@@ -397,7 +397,7 @@ public class StateManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (GameObject.Find("Player").GetComponent<Main_Menu>().worldSelected == true && worldLoaded == false)
+        if (GameObject.Find("Player").GetComponent<MainMenu>().worldSelected == true && worldLoaded == false)
         {
             //Debug.Log("Loading world: " + WorldName);
             LoadWorld();

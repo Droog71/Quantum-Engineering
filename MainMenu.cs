@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using System.Linq;
 
-public class Main_Menu : MonoBehaviour
+public class MainMenu : MonoBehaviour
 {
     public GUISkin thisGUIskin;
     List<string> worldList;

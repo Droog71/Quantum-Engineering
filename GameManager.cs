@@ -25,6 +25,7 @@ public class GameManager : MonoBehaviour
     private int totalBlockCount;
     public bool blockLimitReached;
     public bool blockPhysics;
+    public bool hazardsEnabled = true;
     private float meteorTimer;
     private float pirateTimer;
     public bool savingData;
@@ -58,9 +59,11 @@ public class GameManager : MonoBehaviour
     private bool loadedMeteorTimer;
     private bool loadedPirateTimer;
     private bool loadedBlockPhysics;
+    private bool loadedHazardsEnabled;
     private Rocket rocketScript;
     private Coroutine separateCoroutine;
     private Coroutine combineCoroutine;
+    private Coroutine hazardRemovalCoroutine;
     List<Vector3> meteorShowerLocationList;
 
     void Start()
@@ -188,7 +191,12 @@ public class GameManager : MonoBehaviour
                 blockPhysics = PlayerPrefsX.GetBool(GetComponent<StateManager>().WorldName + "blockPhysics");
                 loadedBlockPhysics = true;
             }
-
+            if (loadedHazardsEnabled == false)
+            {
+                //Load hazards toggle.
+                hazardsEnabled = PlayerPrefsX.GetBool(GetComponent<StateManager>().WorldName + "hazardsEnabled");
+                loadedHazardsEnabled = true;
+            }
             if (loadedMeteorTimer == false)
             {
                 //Load meteor shower timer.
@@ -310,98 +318,88 @@ public class GameManager : MonoBehaviour
         }
 
         //Pirate attacks and meteor showers
-        if (player.timeToDeliver == false && rocketScript.gameTime < 2000)
+        if (hazardsEnabled == true)
         {
-            //Pirate attacks
-            if (rocketScript.day >= 10 && GetComponent<StateManager>().worldLoaded == true)
+            if (player.timeToDeliver == false && rocketScript.gameTime < 2000)
             {
-                pirateAttackTimer += 1 * Time.deltaTime;
-                if (loadedPirateTimer == true)
+                //Pirate attacks
+                if (rocketScript.day >= 10 && GetComponent<StateManager>().worldLoaded == true)
                 {
-                    PlayerPrefs.SetFloat(GetComponent<StateManager>().WorldName + "pirateAttackTimer", pirateAttackTimer);
-                }
-                if (pirateAttackTimer >= 530 & pirateAttackTimer < 540)
-                {
-                    if (player != null)
+                    pirateAttackTimer += 1 * Time.deltaTime;
+                    if (loadedPirateTimer == true)
                     {
-                        if (player.pirateAttackWarningActive == false)
+                        PlayerPrefs.SetFloat(GetComponent<StateManager>().WorldName + "pirateAttackTimer", pirateAttackTimer);
+                    }
+                    if (pirateAttackTimer >= 530 & pirateAttackTimer < 540)
+                    {
+                        if (player != null)
                         {
                             player.pirateAttackWarningActive = true;
                         }
                     }
-                }
-                else if (pirateAttackTimer >= 540 && pirateAttackTimer < 600)
-                {
-                    if (player != null)
+                    else if (pirateAttackTimer >= 540 && pirateAttackTimer < 600)
                     {
-                        if (player.pirateAttackWarningActive == true)
+                        if (player != null)
                         {
                             player.pirateAttackWarningActive = false;
                         }
+                        pirateFrequency = 40 - rocketScript.day;
+                        if (pirateFrequency < 2)
+                        {
+                            pirateFrequency = 2;
+                        }
+                        pirateTimer += 1 * Time.deltaTime;
+                        if (pirateTimer >= pirateFrequency && GetComponent<StateManager>().worldLoaded == true)
+                        {
+                            float x = Random.Range(-4500, 4500);
+                            float z = Random.Range(-4500, 4500);
+                            int RandomSpawn = Random.Range(1, 5);
+                            if (RandomSpawn == 1)
+                            {
+                                Instantiate(pirateObject, new Vector3(x, 400, 10000), transform.rotation);
+                            }
+                            if (RandomSpawn == 2)
+                            {
+                                GameObject pirate = Instantiate(pirateObject, new Vector3(x, 400, -10000), transform.rotation);
+                            }
+                            if (RandomSpawn == 3)
+                            {
+                                GameObject pirate = Instantiate(pirateObject, new Vector3(10000, 400, z), transform.rotation);
+                            }
+                            if (RandomSpawn == 4)
+                            {
+                                GameObject pirate = Instantiate(pirateObject, new Vector3(-10000, 400, z), transform.rotation);
+                            }
+                            pirateTimer = 0;
+                        }
                     }
-                    pirateFrequency = 40 - rocketScript.day;
-                    if (pirateFrequency < 2)
+                    else if (pirateAttackTimer >= 900)
                     {
-                        pirateFrequency = 2;
-                    }
-                    pirateTimer += 1 * Time.deltaTime;
-                    if (pirateTimer >= pirateFrequency && GetComponent<StateManager>().worldLoaded == true)
-                    {
-                        float x = Random.Range(-4500, 4500);
-                        float z = Random.Range(-4500, 4500);
-                        int RandomSpawn = Random.Range(1, 5);
-                        if (RandomSpawn == 1)
-                        {
-                            Instantiate(pirateObject, new Vector3(x, 400, 10000), transform.rotation);
-                        }
-                        if (RandomSpawn == 2)
-                        {
-                            GameObject pirate = Instantiate(pirateObject, new Vector3(x, 400, -10000), transform.rotation);
-                        }
-                        if (RandomSpawn == 3)
-                        {
-                            GameObject pirate = Instantiate(pirateObject, new Vector3(10000, 400, z), transform.rotation);
-                        }
-                        if (RandomSpawn == 4)
-                        {
-                            GameObject pirate = Instantiate(pirateObject, new Vector3(-10000, 400, z), transform.rotation);
-                        }
-                        pirateTimer = 0;
+                        pirateAttackTimer = 0;
+                        player.destructionMessageActive = false;
                     }
                 }
-                else if (pirateAttackTimer >= 900)
+
+                //Meteor showers
+                if (GetComponent<StateManager>().worldLoaded)
                 {
-                    pirateAttackTimer = 0;
-                    player.destructionMessageActive = false;
+                    meteorShowerTimer += 1 * Time.deltaTime;
                 }
-            }
 
-            //Meteor showers
-            if (GetComponent<StateManager>().worldLoaded)
-            {
-                meteorShowerTimer += 1 * Time.deltaTime;
-            }
-
-            if (loadedMeteorTimer == true)
-            {
-                PlayerPrefs.SetFloat(GetComponent<StateManager>().WorldName + "meteorShowerTimer", meteorShowerTimer);
-                //Debug.Log("METEOR TIMER: " + meteorShowerTimer);
-            }
-            if (meteorShowerTimer >= 530 && meteorShowerTimer < 540)
-            {
-                if (player != null)
+                if (loadedMeteorTimer == true)
                 {
-                    if (player.meteorShowerWarningActive == false)
+                    PlayerPrefs.SetFloat(GetComponent<StateManager>().WorldName + "meteorShowerTimer", meteorShowerTimer);
+                }
+                if (meteorShowerTimer >= 530 && meteorShowerTimer < 540)
+                {
+                    if (player != null)
                     {
                         player.meteorShowerWarningActive = true;
                     }
                 }
-            }
-            else if (meteorShowerTimer >= 540 && meteorShowerTimer < 600)
-            {
-                bool locationFound = false;
-                if (locationFound == false)
+                else if (meteorShowerTimer >= 540 && meteorShowerTimer < 600)
                 {
+                    bool locationFound = false;
                     GameObject[] allObjects = GameObject.FindGameObjectsWithTag("Built");
                     foreach (GameObject go in allObjects)
                     {
@@ -415,38 +413,87 @@ public class GameManager : MonoBehaviour
                             }
                         }
                     }
-                    if (locationFound == false && meteorShowerLocationList.Count < 0)
+                    if (locationFound == false && meteorShowerLocationList.Count > 0)
                     {
                         meteorShowerLocationList.Clear();
                     }
-                }
-                if (player != null)
-                {
-                    if (player.meteorShowerWarningActive == true)
+                    meteorTimer += 1 * Time.deltaTime;
+                    if (meteorTimer > 0.5f && GetComponent<StateManager>().worldLoaded == true)
+                    {
+                        float x = Random.Range(meteorShowerLocation.x - 500, meteorShowerLocation.x + 500);
+                        float z = Random.Range(meteorShowerLocation.z - 500, meteorShowerLocation.z + 500);
+                        Instantiate(meteorObject, new Vector3(x, 500, z), transform.rotation);
+                        meteorTimer = 0;
+                    }
+                    if (player != null)
                     {
                         player.meteorShowerWarningActive = false;
                     }
                 }
-                meteorTimer += 1 * Time.deltaTime;
-                if (meteorTimer > 0.5f && GetComponent<StateManager>().worldLoaded == true)
+                else if (meteorShowerTimer >= 900)
                 {
-                    float x = Random.Range(meteorShowerLocation.x - 500, meteorShowerLocation.x + 500);
-                    float z = Random.Range(meteorShowerLocation.z - 500, meteorShowerLocation.z + 500);
-                    Instantiate(meteorObject, new Vector3(x, 500, z), transform.rotation);
-                    meteorTimer = 0;
+                    meteorShowerTimer = 0;
+                    player.destructionMessageActive = false;
                 }
             }
-            else if (meteorShowerTimer >= 900)
+            else
             {
-                meteorShowerTimer = 0;
-                player.destructionMessageActive = false;
+                pirateAttackTimer = 0;
+                meteorShowerTimer = 120;
+                if (player != null)
+                {
+                    player.destructionMessageActive = false;
+                }
             }
         }
         else
         {
-            pirateAttackTimer = 0;
-            meteorShowerTimer = 120;
+            StopHazards();
+        }
+    }
+
+    private void StopHazards()
+    {
+        pirateTimer = 0;
+        meteorTimer = 0;
+        pirateAttackTimer = 0;
+        meteorShowerTimer = 120;
+        if (loadedMeteorTimer == true)
+        {
+            PlayerPrefs.SetFloat(GetComponent<StateManager>().WorldName + "meteorShowerTimer", meteorShowerTimer);
+        }
+        if (loadedPirateTimer == true)
+        {
+            PlayerPrefs.SetFloat(GetComponent<StateManager>().WorldName + "pirateAttackTimer", pirateAttackTimer);
+        }
+        if (player != null)
+        {
+            player.meteorShowerWarningActive = false;
+            player.pirateAttackWarningActive = false;
             player.destructionMessageActive = false;
+        }
+        hazardRemovalCoroutine = StartCoroutine(HazardRemovalCoroutine());
+    }
+
+    IEnumerator HazardRemovalCoroutine()
+    {
+        Meteor[] allMeteors = FindObjectsOfType<Meteor>();
+        foreach (Meteor meteor in allMeteors)
+        {
+            if (meteor.destroying == false)
+            {
+                meteor.Explode();
+            }
+            yield return new WaitForSeconds(0.1f);
+        }
+        Pirate[] allPirates = FindObjectsOfType<Pirate>();
+        foreach (Pirate pirate in allPirates)
+        {
+            if (pirate.destroying == false)
+            {
+                pirate.Explode();
+            }
+            yield return new WaitForSeconds(0.1f);
         }
     }
 

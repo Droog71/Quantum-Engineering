@@ -502,7 +502,7 @@ public class Retriever : MonoBehaviour
                                                     storageComputerConduitItem.target = inputObject;
                                                     if (storageComputerConduitItem.textureDictionary != null)
                                                     { 
-                                                        storageComputerConduitItem.billboard.GetComponent<Renderer>().material.mainTexture = storageComputerConduitItem.textureDictionary[type[multipleItemIteration]];
+                                                        storageComputerConduitItem.billboard.GetComponent<Renderer>().material.mainTexture = storageComputerConduitItem.textureDictionary.dictionary[type[multipleItemIteration]];
                                                     }
                                                     storageComputerConduitItem.active = true;
                                                 }

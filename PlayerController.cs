@@ -266,7 +266,7 @@ public class PlayerController : MonoBehaviour
             //IF THIS IS A NEW WORLD, OPEN THE TABLET TO DISPLAY THE INTRO MESSAGE
             if (PlayerPrefsX.GetBool(stateManager.WorldName + "oldWorld") == false)
             {
-                if (GetComponent<Main_Menu>().finishedLoading == true)
+                if (GetComponent<MainMenu>().finishedLoading == true)
                 {
                     if (introDisplayed == false)
                     {
@@ -387,9 +387,7 @@ public class PlayerController : MonoBehaviour
                     {
                         crosshairEnabled = true;
                     }
-                    guiSound.volume = 0.15f;
-                    guiSound.clip = buttonClip;
-                    guiSound.Play();
+                    playButtonSound();
                 }
 
                 //SPRINTING
@@ -802,9 +800,7 @@ public class PlayerController : MonoBehaviour
                             headlamp.GetComponent<Light>().enabled = true;
                         }
                     }
-                    guiSound.volume = 0.15f;
-                    guiSound.clip = buttonClip;
-                    guiSound.Play();
+                    playButtonSound();
                 }
 
                 //JETPACK
@@ -930,12 +926,10 @@ public class PlayerController : MonoBehaviour
                                 if (buildIncrementTimer >= 0.1f)
                                 {
                                     buildMultiplier += 1;
-                                    guiSound.volume = 0.15f;
-                                    guiSound.clip = buttonClip;
-                                    guiSound.Play();
                                     destroyTimer = 0;
                                     buildTimer = 0;
                                     buildIncrementTimer = 0;
+                                    playButtonSound();
                                 }
                             }
                         }
@@ -947,12 +941,10 @@ public class PlayerController : MonoBehaviour
                                 if (buildIncrementTimer >= 0.1f)
                                 {
                                     buildMultiplier -= 1;
-                                    guiSound.volume = 0.15f;
-                                    guiSound.clip = buttonClip;
-                                    guiSound.Play();
                                     destroyTimer = 0;
                                     buildTimer = 0;
                                     buildIncrementTimer = 0;
+                                    playButtonSound();
                                 }
                             }
                         }
@@ -1153,11 +1145,9 @@ public class PlayerController : MonoBehaviour
                         }
                         displayingBuildItem = true;
                         buildItemDisplayTimer = 0;
-                        guiSound.volume = 0.15f;
-                        guiSound.clip = buttonClip;
-                        guiSound.Play();
                         destroyTimer = 0;
                         buildTimer = 0;
+                        playButtonSound();
                     }
 
                     if (cInput.GetKeyDown("Previous Item"))
@@ -1351,11 +1341,9 @@ public class PlayerController : MonoBehaviour
                         }
                         displayingBuildItem = true;
                         buildItemDisplayTimer = 0;
-                        guiSound.volume = 0.15f;
-                        guiSound.clip = buttonClip;
-                        guiSound.Play();
                         destroyTimer = 0;
                         buildTimer = 0;
+                        playButtonSound();
                     }
                 }
 
@@ -1760,6 +1748,27 @@ public class PlayerController : MonoBehaviour
                 }
             }
         }
+    }
+
+    public void playButtonSound()
+    {
+        guiSound.volume = 0.15f;
+        guiSound.clip = buttonClip;
+        guiSound.Play();
+    }
+
+    public void playCraftingSound()
+    {
+        guiSound.volume = 0.3f;
+        guiSound.clip = craftingClip;
+        guiSound.Play();
+    }
+
+    public void playMissingItemsSound()
+    {
+        guiSound.volume = 0.15f;
+        guiSound.clip = missingItemsClip;
+        guiSound.Play();
     }
 
     //THIS FUNCTION HANDLES SAVING OF DATA AND EXITING THE GAME

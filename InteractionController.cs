@@ -101,16 +101,12 @@ public class InteractionController : MonoBehaviour
                             playerController.playerInventory.AddItem("Storage Container", 1);
                         }
                         Destroy(playerController.objectInSight);
-                        playerController.guiSound.volume = 0.3f;
-                        playerController.guiSound.clip = playerController.craftingClip;
-                        playerController.guiSound.Play();
+                        playerController.playCraftingSound();
                     }
                     else
                     {
                         playerController.cannotCollect = true;
-                        playerController.guiSound.volume = 0.15f;
-                        playerController.guiSound.clip = playerController.missingItemsClip;
-                        playerController.guiSound.Play();
+                        playerController.playCraftingSound();
                     }
                 }
             }
@@ -190,16 +186,12 @@ public class InteractionController : MonoBehaviour
                     {
                         playerController.playerInventory.AddItem("Storage Computer", 1);
                         Destroy(playerController.objectInSight);
-                        playerController.guiSound.volume = 0.3f;
-                        playerController.guiSound.clip = playerController.craftingClip;
-                        playerController.guiSound.Play();
+                        playerController.playCraftingSound();
                     }
                     else
                     {
                         playerController.cannotCollect = true;
-                        playerController.guiSound.volume = 0.15f;
-                        playerController.guiSound.clip = playerController.missingItemsClip;
-                        playerController.guiSound.Play();
+                        playerController.playMissingItemsSound();
                     }
                 }
             }
@@ -268,16 +260,12 @@ public class InteractionController : MonoBehaviour
                             playerController.playerInventory.AddItem("Reactor Turbine", 1);
                         }
                         Destroy(playerController.objectInSight);
-                        playerController.guiSound.volume = 0.3f;
-                        playerController.guiSound.clip = playerController.craftingClip;
-                        playerController.guiSound.Play();
+                        playerController.playCraftingSound();
                     }
                     else
                     {
                         playerController.cannotCollect = true;
-                        playerController.guiSound.volume = 0.15f;
-                        playerController.guiSound.clip = playerController.missingItemsClip;
-                        playerController.guiSound.Play();
+                        playerController.playMissingItemsSound();
                     }
                 }
                 if (cInput.GetKeyDown("Interact"))
@@ -338,16 +326,12 @@ public class InteractionController : MonoBehaviour
                     {
                         playerController.playerInventory.AddItem("Nuclear Reactor", 1);
                         Destroy(playerController.objectInSight);
-                        playerController.guiSound.volume = 0.3f;
-                        playerController.guiSound.clip = playerController.craftingClip;
-                        playerController.guiSound.Play();
+                        playerController.playCraftingSound();
                     }
                     else
                     {
                         playerController.cannotCollect = true;
-                        playerController.guiSound.volume = 0.15f;
-                        playerController.guiSound.clip = playerController.missingItemsClip;
-                        playerController.guiSound.Play();
+                        playerController.playMissingItemsSound();
                     }
                 }
             }
@@ -377,16 +361,12 @@ public class InteractionController : MonoBehaviour
                     {
                         playerController.playerInventory.AddItem("Power Conduit", 1);
                         Destroy(playerController.objectInSight);
-                        playerController.guiSound.volume = 0.3f;
-                        playerController.guiSound.clip = playerController.craftingClip;
-                        playerController.guiSound.Play();
+                        playerController.playCraftingSound();
                     }
                     else
                     {
                         playerController.cannotCollect = true;
-                        playerController.guiSound.volume = 0.15f;
-                        playerController.guiSound.clip = playerController.missingItemsClip;
-                        playerController.guiSound.Play();
+                        playerController.playMissingItemsSound();
                     }
                 }
                 if (cInput.GetKeyDown("Interact"))
@@ -451,16 +431,12 @@ public class InteractionController : MonoBehaviour
                     {
                         playerController.playerInventory.AddItem("Turret", 1);
                         Destroy(playerController.objectInSight);
-                        playerController.guiSound.volume = 0.3f;
-                        playerController.guiSound.clip = playerController.craftingClip;
-                        playerController.guiSound.Play();
+                        playerController.playCraftingSound();
                     }
                     else
                     {
                         playerController.cannotCollect = true;
-                        playerController.guiSound.volume = 0.15f;
-                        playerController.guiSound.clip = playerController.missingItemsClip;
-                        playerController.guiSound.Play();
+                        playerController.playMissingItemsSound();
                     }
                 }
                 if (cInput.GetKeyDown("Interact"))
@@ -527,16 +503,12 @@ public class InteractionController : MonoBehaviour
                     {
                         playerController.playerInventory.AddItem("Universal Extractor", 1);
                         Destroy(playerController.objectInSight);
-                        playerController.guiSound.volume = 0.3f;
-                        playerController.guiSound.clip = playerController.craftingClip;
-                        playerController.guiSound.Play();
+                        playerController.playCraftingSound();
                     }
                     else
                     {
                         playerController.cannotCollect = true;
-                        playerController.guiSound.volume = 0.15f;
-                        playerController.guiSound.clip = playerController.missingItemsClip;
-                        playerController.guiSound.Play();
+                        playerController.playMissingItemsSound();
                     }
                 }
                 if (cInput.GetKeyDown("Interact"))
@@ -602,16 +574,12 @@ public class InteractionController : MonoBehaviour
                     {
                         playerController.playerInventory.AddItem("Auger", 1);
                         Destroy(playerController.objectInSight);
-                        playerController.guiSound.volume = 0.3f;
-                        playerController.guiSound.clip = playerController.craftingClip;
-                        playerController.guiSound.Play();
+                        playerController.playCraftingSound();
                     }
                     else
                     {
                         playerController.cannotCollect = true;
-                        playerController.guiSound.volume = 0.15f;
-                        playerController.guiSound.clip = playerController.missingItemsClip;
-                        playerController.guiSound.Play();
+                        playerController.playMissingItemsSound();
                     }
                 }
                 if (cInput.GetKeyDown("Interact"))
@@ -677,16 +645,12 @@ public class InteractionController : MonoBehaviour
                     {
                         playerController.playerInventory.AddItem("Dark Matter Collector", 1);
                         Destroy(playerController.objectInSight);
-                        playerController.guiSound.volume = 0.3f;
-                        playerController.guiSound.clip = playerController.craftingClip;
-                        playerController.guiSound.Play();
+                        playerController.playCraftingSound();
                     }
                     else
                     {
                         playerController.cannotCollect = true;
-                        playerController.guiSound.volume = 0.15f;
-                        playerController.guiSound.clip = playerController.missingItemsClip;
-                        playerController.guiSound.Play();
+                        playerController.playMissingItemsSound();
                     }
                 }
                 if (cInput.GetKeyDown("Interact"))
@@ -872,16 +836,12 @@ public class InteractionController : MonoBehaviour
                     {
                         playerController.playerInventory.AddItem("Universal Conduit", 1);
                         Destroy(playerController.objectInSight);
-                        playerController.guiSound.volume = 0.3f;
-                        playerController.guiSound.clip = playerController.craftingClip;
-                        playerController.guiSound.Play();
+                        playerController.playCraftingSound();
                     }
                     else
                     {
                         playerController.cannotCollect = true;
-                        playerController.guiSound.volume = 0.15f;
-                        playerController.guiSound.clip = playerController.missingItemsClip;
-                        playerController.guiSound.Play();
+                        playerController.playMissingItemsSound();
                     }
                 }
                 if (cInput.GetKeyDown("Interact"))
@@ -1003,16 +963,12 @@ public class InteractionController : MonoBehaviour
                     {
                         playerController.playerInventory.AddItem("Dark Matter Conduit", 1);
                         Destroy(playerController.objectInSight);
-                        playerController.guiSound.volume = 0.3f;
-                        playerController.guiSound.clip = playerController.craftingClip;
-                        playerController.guiSound.Play();
+                        playerController.playCraftingSound();
                     }
                     else
                     {
                         playerController.cannotCollect = true;
-                        playerController.guiSound.volume = 0.15f;
-                        playerController.guiSound.clip = playerController.missingItemsClip;
-                        playerController.guiSound.Play();
+                        playerController.playMissingItemsSound();
                     }
                 }
                 if (cInput.GetKeyDown("Interact"))
@@ -1097,16 +1053,12 @@ public class InteractionController : MonoBehaviour
                     {
                         playerController.playerInventory.AddItem("Smelter", 1);
                         Destroy(playerController.objectInSight);
-                        playerController.guiSound.volume = 0.3f;
-                        playerController.guiSound.clip = playerController.craftingClip;
-                        playerController.guiSound.Play();
+                        playerController.playCraftingSound();
                     }
                     else
                     {
                         playerController.cannotCollect = true;
-                        playerController.guiSound.volume = 0.15f;
-                        playerController.guiSound.clip = playerController.missingItemsClip;
-                        playerController.guiSound.Play();
+                        playerController.playMissingItemsSound();
                     }
                 }
                 if (cInput.GetKeyDown("Interact"))
@@ -1175,16 +1127,12 @@ public class InteractionController : MonoBehaviour
                     {
                         playerController.playerInventory.AddItem("Alloy Smelter", 1);
                         Destroy(playerController.objectInSight);
-                        playerController.guiSound.volume = 0.3f;
-                        playerController.guiSound.clip = playerController.craftingClip;
-                        playerController.guiSound.Play();
+                        playerController.playCraftingSound();
                     }
                     else
                     {
                         playerController.cannotCollect = true;
-                        playerController.guiSound.volume = 0.15f;
-                        playerController.guiSound.clip = playerController.missingItemsClip;
-                        playerController.guiSound.Play();
+                        playerController.playMissingItemsSound();
                     }
                 }
                 if (cInput.GetKeyDown("Interact"))
@@ -1242,16 +1190,12 @@ public class InteractionController : MonoBehaviour
                     {
                         playerController.playerInventory.AddItem("Extruder", 1);
                         Destroy(playerController.objectInSight);
-                        playerController.guiSound.volume = 0.3f;
-                        playerController.guiSound.clip = playerController.craftingClip;
-                        playerController.guiSound.Play();
+                        playerController.playCraftingSound();
                     }
                     else
                     {
                         playerController.cannotCollect = true;
-                        playerController.guiSound.volume = 0.15f;
-                        playerController.guiSound.clip = playerController.missingItemsClip;
-                        playerController.guiSound.Play();
+                        playerController.playMissingItemsSound();
                     }
                 }
                 if (cInput.GetKeyDown("Interact"))
@@ -1303,16 +1247,12 @@ public class InteractionController : MonoBehaviour
                     {
                         playerController.playerInventory.AddItem("Rail Cart Hub", 1);
                         Destroy(playerController.objectInSight);
-                        playerController.guiSound.volume = 0.3f;
-                        playerController.guiSound.clip = playerController.craftingClip;
-                        playerController.guiSound.Play();
+                        playerController.playCraftingSound();
                     }
                     else
                     {
                         playerController.cannotCollect = true;
-                        playerController.guiSound.volume = 0.15f;
-                        playerController.guiSound.clip = playerController.missingItemsClip;
-                        playerController.guiSound.Play();
+                        playerController.playMissingItemsSound();
                     }
                 }
                 if (cInput.GetKeyDown("Interact"))
@@ -1410,16 +1350,12 @@ public class InteractionController : MonoBehaviour
                     {
                         playerController.playerInventory.AddItem("Retriever", 1);
                         Destroy(playerController.objectInSight);
-                        playerController.guiSound.volume = 0.3f;
-                        playerController.guiSound.clip = playerController.craftingClip;
-                        playerController.guiSound.Play();
+                        playerController.playCraftingSound();
                     }
                     else
                     {
                         playerController.cannotCollect = true;
-                        playerController.guiSound.volume = 0.15f;
-                        playerController.guiSound.clip = playerController.missingItemsClip;
-                        playerController.guiSound.Play();
+                        playerController.playMissingItemsSound();
                     }
                 }
                 if (cInput.GetKeyDown("Interact"))
@@ -1471,16 +1407,12 @@ public class InteractionController : MonoBehaviour
                     {
                         playerController.playerInventory.AddItem("Auto Crafter", 1);
                         Destroy(playerController.objectInSight);
-                        playerController.guiSound.volume = 0.3f;
-                        playerController.guiSound.clip = playerController.craftingClip;
-                        playerController.guiSound.Play();
+                        playerController.playCraftingSound();
                     }
                     else
                     {
                         playerController.cannotCollect = true;
-                        playerController.guiSound.volume = 0.15f;
-                        playerController.guiSound.clip = playerController.missingItemsClip;
-                        playerController.guiSound.Play();
+                        playerController.playMissingItemsSound();
                     }
                 }
                 if (cInput.GetKeyDown("Interact"))
@@ -1573,16 +1505,12 @@ public class InteractionController : MonoBehaviour
                     {
                         playerController.playerInventory.AddItem("Heat Exchanger", 1);
                         Destroy(playerController.objectInSight);
-                        playerController.guiSound.volume = 0.3f;
-                        playerController.guiSound.clip = playerController.craftingClip;
-                        playerController.guiSound.Play();
+                        playerController.playCraftingSound();
                     }
                     else
                     {
                         playerController.cannotCollect = true;
-                        playerController.guiSound.volume = 0.15f;
-                        playerController.guiSound.clip = playerController.missingItemsClip;
-                        playerController.guiSound.Play();
+                        playerController.playMissingItemsSound();
                     }
                 }
                 if (cInput.GetKeyDown("Interact"))
@@ -1640,16 +1568,12 @@ public class InteractionController : MonoBehaviour
                     {
                         playerController.playerInventory.AddItem("Gear Cutter", 1);
                         Destroy(playerController.objectInSight);
-                        playerController.guiSound.volume = 0.3f;
-                        playerController.guiSound.clip = playerController.craftingClip;
-                        playerController.guiSound.Play();
+                        playerController.playCraftingSound();
                     }
                     else
                     {
                         playerController.cannotCollect = true;
-                        playerController.guiSound.volume = 0.15f;
-                        playerController.guiSound.clip = playerController.missingItemsClip;
-                        playerController.guiSound.Play();
+                        playerController.playMissingItemsSound();
                     }
                 }
                 if (cInput.GetKeyDown("Interact"))
@@ -1707,16 +1631,12 @@ public class InteractionController : MonoBehaviour
                     {
                         playerController.playerInventory.AddItem("Press", 1);
                         Destroy(playerController.objectInSight);
-                        playerController.guiSound.volume = 0.3f;
-                        playerController.guiSound.clip = playerController.craftingClip;
-                        playerController.guiSound.Play();
+                        playerController.playCraftingSound();
                     }
                     else
                     {
                         playerController.cannotCollect = true;
-                        playerController.guiSound.volume = 0.15f;
-                        playerController.guiSound.clip = playerController.missingItemsClip;
-                        playerController.guiSound.Play();
+                        playerController.playMissingItemsSound();
                     }
                 }
                 if (cInput.GetKeyDown("Interact"))
@@ -1759,18 +1679,14 @@ public class InteractionController : MonoBehaviour
                     {
                         playerController.playerInventory.AddItem(objectName, 1);
                         Destroy(playerController.objectInSight);
-                        playerController.guiSound.volume = 0.3f;
-                        playerController.guiSound.clip = playerController.craftingClip;
-                        playerController.guiSound.Play();
                         playerController.destroyTimer = 0;
                         playerController.buildTimer = 0;
+                        playerController.playCraftingSound();
                     }
                     else
                     {
                         playerController.cannotCollect = true;
-                        playerController.guiSound.volume = 0.15f;
-                        playerController.guiSound.clip = playerController.missingItemsClip;
-                        playerController.guiSound.Play();
+                        playerController.playMissingItemsSound();
                     }
                 }
             }
@@ -1801,18 +1717,14 @@ public class InteractionController : MonoBehaviour
                     {
                         playerController.playerInventory.AddItem(objectName, 1);
                         Destroy(playerController.objectInSight);
-                        playerController.guiSound.volume = 0.3f;
-                        playerController.guiSound.clip = playerController.craftingClip;
-                        playerController.guiSound.Play();
                         playerController.destroyTimer = 0;
                         playerController.buildTimer = 0;
+                        playerController.playCraftingSound();
                     }
                     else
                     {
                         playerController.cannotCollect = true;
-                        playerController.guiSound.volume = 0.15f;
-                        playerController.guiSound.clip = playerController.missingItemsClip;
-                        playerController.guiSound.Play();
+                        playerController.playMissingItemsSound();
                     }
                 }
             }
@@ -1832,18 +1744,14 @@ public class InteractionController : MonoBehaviour
                     {
                         playerController.playerInventory.AddItem("Glass Block", 1);
                         Destroy(playerController.objectInSight);
-                        playerController.guiSound.volume = 0.3f;
-                        playerController.guiSound.clip = playerController.craftingClip;
-                        playerController.guiSound.Play();
                         playerController.destroyTimer = 0;
                         playerController.buildTimer = 0;
+                        playerController.playCraftingSound();
                     }
                     else
                     {
                         playerController.cannotCollect = true;
-                        playerController.guiSound.volume = 0.15f;
-                        playerController.guiSound.clip = playerController.missingItemsClip;
-                        playerController.guiSound.Play();
+                        playerController.playMissingItemsSound();
                     }
                 }
             }
@@ -1863,18 +1771,14 @@ public class InteractionController : MonoBehaviour
                     {
                         playerController.playerInventory.AddItem("Brick", 1);
                         Destroy(playerController.objectInSight);
-                        playerController.guiSound.volume = 0.3f;
-                        playerController.guiSound.clip = playerController.craftingClip;
-                        playerController.guiSound.Play();
                         playerController.destroyTimer = 0;
                         playerController.buildTimer = 0;
+                        playerController.playCraftingSound();
                     }
                     else
                     {
                         playerController.cannotCollect = true;
-                        playerController.guiSound.volume = 0.15f;
-                        playerController.guiSound.clip = playerController.missingItemsClip;
-                        playerController.guiSound.Play();
+                        playerController.playMissingItemsSound();
                     }
                 }
             }
@@ -1894,16 +1798,12 @@ public class InteractionController : MonoBehaviour
                     {
                         playerController.playerInventory.AddItem("Electric Light", 1);
                         Destroy(playerController.objectInSight);
-                        playerController.guiSound.volume = 0.3f;
-                        playerController.guiSound.clip = playerController.craftingClip;
-                        playerController.guiSound.Play();
+                        playerController.playCraftingSound();
                     }
                     else
                     {
                         playerController.cannotCollect = true;
-                        playerController.guiSound.volume = 0.15f;
-                        playerController.guiSound.clip = playerController.missingItemsClip;
-                        playerController.guiSound.Play();
+                        playerController.playMissingItemsSound();
                     }
                 }
             }
@@ -1968,16 +1868,12 @@ public class InteractionController : MonoBehaviour
                     {
                         playerController.playerInventory.AddItem("Quantum Hatchway", 1);
                         Destroy(playerController.objectInSight);
-                        playerController.guiSound.volume = 0.3f;
-                        playerController.guiSound.clip = playerController.craftingClip;
-                        playerController.guiSound.Play();
+                        playerController.playCraftingSound();
                     }
                     else
                     {
                         playerController.cannotCollect = true;
-                        playerController.guiSound.volume = 0.15f;
-                        playerController.guiSound.clip = playerController.missingItemsClip;
-                        playerController.guiSound.Play();
+                        playerController.playMissingItemsSound();
                     }
                 }
                 if (cInput.GetKeyDown("Interact"))

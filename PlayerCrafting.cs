@@ -40,9 +40,7 @@ public class PlayerCrafting : MonoBehaviour
                                 foundItems = true;
                                 slot.amountInSlot -= 10;
                                 playerInventory.AddItem("Iron Block", 100);
-                                playerController.guiSound.volume = 0.3f;
-                                playerController.guiSound.clip = playerController.craftingClip;
-                                playerController.guiSound.Play();
+                                playerController.playCraftingSound();
                             }
                             if (slot.amountInSlot <= 0)
                             {
@@ -54,17 +52,13 @@ public class PlayerCrafting : MonoBehaviour
                 if (foundItems == false)
                 {
                     missingItem = true;
-                    playerController.guiSound.volume = 0.15f;
-                    playerController.guiSound.clip = playerController.missingItemsClip;
-                    playerController.guiSound.Play();
+                    playerController.playMissingItemsSound();
                 }
             }
             else
             {
                 playerController.outOfSpace = true;
-                playerController.guiSound.volume = 0.15f;
-                playerController.guiSound.clip = playerController.missingItemsClip;
-                playerController.guiSound.Play();
+                playerController.playMissingItemsSound();
             }
         }
         else
@@ -91,9 +85,7 @@ public class PlayerCrafting : MonoBehaviour
                                 foundItems = true;
                                 slot.amountInSlot -= 1;
                                 playerInventory.AddItem("Iron Block", 10);
-                                playerController.guiSound.volume = 0.3f;
-                                playerController.guiSound.clip = playerController.craftingClip;
-                                playerController.guiSound.Play();
+                                playerController.playCraftingSound();
                             }
                             if (slot.amountInSlot <= 0)
                             {
@@ -105,17 +97,13 @@ public class PlayerCrafting : MonoBehaviour
                 if (foundItems == false)
                 {
                     missingItem = true;
-                    playerController.guiSound.volume = 0.15f;
-                    playerController.guiSound.clip = playerController.missingItemsClip;
-                    playerController.guiSound.Play();
+                    playerController.playMissingItemsSound();
                 }
             }
             else
             {
                 playerController.outOfSpace = true;
-                playerController.guiSound.volume = 0.15f;
-                playerController.guiSound.clip = playerController.missingItemsClip;
-                playerController.guiSound.Play();
+                playerController.playMissingItemsSound();
             }
         }
     }
@@ -146,9 +134,7 @@ public class PlayerCrafting : MonoBehaviour
                                 foundItems = true;
                                 slot.amountInSlot -= 10;
                                 playerInventory.AddItem("Iron Ramp", 100);
-                                playerController.guiSound.volume = 0.3f;
-                                playerController.guiSound.clip = playerController.craftingClip;
-                                playerController.guiSound.Play();
+                                playerController.playCraftingSound();
                             }
                             if (slot.amountInSlot <= 0)
                             {
@@ -160,17 +146,13 @@ public class PlayerCrafting : MonoBehaviour
                 if (foundItems == false)
                 {
                     missingItem = true;
-                    playerController.guiSound.volume = 0.15f;
-                    playerController.guiSound.clip = playerController.missingItemsClip;
-                    playerController.guiSound.Play();
+                    playerController.playMissingItemsSound();
                 }
             }
             else
             {
                 playerController.outOfSpace = true;
-                playerController.guiSound.volume = 0.15f;
-                playerController.guiSound.clip = playerController.missingItemsClip;
-                playerController.guiSound.Play();
+                playerController.playMissingItemsSound();
             }
         }
         else
@@ -197,9 +179,7 @@ public class PlayerCrafting : MonoBehaviour
                                 foundItems = true;
                                 slot.amountInSlot -= 1;
                                 playerInventory.AddItem("Iron Ramp", 10);
-                                playerController.guiSound.volume = 0.3f;
-                                playerController.guiSound.clip = playerController.craftingClip;
-                                playerController.guiSound.Play();
+                                playerController.playCraftingSound();
                             }
                             if (slot.amountInSlot <= 0)
                             {
@@ -211,17 +191,13 @@ public class PlayerCrafting : MonoBehaviour
                 if (foundItems == false)
                 {
                     missingItem = true;
-                    playerController.guiSound.volume = 0.15f;
-                    playerController.guiSound.clip = playerController.missingItemsClip;
-                    playerController.guiSound.Play();
+                    playerController.playMissingItemsSound();
                 }
             }
             else
             {
                 playerController.outOfSpace = true;
-                playerController.guiSound.volume = 0.15f;
-                playerController.guiSound.clip = playerController.missingItemsClip;
-                playerController.guiSound.Play();
+                playerController.playMissingItemsSound();
             }
         }
     }
@@ -252,9 +228,7 @@ public class PlayerCrafting : MonoBehaviour
                                 foundItems = true;
                                 slot.amountInSlot -= 10;
                                 playerInventory.AddItem("Steel Block", 100);
-                                playerController.guiSound.volume = 0.3f;
-                                playerController.guiSound.clip = playerController.craftingClip;
-                                playerController.guiSound.Play();
+                                playerController.playCraftingSound();
                             }
                             if (slot.amountInSlot <= 0)
                             {
@@ -266,17 +240,13 @@ public class PlayerCrafting : MonoBehaviour
                 if (foundItems == false)
                 {
                     missingItem = true;
-                    playerController.guiSound.volume = 0.15f;
-                    playerController.guiSound.clip = playerController.missingItemsClip;
-                    playerController.guiSound.Play();
+                    playerController.playMissingItemsSound();
                 }
             }
             else
             {
                 playerController.outOfSpace = true;
-                playerController.guiSound.volume = 0.15f;
-                playerController.guiSound.clip = playerController.missingItemsClip;
-                playerController.guiSound.Play();
+                playerController.playMissingItemsSound();
             }
         }
         else
@@ -303,9 +273,7 @@ public class PlayerCrafting : MonoBehaviour
                                 foundItems = true;
                                 slot.amountInSlot -= 1;
                                 playerInventory.AddItem("Steel Block", 10);
-                                playerController.guiSound.volume = 0.3f;
-                                playerController.guiSound.clip = playerController.craftingClip;
-                                playerController.guiSound.Play();
+                                playerController.playCraftingSound();
                             }
                             if (slot.amountInSlot <= 0)
                             {
@@ -317,17 +285,13 @@ public class PlayerCrafting : MonoBehaviour
                 if (foundItems == false)
                 {
                     missingItem = true;
-                    playerController.guiSound.volume = 0.15f;
-                    playerController.guiSound.clip = playerController.missingItemsClip;
-                    playerController.guiSound.Play();
+                    playerController.playMissingItemsSound();
                 }
             }
             else
             {
                 playerController.outOfSpace = true;
-                playerController.guiSound.volume = 0.15f;
-                playerController.guiSound.clip = playerController.missingItemsClip;
-                playerController.guiSound.Play();
+                playerController.playMissingItemsSound();
             }
         }
     }
@@ -358,9 +322,7 @@ public class PlayerCrafting : MonoBehaviour
                                 foundItems = true;
                                 slot.amountInSlot -= 10;
                                 playerInventory.AddItem("Steel Ramp", 100);
-                                playerController.guiSound.volume = 0.3f;
-                                playerController.guiSound.clip = playerController.craftingClip;
-                                playerController.guiSound.Play();
+                                playerController.playCraftingSound();
                             }
                             if (slot.amountInSlot <= 0)
                             {
@@ -372,17 +334,13 @@ public class PlayerCrafting : MonoBehaviour
                 if (foundItems == false)
                 {
                     missingItem = true;
-                    playerController.guiSound.volume = 0.15f;
-                    playerController.guiSound.clip = playerController.missingItemsClip;
-                    playerController.guiSound.Play();
+                    playerController.playMissingItemsSound();
                 }
             }
             else
             {
                 playerController.outOfSpace = true;
-                playerController.guiSound.volume = 0.15f;
-                playerController.guiSound.clip = playerController.missingItemsClip;
-                playerController.guiSound.Play();
+                playerController.playMissingItemsSound();
             }
         }
         else
@@ -409,9 +367,7 @@ public class PlayerCrafting : MonoBehaviour
                                 foundItems = true;
                                 slot.amountInSlot -= 1;
                                 playerInventory.AddItem("Steel Ramp", 10);
-                                playerController.guiSound.volume = 0.3f;
-                                playerController.guiSound.clip = playerController.craftingClip;
-                                playerController.guiSound.Play();
+                                playerController.playCraftingSound();
                             }
                             if (slot.amountInSlot <= 0)
                             {
@@ -423,17 +379,13 @@ public class PlayerCrafting : MonoBehaviour
                 if (foundItems == false)
                 {
                     missingItem = true;
-                    playerController.guiSound.volume = 0.15f;
-                    playerController.guiSound.clip = playerController.missingItemsClip;
-                    playerController.guiSound.Play();
+                    playerController.playMissingItemsSound();
                 }
             }
             else
             {
                 playerController.outOfSpace = true;
-                playerController.guiSound.volume = 0.15f;
-                playerController.guiSound.clip = playerController.missingItemsClip;
-                playerController.guiSound.Play();
+                playerController.playMissingItemsSound();
             }
         }
     }
@@ -478,9 +430,7 @@ public class PlayerCrafting : MonoBehaviour
             if (foundTin == false || foundDarkMatter == false)
             {
                 missingItem = true;
-                playerController.guiSound.volume = 0.15f;
-                playerController.guiSound.clip = playerController.missingItemsClip;
-                playerController.guiSound.Play();
+                playerController.playMissingItemsSound();
             }
             else
             {
@@ -495,17 +445,13 @@ public class PlayerCrafting : MonoBehaviour
                     playerInventory.inventory[darkMatterSlotNumber].typeInSlot = "nothing";
                 }
                 playerInventory.AddItem("Quantum Hatchway", 1);
-                playerController.guiSound.volume = 0.3f;
-                playerController.guiSound.clip = playerController.craftingClip;
-                playerController.guiSound.Play();
+                playerController.playCraftingSound();
             }
         }
         else
         {
             playerController.outOfSpace = true;
-            playerController.guiSound.volume = 0.15f;
-            playerController.guiSound.clip = playerController.missingItemsClip;
-            playerController.guiSound.Play();
+            playerController.playMissingItemsSound();
         }
     }
 
@@ -556,9 +502,7 @@ public class PlayerCrafting : MonoBehaviour
             if (foundGlass == false || foundCopperWire == false || foundTinPlates == false)
             {
                 missingItem = true;
-                playerController.guiSound.volume = 0.15f;
-                playerController.guiSound.clip = playerController.missingItemsClip;
-                playerController.guiSound.Play();
+                playerController.playMissingItemsSound();
             }
             else
             {
@@ -578,17 +522,13 @@ public class PlayerCrafting : MonoBehaviour
                     playerInventory.inventory[tinPlateSlotNumber].typeInSlot = "nothing";
                 }
                 playerInventory.AddItem("Electric Light", 1);
-                playerController.guiSound.volume = 0.3f;
-                playerController.guiSound.clip = playerController.craftingClip;
-                playerController.guiSound.Play();
+                playerController.playCraftingSound();
             }
         }
         else
         {
             playerController.outOfSpace = true;
-            playerController.guiSound.volume = 0.15f;
-            playerController.guiSound.clip = playerController.missingItemsClip;
-            playerController.guiSound.Play();
+            playerController.playMissingItemsSound();
         }
     }
 
@@ -632,9 +572,7 @@ public class PlayerCrafting : MonoBehaviour
             if (foundIron == false || foundCopper == false)
             {
                 missingItem = true;
-                playerController.guiSound.volume = 0.15f;
-                playerController.guiSound.clip = playerController.missingItemsClip;
-                playerController.guiSound.Play();
+                playerController.playMissingItemsSound();
             }
             else
             {
@@ -649,17 +587,13 @@ public class PlayerCrafting : MonoBehaviour
                     playerInventory.inventory[copperSlotNumber].typeInSlot = "nothing";
                 }
                 playerInventory.AddItem("Auger", 1);
-                playerController.guiSound.volume = 0.3f;
-                playerController.guiSound.clip = playerController.craftingClip;
-                playerController.guiSound.Play();
+                playerController.playCraftingSound();
             }
         }
         else
         {
             playerController.outOfSpace = true;
-            playerController.guiSound.volume = 0.15f;
-            playerController.guiSound.clip = playerController.missingItemsClip;
-            playerController.guiSound.Play();
+            playerController.playMissingItemsSound();
         }
     }
 
@@ -687,9 +621,7 @@ public class PlayerCrafting : MonoBehaviour
                             foundItems = true;
                             slot.amountInSlot -= 6;
                             playerInventory.AddItem("Storage Container", 1);
-                            playerController.guiSound.volume = 0.3f;
-                            playerController.guiSound.clip = playerController.craftingClip;
-                            playerController.guiSound.Play();
+                            playerController.playCraftingSound();
                         }
                         if (slot.amountInSlot <= 0)
                         {
@@ -701,17 +633,13 @@ public class PlayerCrafting : MonoBehaviour
             if (foundItems == false)
             {
                 missingItem = true;
-                playerController.guiSound.volume = 0.15f;
-                playerController.guiSound.clip = playerController.missingItemsClip;
-                playerController.guiSound.Play();
+                playerController.playMissingItemsSound();
             }
         }
         else
         {
             playerController.outOfSpace = true;
-            playerController.guiSound.volume = 0.15f;
-            playerController.guiSound.clip = playerController.missingItemsClip;
-            playerController.guiSound.Play();
+            playerController.playMissingItemsSound();
         }
     }
 
@@ -793,9 +721,7 @@ public class PlayerCrafting : MonoBehaviour
             if (foundRetriever == false || foundUniversalConduit == false || foundAluminumPlate == false || foundCopperWire == false || foundTinGear == false || foundDarkMatterConduit == false || foundGlassBlock == false)
             {
                 missingItem = true;
-                playerController.guiSound.volume = 0.15f;
-                playerController.guiSound.clip = playerController.missingItemsClip;
-                playerController.guiSound.Play();
+                playerController.playMissingItemsSound();
             }
             else
             {
@@ -840,9 +766,7 @@ public class PlayerCrafting : MonoBehaviour
         else
         {
             playerController.outOfSpace = true;
-            playerController.guiSound.volume = 0.15f;
-            playerController.guiSound.clip = playerController.missingItemsClip;
-            playerController.guiSound.Play();
+            playerController.playMissingItemsSound();
         }
     }
 
@@ -886,9 +810,7 @@ public class PlayerCrafting : MonoBehaviour
             if (foundIron == false || foundCopper == false)
             {
                 missingItem = true;
-                playerController.guiSound.volume = 0.15f;
-                playerController.guiSound.clip = playerController.missingItemsClip;
-                playerController.guiSound.Play();
+                playerController.playMissingItemsSound();
             }
             else
             {
@@ -903,17 +825,13 @@ public class PlayerCrafting : MonoBehaviour
                     playerInventory.inventory[copperSlotNumber].typeInSlot = "nothing";
                 }
                 playerInventory.AddItem("Extruder", 1);
-                playerController.guiSound.volume = 0.3f;
-                playerController.guiSound.clip = playerController.craftingClip;
-                playerController.guiSound.Play();
+                playerController.playCraftingSound();
             }
         }
         else
         {
             playerController.outOfSpace = true;
-            playerController.guiSound.volume = 0.15f;
-            playerController.guiSound.clip = playerController.missingItemsClip;
-            playerController.guiSound.Play();
+            playerController.playMissingItemsSound();
         }
     }
 
@@ -961,9 +879,7 @@ public class PlayerCrafting : MonoBehaviour
             if (foundIronIngot == false || foundIronPipe == false || foundCopperWire == false)
             {
                 missingItem = true;
-                playerController.guiSound.volume = 0.15f;
-                playerController.guiSound.clip = playerController.missingItemsClip;
-                playerController.guiSound.Play();
+                playerController.playMissingItemsSound();
             }
             else
             {
@@ -983,17 +899,13 @@ public class PlayerCrafting : MonoBehaviour
                     playerInventory.inventory[ironPipeSlotNumber].typeInSlot = "nothing";
                 }
                 playerInventory.AddItem("Press", 1);
-                playerController.guiSound.volume = 0.3f;
-                playerController.guiSound.clip = playerController.craftingClip;
-                playerController.guiSound.Play();
+                playerController.playCraftingSound();
             }
         }
         else
         {
             playerController.outOfSpace = true;
-            playerController.guiSound.volume = 0.15f;
-            playerController.guiSound.clip = playerController.missingItemsClip;
-            playerController.guiSound.Play();
+            playerController.playMissingItemsSound();
         }
     }
 
@@ -1057,9 +969,7 @@ public class PlayerCrafting : MonoBehaviour
             if (foundIronPlate == false || foundIronPipe == false || foundCopperWire == false || foundDarkMatter == false)
             {
                 missingItem = true;
-                playerController.guiSound.volume = 0.15f;
-                playerController.guiSound.clip = playerController.missingItemsClip;
-                playerController.guiSound.Play();
+                playerController.playMissingItemsSound();
             }
             else
             {
@@ -1084,17 +994,13 @@ public class PlayerCrafting : MonoBehaviour
                     playerInventory.inventory[darkMatterSlotNumber].typeInSlot = "nothing";
                 }
                 playerInventory.AddItem("Universal Extractor", 1);
-                playerController.guiSound.volume = 0.3f;
-                playerController.guiSound.clip = playerController.craftingClip;
-                playerController.guiSound.Play();
+                playerController.playCraftingSound();
             }
         }
         else
         {
             playerController.outOfSpace = true;
-            playerController.guiSound.volume = 0.15f;
-            playerController.guiSound.clip = playerController.missingItemsClip;
-            playerController.guiSound.Play();
+            playerController.playMissingItemsSound();
         }
     }
 
@@ -1158,9 +1064,7 @@ public class PlayerCrafting : MonoBehaviour
             if (foundIronPlate == false || foundIronPipe == false || foundCopperWire == false || foundDarkMatter == false)
             {
                 missingItem = true;
-                playerController.guiSound.volume = 0.15f;
-                playerController.guiSound.clip = playerController.missingItemsClip;
-                playerController.guiSound.Play();
+                playerController.playMissingItemsSound();
             }
             else
             {
@@ -1185,17 +1089,13 @@ public class PlayerCrafting : MonoBehaviour
                     playerInventory.inventory[darkMatterSlotNumber].typeInSlot = "nothing";
                 }
                 playerInventory.AddItem("Universal Conduit", 1);
-                playerController.guiSound.volume = 0.3f;
-                playerController.guiSound.clip = playerController.craftingClip;
-                playerController.guiSound.Play();
+                playerController.playCraftingSound();
             }
         }
         else
         {
             playerController.outOfSpace = true;
-            playerController.guiSound.volume = 0.15f;
-            playerController.guiSound.clip = playerController.missingItemsClip;
-            playerController.guiSound.Play();
+            playerController.playMissingItemsSound();
         }
     }
 
@@ -1269,9 +1169,7 @@ public class PlayerCrafting : MonoBehaviour
             if (foundElectricMotor == false || foundCircuitBoard == false || foundIronPlate == false || foundIronPipe == false || foundCopperWire == false)
             {
                 missingItem = true;
-                playerController.guiSound.volume = 0.15f;
-                playerController.guiSound.clip = playerController.missingItemsClip;
-                playerController.guiSound.Play();
+                playerController.playMissingItemsSound();
             }
             else
             {
@@ -1301,17 +1199,13 @@ public class PlayerCrafting : MonoBehaviour
                     playerInventory.inventory[circuitBoardSlotNumber].typeInSlot = "nothing";
                 }
                 playerInventory.AddItem("Retriever", 1);
-                playerController.guiSound.volume = 0.3f;
-                playerController.guiSound.clip = playerController.craftingClip;
-                playerController.guiSound.Play();
+                playerController.playCraftingSound();
             }
         }
         else
         {
             playerController.outOfSpace = true;
-            playerController.guiSound.volume = 0.15f;
-            playerController.guiSound.clip = playerController.missingItemsClip;
-            playerController.guiSound.Play();
+            playerController.playMissingItemsSound();
         }
     }
 
@@ -1395,9 +1289,7 @@ public class PlayerCrafting : MonoBehaviour
             if (foundSmelter == false || foundIronPipe == false || foundCopperWire == false || foundElectricMotor == false || foundIronGear == false || foundIronPlate == false)
             {
                 missingItem = true;
-                playerController.guiSound.volume = 0.15f;
-                playerController.guiSound.clip = playerController.missingItemsClip;
-                playerController.guiSound.Play();
+                playerController.playMissingItemsSound();
             }
             else
             {
@@ -1432,17 +1324,13 @@ public class PlayerCrafting : MonoBehaviour
                     playerInventory.inventory[ironPlateSlotNumber].typeInSlot = "nothing";
                 }
                 playerInventory.AddItem("Generator", 1);
-                playerController.guiSound.volume = 0.3f;
-                playerController.guiSound.clip = playerController.craftingClip;
-                playerController.guiSound.Play();
+                playerController.playCraftingSound();
             }
         }
         else
         {
             playerController.outOfSpace = true;
-            playerController.guiSound.volume = 0.15f;
-            playerController.guiSound.clip = playerController.missingItemsClip;
-            playerController.guiSound.Play();
+            playerController.playMissingItemsSound();
         }
     }
 
@@ -1526,9 +1414,7 @@ public class PlayerCrafting : MonoBehaviour
             if (foundGenerator == false || foundSteelPipe == false || foundCopperWire == false || foundSteelGear == false || foundSteelPlate == false || foundGlassBlock == false)
             {
                 missingItem = true;
-                playerController.guiSound.volume = 0.15f;
-                playerController.guiSound.clip = playerController.missingItemsClip;
-                playerController.guiSound.Play();
+                playerController.playMissingItemsSound();
             }
             else
             {
@@ -1563,17 +1449,13 @@ public class PlayerCrafting : MonoBehaviour
                     playerInventory.inventory[steelPlateSlotNumber].typeInSlot = "nothing";
                 }
                 playerInventory.AddItem("Reactor Turbine", 1);
-                playerController.guiSound.volume = 0.3f;
-                playerController.guiSound.clip = playerController.craftingClip;
-                playerController.guiSound.Play();
+                playerController.playCraftingSound();
             }
         }
         else
         {
             playerController.outOfSpace = true;
-            playerController.guiSound.volume = 0.15f;
-            playerController.guiSound.clip = playerController.missingItemsClip;
-            playerController.guiSound.Play();
+            playerController.playMissingItemsSound();
         }
     }
 
@@ -1637,9 +1519,7 @@ public class PlayerCrafting : MonoBehaviour
             if (foundTinPlate == false || foundGlassBlock == false || foundCopperWire == false || foundDarkMatter == false)
             {
                 missingItem = true;
-                playerController.guiSound.volume = 0.15f;
-                playerController.guiSound.clip = playerController.missingItemsClip;
-                playerController.guiSound.Play();
+                playerController.playMissingItemsSound();
             }
             else
             {
@@ -1664,17 +1544,13 @@ public class PlayerCrafting : MonoBehaviour
                     playerInventory.inventory[darkMatterSlotNumber].typeInSlot = "nothing";
                 }
                 playerInventory.AddItem("Circuit Board", 1);
-                playerController.guiSound.volume = 0.3f;
-                playerController.guiSound.clip = playerController.craftingClip;
-                playerController.guiSound.Play();
+                playerController.playCraftingSound();
             }
         }
         else
         {
             playerController.outOfSpace = true;
-            playerController.guiSound.volume = 0.15f;
-            playerController.guiSound.clip = playerController.missingItemsClip;
-            playerController.guiSound.Play();
+            playerController.playMissingItemsSound();
         }
     }
 
@@ -1738,9 +1614,7 @@ public class PlayerCrafting : MonoBehaviour
             if (foundIronPlate == false || foundIronPipe == false || foundIronGear == false || foundCopperWire == false)
             {
                 missingItem = true;
-                playerController.guiSound.volume = 0.15f;
-                playerController.guiSound.clip = playerController.missingItemsClip;
-                playerController.guiSound.Play();
+                playerController.playMissingItemsSound();
             }
             else
             {
@@ -1765,17 +1639,13 @@ public class PlayerCrafting : MonoBehaviour
                     playerInventory.inventory[copperWireSlotNumber].typeInSlot = "nothing";
                 }
                 playerInventory.AddItem("Electric Motor", 1);
-                playerController.guiSound.volume = 0.3f;
-                playerController.guiSound.clip = playerController.craftingClip;
-                playerController.guiSound.Play();
+                playerController.playCraftingSound();
             }
         }
         else
         {
             playerController.outOfSpace = true;
-            playerController.guiSound.volume = 0.15f;
-            playerController.guiSound.clip = playerController.missingItemsClip;
-            playerController.guiSound.Play();
+            playerController.playMissingItemsSound();
         }
     }
 
@@ -1849,9 +1719,7 @@ public class PlayerCrafting : MonoBehaviour
             if (foundBronzeGear == false || foundSteelPlate == false || foundCircuitBoard == false || foundElectricMotor == false || foundDarkMatter == false)
             {
                 missingItem = true;
-                playerController.guiSound.volume = 0.15f;
-                playerController.guiSound.clip = playerController.missingItemsClip;
-                playerController.guiSound.Play();
+                playerController.playMissingItemsSound();
             }
             else
             {
@@ -1881,17 +1749,13 @@ public class PlayerCrafting : MonoBehaviour
                     playerInventory.inventory[darkMatterSlotNumber].typeInSlot = "nothing";
                 }
                 playerInventory.AddItem("Auto Crafter", 1);
-                playerController.guiSound.volume = 0.3f;
-                playerController.guiSound.clip = playerController.craftingClip;
-                playerController.guiSound.Play();
+                playerController.playCraftingSound();
             }
         }
         else
         {
             playerController.outOfSpace = true;
-            playerController.guiSound.volume = 0.15f;
-            playerController.guiSound.clip = playerController.missingItemsClip;
-            playerController.guiSound.Play();
+            playerController.playMissingItemsSound();
         }
     }
 
@@ -1965,9 +1829,7 @@ public class PlayerCrafting : MonoBehaviour
             if (foundGlass == false || foundIronPlate == false || foundIronPipe == false || foundCopperWire == false || foundCopperPlate == false)
             {
                 missingItem = true;
-                playerController.guiSound.volume = 0.15f;
-                playerController.guiSound.clip = playerController.missingItemsClip;
-                playerController.guiSound.Play();
+                playerController.playMissingItemsSound();
             }
             else
             {
@@ -1997,17 +1859,13 @@ public class PlayerCrafting : MonoBehaviour
                     playerInventory.inventory[glassSlotNumber].typeInSlot = "nothing";
                 }
                 playerInventory.AddItem("Solar Panel", 1);
-                playerController.guiSound.volume = 0.3f;
-                playerController.guiSound.clip = playerController.craftingClip;
-                playerController.guiSound.Play();
+                playerController.playCraftingSound();
             }
         }
         else
         {
             playerController.outOfSpace = true;
-            playerController.guiSound.volume = 0.15f;
-            playerController.guiSound.clip = playerController.missingItemsClip;
-            playerController.guiSound.Play();
+            playerController.playMissingItemsSound();
         }
     }
 
@@ -2061,9 +1919,7 @@ public class PlayerCrafting : MonoBehaviour
             if (foundGlassBlock == false || foundCopperWire == false || foundAluminumPlate == false)
             {
                 missingItem = true;
-                playerController.guiSound.volume = 0.15f;
-                playerController.guiSound.clip = playerController.missingItemsClip;
-                playerController.guiSound.Play();
+                playerController.playMissingItemsSound();
             }
             else
             {
@@ -2083,17 +1939,13 @@ public class PlayerCrafting : MonoBehaviour
                     playerInventory.inventory[glassBlockSlotNumber].typeInSlot = "nothing";
                 }
                 playerInventory.AddItem("Power Conduit", 1);
-                playerController.guiSound.volume = 0.3f;
-                playerController.guiSound.clip = playerController.craftingClip;
-                playerController.guiSound.Play();
+                playerController.playCraftingSound();
             }
         }
         else
         {
             playerController.outOfSpace = true;
-            playerController.guiSound.volume = 0.15f;
-            playerController.guiSound.clip = playerController.missingItemsClip;
-            playerController.guiSound.Play();
+            playerController.playMissingItemsSound();
         }
     }
 
@@ -2177,9 +2029,7 @@ public class PlayerCrafting : MonoBehaviour
             if (foundDarkMatter == false || foundGlass == false || foundSteelPlate == false || foundSteelPipe == false || foundCopperWire == false || foundCopperPlate == false)
             {
                 missingItem = true;
-                playerController.guiSound.volume = 0.15f;
-                playerController.guiSound.clip = playerController.missingItemsClip;
-                playerController.guiSound.Play();
+                playerController.playMissingItemsSound();
             }
             else
             {
@@ -2210,17 +2060,13 @@ public class PlayerCrafting : MonoBehaviour
                     playerInventory.inventory[darkMatterSlotNumber].typeInSlot = "nothing";
                 }
                 playerInventory.AddItem("Nuclear Reactor", 1);
-                playerController.guiSound.volume = 0.3f;
-                playerController.guiSound.clip = playerController.craftingClip;
-                playerController.guiSound.Play();
+                playerController.playCraftingSound();
             }
         }
         else
         {
             playerController.outOfSpace = true;
-            playerController.guiSound.volume = 0.15f;
-            playerController.guiSound.clip = playerController.missingItemsClip;
-            playerController.guiSound.Play();
+            playerController.playMissingItemsSound();
         }
     }
 
@@ -2264,9 +2110,7 @@ public class PlayerCrafting : MonoBehaviour
             if (foundPlates == false || foundPipe == false)
             {
                 missingItem = true;
-                playerController.guiSound.volume = 0.15f;
-                playerController.guiSound.clip = playerController.missingItemsClip;
-                playerController.guiSound.Play();
+                playerController.playMissingItemsSound();
             }
             else
             {
@@ -2281,17 +2125,13 @@ public class PlayerCrafting : MonoBehaviour
                     playerInventory.inventory[pipeSlotNumber].typeInSlot = "nothing";
                 }
                 playerInventory.AddItem("Heat Exchanger", 1);
-                playerController.guiSound.volume = 0.3f;
-                playerController.guiSound.clip = playerController.craftingClip;
-                playerController.guiSound.Play();
+                playerController.playCraftingSound();
             }
         }
         else
         {
             playerController.outOfSpace = true;
-            playerController.guiSound.volume = 0.15f;
-            playerController.guiSound.clip = playerController.missingItemsClip;
-            playerController.guiSound.Play();
+            playerController.playMissingItemsSound();
         }
     }
 
@@ -2345,9 +2185,7 @@ public class PlayerCrafting : MonoBehaviour
             if (foundIronPlate == false || foundIronPipe == false || foundCopperWire == false)
             {
                 missingItem = true;
-                playerController.guiSound.volume = 0.15f;
-                playerController.guiSound.clip = playerController.missingItemsClip;
-                playerController.guiSound.Play();
+                playerController.playMissingItemsSound();
             }
             else
             {
@@ -2367,17 +2205,13 @@ public class PlayerCrafting : MonoBehaviour
                     playerInventory.inventory[ironPipeSlotNumber].typeInSlot = "nothing";
                 }
                 playerInventory.AddItem("Smelter", 1);
-                playerController.guiSound.volume = 0.3f;
-                playerController.guiSound.clip = playerController.craftingClip;
-                playerController.guiSound.Play();
+                playerController.playCraftingSound();
             }
         }
         else
         {
             playerController.outOfSpace = true;
-            playerController.guiSound.volume = 0.15f;
-            playerController.guiSound.clip = playerController.missingItemsClip;
-            playerController.guiSound.Play();
+            playerController.playMissingItemsSound();
         }
     }
 
@@ -2431,9 +2265,7 @@ public class PlayerCrafting : MonoBehaviour
             if (foundIronPlate == false || foundIronPipe == false || foundCircuitBoard == false)
             {
                 missingItem = true;
-                playerController.guiSound.volume = 0.15f;
-                playerController.guiSound.clip = playerController.missingItemsClip;
-                playerController.guiSound.Play();
+                playerController.playMissingItemsSound();
             }
             else
             {
@@ -2453,17 +2285,13 @@ public class PlayerCrafting : MonoBehaviour
                     playerInventory.inventory[circuitBoardSlotNumber].typeInSlot = "nothing";
                 }
                 playerInventory.AddItem("Rail Cart Hub", 1);
-                playerController.guiSound.volume = 0.3f;
-                playerController.guiSound.clip = playerController.craftingClip;
-                playerController.guiSound.Play();
+                playerController.playCraftingSound();
             }
         }
         else
         {
             playerController.outOfSpace = true;
-            playerController.guiSound.volume = 0.15f;
-            playerController.guiSound.clip = playerController.missingItemsClip;
-            playerController.guiSound.Play();
+            playerController.playMissingItemsSound();
         }
     }
 
@@ -2547,9 +2375,7 @@ public class PlayerCrafting : MonoBehaviour
             if (foundSolarPanel == false || foundElectricMotor == false || foundCopperWire == false || foundTinPlate == false || foundAluminumGear == false || foundStorageContainer == false)
             {
                 missingItem = true;
-                playerController.guiSound.volume = 0.15f;
-                playerController.guiSound.clip = playerController.missingItemsClip;
-                playerController.guiSound.Play();
+                playerController.playMissingItemsSound();
             }
             else
             {
@@ -2584,17 +2410,13 @@ public class PlayerCrafting : MonoBehaviour
                     playerInventory.inventory[solarPanelSlotNumber].typeInSlot = "nothing";
                 }
                 playerInventory.AddItem("Rail Cart", 1);
-                playerController.guiSound.volume = 0.3f;
-                playerController.guiSound.clip = playerController.craftingClip;
-                playerController.guiSound.Play();
+                playerController.playCraftingSound();
             }
         }
         else
         {
             playerController.outOfSpace = true;
-            playerController.guiSound.volume = 0.15f;
-            playerController.guiSound.clip = playerController.missingItemsClip;
-            playerController.guiSound.Play();
+            playerController.playMissingItemsSound();
         }
     }
 
@@ -2659,9 +2481,7 @@ public class PlayerCrafting : MonoBehaviour
             if (foundIronPlate == false || foundIronPipe == false || foundTinPlate == false || foundCopperWire == false || foundAluminumWire == false)
             {
                 missingItem = true;
-                playerController.guiSound.volume = 0.15f;
-                playerController.guiSound.clip = playerController.missingItemsClip;
-                playerController.guiSound.Play();
+                playerController.playMissingItemsSound();
             }
             else
             {
@@ -2691,17 +2511,13 @@ public class PlayerCrafting : MonoBehaviour
                     playerInventory.inventory[aluminumWireSlotNumber].typeInSlot = "nothing";
                 }
                 playerInventory.AddItem("Gear Cutter", 1);
-                playerController.guiSound.volume = 0.3f;
-                playerController.guiSound.clip = playerController.craftingClip;
-                playerController.guiSound.Play();
+                playerController.playCraftingSound();
             }
         }
         else
         {
             playerController.outOfSpace = true;
-            playerController.guiSound.volume = 0.15f;
-            playerController.guiSound.clip = playerController.missingItemsClip;
-            playerController.guiSound.Play();
+            playerController.playMissingItemsSound();
         }
     }
 
@@ -2773,9 +2589,7 @@ public class PlayerCrafting : MonoBehaviour
             if (foundIronGear == false || foundIronPlate == false || foundIronPipe == false || foundTinPlate == false || foundCopperWire == false || foundAluminumWire == false)
             {
                 missingItem = true;
-                playerController.guiSound.volume = 0.15f;
-                playerController.guiSound.clip = playerController.missingItemsClip;
-                playerController.guiSound.Play();
+                playerController.playMissingItemsSound();
             }
             else
             {
@@ -2810,17 +2624,13 @@ public class PlayerCrafting : MonoBehaviour
                     playerInventory.inventory[aluminumWireSlotNumber].typeInSlot = "nothing";
                 }
                 playerInventory.AddItem("Alloy Smelter", 1);
-                playerController.guiSound.volume = 0.3f;
-                playerController.guiSound.clip = playerController.craftingClip;
-                playerController.guiSound.Play();
+                playerController.playCraftingSound();
             }
         }
         else
         {
             playerController.outOfSpace = true;
-            playerController.guiSound.volume = 0.15f;
-            playerController.guiSound.clip = playerController.missingItemsClip;
-            playerController.guiSound.Play();
+            playerController.playMissingItemsSound();
         }
     }
 
@@ -2909,9 +2719,7 @@ public class PlayerCrafting : MonoBehaviour
             if (foundElectricMotor == false || foundCircuitBoard == false || foundSteelGear == false || foundSteelPlate == false || foundSteelPipe == false || foundBronzePlate == false || foundCopperWire == false || foundAluminumWire == false)
             {
                 missingItem = true;
-                playerController.guiSound.volume = 0.15f;
-                playerController.guiSound.clip = playerController.missingItemsClip;
-                playerController.guiSound.Play();
+                playerController.playMissingItemsSound();
             }
             else
             {
@@ -2956,17 +2764,13 @@ public class PlayerCrafting : MonoBehaviour
                     playerInventory.inventory[circuitBoardSlotNumber].typeInSlot = "nothing";
                 }
                 playerInventory.AddItem("Turret", 1);
-                playerController.guiSound.volume = 0.3f;
-                playerController.guiSound.clip = playerController.craftingClip;
-                playerController.guiSound.Play();
+                playerController.playCraftingSound();
             }
         }
         else
         {
             playerController.outOfSpace = true;
-            playerController.guiSound.volume = 0.15f;
-            playerController.guiSound.clip = playerController.missingItemsClip;
-            playerController.guiSound.Play();
+            playerController.playMissingItemsSound();
         }
     }
 
@@ -3052,9 +2856,7 @@ public class PlayerCrafting : MonoBehaviour
             if (foundDarkMatter == false || foundTinGear == false || foundBronzeGear == false || foundSteelGear == false || foundSteelPlate == false || foundSteelPipe == false || foundCopperWire == false || foundAluminumWire == false)
             {
                 missingItem = true;
-                playerController.guiSound.volume = 0.15f;
-                playerController.guiSound.clip = playerController.missingItemsClip;
-                playerController.guiSound.Play();
+                playerController.playMissingItemsSound();
             }
             else
             {
@@ -3099,17 +2901,13 @@ public class PlayerCrafting : MonoBehaviour
                     playerInventory.inventory[darkMatterSlotNumber].typeInSlot = "nothing";
                 }
                 playerInventory.AddItem("Dark Matter Collector", 1);
-                playerController.guiSound.volume = 0.3f;
-                playerController.guiSound.clip = playerController.craftingClip;
-                playerController.guiSound.Play();
+                playerController.playCraftingSound();
             }
         }
         else
         {
             playerController.outOfSpace = true;
-            playerController.guiSound.volume = 0.15f;
-            playerController.guiSound.clip = playerController.missingItemsClip;
-            playerController.guiSound.Play();
+            playerController.playMissingItemsSound();
         }
     }
 
@@ -3195,9 +2993,7 @@ public class PlayerCrafting : MonoBehaviour
             if (foundDarkMatter == false || foundTinGear == false || foundBronzeGear == false || foundSteelGear == false || foundSteelPlate == false || foundSteelPipe == false || foundCopperWire == false || foundAluminumWire == false)
             {
                 missingItem = true;
-                playerController.guiSound.volume = 0.15f;
-                playerController.guiSound.clip = playerController.missingItemsClip;
-                playerController.guiSound.Play();
+                playerController.playMissingItemsSound();
             }
             else
             {
@@ -3242,17 +3038,13 @@ public class PlayerCrafting : MonoBehaviour
                     playerInventory.inventory[darkMatterSlotNumber].typeInSlot = "nothing";
                 }
                 playerInventory.AddItem("Dark Matter Conduit", 1);
-                playerController.guiSound.volume = 0.3f;
-                playerController.guiSound.clip = playerController.craftingClip;
-                playerController.guiSound.Play();
+                playerController.playCraftingSound();
             }
         }
         else
         {
             playerController.outOfSpace = true;
-            playerController.guiSound.volume = 0.15f;
-            playerController.guiSound.clip = playerController.missingItemsClip;
-            playerController.guiSound.Play();
+            playerController.playMissingItemsSound();
         }
     }
 

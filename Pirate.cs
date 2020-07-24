@@ -19,6 +19,7 @@ public class Pirate : MonoBehaviour
     public GameObject model;
     Quaternion originalRotation;
     float lifeSpan = 300;
+    float destroyTimer;
     public float integrity = 100;
 
     public void TakeDamage()
@@ -59,6 +60,16 @@ public class Pirate : MonoBehaviour
         if (lifeSpan <= 0)
         {
             Destroy(gameObject);
+        }
+
+        //Destroying
+        if (destroying == true)
+        {
+            destroyTimer += 1 * Time.deltaTime;
+            if (destroyTimer >= 30)
+            {
+                Destroy(gameObject);
+            }
         }
 
         if (integrity <= 0 && destroying == false)

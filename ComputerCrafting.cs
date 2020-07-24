@@ -66,7 +66,7 @@ public class ComputerCrafting : MonoBehaviour
                             conduitItem.target = manager.gameObject;
                             if (conduitItem.textureDictionary != null)
                             {
-                                conduitItem.billboard.GetComponent<Renderer>().material.mainTexture = conduitItem.textureDictionary["Iron Block"];
+                                conduitItem.billboard.GetComponent<Renderer>().material.mainTexture = conduitItem.textureDictionary.dictionary["Iron Block"];
                             }
                             conduitItem.active = true;
                         }
@@ -126,7 +126,7 @@ public class ComputerCrafting : MonoBehaviour
                             conduitItem.target = manager.gameObject;
                             if (conduitItem.textureDictionary != null)
                             {
-                                conduitItem.billboard.GetComponent<Renderer>().material.mainTexture = conduitItem.textureDictionary["Iron Ramp"];
+                                conduitItem.billboard.GetComponent<Renderer>().material.mainTexture = conduitItem.textureDictionary.dictionary["Iron Ramp"];
                             }
                             conduitItem.active = true;
                         }
@@ -186,7 +186,7 @@ public class ComputerCrafting : MonoBehaviour
                             conduitItem.target = manager.gameObject;
                             if (conduitItem.textureDictionary != null)
                             {
-                                conduitItem.billboard.GetComponent<Renderer>().material.mainTexture = conduitItem.textureDictionary["Steel Block"];
+                                conduitItem.billboard.GetComponent<Renderer>().material.mainTexture = conduitItem.textureDictionary.dictionary["Steel Block"];
                             }
                             conduitItem.active = true;
                         }
@@ -246,7 +246,7 @@ public class ComputerCrafting : MonoBehaviour
                             conduitItem.target = manager.gameObject;
                             if (conduitItem.textureDictionary != null)
                             {
-                                conduitItem.billboard.GetComponent<Renderer>().material.mainTexture = conduitItem.textureDictionary["Steel Ramp"];
+                                conduitItem.billboard.GetComponent<Renderer>().material.mainTexture = conduitItem.textureDictionary.dictionary["Steel Ramp"];
                             }
                             conduitItem.active = true;
                         }
@@ -306,7 +306,7 @@ public class ComputerCrafting : MonoBehaviour
                             conduitItem.target = manager.gameObject;
                             if (conduitItem.textureDictionary != null)
                             {
-                                conduitItem.billboard.GetComponent<Renderer>().material.mainTexture = conduitItem.textureDictionary["Storage Container"];
+                                conduitItem.billboard.GetComponent<Renderer>().material.mainTexture = conduitItem.textureDictionary.dictionary["Storage Container"];
                             }
                             conduitItem.active = true;
                         }
@@ -385,7 +385,7 @@ public class ComputerCrafting : MonoBehaviour
                             conduitItem.target = manager.gameObject;
                             if (conduitItem.textureDictionary != null)
                             {
-                                conduitItem.billboard.GetComponent<Renderer>().material.mainTexture = conduitItem.textureDictionary["Quantum Hatchway"];
+                                conduitItem.billboard.GetComponent<Renderer>().material.mainTexture = conduitItem.textureDictionary.dictionary["Quantum Hatchway"];
                             }
                             conduitItem.active = true;
                         }
@@ -478,7 +478,7 @@ public class ComputerCrafting : MonoBehaviour
                             conduitItem.target = manager.gameObject;
                             if (conduitItem.textureDictionary != null)
                             {
-                                conduitItem.billboard.GetComponent<Renderer>().material.mainTexture = conduitItem.textureDictionary["Electric Light"];
+                                conduitItem.billboard.GetComponent<Renderer>().material.mainTexture = conduitItem.textureDictionary.dictionary["Electric Light"];
                             }
                             conduitItem.active = true;
                         }
@@ -557,7 +557,7 @@ public class ComputerCrafting : MonoBehaviour
                             conduitItem.target = manager.gameObject;
                             if (conduitItem.textureDictionary != null)
                             {
-                                conduitItem.billboard.GetComponent<Renderer>().material.mainTexture = conduitItem.textureDictionary["Auger"];
+                                conduitItem.billboard.GetComponent<Renderer>().material.mainTexture = conduitItem.textureDictionary.dictionary["Auger"];
                             }
                             conduitItem.active = true;
                         }
@@ -709,7 +709,7 @@ public class ComputerCrafting : MonoBehaviour
                             conduitItem.target = manager.gameObject;
                             if (conduitItem.textureDictionary != null)
                             {
-                                conduitItem.billboard.GetComponent<Renderer>().material.mainTexture = conduitItem.textureDictionary["Storage Computer"];
+                                conduitItem.billboard.GetComponent<Renderer>().material.mainTexture = conduitItem.textureDictionary.dictionary["Storage Computer"];
                             }
                             conduitItem.active = true;
                         }
@@ -789,7 +789,7 @@ public class ComputerCrafting : MonoBehaviour
                             conduitItem.target = manager.gameObject;
                             if (conduitItem.textureDictionary != null)
                             {
-                                conduitItem.billboard.GetComponent<Renderer>().material.mainTexture = conduitItem.textureDictionary["Extruder"];
+                                conduitItem.billboard.GetComponent<Renderer>().material.mainTexture = conduitItem.textureDictionary.dictionary["Extruder"];
                             }
                             conduitItem.active = true;
                         }
@@ -879,7 +879,7 @@ public class ComputerCrafting : MonoBehaviour
                             conduitItem.target = manager.gameObject;
                             if (conduitItem.textureDictionary != null)
                             {
-                                conduitItem.billboard.GetComponent<Renderer>().material.mainTexture = conduitItem.textureDictionary["Press"];
+                                conduitItem.billboard.GetComponent<Renderer>().material.mainTexture = conduitItem.textureDictionary.dictionary["Press"];
                             }
                             conduitItem.active = true;
                         }
@@ -992,7 +992,7 @@ public class ComputerCrafting : MonoBehaviour
                             conduitItem.target = manager.gameObject;
                             if (conduitItem.textureDictionary != null)
                             {
-                                conduitItem.billboard.GetComponent<Renderer>().material.mainTexture = conduitItem.textureDictionary["Universal Extractor"];
+                                conduitItem.billboard.GetComponent<Renderer>().material.mainTexture = conduitItem.textureDictionary.dictionary["Universal Extractor"];
                             }
                             conduitItem.active = true;
                         }
@@ -1105,7 +1105,7 @@ public class ComputerCrafting : MonoBehaviour
                             conduitItem.target = manager.gameObject;
                             if (conduitItem.textureDictionary != null)
                             {
-                                conduitItem.billboard.GetComponent<Renderer>().material.mainTexture = conduitItem.textureDictionary["Universal Conduit"];
+                                conduitItem.billboard.GetComponent<Renderer>().material.mainTexture = conduitItem.textureDictionary.dictionary["Universal Conduit"];
                             }
                             conduitItem.active = true;
                         }
@@ -1236,7 +1236,7 @@ public class ComputerCrafting : MonoBehaviour
                             conduitItem.target = manager.gameObject;
                             if (conduitItem.textureDictionary != null)
                             {
-                                conduitItem.billboard.GetComponent<Renderer>().material.mainTexture = conduitItem.textureDictionary["Retriever"];
+                                conduitItem.billboard.GetComponent<Renderer>().material.mainTexture = conduitItem.textureDictionary.dictionary["Retriever"];
                             }
                             conduitItem.active = true;
                         }
@@ -1384,7 +1384,7 @@ public class ComputerCrafting : MonoBehaviour
                             conduitItem.target = manager.gameObject;
                             if (conduitItem.textureDictionary != null)
                             {
-                                conduitItem.billboard.GetComponent<Renderer>().material.mainTexture = conduitItem.textureDictionary["Generator"];
+                                conduitItem.billboard.GetComponent<Renderer>().material.mainTexture = conduitItem.textureDictionary.dictionary["Generator"];
                             }
                             conduitItem.active = true;
                         }
@@ -1532,7 +1532,7 @@ public class ComputerCrafting : MonoBehaviour
                             conduitItem.target = manager.gameObject;
                             if (conduitItem.textureDictionary != null)
                             {
-                                conduitItem.billboard.GetComponent<Renderer>().material.mainTexture = conduitItem.textureDictionary["Reactor Turbine"];
+                                conduitItem.billboard.GetComponent<Renderer>().material.mainTexture = conduitItem.textureDictionary.dictionary["Reactor Turbine"];
                             }
                             conduitItem.active = true;
                         }
@@ -1663,7 +1663,7 @@ public class ComputerCrafting : MonoBehaviour
                             conduitItem.target = manager.gameObject;
                             if (conduitItem.textureDictionary != null)
                             {
-                                conduitItem.billboard.GetComponent<Renderer>().material.mainTexture = conduitItem.textureDictionary["Auto Crafter"];
+                                conduitItem.billboard.GetComponent<Renderer>().material.mainTexture = conduitItem.textureDictionary.dictionary["Auto Crafter"];
                             }
                             conduitItem.active = true;
                         }
@@ -1755,7 +1755,7 @@ public class ComputerCrafting : MonoBehaviour
                             conduitItem.target = manager.gameObject;
                             if (conduitItem.textureDictionary != null)
                             {
-                                conduitItem.billboard.GetComponent<Renderer>().material.mainTexture = conduitItem.textureDictionary["Rail Cart Hub"];
+                                conduitItem.billboard.GetComponent<Renderer>().material.mainTexture = conduitItem.textureDictionary.dictionary["Rail Cart Hub"];
                             }
                             conduitItem.active = true;
                         }
@@ -1898,7 +1898,7 @@ public class ComputerCrafting : MonoBehaviour
                             conduitItem.target = manager.gameObject;
                             if (conduitItem.textureDictionary != null)
                             {
-                                conduitItem.billboard.GetComponent<Renderer>().material.mainTexture = conduitItem.textureDictionary["Rail Cart"];
+                                conduitItem.billboard.GetComponent<Renderer>().material.mainTexture = conduitItem.textureDictionary.dictionary["Rail Cart"];
                             }
                             conduitItem.active = true;
                         }
@@ -2024,7 +2024,7 @@ public class ComputerCrafting : MonoBehaviour
                             conduitItem.target = manager.gameObject;
                             if (conduitItem.textureDictionary != null)
                             {
-                                conduitItem.billboard.GetComponent<Renderer>().material.mainTexture = conduitItem.textureDictionary["Solar Panel"];
+                                conduitItem.billboard.GetComponent<Renderer>().material.mainTexture = conduitItem.textureDictionary.dictionary["Solar Panel"];
                             }
                             conduitItem.active = true;
                         }
@@ -2120,7 +2120,7 @@ public class ComputerCrafting : MonoBehaviour
                             conduitItem.target = manager.gameObject;
                             if (conduitItem.textureDictionary != null)
                             {
-                                conduitItem.billboard.GetComponent<Renderer>().material.mainTexture = conduitItem.textureDictionary["Power Conduit"];
+                                conduitItem.billboard.GetComponent<Renderer>().material.mainTexture = conduitItem.textureDictionary.dictionary["Power Conduit"];
                             }
                             conduitItem.active = true;
                         }
@@ -2267,7 +2267,7 @@ public class ComputerCrafting : MonoBehaviour
                             conduitItem.target = manager.gameObject;
                             if (conduitItem.textureDictionary != null)
                             {
-                                conduitItem.billboard.GetComponent<Renderer>().material.mainTexture = conduitItem.textureDictionary["Nuclear Reactor"];
+                                conduitItem.billboard.GetComponent<Renderer>().material.mainTexture = conduitItem.textureDictionary.dictionary["Nuclear Reactor"];
                             }
                             conduitItem.active = true;
                         }
@@ -2346,7 +2346,7 @@ public class ComputerCrafting : MonoBehaviour
                             conduitItem.target = manager.gameObject;
                             if (conduitItem.textureDictionary != null)
                             {
-                                conduitItem.billboard.GetComponent<Renderer>().material.mainTexture = conduitItem.textureDictionary["Heat Exchanger"];
+                                conduitItem.billboard.GetComponent<Renderer>().material.mainTexture = conduitItem.textureDictionary.dictionary["Heat Exchanger"];
                             }
                             conduitItem.active = true;
                         }
@@ -2442,7 +2442,7 @@ public class ComputerCrafting : MonoBehaviour
                             conduitItem.target = manager.gameObject;
                             if (conduitItem.textureDictionary != null)
                             {
-                                conduitItem.billboard.GetComponent<Renderer>().material.mainTexture = conduitItem.textureDictionary["Smelter"];
+                                conduitItem.billboard.GetComponent<Renderer>().material.mainTexture = conduitItem.textureDictionary.dictionary["Smelter"];
                             }
                             conduitItem.active = true;
                         }
@@ -2563,7 +2563,7 @@ public class ComputerCrafting : MonoBehaviour
                             conduitItem.target = manager.gameObject;
                             if (conduitItem.textureDictionary != null)
                             {
-                                conduitItem.billboard.GetComponent<Renderer>().material.mainTexture = conduitItem.textureDictionary["Gear Cutter"];
+                                conduitItem.billboard.GetComponent<Renderer>().material.mainTexture = conduitItem.textureDictionary.dictionary["Gear Cutter"];
                             }
                             conduitItem.active = true;
                         }
@@ -2676,7 +2676,7 @@ public class ComputerCrafting : MonoBehaviour
                             conduitItem.target = manager.gameObject;
                             if (conduitItem.textureDictionary != null)
                             {
-                                conduitItem.billboard.GetComponent<Renderer>().material.mainTexture = conduitItem.textureDictionary["Circuit Board"];
+                                conduitItem.billboard.GetComponent<Renderer>().material.mainTexture = conduitItem.textureDictionary.dictionary["Circuit Board"];
                             }
                             conduitItem.active = true;
                         }
@@ -2785,7 +2785,7 @@ public class ComputerCrafting : MonoBehaviour
                             conduitItem.target = manager.gameObject;
                             if (conduitItem.textureDictionary != null)
                             {
-                                conduitItem.billboard.GetComponent<Renderer>().material.mainTexture = conduitItem.textureDictionary["Electric Motor"];
+                                conduitItem.billboard.GetComponent<Renderer>().material.mainTexture = conduitItem.textureDictionary.dictionary["Electric Motor"];
                             }
                             conduitItem.active = true;
                         }
@@ -2920,7 +2920,7 @@ public class ComputerCrafting : MonoBehaviour
                             conduitItem.target = manager.gameObject;
                             if (conduitItem.textureDictionary != null)
                             {
-                                conduitItem.billboard.GetComponent<Renderer>().material.mainTexture = conduitItem.textureDictionary["Alloy Smelter"];
+                                conduitItem.billboard.GetComponent<Renderer>().material.mainTexture = conduitItem.textureDictionary.dictionary["Alloy Smelter"];
                             }
                             conduitItem.active = true;
                         }
@@ -3086,7 +3086,7 @@ public class ComputerCrafting : MonoBehaviour
                             conduitItem.target = manager.gameObject;
                             if (conduitItem.textureDictionary != null)
                             {
-                                conduitItem.billboard.GetComponent<Renderer>().material.mainTexture = conduitItem.textureDictionary["Turret"];
+                                conduitItem.billboard.GetComponent<Renderer>().material.mainTexture = conduitItem.textureDictionary.dictionary["Turret"];
                             }
                             conduitItem.active = true;
                         }
@@ -3249,7 +3249,7 @@ public class ComputerCrafting : MonoBehaviour
                             conduitItem.target = manager.gameObject;
                             if (conduitItem.textureDictionary != null)
                             {
-                                conduitItem.billboard.GetComponent<Renderer>().material.mainTexture = conduitItem.textureDictionary["Dark Matter Collector"];
+                                conduitItem.billboard.GetComponent<Renderer>().material.mainTexture = conduitItem.textureDictionary.dictionary["Dark Matter Collector"];
                             }
                             conduitItem.active = true;
                         }
@@ -3412,7 +3412,7 @@ public class ComputerCrafting : MonoBehaviour
                             conduitItem.target = manager.gameObject;
                             if (conduitItem.textureDictionary != null)
                             {
-                                conduitItem.billboard.GetComponent<Renderer>().material.mainTexture = conduitItem.textureDictionary["Dark Matter Conduit"];
+                                conduitItem.billboard.GetComponent<Renderer>().material.mainTexture = conduitItem.textureDictionary.dictionary["Dark Matter Conduit"];
                             }
                             conduitItem.active = true;
                         }

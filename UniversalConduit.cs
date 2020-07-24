@@ -1130,7 +1130,7 @@ public class UniversalConduit : MonoBehaviour
                                                 {
                                                     if (storageComputerConduitItem.textureDictionary != null)
                                                     {
-                                                        storageComputerConduitItem.billboard.GetComponent<Renderer>().material.mainTexture = storageComputerConduitItem.textureDictionary[type];
+                                                        storageComputerConduitItem.billboard.GetComponent<Renderer>().material.mainTexture = storageComputerConduitItem.textureDictionary.dictionary[type];
                                                     }
                                                     storageComputerConduitItem.target = manager.gameObject;
                                                 }
@@ -1154,7 +1154,7 @@ public class UniversalConduit : MonoBehaviour
                                                 {
                                                     if (storageComputerConduitItem.textureDictionary != null)
                                                     {
-                                                        storageComputerConduitItem.billboard.GetComponent<Renderer>().material.mainTexture = storageComputerConduitItem.textureDictionary[type];
+                                                        storageComputerConduitItem.billboard.GetComponent<Renderer>().material.mainTexture = storageComputerConduitItem.textureDictionary.dictionary[type];
                                                     }
                                                     storageComputerConduitItem.target = manager.gameObject;
                                                 }
