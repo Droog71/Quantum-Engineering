@@ -31,11 +31,6 @@ public class Auger : MonoBehaviour
         connectionLine.enabled = false;
     }
 
-    void OnDestroy()
-    {
-
-    }
-
     void Update()
     {
         updateTick += 1 * Time.deltaTime;

@@ -19,7 +19,6 @@ public class Glass : MonoBehaviour
         updateTick += 1 * Time.deltaTime;
         if (updateTick > 0.5f + (address * 0.001f))
         {
-            //Debug.Log(ID + " Physics update tick: " + address * 0.1f);
             GetComponent<PhysicsHandler>().UpdatePhysics();
             updateTick = 0;
         }

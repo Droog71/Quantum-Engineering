@@ -7,7 +7,54 @@ public class MachineCrafting : MonoBehaviour
     public InventoryManager inventoryManager;
     public bool missingItem;
 
-    public void CraftIronBlock()
+    public void CraftItem(string[] ingredients, int[] amounts, string output, int outputAmount)
+    {
+        int[] slots = new int[ingredients.Length];
+        bool[] found = new bool[ingredients.Length];
+
+        for (int i = 0; i < ingredients.Length; i++)
+        {
+            int currentSlot = 0;
+            foreach (InventorySlot slot in inventoryManager.inventory)
+            {
+                if (slot.amountInSlot >= amounts[i])
+                {
+                    if (slot.typeInSlot.Equals(ingredients[i]))
+                    {
+                        found[i] = true;
+                        slots[i] = currentSlot;
+                    }
+                }
+                currentSlot++;
+            }
+        }
+
+        foreach (bool b in found)
+        {
+            if (!missingItem)
+            {
+                missingItem |= !b;
+            }
+        }
+
+        if (!missingItem)
+        {
+            inventoryManager.AddItem(output, outputAmount);
+            if (inventoryManager.itemAdded)
+            {
+                for (int i = 0; i < ingredients.Length; i++)
+                {
+                    inventoryManager.inventory[slots[i]].amountInSlot -= amounts[i];
+                    if (inventoryManager.inventory[slots[i]].amountInSlot <= 0)
+                    {
+                        inventoryManager.inventory[slots[i]].typeInSlot = "nothing";
+                    }
+                }
+            }
+        }
+    }
+
+    public bool CraftIronBlock()
     {
         bool foundItems = false;
         foreach (InventorySlot slot in inventoryManager.inventory)
@@ -36,9 +83,10 @@ public class MachineCrafting : MonoBehaviour
         {
             missingItem = true;
         }
+        return true;
     }
 
-    public void CraftIronRamp()
+    public bool CraftIronRamp()
     {
         bool foundItems = false;
         foreach (InventorySlot slot in inventoryManager.inventory)
@@ -67,9 +115,10 @@ public class MachineCrafting : MonoBehaviour
         {
             missingItem = true;
         }
+        return true;
     }
 
-    public void CraftSteelBlock()
+    public bool CraftSteelBlock()
     {
         bool foundItems = false;
         foreach (InventorySlot slot in inventoryManager.inventory)
@@ -98,9 +147,10 @@ public class MachineCrafting : MonoBehaviour
         {
             missingItem = true;
         }
+        return true;
     }
 
-    public void CraftSteelRamp()
+    public bool CraftSteelRamp()
     {
         bool foundItems = false;
         foreach (InventorySlot slot in inventoryManager.inventory)
@@ -129,9 +179,10 @@ public class MachineCrafting : MonoBehaviour
         {
             missingItem = true;
         }
+        return true;
     }
 
-    public void CraftQuantumHatchway()
+    public bool CraftQuantumHatchway()
     {
         bool foundTin = false;
         bool foundDarkMatter = false;
@@ -179,9 +230,10 @@ public class MachineCrafting : MonoBehaviour
                 }
             }
         }
+        return true;
     }
 
-    public void CraftElectricLight()
+    public bool CraftElectricLight()
     {
         bool foundGlass = false;
         bool foundCopperWire = false;
@@ -241,9 +293,10 @@ public class MachineCrafting : MonoBehaviour
                 }
             }
         }
+        return true;
     }
 
-    public void CraftAuger()
+    public bool CraftAuger()
     {
         bool foundIron = false;
         bool foundCopper = false;
@@ -291,9 +344,10 @@ public class MachineCrafting : MonoBehaviour
                 }
             }
         }
+        return true;
     }
 
-    public void CraftStorageContainer()
+    public bool CraftStorageContainer()
     {
         bool foundItems = false;
         foreach (InventorySlot slot in inventoryManager.inventory)
@@ -322,9 +376,10 @@ public class MachineCrafting : MonoBehaviour
         {
             missingItem = true;
         }
+        return true;
     }
 
-    public void CraftExtruder()
+    public bool CraftExtruder()
     {
         bool foundIron = false;
         bool foundCopper = false;
@@ -372,9 +427,10 @@ public class MachineCrafting : MonoBehaviour
                 }
             }
         }
+        return true;
     }
 
-    public void CraftPress()
+    public bool CraftPress()
     {
         bool foundIronIngot = false;
         bool foundIronPipe = false;
@@ -431,9 +487,10 @@ public class MachineCrafting : MonoBehaviour
                 }
             }
         }
+        return true;
     }
 
-    public void CraftUniversalExtractor()
+    public bool CraftUniversalExtractor()
     {
         bool foundIronPlate = false;
         bool foundIronPipe = false;
@@ -511,9 +568,10 @@ public class MachineCrafting : MonoBehaviour
                 }
             }
         }
+        return true;
     }
 
-    public void CraftUniversalConduit()
+    public bool CraftUniversalConduit()
     {
         bool foundIronPlate = false;
         bool foundIronPipe = false;
@@ -591,9 +649,10 @@ public class MachineCrafting : MonoBehaviour
                 }
             }
         }
+        return true;
     }
 
-    public void CraftRetriever()
+    public bool CraftRetriever()
     {
         bool foundIronPlate = false;
         bool foundIronPipe = false;
@@ -686,9 +745,10 @@ public class MachineCrafting : MonoBehaviour
                 }
             }
         }
+        return true;
     }
 
-    public void CraftGenerator()
+    public bool CraftGenerator()
     {
         bool foundSmelter = false;
         bool foundIronPipe = false;
@@ -796,9 +856,10 @@ public class MachineCrafting : MonoBehaviour
                 }
             }
         }
+        return true;
     }
 
-    public void CraftReactorTurbine()
+    public bool CraftReactorTurbine()
     {
         bool foundGenerator = false;
         bool foundCopperWire = false;
@@ -906,9 +967,10 @@ public class MachineCrafting : MonoBehaviour
                 }
             }
         }
+        return true;
     }
 
-    public void CraftRailCartHub()
+    public bool CraftRailCartHub()
     {
         bool foundIronPlate = false;
         bool foundIronPipe = false;
@@ -971,9 +1033,10 @@ public class MachineCrafting : MonoBehaviour
                 }
             }
         }
+        return true;
     }
 
-    public void CraftRailCart()
+    public bool CraftRailCart()
     {
         bool foundElectricMotor = false;
         bool foundCopperWire = false;
@@ -1081,9 +1144,10 @@ public class MachineCrafting : MonoBehaviour
                 }
             }
         }
+        return true;
     }
 
-    public void CraftCircuitBoard()
+    public bool CraftCircuitBoard()
     {
         bool foundTinPlate = false;
         bool foundGlassBlock = false;
@@ -1161,9 +1225,10 @@ public class MachineCrafting : MonoBehaviour
                 }
             }
         }
+        return true;
     }
 
-    public void CraftMotor()
+    public bool CraftMotor()
     {
         bool foundIronPlate = false;
         bool foundIronPipe = false;
@@ -1241,9 +1306,10 @@ public class MachineCrafting : MonoBehaviour
                 }
             }
         }
+        return true;
     }
 
-    public void CraftAutoCrafter()
+    public bool CraftAutoCrafter()
     {
         bool foundBronzeGear = false;
         bool foundSteelPlate = false;
@@ -1336,9 +1402,10 @@ public class MachineCrafting : MonoBehaviour
                 }
             }
         }
+        return true;
     }
 
-    public void CraftSolarPanel()
+    public bool CraftSolarPanel()
     {
         bool foundIronPlate = false;
         bool foundIronPipe = false;
@@ -1427,9 +1494,10 @@ public class MachineCrafting : MonoBehaviour
                 }
             }
         }
+        return true;
     }
 
-    public void CraftPowerConduit()
+    public bool CraftPowerConduit()
     {
         bool foundAluminumPlate = false;
         bool foundGlassBlock = false;
@@ -1492,9 +1560,10 @@ public class MachineCrafting : MonoBehaviour
                 }
             }
         }
+        return true;
     }
 
-    public void CraftNuclearReactor()
+    public bool CraftNuclearReactor()
     {
         bool foundSteelPlate = false;
         bool foundSteelPipe = false;
@@ -1598,9 +1667,10 @@ public class MachineCrafting : MonoBehaviour
                 }
             }
         }
+        return true;
     }
 
-    public void CraftHeatExchanger()
+    public bool CraftHeatExchanger()
     {
         bool foundPlates = false;
         bool foundPipe = false;
@@ -1648,9 +1718,10 @@ public class MachineCrafting : MonoBehaviour
                 }
             }
         }
+        return true;
     }
 
-    public void CraftSmelter()
+    public bool CraftSmelter()
     {
         bool foundIronPlate = false;
         bool foundIronPipe = false;
@@ -1713,9 +1784,10 @@ public class MachineCrafting : MonoBehaviour
                 }
             }
         }
+        return true;
     }
 
-    public void CraftGearCutter()
+    public bool CraftGearCutter()
     {
         bool foundIronPlate = false;
         bool foundIronPipe = false;
@@ -1799,9 +1871,10 @@ public class MachineCrafting : MonoBehaviour
                 }
             }
         }
+        return true;
     }
 
-    public void CraftStorageComputer()
+    public bool CraftStorageComputer()
     {
         bool foundRetriever = false;
         bool foundUniversalConduit = false;
@@ -1912,9 +1985,10 @@ public class MachineCrafting : MonoBehaviour
                 }
             }
         }
+        return true;
     }
 
-    public void CraftAlloySmelter()
+    public bool CraftAlloySmelter()
     {
         bool foundIronPlate = false;
         bool foundIronPipe = false;
@@ -2010,9 +2084,10 @@ public class MachineCrafting : MonoBehaviour
                 }
             }
         }
+        return true;
     }
 
-    public void CraftTurret()
+    public bool CraftTurret()
     {
         bool foundSteelPlate = false;
         bool foundSteelPipe = false;
@@ -2135,9 +2210,10 @@ public class MachineCrafting : MonoBehaviour
                 }
             }
         }
+        return true;
     }
 
-    public void CraftDarkMatterCollector()
+    public bool CraftDarkMatterCollector()
     {
         bool foundSteelPlate = false;
         bool foundSteelPipe = false;
@@ -2257,9 +2333,10 @@ public class MachineCrafting : MonoBehaviour
                 }
             }
         }
+        return true;
     }
 
-    public void CraftDarkMatterConduit()
+    public bool CraftDarkMatterConduit()
     {
         bool foundSteelPlate = false;
         bool foundSteelPipe = false;
@@ -2379,6 +2456,7 @@ public class MachineCrafting : MonoBehaviour
                 }
             }
         }
+        return true;
     }
 }
 

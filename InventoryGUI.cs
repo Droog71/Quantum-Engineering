@@ -578,67 +578,67 @@ public class InventoryGUI : MonoBehaviour
                         GUI.DrawTexture(GetComponent<GuiCoordinates>().craftingBackgroundRect, GetComponent<TextureDictionary>().dictionary["Interface Background"]);
                         if (GUI.Button(GetComponent<GuiCoordinates>().button1Rect, "Storage Container"))
                         {
-                            playerCrafting.CraftStorageContainer();
+                            playerCrafting.CraftItem(new string[] { "Iron Plate" },new int[] { 6 }, "Storage Container", 1);
                         }
                         if (GUI.Button(GetComponent<GuiCoordinates>().button2Rect, "Auger"))
                         {
-                            playerCrafting.CraftAuger();
+                            playerCrafting.CraftItem(new string[] { "Iron Ingot", "Copper Ingot" }, new int[] { 10, 10 }, "Auger", 1);
                         }
                         if (GUI.Button(GetComponent<GuiCoordinates>().button3Rect, "Extruder"))
                         {
-                            playerCrafting.CraftExtruder();
+                            playerCrafting.CraftItem(new string[] { "Iron Ingot", "Copper Ingot" }, new int[] { 10, 10 }, "Extruder", 1);
                         }
                         if (GUI.Button(GetComponent<GuiCoordinates>().button4Rect, "Press"))
                         {
-                            playerCrafting.CraftPress();
+                            playerCrafting.CraftItem(new string[] { "Iron Ingot", "Iron Pipe", "Copper Wire" }, new int[] { 10, 10, 10 }, "Press", 1);
                         }
                         if (GUI.Button(GetComponent<GuiCoordinates>().button5Rect, "Gear Cutter"))
                         {
-                            playerCrafting.CraftGearCutter();
+                            playerCrafting.CraftItem(new string[] { "Iron Plate", "Tin Plate", "Iron Pipe", "Aluminum Wire", "Copper Wire" }, new int[] { 5, 5, 5, 10, 10 }, "Gear Cutter", 1);
                         }
                         if (GUI.Button(GetComponent<GuiCoordinates>().button6Rect, "Universal Extractor"))
                         {
-                            playerCrafting.CraftUniversalExtractor();
+                            playerCrafting.CraftItem(new string[] { "Iron Plate", "Iron Pipe", "Copper Wire", "Dark Matter" }, new int[] { 10, 10, 10, 10 }, "Universal Extractor", 1);
                         }
                         if (GUI.Button(GetComponent<GuiCoordinates>().button7Rect, "Universal Conduit"))
                         {
-                            playerCrafting.CraftUniversalConduit();
+                            playerCrafting.CraftItem(new string[] { "Iron Plate", "Iron Pipe", "Copper Wire", "Dark Matter" }, new int[] { 5, 5, 5, 5 }, "Universal Conduit", 1);
                         }
                         if (GUI.Button(GetComponent<GuiCoordinates>().button9Rect, "Retriever"))
                         {
-                            playerCrafting.CraftRetriever();
+                            playerCrafting.CraftItem(new string[] { "Iron Plate", "Iron Pipe", "Copper Wire", "Electric Motor", "Circuit Board" }, new int[] { 4 , 2, 4, 2, 2 }, "Retriever", 1);
                         }
                         if (GUI.Button(GetComponent<GuiCoordinates>().button10Rect, "Solar Panel"))
                         {
-                            playerCrafting.CraftSolarPanel();
+                            playerCrafting.CraftItem(new string[] { "Iron Plate", "Iron Pipe", "Copper Wire", "Copper Plate", "Glass Block" }, new int[] { 4, 4, 4, 4, 4 }, "Solar Panel", 1);
                         }
                         if (GUI.Button(GetComponent<GuiCoordinates>().button11Rect, "Generator"))
                         {
-                            playerCrafting.CraftGenerator();
+                            playerCrafting.CraftItem(new string[] { "Iron Plate", "Iron Pipe", "Copper Wire", "Copper Plate", "Glass Block" }, new int[] { 4, 4, 4, 4, 4 }, "Solar Panel", 1);
                         }
                         if (GUI.Button(GetComponent<GuiCoordinates>().button12Rect, "Nuclear Reactor"))
                         {
-                            playerCrafting.CraftNuclearReactor();
+                            playerCrafting.CraftItem(new string[] { "Steel Plate", "Steel Pipe", "Copper Wire", "Copper Plate", "Glass Block", "Dark Matter" }, new int[] { 10, 10, 10, 10, 10, 10 }, "Nuclear Reactor", 1);
                         }
                         if (GUI.Button(GetComponent<GuiCoordinates>().button13Rect, "Reactor Turbine"))
                         {
-                            playerCrafting.CraftReactorTurbine();
+                            playerCrafting.CraftItem(new string[] { "Generator", "Glass Block", "Steel Pipe", "Steel Gear", "Copper Wire", "Steel Plate" }, new int[] { 1, 1, 2, 2, 4, 4 }, "Reactor Turbine", 1);
                         }
                         if (GUI.Button(GetComponent<GuiCoordinates>().button14Rect, "Power Conduit"))
                         {
-                            playerCrafting.CraftPowerConduit();
+                            playerCrafting.CraftItem(new string[] { "Aluminum Plate", "Copper Wire", "Glass Block" }, new int[] { 4, 4, 4 }, "Power Conduit", 1);
                         }
                         if (GUI.Button(GetComponent<GuiCoordinates>().button15Rect, "Heat Exchanger"))
                         {
-                            playerCrafting.CraftHeatExchanger();
+                            playerCrafting.CraftItem(new string[] { "Steel Plate", "Steel Pipe" }, new int[] { 10, 10 }, "Heat Exchanger", 1);
                         }
                         if (GUI.Button(GetComponent<GuiCoordinates>().button17Rect, "Smelter"))
                         {
-                            playerCrafting.CraftSmelter();
+                            playerCrafting.CraftItem(new string[] { "Iron Pipe", "Iron Plate", "Copper Wire" }, new int[] { 5, 10, 10 }, "Smelter", 1);
                         }
                         if (GUI.Button(GetComponent<GuiCoordinates>().button18Rect, "Alloy Smelter"))
                         {
-                            playerCrafting.CraftAlloySmelter();
+                            playerCrafting.CraftItem(new string[] { "Iron Plate", "Tin Plate", "Iron Pipe", "Iron Gear", "Aluminum Wire", "Copper Wire" }, new int[] { 20, 20, 20, 20, 40, 40 }, "Alloy Smelter", 1);
                         }
                         if (GUI.Button(GetComponent<GuiCoordinates>().button19Rect, "DM Collector"))
                         {

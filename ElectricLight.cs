@@ -25,7 +25,6 @@ public class ElectricLight : MonoBehaviour
         updateTick += 1 * Time.deltaTime;
         if (updateTick > 1 + (address * 0.001f))
         {
-            //Debug.Log(ID + " Machine update tick: " + address * 0.1f);
             GetComponent<PhysicsHandler>().UpdatePhysics();
             updateTick = 0;
             if (powerON == true)

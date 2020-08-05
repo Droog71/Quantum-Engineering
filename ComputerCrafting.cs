@@ -16,7 +16,7 @@ public class ComputerCrafting : MonoBehaviour
         }
     }
 
-    public void CraftIronBlock()
+    public bool CraftIronBlock()
     {
         InventorySlot ironPlateSlot = null;
         bool foundItems = false;
@@ -74,9 +74,10 @@ public class ComputerCrafting : MonoBehaviour
                 }
             }
         }
+        return true;
     }
 
-    public void CraftIronRamp()
+    public bool CraftIronRamp()
     {
         InventorySlot ironPlateSlot = null;
         bool foundItems = false;
@@ -134,9 +135,10 @@ public class ComputerCrafting : MonoBehaviour
                 }
             }
         }
+        return true;
     }
 
-    public void CraftSteelBlock()
+    public bool CraftSteelBlock()
     {
         InventorySlot steelPlateSlot = null;
         bool foundItems = false;
@@ -194,9 +196,10 @@ public class ComputerCrafting : MonoBehaviour
                 }
             }
         }
+        return true;
     }
 
-    public void CraftSteelRamp()
+    public bool CraftSteelRamp()
     {
         InventorySlot steelPlateSlot = null;
         bool foundItems = false;
@@ -254,9 +257,10 @@ public class ComputerCrafting : MonoBehaviour
                 }
             }
         }
+        return true;
     }
 
-    public void CraftStorageContainer()
+    public bool CraftStorageContainer()
     {
         InventorySlot ironPlateSlot = null;
         bool foundItems = false;
@@ -314,9 +318,10 @@ public class ComputerCrafting : MonoBehaviour
                 }
             }
         }
+        return true;
     }
 
-    public void CraftQuantumHatchway()
+    public bool CraftQuantumHatchway()
     {
         InventoryManager tinManager = null;
         InventoryManager darkMatterManager = null;
@@ -393,9 +398,10 @@ public class ComputerCrafting : MonoBehaviour
                 }
             }
         }
+        return true;
     }
 
-    public void CraftElectricLight()
+    public bool CraftElectricLight()
     {
         InventoryManager glassBlockManager = null;
         InventoryManager tinPlateManager = null;
@@ -486,9 +492,10 @@ public class ComputerCrafting : MonoBehaviour
                 }
             }
         }
+        return true;
     }
 
-    public void CraftAuger()
+    public bool CraftAuger()
     {
         InventoryManager ironIngotManager = null;
         InventoryManager copperIngotManager = null;
@@ -565,9 +572,10 @@ public class ComputerCrafting : MonoBehaviour
                 }
             }
         }
+        return true;
     }
 
-    public void CraftStorageComputer()
+    public bool CraftStorageComputer()
     {
         InventoryManager retrieverManager = null;
         InventoryManager universalConduitManager = null;
@@ -717,9 +725,10 @@ public class ComputerCrafting : MonoBehaviour
                 }
             }
         }
+        return true;
     }
 
-    public void CraftExtruder()
+    public bool CraftExtruder()
     {
         InventoryManager ironIngotManager = null;
         InventoryManager copperIngotManager = null;
@@ -797,9 +806,10 @@ public class ComputerCrafting : MonoBehaviour
                 }
             }
         }
+        return true;
     }
 
-    public void CraftPress()
+    public bool CraftPress()
     {
         InventoryManager ironIngotManager = null;
         InventoryManager ironPipeManager = null;
@@ -887,9 +897,10 @@ public class ComputerCrafting : MonoBehaviour
                 }
             }
         }
+        return true;
     }
 
-    public void CraftUniversalExtractor()
+    public bool CraftUniversalExtractor()
     {
         InventoryManager ironPlateManager = null;
         InventoryManager ironPipeManager = null;
@@ -1000,9 +1011,10 @@ public class ComputerCrafting : MonoBehaviour
                 }
             }
         }
+        return true;
     }
 
-    public void CraftUniversalConduit()
+    public bool CraftUniversalConduit()
     {
         InventoryManager ironPlateManager = null;
         InventoryManager ironPipeManager = null;
@@ -1113,9 +1125,10 @@ public class ComputerCrafting : MonoBehaviour
                 }
             }
         }
+        return true;
     }
 
-    public void CraftRetriever()
+    public bool CraftRetriever()
     {
         InventoryManager ironPlateManager = null;
         InventoryManager ironPipeManager = null;
@@ -1244,9 +1257,10 @@ public class ComputerCrafting : MonoBehaviour
                 }
             }
         }
+        return true;
     }
 
-    public void CraftGenerator()
+    public bool CraftGenerator()
     {
         InventoryManager smelterManager = null;
         InventoryManager ironPipeManager = null;
@@ -1392,9 +1406,10 @@ public class ComputerCrafting : MonoBehaviour
                 }
             }
         }
+        return true;
     }
 
-    public void CraftReactorTurbine()
+    public bool CraftReactorTurbine()
     {
         InventoryManager generatorManager = null;
         InventoryManager steelPipeManager = null;
@@ -1540,9 +1555,10 @@ public class ComputerCrafting : MonoBehaviour
                 }
             }
         }
+        return true;
     }
 
-    public void CraftAutoCrafter()
+    public bool CraftAutoCrafter()
     {
         InventoryManager bronzeGearManager = null;
         InventoryManager steelPlateManager = null;
@@ -1671,9 +1687,10 @@ public class ComputerCrafting : MonoBehaviour
                 }
             }
         }
+        return true;
     }
 
-    public void CraftRailCartHub()
+    public bool CraftRailCartHub()
     {
         InventoryManager ironPlateManager = null;
         InventoryManager ironPipeManager = null;
@@ -1763,9 +1780,10 @@ public class ComputerCrafting : MonoBehaviour
                 }
             }
         }
+        return true;
     }
 
-    public void CraftRailCart()
+    public bool CraftRailCart()
     {
         InventoryManager electricMotorManager = null;
         InventoryManager copperWireManager = null;
@@ -1906,9 +1924,10 @@ public class ComputerCrafting : MonoBehaviour
                 }
             }
         }
+        return true;
     }
 
-    public void CraftSolarPanel()
+    public bool CraftSolarPanel()
     {
         InventoryManager ironPlateManager = null;
         InventoryManager ironPipeManager = null;
@@ -2032,9 +2051,10 @@ public class ComputerCrafting : MonoBehaviour
                 }
             }
         }
+        return true;
     }
 
-    public void CraftPowerConduit()
+    public bool CraftPowerConduit()
     {
         InventoryManager aluminumPlateManager = null;
         InventoryManager glassBlockManager = null;
@@ -2128,9 +2148,10 @@ public class ComputerCrafting : MonoBehaviour
                 }
             }
         }
+        return true;
     }
 
-    public void CraftNuclearReactor()
+    public bool CraftNuclearReactor()
     {
         InventoryManager steelPlateManager = null;
         InventoryManager steelPipeManager = null;
@@ -2275,9 +2296,10 @@ public class ComputerCrafting : MonoBehaviour
                 }
             }
         }
+        return true;
     }
 
-    public void CraftHeatExchanger()
+    public bool CraftHeatExchanger()
     {
         InventoryManager steelPlateManager = null;
         InventoryManager steelPipeManager = null;
@@ -2354,9 +2376,10 @@ public class ComputerCrafting : MonoBehaviour
                 }
             }
         }
+        return true;
     }
 
-    public void CraftSmelter()
+    public bool CraftSmelter()
     {
         InventoryManager ironPlateManager = null;
         InventoryManager ironPipeManager = null;
@@ -2450,9 +2473,10 @@ public class ComputerCrafting : MonoBehaviour
                 }
             }
         }
+        return true;
     }
 
-    public void CraftGearCutter()
+    public bool CraftGearCutter()
     {
         InventoryManager ironPlateManager = null;
         InventoryManager ironPipeManager = null;
@@ -2571,9 +2595,10 @@ public class ComputerCrafting : MonoBehaviour
                 }
             }
         }
+        return true;
     }
 
-    public void CraftCircuitBoard()
+    public bool CraftCircuitBoard()
     {
         InventoryManager tinManager = null;
         InventoryManager glassManager = null;
@@ -2684,9 +2709,10 @@ public class ComputerCrafting : MonoBehaviour
                 }
             }
         }
+        return true;
     }
 
-    public void CraftMotor()
+    public bool CraftMotor()
     {
         InventoryManager ironPlateManager = null;
         InventoryManager ironPipeManager = null;
@@ -2793,9 +2819,10 @@ public class ComputerCrafting : MonoBehaviour
                 }
             }
         }
+        return true;
     }
 
-    public void CraftAlloySmelter()
+    public bool CraftAlloySmelter()
     {
         InventoryManager ironPlateManager = null;
         InventoryManager ironPipeManager = null;
@@ -2928,9 +2955,10 @@ public class ComputerCrafting : MonoBehaviour
                 }
             }
         }
+        return true;
     }
 
-    public void CraftTurret()
+    public bool CraftTurret()
     {
         InventoryManager steelPlateManager = null;
         InventoryManager steelPipeManager = null;
@@ -3094,9 +3122,10 @@ public class ComputerCrafting : MonoBehaviour
                 }
             }
         }
+        return true;
     }
 
-    public void CraftDarkMatterCollector()
+    public bool CraftDarkMatterCollector()
     {
         InventoryManager steelPlateManager = null;
         InventoryManager steelPipeManager = null;
@@ -3257,9 +3286,10 @@ public class ComputerCrafting : MonoBehaviour
                 }
             }
         }
+        return true;
     }
 
-    public void CraftDarkMatterConduit()
+    public bool CraftDarkMatterConduit()
     {
         InventoryManager steelPlateManager = null;
         InventoryManager steelPipeManager = null;
@@ -3420,5 +3450,6 @@ public class ComputerCrafting : MonoBehaviour
                 }
             }
         }
+        return true;
     }
 }

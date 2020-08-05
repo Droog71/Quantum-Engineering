@@ -14,6 +14,67 @@ public class PlayerCrafting : MonoBehaviour
         playerInventory = GetComponent<InventoryManager>();
     }
 
+    public void CraftItem(string[] ingredients, int[] amounts, string output, int outputAmount)
+    {
+        if (Input.GetKey(KeyCode.LeftShift))
+        {
+            for (int i = 0; i < amounts.Length; i++)
+            {
+                amounts[i] *= 10;
+            }
+            outputAmount *= 10;
+        }
+
+        int[] slots = new int[ingredients.Length];
+        bool[] found = new bool[ingredients.Length];
+
+        for (int i = 0; i < ingredients.Length; i++)
+        {
+            int currentSlot = 0;
+            foreach (InventorySlot slot in playerInventory.inventory)
+            {
+                if (slot.amountInSlot >= amounts[i])
+                {
+                    if (slot.typeInSlot.Equals(ingredients[i]))
+                    {
+                        found[i] = true;
+                        slots[i] = currentSlot;
+                    }
+                }
+                currentSlot++;
+            }
+        }
+
+        foreach (bool b in found)
+        {
+            if (!missingItem)
+            {
+                missingItem |= !b;
+            }
+        }
+
+        if (!missingItem)
+        {
+            playerInventory.AddItem(output, outputAmount);
+            if (playerInventory.itemAdded)
+            {
+                for (int i = 0; i < ingredients.Length; i++)
+                {
+                    playerInventory.inventory[slots[i]].amountInSlot -= amounts[i];
+                    if (playerInventory.inventory[slots[i]].amountInSlot <= 0)
+                    {
+                        playerInventory.inventory[slots[i]].typeInSlot = "nothing";
+                    }
+                }
+                playerController.playCraftingSound();
+            }
+        }
+        else
+        {
+            playerController.playMissingItemsSound();
+        }
+    }
+
     public void CraftIronBlock()
     {
         if (Input.GetKey(KeyCode.LeftShift))

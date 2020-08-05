@@ -45,14 +45,56 @@ public class DarkMatterCollector : MonoBehaviour
         }
     }
 
+    bool IsValidObject(GameObject obj)
+    {
+        if (obj != null)
+        {
+            return obj.transform.parent != builtObjects.transform && obj.activeInHierarchy;
+        }
+        return false;
+    }
+
+    private void FindDarkMatter()
+    {
+        DarkMatter[] allDarkMatter = FindObjectsOfType<DarkMatter>();
+        foreach (DarkMatter d in allDarkMatter)
+        {
+            GameObject obj = d.gameObject;
+            if (IsValidObject(obj))
+            {
+                float distance = Vector3.Distance(transform.position, obj.transform.position);
+                if (obj.GetComponent<DarkMatter>() != null && distance < 20)
+                {
+                    if (obj.GetComponent<DarkMatter>().collector == null)
+                    {
+                        obj.GetComponent<DarkMatter>().collector = gameObject;
+                    }
+                    if (obj.GetComponent<DarkMatter>().collector == gameObject)
+                    {
+                        if (inputLine == null && obj.GetComponent<LineRenderer>() == null)
+                        {
+                            inputLine = obj.AddComponent<LineRenderer>();
+                            inputLine.startWidth = 0.2f;
+                            inputLine.endWidth = 0.2f;
+                            inputLine.material = lineMat;
+                            inputLine.SetPosition(0, transform.position);
+                            inputLine.SetPosition(1, obj.transform.position);
+                        }
+                        foundDarkMatter = true;
+                    }
+                }
+            }
+        }
+    }
+
     void Update()
     {
         updateTick += 1 * Time.deltaTime;
         if (updateTick > 0.5f + (address * 0.001f))
         {
-            //Debug.Log(ID + " Machine update tick: " + address * 0.1f);
             GetComponent<PhysicsHandler>().UpdatePhysics();
             updateTick = 0;
+
             if (speed > 1)
             {
                 heat = speed - 1 - cooling;
@@ -61,10 +103,12 @@ public class DarkMatterCollector : MonoBehaviour
             {
                 heat = 0;
             }
+
             if (heat < 0)
             {
                 heat = 0;
             }
+
             if (outputObject != null)
             {
                 connectionLine.SetPosition(0, transform.position);
@@ -75,6 +119,7 @@ public class DarkMatterCollector : MonoBehaviour
             {
                 connectionLine.enabled = false;
             }
+
             if (foundDarkMatter == true)
             {
                 if (powerON == true && connectionFailed == false && speed > 0)
@@ -116,46 +161,10 @@ public class DarkMatterCollector : MonoBehaviour
                         connectionFailed = true;
                     }
                 }
+
                 if (connectionFailed == false)
                 {
-                    DarkMatter[] allDarkMatter = FindObjectsOfType<DarkMatter>();
-                    foreach (DarkMatter d in allDarkMatter)
-                    {
-                        GameObject obj = d.gameObject;
-                        if (obj != null)
-                        {
-                            if (obj.transform.parent != builtObjects.transform)
-                            {
-                                if (obj.activeInHierarchy)
-                                {
-                                    if (obj.GetComponent<DarkMatter>() != null)
-                                    {
-                                        float distance = Vector3.Distance(transform.position, obj.transform.position);
-                                        if (distance < 20)
-                                        {
-                                            if (obj.GetComponent<DarkMatter>().collector == null)
-                                            {
-                                                obj.GetComponent<DarkMatter>().collector = this.gameObject;
-                                            }
-                                            if (obj.GetComponent<DarkMatter>().collector == this.gameObject)
-                                            {
-                                                if (inputLine == null && obj.GetComponent<LineRenderer>() == null)
-                                                {
-                                                    inputLine = obj.AddComponent<LineRenderer>();
-                                                    inputLine.startWidth = 0.2f;
-                                                    inputLine.endWidth = 0.2f;
-                                                    inputLine.material = lineMat;
-                                                    inputLine.SetPosition(0, transform.position);
-                                                    inputLine.SetPosition(1, obj.transform.position);
-                                                }
-                                                foundDarkMatter = true;
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
+                    FindDarkMatter();
                 }
             }
         }

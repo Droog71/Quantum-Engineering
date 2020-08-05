@@ -48,6 +48,11 @@ public class UniversalExtractor : MonoBehaviour
         }
     }
 
+    bool IsValidResource(GameObject obj)
+    {
+        return obj != null && obj.transform.parent != builtObjects.transform && obj.activeInHierarchy && obj.GetComponent<UniversalResource>() != null;
+    }
+
     void Update()
     {
         updateTick += 1 * Time.deltaTime;
@@ -117,45 +122,36 @@ public class UniversalExtractor : MonoBehaviour
                     foreach (UniversalResource r in allResources)
                     {
                         GameObject obj = r.gameObject;
-                        if (obj != null)
+                        if (IsValidResource(obj))
                         {
-                            if (obj.transform.parent != builtObjects.transform)
+                            float distance = Vector3.Distance(transform.position, obj.transform.position);
+                            if (distance < 20)
                             {
-                                if (obj.activeInHierarchy)
+                                if (obj.GetComponent<UniversalResource>().extractor == null)
                                 {
-                                    if (obj.GetComponent<UniversalResource>() != null)
+                                    obj.GetComponent<UniversalResource>().extractor = gameObject;
+                                }
+                                if (obj.GetComponent<UniversalResource>().extractor == gameObject)
+                                {
+                                    if (obj.GetComponent<UniversalResource>().type.Equals("Ice"))
                                     {
-                                        float distance = Vector3.Distance(transform.position, obj.transform.position);
-                                        if (distance < 20)
-                                        {
-                                            if (obj.GetComponent<UniversalResource>().extractor == null)
-                                            {
-                                                obj.GetComponent<UniversalResource>().extractor = this.gameObject;
-                                            }
-                                            if (obj.GetComponent<UniversalResource>().extractor == this.gameObject)
-                                            {
-                                                if (obj.GetComponent<UniversalResource>().type.Equals("Ice"))
-                                                {
-                                                    extractingIce = true;
-                                                }
-                                                else
-                                                {
-                                                    extractingIce = false;
-                                                }
-                                                if (inputLine == null && obj.GetComponent<LineRenderer>() == null)
-                                                {
-                                                    inputLine = obj.AddComponent<LineRenderer>();
-                                                    inputLine.startWidth = 0.2f;
-                                                    inputLine.endWidth = 0.2f;
-                                                    inputLine.material = lineMat;
-                                                    inputLine.SetPosition(0, transform.position);
-                                                    inputLine.SetPosition(1, obj.transform.position);
-                                                }
-                                                inputObject = obj;
-                                                hasResource = true;
-                                            }
-                                        }
+                                        extractingIce = true;
                                     }
+                                    else
+                                    {
+                                        extractingIce = false;
+                                    }
+                                    if (inputLine == null && obj.GetComponent<LineRenderer>() == null)
+                                    {
+                                        inputLine = obj.AddComponent<LineRenderer>();
+                                        inputLine.startWidth = 0.2f;
+                                        inputLine.endWidth = 0.2f;
+                                        inputLine.material = lineMat;
+                                        inputLine.SetPosition(0, transform.position);
+                                        inputLine.SetPosition(1, obj.transform.position);
+                                    }
+                                    inputObject = obj;
+                                    hasResource = true;
                                 }
                             }
                         }

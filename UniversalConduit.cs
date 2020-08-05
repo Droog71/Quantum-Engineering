@@ -45,6 +45,353 @@ public class UniversalConduit : MonoBehaviour
         }
     }
 
+    bool IsValidObject(GameObject obj)
+    {
+        if (obj != null)
+        {
+            return obj.transform.parent != builtObjects.transform && obj.activeInHierarchy;
+        }
+        return false;
+    }
+
+    bool IsValidOutputObject(GameObject obj)
+    {
+        return outputObject == null && inputObject != null && obj != inputObject && obj != gameObject;
+    }
+
+    void ConnectToObject(GameObject obj)
+    {
+        if (obj.GetComponent<Auger>() != null)
+        {
+            float distance = Vector3.Distance(transform.position, obj.transform.position);
+            if (distance < range && inputObject == null && obj.GetComponent<Auger>().outputObject == null)
+            {
+                if (creationMethod.Equals("spawned") && obj.GetComponent<Auger>().ID.Equals(inputID))
+                {
+                    inputObject = obj;
+                    type = "Regolith";
+                    obj.GetComponent<Auger>().outputObject = gameObject;
+                    creationMethod = "built";
+                }
+                else if (creationMethod.Equals("built"))
+                {
+                    inputObject = obj;
+                    type = "Regolith";
+                    obj.GetComponent<Auger>().outputObject = gameObject;
+                }
+            }
+        }
+        if (obj.GetComponent<UniversalExtractor>() != null)
+        {
+            float distance = Vector3.Distance(transform.position, obj.transform.position);
+            if (distance < range && inputObject == null && obj.GetComponent<UniversalExtractor>().outputObject == null)
+            {
+                if (creationMethod.Equals("spawned") && obj.GetComponent<UniversalExtractor>().ID.Equals(inputID))
+                {
+                    inputObject = obj;
+                    obj.GetComponent<UniversalExtractor>().outputObject = gameObject;
+                    creationMethod = "built";
+                }
+                else if (creationMethod.Equals("built"))
+                {
+                    inputObject = obj;
+                    obj.GetComponent<UniversalExtractor>().outputObject = gameObject;
+                }
+            }
+        }
+        if (obj.GetComponent<UniversalConduit>() != null)
+        {
+            float distance = Vector3.Distance(transform.position, obj.transform.position);
+            if (IsValidOutputObject(obj) && distance < range)
+            {
+                if (obj.GetComponent<UniversalConduit>().inputObject == null)
+                {
+                    if (creationMethod.Equals("spawned") && obj.GetComponent<UniversalConduit>().ID.Equals(outputID))
+                    {
+                        outputObject = obj;
+                        obj.GetComponent<UniversalConduit>().type = type;
+                        obj.GetComponent<UniversalConduit>().inputObject = gameObject;
+                        connectionLine.SetPosition(0, transform.position);
+                        connectionLine.SetPosition(1, obj.transform.position);
+                        connectionLine.enabled = true;
+                        creationMethod = "built";
+                    }
+                    else if (creationMethod.Equals("built"))
+                    {
+                        outputObject = obj;
+                        obj.GetComponent<UniversalConduit>().type = type;
+                        obj.GetComponent<UniversalConduit>().inputObject = gameObject;
+                        connectionLine.SetPosition(0, transform.position);
+                        connectionLine.SetPosition(1, obj.transform.position);
+                        connectionLine.enabled = true;
+                    }
+                }
+            }
+        }
+        if (obj.GetComponent<InventoryManager>() != null && !obj.GetComponent<InventoryManager>().ID.Equals("player") && obj.GetComponent<Retriever>() == null && obj.GetComponent<AutoCrafter>() == null)
+        {
+            if (IsValidOutputObject(obj))
+            {
+                if (creationMethod.Equals("spawned") && obj.GetComponent<InventoryManager>().ID.Equals(outputID))
+                {
+                    float distance = Vector3.Distance(transform.position, obj.transform.position);
+                    if (distance < range || obj.GetComponent<RailCart>() != null)
+                    {
+                        outputObject = obj;
+                        connectionLine.SetPosition(0, transform.position);
+                        connectionLine.SetPosition(1, obj.transform.position);
+                        connectionLine.enabled = true;
+                        creationMethod = "built";
+                    }
+                }
+                else if (creationMethod.Equals("built"))
+                {
+                    float distance = Vector3.Distance(transform.position, obj.transform.position);
+                    if (distance < range)
+                    {
+                        outputObject = obj;
+                        connectionLine.SetPosition(0, transform.position);
+                        connectionLine.SetPosition(1, obj.transform.position);
+                        connectionLine.enabled = true;
+                    }
+                }
+            }
+        }
+        if (obj.GetComponent<StorageComputer>() != null)
+        {
+            float distance = Vector3.Distance(transform.position, obj.transform.position);
+            if (distance < range && outputObject == null && inputObject != null)
+            {
+                if (creationMethod.Equals("spawned") && obj.GetComponent<StorageComputer>().ID.Equals(outputID))
+                {
+                    outputObject = obj;
+                    connectionLine.SetPosition(0, transform.position);
+                    connectionLine.SetPosition(1, obj.transform.position);
+                    connectionLine.enabled = true;
+                }
+                else if (creationMethod.Equals("built"))
+                {
+                    outputObject = obj;
+                    connectionLine.SetPosition(0, transform.position);
+                    connectionLine.SetPosition(1, obj.transform.position);
+                    connectionLine.enabled = true;
+                }
+            }
+        }
+        if (obj.GetComponent<AlloySmelter>() != null)
+        {
+            float distance = Vector3.Distance(transform.position, obj.transform.position);
+            if (IsValidOutputObject(obj) && distance < range)
+            {
+                if (obj.GetComponent<AlloySmelter>().inputObject1 == null)
+                {
+                    if (creationMethod.Equals("spawned") && obj.GetComponent<AlloySmelter>().ID.Equals(outputID))
+                    {
+                        outputObject = obj;
+                        obj.GetComponent<AlloySmelter>().inputObject1 = gameObject;
+                        connectionLine.SetPosition(0, transform.position);
+                        connectionLine.SetPosition(1, obj.transform.position);
+                        connectionLine.enabled = true;
+                        creationMethod = "built";
+                    }
+                    else if (creationMethod.Equals("built"))
+                    {
+                        outputObject = obj;
+                        obj.GetComponent<AlloySmelter>().inputObject1 = gameObject;
+                        connectionLine.SetPosition(0, transform.position);
+                        connectionLine.SetPosition(1, obj.transform.position);
+                        connectionLine.enabled = true;
+                    }
+                }
+                else if (obj.GetComponent<AlloySmelter>().inputObject2 == null)
+                {
+                    if (creationMethod.Equals("spawned") && obj.GetComponent<AlloySmelter>().ID.Equals(outputID))
+                    {
+                        outputObject = obj;
+                        obj.GetComponent<AlloySmelter>().inputObject2 = gameObject;
+                        connectionLine.SetPosition(0, transform.position);
+                        connectionLine.SetPosition(1, obj.transform.position);
+                        connectionLine.enabled = true;
+                        creationMethod = "built";
+                    }
+                    else if (creationMethod.Equals("built"))
+                    {
+                        outputObject = obj;
+                        obj.GetComponent<AlloySmelter>().inputObject2 = gameObject;
+                        connectionLine.SetPosition(0, transform.position);
+                        connectionLine.SetPosition(1, obj.transform.position);
+                        connectionLine.enabled = true;
+                    }
+                }
+            }
+        }
+        if (obj.GetComponent<Smelter>() != null)
+        {
+            float distance = Vector3.Distance(transform.position, obj.transform.position);
+            if (IsValidOutputObject(obj) && distance < range)
+            {
+                if (obj.GetComponent<Smelter>().inputObject == null)
+                {
+                    if (creationMethod.Equals("spawned") && obj.GetComponent<Smelter>().ID.Equals(outputID))
+                    {
+                        outputObject = obj;
+                        obj.GetComponent<Smelter>().inputObject = gameObject;
+                        connectionLine.SetPosition(0, transform.position);
+                        connectionLine.SetPosition(1, obj.transform.position);
+                        connectionLine.enabled = true;
+                        creationMethod = "built";
+                    }
+                    else if (creationMethod.Equals("built"))
+                    {
+                        outputObject = obj;
+                        obj.GetComponent<Smelter>().inputObject = gameObject;
+                        connectionLine.SetPosition(0, transform.position);
+                        connectionLine.SetPosition(1, obj.transform.position);
+                        connectionLine.enabled = true;
+                    }
+                }
+            }
+        }
+        if (obj.GetComponent<PowerSource>() != null)
+        {
+            if (obj.GetComponent<PowerSource>().type.Equals("Generator"))
+            {
+                float distance = Vector3.Distance(transform.position, obj.transform.position);
+                if (IsValidOutputObject(obj) && distance < range)
+                {
+                    if (obj.GetComponent<PowerSource>().inputObject == null)
+                    {
+                        if (creationMethod.Equals("spawned") && obj.GetComponent<PowerSource>().ID.Equals(outputID))
+                        {
+                            outputObject = obj;
+                            obj.GetComponent<PowerSource>().inputObject = gameObject;
+                            connectionLine.SetPosition(0, transform.position);
+                            connectionLine.SetPosition(1, obj.transform.position);
+                            connectionLine.enabled = true;
+                            creationMethod = "built";
+                        }
+                        else if (creationMethod.Equals("built"))
+                        {
+                            outputObject = obj;
+                            obj.GetComponent<PowerSource>().inputObject = gameObject;
+                            connectionLine.SetPosition(0, transform.position);
+                            connectionLine.SetPosition(1, obj.transform.position);
+                            connectionLine.enabled = true;
+                        }
+                    }
+                }
+            }
+        }
+        if (obj.GetComponent<Extruder>() != null)
+        {
+            float distance = Vector3.Distance(transform.position, obj.transform.position);
+            if (IsValidOutputObject(obj) && distance < range)
+            {
+                if (obj.GetComponent<Extruder>().inputObject == null)
+                {
+                    if (creationMethod.Equals("spawned") && obj.GetComponent<Extruder>().ID.Equals(outputID))
+                    {
+                        outputObject = obj;
+                        obj.GetComponent<Extruder>().inputObject = gameObject;
+                        connectionLine.SetPosition(0, transform.position);
+                        connectionLine.SetPosition(1, obj.transform.position);
+                        connectionLine.enabled = true;
+                        creationMethod = "built";
+                    }
+                    else if (creationMethod.Equals("built"))
+                    {
+                        outputObject = obj;
+                        obj.GetComponent<Extruder>().inputObject = gameObject;
+                        connectionLine.SetPosition(0, transform.position);
+                        connectionLine.SetPosition(1, obj.transform.position);
+                        connectionLine.enabled = true;
+                    }
+                }
+            }
+        }
+        if (obj.GetComponent<HeatExchanger>() != null)
+        {
+            float distance = Vector3.Distance(transform.position, obj.transform.position);
+            if (IsValidOutputObject(obj) && distance < range)
+            {
+                if (obj.GetComponent<HeatExchanger>().inputObject == null)
+                {
+                    if (creationMethod.Equals("spawned") && obj.GetComponent<HeatExchanger>().ID.Equals(outputID))
+                    {
+                        outputObject = obj;
+                        obj.GetComponent<HeatExchanger>().inputObject = gameObject;
+                        connectionLine.SetPosition(0, transform.position);
+                        connectionLine.SetPosition(1, obj.transform.position);
+                        connectionLine.enabled = true;
+                        creationMethod = "built";
+                    }
+                    else if (creationMethod.Equals("built"))
+                    {
+                        outputObject = obj;
+                        obj.GetComponent<HeatExchanger>().inputObject = gameObject;
+                        connectionLine.SetPosition(0, transform.position);
+                        connectionLine.SetPosition(1, obj.transform.position);
+                        connectionLine.enabled = true;
+                    }
+                }
+            }
+        }
+        if (obj.GetComponent<GearCutter>() != null)
+        {
+            float distance = Vector3.Distance(transform.position, obj.transform.position);
+            if (IsValidOutputObject(obj) && distance < range)
+            {
+                if (obj.GetComponent<GearCutter>().inputObject == null)
+                {
+                    if (creationMethod.Equals("spawned") && obj.GetComponent<GearCutter>().ID.Equals(outputID))
+                    {
+                        outputObject = obj;
+                        obj.GetComponent<GearCutter>().inputObject = gameObject;
+                        connectionLine.SetPosition(0, transform.position);
+                        connectionLine.SetPosition(1, obj.transform.position);
+                        connectionLine.enabled = true;
+                        creationMethod = "built";
+                    }
+                    else if (creationMethod.Equals("built"))
+                    {
+                        outputObject = obj;
+                        obj.GetComponent<GearCutter>().inputObject = gameObject;
+                        connectionLine.SetPosition(0, transform.position);
+                        connectionLine.SetPosition(1, obj.transform.position);
+                        connectionLine.enabled = true;
+                    }
+                }
+            }
+        }
+        if (obj.GetComponent<Press>() != null)
+        {
+            float distance = Vector3.Distance(transform.position, obj.transform.position);
+            if (IsValidOutputObject(obj) && distance < range)
+            {
+                if (obj.GetComponent<Press>().inputObject == null)
+                {
+                    if (creationMethod.Equals("spawned") && obj.GetComponent<Press>().ID.Equals(outputID))
+                    {
+                        outputObject = obj;
+                        obj.GetComponent<Press>().inputObject = gameObject;
+                        connectionLine.SetPosition(0, transform.position);
+                        connectionLine.SetPosition(1, obj.transform.position);
+                        connectionLine.enabled = true;
+                        creationMethod = "built";
+                    }
+                    else if (creationMethod.Equals("built"))
+                    {
+                        outputObject = obj;
+                        obj.GetComponent<Press>().inputObject = gameObject;
+                        connectionLine.SetPosition(0, transform.position);
+                        connectionLine.SetPosition(1, obj.transform.position);
+                        connectionLine.enabled = true;
+                    }
+                }
+            }
+        }
+    }
+
     void Update()
     {
         updateTick += 1 * Time.deltaTime;
@@ -77,536 +424,9 @@ public class UniversalConduit : MonoBehaviour
                     GameObject[] allObjects = GameObject.FindGameObjectsWithTag("Built");
                     foreach (GameObject obj in allObjects)
                     {
-                        if (obj != null)
+                        if (IsValidObject(obj))
                         {
-                            if (obj.transform.parent != builtObjects.transform)
-                            {
-                                if (obj.activeInHierarchy)
-                                {
-                                    if (obj.GetComponent<Auger>() != null)
-                                    {
-                                        float distance = Vector3.Distance(transform.position, obj.transform.position);
-                                        if (distance < range)
-                                        {
-                                            if (inputObject == null && obj.GetComponent<Auger>().outputObject == null)
-                                            {
-                                                if (creationMethod.Equals("spawned"))
-                                                {
-                                                    if (obj.GetComponent<Auger>().ID.Equals(inputID))
-                                                    {
-                                                        inputObject = obj;
-                                                        type = "Regolith";
-                                                        obj.GetComponent<Auger>().outputObject = this.gameObject;
-                                                        creationMethod = "built";
-                                                    }
-                                                }
-                                                else if (creationMethod.Equals("built"))
-                                                {
-                                                    inputObject = obj;
-                                                    type = "Regolith";
-                                                    obj.GetComponent<Auger>().outputObject = this.gameObject;
-                                                }
-                                            }
-                                        }
-                                    }
-                                    if (obj.GetComponent<UniversalExtractor>() != null)
-                                    {
-                                        float distance = Vector3.Distance(transform.position, obj.transform.position);
-                                        if (distance < range)
-                                        {
-                                            if (inputObject == null && obj.GetComponent<UniversalExtractor>().outputObject == null)
-                                            {
-                                                if (creationMethod.Equals("spawned"))
-                                                {
-                                                    if (obj.GetComponent<UniversalExtractor>().ID.Equals(inputID))
-                                                    {
-                                                        inputObject = obj;
-                                                        obj.GetComponent<UniversalExtractor>().outputObject = this.gameObject;
-                                                        creationMethod = "built";
-                                                    }
-                                                }
-                                                else if (creationMethod.Equals("built"))
-                                                {
-                                                    inputObject = obj;
-                                                    obj.GetComponent<UniversalExtractor>().outputObject = this.gameObject;
-                                                }
-                                            }
-                                        }
-                                    }
-                                    if (obj.GetComponent<UniversalConduit>() != null)
-                                    {
-                                        float distance = Vector3.Distance(transform.position, obj.transform.position);
-                                        if (distance < range)
-                                        {
-                                            if (outputObject == null)
-                                            {
-                                                if (inputObject != null)
-                                                {
-                                                    if (obj != inputObject && obj != this.gameObject)
-                                                    {
-                                                        if (obj.GetComponent<UniversalConduit>().inputObject == null)
-                                                        {
-                                                            if (creationMethod.Equals("spawned"))
-                                                            {
-                                                                //Debug.Log("trying to connect " + ID + " to " + obj.GetComponent<UniversalConduit>().ID + " vs " + outputID);
-                                                                if (obj.GetComponent<UniversalConduit>().ID.Equals(outputID))
-                                                                {
-                                                                    outputObject = obj;
-                                                                    obj.GetComponent<UniversalConduit>().type = type;
-                                                                    obj.GetComponent<UniversalConduit>().inputObject = this.gameObject;
-                                                                    connectionLine.SetPosition(0, transform.position);
-                                                                    connectionLine.SetPosition(1, obj.transform.position);
-                                                                    connectionLine.enabled = true;
-                                                                    creationMethod = "built";
-                                                                }
-                                                            }
-                                                            else if (creationMethod.Equals("built"))
-                                                            {
-                                                                outputObject = obj;
-                                                                obj.GetComponent<UniversalConduit>().type = type;
-                                                                obj.GetComponent<UniversalConduit>().inputObject = this.gameObject;
-                                                                connectionLine.SetPosition(0, transform.position);
-                                                                connectionLine.SetPosition(1, obj.transform.position);
-                                                                connectionLine.enabled = true;
-                                                            }
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                    if (obj.GetComponent<InventoryManager>() != null && !obj.GetComponent<InventoryManager>().ID.Equals("player") && obj.GetComponent<Retriever>() == null && obj.GetComponent<AutoCrafter>() == null)
-                                    {
-                                        if (outputObject == null)
-                                        {
-                                            if (inputObject != null)
-                                            {
-                                                if (obj != inputObject && obj != this.gameObject)
-                                                {
-                                                    if (creationMethod.Equals("spawned"))
-                                                    {
-                                                        //Debug.Log("trying to connect " + ID + " to " + obj.GetComponent<InventoryManager>().ID + " vs " + outputID);
-                                                        if (obj.GetComponent<InventoryManager>().ID.Equals(outputID))
-                                                        {
-                                                            float distance = Vector3.Distance(transform.position, obj.transform.position);
-                                                            if (distance < range || obj.GetComponent<RailCart>() != null)
-                                                            {
-                                                                outputObject = obj;
-                                                                connectionLine.SetPosition(0, transform.position);
-                                                                connectionLine.SetPosition(1, obj.transform.position);
-                                                                connectionLine.enabled = true;
-                                                                creationMethod = "built";
-                                                            }
-                                                        }
-                                                    }
-                                                    else if (creationMethod.Equals("built"))
-                                                    {
-                                                        float distance = Vector3.Distance(transform.position, obj.transform.position);
-                                                        if (distance < range)
-                                                        {
-                                                            outputObject = obj;
-                                                            connectionLine.SetPosition(0, transform.position);
-                                                            connectionLine.SetPosition(1, obj.transform.position);
-                                                            connectionLine.enabled = true;
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                    if (obj.GetComponent<StorageComputer>() != null)
-                                    {
-                                        float distance = Vector3.Distance(transform.position, obj.transform.position);
-                                        if (distance < range)
-                                        {
-                                            if (outputObject == null)
-                                            {
-                                                if (inputObject != null)
-                                                {
-                                                    if (creationMethod.Equals("spawned"))
-                                                    {
-                                                        //Debug.Log("trying to connect " + ID + " to " + obj.GetComponent<InventoryManager>().ID + " vs " + outputID);
-                                                        if (obj.GetComponent<StorageComputer>().ID.Equals(outputID))
-                                                        {
-                                                            outputObject = obj;
-                                                            connectionLine.SetPosition(0, transform.position);
-                                                            connectionLine.SetPosition(1, obj.transform.position);
-                                                            connectionLine.enabled = true;
-                                                        }
-                                                    }
-                                                    else if (creationMethod.Equals("built"))
-                                                    {
-                                                        outputObject = obj;
-                                                        connectionLine.SetPosition(0, transform.position);
-                                                        connectionLine.SetPosition(1, obj.transform.position);
-                                                        connectionLine.enabled = true;
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                    if (obj.GetComponent<AlloySmelter>() != null)
-                                    {
-                                        ////Debug.Log("CONDUIT ALLOY FOUND SMELTER");
-                                        float distance = Vector3.Distance(transform.position, obj.transform.position);
-                                        if (distance < range)
-                                        {
-                                            ////Debug.Log("CONDUIT FOUND ALLOY SMELTER IN RANGE");
-                                            if (outputObject == null)
-                                            {
-                                                if (inputObject != null)
-                                                {
-                                                    ////Debug.Log("CONDUIT HAS INPUT");
-                                                    if (obj != inputObject && obj != this.gameObject)
-                                                    {
-                                                        ////Debug.Log("INPUT is VALID");
-                                                        if (obj.GetComponent<AlloySmelter>().inputObject1 == null)
-                                                        {
-                                                            ////Debug.Log("ALLOY SMELTER INPUT PORT IS EMPTY");
-                                                            if (creationMethod.Equals("spawned"))
-                                                            {
-                                                                ////Debug.Log("trying to connect " + ID + " to " + obj.GetComponent<AlloySmelter>().ID + " vs " + outputID);
-                                                                if (obj.GetComponent<AlloySmelter>().ID.Equals(outputID))
-                                                                {
-                                                                    ////Debug.Log("PRE-EXISTING CONNECTION ESTABLISHING");
-                                                                    outputObject = obj;
-                                                                    obj.GetComponent<AlloySmelter>().inputObject1 = this.gameObject;
-                                                                    connectionLine.SetPosition(0, transform.position);
-                                                                    connectionLine.SetPosition(1, obj.transform.position);
-                                                                    connectionLine.enabled = true;
-                                                                    creationMethod = "built";
-                                                                }
-                                                            }
-                                                            else if (creationMethod.Equals("built"))
-                                                            {
-                                                                ////Debug.Log("NEW ALLOY SMELTER");
-                                                                outputObject = obj;
-                                                                obj.GetComponent<AlloySmelter>().inputObject1 = this.gameObject;
-                                                                connectionLine.SetPosition(0, transform.position);
-                                                                connectionLine.SetPosition(1, obj.transform.position);
-                                                                connectionLine.enabled = true;
-                                                            }
-                                                        }
-                                                        ////Debug.Log("INPUT is VALID");
-                                                        else if (obj.GetComponent<AlloySmelter>().inputObject2 == null)
-                                                        {
-                                                            ////Debug.Log("ALLOY SMELTER INPUT PORT IS EMPTY");
-                                                            if (creationMethod.Equals("spawned"))
-                                                            {
-                                                                ////Debug.Log("trying to connect " + ID + " to " + obj.GetComponent<AlloySmelter>().ID + " vs " + outputID);
-                                                                if (obj.GetComponent<AlloySmelter>().ID.Equals(outputID))
-                                                                {
-                                                                    ////Debug.Log("PRE-EXISTING CONNECTION ESTABLISHING");
-                                                                    outputObject = obj;
-                                                                    obj.GetComponent<AlloySmelter>().inputObject2 = this.gameObject;
-                                                                    connectionLine.SetPosition(0, transform.position);
-                                                                    connectionLine.SetPosition(1, obj.transform.position);
-                                                                    connectionLine.enabled = true;
-                                                                    creationMethod = "built";
-                                                                }
-                                                            }
-                                                            else if (creationMethod.Equals("built"))
-                                                            {
-                                                                ////Debug.Log("NEW ALLOY SMELTER");
-                                                                outputObject = obj;
-                                                                obj.GetComponent<AlloySmelter>().inputObject2 = this.gameObject;
-                                                                connectionLine.SetPosition(0, transform.position);
-                                                                connectionLine.SetPosition(1, obj.transform.position);
-                                                                connectionLine.enabled = true;
-                                                            }
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                    if (obj.GetComponent<Smelter>() != null)
-                                    {
-                                        ////Debug.Log("CONDUIT FOUND SMELTER");
-                                        float distance = Vector3.Distance(transform.position, obj.transform.position);
-                                        if (distance < range)
-                                        {
-                                            ////Debug.Log("CONDUIT FOUND SMELTER IN RANGE");
-                                            if (outputObject == null)
-                                            {
-                                                if (inputObject != null)
-                                                {
-                                                    ////Debug.Log("CONDUIT HAS INPUT");
-                                                    if (obj != inputObject && obj != this.gameObject)
-                                                    {
-                                                        ////Debug.Log("INPUT is VALID");
-                                                        if (obj.GetComponent<Smelter>().inputObject == null)
-                                                        {
-                                                            ////Debug.Log("SMELTER INPUT PORT IS EMPTY");
-                                                            if (creationMethod.Equals("spawned"))
-                                                            {
-                                                                ////Debug.Log("trying to connect " + ID + " to " + obj.GetComponent<Smelter>().ID + " vs " + outputID);
-                                                                if (obj.GetComponent<Smelter>().ID.Equals(outputID))
-                                                                {
-                                                                    ////Debug.Log("PRE-EXISTING CONNECTION ESTABLISHING");
-                                                                    outputObject = obj;
-                                                                    obj.GetComponent<Smelter>().inputObject = this.gameObject;
-                                                                    connectionLine.SetPosition(0, transform.position);
-                                                                    connectionLine.SetPosition(1, obj.transform.position);
-                                                                    connectionLine.enabled = true;
-                                                                    creationMethod = "built";
-                                                                }
-                                                            }
-                                                            else if (creationMethod.Equals("built"))
-                                                            {
-                                                                ////Debug.Log("NEW SMELTER");
-                                                                outputObject = obj;
-                                                                obj.GetComponent<Smelter>().inputObject = this.gameObject;
-                                                                connectionLine.SetPosition(0, transform.position);
-                                                                connectionLine.SetPosition(1, obj.transform.position);
-                                                                connectionLine.enabled = true;
-                                                            }
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                    if (obj.GetComponent<PowerSource>() != null)
-                                    {
-                                        if (obj.GetComponent<PowerSource>().type.Equals("Generator"))
-                                        {
-                                            ////Debug.Log("CONDUIT FOUND GENERATOR");
-                                            float distance = Vector3.Distance(transform.position, obj.transform.position);
-                                            if (distance < range)
-                                            {
-                                                ////Debug.Log("CONDUIT FOUND GENERATOR IN RANGE");
-                                                if (outputObject == null)
-                                                {
-                                                    if (inputObject != null)
-                                                    {
-                                                        ////Debug.Log("CONDUIT HAS INPUT");
-                                                        if (obj != inputObject && obj != this.gameObject)
-                                                        {
-                                                            ////Debug.Log("INPUT is VALID");
-                                                            if (obj.GetComponent<PowerSource>().inputObject == null)
-                                                            {
-                                                                ////Debug.Log("GENERATOR INPUT PORT IS EMPTY");
-                                                                if (creationMethod.Equals("spawned"))
-                                                                {
-                                                                    ////Debug.Log("trying to connect " + ID + " to " + obj.GetComponent<Smelter>().ID + " vs " + outputID);
-                                                                    if (obj.GetComponent<PowerSource>().ID.Equals(outputID))
-                                                                    {
-                                                                        ////Debug.Log("PRE-EXISTING CONNECTION ESTABLISHING");
-                                                                        outputObject = obj;
-                                                                        obj.GetComponent<PowerSource>().inputObject = this.gameObject;
-                                                                        connectionLine.SetPosition(0, transform.position);
-                                                                        connectionLine.SetPosition(1, obj.transform.position);
-                                                                        connectionLine.enabled = true;
-                                                                        creationMethod = "built";
-                                                                    }
-                                                                }
-                                                                else if (creationMethod.Equals("built"))
-                                                                {
-                                                                    ////Debug.Log("NEW GENERATOR");
-                                                                    outputObject = obj;
-                                                                    obj.GetComponent<PowerSource>().inputObject = this.gameObject;
-                                                                    connectionLine.SetPosition(0, transform.position);
-                                                                    connectionLine.SetPosition(1, obj.transform.position);
-                                                                    connectionLine.enabled = true;
-                                                                }
-                                                            }
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                    if (obj.GetComponent<Extruder>() != null)
-                                    {
-                                        ////Debug.Log("CONDUIT FOUND Extruder");
-                                        float distance = Vector3.Distance(transform.position, obj.transform.position);
-                                        if (distance < range)
-                                        {
-                                            ////Debug.Log("CONDUIT FOUND Extruder IN RANGE");
-                                            if (outputObject == null)
-                                            {
-                                                if (inputObject != null)
-                                                {
-                                                    ////Debug.Log("CONDUIT HAS INPUT");
-                                                    if (obj != inputObject && obj != this.gameObject)
-                                                    {
-                                                        ////Debug.Log("INPUT is VALID");
-                                                        if (obj.GetComponent<Extruder>().inputObject == null)
-                                                        {
-                                                            ////Debug.Log("Extruder INPUT PORT IS EMPTY");
-                                                            if (creationMethod.Equals("spawned"))
-                                                            {
-                                                                ////Debug.Log("trying to connect " + ID + " to " + obj.GetComponent<Extruder>().ID + " vs " + outputID);
-                                                                if (obj.GetComponent<Extruder>().ID.Equals(outputID))
-                                                                {
-                                                                    ////Debug.Log("PRE-EXISTING CONNECTION ESTABLISHING");
-                                                                    outputObject = obj;
-                                                                    obj.GetComponent<Extruder>().inputObject = this.gameObject;
-                                                                    connectionLine.SetPosition(0, transform.position);
-                                                                    connectionLine.SetPosition(1, obj.transform.position);
-                                                                    connectionLine.enabled = true;
-                                                                    creationMethod = "built";
-                                                                }
-                                                            }
-                                                            else if (creationMethod.Equals("built"))
-                                                            {
-                                                                ////Debug.Log("NEW Extruder");
-                                                                outputObject = obj;
-                                                                obj.GetComponent<Extruder>().inputObject = this.gameObject;
-                                                                connectionLine.SetPosition(0, transform.position);
-                                                                connectionLine.SetPosition(1, obj.transform.position);
-                                                                connectionLine.enabled = true;
-                                                            }
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                    if (obj.GetComponent<HeatExchanger>() != null)
-                                    {
-                                        ////Debug.Log("CONDUIT FOUND GearCutter");
-                                        float distance = Vector3.Distance(transform.position, obj.transform.position);
-                                        if (distance < range)
-                                        {
-                                            ////Debug.Log("CONDUIT FOUND GearCutter IN RANGE");
-                                            if (outputObject == null)
-                                            {
-                                                if (inputObject != null)
-                                                {
-                                                    ////Debug.Log("CONDUIT HAS INPUT");
-                                                    if (obj != inputObject && obj != this.gameObject)
-                                                    {
-                                                        ////Debug.Log("INPUT is VALID");
-                                                        if (obj.GetComponent<HeatExchanger>().inputObject == null)
-                                                        {
-                                                            ////Debug.Log("GearCutter INPUT PORT IS EMPTY");
-                                                            if (creationMethod.Equals("spawned"))
-                                                            {
-                                                                ////Debug.Log("trying to connect " + ID + " to " + obj.GetComponent<GearCutter>().ID + " vs " + outputID);
-                                                                if (obj.GetComponent<HeatExchanger>().ID.Equals(outputID))
-                                                                {
-                                                                    ////Debug.Log("PRE-EXISTING CONNECTION ESTABLISHING");
-                                                                    outputObject = obj;
-                                                                    obj.GetComponent<HeatExchanger>().inputObject = this.gameObject;
-                                                                    connectionLine.SetPosition(0, transform.position);
-                                                                    connectionLine.SetPosition(1, obj.transform.position);
-                                                                    connectionLine.enabled = true;
-                                                                    creationMethod = "built";
-                                                                }
-                                                            }
-                                                            else if (creationMethod.Equals("built"))
-                                                            {
-                                                                ////Debug.Log("NEW GearCutter");
-                                                                outputObject = obj;
-                                                                obj.GetComponent<HeatExchanger>().inputObject = this.gameObject;
-                                                                connectionLine.SetPosition(0, transform.position);
-                                                                connectionLine.SetPosition(1, obj.transform.position);
-                                                                connectionLine.enabled = true;
-                                                            }
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                    if (obj.GetComponent<GearCutter>() != null)
-                                    {
-                                        ////Debug.Log("CONDUIT FOUND GearCutter");
-                                        float distance = Vector3.Distance(transform.position, obj.transform.position);
-                                        if (distance < range)
-                                        {
-                                            ////Debug.Log("CONDUIT FOUND GearCutter IN RANGE");
-                                            if (outputObject == null)
-                                            {
-                                                if (inputObject != null)
-                                                {
-                                                    ////Debug.Log("CONDUIT HAS INPUT");
-                                                    if (obj != inputObject && obj != this.gameObject)
-                                                    {
-                                                        ////Debug.Log("INPUT is VALID");
-                                                        if (obj.GetComponent<GearCutter>().inputObject == null)
-                                                        {
-                                                            ////Debug.Log("GearCutter INPUT PORT IS EMPTY");
-                                                            if (creationMethod.Equals("spawned"))
-                                                            {
-                                                                ////Debug.Log("trying to connect " + ID + " to " + obj.GetComponent<GearCutter>().ID + " vs " + outputID);
-                                                                if (obj.GetComponent<GearCutter>().ID.Equals(outputID))
-                                                                {
-                                                                    ////Debug.Log("PRE-EXISTING CONNECTION ESTABLISHING");
-                                                                    outputObject = obj;
-                                                                    obj.GetComponent<GearCutter>().inputObject = this.gameObject;
-                                                                    connectionLine.SetPosition(0, transform.position);
-                                                                    connectionLine.SetPosition(1, obj.transform.position);
-                                                                    connectionLine.enabled = true;
-                                                                    creationMethod = "built";
-                                                                }
-                                                            }
-                                                            else if (creationMethod.Equals("built"))
-                                                            {
-                                                                ////Debug.Log("NEW GearCutter");
-                                                                outputObject = obj;
-                                                                obj.GetComponent<GearCutter>().inputObject = this.gameObject;
-                                                                connectionLine.SetPosition(0, transform.position);
-                                                                connectionLine.SetPosition(1, obj.transform.position);
-                                                                connectionLine.enabled = true;
-                                                            }
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                    if (obj.GetComponent<Press>() != null)
-                                    {
-                                        ////Debug.Log("CONDUIT FOUND Press");
-                                        float distance = Vector3.Distance(transform.position, obj.transform.position);
-                                        if (distance < range)
-                                        {
-                                            ////Debug.Log("CONDUIT FOUND Press IN RANGE");
-                                            if (outputObject == null)
-                                            {
-                                                if (inputObject != null)
-                                                {
-                                                    ////Debug.Log("CONDUIT HAS INPUT");
-                                                    if (obj != inputObject && obj != this.gameObject)
-                                                    {
-                                                        ////Debug.Log("INPUT is VALID");
-                                                        if (obj.GetComponent<Press>().inputObject == null)
-                                                        {
-                                                            ////Debug.Log("Press INPUT PORT IS EMPTY");
-                                                            if (creationMethod.Equals("spawned"))
-                                                            {
-                                                                ////Debug.Log("trying to connect " + ID + " to " + obj.GetComponent<Press>().ID + " vs " + outputID);
-                                                                if (obj.GetComponent<Press>().ID.Equals(outputID))
-                                                                {
-                                                                    ////Debug.Log("PRE-EXISTING CONNECTION ESTABLISHING");
-                                                                    outputObject = obj;
-                                                                    obj.GetComponent<Press>().inputObject = this.gameObject;
-                                                                    connectionLine.SetPosition(0, transform.position);
-                                                                    connectionLine.SetPosition(1, obj.transform.position);
-                                                                    connectionLine.enabled = true;
-                                                                    creationMethod = "built";
-                                                                }
-                                                            }
-                                                            else if (creationMethod.Equals("built"))
-                                                            {
-                                                                ////Debug.Log("NEW Press");
-                                                                outputObject = obj;
-                                                                obj.GetComponent<Press>().inputObject = this.gameObject;
-                                                                connectionLine.SetPosition(0, transform.position);
-                                                                connectionLine.SetPosition(1, obj.transform.position);
-                                                                connectionLine.enabled = true;
-                                                            }
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
+                            ConnectToObject(obj);
                         }
                     }
                 }
@@ -904,7 +724,7 @@ public class UniversalConduit : MonoBehaviour
                     if (outputObject.GetComponent<AlloySmelter>() != null)
                     {
                         outputID = outputObject.GetComponent<AlloySmelter>().ID;
-                        if (outputObject.GetComponent<AlloySmelter>().inputObject1 == this.gameObject)
+                        if (outputObject.GetComponent<AlloySmelter>().inputObject1 == gameObject)
                         {
                             outputObject.GetComponent<AlloySmelter>().inputID1 = ID;
                             //Debug.Log("CONDUIT OUTPUT SET TO: " + outputObject.GetComponent<AlloySmelter>().ID);
@@ -926,7 +746,7 @@ public class UniversalConduit : MonoBehaviour
                                 }
                             }
                         }
-                        else if (outputObject.GetComponent<AlloySmelter>().inputObject2 == this.gameObject)
+                        else if (outputObject.GetComponent<AlloySmelter>().inputObject2 == gameObject)
                         {
                             outputObject.GetComponent<AlloySmelter>().inputID2 = ID;
                             ////Debug.Log("CONDUIT OUTPUT SET TO: " + outputObject.GetComponent<AlloySmelter>().ID);

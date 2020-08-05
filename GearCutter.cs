@@ -41,12 +41,151 @@ public class GearCutter : MonoBehaviour
         builtObjects = GameObject.Find("Built_Objects");
     }
 
+    bool IsValidObject(GameObject obj)
+    {
+        if (obj != null)
+        {
+            return obj.transform.parent != builtObjects.transform && obj.activeInHierarchy;
+        }
+        return false;
+    }
+
+    bool IsValidOutputObject(GameObject obj)
+    {
+        return outputObject == null && inputObject != null && obj != inputObject && obj != gameObject;
+    }
+
+    private void ConnectToOutput()
+    {
+        GameObject[] allObjects = GameObject.FindGameObjectsWithTag("Built");
+        foreach (GameObject obj in allObjects)
+        {
+            if (IsValidObject(obj))
+            {
+                if (obj.GetComponent<UniversalConduit>() != null)
+                {
+                    float distance = Vector3.Distance(transform.position, obj.transform.position);
+                    if (IsValidOutputObject(obj) && distance < 20)
+                    {
+                        if (obj.GetComponent<UniversalConduit>().inputObject == null)
+                        {
+                            if (creationMethod.Equals("spawned"))
+                            {
+                                if (obj.GetComponent<UniversalConduit>().ID.Equals(outputID))
+                                {
+                                    outputObject = obj;
+                                    obj.GetComponent<UniversalConduit>().type = outputType;
+                                    obj.GetComponent<UniversalConduit>().inputObject = this.gameObject;
+                                    connectionLine.SetPosition(0, transform.position);
+                                    connectionLine.SetPosition(1, obj.transform.position);
+                                    connectionLine.enabled = true;
+                                    creationMethod = "built";
+                                }
+                            }
+                            else if (creationMethod.Equals("built"))
+                            {
+                                outputObject = obj;
+                                obj.GetComponent<UniversalConduit>().type = outputType;
+                                obj.GetComponent<UniversalConduit>().inputObject = this.gameObject;
+                                connectionLine.SetPosition(0, transform.position);
+                                connectionLine.SetPosition(1, obj.transform.position);
+                                connectionLine.enabled = true;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private void SetOutputType()
+    {
+        inputType = inputObject.GetComponent<UniversalConduit>().type;
+        if (inputObject.GetComponent<UniversalConduit>().type.Equals("Copper Plate"))
+        {
+            outputType = "Copper Gear";
+        }
+        if (inputObject.GetComponent<UniversalConduit>().type.Equals("Iron Plate"))
+        {
+            outputType = "Iron Gear";
+        }
+        if (inputObject.GetComponent<UniversalConduit>().type.Equals("Tin Plate"))
+        {
+            outputType = "Tin Gear";
+        }
+        if (inputObject.GetComponent<UniversalConduit>().type.Equals("Bronze Plate"))
+        {
+            outputType = "Bronze Gear";
+        }
+        if (inputObject.GetComponent<UniversalConduit>().type.Equals("Steel Plate"))
+        {
+            outputType = "Steel Gear";
+        }
+        if (inputObject.GetComponent<UniversalConduit>().type.Equals("Aluminum Plate"))
+        {
+            outputType = "Aluminum Gear";
+        }
+    }
+
+    private void HandleOutput()
+    {
+        if (outputObject != null)
+        {
+            if (outputObject.GetComponent<UniversalConduit>() != null)
+            {
+                outputObject.GetComponent<UniversalConduit>().inputID = ID;
+                outputObject.GetComponent<UniversalConduit>().type = outputType;
+                outputObject.GetComponent<UniversalConduit>().speed = speed;
+                outputID = outputObject.GetComponent<UniversalConduit>().ID;
+                if (amount >= speed)
+                {
+                    if (outputType.Equals(outputObject.GetComponent<UniversalConduit>().type))
+                    {
+                        if (powerON == true && connectionFailed == false && inputObject != null && speed > 0)
+                        {
+                            conduitItem.GetComponent<ConduitItem>().active = true;
+                            GetComponent<Light>().enabled = true;
+                            GetComponent<AudioSource>().enabled = true;
+                            laserCutter.SetActive(true);
+                            machineTimer += 1;
+                            if (machineTimer > 5 - (address * 0.01f))
+                            {
+                                outputObject.GetComponent<UniversalConduit>().amount += speed - heat;
+                                amount -= speed - heat;
+                                machineTimer = 0;
+                            }
+                        }
+                        else
+                        {
+                            machineTimer = 0;
+                            conduitItem.GetComponent<ConduitItem>().active = false;
+                            GetComponent<Light>().enabled = false;
+                            GetComponent<AudioSource>().enabled = false;
+                            laserCutter.SetActive(false);
+                        }
+                    }
+                }
+            }
+        }
+        else
+        {
+            // Reset the output connection, allow new connections to be made
+            connectionLine.enabled = false;
+            if (connectionFailed == true)
+            {
+                if (creationMethod.Equals("spawned"))
+                {
+                    creationMethod = "built";
+                }
+            }
+        }
+    }
+
     void Update()
     {
         updateTick += 1 * Time.deltaTime;
         if (updateTick > 0.5f + (address * 0.001f))
         {
-            //Debug.Log(ID + " Machine update tick: " + address * 0.1f);
             GetComponent<PhysicsHandler>().UpdatePhysics();
             updateTick = 0;
             if (speed > 1)
@@ -82,96 +221,20 @@ public class GearCutter : MonoBehaviour
                 }
                 if (connectionFailed == false)
                 {
-                    GameObject[] allObjects = GameObject.FindGameObjectsWithTag("Built");
-                    foreach (GameObject obj in allObjects)
-                    {
-                        if (obj != null)
-                        {
-                            if (obj.transform.parent != builtObjects.transform)
-                            {
-                                if (obj.activeInHierarchy)
-                                {
-                                    if (obj.GetComponent<UniversalConduit>() != null)
-                                    {
-                                        float distance = Vector3.Distance(transform.position, obj.transform.position);
-                                        if (distance < 20)
-                                        {
-                                            if (outputObject == null)
-                                            {
-                                                if (inputObject != null)
-                                                {
-                                                    if (obj != inputObject && obj != this.gameObject)
-                                                    {
-                                                        if (obj.GetComponent<UniversalConduit>().inputObject == null)
-                                                        {
-                                                            if (creationMethod.Equals("spawned"))
-                                                            {
-                                                                //Debug.Log("trying to connect " + ID + " to " + obj.GetComponent<UniversalConduit>().ID + " vs " + outputID);
-                                                                if (obj.GetComponent<UniversalConduit>().ID.Equals(outputID))
-                                                                {
-                                                                    outputObject = obj;
-                                                                    obj.GetComponent<UniversalConduit>().type = outputType;
-                                                                    //Debug.Log("Setting " + ID + " output conduit type to: " + outputType);
-                                                                    obj.GetComponent<UniversalConduit>().inputObject = this.gameObject;
-                                                                    connectionLine.SetPosition(0, transform.position);
-                                                                    connectionLine.SetPosition(1, obj.transform.position);
-                                                                    connectionLine.enabled = true;
-                                                                    creationMethod = "built";
-                                                                }
-                                                            }
-                                                            else if (creationMethod.Equals("built"))
-                                                            {
-                                                                outputObject = obj;
-                                                                obj.GetComponent<UniversalConduit>().type = outputType;
-                                                                obj.GetComponent<UniversalConduit>().inputObject = this.gameObject;
-                                                                connectionLine.SetPosition(0, transform.position);
-                                                                connectionLine.SetPosition(1, obj.transform.position);
-                                                                connectionLine.enabled = true;
-                                                            }
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
+                    ConnectToOutput();
                 }
             }
             if (inputObject != null)
             {
                 if (inputObject.GetComponent<UniversalConduit>() != null)
                 {
+                    // Determine the item to be processed before it enters the inventory
                     if (amount < 1)
                     {
-                        inputType = inputObject.GetComponent<UniversalConduit>().type;
-                        if (inputObject.GetComponent<UniversalConduit>().type.Equals("Copper Plate"))
-                        {
-                            outputType = "Copper Gear";
-                        }
-                        if (inputObject.GetComponent<UniversalConduit>().type.Equals("Iron Plate"))
-                        {
-                            outputType = "Iron Gear";
-                        }
-                        if (inputObject.GetComponent<UniversalConduit>().type.Equals("Tin Plate"))
-                        {
-                            outputType = "Tin Gear";
-                        }
-                        if (inputObject.GetComponent<UniversalConduit>().type.Equals("Bronze Plate"))
-                        {
-                            outputType = "Bronze Gear";
-                        }
-                        if (inputObject.GetComponent<UniversalConduit>().type.Equals("Steel Plate"))
-                        {
-                            outputType = "Steel Gear";
-                        }
-                        if (inputObject.GetComponent<UniversalConduit>().type.Equals("Aluminum Plate"))
-                        {
-                            outputType = "Aluminum Gear";
-                        }
+                        SetOutputType();
                     }
+
+                    // Disable effects when there is no input to this machine
                     if (inputObject.GetComponent<UniversalConduit>().conduitItem.GetComponent<ConduitItem>().active == false)
                     {
                         conduitItem.GetComponent<ConduitItem>().active = false;
@@ -183,61 +246,15 @@ public class GearCutter : MonoBehaviour
             }
             else
             {
+                // With no input object, this machine is inactive
                 conduitItem.GetComponent<ConduitItem>().active = false;
                 GetComponent<Light>().enabled = false;
                 GetComponent<AudioSource>().enabled = false;
                 laserCutter.SetActive(false);
             }
-            if (outputObject != null)
-            {
-                if (outputObject.GetComponent<UniversalConduit>() != null)
-                {
-                    outputObject.GetComponent<UniversalConduit>().inputID = ID;
-                    outputObject.GetComponent<UniversalConduit>().type = outputType;
-                    outputObject.GetComponent<UniversalConduit>().speed = speed;
-                    //Debug.Log("Setting " + ID + " output conduit type to: " + outputType);
-                    outputID = outputObject.GetComponent<UniversalConduit>().ID;
-                    if (amount >= speed)
-                    {
-                        if (outputType.Equals(outputObject.GetComponent<UniversalConduit>().type))
-                        {
-                            if (powerON == true && connectionFailed == false && inputObject != null && speed > 0)
-                            {
-                                conduitItem.GetComponent<ConduitItem>().active = true;
-                                GetComponent<Light>().enabled = true;
-                                GetComponent<AudioSource>().enabled = true;
-                                laserCutter.SetActive(true);
-                                machineTimer += 1;
-                                if (machineTimer > 5 - (address * 0.01f))
-                                {
-                                    outputObject.GetComponent<UniversalConduit>().amount += speed - heat;
-                                    amount -= speed - heat;
-                                    machineTimer = 0;
-                                }
-                            }
-                            else
-                            {
-                                machineTimer = 0;
-                                conduitItem.GetComponent<ConduitItem>().active = false;
-                                GetComponent<Light>().enabled = false;
-                                GetComponent<AudioSource>().enabled = false;
-                                laserCutter.SetActive(false);
-                            }
-                        }
-                    }
-                }
-            }
-            else
-            {
-                connectionLine.enabled = false;
-                if (connectionFailed == true)
-                {
-                    if (creationMethod.Equals("spawned"))
-                    {
-                        creationMethod = "built";
-                    }
-                }
-            }
+
+            HandleOutput();
+
             if (inputObject != null && outputObject != null)
             {
                 connectionAttempts = 0;
