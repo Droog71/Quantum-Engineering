@@ -171,6 +171,7 @@ public class Extruder : MonoBehaviour
         {
             GetComponent<PhysicsHandler>().UpdatePhysics();
             updateTick = 0;
+
             if (speed > 1)
             {
                 heat = speed - 1 - cooling;
@@ -179,10 +180,12 @@ public class Extruder : MonoBehaviour
             {
                 heat = 0;
             }
+
             if (heat < 0)
             {
                 heat = 0;
             }
+
             if (inputObject == null || outputObject == null)
             {
                 connectionAttempts += 1;
