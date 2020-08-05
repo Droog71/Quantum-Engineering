@@ -1940,7 +1940,7 @@ public class PowerConduit : MonoBehaviour
                     }
                     if (outputObject2 != null)
                     {
-                        outputObject1.GetComponent<Retriever>().power = powerAmount/2;
+                        outputObject1.GetComponent<Retriever>().power = powerAmount / 2;
                     }
                     else
                     {
@@ -2214,7 +2214,7 @@ public class PowerConduit : MonoBehaviour
                         outputObject2.GetComponent<Retriever>().powerON = false;
                     }
                     outputObject2.GetComponent<Retriever>().powerObject = this.gameObject;
-                    outputObject2.GetComponent<Retriever>().power = powerAmount/2;
+                    outputObject2.GetComponent<Retriever>().power = powerAmount / 2;
                     outputID2 = outputObject2.GetComponent<Retriever>().ID;
                 }
                 if (outputObject2.GetComponent<Smelter>() != null)
@@ -2228,7 +2228,7 @@ public class PowerConduit : MonoBehaviour
                         outputObject2.GetComponent<Smelter>().powerON = false;
                     }
                     outputObject2.GetComponent<Smelter>().powerObject = this.gameObject;
-                    outputObject2.GetComponent<Smelter>().power = powerAmount/2;
+                    outputObject2.GetComponent<Smelter>().power = powerAmount / 2;
                     outputID2 = outputObject2.GetComponent<Smelter>().ID;
                 }
                 if (outputObject2.GetComponent<Turret>() != null)
@@ -2242,7 +2242,7 @@ public class PowerConduit : MonoBehaviour
                         outputObject2.GetComponent<Turret>().powerON = false;
                     }
                     outputObject2.GetComponent<Turret>().powerObject = this.gameObject;
-                    outputObject2.GetComponent<Turret>().power = powerAmount/2;
+                    outputObject2.GetComponent<Turret>().power = powerAmount / 2;
                     outputID2 = outputObject2.GetComponent<Turret>().ID;
                 }
                 if (outputObject2.GetComponent<AutoCrafter>() != null)
@@ -2270,7 +2270,7 @@ public class PowerConduit : MonoBehaviour
                         outputObject2.GetComponent<Press>().powerON = false;
                     }
                     outputObject2.GetComponent<Press>().powerObject = this.gameObject;
-                    outputObject2.GetComponent<Press>().power = powerAmount/2;
+                    outputObject2.GetComponent<Press>().power = powerAmount / 2;
                     outputID2 = outputObject2.GetComponent<Press>().ID;
                 }
                 if (outputObject2.GetComponent<AlloySmelter>() != null)
@@ -2284,7 +2284,7 @@ public class PowerConduit : MonoBehaviour
                         outputObject2.GetComponent<AlloySmelter>().powerON = false;
                     }
                     outputObject2.GetComponent<AlloySmelter>().powerObject = this.gameObject;
-                    outputObject2.GetComponent<AlloySmelter>().power = powerAmount/2;
+                    outputObject2.GetComponent<AlloySmelter>().power = powerAmount / 2;
                     outputID2 = outputObject2.GetComponent<AlloySmelter>().ID;
                 }
                 if (outputObject2.GetComponent<Extruder>() != null)
@@ -2298,7 +2298,7 @@ public class PowerConduit : MonoBehaviour
                         outputObject2.GetComponent<Extruder>().powerON = false;
                     }
                     outputObject2.GetComponent<Extruder>().powerObject = this.gameObject;
-                    outputObject2.GetComponent<Extruder>().power = powerAmount/2;
+                    outputObject2.GetComponent<Extruder>().power = powerAmount / 2;
                     outputID2 = outputObject2.GetComponent<Extruder>().ID;
                 }
                 if (outputObject2.GetComponent<GearCutter>() != null)
@@ -2312,7 +2312,7 @@ public class PowerConduit : MonoBehaviour
                         outputObject2.GetComponent<GearCutter>().powerON = false;
                     }
                     outputObject2.GetComponent<GearCutter>().powerObject = this.gameObject;
-                    outputObject2.GetComponent<GearCutter>().power = powerAmount/2;
+                    outputObject2.GetComponent<GearCutter>().power = powerAmount / 2;
                     outputID2 = outputObject2.GetComponent<GearCutter>().ID;
                 }
                 if (outputObject2.GetComponent<UniversalExtractor>() != null)
@@ -2326,7 +2326,7 @@ public class PowerConduit : MonoBehaviour
                         outputObject2.GetComponent<UniversalExtractor>().powerON = false;
                     }
                     outputObject2.GetComponent<UniversalExtractor>().powerObject = this.gameObject;
-                    outputObject2.GetComponent<UniversalExtractor>().power = powerAmount/2;
+                    outputObject2.GetComponent<UniversalExtractor>().power = powerAmount / 2;
                     outputID2 = outputObject2.GetComponent<UniversalExtractor>().ID;
                 }
                 if (outputObject2.GetComponent<DarkMatterCollector>() != null)
@@ -2340,7 +2340,7 @@ public class PowerConduit : MonoBehaviour
                         outputObject2.GetComponent<DarkMatterCollector>().powerON = false;
                     }
                     outputObject2.GetComponent<DarkMatterCollector>().powerObject = this.gameObject;
-                    outputObject2.GetComponent<DarkMatterCollector>().power = powerAmount/2;
+                    outputObject2.GetComponent<DarkMatterCollector>().power = powerAmount / 2;
                     outputID2 = outputObject2.GetComponent<DarkMatterCollector>().ID;
                 }
                 if (outputObject2.GetComponent<Auger>() != null)
@@ -2354,7 +2354,7 @@ public class PowerConduit : MonoBehaviour
                         outputObject2.GetComponent<Auger>().powerON = false;
                     }
                     outputObject2.GetComponent<Auger>().powerObject = this.gameObject;
-                    outputObject2.GetComponent<Auger>().power = powerAmount/2;
+                    outputObject2.GetComponent<Auger>().power = powerAmount / 2;
                     outputID2 = outputObject2.GetComponent<Auger>().ID;
                 }
                 if (outputObject2.GetComponent<ElectricLight>() != null)
@@ -2388,7 +2388,7 @@ public class PowerConduit : MonoBehaviour
                     outputID2 = outputObject2.GetComponent<PowerConduit>().ID;
                     outputObject2.GetComponent<PowerConduit>().inputID = ID;
                     outputObject2.GetComponent<PowerConduit>().inputObject = this.gameObject;
-                    outputObject2.GetComponent<PowerConduit>().powerAmount = powerAmount/2;
+                    outputObject2.GetComponent<PowerConduit>().powerAmount = powerAmount / 2;
                 }
             }
             if (inputObject != null)
@@ -2442,3 +2442,4 @@ public class PowerConduit : MonoBehaviour
         }
     }
 }
+

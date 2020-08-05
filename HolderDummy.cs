@@ -4,15 +4,5 @@ using UnityEngine;
 
 public class HolderDummy : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    // This class is attached to placeholder objects identified through Unity's GetComponent method.
 }

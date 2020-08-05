@@ -98,7 +98,7 @@ public class InfoHUD : MonoBehaviour
                     machineDisplayOutputID2 = "unassigned";
                 }
 
-                if (playerController.objectInSight.GetComponent<InventoryManager>() != null && playerController.objectInSight.GetComponent<AutoCrafter>() == null && playerController.objectInSight.GetComponent<Retriever>() == null && playerController.objectInSight != this.gameObject)
+                if (playerController.objectInSight.GetComponent<InventoryManager>() != null && playerController.objectInSight.GetComponent<AutoCrafter>() == null && playerController.objectInSight.GetComponent<Retriever>() == null && playerController.objectInSight != gameObject)
                 {
                     if (playerController.objectInSight.GetComponent<RailCart>() != null)
                     {

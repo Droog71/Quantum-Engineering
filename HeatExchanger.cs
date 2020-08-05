@@ -34,6 +34,102 @@ public class HeatExchanger : MonoBehaviour
         builtObjects = GameObject.Find("Built_Objects");
     }
 
+    void Update()
+    {
+        updateTick += 1 * Time.deltaTime;
+        if (updateTick > 0.5f + (address * 0.001f))
+        {
+            GetComponent<PhysicsHandler>().UpdatePhysics();
+            updateTick = 0;
+            if (outputObject == null)
+            {
+                connectionAttempts += 1;
+                if (creationMethod.Equals("spawned"))
+                {
+                    if (connectionAttempts >= 30)
+                    {
+                        connectionAttempts = 0;
+                        connectionFailed = true;
+                    }
+                }
+                else
+                {
+                    if (connectionAttempts >= 120)
+                    {
+                        connectionAttempts = 0;
+                        connectionFailed = true;
+                    }
+                }
+
+                if (connectionFailed == false)
+                {
+                    GameObject[] allObjects = GameObject.FindGameObjectsWithTag("Built");
+                    foreach (GameObject obj in allObjects)
+                    {
+                        if (IsValidObject(obj))
+                        {
+                            ConnectToObject(obj);
+                        }
+                    }
+                }
+            }
+
+            if (inputObject != null)
+            {
+                if (inputObject.GetComponent<UniversalConduit>() != null)
+                {
+                    inputType = inputObject.GetComponent<UniversalConduit>().type;
+                    if (inputObject.GetComponent<UniversalConduit>().type.Equals("Ice"))
+                    {
+                        if (speed > inputObject.GetComponent<UniversalConduit>().speed)
+                        {
+                            speed = inputObject.GetComponent<UniversalConduit>().speed;
+                        }
+                        if (amount >= speed && speed > 0)
+                        {
+                            providingCooling = true;
+                        }
+                        else
+                        {
+                            providingCooling = false;
+                        }
+                    }
+                }
+            }
+
+            if (outputObject != null)
+            {
+                machineTimer += 1;
+                if (machineTimer > 5 - (address * 0.01f))
+                {
+                    SetOutputID();
+                    DoWork();
+                    machineTimer = 0;
+                }
+            }
+            else
+            {
+                connectionLine.enabled = false;
+                if (connectionFailed == true)
+                {
+                    if (creationMethod.Equals("spawned"))
+                    {
+                        creationMethod = "built";
+                    }
+                }
+            }
+        }
+    }
+
+    bool IsValidObject(GameObject obj)
+    {
+        if (obj != null)
+        {
+            return obj.transform.parent != builtObjects.transform && obj.activeInHierarchy;
+        }
+        return false;
+    }
+
     void OnDestroy()
     {
         if (outputObject != null)
@@ -101,812 +197,735 @@ public class HeatExchanger : MonoBehaviour
         }
     }
 
-    void Update()
+    private void ConnectToObject(GameObject obj)
     {
-        updateTick += 1 * Time.deltaTime;
-        if (updateTick > 0.5f + (address * 0.001f))
+        if (obj.GetComponent<UniversalExtractor>() != null)
         {
-            //Debug.Log(ID + " Machine update tick: " + address * 0.1f);
-            GetComponent<PhysicsHandler>().UpdatePhysics();
-            updateTick = 0;
-            if (outputObject == null)
+            float distance = Vector3.Distance(transform.position, obj.transform.position);
+            if (distance < 20)
             {
-                connectionAttempts += 1;
-                if (creationMethod.Equals("spawned"))
+                if (obj != this.gameObject)
                 {
-                    if (connectionAttempts >= 30)
+                    if (creationMethod.Equals("spawned"))
                     {
-                        connectionAttempts = 0;
-                        connectionFailed = true;
-                    }
-                }
-                else
-                {
-                    if (connectionAttempts >= 120)
-                    {
-                        connectionAttempts = 0;
-                        connectionFailed = true;
-                    }
-                }
-                if (connectionFailed == false)
-                {
-                    GameObject[] allObjects = GameObject.FindGameObjectsWithTag("Built");
-                    foreach (GameObject obj in allObjects)
-                    {
-                        if (obj != null)
+                        if (obj.GetComponent<UniversalExtractor>().ID.Equals(outputID))
                         {
-                            if (obj.transform.parent != builtObjects.transform)
+                            if (obj.GetComponent<UniversalExtractor>().hasHeatExchanger == false)
                             {
-                                if (obj.activeInHierarchy)
-                                {
-                                    if (obj.GetComponent<UniversalExtractor>() != null)
-                                    {
-                                        float distance = Vector3.Distance(transform.position, obj.transform.position);
-                                        if (distance < 20)
-                                        {
-                                            if (obj != this.gameObject)
-                                            {
-                                                if (creationMethod.Equals("spawned"))
-                                                {
-                                                    if (obj.GetComponent<UniversalExtractor>().ID.Equals(outputID))
-                                                    {
-                                                        if (obj.GetComponent<UniversalExtractor>().hasHeatExchanger == false)
-                                                        {
-                                                            outputObject = obj;
-                                                            outputObject.GetComponent<UniversalExtractor>().hasHeatExchanger = true;
-                                                            connectionLine.SetPosition(0, transform.position);
-                                                            connectionLine.SetPosition(1, obj.transform.position);
-                                                            connectionLine.enabled = true;
-                                                            creationMethod = "built";
-                                                        }
-                                                    }
-                                                }
-                                                else if (creationMethod.Equals("built"))
-                                                {
-                                                    if (obj.GetComponent<UniversalExtractor>().hasHeatExchanger == false)
-                                                    {
-                                                        outputObject = obj;
-                                                        outputObject.GetComponent<UniversalExtractor>().hasHeatExchanger = true;
-                                                        connectionLine.SetPosition(0, transform.position);
-                                                        connectionLine.SetPosition(1, obj.transform.position);
-                                                        connectionLine.enabled = true;
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                    if (obj.GetComponent<DarkMatterCollector>() != null)
-                                    {
-                                        float distance = Vector3.Distance(transform.position, obj.transform.position);
-                                        if (distance < 20)
-                                        {
-                                            if (obj != this.gameObject)
-                                            {
-                                                if (creationMethod.Equals("spawned"))
-                                                {
-                                                    if (obj.GetComponent<DarkMatterCollector>().ID.Equals(outputID))
-                                                    {
-                                                        if (obj.GetComponent<DarkMatterCollector>().hasHeatExchanger == false)
-                                                        {
-                                                            outputObject = obj;
-                                                            outputObject.GetComponent<DarkMatterCollector>().hasHeatExchanger = true;
-                                                            connectionLine.SetPosition(0, transform.position);
-                                                            connectionLine.SetPosition(1, obj.transform.position);
-                                                            connectionLine.enabled = true;
-                                                            creationMethod = "built";
-                                                        }
-                                                    }
-                                                }
-                                                else if (creationMethod.Equals("built"))
-                                                {
-                                                    if (obj.GetComponent<DarkMatterCollector>().hasHeatExchanger == false)
-                                                    {
-                                                        outputObject = obj;
-                                                        outputObject.GetComponent<DarkMatterCollector>().hasHeatExchanger = true;
-                                                        connectionLine.SetPosition(0, transform.position);
-                                                        connectionLine.SetPosition(1, obj.transform.position);
-                                                        connectionLine.enabled = true;
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                    if (obj.GetComponent<Retriever>() != null)
-                                    {
-                                        float distance = Vector3.Distance(transform.position, obj.transform.position);
-                                        if (distance < 20)
-                                        {
-                                            if (obj != this.gameObject)
-                                            {
-                                                if (creationMethod.Equals("spawned"))
-                                                {
-                                                    if (obj.GetComponent<Retriever>().ID.Equals(outputID))
-                                                    {
-                                                        if (obj.GetComponent<Retriever>().hasHeatExchanger == false)
-                                                        {
-                                                            outputObject = obj;
-                                                            outputObject.GetComponent<Retriever>().hasHeatExchanger = true;
-                                                            connectionLine.SetPosition(0, transform.position);
-                                                            connectionLine.SetPosition(1, obj.transform.position);
-                                                            connectionLine.enabled = true;
-                                                            creationMethod = "built";
-                                                        }
-                                                    }
-                                                }
-                                                else if (creationMethod.Equals("built"))
-                                                {
-                                                    if (obj.GetComponent<Retriever>().hasHeatExchanger == false)
-                                                    {
-                                                        outputObject = obj;
-                                                        outputObject.GetComponent<Retriever>().hasHeatExchanger = true;
-                                                        connectionLine.SetPosition(0, transform.position);
-                                                        connectionLine.SetPosition(1, obj.transform.position);
-                                                        connectionLine.enabled = true;
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                    if (obj.GetComponent<AutoCrafter>() != null)
-                                    {
-                                        float distance = Vector3.Distance(transform.position, obj.transform.position);
-                                        if (distance < 20)
-                                        {
-                                            if (obj != this.gameObject)
-                                            {
-                                                if (creationMethod.Equals("spawned"))
-                                                {
-                                                    if (obj.GetComponent<AutoCrafter>().ID.Equals(outputID))
-                                                    {
-                                                        if (obj.GetComponent<AutoCrafter>().hasHeatExchanger == false)
-                                                        {
-                                                            outputObject = obj;
-                                                            outputObject.GetComponent<AutoCrafter>().hasHeatExchanger = true;
-                                                            connectionLine.SetPosition(0, transform.position);
-                                                            connectionLine.SetPosition(1, obj.transform.position);
-                                                            connectionLine.enabled = true;
-                                                            creationMethod = "built";
-                                                        }
-                                                    }
-                                                }
-                                                else if (creationMethod.Equals("built"))
-                                                {
-                                                    if (obj.GetComponent<AutoCrafter>().hasHeatExchanger == false)
-                                                    {
-                                                        outputObject = obj;
-                                                        outputObject.GetComponent<AutoCrafter>().hasHeatExchanger = true;
-                                                        connectionLine.SetPosition(0, transform.position);
-                                                        connectionLine.SetPosition(1, obj.transform.position);
-                                                        connectionLine.enabled = true;
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                    if (obj.GetComponent<Auger>() != null)
-                                    {
-                                        float distance = Vector3.Distance(transform.position, obj.transform.position);
-                                        if (distance < 20)
-                                        {
-                                            if (obj != this.gameObject)
-                                            {
-                                                if (creationMethod.Equals("spawned"))
-                                                {
-                                                    if (obj.GetComponent<Auger>().ID.Equals(outputID))
-                                                    {
-                                                        if (obj.GetComponent<Auger>().hasHeatExchanger == false)
-                                                        {
-                                                            outputObject = obj;
-                                                            outputObject.GetComponent<Auger>().hasHeatExchanger = true;
-                                                            connectionLine.SetPosition(0, transform.position);
-                                                            connectionLine.SetPosition(1, obj.transform.position);
-                                                            connectionLine.enabled = true;
-                                                            creationMethod = "built";
-                                                        }
-                                                    }
-                                                }
-                                                else if (creationMethod.Equals("built"))
-                                                {
-                                                    if (obj.GetComponent<Auger>().hasHeatExchanger == false)
-                                                    {
-                                                        outputObject = obj;
-                                                        outputObject.GetComponent<Auger>().hasHeatExchanger = true;
-                                                        connectionLine.SetPosition(0, transform.position);
-                                                        connectionLine.SetPosition(1, obj.transform.position);
-                                                        connectionLine.enabled = true;
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                    if (obj.GetComponent<NuclearReactor>() != null)
-                                    {
-                                        float distance = Vector3.Distance(transform.position, obj.transform.position);
-                                        if (distance < 20)
-                                        {
-                                            if (obj != this.gameObject)
-                                            {
-                                                if (creationMethod.Equals("spawned"))
-                                                {
-                                                    if (obj.GetComponent<NuclearReactor>().ID.Equals(outputID))
-                                                    {
-                                                        if (obj.GetComponent<NuclearReactor>().hasHeatExchanger == false)
-                                                        {
-                                                            outputObject = obj;
-                                                            outputObject.GetComponent<NuclearReactor>().hasHeatExchanger = true;
-                                                            connectionLine.SetPosition(0, transform.position);
-                                                            connectionLine.SetPosition(1, obj.transform.position);
-                                                            connectionLine.enabled = true;
-                                                            creationMethod = "built";
-                                                        }
-                                                    }
-                                                }
-                                                else if (creationMethod.Equals("built"))
-                                                {
-                                                    if (obj.GetComponent<NuclearReactor>().hasHeatExchanger == false)
-                                                    {
-                                                        outputObject = obj;
-                                                        outputObject.GetComponent<NuclearReactor>().hasHeatExchanger = true;
-                                                        connectionLine.SetPosition(0, transform.position);
-                                                        connectionLine.SetPosition(1, obj.transform.position);
-                                                        connectionLine.enabled = true;
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                    if (obj.GetComponent<Smelter>() != null)
-                                    {
-                                        float distance = Vector3.Distance(transform.position, obj.transform.position);
-                                        if (distance < 20)
-                                        {
-                                            if (obj != this.gameObject)
-                                            {
-                                                if (creationMethod.Equals("spawned"))
-                                                {
-                                                    if (obj.GetComponent<Smelter>().ID.Equals(outputID))
-                                                    {
-                                                        if (obj.GetComponent<Smelter>().hasHeatExchanger == false)
-                                                        {
-                                                            outputObject = obj;
-                                                            outputObject.GetComponent<Smelter>().hasHeatExchanger = true;
-                                                            connectionLine.SetPosition(0, transform.position);
-                                                            connectionLine.SetPosition(1, obj.transform.position);
-                                                            connectionLine.enabled = true;
-                                                            creationMethod = "built";
-                                                        }
-                                                    }
-                                                }
-                                                else if (creationMethod.Equals("built"))
-                                                {
-                                                    if (obj.GetComponent<Smelter>().hasHeatExchanger == false)
-                                                    {
-                                                        outputObject = obj;
-                                                        outputObject.GetComponent<Smelter>().hasHeatExchanger = true;
-                                                        connectionLine.SetPosition(0, transform.position);
-                                                        connectionLine.SetPosition(1, obj.transform.position);
-                                                        connectionLine.enabled = true;
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                    if (obj.GetComponent<Extruder>() != null)
-                                    {
-                                        float distance = Vector3.Distance(transform.position, obj.transform.position);
-                                        if (distance < 20)
-                                        {
-                                            if (obj != this.gameObject)
-                                            {
-                                                if (creationMethod.Equals("spawned"))
-                                                {
-                                                    if (obj.GetComponent<Extruder>().ID.Equals(outputID))
-                                                    {
-                                                        if (obj.GetComponent<Extruder>().hasHeatExchanger == false)
-                                                        {
-                                                            outputObject = obj;
-                                                            outputObject.GetComponent<Extruder>().hasHeatExchanger = true;
-                                                            connectionLine.SetPosition(0, transform.position);
-                                                            connectionLine.SetPosition(1, obj.transform.position);
-                                                            connectionLine.enabled = true;
-                                                            creationMethod = "built";
-                                                        }
-                                                    }
-                                                }
-                                                else if (creationMethod.Equals("built"))
-                                                {
-                                                    if (obj.GetComponent<Extruder>().hasHeatExchanger == false)
-                                                    {
-                                                        outputObject = obj;
-                                                        outputObject.GetComponent<Extruder>().hasHeatExchanger = true;
-                                                        connectionLine.SetPosition(0, transform.position);
-                                                        connectionLine.SetPosition(1, obj.transform.position);
-                                                        connectionLine.enabled = true;
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                    if (obj.GetComponent<Press>() != null)
-                                    {
-                                        float distance = Vector3.Distance(transform.position, obj.transform.position);
-                                        if (distance < 20)
-                                        {
-                                            if (obj != this.gameObject)
-                                            {
-                                                if (creationMethod.Equals("spawned"))
-                                                {
-                                                    if (obj.GetComponent<Press>().ID.Equals(outputID))
-                                                    {
-                                                        if (obj.GetComponent<Press>().hasHeatExchanger == false)
-                                                        {
-                                                            outputObject = obj;
-                                                            outputObject.GetComponent<Press>().hasHeatExchanger = true;
-                                                            connectionLine.SetPosition(0, transform.position);
-                                                            connectionLine.SetPosition(1, obj.transform.position);
-                                                            connectionLine.enabled = true;
-                                                            creationMethod = "built";
-                                                        }
-                                                    }
-                                                }
-                                                else if (creationMethod.Equals("built"))
-                                                {
-                                                    if (obj.GetComponent<Press>().hasHeatExchanger == false)
-                                                    {
-                                                        outputObject = obj;
-                                                        outputObject.GetComponent<Press>().hasHeatExchanger = true;
-                                                        connectionLine.SetPosition(0, transform.position);
-                                                        connectionLine.SetPosition(1, obj.transform.position);
-                                                        connectionLine.enabled = true;
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                    if (obj.GetComponent<AlloySmelter>() != null)
-                                    {
-                                        float distance = Vector3.Distance(transform.position, obj.transform.position);
-                                        if (distance < 20)
-                                        {
-                                            if (obj != this.gameObject)
-                                            {
-                                                if (creationMethod.Equals("spawned"))
-                                                {
-                                                    if (obj.GetComponent<AlloySmelter>().ID.Equals(outputID))
-                                                    {
-                                                        if (obj.GetComponent<AlloySmelter>().hasHeatExchanger == false)
-                                                        {
-                                                            outputObject = obj;
-                                                            outputObject.GetComponent<AlloySmelter>().hasHeatExchanger = true;
-                                                            connectionLine.SetPosition(0, transform.position);
-                                                            connectionLine.SetPosition(1, obj.transform.position);
-                                                            connectionLine.enabled = true;
-                                                            creationMethod = "built";
-                                                        }
-                                                    }
-                                                }
-                                                else if (creationMethod.Equals("built"))
-                                                {
-                                                    if (obj.GetComponent<AlloySmelter>().hasHeatExchanger == false)
-                                                    {
-                                                        outputObject = obj;
-                                                        outputObject.GetComponent<AlloySmelter>().hasHeatExchanger = true;
-                                                        connectionLine.SetPosition(0, transform.position);
-                                                        connectionLine.SetPosition(1, obj.transform.position);
-                                                        connectionLine.enabled = true;
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                    if (obj.GetComponent<GearCutter>() != null)
-                                    {
-                                        float distance = Vector3.Distance(transform.position, obj.transform.position);
-                                        if (distance < 20)
-                                        {
-                                            if (obj != this.gameObject)
-                                            {
-                                                if (creationMethod.Equals("spawned"))
-                                                {
-                                                    if (obj.GetComponent<GearCutter>().ID.Equals(outputID))
-                                                    {
-                                                        if (obj.GetComponent<GearCutter>().hasHeatExchanger == false)
-                                                        {
-                                                            outputObject = obj;
-                                                            outputObject.GetComponent<GearCutter>().hasHeatExchanger = true;
-                                                            connectionLine.SetPosition(0, transform.position);
-                                                            connectionLine.SetPosition(1, obj.transform.position);
-                                                            connectionLine.enabled = true;
-                                                            creationMethod = "built";
-                                                        }
-                                                    }
-                                                }
-                                                else if (creationMethod.Equals("built"))
-                                                {
-                                                    if (obj.GetComponent<GearCutter>().hasHeatExchanger == false)
-                                                    {
-                                                        outputObject = obj;
-                                                        outputObject.GetComponent<GearCutter>().hasHeatExchanger = true;
-                                                        connectionLine.SetPosition(0, transform.position);
-                                                        connectionLine.SetPosition(1, obj.transform.position);
-                                                        connectionLine.enabled = true;
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                    if (obj.GetComponent<Turret>() != null)
-                                    {
-                                        float distance = Vector3.Distance(transform.position, obj.transform.position);
-                                        if (distance < 20)
-                                        {
-                                            if (obj != this.gameObject)
-                                            {
-                                                if (creationMethod.Equals("spawned"))
-                                                {
-                                                    if (obj.GetComponent<Turret>().ID.Equals(outputID))
-                                                    {
-                                                        if (obj.GetComponent<Turret>().hasHeatExchanger == false)
-                                                        {
-                                                            outputObject = obj;
-                                                            outputObject.GetComponent<Turret>().hasHeatExchanger = true;
-                                                            connectionLine.SetPosition(0, transform.position);
-                                                            connectionLine.SetPosition(1, obj.transform.position);
-                                                            connectionLine.enabled = true;
-                                                            creationMethod = "built";
-                                                        }
-                                                    }
-                                                }
-                                                else if (creationMethod.Equals("built"))
-                                                {
-                                                    if (obj.GetComponent<Turret>().hasHeatExchanger == false)
-                                                    {
-                                                        outputObject = obj;
-                                                        outputObject.GetComponent<Turret>().hasHeatExchanger = true;
-                                                        connectionLine.SetPosition(0, transform.position);
-                                                        connectionLine.SetPosition(1, obj.transform.position);
-                                                        connectionLine.enabled = true;
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
+                                outputObject = obj;
+                                outputObject.GetComponent<UniversalExtractor>().hasHeatExchanger = true;
+                                connectionLine.SetPosition(0, transform.position);
+                                connectionLine.SetPosition(1, obj.transform.position);
+                                connectionLine.enabled = true;
+                                creationMethod = "built";
                             }
+                        }
+                    }
+                    else if (creationMethod.Equals("built"))
+                    {
+                        if (obj.GetComponent<UniversalExtractor>().hasHeatExchanger == false)
+                        {
+                            outputObject = obj;
+                            outputObject.GetComponent<UniversalExtractor>().hasHeatExchanger = true;
+                            connectionLine.SetPosition(0, transform.position);
+                            connectionLine.SetPosition(1, obj.transform.position);
+                            connectionLine.enabled = true;
                         }
                     }
                 }
             }
-            if (inputObject != null)
+        }
+        if (obj.GetComponent<DarkMatterCollector>() != null)
+        {
+            float distance = Vector3.Distance(transform.position, obj.transform.position);
+            if (distance < 20)
             {
-                if (inputObject.GetComponent<UniversalConduit>() != null)
+                if (obj != this.gameObject)
                 {
-                    inputType = inputObject.GetComponent<UniversalConduit>().type;
-                    if (inputObject.GetComponent<UniversalConduit>().type.Equals("Ice"))
+                    if (creationMethod.Equals("spawned"))
                     {
-                        if (speed > inputObject.GetComponent<UniversalConduit>().speed)
+                        if (obj.GetComponent<DarkMatterCollector>().ID.Equals(outputID))
                         {
-                            speed = inputObject.GetComponent<UniversalConduit>().speed;
+                            if (obj.GetComponent<DarkMatterCollector>().hasHeatExchanger == false)
+                            {
+                                outputObject = obj;
+                                outputObject.GetComponent<DarkMatterCollector>().hasHeatExchanger = true;
+                                connectionLine.SetPosition(0, transform.position);
+                                connectionLine.SetPosition(1, obj.transform.position);
+                                connectionLine.enabled = true;
+                                creationMethod = "built";
+                            }
                         }
-                        if (amount >= speed && speed > 0)
+                    }
+                    else if (creationMethod.Equals("built"))
+                    {
+                        if (obj.GetComponent<DarkMatterCollector>().hasHeatExchanger == false)
                         {
-                            providingCooling = true;
-                        }
-                        else
-                        {
-                            //Debug.Log("Heat exchanger does not have enough ice.");
-                            providingCooling = false;
+                            outputObject = obj;
+                            outputObject.GetComponent<DarkMatterCollector>().hasHeatExchanger = true;
+                            connectionLine.SetPosition(0, transform.position);
+                            connectionLine.SetPosition(1, obj.transform.position);
+                            connectionLine.enabled = true;
                         }
                     }
                 }
             }
-            if (outputObject != null)
+        }
+        if (obj.GetComponent<Retriever>() != null)
+        {
+            float distance = Vector3.Distance(transform.position, obj.transform.position);
+            if (distance < 20)
             {
-                if (outputObject.GetComponent<NuclearReactor>() != null)
+                if (obj != this.gameObject)
                 {
-                    outputID = outputObject.GetComponent<NuclearReactor>().ID;
-                }
-                if (outputObject.GetComponent<UniversalExtractor>() != null)
-                {
-                    outputID = outputObject.GetComponent<UniversalExtractor>().ID;
-                }
-                if (outputObject.GetComponent<Retriever>() != null)
-                {
-                    outputID = outputObject.GetComponent<Retriever>().ID;
-                }
-                if (outputObject.GetComponent<AutoCrafter>() != null)
-                {
-                    outputID = outputObject.GetComponent<AutoCrafter>().ID;
-                }
-                if (outputObject.GetComponent<DarkMatterCollector>() != null)
-                {
-                    outputID = outputObject.GetComponent<DarkMatterCollector>().ID;
-                }
-                if (outputObject.GetComponent<Auger>() != null)
-                {
-                    outputID = outputObject.GetComponent<Auger>().ID;
-                }
-                if (outputObject.GetComponent<NuclearReactor>() != null)
-                {
-                    outputID = outputObject.GetComponent<NuclearReactor>().ID;
-                }
-                if (outputObject.GetComponent<Smelter>() != null)
-                {
-                    outputID = outputObject.GetComponent<Smelter>().ID;
-                }
-                if (outputObject.GetComponent<Extruder>() != null)
-                {
-                    outputID = outputObject.GetComponent<Extruder>().ID;
-                }
-                if (outputObject.GetComponent<Press>() != null)
-                {
-                    outputID = outputObject.GetComponent<Press>().ID;
-                }
-                if (outputObject.GetComponent<AlloySmelter>() != null)
-                {
-                    outputID = outputObject.GetComponent<AlloySmelter>().ID;
-                }
-                if (outputObject.GetComponent<GearCutter>() != null)
-                {
-                    outputID = outputObject.GetComponent<GearCutter>().ID;
-                }
-                if (outputObject.GetComponent<Turret>() != null)
-                {
-                    outputID = outputObject.GetComponent<Turret>().ID;
-                }
-                machineTimer += 1;
-                if (machineTimer > 5 - (address * 0.01f))
-                {
-                    if (outputObject.GetComponent<UniversalExtractor>() != null)
+                    if (creationMethod.Equals("spawned"))
                     {
-                        if (providingCooling == true && connectionFailed == false && inputObject != null)
+                        if (obj.GetComponent<Retriever>().ID.Equals(outputID))
                         {
-                            if (amount >= speed)
+                            if (obj.GetComponent<Retriever>().hasHeatExchanger == false)
                             {
-                                outputObject.GetComponent<UniversalExtractor>().cooling = speed;
-                                amount -= speed;
-                                GetComponent<Light>().enabled = true;
-                                GetComponent<AudioSource>().enabled = true;
+                                outputObject = obj;
+                                outputObject.GetComponent<Retriever>().hasHeatExchanger = true;
+                                connectionLine.SetPosition(0, transform.position);
+                                connectionLine.SetPosition(1, obj.transform.position);
+                                connectionLine.enabled = true;
+                                creationMethod = "built";
                             }
                         }
-                        else
+                    }
+                    else if (creationMethod.Equals("built"))
+                    {
+                        if (obj.GetComponent<Retriever>().hasHeatExchanger == false)
                         {
-                            //Debug.Log("Heat exchanger ran out of ice.");
-                            outputObject.GetComponent<UniversalExtractor>().cooling = 0;
-                            GetComponent<Light>().enabled = false;
-                            GetComponent<AudioSource>().enabled = false;
+                            outputObject = obj;
+                            outputObject.GetComponent<Retriever>().hasHeatExchanger = true;
+                            connectionLine.SetPosition(0, transform.position);
+                            connectionLine.SetPosition(1, obj.transform.position);
+                            connectionLine.enabled = true;
                         }
                     }
-                    if (outputObject.GetComponent<Retriever>() != null)
+                }
+            }
+        }
+        if (obj.GetComponent<AutoCrafter>() != null)
+        {
+            float distance = Vector3.Distance(transform.position, obj.transform.position);
+            if (distance < 20)
+            {
+                if (obj != this.gameObject)
+                {
+                    if (creationMethod.Equals("spawned"))
                     {
-                        if (providingCooling == true && connectionFailed == false && inputObject != null)
+                        if (obj.GetComponent<AutoCrafter>().ID.Equals(outputID))
                         {
-                            if (amount >= speed)
+                            if (obj.GetComponent<AutoCrafter>().hasHeatExchanger == false)
                             {
-                                outputObject.GetComponent<Retriever>().cooling = speed;
-                                amount -= speed;
-                                GetComponent<Light>().enabled = true;
-                                GetComponent<AudioSource>().enabled = true;
+                                outputObject = obj;
+                                outputObject.GetComponent<AutoCrafter>().hasHeatExchanger = true;
+                                connectionLine.SetPosition(0, transform.position);
+                                connectionLine.SetPosition(1, obj.transform.position);
+                                connectionLine.enabled = true;
+                                creationMethod = "built";
                             }
                         }
-                        else
+                    }
+                    else if (creationMethod.Equals("built"))
+                    {
+                        if (obj.GetComponent<AutoCrafter>().hasHeatExchanger == false)
                         {
-                            //Debug.Log("Heat exchanger ran out of ice.");
-                            outputObject.GetComponent<Retriever>().cooling = 0;
-                            GetComponent<Light>().enabled = false;
-                            GetComponent<AudioSource>().enabled = false;
+                            outputObject = obj;
+                            outputObject.GetComponent<AutoCrafter>().hasHeatExchanger = true;
+                            connectionLine.SetPosition(0, transform.position);
+                            connectionLine.SetPosition(1, obj.transform.position);
+                            connectionLine.enabled = true;
                         }
                     }
-                    if (outputObject.GetComponent<AutoCrafter>() != null)
+                }
+            }
+        }
+        if (obj.GetComponent<Auger>() != null)
+        {
+            float distance = Vector3.Distance(transform.position, obj.transform.position);
+            if (distance < 20)
+            {
+                if (obj != this.gameObject)
+                {
+                    if (creationMethod.Equals("spawned"))
                     {
-                        if (providingCooling == true && connectionFailed == false && inputObject != null)
+                        if (obj.GetComponent<Auger>().ID.Equals(outputID))
                         {
-                            if (amount >= speed)
+                            if (obj.GetComponent<Auger>().hasHeatExchanger == false)
                             {
-                                outputObject.GetComponent<AutoCrafter>().cooling = speed;
-                                amount -= speed;
-                                GetComponent<Light>().enabled = true;
-                                GetComponent<AudioSource>().enabled = true;
+                                outputObject = obj;
+                                outputObject.GetComponent<Auger>().hasHeatExchanger = true;
+                                connectionLine.SetPosition(0, transform.position);
+                                connectionLine.SetPosition(1, obj.transform.position);
+                                connectionLine.enabled = true;
+                                creationMethod = "built";
                             }
                         }
-                        else
+                    }
+                    else if (creationMethod.Equals("built"))
+                    {
+                        if (obj.GetComponent<Auger>().hasHeatExchanger == false)
                         {
-                            //Debug.Log("Heat exchanger ran out of ice.");
-                            outputObject.GetComponent<AutoCrafter>().cooling = 0;
-                            GetComponent<Light>().enabled = false;
-                            GetComponent<AudioSource>().enabled = false;
+                            outputObject = obj;
+                            outputObject.GetComponent<Auger>().hasHeatExchanger = true;
+                            connectionLine.SetPosition(0, transform.position);
+                            connectionLine.SetPosition(1, obj.transform.position);
+                            connectionLine.enabled = true;
                         }
                     }
-                    if (outputObject.GetComponent<DarkMatterCollector>() != null)
+                }
+            }
+        }
+        if (obj.GetComponent<NuclearReactor>() != null)
+        {
+            float distance = Vector3.Distance(transform.position, obj.transform.position);
+            if (distance < 20)
+            {
+                if (obj != this.gameObject)
+                {
+                    if (creationMethod.Equals("spawned"))
                     {
-                        if (providingCooling == true && connectionFailed == false && inputObject != null)
+                        if (obj.GetComponent<NuclearReactor>().ID.Equals(outputID))
                         {
-                            if (amount >= speed)
+                            if (obj.GetComponent<NuclearReactor>().hasHeatExchanger == false)
                             {
-                                outputObject.GetComponent<DarkMatterCollector>().cooling = speed;
-                                amount -= speed;
-                                GetComponent<Light>().enabled = true;
-                                GetComponent<AudioSource>().enabled = true;
+                                outputObject = obj;
+                                outputObject.GetComponent<NuclearReactor>().hasHeatExchanger = true;
+                                connectionLine.SetPosition(0, transform.position);
+                                connectionLine.SetPosition(1, obj.transform.position);
+                                connectionLine.enabled = true;
+                                creationMethod = "built";
                             }
                         }
-                        else
+                    }
+                    else if (creationMethod.Equals("built"))
+                    {
+                        if (obj.GetComponent<NuclearReactor>().hasHeatExchanger == false)
                         {
-                            //Debug.Log("Heat exchanger ran out of ice.");
-                            outputObject.GetComponent<DarkMatterCollector>().cooling = 0;
-                            GetComponent<Light>().enabled = false;
-                            GetComponent<AudioSource>().enabled = false;
+                            outputObject = obj;
+                            outputObject.GetComponent<NuclearReactor>().hasHeatExchanger = true;
+                            connectionLine.SetPosition(0, transform.position);
+                            connectionLine.SetPosition(1, obj.transform.position);
+                            connectionLine.enabled = true;
                         }
                     }
-                    if (outputObject.GetComponent<Auger>() != null)
+                }
+            }
+        }
+        if (obj.GetComponent<Smelter>() != null)
+        {
+            float distance = Vector3.Distance(transform.position, obj.transform.position);
+            if (distance < 20)
+            {
+                if (obj != this.gameObject)
+                {
+                    if (creationMethod.Equals("spawned"))
                     {
-                        if (providingCooling == true && connectionFailed == false && inputObject != null)
+                        if (obj.GetComponent<Smelter>().ID.Equals(outputID))
                         {
-                            if (amount >= speed)
+                            if (obj.GetComponent<Smelter>().hasHeatExchanger == false)
                             {
-                                outputObject.GetComponent<Auger>().cooling = speed;
-                                amount -= speed;
-                                GetComponent<Light>().enabled = true;
-                                GetComponent<AudioSource>().enabled = true;
+                                outputObject = obj;
+                                outputObject.GetComponent<Smelter>().hasHeatExchanger = true;
+                                connectionLine.SetPosition(0, transform.position);
+                                connectionLine.SetPosition(1, obj.transform.position);
+                                connectionLine.enabled = true;
+                                creationMethod = "built";
                             }
                         }
-                        else
+                    }
+                    else if (creationMethod.Equals("built"))
+                    {
+                        if (obj.GetComponent<Smelter>().hasHeatExchanger == false)
                         {
-                            //Debug.Log("Heat exchanger ran out of ice.");
-                            outputObject.GetComponent<Auger>().cooling = 0;
-                            GetComponent<Light>().enabled = false;
-                            GetComponent<AudioSource>().enabled = false;
+                            outputObject = obj;
+                            outputObject.GetComponent<Smelter>().hasHeatExchanger = true;
+                            connectionLine.SetPosition(0, transform.position);
+                            connectionLine.SetPosition(1, obj.transform.position);
+                            connectionLine.enabled = true;
                         }
                     }
-                    if (outputObject.GetComponent<NuclearReactor>() != null)
+                }
+            }
+        }
+        if (obj.GetComponent<Extruder>() != null)
+        {
+            float distance = Vector3.Distance(transform.position, obj.transform.position);
+            if (distance < 20)
+            {
+                if (obj != this.gameObject)
+                {
+                    if (creationMethod.Equals("spawned"))
                     {
-                        if (providingCooling == true && connectionFailed == false && inputObject != null)
+                        if (obj.GetComponent<Extruder>().ID.Equals(outputID))
                         {
-                            if (amount >= speed)
+                            if (obj.GetComponent<Extruder>().hasHeatExchanger == false)
                             {
-                                outputObject.GetComponent<NuclearReactor>().cooling = speed;
-                                amount -= speed;
-                                GetComponent<Light>().enabled = true;
-                                GetComponent<AudioSource>().enabled = true;
+                                outputObject = obj;
+                                outputObject.GetComponent<Extruder>().hasHeatExchanger = true;
+                                connectionLine.SetPosition(0, transform.position);
+                                connectionLine.SetPosition(1, obj.transform.position);
+                                connectionLine.enabled = true;
+                                creationMethod = "built";
                             }
                         }
-                        else
+                    }
+                    else if (creationMethod.Equals("built"))
+                    {
+                        if (obj.GetComponent<Extruder>().hasHeatExchanger == false)
                         {
-                            //Debug.Log("Heat exchanger ran out of ice.");
-                            outputObject.GetComponent<NuclearReactor>().cooling = 0;
-                            GetComponent<Light>().enabled = false;
-                            GetComponent<AudioSource>().enabled = false;
+                            outputObject = obj;
+                            outputObject.GetComponent<Extruder>().hasHeatExchanger = true;
+                            connectionLine.SetPosition(0, transform.position);
+                            connectionLine.SetPosition(1, obj.transform.position);
+                            connectionLine.enabled = true;
                         }
                     }
-                    if (outputObject.GetComponent<Smelter>() != null)
+                }
+            }
+        }
+        if (obj.GetComponent<Press>() != null)
+        {
+            float distance = Vector3.Distance(transform.position, obj.transform.position);
+            if (distance < 20)
+            {
+                if (obj != this.gameObject)
+                {
+                    if (creationMethod.Equals("spawned"))
                     {
-                        if (providingCooling == true && connectionFailed == false && inputObject != null)
+                        if (obj.GetComponent<Press>().ID.Equals(outputID))
                         {
-                            if (amount >= speed)
+                            if (obj.GetComponent<Press>().hasHeatExchanger == false)
                             {
-                                outputObject.GetComponent<Smelter>().cooling = speed;
-                                amount -= speed;
-                                GetComponent<Light>().enabled = true;
-                                GetComponent<AudioSource>().enabled = true;
+                                outputObject = obj;
+                                outputObject.GetComponent<Press>().hasHeatExchanger = true;
+                                connectionLine.SetPosition(0, transform.position);
+                                connectionLine.SetPosition(1, obj.transform.position);
+                                connectionLine.enabled = true;
+                                creationMethod = "built";
                             }
                         }
-                        else
+                    }
+                    else if (creationMethod.Equals("built"))
+                    {
+                        if (obj.GetComponent<Press>().hasHeatExchanger == false)
                         {
-                            //Debug.Log("Heat exchanger ran out of ice.");
-                            outputObject.GetComponent<Smelter>().cooling = 0;
-                            GetComponent<Light>().enabled = false;
-                            GetComponent<AudioSource>().enabled = false;
+                            outputObject = obj;
+                            outputObject.GetComponent<Press>().hasHeatExchanger = true;
+                            connectionLine.SetPosition(0, transform.position);
+                            connectionLine.SetPosition(1, obj.transform.position);
+                            connectionLine.enabled = true;
                         }
                     }
-                    if (outputObject.GetComponent<Extruder>() != null)
+                }
+            }
+        }
+        if (obj.GetComponent<AlloySmelter>() != null)
+        {
+            float distance = Vector3.Distance(transform.position, obj.transform.position);
+            if (distance < 20)
+            {
+                if (obj != this.gameObject)
+                {
+                    if (creationMethod.Equals("spawned"))
                     {
-                        if (providingCooling == true && connectionFailed == false && inputObject != null)
+                        if (obj.GetComponent<AlloySmelter>().ID.Equals(outputID))
                         {
-                            if (amount >= speed)
+                            if (obj.GetComponent<AlloySmelter>().hasHeatExchanger == false)
                             {
-                                outputObject.GetComponent<Extruder>().cooling = speed;
-                                amount -= speed;
-                                GetComponent<Light>().enabled = true;
-                                GetComponent<AudioSource>().enabled = true;
+                                outputObject = obj;
+                                outputObject.GetComponent<AlloySmelter>().hasHeatExchanger = true;
+                                connectionLine.SetPosition(0, transform.position);
+                                connectionLine.SetPosition(1, obj.transform.position);
+                                connectionLine.enabled = true;
+                                creationMethod = "built";
                             }
                         }
-                        else
+                    }
+                    else if (creationMethod.Equals("built"))
+                    {
+                        if (obj.GetComponent<AlloySmelter>().hasHeatExchanger == false)
                         {
-                            //Debug.Log("Heat exchanger ran out of ice.");
-                            outputObject.GetComponent<Extruder>().cooling = 0;
-                            GetComponent<Light>().enabled = false;
-                            GetComponent<AudioSource>().enabled = false;
+                            outputObject = obj;
+                            outputObject.GetComponent<AlloySmelter>().hasHeatExchanger = true;
+                            connectionLine.SetPosition(0, transform.position);
+                            connectionLine.SetPosition(1, obj.transform.position);
+                            connectionLine.enabled = true;
                         }
                     }
-                    if (outputObject.GetComponent<Press>() != null)
+                }
+            }
+        }
+        if (obj.GetComponent<GearCutter>() != null)
+        {
+            float distance = Vector3.Distance(transform.position, obj.transform.position);
+            if (distance < 20)
+            {
+                if (obj != this.gameObject)
+                {
+                    if (creationMethod.Equals("spawned"))
                     {
-                        if (providingCooling == true && connectionFailed == false && inputObject != null)
+                        if (obj.GetComponent<GearCutter>().ID.Equals(outputID))
                         {
-                            if (amount >= speed)
+                            if (obj.GetComponent<GearCutter>().hasHeatExchanger == false)
                             {
-                                outputObject.GetComponent<Press>().cooling = speed;
-                                amount -= speed;
-                                GetComponent<Light>().enabled = true;
-                                GetComponent<AudioSource>().enabled = true;
+                                outputObject = obj;
+                                outputObject.GetComponent<GearCutter>().hasHeatExchanger = true;
+                                connectionLine.SetPosition(0, transform.position);
+                                connectionLine.SetPosition(1, obj.transform.position);
+                                connectionLine.enabled = true;
+                                creationMethod = "built";
                             }
                         }
-                        else
+                    }
+                    else if (creationMethod.Equals("built"))
+                    {
+                        if (obj.GetComponent<GearCutter>().hasHeatExchanger == false)
                         {
-                            //Debug.Log("Heat exchanger ran out of ice.");
-                            outputObject.GetComponent<Press>().cooling = 0;
-                            GetComponent<Light>().enabled = false;
-                            GetComponent<AudioSource>().enabled = false;
+                            outputObject = obj;
+                            outputObject.GetComponent<GearCutter>().hasHeatExchanger = true;
+                            connectionLine.SetPosition(0, transform.position);
+                            connectionLine.SetPosition(1, obj.transform.position);
+                            connectionLine.enabled = true;
                         }
                     }
-                    if (outputObject.GetComponent<AlloySmelter>() != null)
+                }
+            }
+        }
+        if (obj.GetComponent<Turret>() != null)
+        {
+            float distance = Vector3.Distance(transform.position, obj.transform.position);
+            if (distance < 20)
+            {
+                if (obj != this.gameObject)
+                {
+                    if (creationMethod.Equals("spawned"))
                     {
-                        if (providingCooling == true && connectionFailed == false && inputObject != null)
+                        if (obj.GetComponent<Turret>().ID.Equals(outputID))
                         {
-                            if (amount >= speed)
+                            if (obj.GetComponent<Turret>().hasHeatExchanger == false)
                             {
-                                outputObject.GetComponent<AlloySmelter>().cooling = speed;
-                                amount -= speed;
-                                GetComponent<Light>().enabled = true;
-                                GetComponent<AudioSource>().enabled = true;
+                                outputObject = obj;
+                                outputObject.GetComponent<Turret>().hasHeatExchanger = true;
+                                connectionLine.SetPosition(0, transform.position);
+                                connectionLine.SetPosition(1, obj.transform.position);
+                                connectionLine.enabled = true;
+                                creationMethod = "built";
                             }
                         }
-                        else
-                        {
-                            //Debug.Log("Heat exchanger ran out of ice.");
-                            outputObject.GetComponent<AlloySmelter>().cooling = 0;
-                            GetComponent<Light>().enabled = false;
-                            GetComponent<AudioSource>().enabled = false;
-                        }
                     }
-                    if (outputObject.GetComponent<GearCutter>() != null)
+                    else if (creationMethod.Equals("built"))
                     {
-                        if (providingCooling == true && connectionFailed == false && inputObject != null)
+                        if (obj.GetComponent<Turret>().hasHeatExchanger == false)
                         {
-                            if (amount >= speed)
-                            {
-                                outputObject.GetComponent<GearCutter>().cooling = speed;
-                                amount -= speed;
-                                GetComponent<Light>().enabled = true;
-                                GetComponent<AudioSource>().enabled = true;
-                            }
-                        }
-                        else
-                        {
-                            //Debug.Log("Heat exchanger ran out of ice.");
-                            outputObject.GetComponent<GearCutter>().cooling = 0;
-                            GetComponent<Light>().enabled = false;
-                            GetComponent<AudioSource>().enabled = false;
+                            outputObject = obj;
+                            outputObject.GetComponent<Turret>().hasHeatExchanger = true;
+                            connectionLine.SetPosition(0, transform.position);
+                            connectionLine.SetPosition(1, obj.transform.position);
+                            connectionLine.enabled = true;
                         }
                     }
-                    if (outputObject.GetComponent<Turret>() != null)
-                    {
-                        if (providingCooling == true && connectionFailed == false && inputObject != null)
-                        {
-                            outputObject.GetComponent<Turret>().cooling = speed;
-                            amount -= speed;
-                            GetComponent<Light>().enabled = true;
-                            GetComponent<AudioSource>().enabled = true;
-                        }
-                        else
-                        {
-                            //Debug.Log("Heat exchanger ran out of ice.");
-                            outputObject.GetComponent<Turret>().cooling = 0;
-                            GetComponent<Light>().enabled = false;
-                            GetComponent<AudioSource>().enabled = false;
-                        }
-                    }
-                    machineTimer = 0;
+                }
+            }
+        }
+    }
+
+    private void SetOutputID()
+    {
+        if (outputObject.GetComponent<NuclearReactor>() != null)
+        {
+            outputID = outputObject.GetComponent<NuclearReactor>().ID;
+        }
+        if (outputObject.GetComponent<UniversalExtractor>() != null)
+        {
+            outputID = outputObject.GetComponent<UniversalExtractor>().ID;
+        }
+        if (outputObject.GetComponent<Retriever>() != null)
+        {
+            outputID = outputObject.GetComponent<Retriever>().ID;
+        }
+        if (outputObject.GetComponent<AutoCrafter>() != null)
+        {
+            outputID = outputObject.GetComponent<AutoCrafter>().ID;
+        }
+        if (outputObject.GetComponent<DarkMatterCollector>() != null)
+        {
+            outputID = outputObject.GetComponent<DarkMatterCollector>().ID;
+        }
+        if (outputObject.GetComponent<Auger>() != null)
+        {
+            outputID = outputObject.GetComponent<Auger>().ID;
+        }
+        if (outputObject.GetComponent<NuclearReactor>() != null)
+        {
+            outputID = outputObject.GetComponent<NuclearReactor>().ID;
+        }
+        if (outputObject.GetComponent<Smelter>() != null)
+        {
+            outputID = outputObject.GetComponent<Smelter>().ID;
+        }
+        if (outputObject.GetComponent<Extruder>() != null)
+        {
+            outputID = outputObject.GetComponent<Extruder>().ID;
+        }
+        if (outputObject.GetComponent<Press>() != null)
+        {
+            outputID = outputObject.GetComponent<Press>().ID;
+        }
+        if (outputObject.GetComponent<AlloySmelter>() != null)
+        {
+            outputID = outputObject.GetComponent<AlloySmelter>().ID;
+        }
+        if (outputObject.GetComponent<GearCutter>() != null)
+        {
+            outputID = outputObject.GetComponent<GearCutter>().ID;
+        }
+        if (outputObject.GetComponent<Turret>() != null)
+        {
+            outputID = outputObject.GetComponent<Turret>().ID;
+        }
+    }
+
+    private void DoWork()
+    {
+        if (outputObject.GetComponent<UniversalExtractor>() != null)
+        {
+            if (providingCooling == true && connectionFailed == false && inputObject != null)
+            {
+                if (amount >= speed)
+                {
+                    outputObject.GetComponent<UniversalExtractor>().cooling = speed;
+                    amount -= speed;
+                    GetComponent<Light>().enabled = true;
+                    GetComponent<AudioSource>().enabled = true;
                 }
             }
             else
             {
-                connectionLine.enabled = false;
-                if (connectionFailed == true)
+                //Debug.Log("Heat exchanger ran out of ice.");
+                outputObject.GetComponent<UniversalExtractor>().cooling = 0;
+                GetComponent<Light>().enabled = false;
+                GetComponent<AudioSource>().enabled = false;
+            }
+        }
+        if (outputObject.GetComponent<Retriever>() != null)
+        {
+            if (providingCooling == true && connectionFailed == false && inputObject != null)
+            {
+                if (amount >= speed)
                 {
-                    if (creationMethod.Equals("spawned"))
-                    {
-                        creationMethod = "built";
-                    }
+                    outputObject.GetComponent<Retriever>().cooling = speed;
+                    amount -= speed;
+                    GetComponent<Light>().enabled = true;
+                    GetComponent<AudioSource>().enabled = true;
                 }
+            }
+            else
+            {
+                //Debug.Log("Heat exchanger ran out of ice.");
+                outputObject.GetComponent<Retriever>().cooling = 0;
+                GetComponent<Light>().enabled = false;
+                GetComponent<AudioSource>().enabled = false;
+            }
+        }
+        if (outputObject.GetComponent<AutoCrafter>() != null)
+        {
+            if (providingCooling == true && connectionFailed == false && inputObject != null)
+            {
+                if (amount >= speed)
+                {
+                    outputObject.GetComponent<AutoCrafter>().cooling = speed;
+                    amount -= speed;
+                    GetComponent<Light>().enabled = true;
+                    GetComponent<AudioSource>().enabled = true;
+                }
+            }
+            else
+            {
+                //Debug.Log("Heat exchanger ran out of ice.");
+                outputObject.GetComponent<AutoCrafter>().cooling = 0;
+                GetComponent<Light>().enabled = false;
+                GetComponent<AudioSource>().enabled = false;
+            }
+        }
+        if (outputObject.GetComponent<DarkMatterCollector>() != null)
+        {
+            if (providingCooling == true && connectionFailed == false && inputObject != null)
+            {
+                if (amount >= speed)
+                {
+                    outputObject.GetComponent<DarkMatterCollector>().cooling = speed;
+                    amount -= speed;
+                    GetComponent<Light>().enabled = true;
+                    GetComponent<AudioSource>().enabled = true;
+                }
+            }
+            else
+            {
+                //Debug.Log("Heat exchanger ran out of ice.");
+                outputObject.GetComponent<DarkMatterCollector>().cooling = 0;
+                GetComponent<Light>().enabled = false;
+                GetComponent<AudioSource>().enabled = false;
+            }
+        }
+        if (outputObject.GetComponent<Auger>() != null)
+        {
+            if (providingCooling == true && connectionFailed == false && inputObject != null)
+            {
+                if (amount >= speed)
+                {
+                    outputObject.GetComponent<Auger>().cooling = speed;
+                    amount -= speed;
+                    GetComponent<Light>().enabled = true;
+                    GetComponent<AudioSource>().enabled = true;
+                }
+            }
+            else
+            {
+                //Debug.Log("Heat exchanger ran out of ice.");
+                outputObject.GetComponent<Auger>().cooling = 0;
+                GetComponent<Light>().enabled = false;
+                GetComponent<AudioSource>().enabled = false;
+            }
+        }
+        if (outputObject.GetComponent<NuclearReactor>() != null)
+        {
+            if (providingCooling == true && connectionFailed == false && inputObject != null)
+            {
+                if (amount >= speed)
+                {
+                    outputObject.GetComponent<NuclearReactor>().cooling = speed;
+                    amount -= speed;
+                    GetComponent<Light>().enabled = true;
+                    GetComponent<AudioSource>().enabled = true;
+                }
+            }
+            else
+            {
+                //Debug.Log("Heat exchanger ran out of ice.");
+                outputObject.GetComponent<NuclearReactor>().cooling = 0;
+                GetComponent<Light>().enabled = false;
+                GetComponent<AudioSource>().enabled = false;
+            }
+        }
+        if (outputObject.GetComponent<Smelter>() != null)
+        {
+            if (providingCooling == true && connectionFailed == false && inputObject != null)
+            {
+                if (amount >= speed)
+                {
+                    outputObject.GetComponent<Smelter>().cooling = speed;
+                    amount -= speed;
+                    GetComponent<Light>().enabled = true;
+                    GetComponent<AudioSource>().enabled = true;
+                }
+            }
+            else
+            {
+                //Debug.Log("Heat exchanger ran out of ice.");
+                outputObject.GetComponent<Smelter>().cooling = 0;
+                GetComponent<Light>().enabled = false;
+                GetComponent<AudioSource>().enabled = false;
+            }
+        }
+        if (outputObject.GetComponent<Extruder>() != null)
+        {
+            if (providingCooling == true && connectionFailed == false && inputObject != null)
+            {
+                if (amount >= speed)
+                {
+                    outputObject.GetComponent<Extruder>().cooling = speed;
+                    amount -= speed;
+                    GetComponent<Light>().enabled = true;
+                    GetComponent<AudioSource>().enabled = true;
+                }
+            }
+            else
+            {
+                //Debug.Log("Heat exchanger ran out of ice.");
+                outputObject.GetComponent<Extruder>().cooling = 0;
+                GetComponent<Light>().enabled = false;
+                GetComponent<AudioSource>().enabled = false;
+            }
+        }
+        if (outputObject.GetComponent<Press>() != null)
+        {
+            if (providingCooling == true && connectionFailed == false && inputObject != null)
+            {
+                if (amount >= speed)
+                {
+                    outputObject.GetComponent<Press>().cooling = speed;
+                    amount -= speed;
+                    GetComponent<Light>().enabled = true;
+                    GetComponent<AudioSource>().enabled = true;
+                }
+            }
+            else
+            {
+                //Debug.Log("Heat exchanger ran out of ice.");
+                outputObject.GetComponent<Press>().cooling = 0;
+                GetComponent<Light>().enabled = false;
+                GetComponent<AudioSource>().enabled = false;
+            }
+        }
+        if (outputObject.GetComponent<AlloySmelter>() != null)
+        {
+            if (providingCooling == true && connectionFailed == false && inputObject != null)
+            {
+                if (amount >= speed)
+                {
+                    outputObject.GetComponent<AlloySmelter>().cooling = speed;
+                    amount -= speed;
+                    GetComponent<Light>().enabled = true;
+                    GetComponent<AudioSource>().enabled = true;
+                }
+            }
+            else
+            {
+                //Debug.Log("Heat exchanger ran out of ice.");
+                outputObject.GetComponent<AlloySmelter>().cooling = 0;
+                GetComponent<Light>().enabled = false;
+                GetComponent<AudioSource>().enabled = false;
+            }
+        }
+        if (outputObject.GetComponent<GearCutter>() != null)
+        {
+            if (providingCooling == true && connectionFailed == false && inputObject != null)
+            {
+                if (amount >= speed)
+                {
+                    outputObject.GetComponent<GearCutter>().cooling = speed;
+                    amount -= speed;
+                    GetComponent<Light>().enabled = true;
+                    GetComponent<AudioSource>().enabled = true;
+                }
+            }
+            else
+            {
+                //Debug.Log("Heat exchanger ran out of ice.");
+                outputObject.GetComponent<GearCutter>().cooling = 0;
+                GetComponent<Light>().enabled = false;
+                GetComponent<AudioSource>().enabled = false;
+            }
+        }
+        if (outputObject.GetComponent<Turret>() != null)
+        {
+            if (providingCooling == true && connectionFailed == false && inputObject != null)
+            {
+                outputObject.GetComponent<Turret>().cooling = speed;
+                amount -= speed;
+                GetComponent<Light>().enabled = true;
+                GetComponent<AudioSource>().enabled = true;
+            }
+            else
+            {
+                //Debug.Log("Heat exchanger ran out of ice.");
+                outputObject.GetComponent<Turret>().cooling = 0;
+                GetComponent<Light>().enabled = false;
+                GetComponent<AudioSource>().enabled = false;
             }
         }
     }

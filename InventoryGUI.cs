@@ -6,7 +6,8 @@ public class InventoryGUI : MonoBehaviour
 {
     private PlayerController playerController;
     private InventoryManager playerInventory;
-    private PlayerCrafting playerCrafting;
+    private CraftingManager craftingManager;
+    private CraftingDictionary craftingDictionary;
     private string storageComputerSearchText = "";
     private float missingItemTimer;
     private int craftingPage;
@@ -15,7 +16,8 @@ public class InventoryGUI : MonoBehaviour
     {
         playerController = GetComponent<PlayerController>();
         playerInventory = GetComponent<InventoryManager>();
-        playerCrafting = GetComponent<PlayerCrafting>();
+        craftingManager = GetComponent<CraftingManager>();
+        craftingDictionary = gameObject.AddComponent<CraftingDictionary>();
     }
 
     void OnGUI()
@@ -407,7 +409,7 @@ public class InventoryGUI : MonoBehaviour
                 }
 
                 //MESSAGE TELLING THE PLAYER THEY ARE MISSING THE ITEMS REQUIRED TO CRAFT AN OBJECT
-                if (playerCrafting.missingItem == true)
+                if (craftingManager.missingItem == true)
                 {
                     if (missingItemTimer < 3)
                     {
@@ -416,7 +418,7 @@ public class InventoryGUI : MonoBehaviour
                     }
                     else
                     {
-                        playerCrafting.missingItem = false;
+                        craftingManager.missingItem = false;
                         missingItemTimer = 0;
                     }
                 }
@@ -578,87 +580,87 @@ public class InventoryGUI : MonoBehaviour
                         GUI.DrawTexture(GetComponent<GuiCoordinates>().craftingBackgroundRect, GetComponent<TextureDictionary>().dictionary["Interface Background"]);
                         if (GUI.Button(GetComponent<GuiCoordinates>().button1Rect, "Storage Container"))
                         {
-                            playerCrafting.CraftItem(new string[] { "Iron Plate" },new int[] { 6 }, "Storage Container", 1);
+                            craftingManager.CraftItemAsPlayer(craftingDictionary.dictionary["Storage Container"]);
                         }
                         if (GUI.Button(GetComponent<GuiCoordinates>().button2Rect, "Auger"))
                         {
-                            playerCrafting.CraftItem(new string[] { "Iron Ingot", "Copper Ingot" }, new int[] { 10, 10 }, "Auger", 1);
+                            craftingManager.CraftItemAsPlayer(craftingDictionary.dictionary["Auger"]);
                         }
                         if (GUI.Button(GetComponent<GuiCoordinates>().button3Rect, "Extruder"))
                         {
-                            playerCrafting.CraftItem(new string[] { "Iron Ingot", "Copper Ingot" }, new int[] { 10, 10 }, "Extruder", 1);
+                            craftingManager.CraftItemAsPlayer(craftingDictionary.dictionary["Extruder"]);
                         }
                         if (GUI.Button(GetComponent<GuiCoordinates>().button4Rect, "Press"))
                         {
-                            playerCrafting.CraftItem(new string[] { "Iron Ingot", "Iron Pipe", "Copper Wire" }, new int[] { 10, 10, 10 }, "Press", 1);
+                            craftingManager.CraftItemAsPlayer(craftingDictionary.dictionary["Press"]);
                         }
                         if (GUI.Button(GetComponent<GuiCoordinates>().button5Rect, "Gear Cutter"))
                         {
-                            playerCrafting.CraftItem(new string[] { "Iron Plate", "Tin Plate", "Iron Pipe", "Aluminum Wire", "Copper Wire" }, new int[] { 5, 5, 5, 10, 10 }, "Gear Cutter", 1);
+                            craftingManager.CraftItemAsPlayer(craftingDictionary.dictionary["Gear Cutter"]);
                         }
                         if (GUI.Button(GetComponent<GuiCoordinates>().button6Rect, "Universal Extractor"))
                         {
-                            playerCrafting.CraftItem(new string[] { "Iron Plate", "Iron Pipe", "Copper Wire", "Dark Matter" }, new int[] { 10, 10, 10, 10 }, "Universal Extractor", 1);
+                            craftingManager.CraftItemAsPlayer(craftingDictionary.dictionary["Universal Extractor"]);
                         }
                         if (GUI.Button(GetComponent<GuiCoordinates>().button7Rect, "Universal Conduit"))
                         {
-                            playerCrafting.CraftItem(new string[] { "Iron Plate", "Iron Pipe", "Copper Wire", "Dark Matter" }, new int[] { 5, 5, 5, 5 }, "Universal Conduit", 1);
+                            craftingManager.CraftItemAsPlayer(craftingDictionary.dictionary["Universal Conduit"]);
                         }
                         if (GUI.Button(GetComponent<GuiCoordinates>().button9Rect, "Retriever"))
                         {
-                            playerCrafting.CraftItem(new string[] { "Iron Plate", "Iron Pipe", "Copper Wire", "Electric Motor", "Circuit Board" }, new int[] { 4 , 2, 4, 2, 2 }, "Retriever", 1);
+                            craftingManager.CraftItemAsPlayer(craftingDictionary.dictionary["Retriever"]);
                         }
                         if (GUI.Button(GetComponent<GuiCoordinates>().button10Rect, "Solar Panel"))
                         {
-                            playerCrafting.CraftItem(new string[] { "Iron Plate", "Iron Pipe", "Copper Wire", "Copper Plate", "Glass Block" }, new int[] { 4, 4, 4, 4, 4 }, "Solar Panel", 1);
+                            craftingManager.CraftItemAsPlayer(craftingDictionary.dictionary["Solar Panel"]);
                         }
                         if (GUI.Button(GetComponent<GuiCoordinates>().button11Rect, "Generator"))
                         {
-                            playerCrafting.CraftItem(new string[] { "Iron Plate", "Iron Pipe", "Copper Wire", "Copper Plate", "Glass Block" }, new int[] { 4, 4, 4, 4, 4 }, "Solar Panel", 1);
+                            craftingManager.CraftItemAsPlayer(craftingDictionary.dictionary["Generator"]);
                         }
                         if (GUI.Button(GetComponent<GuiCoordinates>().button12Rect, "Nuclear Reactor"))
                         {
-                            playerCrafting.CraftItem(new string[] { "Steel Plate", "Steel Pipe", "Copper Wire", "Copper Plate", "Glass Block", "Dark Matter" }, new int[] { 10, 10, 10, 10, 10, 10 }, "Nuclear Reactor", 1);
+                            craftingManager.CraftItemAsPlayer(craftingDictionary.dictionary["Nuclear Reactor"]);
                         }
                         if (GUI.Button(GetComponent<GuiCoordinates>().button13Rect, "Reactor Turbine"))
                         {
-                            playerCrafting.CraftItem(new string[] { "Generator", "Glass Block", "Steel Pipe", "Steel Gear", "Copper Wire", "Steel Plate" }, new int[] { 1, 1, 2, 2, 4, 4 }, "Reactor Turbine", 1);
+                            craftingManager.CraftItemAsPlayer(craftingDictionary.dictionary["Reactor Turbine"]);
                         }
                         if (GUI.Button(GetComponent<GuiCoordinates>().button14Rect, "Power Conduit"))
                         {
-                            playerCrafting.CraftItem(new string[] { "Aluminum Plate", "Copper Wire", "Glass Block" }, new int[] { 4, 4, 4 }, "Power Conduit", 1);
+                            craftingManager.CraftItemAsPlayer(craftingDictionary.dictionary["Power Conduit"]);
                         }
                         if (GUI.Button(GetComponent<GuiCoordinates>().button15Rect, "Heat Exchanger"))
                         {
-                            playerCrafting.CraftItem(new string[] { "Steel Plate", "Steel Pipe" }, new int[] { 10, 10 }, "Heat Exchanger", 1);
+                            craftingManager.CraftItemAsPlayer(craftingDictionary.dictionary["Heat Exchanger"]);
                         }
                         if (GUI.Button(GetComponent<GuiCoordinates>().button17Rect, "Smelter"))
                         {
-                            playerCrafting.CraftItem(new string[] { "Iron Pipe", "Iron Plate", "Copper Wire" }, new int[] { 5, 10, 10 }, "Smelter", 1);
+                            craftingManager.CraftItemAsPlayer(craftingDictionary.dictionary["Smelter"]);
                         }
                         if (GUI.Button(GetComponent<GuiCoordinates>().button18Rect, "Alloy Smelter"))
                         {
-                            playerCrafting.CraftItem(new string[] { "Iron Plate", "Tin Plate", "Iron Pipe", "Iron Gear", "Aluminum Wire", "Copper Wire" }, new int[] { 20, 20, 20, 20, 40, 40 }, "Alloy Smelter", 1);
+                            craftingManager.CraftItemAsPlayer(craftingDictionary.dictionary["Alloy Smelter"]);
                         }
                         if (GUI.Button(GetComponent<GuiCoordinates>().button19Rect, "DM Collector"))
                         {
-                            playerCrafting.CraftDarkMatterCollector();
+                            craftingManager.CraftItemAsPlayer(craftingDictionary.dictionary["Dark Matter Collector"]);
                         }
                         if (GUI.Button(GetComponent<GuiCoordinates>().button20Rect, "DM Conduit"))
                         {
-                            playerCrafting.CraftDarkMatterConduit();
+                            craftingManager.CraftItemAsPlayer(craftingDictionary.dictionary["Dark Matter Conduit"]);
                         }
                         if (GUI.Button(GetComponent<GuiCoordinates>().button21Rect, "Auto Crafter"))
                         {
-                            playerCrafting.CraftAutoCrafter();
+                            craftingManager.CraftItemAsPlayer(craftingDictionary.dictionary["Auto Crafter"]);
                         }
                         if (GUI.Button(GetComponent<GuiCoordinates>().button22Rect, "Rail Cart Hub"))
                         {
-                            playerCrafting.CraftRailCartHub();
+                            craftingManager.CraftItemAsPlayer(craftingDictionary.dictionary["Rail Cart Hub"]);
                         }
                         if (GUI.Button(GetComponent<GuiCoordinates>().button23Rect, "Rail Cart"))
                         {
-                            playerCrafting.CraftRailCart();
+                            craftingManager.CraftItemAsPlayer(craftingDictionary.dictionary["Rail Cart"]);
                         }
                     }
                     if (craftingPage == 1)
@@ -717,43 +719,43 @@ public class InventoryGUI : MonoBehaviour
                         GUI.DrawTexture(GetComponent<GuiCoordinates>().craftingBackgroundRect, GetComponent<TextureDictionary>().dictionary["Interface Background"]);
                         if (GUI.Button(GetComponent<GuiCoordinates>().button1Rect, "Iron Block"))
                         {
-                            playerCrafting.CraftIronBlock();
+                            craftingManager.CraftItemAsPlayer(craftingDictionary.dictionary["Iron Block"]);
                         }
                         if (GUI.Button(GetComponent<GuiCoordinates>().button2Rect, "Iron Ramp"))
                         {
-                            playerCrafting.CraftIronRamp();
+                            craftingManager.CraftItemAsPlayer(craftingDictionary.dictionary["Iron Ramp"]);
                         }
                         if (GUI.Button(GetComponent<GuiCoordinates>().button3Rect, "Steel Block"))
                         {
-                            playerCrafting.CraftSteelBlock();
+                            craftingManager.CraftItemAsPlayer(craftingDictionary.dictionary["Steel Block"]);
                         }
                         if (GUI.Button(GetComponent<GuiCoordinates>().button4Rect, "Steel Ramp"))
                         {
-                            playerCrafting.CraftSteelRamp();
+                            craftingManager.CraftItemAsPlayer(craftingDictionary.dictionary["Steel Ramp"]);
                         }
                         if (GUI.Button(GetComponent<GuiCoordinates>().button5Rect, "Quantum Hatchway"))
                         {
-                            playerCrafting.CraftQuantumHatchway();
+                            craftingManager.CraftItemAsPlayer(craftingDictionary.dictionary["Quantum Hatchway"]);
                         }
                         if (GUI.Button(GetComponent<GuiCoordinates>().button6Rect, "Electric Light"))
                         {
-                            playerCrafting.CraftElectricLight();
+                            craftingManager.CraftItemAsPlayer(craftingDictionary.dictionary["Electric Light"]);
                         }
                         if (GUI.Button(GetComponent<GuiCoordinates>().button7Rect, "Circuit Board"))
                         {
-                            playerCrafting.CraftCircuitBoard();
+                            craftingManager.CraftItemAsPlayer(craftingDictionary.dictionary["Circuit Board"]);
                         }
                         if (GUI.Button(GetComponent<GuiCoordinates>().button9Rect, "Electric Motor"))
                         {
-                            playerCrafting.CraftMotor();
+                            craftingManager.CraftItemAsPlayer(craftingDictionary.dictionary["Electric Motor"]);
                         }
                         if (GUI.Button(GetComponent<GuiCoordinates>().button10Rect, "Storage Computer"))
                         {
-                            playerCrafting.CraftStorageComputer();
+                            craftingManager.CraftItemAsPlayer(craftingDictionary.dictionary["Storage Computer"]);
                         }
                         if (GUI.Button(GetComponent<GuiCoordinates>().button11Rect, "Turret"))
                         {
-                            playerCrafting.CraftTurret();
+                            craftingManager.CraftItemAsPlayer(craftingDictionary.dictionary["Turret"]);
                         }
 
                     }

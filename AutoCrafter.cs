@@ -20,9 +20,8 @@ public class AutoCrafter : MonoBehaviour
     private float updateTick;
     public int address;
     public bool hasHeatExchanger;
-    private MachineCrafting machineCrafting;
+    private CraftingManager craftingManager;
     private CraftingDictionary craftingDictionary;
-    private ComputerCrafting computerCrafting;
     private int machineTimer;
     public int connectionAttempts;
     public bool connectionFailed;
@@ -31,9 +30,8 @@ public class AutoCrafter : MonoBehaviour
 
     void Start()
     {
-        machineCrafting = GetComponent<MachineCrafting>();
-        computerCrafting = GetComponent<ComputerCrafting>();
-        craftingDictionary = new CraftingDictionary(machineCrafting, computerCrafting);
+        craftingManager = GetComponent<CraftingManager>();
+        craftingDictionary = gameObject.AddComponent<CraftingDictionary>();
         connectionLine = gameObject.AddComponent<LineRenderer>();
         connectionLine.startWidth = 0.2f;
         connectionLine.endWidth = 0.2f;
@@ -120,7 +118,7 @@ public class AutoCrafter : MonoBehaviour
 
             if (inputObject == null)
             {
-                connectionLine.enabled = false;
+                ShutDown(true);
                 if (connectionFailed == true)
                 {
                     if (creationMethod.Equals("spawned"))
@@ -161,7 +159,7 @@ public class AutoCrafter : MonoBehaviour
                         {
                             inputID = obj.GetComponent<InventoryManager>().ID;
                         }
-                        machineCrafting.inventoryManager = obj.GetComponent<InventoryManager>();
+                        craftingManager.inventoryManager = obj.GetComponent<InventoryManager>();
                         connectionLine.SetPosition(0, transform.position);
                         connectionLine.SetPosition(1, obj.transform.position);
                         connectionLine.enabled = true;
@@ -175,7 +173,7 @@ public class AutoCrafter : MonoBehaviour
                     {
                         inputObject = obj;
                         inputID = obj.GetComponent<InventoryManager>().ID;
-                        machineCrafting.inventoryManager = obj.GetComponent<InventoryManager>();
+                        craftingManager.inventoryManager = obj.GetComponent<InventoryManager>();
                         connectionLine.SetPosition(0, transform.position);
                         connectionLine.SetPosition(1, obj.transform.position);
                         connectionLine.enabled = true;
@@ -197,8 +195,8 @@ public class AutoCrafter : MonoBehaviour
                         {
                             inputObject = obj;
                             inputID = obj.GetComponent<StorageComputer>().ID;
-                            computerCrafting.computerManager = obj.GetComponent<StorageComputer>().computerContainers;
-                            computerCrafting.conduitItem = inputObject.GetComponent<StorageComputer>().conduitItem.GetComponent<ConduitItem>();
+                            craftingManager.storageComputerInventoryManager = obj.GetComponent<StorageComputer>().computerContainers;
+                            craftingManager.conduitItem = inputObject.GetComponent<StorageComputer>().conduitItem.GetComponent<ConduitItem>();
                             connectionLine.SetPosition(0, transform.position);
                             connectionLine.SetPosition(1, obj.transform.position);
                             connectionLine.enabled = true;
@@ -213,8 +211,8 @@ public class AutoCrafter : MonoBehaviour
                     {
                         inputObject = obj;
                         inputID = obj.GetComponent<StorageComputer>().ID;
-                        computerCrafting.computerManager = obj.GetComponent<StorageComputer>().computerContainers;
-                        computerCrafting.conduitItem = inputObject.GetComponent<StorageComputer>().conduitItem.GetComponent<ConduitItem>();
+                        craftingManager.storageComputerInventoryManager = obj.GetComponent<StorageComputer>().computerContainers;
+                        craftingManager.conduitItem = inputObject.GetComponent<StorageComputer>().conduitItem.GetComponent<ConduitItem>();
                         connectionLine.SetPosition(0, transform.position);
                         connectionLine.SetPosition(1, obj.transform.position);
                         connectionLine.enabled = true;
@@ -224,19 +222,21 @@ public class AutoCrafter : MonoBehaviour
         }
     }
 
-    private void MachineCraftItem()
+    private void CraftItems(bool usingStorageComputer)
     {
-        for (int count = 0; count < speed; count++)
+        if (usingStorageComputer)
         {
-            bool craft = craftingDictionary.machineCraftingDictionary[type];
+            for (int count = 0; count < speed; count++)
+            {
+                craftingManager.CraftItemUsingStorageComputer(craftingDictionary.dictionary[type]);
+            }
         }
-    }
-
-    private void ComputerCraftItem()
-    {
-        for (int count = 0; count < speed; count++)
+        else 
         {
-            bool craft = craftingDictionary.computerCraftingDictionary[type];
+            for (int count = 0; count < speed; count++)
+            {
+                craftingManager.CraftItemUsingStorageContainer(craftingDictionary.dictionary[type]);
+            }
         }
     }
 
@@ -257,19 +257,21 @@ public class AutoCrafter : MonoBehaviour
                     {
                         inputID = inputObject.GetComponent<InventoryManager>().ID;
                     }
-                    conduitItem.GetComponent<ConduitItem>().active = true;
-                    GetComponent<Light>().enabled = true;
-                    if (GetComponent<AudioSource>().isPlaying == false)
-                    {
-                        GetComponent<AudioSource>().Play();
-                    }
-                    connectionLine.enabled = true;
-                    connectionLine.SetPosition(1, inputObject.transform.position);
+
                     machineTimer += 1;
                     if (machineTimer > 5 - (address * 0.01f))
                     {
-                        MachineCraftItem();
+                        CraftItems(false);
                         machineTimer = 0;
+                    }
+
+                    if (craftingManager.missingItem == false)
+                    {
+                        Activate();
+                    }
+                    else
+                    {
+                        ShutDown(false);
                     }
                 }
                 if (inputObject.GetComponent<StorageComputer>() != null)
@@ -277,26 +279,28 @@ public class AutoCrafter : MonoBehaviour
                     inputID = inputObject.GetComponent<StorageComputer>().ID;
                     if (inputObject.GetComponent<StorageComputer>().initialized == true)
                     {
-                        computerCrafting.computerManager = inputObject.GetComponent<StorageComputer>().computerContainers;
-                        if (computerCrafting.conduitItem == null)
+                        craftingManager.storageComputerInventoryManager = inputObject.GetComponent<StorageComputer>().computerContainers;
+                        if (craftingManager.conduitItem == null)
                         {
                             GameObject storageComputerItemObject = Instantiate(storageComputerConduitItemObject, inputObject.transform.position, inputObject.transform.rotation);
                             storageComputerItemObject.transform.parent = inputObject.transform;
-                            computerCrafting.conduitItem = storageComputerItemObject.GetComponent<ConduitItem>();
+                            craftingManager.conduitItem = storageComputerItemObject.GetComponent<ConduitItem>();
                         }
-                        conduitItem.GetComponent<ConduitItem>().active = true;
-                        GetComponent<Light>().enabled = true;
-                        if (GetComponent<AudioSource>().isPlaying == false)
-                        {
-                            GetComponent<AudioSource>().Play();
-                        }
-                        connectionLine.enabled = true;
-                        connectionLine.SetPosition(1, inputObject.transform.position);
+
                         machineTimer += 1;
                         if (machineTimer > 5 - (address * 0.01f))
                         {
-                            ComputerCraftItem();
+                            CraftItems(true);
                             machineTimer = 0;
+                        }
+
+                        if (craftingManager.missingItem == false)
+                        {
+                            Activate();
+                        }
+                        else
+                        {
+                            ShutDown(false);
                         }
                     }
                     else
@@ -316,11 +320,23 @@ public class AutoCrafter : MonoBehaviour
         }
     }
 
+    private void Activate()
+    {
+        conduitItem.GetComponent<ConduitItem>().active = true;
+        GetComponent<Light>().enabled = true;
+        if (GetComponent<AudioSource>().isPlaying == false)
+        {
+            GetComponent<AudioSource>().Play();
+        }
+        connectionLine.enabled = true;
+        connectionLine.SetPosition(1, inputObject.transform.position);
+    }
+
     private void ShutDown(bool disconnect)
     {
-        if (computerCrafting.conduitItem != null)
+        if (craftingManager.conduitItem != null)
         {
-            computerCrafting.conduitItem.active = false;
+            craftingManager.conduitItem.active = false;
         }
         connectionLine.enabled &= !disconnect;
         conduitItem.GetComponent<ConduitItem>().active = false;

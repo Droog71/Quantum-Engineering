@@ -9,11 +9,6 @@ public class Glass : MonoBehaviour
     public int address;
     private float updateTick;
 
-    void Start()
-    {
-
-    }
-
     void Update()
     {
         updateTick += 1 * Time.deltaTime;

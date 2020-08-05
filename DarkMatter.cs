@@ -6,11 +6,6 @@ public class DarkMatter: MonoBehaviour
     float size;
     public GameObject collector;
 
-    void Start()
-    {
-
-    }
-
     void Update()
     {
         if (size < 10)
