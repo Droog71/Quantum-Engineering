@@ -56,19 +56,16 @@ public class UniversalExtractor : MonoBehaviour
     private void UpdatePowerReceiver()
     {
         powerReceiver.ID = ID;
-        if (powerObject != null && powerObject.GetComponent<PowerSource>() != null)
+        power = powerReceiver.power;
+        powerON = powerReceiver.powerON;
+        powerObject = powerReceiver.powerObject;
+        if (powerReceiver.overClocked == true)
         {
-            power = powerReceiver.power;
-            powerON = powerReceiver.powerON;
-            powerObject = powerReceiver.powerObject;
-            if (powerReceiver.overClocked == true)
-            {
-                speed = powerReceiver.speed;
-            }
-            else
-            {
-                powerReceiver.speed = speed;
-            }
+            speed = powerReceiver.speed;
+        }
+        else
+        {
+            powerReceiver.speed = speed;
         }
     }
 

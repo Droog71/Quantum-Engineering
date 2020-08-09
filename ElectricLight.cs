@@ -23,11 +23,8 @@ public class ElectricLight : MonoBehaviour
     private void UpdatePowerReceiver()
     {
         powerReceiver.ID = ID;
-        if (powerObject != null && powerObject.GetComponent<PowerSource>() != null)
-        {
-            powerON = powerReceiver.powerON;
-            powerObject = powerReceiver.powerObject;
-        }
+        powerON = powerReceiver.powerON;
+        powerObject = powerReceiver.powerObject;
     }
 
     void Update()
