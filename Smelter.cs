@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using System.Collections;
 
 public class Smelter : MonoBehaviour
 {
@@ -22,7 +21,8 @@ public class Smelter : MonoBehaviour
     public GameObject powerObject;
     public GameObject conduitItem;
     public Material lineMat;
-    LineRenderer connectionLine;
+    public PowerReceiver powerReceiver;
+    private LineRenderer connectionLine;
     private float updateTick;
     public int address;
     private int machineTimer;
@@ -32,6 +32,7 @@ public class Smelter : MonoBehaviour
 
     void Start()
     {
+        powerReceiver = gameObject.AddComponent<PowerReceiver>();
         connectionLine = gameObject.AddComponent<LineRenderer>();
         connectionLine.startWidth = 0.2f;
         connectionLine.endWidth = 0.2f;
@@ -41,13 +42,33 @@ public class Smelter : MonoBehaviour
         builtObjects = GameObject.Find("Built_Objects");
     }
 
+    private void UpdatePowerReceiver()
+    {
+        powerReceiver.ID = ID;
+        if (powerObject != null && powerObject.GetComponent<PowerSource>() != null)
+        {
+            power = powerReceiver.power;
+            powerON = powerReceiver.powerON;
+            powerObject = powerReceiver.powerObject;
+            if (powerReceiver.overClocked == true)
+            {
+                speed = powerReceiver.speed;
+            }
+            else
+            {
+                powerReceiver.speed = speed;
+            }
+        }
+    }
+
     void Update()
     {
         updateTick += 1 * Time.deltaTime;
         if (updateTick > 0.5f + (address * 0.001f))
         {
-            //Debug.Log(ID + " Machine update tick: " + address * 0.1f);
             GetComponent<PhysicsHandler>().UpdatePhysics();
+            UpdatePowerReceiver();
+
             updateTick = 0;
             if (speed > 1)
             {

@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using System.Collections;
 
 public class HeatExchanger : MonoBehaviour
 {
@@ -14,7 +13,7 @@ public class HeatExchanger : MonoBehaviour
     public string creationMethod;
     public GameObject outputObject;
     public string outputID;
-    LineRenderer connectionLine;
+    private LineRenderer connectionLine;
     private float updateTick;
     public int address;
     public string type;

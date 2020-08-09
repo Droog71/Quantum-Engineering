@@ -1,7 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
-using System.Linq;
 
 public class Retriever : MonoBehaviour
 {
@@ -22,8 +20,8 @@ public class Retriever : MonoBehaviour
     public GameObject powerObject;
     public GameObject conduitItem;
     public Material lineMat;
-    LineRenderer connectionLine;
-    LineRenderer inputLine;
+    private LineRenderer connectionLine;
+    private LineRenderer inputLine;
     private float updateTick;
     public int address;
     public bool hasHeatExchanger;
@@ -36,10 +34,12 @@ public class Retriever : MonoBehaviour
     public GameObject storageComputerConduitItemObject;
     public ConduitItem storageComputerConduitItem;
     private InventoryManager storageComputerInventoryManager;
+    public PowerReceiver powerReceiver;
     private GameObject builtObjects;
 
     void Start()
     {
+        powerReceiver = gameObject.AddComponent<PowerReceiver>();
         connectionLine = gameObject.AddComponent<LineRenderer>();
         connectionLine.startWidth = 0.2f;
         connectionLine.endWidth = 0.2f;
@@ -61,13 +61,33 @@ public class Retriever : MonoBehaviour
         }
     }
 
+    private void UpdatePowerReceiver()
+    {
+        powerReceiver.ID = ID;
+        if (powerObject != null && powerObject.GetComponent<PowerSource>() != null)
+        {
+            power = powerReceiver.power;
+            powerON = powerReceiver.powerON;
+            powerObject = powerReceiver.powerObject;
+            if (powerReceiver.overClocked == true)
+            {
+                speed = powerReceiver.speed;
+            }
+            else
+            {
+                powerReceiver.speed = speed;
+            }
+        }
+    }
+
     void Update()
     {
         updateTick += 1 * Time.deltaTime;
         if (updateTick > 0.5f + (address * 0.001f))
         {
-            //Debug.Log(ID + " Machine update tick: " + address * 0.1f);
             GetComponent<PhysicsHandler>().UpdatePhysics();
+            UpdatePowerReceiver();
+
             updateTick = 0;
             if (speed > 1 && retrievingIce == false)
             {

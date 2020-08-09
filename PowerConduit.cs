@@ -13,8 +13,8 @@ public class PowerConduit : MonoBehaviour
     public string outputID1 = "unassigned";
     public string outputID2 = "unassigned";
     public string inputID;
-    LineRenderer connectionLine;
-    GameObject connectionLine2;
+    private LineRenderer connectionLine;
+    private GameObject connectionLine2;
     private float updateTick;
     public int address;
     public int powerAmount;
@@ -24,10 +24,12 @@ public class PowerConduit : MonoBehaviour
     public int dualConnectionAttempts;
     public bool connectionFailed;
     private GameObject builtObjects;
+    public PowerReceiver powerReceiver;
 
     void Start()
     {
         connectionLine = gameObject.AddComponent<LineRenderer>();
+        powerReceiver = gameObject.AddComponent<PowerReceiver>();
         connectionLine.startWidth = 0.2f;
         connectionLine.endWidth = 0.2f;
         connectionLine.material = lineMat;
@@ -206,13 +208,27 @@ public class PowerConduit : MonoBehaviour
         }
     }
 
+    private void UpdatePowerReceiver()
+    {
+        powerReceiver.ID = ID;
+        if (powerReceiver.powerObject != null)
+        {
+            inputObject = powerReceiver.powerObject;
+        }
+        if (inputObject != null && inputObject.GetComponent<PowerSource>() != null)
+        {
+            powerAmount = powerReceiver.power;
+        }
+    }
+
     void Update()
     {
         updateTick += 1 * Time.deltaTime;
         if (updateTick > 0.5f + (address * 0.001f))
         {
-            //Debug.Log(ID + " Machine update tick: " + address * 0.1f);
             GetComponent<PhysicsHandler>().UpdatePhysics();
+            UpdatePowerReceiver();
+
             updateTick = 0;
             if (outputObject1 == null && powerAmount > 0)
             {
@@ -235,7 +251,6 @@ public class PowerConduit : MonoBehaviour
                 }
                 if (connectionFailed == false)
                 {
-                    //Debug.Log(ID + " Searching as "+creationMethod);
                     GameObject[] allObjects = GameObject.FindGameObjectsWithTag("Built");
                     foreach (GameObject obj in allObjects)
                     {
@@ -817,19 +832,14 @@ public class PowerConduit : MonoBehaviour
                                             {
                                                 if (obj.GetComponent<PowerConduit>().outputObject1 != null)
                                                 {
-                                                    //Debug.Log(ID + " found conduit with single output.");
                                                     if (obj.GetComponent<PowerConduit>().outputObject1 != this.gameObject)
                                                     {
-                                                        //Debug.Log(ID + " found conduit with single output that is not itself.");
                                                         if (obj.GetComponent<PowerConduit>().outputObject2 != null)
                                                         {
-                                                            //Debug.Log(ID + " found conduit with dual output.");
                                                             if (obj.GetComponent<PowerConduit>().outputObject2 != this.gameObject)
                                                             {
-                                                                //Debug.Log(ID + " found conduit with two outputs, neither being itself.");
                                                                 if (obj.GetComponent<PowerConduit>().inputObject == null && inputObject != null)
                                                                 {
-                                                                    //Debug.Log(ID + " found conduit with no input object and has power.");
                                                                     if (creationMethod.Equals("spawned"))
                                                                     {
                                                                         if (obj.GetComponent<PowerConduit>().ID.Equals(outputID1))
@@ -1098,7 +1108,6 @@ public class PowerConduit : MonoBehaviour
                 }
                 if (dualOutput == true)
                 {
-                    //Debug.Log(ID + " Searching for output 2 as "+creationMethod);
                     GameObject[] allObjects = FindObjectsOfType<GameObject>();
                     foreach (GameObject obj in allObjects)
                     {
@@ -1927,7 +1936,6 @@ public class PowerConduit : MonoBehaviour
             }
             if (outputObject1 != null && connectionFailed == false)
             {
-                //Debug.Log(ID+" connected to output 1 "+outputObject1.name);
                 if (outputObject1.GetComponent<Retriever>() != null)
                 {
                     if (powerAmount > 0)
@@ -2202,7 +2210,6 @@ public class PowerConduit : MonoBehaviour
             }
             if (outputObject2 != null && connectionFailed == false)
             {
-                //Debug.Log(ID+" connected to output 2"+outputObject2.name);
                 if (outputObject2.GetComponent<Retriever>() != null)
                 {
                     if (powerAmount > 0)
@@ -2419,7 +2426,6 @@ public class PowerConduit : MonoBehaviour
             }
             if (outputObject1 == null || outputObject2 == null)
             {
-                //Debug.Log(ID + " output objects are null.");
                 if (connectionFailed == true)
                 {
                     if (creationMethod.Equals("spawned"))

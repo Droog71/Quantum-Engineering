@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using System.Collections;
 
 public class DarkMatterCollector : MonoBehaviour
 {
@@ -15,8 +14,9 @@ public class DarkMatterCollector : MonoBehaviour
     public Material lineMat;
     public string ID = "unassigned";
     public string creationMethod;
-    LineRenderer connectionLine;
-    LineRenderer inputLine;
+    public PowerReceiver powerReceiver;
+    private LineRenderer connectionLine;
+    private LineRenderer inputLine;
     private float updateTick;
     public int address;
     public bool powerON;
@@ -29,6 +29,7 @@ public class DarkMatterCollector : MonoBehaviour
     void Start()
     {
         connectionLine = gameObject.AddComponent<LineRenderer>();
+        powerReceiver = gameObject.AddComponent<PowerReceiver>();
         connectionLine.startWidth = 0.2f;
         connectionLine.endWidth = 0.2f;
         connectionLine.material = lineMat;
@@ -87,12 +88,33 @@ public class DarkMatterCollector : MonoBehaviour
         }
     }
 
+    private void UpdatePowerReceiver()
+    {
+        powerReceiver.ID = ID;
+        if (powerObject != null && powerObject.GetComponent<PowerSource>() != null)
+        {
+            power = powerReceiver.power;
+            powerON = powerReceiver.powerON;
+            powerObject = powerReceiver.powerObject;
+            if (powerReceiver.overClocked == true)
+            {
+                speed = powerReceiver.speed;
+            }
+            else
+            {
+                powerReceiver.speed = speed;
+            }
+        }
+    }
+
     void Update()
     {
         updateTick += 1 * Time.deltaTime;
         if (updateTick > 0.5f + (address * 0.001f))
         {
             GetComponent<PhysicsHandler>().UpdatePhysics();
+            UpdatePowerReceiver();
+
             updateTick = 0;
 
             if (speed > 1)

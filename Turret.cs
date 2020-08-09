@@ -24,10 +24,12 @@ public class Turret : MonoBehaviour
     private Coroutine fireCoroutine;
     private bool firing;
     private GameManager game;
-    LineRenderer laser;
+    private LineRenderer laser;
+    public PowerReceiver powerReceiver;
 
     void Start()
     {
+        powerReceiver = gameObject.AddComponent<PowerReceiver>();
         laser = gameObject.AddComponent<LineRenderer>();
         laser.startWidth = 0.2f;
         laser.endWidth = 0.2f;
@@ -38,13 +40,33 @@ public class Turret : MonoBehaviour
         restingRotation = barrel.transform.rotation;
     }
 
+    private void UpdatePowerReceiver()
+    {
+        powerReceiver.ID = ID;
+        if (powerObject != null && powerObject.GetComponent<PowerSource>() != null)
+        {
+            power = powerReceiver.power;
+            powerON = powerReceiver.powerON;
+            powerObject = powerReceiver.powerObject;
+            if (powerReceiver.overClocked == true)
+            {
+                speed = powerReceiver.speed;
+            }
+            else
+            {
+                powerReceiver.speed = speed;
+            }
+        }
+    }
+
     void Update()
     {
         updateTick += 1 * Time.deltaTime;
         if (updateTick > 0.5f + (address * 0.001f))
         {
-            //Debug.Log(ID + " Machine update tick: " + address * 0.1f);
             GetComponent<PhysicsHandler>().UpdatePhysics();
+            UpdatePowerReceiver();
+
             updateTick = 0;
             if (game == null)
             {

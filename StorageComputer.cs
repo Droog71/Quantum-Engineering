@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 public class StorageComputer : MonoBehaviour
@@ -17,22 +16,33 @@ public class StorageComputer : MonoBehaviour
     public Material lineMat;
     public GameObject powerObject;
     public GameObject conduitItem;
+    public PowerReceiver powerReceiver;
 
-    // Start is called before the first frame update
     void Start()
     {
+        powerReceiver = gameObject.AddComponent<PowerReceiver>();
         computerContainerList = new List<InventoryManager>();
         spawnedConnectionList = new List<GameObject>();
     }
 
-    // Update is called once per frame
+    private void UpdatePowerReceiver()
+    {
+        powerReceiver.ID = ID;
+        if (powerObject != null && powerObject.GetComponent<PowerSource>() != null)
+        {
+            powerON = powerReceiver.powerON;
+            powerObject = powerReceiver.powerObject;
+        }
+    }
+
     void Update()
     {
         updateTick += 1 * Time.deltaTime;
         if (updateTick > 0.5f + (address * 0.001f))
         {
-            //Debug.Log(ID + " Machine update tick: " + address * 0.1f);
             GetComponent<PhysicsHandler>().UpdatePhysics();
+            UpdatePowerReceiver();
+
             updateTick = 0;
             if (powerON == true)
             {
