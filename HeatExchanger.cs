@@ -10,7 +10,7 @@ public class HeatExchanger : MonoBehaviour
     public bool providingCooling;
     public GameObject inputObject;
     public Material lineMat;
-    public string creationMethod;
+    public string creationMethod = "built";
     public GameObject outputObject;
     public string outputID;
     private LineRenderer connectionLine;

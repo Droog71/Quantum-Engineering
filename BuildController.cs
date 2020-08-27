@@ -15,66 +15,6 @@ public class BuildController : MonoBehaviour
         builtObjects = GameObject.Find("Built_Objects");
     }
 
-    private void BuildMachine(string type, RaycastHit hit)
-    {
-        bool foundItems = false;
-        foreach (InventorySlot slot in playerController.playerInventory.inventory)
-        {
-            if (foundItems == false)
-            {
-                if (slot.amountInSlot > 0)
-                {
-                    if (slot.typeInSlot.Equals(type))
-                    {
-                        foundItems = true;
-                        bool flag = true;
-                        if (type.Equals("Auger"))
-                        {
-                            if (hit.collider.gameObject.tag.Equals("Landscape"))
-                            {
-                                flag = true;
-                            }
-                            else
-                            {
-                                playerController.invalidAugerPlacement = true;
-                                flag = false;
-                            }
-                        }
-                        if (flag == true)
-                        {
-                            Instantiate(blockDictionary.dictionary[type], playerController.buildObject.transform.position, playerController.buildObject.transform.rotation);
-                            slot.amountInSlot -= 1;
-                            playerController.builderSound.Play();
-                            playerController.destroyTimer = 0;
-                            playerController.buildTimer = 0;
-                        }
-                    }
-                    if (slot.amountInSlot == 0)
-                    {
-                        slot.typeInSlot = "nothing";
-                    }
-                }
-            }
-        }
-        if (foundItems == false)
-        {
-            if (GameObject.Find("GameManager").GetComponent<GameManager>().working == false)
-            {
-                playerController.stoppingBuildCoRoutine = true;
-                GameObject.Find("GameManager").GetComponent<GameManager>().CombineBlocks();
-                playerController.separatedBlocks = false;
-                playerController.destroyTimer = 0;
-                playerController.buildTimer = 0;
-                playerController.building = false;
-                playerController.destroying = false;
-            }
-            else
-            {
-                playerController.requestedBuildingStop = true;
-            }
-        }
-    }
-
     public void Update()
     {
         //PLACING BLOCKS
@@ -98,6 +38,7 @@ public class BuildController : MonoBehaviour
                     playerController.requestedBuildingStop = true;
                 }
             }
+
             if (playerController.separatedBlocks == false)
             {
                 if (GameObject.Find("GameManager").GetComponent<GameManager>().working == false)
@@ -154,22 +95,7 @@ public class BuildController : MonoBehaviour
 
             if (playerController.buildObject == null)
             {
-                playerController.buildObject = GameObject.CreatePrimitive(PrimitiveType.Cube);
-                playerController.buildObject.transform.localScale = new Vector3(5, 5, 5);
-                playerController.buildObject.transform.position = Camera.main.gameObject.transform.position + Camera.main.gameObject.transform.forward * 5;
-                playerController.buildObject.GetComponent<Renderer>().material = playerController.constructionMat;
-                playerController.buildObject.GetComponent<Renderer>().shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
-                Destroy(playerController.buildObject.GetComponent<Collider>());
-                dirLine = playerController.buildObject.AddComponent<LineRenderer>();
-                dirLine.material = lineMat;
-                dirLine.startWidth = 0.2f;
-                dirLine.endWidth = 0.2f;
-                dirLine.loop = true;
-                dirLine.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
-                dirLine.SetPosition(0, playerController.buildObject.transform.position);
-                Vector3 dirVector = playerController.buildObject.transform.position + playerController.buildObject.transform.forward * 4;
-                dirLine.SetPosition(1, dirVector);
-                dirLine.enabled = true;
+                CreateBuildObject();
             }
             else
             {
@@ -177,6 +103,7 @@ public class BuildController : MonoBehaviour
                 {
                     //LIMIT THE BUILD RANGE TO 40
                     float distance = Vector3.Distance(transform.position, playerController.buildObject.transform.position);
+
                     if (distance > 40)
                     {
                         playerController.buildObject.GetComponent<MeshRenderer>().material.color = Color.red;
@@ -186,7 +113,6 @@ public class BuildController : MonoBehaviour
                         playerController.buildObject.GetComponent<MeshRenderer>().material.color = Color.white;
                     }
 
-                    //SNAP BLOCKS TO ADJACENT BLOCKS DEPENDING ON AXIS SELECTED BY THE PLAYER
                     if (hit.transform.gameObject.tag == "Built")
                     {
                         //BLOCK ROTATION
@@ -196,114 +122,18 @@ public class BuildController : MonoBehaviour
                             playerController.destroyTimer = 0;
                             playerController.buildTimer = 0;
                         }
+
                         //BUILD AXIS
                         if (cInput.GetKeyDown("Build Axis"))
                         {
-                            if (playerController.cubeloc == "up")
-                            {
-                                playerController.cubeloc = "down";
-                            }
-                            else if (playerController.cubeloc == "down")
-                            {
-                                playerController.cubeloc = "left";
-                            }
-                            else if (playerController.cubeloc == "left")
-                            {
-                                playerController.cubeloc = "right";
-                            }
-                            else if (playerController.cubeloc == "right")
-                            {
-                                playerController.cubeloc = "front";
-                            }
-                            else if (playerController.cubeloc == "front")
-                            {
-                                playerController.cubeloc = "back";
-                            }
-                            else if (playerController.cubeloc == "back")
-                            {
-                                playerController.cubeloc = "up";
-                            }
-                            playerController.destroyTimer = 0;
-                            playerController.buildTimer = 0;
+                            ChangeBuildAxis();
                         }
 
-                        if (playerController.cubeloc == "up")
-                        {
-                            Vector3 placementPoint = new Vector3(hit.transform.position.x, hit.transform.position.y + 5, hit.transform.position.z);
-                            Quaternion placementRotation = playerController.buildObject.transform.rotation;
-                            playerController.buildObject.transform.position = placementPoint;
-                            playerController.buildObject.transform.rotation = placementRotation;
-                            dirLine.SetPosition(0, playerController.buildObject.transform.position);
-                            Vector3 dirVector = playerController.buildObject.transform.position + playerController.buildObject.transform.forward * 4;
-                            dirLine.SetPosition(1, dirVector);
-                        }
-                        if (playerController.cubeloc == "down")
-                        {
-                            Vector3 placementPoint = new Vector3(hit.transform.position.x, hit.transform.position.y - 5, hit.transform.position.z);
-                            Quaternion placementRotation = playerController.buildObject.transform.rotation;
-                            playerController.buildObject.transform.position = placementPoint;
-                            playerController.buildObject.transform.rotation = placementRotation;
-                            dirLine.SetPosition(0, playerController.buildObject.transform.position);
-                            Vector3 dirVector = playerController.buildObject.transform.position + playerController.buildObject.transform.forward * 4;
-                            dirLine.SetPosition(1, dirVector);
-                        }
-                        if (playerController.cubeloc == "left")
-                        {
-                            Vector3 placementPoint = new Vector3(hit.transform.position.x + 5, hit.transform.position.y, hit.transform.position.z);
-                            Quaternion placementRotation = playerController.buildObject.transform.rotation;
-                            playerController.buildObject.transform.position = placementPoint;
-                            playerController.buildObject.transform.rotation = placementRotation;
-                            dirLine.SetPosition(0, playerController.buildObject.transform.position);
-                            Vector3 dirVector = playerController.buildObject.transform.position + playerController.buildObject.transform.forward * 4;
-                            dirLine.SetPosition(1, dirVector);
-                        }
-                        if (playerController.cubeloc == "right")
-                        {
-                            Vector3 placementPoint = new Vector3(hit.transform.position.x - 5, hit.transform.position.y, hit.transform.position.z);
-                            Quaternion placementRotation = playerController.buildObject.transform.rotation;
-                            playerController.buildObject.transform.position = placementPoint;
-                            playerController.buildObject.transform.rotation = placementRotation;
-                            dirLine.SetPosition(0, playerController.buildObject.transform.position);
-                            Vector3 dirVector = playerController.buildObject.transform.position + playerController.buildObject.transform.forward * 4;
-                            dirLine.SetPosition(1, dirVector);
-                        }
-                        if (playerController.cubeloc == "front")
-                        {
-                            Vector3 placementPoint = new Vector3(hit.transform.position.x, hit.transform.position.y, hit.transform.position.z + 5);
-                            Quaternion placementRotation = playerController.buildObject.transform.rotation;
-                            playerController.buildObject.transform.position = placementPoint;
-                            playerController.buildObject.transform.rotation = placementRotation;
-                            dirLine.SetPosition(0, playerController.buildObject.transform.position);
-                            Vector3 dirVector = playerController.buildObject.transform.position + playerController.buildObject.transform.forward * 4;
-                            dirLine.SetPosition(1, dirVector);
-                        }
-                        if (playerController.cubeloc == "back")
-                        {
-                            Vector3 placementPoint = new Vector3(hit.transform.position.x, hit.transform.position.y, hit.transform.position.z - 5);
-                            Quaternion placementRotation = playerController.buildObject.transform.rotation;
-                            playerController.buildObject.transform.position = placementPoint;
-                            playerController.buildObject.transform.rotation = placementRotation;
-                            dirLine.SetPosition(0, playerController.buildObject.transform.position);
-                            Vector3 dirVector = playerController.buildObject.transform.position + playerController.buildObject.transform.forward * 4;
-                            dirLine.SetPosition(1, dirVector);
-                        }
+                        SetupBuildAxis(hit);
                     }
                     else
                     {
-                        Vector3 placementPoint = new Vector3(hit.point.x, (hit.point.y + 2.4f), hit.point.z);
-                        //BLOCK ROTATION
-                        if (cInput.GetKeyDown("Rotate Block"))
-                        {
-                            playerController.buildObject.transform.Rotate(transform.up * 90);
-                            playerController.destroyTimer = 0;
-                            playerController.buildTimer = 0;
-                        }
-                        Quaternion placementRotation = playerController.buildObject.transform.rotation;
-                        playerController.buildObject.transform.position = placementPoint;
-                        playerController.buildObject.transform.rotation = placementRotation;
-                        dirLine.SetPosition(0, playerController.buildObject.transform.position);
-                        Vector3 dirVector = playerController.buildObject.transform.position + playerController.buildObject.transform.forward * 4;
-                        dirLine.SetPosition(1, dirVector);
+                        SetupFreePlacement(hit);
                     }
                 }
                 if (Physics.Raycast(Camera.main.gameObject.transform.position, Camera.main.gameObject.transform.forward, out RaycastHit buildHit, 40))
@@ -311,501 +141,13 @@ public class BuildController : MonoBehaviour
                     if (buildHit.collider.gameObject.tag != "CombinedMesh")
                     {
                         playerController.buildObject.GetComponent<MeshRenderer>().material.color = Color.white;
-                        if (playerController.buildType == "Steel Block")
+                        if (cInput.GetKeyDown("Place Object"))
                         {
-                            if (cInput.GetKeyDown("Place Object"))
+                            if (blockDictionary.machineDictionary.ContainsKey(playerController.buildType))
                             {
-                                bool foundItems = false;
-                                foreach (InventorySlot slot in playerController.playerInventory.inventory)
-                                {
-                                    if (foundItems == false)
-                                    {
-                                        if (slot.amountInSlot >= playerController.buildMultiplier)
-                                        {
-                                            if (slot.typeInSlot.Equals("Steel Block") && GameObject.Find("GameManager").GetComponent<GameManager>().blockLimitReached == false)
-                                            {
-                                                foundItems = true;
-                                                int h = 0;
-                                                Vector3 multiBuildPlacement = playerController.buildObject.transform.position;
-                                                for (int i = 0; i < playerController.buildMultiplier; i++)
-                                                {
-                                                    if (playerController.cubeloc == "up")
-                                                    {
-                                                        multiBuildPlacement = new Vector3(playerController.buildObject.transform.position.x, playerController.buildObject.transform.position.y + h, playerController.buildObject.transform.position.z);
-                                                    }
-                                                    if (playerController.cubeloc == "down")
-                                                    {
-                                                        multiBuildPlacement = new Vector3(playerController.buildObject.transform.position.x, playerController.buildObject.transform.position.y - h, playerController.buildObject.transform.position.z);
-                                                    }
-                                                    if (playerController.cubeloc == "left")
-                                                    {
-                                                        multiBuildPlacement = new Vector3(playerController.buildObject.transform.position.x + h, playerController.buildObject.transform.position.y, playerController.buildObject.transform.position.z);
-                                                    }
-                                                    if (playerController.cubeloc == "right")
-                                                    {
-                                                        multiBuildPlacement = new Vector3(playerController.buildObject.transform.position.x - h, playerController.buildObject.transform.position.y, playerController.buildObject.transform.position.z);
-                                                    }
-                                                    if (playerController.cubeloc == "front")
-                                                    {
-                                                        multiBuildPlacement = new Vector3(playerController.buildObject.transform.position.x, playerController.buildObject.transform.position.y, playerController.buildObject.transform.position.z + h);
-                                                    }
-                                                    if (playerController.cubeloc == "back")
-                                                    {
-                                                        multiBuildPlacement = new Vector3(playerController.buildObject.transform.position.x, playerController.buildObject.transform.position.y, playerController.buildObject.transform.position.z - h);
-                                                    }
-                                                    h += 5;
-                                                    GameObject builtObject = Instantiate(playerController.steel, multiBuildPlacement, playerController.buildObject.transform.rotation);
-                                                    builtObject.transform.parent = builtObjects.transform;
-                                                    builtObject.GetComponent<Steel>().creationMethod = "built";
-                                                    slot.amountInSlot -= 1;
-                                                    playerController.builderSound.Play();
-                                                    playerController.destroyTimer = 0;
-                                                    playerController.buildTimer = 0;
-                                                }
-                                            }
-                                            else if (GameObject.Find("GameManager").GetComponent<GameManager>().blockLimitReached == true)
-                                            {
-                                                playerController.blockLimitMessage = true;
-                                            }
-                                            if (slot.amountInSlot == 0)
-                                            {
-                                                slot.typeInSlot = "nothing";
-                                            }
-                                        }
-                                    }
-                                }
-                                if (foundItems == false)
-                                {
-                                    if (GameObject.Find("GameManager").GetComponent<GameManager>().working == false)
-                                    {
-                                        playerController.stoppingBuildCoRoutine = true;
-                                        GameObject.Find("GameManager").GetComponent<GameManager>().CombineBlocks();
-                                        playerController.separatedBlocks = false;
-                                        playerController.destroyTimer = 0;
-                                        playerController.buildTimer = 0;
-                                        playerController.building = false;
-                                        playerController.destroying = false;
-                                    }
-                                    else
-                                    {
-                                        playerController.requestedBuildingStop = true;
-                                    }
-                                }
+                                BuildBlock(playerController.buildType);
                             }
-                        }
-                        else if (playerController.buildType == "Steel Ramp")
-                        {
-                            if (cInput.GetKeyDown("Place Object"))
-                            {
-                                bool foundItems = false;
-                                foreach (InventorySlot slot in playerController.playerInventory.inventory)
-                                {
-                                    if (foundItems == false)
-                                    {
-                                        if (slot.amountInSlot >= playerController.buildMultiplier)
-                                        {
-                                            if (slot.typeInSlot.Equals("Steel Ramp") && GameObject.Find("GameManager").GetComponent<GameManager>().blockLimitReached == false)
-                                            {
-                                                foundItems = true;
-                                                int h = 0;
-                                                Vector3 multiBuildPlacement = playerController.buildObject.transform.position;
-                                                for (int i = 0; i < playerController.buildMultiplier; i++)
-                                                {
-                                                    if (playerController.cubeloc == "up")
-                                                    {
-                                                        multiBuildPlacement = new Vector3(playerController.buildObject.transform.position.x, playerController.buildObject.transform.position.y + h, playerController.buildObject.transform.position.z);
-                                                    }
-                                                    if (playerController.cubeloc == "down")
-                                                    {
-                                                        multiBuildPlacement = new Vector3(playerController.buildObject.transform.position.x, playerController.buildObject.transform.position.y - h, playerController.buildObject.transform.position.z);
-                                                    }
-                                                    if (playerController.cubeloc == "left")
-                                                    {
-                                                        multiBuildPlacement = new Vector3(playerController.buildObject.transform.position.x + h, playerController.buildObject.transform.position.y, playerController.buildObject.transform.position.z);
-                                                    }
-                                                    if (playerController.cubeloc == "right")
-                                                    {
-                                                        multiBuildPlacement = new Vector3(playerController.buildObject.transform.position.x - h, playerController.buildObject.transform.position.y, playerController.buildObject.transform.position.z);
-                                                    }
-                                                    if (playerController.cubeloc == "front")
-                                                    {
-                                                        multiBuildPlacement = new Vector3(playerController.buildObject.transform.position.x, playerController.buildObject.transform.position.y, playerController.buildObject.transform.position.z + h);
-                                                    }
-                                                    if (playerController.cubeloc == "back")
-                                                    {
-                                                        multiBuildPlacement = new Vector3(playerController.buildObject.transform.position.x, playerController.buildObject.transform.position.y, playerController.buildObject.transform.position.z - h);
-                                                    }
-                                                    h += 5;
-                                                    GameObject builtObject = Instantiate(playerController.steelRamp, multiBuildPlacement, playerController.buildObject.transform.rotation);
-                                                    builtObject.transform.parent = builtObjects.transform;
-                                                    builtObject.GetComponent<Steel>().creationMethod = "built";
-                                                    slot.amountInSlot -= 1;
-                                                    playerController.builderSound.Play();
-                                                    playerController.destroyTimer = 0;
-                                                    playerController.buildTimer = 0;
-                                                }
-                                            }
-                                            else if (GameObject.Find("GameManager").GetComponent<GameManager>().blockLimitReached == true)
-                                            {
-                                                playerController.blockLimitMessage = true;
-                                            }
-                                            if (slot.amountInSlot == 0)
-                                            {
-                                                slot.typeInSlot = "nothing";
-                                            }
-                                        }
-                                    }
-                                }
-                                if (foundItems == false)
-                                {
-                                    if (GameObject.Find("GameManager").GetComponent<GameManager>().working == false)
-                                    {
-                                        playerController.stoppingBuildCoRoutine = true;
-                                        GameObject.Find("GameManager").GetComponent<GameManager>().CombineBlocks();
-                                        playerController.separatedBlocks = false;
-                                        playerController.destroyTimer = 0;
-                                        playerController.buildTimer = 0;
-                                        playerController.building = false;
-                                        playerController.destroying = false;
-                                    }
-                                    else
-                                    {
-                                        playerController.requestedBuildingStop = true;
-                                    }
-                                }
-                            }
-                        }
-                        else if (playerController.buildType == "Iron Block")
-                        {
-                            if (cInput.GetKeyDown("Place Object"))
-                            {
-                                bool foundItems = false;
-                                foreach (InventorySlot slot in playerController.playerInventory.inventory)
-                                {
-                                    if (foundItems == false)
-                                    {
-                                        if (slot.amountInSlot >= playerController.buildMultiplier)
-                                        {
-                                            if (slot.typeInSlot.Equals("Iron Block") && GameObject.Find("GameManager").GetComponent<GameManager>().blockLimitReached == false)
-                                            {
-                                                foundItems = true;
-                                                int h = 0;
-                                                Vector3 multiBuildPlacement = playerController.buildObject.transform.position;
-                                                for (int i = 0; i < playerController.buildMultiplier; i++)
-                                                {
-                                                    if (playerController.cubeloc == "up")
-                                                    {
-                                                        multiBuildPlacement = new Vector3(playerController.buildObject.transform.position.x, playerController.buildObject.transform.position.y + h, playerController.buildObject.transform.position.z);
-                                                    }
-                                                    if (playerController.cubeloc == "down")
-                                                    {
-                                                        multiBuildPlacement = new Vector3(playerController.buildObject.transform.position.x, playerController.buildObject.transform.position.y - h, playerController.buildObject.transform.position.z);
-                                                    }
-                                                    if (playerController.cubeloc == "left")
-                                                    {
-                                                        multiBuildPlacement = new Vector3(playerController.buildObject.transform.position.x + h, playerController.buildObject.transform.position.y, playerController.buildObject.transform.position.z);
-                                                    }
-                                                    if (playerController.cubeloc == "right")
-                                                    {
-                                                        multiBuildPlacement = new Vector3(playerController.buildObject.transform.position.x - h, playerController.buildObject.transform.position.y, playerController.buildObject.transform.position.z);
-                                                    }
-                                                    if (playerController.cubeloc == "front")
-                                                    {
-                                                        multiBuildPlacement = new Vector3(playerController.buildObject.transform.position.x, playerController.buildObject.transform.position.y, playerController.buildObject.transform.position.z + h);
-                                                    }
-                                                    if (playerController.cubeloc == "back")
-                                                    {
-                                                        multiBuildPlacement = new Vector3(playerController.buildObject.transform.position.x, playerController.buildObject.transform.position.y, playerController.buildObject.transform.position.z - h);
-                                                    }
-                                                    h += 5;
-                                                    GameObject builtObject = Instantiate(playerController.ironBlock, multiBuildPlacement, playerController.buildObject.transform.rotation);
-                                                    builtObject.transform.parent = builtObjects.transform;
-                                                    builtObject.GetComponent<IronBlock>().creationMethod = "built";
-                                                    slot.amountInSlot -= 1;
-                                                    playerController.builderSound.Play();
-                                                    playerController.destroyTimer = 0;
-                                                    playerController.buildTimer = 0;
-                                                }
-                                            }
-                                            else if (GameObject.Find("GameManager").GetComponent<GameManager>().blockLimitReached == true)
-                                            {
-                                                playerController.blockLimitMessage = true;
-                                            }
-                                            if (slot.amountInSlot == 0)
-                                            {
-                                                slot.typeInSlot = "nothing";
-                                            }
-                                        }
-                                    }
-                                }
-                                if (foundItems == false)
-                                {
-                                    if (GameObject.Find("GameManager").GetComponent<GameManager>().working == false)
-                                    {
-                                        playerController.stoppingBuildCoRoutine = true;
-                                        GameObject.Find("GameManager").GetComponent<GameManager>().CombineBlocks();
-                                        playerController.separatedBlocks = false;
-                                        playerController.destroyTimer = 0;
-                                        playerController.buildTimer = 0;
-                                        playerController.building = false;
-                                        playerController.destroying = false;
-                                    }
-                                    else
-                                    {
-                                        playerController.requestedBuildingStop = true;
-                                    }
-                                }
-                            }
-                        }
-                        else if (playerController.buildType == "Iron Ramp")
-                        {
-                            if (cInput.GetKeyDown("Place Object"))
-                            {
-                                bool foundItems = false;
-                                foreach (InventorySlot slot in playerController.playerInventory.inventory)
-                                {
-                                    if (foundItems == false)
-                                    {
-                                        if (slot.amountInSlot >= playerController.buildMultiplier)
-                                        {
-                                            if (slot.typeInSlot.Equals("Iron Ramp") && GameObject.Find("GameManager").GetComponent<GameManager>().blockLimitReached == false)
-                                            {
-                                                foundItems = true;
-                                                int h = 0;
-                                                Vector3 multiBuildPlacement = playerController.buildObject.transform.position;
-                                                for (int i = 0; i < playerController.buildMultiplier; i++)
-                                                {
-                                                    if (playerController.cubeloc == "up")
-                                                    {
-                                                        multiBuildPlacement = new Vector3(playerController.buildObject.transform.position.x, playerController.buildObject.transform.position.y + h, playerController.buildObject.transform.position.z);
-                                                    }
-                                                    if (playerController.cubeloc == "down")
-                                                    {
-                                                        multiBuildPlacement = new Vector3(playerController.buildObject.transform.position.x, playerController.buildObject.transform.position.y - h, playerController.buildObject.transform.position.z);
-                                                    }
-                                                    if (playerController.cubeloc == "left")
-                                                    {
-                                                        multiBuildPlacement = new Vector3(playerController.buildObject.transform.position.x + h, playerController.buildObject.transform.position.y, playerController.buildObject.transform.position.z);
-                                                    }
-                                                    if (playerController.cubeloc == "right")
-                                                    {
-                                                        multiBuildPlacement = new Vector3(playerController.buildObject.transform.position.x - h, playerController.buildObject.transform.position.y, playerController.buildObject.transform.position.z);
-                                                    }
-                                                    if (playerController.cubeloc == "front")
-                                                    {
-                                                        multiBuildPlacement = new Vector3(playerController.buildObject.transform.position.x, playerController.buildObject.transform.position.y, playerController.buildObject.transform.position.z + h);
-                                                    }
-                                                    if (playerController.cubeloc == "back")
-                                                    {
-                                                        multiBuildPlacement = new Vector3(playerController.buildObject.transform.position.x, playerController.buildObject.transform.position.y, playerController.buildObject.transform.position.z - h);
-                                                    }
-                                                    h += 5;
-                                                    GameObject builtObject = Instantiate(playerController.ironRamp, multiBuildPlacement, playerController.buildObject.transform.rotation);
-                                                    builtObject.transform.parent = builtObjects.transform;
-                                                    builtObject.GetComponent<IronBlock>().creationMethod = "built";
-                                                    slot.amountInSlot -= 1;
-                                                    playerController.builderSound.Play();
-                                                    playerController.destroyTimer = 0;
-                                                    playerController.buildTimer = 0;
-                                                }
-                                            }
-                                            else if (GameObject.Find("GameManager").GetComponent<GameManager>().blockLimitReached == true)
-                                            {
-                                                playerController.blockLimitMessage = true;
-                                            }
-                                            if (slot.amountInSlot == 0)
-                                            {
-                                                slot.typeInSlot = "nothing";
-                                            }
-                                        }
-                                    }
-                                }
-                                if (foundItems == false)
-                                {
-                                    if (GameObject.Find("GameManager").GetComponent<GameManager>().working == false)
-                                    {
-                                        playerController.stoppingBuildCoRoutine = true;
-                                        GameObject.Find("GameManager").GetComponent<GameManager>().CombineBlocks();
-                                        playerController.separatedBlocks = false;
-                                        playerController.destroyTimer = 0;
-                                        playerController.buildTimer = 0;
-                                        playerController.building = false;
-                                        playerController.destroying = false;
-                                    }
-                                    else
-                                    {
-                                        playerController.requestedBuildingStop = true;
-                                    }
-                                }
-                            }
-                        }
-                        else if (playerController.buildType == "Glass Block")
-                        {
-                            if (cInput.GetKeyDown("Place Object"))
-                            {
-                                bool foundItems = false;
-                                foreach (InventorySlot slot in playerController.playerInventory.inventory)
-                                {
-                                    if (foundItems == false)
-                                    {
-                                        if (slot.amountInSlot >= playerController.buildMultiplier)
-                                        {
-                                            if (slot.typeInSlot.Equals("Glass Block") && GameObject.Find("GameManager").GetComponent<GameManager>().blockLimitReached == false)
-                                            {
-                                                foundItems = true;
-                                                int h = 0;
-                                                Vector3 multiBuildPlacement = playerController.buildObject.transform.position;
-                                                for (int i = 0; i < playerController.buildMultiplier; i++)
-                                                {
-                                                    if (playerController.cubeloc == "up")
-                                                    {
-                                                        multiBuildPlacement = new Vector3(playerController.buildObject.transform.position.x, playerController.buildObject.transform.position.y + h, playerController.buildObject.transform.position.z);
-                                                    }
-                                                    if (playerController.cubeloc == "down")
-                                                    {
-                                                        multiBuildPlacement = new Vector3(playerController.buildObject.transform.position.x, playerController.buildObject.transform.position.y - h, playerController.buildObject.transform.position.z);
-                                                    }
-                                                    if (playerController.cubeloc == "left")
-                                                    {
-                                                        multiBuildPlacement = new Vector3(playerController.buildObject.transform.position.x + h, playerController.buildObject.transform.position.y, playerController.buildObject.transform.position.z);
-                                                    }
-                                                    if (playerController.cubeloc == "right")
-                                                    {
-                                                        multiBuildPlacement = new Vector3(playerController.buildObject.transform.position.x - h, playerController.buildObject.transform.position.y, playerController.buildObject.transform.position.z);
-                                                    }
-                                                    if (playerController.cubeloc == "front")
-                                                    {
-                                                        multiBuildPlacement = new Vector3(playerController.buildObject.transform.position.x, playerController.buildObject.transform.position.y, playerController.buildObject.transform.position.z + h);
-                                                    }
-                                                    if (playerController.cubeloc == "back")
-                                                    {
-                                                        multiBuildPlacement = new Vector3(playerController.buildObject.transform.position.x, playerController.buildObject.transform.position.y, playerController.buildObject.transform.position.z - h);
-                                                    }
-                                                    h += 5;
-                                                    GameObject builtObject = Instantiate(playerController.glass, multiBuildPlacement, playerController.buildObject.transform.rotation);
-                                                    builtObject.transform.parent = builtObjects.transform;
-                                                    builtObject.GetComponent<Glass>().creationMethod = "built";
-                                                    slot.amountInSlot -= 1;
-                                                    playerController.builderSound.Play();
-                                                    playerController.destroyTimer = 0;
-                                                    playerController.buildTimer = 0;
-                                                }
-                                            }
-                                            else if (GameObject.Find("GameManager").GetComponent<GameManager>().blockLimitReached == true)
-                                            {
-                                                playerController.blockLimitMessage = true;
-                                            }
-                                            if (slot.amountInSlot == 0)
-                                            {
-                                                slot.typeInSlot = "nothing";
-                                            }
-                                        }
-                                    }
-                                }
-                                if (foundItems == false)
-                                {
-                                    if (GameObject.Find("GameManager").GetComponent<GameManager>().working == false)
-                                    {
-                                        playerController.stoppingBuildCoRoutine = true;
-                                        GameObject.Find("GameManager").GetComponent<GameManager>().CombineBlocks();
-                                        playerController.separatedBlocks = false;
-                                        playerController.destroyTimer = 0;
-                                        playerController.buildTimer = 0;
-                                        playerController.building = false;
-                                        playerController.destroying = false;
-                                    }
-                                    else
-                                    {
-                                        playerController.requestedBuildingStop = true;
-                                    }
-                                }
-                            }
-                        }
-                        else if (playerController.buildType == "Brick")
-                        {
-                            if (cInput.GetKeyDown("Place Object"))
-                            {
-                                bool foundItems = false;
-                                foreach (InventorySlot slot in playerController.playerInventory.inventory)
-                                {
-                                    if (foundItems == false)
-                                    {
-                                        if (slot.amountInSlot >= playerController.buildMultiplier)
-                                        {
-                                            if (slot.typeInSlot.Equals("Brick") && GameObject.Find("GameManager").GetComponent<GameManager>().blockLimitReached == false)
-                                            {
-                                                foundItems = true;
-                                                int h = 0;
-                                                Vector3 multiBuildPlacement = playerController.buildObject.transform.position;
-                                                for (int i = 0; i < playerController.buildMultiplier; i++)
-                                                {
-                                                    if (playerController.cubeloc == "up")
-                                                    {
-                                                        multiBuildPlacement = new Vector3(playerController.buildObject.transform.position.x, playerController.buildObject.transform.position.y + h, playerController.buildObject.transform.position.z);
-                                                    }
-                                                    if (playerController.cubeloc == "down")
-                                                    {
-                                                        multiBuildPlacement = new Vector3(playerController.buildObject.transform.position.x, playerController.buildObject.transform.position.y - h, playerController.buildObject.transform.position.z);
-                                                    }
-                                                    if (playerController.cubeloc == "left")
-                                                    {
-                                                        multiBuildPlacement = new Vector3(playerController.buildObject.transform.position.x + h, playerController.buildObject.transform.position.y, playerController.buildObject.transform.position.z);
-                                                    }
-                                                    if (playerController.cubeloc == "right")
-                                                    {
-                                                        multiBuildPlacement = new Vector3(playerController.buildObject.transform.position.x - h, playerController.buildObject.transform.position.y, playerController.buildObject.transform.position.z);
-                                                    }
-                                                    if (playerController.cubeloc == "front")
-                                                    {
-                                                        multiBuildPlacement = new Vector3(playerController.buildObject.transform.position.x, playerController.buildObject.transform.position.y, playerController.buildObject.transform.position.z + h);
-                                                    }
-                                                    if (playerController.cubeloc == "back")
-                                                    {
-                                                        multiBuildPlacement = new Vector3(playerController.buildObject.transform.position.x, playerController.buildObject.transform.position.y, playerController.buildObject.transform.position.z - h);
-                                                    }
-                                                    h += 5;
-                                                    GameObject builtObject = Instantiate(playerController.brick, multiBuildPlacement, playerController.buildObject.transform.rotation);
-                                                    builtObject.transform.parent = builtObjects.transform;
-                                                    builtObject.GetComponent<Brick>().creationMethod = "built";
-                                                    slot.amountInSlot -= 1;
-                                                    playerController.builderSound.Play();
-                                                    playerController.destroyTimer = 0;
-                                                    playerController.buildTimer = 0;
-                                                }
-                                            }
-                                            else if (GameObject.Find("GameManager").GetComponent<GameManager>().blockLimitReached == true)
-                                            {
-                                                playerController.blockLimitMessage = true;
-                                            }
-                                            if (slot.amountInSlot == 0)
-                                            {
-                                                slot.typeInSlot = "nothing";
-                                            }
-                                        }
-                                    }
-                                }
-                                if (foundItems == false)
-                                {
-                                    if (GameObject.Find("GameManager").GetComponent<GameManager>().working == false)
-                                    {
-                                        playerController.stoppingBuildCoRoutine = true;
-                                        GameObject.Find("GameManager").GetComponent<GameManager>().CombineBlocks();
-                                        playerController.separatedBlocks = false;
-                                        playerController.destroyTimer = 0;
-                                        playerController.buildTimer = 0;
-                                        playerController.building = false;
-                                        playerController.destroying = false;
-                                    }
-                                    else
-                                    {
-                                        playerController.requestedBuildingStop = true;
-                                    }
-                                }
-                            }
-                        }
-                        else
-                        {
-                            if (cInput.GetKeyDown("Place Object"))
+                            else
                             {
                                 BuildMachine(playerController.buildType, hit);
                             }
@@ -825,6 +167,245 @@ public class BuildController : MonoBehaviour
         else if (playerController.buildObject != null)
         {
             Destroy(playerController.buildObject);
+        }
+    }
+
+    private void CreateBuildObject()
+    {
+        playerController.buildObject = GameObject.CreatePrimitive(PrimitiveType.Cube);
+        playerController.buildObject.transform.localScale = new Vector3(5, 5, 5);
+        playerController.buildObject.transform.position = Camera.main.gameObject.transform.position + Camera.main.gameObject.transform.forward * 5;
+        playerController.buildObject.GetComponent<Renderer>().material = playerController.constructionMat;
+        playerController.buildObject.GetComponent<Renderer>().shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
+        Destroy(playerController.buildObject.GetComponent<Collider>());
+        dirLine = playerController.buildObject.AddComponent<LineRenderer>();
+        dirLine.material = lineMat;
+        dirLine.startWidth = 0.2f;
+        dirLine.endWidth = 0.2f;
+        dirLine.loop = true;
+        dirLine.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
+        dirLine.SetPosition(0, playerController.buildObject.transform.position);
+        Vector3 dirVector = playerController.buildObject.transform.position + playerController.buildObject.transform.forward * 4;
+        dirLine.SetPosition(1, dirVector);
+        dirLine.enabled = true;
+    }
+
+    private void ChangeBuildAxis()
+    {
+        switch (playerController.cubeloc)
+        {
+            case "up":
+                playerController.cubeloc = "down";
+                break;
+            case "down":
+                playerController.cubeloc = "left";
+                break;
+            case "left":
+                playerController.cubeloc = "right";
+                break;
+            case "right":
+                playerController.cubeloc = "front";
+                break;
+            case "front":
+                playerController.cubeloc = "back";
+                break;
+            case "back":
+                playerController.cubeloc = "up";
+                break;
+        }
+        playerController.destroyTimer = 0;
+        playerController.buildTimer = 0;
+    }
+
+    private void SetupBuildAxis(RaycastHit hit)
+    {
+        Vector3 placementPoint = hit.transform.position;
+        Quaternion placementRotation;
+        Vector3 dirVector;
+
+        switch (playerController.cubeloc)
+        {
+            case "up":
+                placementPoint = new Vector3(hit.transform.position.x, hit.transform.position.y + 5, hit.transform.position.z);
+                break;
+            case "down":
+                placementPoint = new Vector3(hit.transform.position.x, hit.transform.position.y - 5, hit.transform.position.z);
+                break;
+            case "left":
+                placementPoint = new Vector3(hit.transform.position.x + 5, hit.transform.position.y, hit.transform.position.z);
+                break;
+            case "right":
+                placementPoint = new Vector3(hit.transform.position.x - 5, hit.transform.position.y, hit.transform.position.z);
+                break;
+            case "front":
+                placementPoint = new Vector3(hit.transform.position.x, hit.transform.position.y, hit.transform.position.z + 5);
+                break;
+            case "back":
+                placementPoint = new Vector3(hit.transform.position.x, hit.transform.position.y, hit.transform.position.z - 5);
+                break;
+        }
+
+        placementRotation = playerController.buildObject.transform.rotation;
+        playerController.buildObject.transform.position = placementPoint;
+        playerController.buildObject.transform.rotation = placementRotation;
+        dirLine.SetPosition(0, playerController.buildObject.transform.position);
+        dirVector = playerController.buildObject.transform.position + playerController.buildObject.transform.forward * 4;
+        dirLine.SetPosition(1, dirVector);
+    }
+
+    private void SetupFreePlacement(RaycastHit hit)
+    {
+        Vector3 placementPoint = new Vector3(hit.point.x, (hit.point.y + 2.4f), hit.point.z);
+        //BLOCK ROTATION
+        if (cInput.GetKeyDown("Rotate Block"))
+        {
+            playerController.buildObject.transform.Rotate(transform.up * 90);
+            playerController.destroyTimer = 0;
+            playerController.buildTimer = 0;
+        }
+        Quaternion placementRotation = playerController.buildObject.transform.rotation;
+        playerController.buildObject.transform.position = placementPoint;
+        playerController.buildObject.transform.rotation = placementRotation;
+        dirLine.SetPosition(0, playerController.buildObject.transform.position);
+        Vector3 dirVector = playerController.buildObject.transform.position + playerController.buildObject.transform.forward * 4;
+        dirLine.SetPosition(1, dirVector);
+    }
+
+    private void BuildMachine(string type, RaycastHit hit)
+    {
+        bool foundItems = false;
+        foreach (InventorySlot slot in playerController.playerInventory.inventory)
+        {
+            if (foundItems == false)
+            {
+                if (slot.amountInSlot > 0)
+                {
+                    if (slot.typeInSlot.Equals(type))
+                    {
+                        foundItems = true;
+                        bool flag = true;
+                        if (type.Equals("Auger"))
+                        {
+                            if (hit.collider.gameObject.tag.Equals("Landscape"))
+                            {
+                                flag = true;
+                            }
+                            else
+                            {
+                                playerController.invalidAugerPlacement = true;
+                                flag = false;
+                            }
+                        }
+                        if (flag == true)
+                        {
+                            Instantiate(blockDictionary.machineDictionary[type], playerController.buildObject.transform.position, playerController.buildObject.transform.rotation);
+                            slot.amountInSlot -= 1;
+                            playerController.builderSound.Play();
+                            playerController.destroyTimer = 0;
+                            playerController.buildTimer = 0;
+                        }
+                    }
+                    if (slot.amountInSlot == 0)
+                    {
+                        slot.typeInSlot = "nothing";
+                    }
+                }
+            }
+        }
+        if (foundItems == false)
+        {
+            if (GameObject.Find("GameManager").GetComponent<GameManager>().working == false)
+            {
+                playerController.stoppingBuildCoRoutine = true;
+                GameObject.Find("GameManager").GetComponent<GameManager>().CombineBlocks();
+                playerController.separatedBlocks = false;
+                playerController.destroyTimer = 0;
+                playerController.buildTimer = 0;
+                playerController.building = false;
+                playerController.destroying = false;
+            }
+            else
+            {
+                playerController.requestedBuildingStop = true;
+            }
+        }
+    }
+
+    private void BuildBlock(string type)
+    {
+        bool foundItems = false;
+        foreach (InventorySlot slot in playerController.playerInventory.inventory)
+        {
+            if (foundItems == false)
+            {
+                if (slot.amountInSlot >= playerController.buildMultiplier)
+                {
+                    if (slot.typeInSlot.Equals(type) && GameObject.Find("GameManager").GetComponent<GameManager>().blockLimitReached == false)
+                    {
+                        foundItems = true;
+                        int h = 0;
+                        Vector3 multiBuildPlacement = playerController.buildObject.transform.position;
+                        for (int i = 0; i < playerController.buildMultiplier; i++)
+                        {
+                            if (playerController.cubeloc == "up")
+                            {
+                                multiBuildPlacement = new Vector3(playerController.buildObject.transform.position.x, playerController.buildObject.transform.position.y + h, playerController.buildObject.transform.position.z);
+                            }
+                            if (playerController.cubeloc == "down")
+                            {
+                                multiBuildPlacement = new Vector3(playerController.buildObject.transform.position.x, playerController.buildObject.transform.position.y - h, playerController.buildObject.transform.position.z);
+                            }
+                            if (playerController.cubeloc == "left")
+                            {
+                                multiBuildPlacement = new Vector3(playerController.buildObject.transform.position.x + h, playerController.buildObject.transform.position.y, playerController.buildObject.transform.position.z);
+                            }
+                            if (playerController.cubeloc == "right")
+                            {
+                                multiBuildPlacement = new Vector3(playerController.buildObject.transform.position.x - h, playerController.buildObject.transform.position.y, playerController.buildObject.transform.position.z);
+                            }
+                            if (playerController.cubeloc == "front")
+                            {
+                                multiBuildPlacement = new Vector3(playerController.buildObject.transform.position.x, playerController.buildObject.transform.position.y, playerController.buildObject.transform.position.z + h);
+                            }
+                            if (playerController.cubeloc == "back")
+                            {
+                                multiBuildPlacement = new Vector3(playerController.buildObject.transform.position.x, playerController.buildObject.transform.position.y, playerController.buildObject.transform.position.z - h);
+                            }
+                            h += 5;
+                            Instantiate(blockDictionary.blockDictionary[type], multiBuildPlacement, playerController.buildObject.transform.rotation);
+                            slot.amountInSlot -= 1;
+                            playerController.builderSound.Play();
+                            playerController.destroyTimer = 0;
+                            playerController.buildTimer = 0;
+                        }
+                    }
+                    else if (GameObject.Find("GameManager").GetComponent<GameManager>().blockLimitReached == true)
+                    {
+                        playerController.blockLimitMessage = true;
+                    }
+                    if (slot.amountInSlot == 0)
+                    {
+                        slot.typeInSlot = "nothing";
+                    }
+                }
+            }
+        }
+        if (foundItems == false)
+        {
+            if (GameObject.Find("GameManager").GetComponent<GameManager>().working == false)
+            {
+                playerController.stoppingBuildCoRoutine = true;
+                GameObject.Find("GameManager").GetComponent<GameManager>().CombineBlocks();
+                playerController.separatedBlocks = false;
+                playerController.destroyTimer = 0;
+                playerController.buildTimer = 0;
+                playerController.building = false;
+                playerController.destroying = false;
+            }
+            else
+            {
+                playerController.requestedBuildingStop = true;
+            }
         }
     }
 }

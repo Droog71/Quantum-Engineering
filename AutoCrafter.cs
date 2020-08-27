@@ -10,7 +10,7 @@ public class AutoCrafter : MonoBehaviour
     public string type;
     public string ID = "unassigned";
     public string inputID;
-    public string creationMethod;
+    public string creationMethod = "built";
     public GameObject inputObject;
     public GameObject powerObject;
     public GameObject conduitItem;

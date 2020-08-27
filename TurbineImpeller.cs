@@ -6,12 +6,6 @@ public class TurbineImpeller : MonoBehaviour
 {
     public GameObject turbine;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-
-    }
-
     // Update is called once per frame
     void Update()
     {

@@ -4,7 +4,7 @@ using System.Collections;
 public class RailCart : MonoBehaviour
 {
     public string ID = "unassigned";
-    public string creationMethod;
+    public string creationMethod = "built";
     public GameObject target;
     private Vector3 targetPosition;
     public int address;

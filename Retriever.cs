@@ -14,7 +14,7 @@ public class Retriever : MonoBehaviour
     public string currentType;
     public string inputID;
     public string outputID;
-    public string creationMethod;
+    public string creationMethod = "built";
     public GameObject inputObject;
     public GameObject outputObject;
     public GameObject powerObject;

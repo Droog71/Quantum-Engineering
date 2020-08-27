@@ -6,21 +6,11 @@ public class NuclearReactor : MonoBehaviour
     public bool hasHeatExchanger;
     public int cooling;
     public string ID = "unassigned";
-    public string creationMethod;
+    public string creationMethod = "built";
     private float updateTick;
     public int address;
     public int turbineCount;
     public bool sufficientCooling;
-
-    void Start()
-    {
-
-    }
-
-    void OnDestroy()
-    {
-
-    }
 
     void Update()
     {

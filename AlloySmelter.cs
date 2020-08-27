@@ -19,7 +19,7 @@ public class AlloySmelter : MonoBehaviour
     public string outputID;
     public GameObject fireObject;
     public bool powerON;
-    public string creationMethod;
+    public string creationMethod = "built";
     public GameObject inputObject1;
     public GameObject inputObject2;
     public GameObject outputObject;

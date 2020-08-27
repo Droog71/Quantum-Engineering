@@ -16,7 +16,7 @@ public class UniversalExtractor : MonoBehaviour
     public GameObject conduitItem;
     public Material lineMat;
     public string ID = "unassigned";
-    public string creationMethod;
+    public string creationMethod = "built";
     private LineRenderer connectionLine;
     private LineRenderer inputLine;
     private float updateTick;

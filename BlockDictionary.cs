@@ -3,12 +3,24 @@ using System.Collections.Generic;
 
 public class BlockDictionary : MonoBehaviour
 {
-    public Dictionary<string, GameObject> dictionary;
+    public Dictionary<string, GameObject> machineDictionary;
+    public Dictionary<string, GameObject> blockDictionary;
 
     void Start()
     {
         PlayerController playerController = GetComponent<PlayerController>();
-        dictionary = new Dictionary<string, GameObject>
+
+        blockDictionary = new Dictionary<string, GameObject>
+        {
+            { "Brick", playerController.brick },
+            { "Glass Block", playerController.glass },
+            { "Iron Block", playerController.ironBlock },
+            { "Iron Ramp", playerController.ironRamp },
+            { "Steel Block", playerController.steel },
+            { "Steel Ramp", playerController.steelRamp }
+        };
+
+        machineDictionary = new Dictionary<string, GameObject>
         {
             { "Quantum Hatchway", playerController.airlock },
             { "Alloy Smelter", playerController.alloySmelter },
@@ -35,6 +47,8 @@ public class BlockDictionary : MonoBehaviour
             { "Solar Panel", playerController.solarPanel },
             { "Steel", playerController.steel },
             { "Storage Computer", playerController.storageComputer },
+            { "Storage Container", playerController.storageContainer },
+            { "Turret", playerController.turret },
             { "Universal Conduit", playerController.universalConduit },
             { "Universal Extractor", playerController.universalExtractor }
         };

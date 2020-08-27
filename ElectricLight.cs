@@ -3,7 +3,7 @@
 public class ElectricLight : MonoBehaviour
 {
     public string ID = "unassigned";
-    public string creationMethod;
+    public string creationMethod = "built";
     private float updateTick;
     public int address;
     public bool powerON;

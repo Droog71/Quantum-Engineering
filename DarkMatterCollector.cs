@@ -13,7 +13,7 @@ public class DarkMatterCollector : MonoBehaviour
     public GameObject conduitItem;
     public Material lineMat;
     public string ID = "unassigned";
-    public string creationMethod;
+    public string creationMethod = "built";
     public PowerReceiver powerReceiver;
     private LineRenderer connectionLine;
     private LineRenderer inputLine;

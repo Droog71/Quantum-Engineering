@@ -15,7 +15,7 @@ public class Smelter : MonoBehaviour
     public string outputID;
     public bool powerON;
     public GameObject fireObject;
-    public string creationMethod;
+    public string creationMethod = "built";
     public GameObject inputObject;
     public GameObject outputObject;
     public GameObject powerObject;

@@ -9,7 +9,7 @@ public class Turret : MonoBehaviour
     public bool hasHeatExchanger;
     public int cooling;
     public string ID = "unassigned";
-    public string creationMethod;
+    public string creationMethod = "built";
     private float updateTick;
     public int address;
     public bool powerON;

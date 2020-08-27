@@ -5,7 +5,7 @@ public class PowerConduit : MonoBehaviour
 {
     public string ID = "unassigned";
     public Material lineMat;
-    public string creationMethod;
+    public string creationMethod = "built";
     public GameObject outputObject1;
     public GameObject outputObject2;
     public GameObject inputObject;
