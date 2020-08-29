@@ -1,10 +1,13 @@
 ﻿using UnityEngine;
+using System;
+using System.Collections;
 using System.Collections.Generic;
 
 public class BlockDictionary : MonoBehaviour
 {
     public Dictionary<string, GameObject> machineDictionary;
     public Dictionary<string, GameObject> blockDictionary;
+    public Type[] machineTypes;
 
     void Start()
     {
@@ -51,6 +54,39 @@ public class BlockDictionary : MonoBehaviour
             { "Turret", playerController.turret },
             { "Universal Conduit", playerController.universalConduit },
             { "Universal Extractor", playerController.universalExtractor }
+        };
+
+        machineTypes = new Type[] 
+        { 
+            typeof(AirLock), 
+            typeof(AlloySmelter), 
+            typeof(Auger),  
+            typeof(AutoCrafter), 
+            typeof(Brick), 
+            typeof(DarkMatterCollector), 
+            typeof(DarkMatterConduit), 
+            typeof(ElectricLight),
+            typeof(Extruder), 
+            typeof(GearCutter), 
+            typeof(PowerSource), 
+            typeof(Glass),
+            typeof(HeatExchanger),
+            typeof(UniversalResource),
+            typeof(NuclearReactor),
+            typeof(PowerConduit),
+            typeof(Press),
+            typeof(RailCart),
+            typeof(RailCartHub),
+            typeof(PowerSource),
+            typeof(Retriever),
+            typeof(Smelter),
+            typeof(PowerSource),
+            typeof(Steel),
+            typeof(StorageComputer),
+            typeof(InventoryManager),
+            typeof(Turret),
+            typeof(UniversalConduit),
+            typeof(UniversalExtractor)
         };
     }
 }

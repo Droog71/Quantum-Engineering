@@ -11,7 +11,7 @@ public class BuildController : MonoBehaviour
     public void Start()
     {
         playerController = GetComponent<PlayerController>();
-        blockDictionary = gameObject.AddComponent<BlockDictionary>();
+        blockDictionary = GetComponent<BlockDictionary>();
         builtObjects = GameObject.Find("Built_Objects");
     }
 
@@ -145,11 +145,11 @@ public class BuildController : MonoBehaviour
                         {
                             if (blockDictionary.machineDictionary.ContainsKey(playerController.buildType))
                             {
-                                BuildBlock(playerController.buildType);
+                                BuildMachine(playerController.buildType, hit);
                             }
                             else
                             {
-                                BuildMachine(playerController.buildType, hit);
+                                BuildBlock(playerController.buildType);
                             }
                         }
                     }

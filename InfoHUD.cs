@@ -125,10 +125,6 @@ public class InfoHUD : MonoBehaviour
                 {
                     GUI.Label(GetComponent<GuiCoordinates>().messageRect, playerController.objectInSight.GetComponent<UniversalResource>().type);
                 }
-                else if (playerController.objectInSight.GetComponent<Iron>() != null)
-                {
-                    GUI.Label(GetComponent<GuiCoordinates>().messageRect, "Iron");
-                }
                 else if (playerController.objectInSight.GetComponent<IronBlock>() != null)
                 {
                     GUI.Label(GetComponent<GuiCoordinates>().messageRect, "Iron Block");
