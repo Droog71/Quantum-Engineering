@@ -1,15 +1,17 @@
 ﻿using UnityEngine;
-using System.Collections;
-using System.Collections.Generic;
 
 public class MachineGUI : MonoBehaviour
 {
     private PlayerController playerController;
     private bool hubStopWindowOpen;
+    private TextureDictionary td;
+    private GuiCoordinates gc;
 
     void Start()
     {
         playerController = GetComponent<PlayerController>();
+        td = GetComponent<TextureDictionary>();
+        gc = GetComponent<GuiCoordinates>();
     }
 
     void OnGUI()
@@ -30,24 +32,29 @@ public class MachineGUI : MonoBehaviour
             //MACHINE CONTROL GUI
             if (playerController.inventoryOpen == false && playerController.machineGUIopen == true && playerController.objectInSight != null)
             {
-                if (playerController.objectInSight.GetComponent<PowerConduit>() != null)
+                GameObject obj = playerController.objectInSight;
+
+                if (obj.GetComponent<PowerConduit>() != null)
                 {
-                    if (playerController.objectInSight.GetComponent<PowerConduit>().connectionFailed == false)
+                    PowerConduit powerConduit = obj.GetComponent<PowerConduit>();
+                    if (powerConduit.connectionFailed == false)
                     {
-                        GUI.DrawTexture(GetComponent<GuiCoordinates>().FourButtonSpeedControlBGRect, GetComponent<TextureDictionary>().dictionary["Interface Background"]);
-                        if (GUI.Button(GetComponent<GuiCoordinates>().outputControlButton3Rect, "Dual Output: " + playerController.objectInSight.GetComponent<PowerConduit>().dualOutput))
+                        GUI.DrawTexture(gc.FourButtonSpeedControlBGRect, td.dictionary["Interface Background"]);
+                        GUI.Label(gc.outputLabelRect, "Range");
+                        powerConduit.range = (int)GUI.HorizontalSlider(gc.outputControlButton2Rect, powerConduit.range, 6, 120);
+                        if (GUI.Button(gc.outputControlButton3Rect, "Dual Output: " + powerConduit.dualOutput))
                         {
-                            if (playerController.objectInSight.GetComponent<PowerConduit>().dualOutput == true)
+                            if (powerConduit.dualOutput == true)
                             {
-                                playerController.objectInSight.GetComponent<PowerConduit>().dualOutput = false;
+                                powerConduit.dualOutput = false;
                             }
                             else
                             {
-                                playerController.objectInSight.GetComponent<PowerConduit>().dualOutput = true;
+                                powerConduit.dualOutput = true;
                             }
                             playerController.playButtonSound();
                         }
-                        if (GUI.Button(GetComponent<GuiCoordinates>().outputControlButton4Rect, "Close"))
+                        if (GUI.Button(gc.outputControlButton4Rect, "Close"))
                         {
                             playerController.machineGUIopen = false;
                             playerController.playButtonSound();
@@ -55,31 +62,44 @@ public class MachineGUI : MonoBehaviour
                     }
                     else
                     {
-                        GUI.DrawTexture(GetComponent<GuiCoordinates>().speedControlBGRect, GetComponent<TextureDictionary>().dictionary["Interface Background"]);
-                        GUI.Label(GetComponent<GuiCoordinates>().outputLabelRect, "Offline");
-                        if (GUI.Button(GetComponent<GuiCoordinates>().outputControlButton2Rect, "Reboot"))
+                        GUI.DrawTexture(gc.speedControlBGRect, td.dictionary["Interface Background"]);
+                        GUI.Label(gc.outputLabelRect, "Offline");
+                        if (GUI.Button(gc.outputControlButton2Rect, "Reboot"))
                         {
-                            playerController.objectInSight.GetComponent<PowerConduit>().connectionAttempts = 0;
-                            playerController.objectInSight.GetComponent<PowerConduit>().connectionFailed = false;
+                            powerConduit.connectionAttempts = 0;
+                            powerConduit.connectionFailed = false;
                             playerController.playButtonSound();
                         }
                     }
                 }
-                else if (playerController.objectInSight.GetComponent<RailCartHub>() != null)
+
+                if (obj.GetComponent<RailCartHub>() != null)
                 {
-                    if (playerController.objectInSight.GetComponent<RailCartHub>().connectionFailed == false)
+                    RailCartHub hub = obj.GetComponent<RailCartHub>();
+                    if (hub.connectionFailed == false)
                     {
                         if (hubStopWindowOpen == false)
                         {
-                            GUI.DrawTexture(GetComponent<GuiCoordinates>().FourButtonSpeedControlBGRect, GetComponent<TextureDictionary>().dictionary["Interface Background"]);
-                            GUI.Label(GetComponent<GuiCoordinates>().outputLabelRect, "Range");
-                            playerController.objectInSight.GetComponent<RailCartHub>().range = (int)GUI.HorizontalSlider(GetComponent<GuiCoordinates>().outputControlButton2Rect, playerController.objectInSight.GetComponent<RailCartHub>().range, 6, 120);
-                            if (GUI.Button(GetComponent<GuiCoordinates>().outputControlButton3Rect, "Stop Settings"))
+                            GUI.DrawTexture(gc.FiveButtonSpeedControlBGRect, td.dictionary["Interface Background"]);
+                            GUI.Label(gc.railCartHubCircuitLabelRect, "Circuit");
+                            int circuit = hub.circuit;
+                            string circuitString = GUI.TextField(gc.railCartHubCircuitRect, circuit.ToString(), 3);
+                            try
+                            {
+                                hub.circuit = int.Parse(circuitString);
+                            }
+                            catch
+                            {
+                                //NOOP
+                            }
+                            GUI.Label(gc.outputLabelRect, "Range");
+                            hub.range = (int)GUI.HorizontalSlider(gc.outputControlButton2Rect, hub.range, 6, 120);
+                            if (GUI.Button(gc.outputControlButton3Rect, "Stop Settings"))
                             {
                                 hubStopWindowOpen = true;
                                 playerController.playButtonSound();
                             }
-                            if (GUI.Button(GetComponent<GuiCoordinates>().outputControlButton4Rect, "Close"))
+                            if (GUI.Button(gc.outputControlButton4Rect, "Close"))
                             {
                                 playerController.machineGUIopen = false;
                                 hubStopWindowOpen = false;
@@ -88,27 +108,27 @@ public class MachineGUI : MonoBehaviour
                         }
                         else
                         {
-                            GUI.DrawTexture(GetComponent<GuiCoordinates>().FiveButtonSpeedControlBGRect, GetComponent<TextureDictionary>().dictionary["Interface Background"]);
-                            GUI.Label(GetComponent<GuiCoordinates>().longOutputLabelRect, "Stop Time");
-                            if (GUI.Button(GetComponent<GuiCoordinates>().outputControlButton0Rect, "Stop: " + playerController.objectInSight.GetComponent<RailCartHub>().stop))
+                            GUI.DrawTexture(gc.FiveButtonSpeedControlBGRect, td.dictionary["Interface Background"]);
+                            GUI.Label(gc.longOutputLabelRect, "Stop Time");
+                            if (GUI.Button(gc.outputControlButton0Rect, "Stop: " + hub.stop))
                             {
-                                if (playerController.objectInSight.GetComponent<RailCartHub>().stop == true)
+                                if (hub.stop == true)
                                 {
-                                    playerController.objectInSight.GetComponent<RailCartHub>().stop = false;
+                                    hub.stop = false;
                                 }
                                 else
                                 {
-                                    playerController.objectInSight.GetComponent<RailCartHub>().stop = true;
+                                    hub.stop = true;
                                 }
                                 playerController.playButtonSound();
                             }
-                            playerController.objectInSight.GetComponent<RailCartHub>().stopTime = (int)GUI.HorizontalSlider(GetComponent<GuiCoordinates>().outputControlButton2Rect, playerController.objectInSight.GetComponent<RailCartHub>().stopTime, 0, 600);
-                            if (GUI.Button(GetComponent<GuiCoordinates>().outputControlButton3Rect, "Range Settings"))
+                            hub.stopTime = (int)GUI.HorizontalSlider(gc.outputControlButton2Rect, hub.stopTime, 0, 600);
+                            if (GUI.Button(gc.outputControlButton3Rect, "Range Settings"))
                             {
                                 hubStopWindowOpen = false;
                                 playerController.playButtonSound();
                             }
-                            if (GUI.Button(GetComponent<GuiCoordinates>().outputControlButton4Rect, "Close"))
+                            if (GUI.Button(gc.outputControlButton4Rect, "Close"))
                             {
                                 playerController.machineGUIopen = false;
                                 hubStopWindowOpen = false;
@@ -118,454 +138,427 @@ public class MachineGUI : MonoBehaviour
                     }
                     else
                     {
-                        GUI.DrawTexture(GetComponent<GuiCoordinates>().speedControlBGRect, GetComponent<TextureDictionary>().dictionary["Interface Background"]);
-                        GUI.Label(GetComponent<GuiCoordinates>().outputLabelRect, "Offline");
-                        if (GUI.Button(GetComponent<GuiCoordinates>().outputControlButton2Rect, "Reboot"))
+                        GUI.DrawTexture(gc.speedControlBGRect, td.dictionary["Interface Background"]);
+                        GUI.Label(gc.outputLabelRect, "Offline");
+                        if (GUI.Button(gc.outputControlButton2Rect, "Reboot"))
                         {
-                            playerController.objectInSight.GetComponent<RailCartHub>().connectionAttempts = 0;
-                            playerController.objectInSight.GetComponent<RailCartHub>().connectionFailed = false;
+                            hub.connectionAttempts = 0;
+                            hub.connectionFailed = false;
                             playerController.playButtonSound();
                         }
-                    }
-                }
-                else if (playerController.objectInSight.GetComponent<Retriever>() != null)
-                {
-                    if (playerController.objectInSight.GetComponent<Retriever>().connectionFailed == false)
-                    {
-                        GUI.DrawTexture(GetComponent<GuiCoordinates>().FourButtonSpeedControlBGRect, GetComponent<TextureDictionary>().dictionary["Interface Background"]);
-                        if (GUI.Button(GetComponent<GuiCoordinates>().outputControlButton3Rect, "Choose Items"))
-                        {
-                            if (playerController.objectInSight.GetComponent<InventoryManager>().initialized == true)
-                            {
-                                playerController.inventoryOpen = true;
-                                playerController.storageGUIopen = true;
-                                playerController.machineGUIopen = false;
-                                playerController.playButtonSound();
-                            }
-                        }
-                        if (GUI.Button(GetComponent<GuiCoordinates>().outputControlButton4Rect, "Close"))
-                        {
-                            playerController.machineGUIopen = false;
-                            playerController.playButtonSound();
-                        }
-                    }
-                    else
-                    {
-                        GUI.DrawTexture(GetComponent<GuiCoordinates>().speedControlBGRect, GetComponent<TextureDictionary>().dictionary["Interface Background"]);
-                        GUI.Label(GetComponent<GuiCoordinates>().outputLabelRect, "Offline");
-                        if (GUI.Button(GetComponent<GuiCoordinates>().outputControlButton2Rect, "Reboot"))
-                        {
-                            playerController.objectInSight.GetComponent<Retriever>().connectionAttempts = 0;
-                            playerController.objectInSight.GetComponent<Retriever>().connectionFailed = false;
-                            playerController.playButtonSound();
-                        }
-                    }
-                }
-                else if (playerController.objectInSight.GetComponent<AutoCrafter>() != null)
-                {
-                    if (playerController.objectInSight.GetComponent<AutoCrafter>().connectionFailed == false)
-                    {
-                        GUI.DrawTexture(GetComponent<GuiCoordinates>().FourButtonSpeedControlBGRect, GetComponent<TextureDictionary>().dictionary["Interface Background"]);
-                        if (GUI.Button(GetComponent<GuiCoordinates>().outputControlButton3Rect, "Choose Item"))
-                        {
-                            if (playerController.objectInSight.GetComponent<InventoryManager>().initialized == true)
-                            {
-                                playerController.inventoryOpen = true;
-                                playerController.storageGUIopen = true;
-                                playerController.machineGUIopen = false;
-                                playerController.playButtonSound();
-                            }
-                        }
-                        if (GUI.Button(GetComponent<GuiCoordinates>().outputControlButton4Rect, "Close"))
-                        {
-                            playerController.machineGUIopen = false;
-                            playerController.playButtonSound();
-                        }
-                    }
-                    else
-                    {
-                        GUI.DrawTexture(GetComponent<GuiCoordinates>().speedControlBGRect, GetComponent<TextureDictionary>().dictionary["Interface Background"]);
-                        GUI.Label(GetComponent<GuiCoordinates>().outputLabelRect, "Offline");
-                        if (GUI.Button(GetComponent<GuiCoordinates>().outputControlButton2Rect, "Reboot"))
-                        {
-                            playerController.objectInSight.GetComponent<AutoCrafter>().connectionAttempts = 0;
-                            playerController.objectInSight.GetComponent<AutoCrafter>().connectionFailed = false;
-                            playerController.playButtonSound();
-                        }
-                    }
-                }
-                else if (playerController.objectInSight.GetComponent<RailCart>() == null)
-                {
-                    GUI.DrawTexture(GetComponent<GuiCoordinates>().speedControlBGRect, GetComponent<TextureDictionary>().dictionary["Interface Background"]);
-                    if (GUI.Button(GetComponent<GuiCoordinates>().outputControlButton3Rect, "Close"))
-                    {
-                        playerController.machineGUIopen = false;
-                        playerController.playButtonSound();
                     }
                 }
 
-                if (playerController.objectInSight.GetComponent<UniversalConduit>() != null || playerController.objectInSight.GetComponent<DarkMatterConduit>() != null || playerController.objectInSight.GetComponent<PowerConduit>() != null)
+                if (obj.GetComponent<Retriever>() != null)
                 {
-                    if (playerController.objectInSight.GetComponent<UniversalConduit>() != null)
+                    Retriever retriever = obj.GetComponent<Retriever>();
+                    if (retriever.connectionFailed == false)
                     {
-                        if (playerController.objectInSight.GetComponent<UniversalConduit>().connectionFailed == false)
+                        GUI.DrawTexture(gc.FourButtonSpeedControlBGRect, td.dictionary["Interface Background"]);
+                        if (retriever.power > 0)
                         {
-                            GUI.Label(GetComponent<GuiCoordinates>().outputLabelRect, "Range");
-                            playerController.objectInSight.GetComponent<UniversalConduit>().range = (int)GUI.HorizontalSlider(GetComponent<GuiCoordinates>().outputControlButton2Rect, playerController.objectInSight.GetComponent<UniversalConduit>().range, 6, 120);
+                            GUI.Label(gc.outputLabelRect, "Output");
+                            retriever.speed = (int)GUI.HorizontalSlider(gc.outputControlButton2Rect, retriever.speed, 0, retriever.power);
                         }
                         else
                         {
-                            GUI.Label(GetComponent<GuiCoordinates>().outputLabelRect, "Offline");
-                            if (GUI.Button(GetComponent<GuiCoordinates>().outputControlButton2Rect, "Reboot"))
+                            GUI.Label(gc.outputLabelRect, "No Power");
+                        }
+                        if (GUI.Button(gc.outputControlButton3Rect, "Choose Items"))
+                        {
+                            if (obj.GetComponent<InventoryManager>().initialized == true)
                             {
-                                playerController.objectInSight.GetComponent<UniversalConduit>().connectionAttempts = 0;
-                                playerController.objectInSight.GetComponent<UniversalConduit>().connectionFailed = false;
+                                playerController.inventoryOpen = true;
+                                playerController.storageGUIopen = true;
+                                playerController.machineGUIopen = false;
                                 playerController.playButtonSound();
                             }
                         }
-                    }
-                    if (playerController.objectInSight.GetComponent<PowerConduit>() != null)
-                    {
-                        if (playerController.objectInSight.GetComponent<PowerConduit>().connectionFailed == false)
+                        if (GUI.Button(gc.outputControlButton4Rect, "Close"))
                         {
-                            GUI.Label(GetComponent<GuiCoordinates>().outputLabelRect, "Range");
-                            playerController.objectInSight.GetComponent<PowerConduit>().range = (int)GUI.HorizontalSlider(GetComponent<GuiCoordinates>().outputControlButton2Rect, playerController.objectInSight.GetComponent<PowerConduit>().range, 6, 120);
+                            playerController.machineGUIopen = false;
+                            playerController.playButtonSound();
                         }
                     }
-                    if (playerController.objectInSight.GetComponent<DarkMatterConduit>() != null)
+                    else
                     {
-                        if (playerController.objectInSight.GetComponent<DarkMatterConduit>().connectionFailed == false)
+                        GUI.DrawTexture(gc.speedControlBGRect, td.dictionary["Interface Background"]);
+                        GUI.Label(gc.outputLabelRect, "Offline");
+                        if (GUI.Button(gc.outputControlButton2Rect, "Reboot"))
                         {
-                            GUI.Label(GetComponent<GuiCoordinates>().outputLabelRect, "Range");
-                            playerController.objectInSight.GetComponent<DarkMatterConduit>().range = (int)GUI.HorizontalSlider(GetComponent<GuiCoordinates>().outputControlButton2Rect, playerController.objectInSight.GetComponent<DarkMatterConduit>().range, 6, 120);
-                        }
-                        else
-                        {
-                            GUI.Label(GetComponent<GuiCoordinates>().outputLabelRect, "Offline");
-                            if (GUI.Button(GetComponent<GuiCoordinates>().outputControlButton2Rect, "Reboot"))
-                            {
-                                playerController.objectInSight.GetComponent<DarkMatterConduit>().connectionAttempts = 0;
-                                playerController.objectInSight.GetComponent<DarkMatterConduit>().connectionFailed = false;
-                                playerController.playButtonSound();
-                            }
+                            retriever.connectionAttempts = 0;
+                            retriever.connectionFailed = false;
+                            playerController.playButtonSound();
                         }
                     }
                 }
-                else
+
+                if (obj.GetComponent<AutoCrafter>() != null)
                 {
-                    if (playerController.objectInSight.GetComponent<HeatExchanger>() != null)
+                    AutoCrafter autoCrafter = obj.GetComponent<AutoCrafter>();
+                    if (autoCrafter.connectionFailed == false)
                     {
-                        if (playerController.objectInSight.GetComponent<HeatExchanger>().inputObject != null)
+                        GUI.DrawTexture(gc.FourButtonSpeedControlBGRect, td.dictionary["Interface Background"]);
+                        if (autoCrafter.power > 0)
                         {
-                            if (playerController.objectInSight.GetComponent<HeatExchanger>().inputObject.GetComponent<UniversalConduit>() != null)
+                            GUI.Label(gc.outputLabelRect, "Output");
+                            autoCrafter.speed = (int)GUI.HorizontalSlider(gc.outputControlButton2Rect, autoCrafter.speed, 0, autoCrafter.power);
+                        }
+                        else
+                        {
+                            GUI.Label(gc.outputLabelRect, "No Power");
+                        }
+                        if (GUI.Button(gc.outputControlButton3Rect, "Choose Item"))
+                        {
+                            if (obj.GetComponent<InventoryManager>().initialized == true)
                             {
-                                if (playerController.objectInSight.GetComponent<HeatExchanger>().inputObject.GetComponent<UniversalConduit>().speed > 0)
+                                playerController.inventoryOpen = true;
+                                playerController.storageGUIopen = true;
+                                playerController.machineGUIopen = false;
+                                playerController.playButtonSound();
+                            }
+                        }
+                        if (GUI.Button(gc.outputControlButton4Rect, "Close"))
+                        {
+                            playerController.machineGUIopen = false;
+                            playerController.playButtonSound();
+                        }
+                    }
+                    else
+                    {
+                        GUI.DrawTexture(gc.speedControlBGRect, td.dictionary["Interface Background"]);
+                        GUI.Label(gc.outputLabelRect, "Offline");
+                        if (GUI.Button(gc.outputControlButton2Rect, "Reboot"))
+                        {
+                            autoCrafter.connectionAttempts = 0;
+                            autoCrafter.connectionFailed = false;
+                            playerController.playButtonSound();
+                        }
+                    }
+                }
+
+                if (obj.GetComponent<UniversalConduit>() != null)
+                {
+                    UniversalConduit conduit = obj.GetComponent<UniversalConduit>();
+                    if (conduit.connectionFailed == false)
+                    {
+                        GUI.Label(gc.outputLabelRect, "Range");
+                        conduit.range = (int)GUI.HorizontalSlider(gc.outputControlButton2Rect, conduit.range, 6, 120);
+                    }
+                    else
+                    {
+                        GUI.Label(gc.outputLabelRect, "Offline");
+                        if (GUI.Button(gc.outputControlButton2Rect, "Reboot"))
+                        {
+                            conduit.connectionAttempts = 0;
+                            conduit.connectionFailed = false;
+                            playerController.playButtonSound();
+                        }
+                    }
+                }
+
+                if (obj.GetComponent<DarkMatterConduit>() != null)
+                {
+                    DarkMatterConduit conduit = obj.GetComponent<DarkMatterConduit>();
+                    if (conduit.connectionFailed == false)
+                    {
+                        GUI.Label(gc.outputLabelRect, "Range");
+                        conduit.range = (int)GUI.HorizontalSlider(gc.outputControlButton2Rect, conduit.range, 6, 120);
+                    }
+                    else
+                    {
+                        GUI.Label(gc.outputLabelRect, "Offline");
+                        if (GUI.Button(gc.outputControlButton2Rect, "Reboot"))
+                        {
+                            conduit.connectionAttempts = 0;
+                            conduit.connectionFailed = false;
+                            playerController.playButtonSound();
+                        }
+                    }
+                }
+
+                if (obj.GetComponent<HeatExchanger>() != null)
+                {
+                    HeatExchanger hx = obj.GetComponent<HeatExchanger>();
+                    if (hx.inputObject != null)
+                    {
+                        if (hx.inputObject.GetComponent<UniversalConduit>() != null)
+                        {
+                            if (hx.inputObject.GetComponent<UniversalConduit>().speed > 0)
+                            {
+                                if (hx.connectionFailed == false)
                                 {
-                                    if (playerController.objectInSight.GetComponent<HeatExchanger>().connectionFailed == false)
-                                    {
-                                        GUI.Label(GetComponent<GuiCoordinates>().outputLabelRect, "Output");
-                                        playerController.objectInSight.GetComponent<HeatExchanger>().speed = (int)GUI.HorizontalSlider(GetComponent<GuiCoordinates>().outputControlButton2Rect, playerController.objectInSight.GetComponent<HeatExchanger>().speed, 0, playerController.objectInSight.GetComponent<HeatExchanger>().inputObject.GetComponent<UniversalConduit>().speed);
-                                    }
-                                    else
-                                    {
-                                        GUI.Label(GetComponent<GuiCoordinates>().outputLabelRect, "Offline");
-                                        if (GUI.Button(GetComponent<GuiCoordinates>().outputControlButton2Rect, "Reboot"))
-                                        {
-                                            playerController.objectInSight.GetComponent<HeatExchanger>().connectionAttempts = 0;
-                                            playerController.objectInSight.GetComponent<HeatExchanger>().connectionFailed = false;
-                                            playerController.playButtonSound();
-                                        }
-                                    }
+                                    GUI.Label(gc.outputLabelRect, "Output");
+                                    hx.speed = (int)GUI.HorizontalSlider(gc.outputControlButton2Rect, hx.speed, 0, hx.inputObject.GetComponent<UniversalConduit>().speed);
                                 }
                                 else
                                 {
-                                    //Debug.Log(playerController.objectInSight.GetComponent<HeatExchanger>().ID + " input speed is zero");
-                                    GUI.Label(GetComponent<GuiCoordinates>().outputLabelRect, "No Input");
+                                    GUI.Label(gc.outputLabelRect, "Offline");
+                                    if (GUI.Button(gc.outputControlButton2Rect, "Reboot"))
+                                    {
+                                        hx.connectionAttempts = 0;
+                                        hx.connectionFailed = false;
+                                        playerController.playButtonSound();
+                                    }
                                 }
                             }
                             else
                             {
-                                //Debug.Log(playerController.objectInSight.GetComponent<HeatExchanger>().ID + " input object is not recognized as a conduit");
-                                GUI.Label(GetComponent<GuiCoordinates>().outputLabelRect, "No Input");
+                                //Debug.Log(hx.ID + " input speed is zero");
+                                GUI.Label(gc.outputLabelRect, "No Input");
                             }
                         }
                         else
                         {
-                            //Debug.Log(playerController.objectInSight.GetComponent<HeatExchanger>().ID + " input object is null");
-                            GUI.Label(GetComponent<GuiCoordinates>().outputLabelRect, "No Input");
+                            //Debug.Log(hx.ID + " input object is not recognized as a conduit");
+                            GUI.Label(gc.outputLabelRect, "No Input");
                         }
                     }
-                    if (playerController.objectInSight.GetComponent<PowerSource>() != null)
+                    else
                     {
-                        if (playerController.objectInSight.GetComponent<PowerSource>().connectionFailed == true)
+                        //Debug.Log(hx.ID + " input object is null");
+                        GUI.Label(gc.outputLabelRect, "No Input");
+                    }
+                }
+
+                if (obj.GetComponent<PowerSource>() != null)
+                {
+                    PowerSource powerSource = obj.GetComponent<PowerSource>();
+                    if (powerSource.connectionFailed == true)
+                    {
+                        GUI.Label(gc.outputLabelRect, "Offline");
+                        if (GUI.Button(gc.outputControlButton2Rect, "Reboot"))
                         {
-                            GUI.Label(GetComponent<GuiCoordinates>().outputLabelRect, "Offline");
-                            if (GUI.Button(GetComponent<GuiCoordinates>().outputControlButton2Rect, "Reboot"))
-                            {
-                                playerController.objectInSight.GetComponent<PowerSource>().connectionAttempts = 0;
-                                playerController.objectInSight.GetComponent<PowerSource>().connectionFailed = false;
-                                playerController.playButtonSound();
-                            }
-                        }
-                        else
-                        {
-                            GUI.Label(GetComponent<GuiCoordinates>().outputLabelRect, "Online");
+                            powerSource.connectionAttempts = 0;
+                            powerSource.connectionFailed = false;
+                            playerController.playButtonSound();
                         }
                     }
-                    if (playerController.objectInSight.GetComponent<Auger>() != null)
+                    else
                     {
-                        if (playerController.objectInSight.GetComponent<Auger>().power > 0)
+                        GUI.Label(gc.outputLabelRect, "Online");
+                    }
+                }
+
+                if (obj.GetComponent<Auger>() != null)
+                {
+                    Auger auger = obj.GetComponent<Auger>();
+                    if (auger.power > 0)
+                    {
+                        GUI.Label(gc.outputLabelRect, "Output");
+                        auger.speed = (int)GUI.HorizontalSlider(gc.outputControlButton2Rect, auger.speed, 0, auger.power);
+                    }
+                    else
+                    {
+                        GUI.Label(gc.outputLabelRect, "No Power");
+                    }
+                }
+
+                if (obj.GetComponent<UniversalExtractor>() != null)
+                {
+                    UniversalExtractor extractor = obj.GetComponent<UniversalExtractor>();
+                    if (extractor.connectionFailed == false)
+                    {
+                        if (extractor.power > 0)
                         {
-                            GUI.Label(GetComponent<GuiCoordinates>().outputLabelRect, "Output");
-                            playerController.objectInSight.GetComponent<Auger>().speed = (int)GUI.HorizontalSlider(GetComponent<GuiCoordinates>().outputControlButton2Rect, playerController.objectInSight.GetComponent<Auger>().speed, 0, playerController.objectInSight.GetComponent<Auger>().power);
+                            GUI.Label(gc.outputLabelRect, "Output");
+                            extractor.speed = (int)GUI.HorizontalSlider(gc.outputControlButton2Rect, extractor.speed, 0, extractor.power);
                         }
                         else
                         {
-                            GUI.Label(GetComponent<GuiCoordinates>().outputLabelRect, "No Power");
+                            GUI.Label(gc.outputLabelRect, "No Power");
                         }
                     }
-                    if (playerController.objectInSight.GetComponent<UniversalExtractor>() != null)
+                    else
                     {
-                        if (playerController.objectInSight.GetComponent<UniversalExtractor>().connectionFailed == false)
+                        GUI.Label(gc.outputLabelRect, "Offline");
+                        if (GUI.Button(gc.outputControlButton2Rect, "Reboot"))
                         {
-                            if (playerController.objectInSight.GetComponent<UniversalExtractor>().power > 0)
-                            {
-                                GUI.Label(GetComponent<GuiCoordinates>().outputLabelRect, "Output");
-                                playerController.objectInSight.GetComponent<UniversalExtractor>().speed = (int)GUI.HorizontalSlider(GetComponent<GuiCoordinates>().outputControlButton2Rect, playerController.objectInSight.GetComponent<UniversalExtractor>().speed, 0, playerController.objectInSight.GetComponent<UniversalExtractor>().power);
-                            }
-                            else
-                            {
-                                GUI.Label(GetComponent<GuiCoordinates>().outputLabelRect, "No Power");
-                            }
-                        }
-                        else
-                        {
-                            GUI.Label(GetComponent<GuiCoordinates>().outputLabelRect, "Offline");
-                            if (GUI.Button(GetComponent<GuiCoordinates>().outputControlButton2Rect, "Reboot"))
-                            {
-                                playerController.objectInSight.GetComponent<UniversalExtractor>().connectionAttempts = 0;
-                                playerController.objectInSight.GetComponent<UniversalExtractor>().connectionFailed = false;
-                                playerController.playButtonSound();
-                            }
+                            extractor.connectionAttempts = 0;
+                            extractor.connectionFailed = false;
+                            playerController.playButtonSound();
                         }
                     }
-                    if (playerController.objectInSight.GetComponent<DarkMatterCollector>() != null)
+                }
+                if (obj.GetComponent<DarkMatterCollector>() != null)
+                {
+                    DarkMatterCollector collector = obj.GetComponent<DarkMatterCollector>();
+                    if (collector.connectionFailed == false)
                     {
-                        if (playerController.objectInSight.GetComponent<DarkMatterCollector>().connectionFailed == false)
+                        if (collector.power > 0)
                         {
-                            if (playerController.objectInSight.GetComponent<DarkMatterCollector>().power > 0)
-                            {
-                                GUI.Label(GetComponent<GuiCoordinates>().outputLabelRect, "Output");
-                                playerController.objectInSight.GetComponent<DarkMatterCollector>().speed = (int)GUI.HorizontalSlider(GetComponent<GuiCoordinates>().outputControlButton2Rect, playerController.objectInSight.GetComponent<DarkMatterCollector>().speed, 0, playerController.objectInSight.GetComponent<DarkMatterCollector>().power);
-                            }
-                            else
-                            {
-                                GUI.Label(GetComponent<GuiCoordinates>().outputLabelRect, "No Power");
-                            }
+                            GUI.Label(gc.outputLabelRect, "Output");
+                            collector.speed = (int)GUI.HorizontalSlider(gc.outputControlButton2Rect, collector.speed, 0, collector.power);
                         }
                         else
                         {
-                            GUI.Label(GetComponent<GuiCoordinates>().outputLabelRect, "Offline");
-                            if (GUI.Button(GetComponent<GuiCoordinates>().outputControlButton2Rect, "Reboot"))
-                            {
-                                playerController.objectInSight.GetComponent<DarkMatterCollector>().connectionAttempts = 0;
-                                playerController.objectInSight.GetComponent<DarkMatterCollector>().connectionFailed = false;
-                                playerController.playButtonSound();
-                            }
+                            GUI.Label(gc.outputLabelRect, "No Power");
                         }
                     }
-                    if (playerController.objectInSight.GetComponent<Smelter>() != null)
+                    else
                     {
-                        if (playerController.objectInSight.GetComponent<Smelter>().connectionFailed == false)
+                        GUI.Label(gc.outputLabelRect, "Offline");
+                        if (GUI.Button(gc.outputControlButton2Rect, "Reboot"))
                         {
-                            if (playerController.objectInSight.GetComponent<Smelter>().power > 0)
-                            {
-                                GUI.Label(GetComponent<GuiCoordinates>().outputLabelRect, "Output");
-                                playerController.objectInSight.GetComponent<Smelter>().speed = (int)GUI.HorizontalSlider(GetComponent<GuiCoordinates>().outputControlButton2Rect, playerController.objectInSight.GetComponent<Smelter>().speed, 0, playerController.objectInSight.GetComponent<Smelter>().power);
-                            }
-                            else
-                            {
-                                GUI.Label(GetComponent<GuiCoordinates>().outputLabelRect, "No Power");
-                            }
-                        }
-                        else
-                        {
-                            GUI.Label(GetComponent<GuiCoordinates>().outputLabelRect, "Offline");
-                            if (GUI.Button(GetComponent<GuiCoordinates>().outputControlButton2Rect, "Reboot"))
-                            {
-                                playerController.objectInSight.GetComponent<Smelter>().connectionAttempts = 0;
-                                playerController.objectInSight.GetComponent<Smelter>().connectionFailed = false;
-                                playerController.playButtonSound();
-                            }
+                            collector.connectionAttempts = 0;
+                            collector.connectionFailed = false;
+                            playerController.playButtonSound();
                         }
                     }
-                    if (playerController.objectInSight.GetComponent<AlloySmelter>() != null)
+                }
+
+                if (obj.GetComponent<Smelter>() != null)
+                {
+                    Smelter smelter = obj.GetComponent<Smelter>();
+                    if (smelter.connectionFailed == false)
                     {
-                        if (playerController.objectInSight.GetComponent<AlloySmelter>().connectionFailed == false)
+                        if (smelter.power > 0)
                         {
-                            if (playerController.objectInSight.GetComponent<AlloySmelter>().power > 0)
-                            {
-                                GUI.Label(GetComponent<GuiCoordinates>().outputLabelRect, "Output");
-                                playerController.objectInSight.GetComponent<AlloySmelter>().speed = (int)GUI.HorizontalSlider(GetComponent<GuiCoordinates>().outputControlButton2Rect, playerController.objectInSight.GetComponent<AlloySmelter>().speed, 0, playerController.objectInSight.GetComponent<AlloySmelter>().power);
-                            }
-                            else
-                            {
-                                GUI.Label(GetComponent<GuiCoordinates>().outputLabelRect, "No Power");
-                            }
+                            GUI.Label(gc.outputLabelRect, "Output");
+                            smelter.speed = (int)GUI.HorizontalSlider(gc.outputControlButton2Rect, smelter.speed, 0, smelter.power);
                         }
                         else
                         {
-                            GUI.Label(GetComponent<GuiCoordinates>().outputLabelRect, "Offline");
-                            if (GUI.Button(GetComponent<GuiCoordinates>().outputControlButton2Rect, "Reboot"))
-                            {
-                                playerController.objectInSight.GetComponent<AlloySmelter>().connectionAttempts = 0;
-                                playerController.objectInSight.GetComponent<AlloySmelter>().connectionFailed = false;
-                                playerController.playButtonSound();
-                            }
+                            GUI.Label(gc.outputLabelRect, "No Power");
                         }
                     }
-                    if (playerController.objectInSight.GetComponent<Press>() != null)
+                    else
                     {
-                        if (playerController.objectInSight.GetComponent<Press>().connectionFailed == false)
+                        GUI.Label(gc.outputLabelRect, "Offline");
+                        if (GUI.Button(gc.outputControlButton2Rect, "Reboot"))
                         {
-                            if (playerController.objectInSight.GetComponent<Press>().power > 0)
-                            {
-                                GUI.Label(GetComponent<GuiCoordinates>().outputLabelRect, "Output");
-                                playerController.objectInSight.GetComponent<Press>().speed = (int)GUI.HorizontalSlider(GetComponent<GuiCoordinates>().outputControlButton2Rect, playerController.objectInSight.GetComponent<Press>().speed, 0, playerController.objectInSight.GetComponent<Press>().power);
-                            }
-                            else
-                            {
-                                GUI.Label(GetComponent<GuiCoordinates>().outputLabelRect, "No Power");
-                            }
-                        }
-                        else
-                        {
-                            GUI.Label(GetComponent<GuiCoordinates>().outputLabelRect, "Offline");
-                            if (GUI.Button(GetComponent<GuiCoordinates>().outputControlButton2Rect, "Reboot"))
-                            {
-                                playerController.objectInSight.GetComponent<Press>().connectionAttempts = 0;
-                                playerController.objectInSight.GetComponent<Press>().connectionFailed = false;
-                                playerController.playButtonSound();
-                            }
+                            smelter.connectionAttempts = 0;
+                            smelter.connectionFailed = false;
+                            playerController.playButtonSound();
                         }
                     }
-                    if (playerController.objectInSight.GetComponent<Extruder>() != null)
+                }
+
+                if (obj.GetComponent<AlloySmelter>() != null)
+                {
+                    AlloySmelter alloySmelter = obj.GetComponent<AlloySmelter>();
+                    if (alloySmelter.connectionFailed == false)
                     {
-                        if (playerController.objectInSight.GetComponent<Extruder>().connectionFailed == false)
+                        if (alloySmelter.power > 0)
                         {
-                            if (playerController.objectInSight.GetComponent<Extruder>().power > 0)
-                            {
-                                GUI.Label(GetComponent<GuiCoordinates>().outputLabelRect, "Output");
-                                playerController.objectInSight.GetComponent<Extruder>().speed = (int)GUI.HorizontalSlider(GetComponent<GuiCoordinates>().outputControlButton2Rect, playerController.objectInSight.GetComponent<Extruder>().speed, 0, playerController.objectInSight.GetComponent<Extruder>().power);
-                            }
-                            else
-                            {
-                                GUI.Label(GetComponent<GuiCoordinates>().outputLabelRect, "No Power");
-                            }
+                            GUI.Label(gc.outputLabelRect, "Output");
+                            alloySmelter.speed = (int)GUI.HorizontalSlider(gc.outputControlButton2Rect, alloySmelter.speed, 0, alloySmelter.power);
                         }
                         else
                         {
-                            GUI.Label(GetComponent<GuiCoordinates>().outputLabelRect, "Offline");
-                            if (GUI.Button(GetComponent<GuiCoordinates>().outputControlButton2Rect, "Reboot"))
-                            {
-                                playerController.objectInSight.GetComponent<Extruder>().connectionAttempts = 0;
-                                playerController.objectInSight.GetComponent<Extruder>().connectionFailed = false;
-                                playerController.playButtonSound();
-                            }
+                            GUI.Label(gc.outputLabelRect, "No Power");
                         }
                     }
-                    if (playerController.objectInSight.GetComponent<Retriever>() != null)
+                    else
                     {
-                        if (playerController.objectInSight.GetComponent<Retriever>().connectionFailed == false)
+                        GUI.Label(gc.outputLabelRect, "Offline");
+                        if (GUI.Button(gc.outputControlButton2Rect, "Reboot"))
                         {
-                            if (playerController.objectInSight.GetComponent<Retriever>().power > 0)
-                            {
-                                GUI.Label(GetComponent<GuiCoordinates>().outputLabelRect, "Output");
-                                playerController.objectInSight.GetComponent<Retriever>().speed = (int)GUI.HorizontalSlider(GetComponent<GuiCoordinates>().outputControlButton2Rect, playerController.objectInSight.GetComponent<Retriever>().speed, 0, playerController.objectInSight.GetComponent<Retriever>().power);
-                            }
-                            else
-                            {
-                                GUI.Label(GetComponent<GuiCoordinates>().outputLabelRect, "No Power");
-                            }
-                        }
-                        else
-                        {
-                            GUI.Label(GetComponent<GuiCoordinates>().outputLabelRect, "Offline");
-                            if (GUI.Button(GetComponent<GuiCoordinates>().outputControlButton2Rect, "Reboot"))
-                            {
-                                playerController.objectInSight.GetComponent<Retriever>().connectionAttempts = 0;
-                                playerController.objectInSight.GetComponent<Retriever>().connectionFailed = false;
-                                playerController.playButtonSound();
-                            }
+                            alloySmelter.connectionAttempts = 0;
+                            alloySmelter.connectionFailed = false;
+                            playerController.playButtonSound();
                         }
                     }
-                    if (playerController.objectInSight.GetComponent<AutoCrafter>() != null)
+                }
+
+                if (obj.GetComponent<Press>() != null)
+                {
+                    Press press = obj.GetComponent<Press>();
+                    if (press.connectionFailed == false)
                     {
-                        if (playerController.objectInSight.GetComponent<AutoCrafter>().connectionFailed == false)
+                        if (press.power > 0)
                         {
-                            if (playerController.objectInSight.GetComponent<AutoCrafter>().power > 0)
-                            {
-                                GUI.Label(GetComponent<GuiCoordinates>().outputLabelRect, "Output");
-                                playerController.objectInSight.GetComponent<AutoCrafter>().speed = (int)GUI.HorizontalSlider(GetComponent<GuiCoordinates>().outputControlButton2Rect, playerController.objectInSight.GetComponent<AutoCrafter>().speed, 0, playerController.objectInSight.GetComponent<AutoCrafter>().power);
-                            }
-                            else
-                            {
-                                GUI.Label(GetComponent<GuiCoordinates>().outputLabelRect, "No Power");
-                            }
+                            GUI.Label(gc.outputLabelRect, "Output");
+                            press.speed = (int)GUI.HorizontalSlider(gc.outputControlButton2Rect, press.speed, 0, press.power);
                         }
                         else
                         {
-                            GUI.Label(GetComponent<GuiCoordinates>().outputLabelRect, "Offline");
-                            if (GUI.Button(GetComponent<GuiCoordinates>().outputControlButton2Rect, "Reboot"))
-                            {
-                                playerController.objectInSight.GetComponent<AutoCrafter>().connectionAttempts = 0;
-                                playerController.objectInSight.GetComponent<AutoCrafter>().connectionFailed = false;
-                                playerController.playButtonSound();
-                            }
+                            GUI.Label(gc.outputLabelRect, "No Power");
                         }
                     }
-                    if (playerController.objectInSight.GetComponent<Turret>() != null)
+                    else
                     {
-                        if (playerController.objectInSight.GetComponent<Turret>().power > 0)
+                        GUI.Label(gc.outputLabelRect, "Offline");
+                        if (GUI.Button(gc.outputControlButton2Rect, "Reboot"))
                         {
-                            GUI.Label(GetComponent<GuiCoordinates>().outputLabelRect, "Output");
-                            if (playerController.objectInSight.GetComponent<Turret>().power < 30)
-                            {
-                                playerController.objectInSight.GetComponent<Turret>().speed = (int)GUI.HorizontalSlider(GetComponent<GuiCoordinates>().outputControlButton2Rect, playerController.objectInSight.GetComponent<Turret>().speed, 0, playerController.objectInSight.GetComponent<Turret>().power);
-                            }
-                            else
-                            {
-                                playerController.objectInSight.GetComponent<Turret>().speed = (int)GUI.HorizontalSlider(GetComponent<GuiCoordinates>().outputControlButton2Rect, playerController.objectInSight.GetComponent<Turret>().speed, 0, 30);
-                            }
-                        }
-                        else
-                        {
-                            GUI.Label(GetComponent<GuiCoordinates>().outputLabelRect, "No Power");
+                            press.connectionAttempts = 0;
+                            press.connectionFailed = false;
+                            playerController.playButtonSound();
                         }
                     }
-                    if (playerController.objectInSight.GetComponent<GearCutter>() != null)
+                }
+
+                if (obj.GetComponent<Extruder>() != null)
+                {
+                    Extruder extruder = obj.GetComponent<Extruder>();
+                    if (extruder.connectionFailed == false)
                     {
-                        if (playerController.objectInSight.GetComponent<GearCutter>().connectionFailed == false)
+                        if (extruder.power > 0)
                         {
-                            if (playerController.objectInSight.GetComponent<GearCutter>().power > 0)
-                            {
-                                GUI.Label(GetComponent<GuiCoordinates>().outputLabelRect, "Output");
-                                playerController.objectInSight.GetComponent<GearCutter>().speed = (int)GUI.HorizontalSlider(GetComponent<GuiCoordinates>().outputControlButton2Rect, playerController.objectInSight.GetComponent<GearCutter>().speed, 0, playerController.objectInSight.GetComponent<GearCutter>().power);
-                            }
-                            else
-                            {
-                                GUI.Label(GetComponent<GuiCoordinates>().outputLabelRect, "No Power");
-                            }
+                            GUI.Label(gc.outputLabelRect, "Output");
+                            extruder.speed = (int)GUI.HorizontalSlider(gc.outputControlButton2Rect, extruder.speed, 0, extruder.power);
                         }
                         else
                         {
-                            GUI.Label(GetComponent<GuiCoordinates>().outputLabelRect, "Offline");
-                            if (GUI.Button(GetComponent<GuiCoordinates>().outputControlButton2Rect, "Reboot"))
-                            {
-                                playerController.objectInSight.GetComponent<GearCutter>().connectionAttempts = 0;
-                                playerController.objectInSight.GetComponent<GearCutter>().connectionFailed = false;
-                                playerController.playButtonSound();
-                            }
+                            GUI.Label(gc.outputLabelRect, "No Power");
+                        }
+                    }
+                    else
+                    {
+                        GUI.Label(gc.outputLabelRect, "Offline");
+                        if (GUI.Button(gc.outputControlButton2Rect, "Reboot"))
+                        {
+                            extruder.connectionAttempts = 0;
+                            extruder.connectionFailed = false;
+                            playerController.playButtonSound();
+                        }
+                    }
+                }
+
+                if (obj.GetComponent<Turret>() != null)
+                {
+                    Turret turret = obj.GetComponent<Turret>();
+                    if (turret.power > 0)
+                    {
+                        GUI.Label(gc.outputLabelRect, "Output");
+                        if (turret.power < 30)
+                        {
+                            turret.speed = (int)GUI.HorizontalSlider(gc.outputControlButton2Rect, turret.speed, 0, turret.power);
+                        }
+                        else
+                        {
+                            turret.speed = (int)GUI.HorizontalSlider(gc.outputControlButton2Rect, turret.speed, 0, 30);
+                        }
+                    }
+                    else
+                    {
+                        GUI.Label(gc.outputLabelRect, "No Power");
+                    }
+                }
+
+                if (obj.GetComponent<GearCutter>() != null)
+                {
+                    GearCutter gearCutter = obj.GetComponent<GearCutter>();
+                    if (gearCutter.connectionFailed == false)
+                    {
+                        if (gearCutter.power > 0)
+                        {
+                            GUI.Label(gc.outputLabelRect, "Output");
+                            gearCutter.speed = (int)GUI.HorizontalSlider(gc.outputControlButton2Rect, gearCutter.speed, 0, gearCutter.power);
+                        }
+                        else
+                        {
+                            GUI.Label(gc.outputLabelRect, "No Power");
+                        }
+                    }
+                    else
+                    {
+                        GUI.Label(gc.outputLabelRect, "Offline");
+                        if (GUI.Button(gc.outputControlButton2Rect, "Reboot"))
+                        {
+                            gearCutter.connectionAttempts = 0;
+                            gearCutter.connectionFailed = false;
+                            playerController.playButtonSound();
                         }
                     }
                 }

@@ -17,6 +17,7 @@ public class InteractionController : MonoBehaviour
         blockDictionary = GetComponent<BlockDictionary>();
         machineInteraction = gameObject.AddComponent<MachineInteraction>();
         storageInteraction = gameObject.AddComponent<StorageInteraction>();
+        blockInteraction = gameObject.AddComponent<BlockInteraction>();
     }
 
     void Update()

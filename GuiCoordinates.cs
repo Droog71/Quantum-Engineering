@@ -155,6 +155,8 @@ public class GuiCoordinates : MonoBehaviour
     public Rect FiveButtonSpeedControlBGRect;
     public Rect outputLabelRect;
     public Rect longOutputLabelRect;
+    public Rect railCartHubCircuitRect;
+    public Rect railCartHubCircuitLabelRect;
     public Rect outputControlButton0Rect;
     public Rect outputControlButton1Rect;
     public Rect outputControlButton2Rect;
@@ -424,6 +426,8 @@ public class GuiCoordinates : MonoBehaviour
         FiveButtonSpeedControlBGRect = new Rect((ScreenWidth * 0.20f), (ScreenHeight * 0.22f), (ScreenWidth * 0.24f), (ScreenHeight * 0.41f));
         outputLabelRect = new Rect((ScreenWidth * 0.30f), (ScreenHeight * 0.34f), (ScreenWidth * 0.14f), (ScreenHeight * 0.05f));
         longOutputLabelRect = new Rect((ScreenWidth * 0.29f), (ScreenHeight * 0.34f), (ScreenWidth * 0.14f), (ScreenHeight * 0.05f));
+        railCartHubCircuitLabelRect = new Rect((ScreenWidth * 0.27f), (ScreenHeight * 0.29f), (ScreenWidth * 0.14f), (ScreenHeight * 0.05f));
+        railCartHubCircuitRect = new Rect((ScreenWidth * 0.335f), (ScreenHeight * 0.29f), (ScreenWidth * 0.04f), (ScreenHeight * 0.03f));
         outputControlButton0Rect = new Rect((ScreenWidth * 0.25f), (ScreenHeight * 0.28f), (ScreenWidth * 0.14f), (ScreenHeight * 0.05f));
         outputControlButton1Rect = new Rect((ScreenWidth * 0.25f), (ScreenHeight * 0.34f), (ScreenWidth * 0.14f), (ScreenHeight * 0.05f));
         outputControlButton2Rect = new Rect((ScreenWidth * 0.25f), (ScreenHeight * 0.40f), (ScreenWidth * 0.14f), (ScreenHeight * 0.05f));

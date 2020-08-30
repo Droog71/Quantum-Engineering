@@ -57,12 +57,6 @@ public class StateManager : MonoBehaviour
     //Whether or not initialization has completed.
     public bool Loaded = false;
 
-    // Use this for initialization
-    void Start()
-    {
-
-    }
-
     void LoadWorld()
     {
         //LOADING BUILT OBJECTS
@@ -115,6 +109,7 @@ public class StateManager : MonoBehaviour
                         PrintedPart.GetComponent<RailCartHub>().outputID = PlayerPrefs.GetString(ObjectName + PartNumber + "outputID");
                         PrintedPart.GetComponent<RailCartHub>().range = PlayerPrefs.GetInt(ObjectName + PartNumber + "range");
                         PrintedPart.GetComponent<RailCartHub>().stop = PlayerPrefsX.GetBool(ObjectName + PartNumber + "stop");
+                        PrintedPart.GetComponent<RailCartHub>().circuit = PlayerPrefs.GetInt(ObjectName + PartNumber + "circuit");
                         PrintedPart.GetComponent<RailCartHub>().stopTime = PlayerPrefs.GetFloat(ObjectName + PartNumber + "stopTime");
                         PrintedPart.GetComponent<RailCartHub>().centralHub = PlayerPrefsX.GetBool(ObjectName + PartNumber + "centralHub");
                         PrintedPart.GetComponent<RailCartHub>().creationMethod = "spawned";
@@ -508,10 +503,12 @@ public class StateManager : MonoBehaviour
                         int range = go.GetComponent<RailCartHub>().range;
                         bool centralHub = go.GetComponent<RailCartHub>().centralHub;
                         bool stop = go.GetComponent<RailCartHub>().stop;
+                        int circuit = go.GetComponent<RailCartHub>().circuit;
                         float stopTime = go.GetComponent<RailCartHub>().stopTime;
                         PlayerPrefs.SetString(PartName + PartNumber + "inputID", inputID);
                         PlayerPrefs.SetString(PartName + PartNumber + "outputID", outputID);
                         PlayerPrefs.SetInt(PartName + PartNumber + "range", range);
+                        PlayerPrefs.SetInt(PartName + PartNumber + "circuit", circuit);
                         PlayerPrefsX.SetBool(PartName + PartNumber + "centralHub", centralHub);
                         PlayerPrefsX.SetBool(PartName + PartNumber + "stop", stop);
                         PlayerPrefs.SetFloat(PartName + PartNumber + "stopTime", stopTime);

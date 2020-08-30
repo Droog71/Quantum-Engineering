@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System;
 
 public class BuildController : MonoBehaviour
 {
@@ -284,7 +285,19 @@ public class BuildController : MonoBehaviour
                     {
                         foundItems = true;
                         bool flag = true;
-                        if (type.Equals("Auger"))
+                        if (type.Equals("Rail Cart"))
+                        {
+                            if (hit.collider.gameObject.GetComponent<RailCartHub>() != null)
+                            {
+                                flag = true;
+                            }
+                            else
+                            {
+                                playerController.invalidRailCartPlacement = true;
+                                flag = false;
+                            }
+                        }
+                        else if (type.Equals("Auger"))
                         {
                             if (hit.collider.gameObject.tag.Equals("Landscape"))
                             {
@@ -298,7 +311,14 @@ public class BuildController : MonoBehaviour
                         }
                         if (flag == true)
                         {
-                            Instantiate(blockDictionary.machineDictionary[type], playerController.buildObject.transform.position, playerController.buildObject.transform.rotation);
+                            GameObject t = blockDictionary.machineDictionary[type];
+                            Vector3 pos = playerController.buildObject.transform.position;
+                            Quaternion rot = playerController.buildObject.transform.rotation;
+                            GameObject obj = Instantiate(t, pos, rot);
+                            if (obj.GetComponent<RailCart>() != null)
+                            {
+                                obj.GetComponent<RailCart>().target = hit.collider.gameObject;
+                            }
                             slot.amountInSlot -= 1;
                             playerController.builderSound.Play();
                             playerController.destroyTimer = 0;

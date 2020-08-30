@@ -1,5 +1,5 @@
 ﻿using UnityEngine;
-using System.Collections;
+using System.Collections.Generic;
 
 public class RailCartHub : MonoBehaviour
 {
@@ -16,6 +16,7 @@ public class RailCartHub : MonoBehaviour
     public int range = 6;
     public float stopTime;
     public int connectionAttempts;
+    public int circuit;
     public bool stop;
     public bool connectionFailed;
     public bool centralHub;
@@ -28,11 +29,6 @@ public class RailCartHub : MonoBehaviour
         connectionLine.material = lineMat;
         connectionLine.loop = true;
         connectionLine.enabled = false;
-    }
-
-    void OnDestroy()
-    {
-
     }
 
     void Update()
@@ -65,11 +61,19 @@ public class RailCartHub : MonoBehaviour
                 if (connectionFailed == false)
                 {
                     RailCartHub[] allHubs = FindObjectsOfType<RailCartHub>();
-                    if (allHubs.Length < 2)
+                    List<RailCartHub> hubList = new List<RailCartHub>();
+                    foreach (RailCartHub hub in allHubs)
+                    {
+                        if (hub.circuit == circuit)
+                        {
+                            hubList.Add(hub);
+                        }
+                    }
+                    if (hubList.Count < 2)
                     {
                         centralHub = true;
                     }
-                    foreach (RailCartHub hub in allHubs)
+                    foreach (RailCartHub hub in hubList)
                     {
                         if (hub.gameObject.activeInHierarchy)
                         {
