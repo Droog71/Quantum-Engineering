@@ -28,7 +28,8 @@ public class AutoCrafter : MonoBehaviour
     public GameObject storageComputerConduitItemObject;
     private GameObject builtObjects;
 
-    void Start()
+    // Called by unity engine on start up to initialize variables
+    public void Start()
     {
         craftingManager = GetComponent<CraftingManager>();
         craftingDictionary = gameObject.AddComponent<CraftingDictionary>();
@@ -42,23 +43,8 @@ public class AutoCrafter : MonoBehaviour
         builtObjects = GameObject.Find("Built_Objects");
     }
 
-    private void UpdatePowerReceiver()
-    {
-        powerReceiver.ID = ID;
-        power = powerReceiver.power;
-        powerON = powerReceiver.powerON;
-        powerObject = powerReceiver.powerObject;
-        if (powerReceiver.overClocked == true)
-        {
-            speed = powerReceiver.speed;
-        }
-        else
-        {
-            powerReceiver.speed = speed;
-        }
-    }
-
-    void Update()
+    // Called once per frame by unity engine
+    public void Update()
     {
         updateTick += 1 * Time.deltaTime;
         if (updateTick > 0.5f + (address * 0.001f))
@@ -149,6 +135,24 @@ public class AutoCrafter : MonoBehaviour
         }
     }
 
+    // Gets power values from power receiver
+    private void UpdatePowerReceiver()
+    {
+        powerReceiver.ID = ID;
+        power = powerReceiver.power;
+        powerON = powerReceiver.powerON;
+        powerObject = powerReceiver.powerObject;
+        if (powerReceiver.overClocked == true)
+        {
+            speed = powerReceiver.speed;
+        }
+        else
+        {
+            powerReceiver.speed = speed;
+        }
+    }
+
+    // The object exists, is active and is not a standard building block
     bool IsValidObject(GameObject obj)
     {
         if (obj != null)
@@ -158,6 +162,7 @@ public class AutoCrafter : MonoBehaviour
         return false;
     }
 
+    // Connects the auto crafter to a storage inventory
     private void ConnectToObject(GameObject obj)
     {
         if (obj.GetComponent<InventoryManager>() != null && !obj.GetComponent<InventoryManager>().ID.Equals("player") && obj.GetComponent<Retriever>() == null && obj.GetComponent<Rocket>() == null && obj.GetComponent<AutoCrafter>() == null && obj != gameObject)
@@ -241,6 +246,7 @@ public class AutoCrafter : MonoBehaviour
         }
     }
 
+    // Calls the appropriate item crafting method in the crafting manager
     private void CraftItems(bool usingStorageComputer)
     {
         if (usingStorageComputer)
@@ -259,6 +265,7 @@ public class AutoCrafter : MonoBehaviour
         }
     }
 
+    // Handles overall operation of the machine
     private void DoWork()
     {
         float distance = Vector3.Distance(transform.position, inputObject.transform.position);
@@ -339,6 +346,7 @@ public class AutoCrafter : MonoBehaviour
         }
     }
 
+    // Called when all requirements are met for the machine to be running, activates effects
     private void Activate()
     {
         conduitItem.GetComponent<ConduitItem>().active = true;
@@ -351,6 +359,7 @@ public class AutoCrafter : MonoBehaviour
         connectionLine.SetPosition(1, inputObject.transform.position);
     }
 
+    // Called when requirements are not met for the machine to be running, disables effects
     private void ShutDown(bool disconnect)
     {
         if (craftingManager.conduitItem != null)

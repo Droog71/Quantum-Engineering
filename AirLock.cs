@@ -14,7 +14,6 @@ public class AirLock : MonoBehaviour
 
     void Start()
     {
-        // Disable particle effects when using lower video quality settings
         if (QualitySettings.GetQualityLevel() < 3)
         {
             effects.SetActive(false);
@@ -26,7 +25,6 @@ public class AirLock : MonoBehaviour
         updateTick += 1 * Time.deltaTime;
         if (updateTick > 0.5f + (address * 0.001f))
         {
-            // Block physics update
             GetComponent<PhysicsHandler>().UpdatePhysics();
             updateTick = 0;
         }

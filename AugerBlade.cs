@@ -6,8 +6,8 @@ public class AugerBlade : MonoBehaviour
 {
     public GameObject auger;
 
-    // Update is called once per frame
-    void Update()
+    // Called once per frame by unity engine
+    public void Update()
     {
         if (auger.GetComponent<AudioSource>().enabled == true)
         {

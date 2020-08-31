@@ -1,12 +1,12 @@
 using UnityEngine;
-using System.Collections;
 
 public class DarkMatter: MonoBehaviour
 {
     float size;
     public GameObject collector;
 
-    void Update()
+    // Called once per frame by unity engine
+    public void Update()
     {
         if (size < 10)
         {

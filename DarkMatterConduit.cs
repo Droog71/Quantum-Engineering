@@ -24,7 +24,8 @@ public class DarkMatterConduit : MonoBehaviour
     public ConduitItem storageComputerConduitItem;
     private GameObject builtObjects;
 
-    void Start()
+    // Called by unity engine on start up to initialize variables
+    public void Start()
     {
         connectionLine = gameObject.AddComponent<LineRenderer>();
         connectionLine.startWidth = 0.2f;
@@ -35,6 +36,51 @@ public class DarkMatterConduit : MonoBehaviour
         builtObjects = GameObject.Find("Built_Objects");
     }
 
+    // Called once per frame by unity engine
+    public void Update()
+    {
+        updateTick += 1 * Time.deltaTime;
+
+        if (updateTick > 0.5f + (address * 0.001f))
+        {
+            GetComponent<PhysicsHandler>().UpdatePhysics();
+            updateTick = 0;
+            if (inputObject == null || outputObject == null)
+            {
+                connectionAttempts += 1;
+                if (creationMethod.Equals("spawned"))
+                {
+                    if (connectionAttempts >= 30)
+                    {
+                        connectionAttempts = 0;
+                        connectionFailed = true;
+                    }
+                }
+                else
+                {
+                    if (connectionAttempts >= 120)
+                    {
+                        connectionAttempts = 0;
+                        connectionFailed = true;
+                    }
+                }
+
+                if (connectionFailed == false)
+                {
+                    FindConnections();
+                }
+            }
+
+            HandleIO();
+
+            if (inputObject != null && outputObject != null)
+            {
+                connectionAttempts = 0;
+            }
+        }
+    }
+
+    // Used to remove conduit item from storage computer if connected to one
     void OnDestroy()
     {
         if (storageComputerConduitItem != null)
@@ -43,6 +89,7 @@ public class DarkMatterConduit : MonoBehaviour
         }
     }
 
+    // The object exists, is active and is not a standard building block
     bool IsValidObject(GameObject obj)
     {
         if (obj != null)
@@ -52,11 +99,22 @@ public class DarkMatterConduit : MonoBehaviour
         return false;
     }
 
+    // The object is a potential output connection
     bool IsValidOutputObject(GameObject obj)
     {
         return outputObject == null && inputObject != null && obj != inputObject && obj != gameObject;
     }
 
+    // Returns true if the object is a storage container
+    private bool IsStorageContainer(GameObject obj)
+    {
+        return obj.GetComponent<InventoryManager>() != null 
+        && obj.GetComponent<Retriever>() == null 
+        && obj.GetComponent<AutoCrafter>() == null 
+        && !obj.GetComponent<InventoryManager>().ID.Equals("player");
+    }
+
+    // Makes connections to collectors and other conduits
     private void FindConnections()
     {
         GameObject[] allObjects = GameObject.FindGameObjectsWithTag("Built");
@@ -88,13 +146,12 @@ public class DarkMatterConduit : MonoBehaviour
                         }
                     }
                 }
-                if (obj.GetComponent<InventoryManager>() != null && obj.GetComponent<Retriever>() == null && obj.GetComponent<AutoCrafter>() == null && !obj.GetComponent<InventoryManager>().ID.Equals("player"))
+                if (IsStorageContainer(obj))
                 {
                     if (IsValidOutputObject(obj))
                     {
                         if (creationMethod.Equals("spawned"))
                         {
-                            //Debug.Log("trying to connect " + ID + " to " + obj.GetComponent<InventoryManager>().ID + " vs " + outputID);
                             if (obj.GetComponent<InventoryManager>().ID.Equals(outputID))
                             {
                                 float distance = Vector3.Distance(transform.position, obj.transform.position);
@@ -176,6 +233,7 @@ public class DarkMatterConduit : MonoBehaviour
         }
     }
 
+    // Gets values from input object and calls HandleOutput
     private void HandleIO()
     {
         if (inputObject != null)
@@ -226,6 +284,7 @@ public class DarkMatterConduit : MonoBehaviour
         HandleOutput();
     }
 
+    // Moves dark matter to the output object
     private void HandleOutput()
     {
         if (outputObject != null)
@@ -346,49 +405,6 @@ public class DarkMatterConduit : MonoBehaviour
                 {
                     creationMethod = "built";
                 }
-            }
-        }
-    }
-
-    void Update()
-    {
-        updateTick += 1 * Time.deltaTime;
-
-        if (updateTick > 0.5f + (address * 0.001f))
-        {
-            GetComponent<PhysicsHandler>().UpdatePhysics();
-            updateTick = 0;
-            if (inputObject == null || outputObject == null)
-            {
-                connectionAttempts += 1;
-                if (creationMethod.Equals("spawned"))
-                {
-                    if (connectionAttempts >= 30)
-                    {
-                        connectionAttempts = 0;
-                        connectionFailed = true;
-                    }
-                }
-                else
-                {
-                    if (connectionAttempts >= 120)
-                    {
-                        connectionAttempts = 0;
-                        connectionFailed = true;
-                    }
-                }
-
-                if (connectionFailed == false)
-                {
-                    FindConnections();
-                }
-            }
-
-            HandleIO();
-
-            if (inputObject != null && outputObject != null)
-            {
-                connectionAttempts = 0;
             }
         }
     }

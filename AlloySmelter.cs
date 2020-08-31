@@ -35,7 +35,8 @@ public class AlloySmelter : MonoBehaviour
     public bool connectionFailed;
     private GameObject builtObjects;
 
-    void Start()
+    // Called by unity engine on start up to initialize variables
+    public void Start()
     {
         powerReceiver = gameObject.AddComponent<PowerReceiver>();
         connectionLine = gameObject.AddComponent<LineRenderer>();
@@ -47,6 +48,80 @@ public class AlloySmelter : MonoBehaviour
         builtObjects = GameObject.Find("Built_Objects");
     }
 
+    // Called once per frame by unity engine
+    public void Update()
+    {
+        updateTick += 1 * Time.deltaTime;
+        if (updateTick > 0.5f + (address * 0.001f))
+        {
+            GetComponent<PhysicsHandler>().UpdatePhysics();
+            UpdatePowerReceiver();
+
+            updateTick = 0;
+
+            if (speed > 1)
+            {
+                heat = speed - 1 - cooling;
+            }
+            else
+            {
+                heat = 0;
+            }
+
+            if (heat < 0)
+            {
+                heat = 0;
+            }
+
+            if (GetComponent<AudioSource>().isPlaying == false)
+            {
+                fireObject.SetActive(false);
+            }
+
+            if (inputObject1 == null || inputObject2 == null || outputObject == null)
+            {
+                connectionAttempts += 1;
+                if (creationMethod.Equals("spawned"))
+                {
+                    if (connectionAttempts >= 30)
+                    {
+                        connectionAttempts = 0;
+                        connectionFailed = true;
+                    }
+                }
+                else
+                {
+                    if (connectionAttempts >= 120)
+                    {
+                        connectionAttempts = 0;
+                        connectionFailed = true;
+                    }
+                }
+                if (connectionFailed == false)
+                {
+                    GetOutputConduit();
+                }
+            }
+
+            if (inputObject1 != null && inputObject2 != null)
+            {
+                SmeltAlloy();
+            }
+            else
+            {
+                conduitItem.GetComponent<ConduitItem>().active = false;
+            }
+
+            OutputToConduit();
+
+            if (inputObject1 != null && inputObject2 != null && outputObject != null)
+            {
+                connectionAttempts = 0;
+            }
+        }
+    }
+
+    // The object exists, is active and is not a standard building block
     bool IsValidObject(GameObject obj)
     {
         if (obj != null)
@@ -56,12 +131,14 @@ public class AlloySmelter : MonoBehaviour
         return false;
     }
 
+    // The object is a potential output connection
     bool IsValidOutputObject(GameObject obj)
     {
         return outputObject == null && inputObject1 != null && inputObject2 != null && obj != inputObject1 && obj != inputObject2 && obj != gameObject;
     }
 
-    private void GetInputConduits()
+    // Finds a universal conduit to use as an output
+    private void GetOutputConduit()
     {
         GameObject[] allObjects = GameObject.FindGameObjectsWithTag("Built");
         foreach (GameObject obj in allObjects)
@@ -79,7 +156,7 @@ public class AlloySmelter : MonoBehaviour
                             {
                                 outputObject = obj;
                                 obj.GetComponent<UniversalConduit>().type = outputType;
-                                obj.GetComponent<UniversalConduit>().inputObject = this.gameObject;
+                                obj.GetComponent<UniversalConduit>().inputObject = gameObject;
                                 connectionLine.SetPosition(0, transform.position);
                                 connectionLine.SetPosition(1, obj.transform.position);
                                 connectionLine.enabled = true;
@@ -89,7 +166,7 @@ public class AlloySmelter : MonoBehaviour
                             {
                                 outputObject = obj;
                                 obj.GetComponent<UniversalConduit>().type = outputType;
-                                obj.GetComponent<UniversalConduit>().inputObject = this.gameObject;
+                                obj.GetComponent<UniversalConduit>().inputObject = gameObject;
                                 connectionLine.SetPosition(0, transform.position);
                                 connectionLine.SetPosition(1, obj.transform.position);
                                 connectionLine.enabled = true;
@@ -101,6 +178,7 @@ public class AlloySmelter : MonoBehaviour
         }
     }
 
+    // Consumes input items and produces an item for output
     private void SmeltAlloy()
     {
         if (inputObject1.GetComponent<UniversalConduit>() != null && inputObject2.GetComponent<UniversalConduit>() != null)
@@ -113,7 +191,7 @@ public class AlloySmelter : MonoBehaviour
             {
                 inputType2 = inputObject2.GetComponent<UniversalConduit>().type;
             }
-            //Debug.Log(ID + " receiving: " + inputObject1.GetComponent<UniversalConduit>().type + " and " + inputObject2.GetComponent<UniversalConduit>().type);
+
             if (inputObject1.GetComponent<UniversalConduit>().type.Equals("Copper Ingot") && inputObject2.GetComponent<UniversalConduit>().type.Equals("Tin Ingot"))
             {
                 outputType = "Bronze Ingot";
@@ -132,7 +210,6 @@ public class AlloySmelter : MonoBehaviour
                         fireObject.SetActive(false);
                         GetComponent<AudioSource>().enabled = false;
                     }
-                    //Debug.Log(ID + " output: " + outputType);
                 }
             }
             else if (inputObject1.GetComponent<UniversalConduit>().type.Equals("Tin Ingot") && inputObject2.GetComponent<UniversalConduit>().type.Equals("Copper Ingot"))
@@ -153,7 +230,6 @@ public class AlloySmelter : MonoBehaviour
                         fireObject.SetActive(false);
                         GetComponent<AudioSource>().enabled = false;
                     }
-                    //Debug.Log(ID + " output: " + outputType);
                 }
             }
             else if (inputObject1.GetComponent<UniversalConduit>().type.Equals("Iron Ingot") && inputObject2.GetComponent<UniversalConduit>().type.Equals("Coal"))
@@ -174,7 +250,6 @@ public class AlloySmelter : MonoBehaviour
                         fireObject.SetActive(false);
                         GetComponent<AudioSource>().enabled = false;
                     }
-                    //Debug.Log(ID + " output: " + outputType);
                 }
             }
             else if (inputObject1.GetComponent<UniversalConduit>().type.Equals("Coal") && inputObject2.GetComponent<UniversalConduit>().type.Equals("Iron Ingot"))
@@ -195,7 +270,6 @@ public class AlloySmelter : MonoBehaviour
                         fireObject.SetActive(false);
                         GetComponent<AudioSource>().enabled = false;
                     }
-                    //Debug.Log(ID + " output: " + outputType);
                 }
             }
             if (inputObject1.GetComponent<UniversalConduit>().conduitItem.GetComponent<ConduitItem>().active == false)
@@ -209,6 +283,7 @@ public class AlloySmelter : MonoBehaviour
         }
     }
 
+    // Items are moved to output conduit, sounds and special effects are created
     private void OutputToConduit()
     {
         if (outputObject != null)
@@ -218,7 +293,6 @@ public class AlloySmelter : MonoBehaviour
                 outputObject.GetComponent<UniversalConduit>().inputID = ID;
                 outputObject.GetComponent<UniversalConduit>().type = outputType;
                 outputObject.GetComponent<UniversalConduit>().speed = speed;
-                //Debug.Log("Setting " + ID + " output conduit type to: " + outputType);
                 outputID = outputObject.GetComponent<UniversalConduit>().ID;
                 if (outputAmount >= speed)
                 {
@@ -271,6 +345,7 @@ public class AlloySmelter : MonoBehaviour
         }
     }
 
+    // Gets power values from power receiver
     private void UpdatePowerReceiver()
     {
         powerReceiver.ID = ID;
@@ -284,78 +359,6 @@ public class AlloySmelter : MonoBehaviour
         else
         {
             powerReceiver.speed = speed;
-        }
-    }
-
-    void Update()
-    {
-        updateTick += 1 * Time.deltaTime;
-        if (updateTick > 0.5f + (address * 0.001f))
-        {
-            GetComponent<PhysicsHandler>().UpdatePhysics();
-            UpdatePowerReceiver();
-
-            updateTick = 0;
-
-            if (speed > 1)
-            {
-                heat = speed - 1 - cooling;
-            }
-            else
-            {
-                heat = 0;
-            }
-
-            if (heat < 0)
-            {
-                heat = 0;
-            }
-
-            if (GetComponent<AudioSource>().isPlaying == false)
-            {
-                fireObject.SetActive(false);
-            }
-
-            if (inputObject1 == null || inputObject2 == null || outputObject == null)
-            {
-                connectionAttempts += 1;
-                if (creationMethod.Equals("spawned"))
-                {
-                    if (connectionAttempts >= 30)
-                    {
-                        connectionAttempts = 0;
-                        connectionFailed = true;
-                    }
-                }
-                else
-                {
-                    if (connectionAttempts >= 120)
-                    {
-                        connectionAttempts = 0;
-                        connectionFailed = true;
-                    }
-                }
-                if (connectionFailed == false)
-                {
-                    GetInputConduits();
-                }
-            }
-
-            if (inputObject1 != null && inputObject2 != null)
-            {
-                SmeltAlloy();
-            }
-            else
-            {
-                conduitItem.GetComponent<ConduitItem>().active = false;
-            }
-
-            OutputToConduit();
-
-            if (inputObject1 != null && inputObject2 != null && outputObject != null)
-            {
-                connectionAttempts = 0;
-            }
         }
     }
 }

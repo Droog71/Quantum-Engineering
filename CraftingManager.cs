@@ -1,6 +1,4 @@
 ﻿using UnityEngine;
-using System.Collections;
-using System.Collections.Generic;
 
 public class CraftingManager : MonoBehaviour
 {
@@ -10,12 +8,14 @@ public class CraftingManager : MonoBehaviour
     public ConduitItem conduitItem;
     public bool missingItem;
 
-    void Start()
+    // Called by unity engine on start up to initialize variables
+    public void Start()
     {
         playerController = GetComponent<PlayerController>();
     }
 
-    void OnDestroy()
+    // Used to disable the conduit item if this block is destroyed
+    public void OnDestroy()
     {
         if (conduitItem != null)
         {
@@ -23,6 +23,7 @@ public class CraftingManager : MonoBehaviour
         }
     }
 
+    // Called when the player crafts an item from the inventory GUI
     public void CraftItemAsPlayer(CraftingRecipe recipe)
     {
         if (Input.GetKey(KeyCode.LeftShift))
@@ -86,6 +87,7 @@ public class CraftingManager : MonoBehaviour
         }
     }
 
+    // Called by the auto crafter when it is connected to a storage container
     public void CraftItemUsingStorageContainer(CraftingRecipe recipe)
     {
         InventorySlot[] slots = new InventorySlot[recipe.ingredients.Length];
@@ -135,6 +137,7 @@ public class CraftingManager : MonoBehaviour
         }
     }
 
+    // Called by the auto crafter when it is connected to a storage computer
     public void CraftItemUsingStorageComputer(CraftingRecipe recipe)
     {
         InventorySlot[] slots = new InventorySlot[recipe.ingredients.Length];

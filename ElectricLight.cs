@@ -10,24 +10,14 @@ public class ElectricLight : MonoBehaviour
     public GameObject powerObject;
     public PowerReceiver powerReceiver;
 
-    void Start()
+    // Called by unity engine on start up to initialize variables
+    public void Start()
     {
         powerReceiver = gameObject.AddComponent<PowerReceiver>();
     }
 
-    void OnDestroy()
-    {
-
-    }
-
-    private void UpdatePowerReceiver()
-    {
-        powerReceiver.ID = ID;
-        powerON = powerReceiver.powerON;
-        powerObject = powerReceiver.powerObject;
-    }
-
-    void Update()
+    // Called once per frame by unity engine
+    public void Update()
     {
         updateTick += 1 * Time.deltaTime;
         if (updateTick > 1 + (address * 0.001f))
@@ -45,5 +35,13 @@ public class ElectricLight : MonoBehaviour
                 GetComponent<Light>().enabled = false;
             }
         }
+    }
+
+    // Gets power values from power receiver
+    private void UpdatePowerReceiver()
+    {
+        powerReceiver.ID = ID;
+        powerON = powerReceiver.powerON;
+        powerObject = powerReceiver.powerObject;
     }
 }

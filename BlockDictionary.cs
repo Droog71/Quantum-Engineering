@@ -1,8 +1,8 @@
 ﻿using UnityEngine;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 
+//This class contains GameObject dictionaries for easily referencing different machines and other blocks
 public class BlockDictionary : MonoBehaviour
 {
     public Dictionary<string, GameObject> machineDictionary;

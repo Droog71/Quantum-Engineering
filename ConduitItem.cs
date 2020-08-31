@@ -24,6 +24,8 @@ public class ConduitItem : MonoBehaviour
         {
             if (machine != null)
             {
+                Texture billboardTexture = billboard.GetComponent<Renderer>().material.mainTexture;
+
                 if (machine.GetComponent<AlloySmelter>() != null)
                 {
                     if (machine.GetComponent<AlloySmelter>().outputObject != null)
@@ -31,18 +33,20 @@ public class ConduitItem : MonoBehaviour
                         target = machine.GetComponent<AlloySmelter>().outputObject;
                         if (textureDictionary.dictionary.ContainsKey(machine.GetComponent<AlloySmelter>().outputType))
                         {
-                            billboard.GetComponent<Renderer>().material.mainTexture = textureDictionary.dictionary[machine.GetComponent<AlloySmelter>().outputType];
+                            billboardTexture = textureDictionary.dictionary[machine.GetComponent<AlloySmelter>().outputType];
                         }
                     }
                 }
+
                 if (machine.GetComponent<Auger>() != null)
                 {
                     if (machine.GetComponent<Auger>().outputObject != null)
                     {
                         target = machine.GetComponent<Auger>().outputObject;
-                        billboard.GetComponent<Renderer>().material.mainTexture = textureDictionary.dictionary["Regolith"];
+                        billboardTexture = textureDictionary.dictionary["Regolith"];
                     }
                 }
+
                 if (machine.GetComponent<AutoCrafter>() != null)
                 {
                     if (machine.GetComponent<AutoCrafter>().inputObject != null)
@@ -50,26 +54,29 @@ public class ConduitItem : MonoBehaviour
                         target = machine.GetComponent<AutoCrafter>().inputObject;
                         if (textureDictionary.dictionary.ContainsKey(machine.GetComponent<AutoCrafter>().type))
                         {
-                            billboard.GetComponent<Renderer>().material.mainTexture = textureDictionary.dictionary[machine.GetComponent<AutoCrafter>().type];
+                            billboardTexture = textureDictionary.dictionary[machine.GetComponent<AutoCrafter>().type];
                         }
                     }
                 }
+
                 if (machine.GetComponent<DarkMatterCollector>() != null)
                 {
                     if (machine.GetComponent<DarkMatterCollector>().outputObject != null)
                     {
                         target = machine.GetComponent<DarkMatterCollector>().outputObject;
-                        billboard.GetComponent<Renderer>().material.mainTexture = textureDictionary.dictionary["Dark Matter"];
+                        billboardTexture = textureDictionary.dictionary["Dark Matter"];
                     }
                 }
+
                 if (machine.GetComponent<DarkMatterConduit>() != null)
                 {
                     if (machine.GetComponent<DarkMatterConduit>().outputObject != null)
                     {
                         target = machine.GetComponent<DarkMatterConduit>().outputObject;
-                        billboard.GetComponent<Renderer>().material.mainTexture = textureDictionary.dictionary["Dark Matter"];
+                        billboardTexture = textureDictionary.dictionary["Dark Matter"];
                     }
                 }
+
                 if (machine.GetComponent<Extruder>() != null)
                 {
                     if (machine.GetComponent<Extruder>().outputObject != null)
@@ -77,10 +84,11 @@ public class ConduitItem : MonoBehaviour
                         target = machine.GetComponent<Extruder>().outputObject;
                         if (textureDictionary.dictionary.ContainsKey(machine.GetComponent<Extruder>().outputType))
                         {
-                            billboard.GetComponent<Renderer>().material.mainTexture = textureDictionary.dictionary[machine.GetComponent<Extruder>().outputType];
+                            billboardTexture = textureDictionary.dictionary[machine.GetComponent<Extruder>().outputType];
                         }
                     }
                 }
+
                 if (machine.GetComponent<GearCutter>() != null)
                 {
                     if (machine.GetComponent<GearCutter>().outputObject != null)
@@ -88,10 +96,11 @@ public class ConduitItem : MonoBehaviour
                         target = machine.GetComponent<GearCutter>().outputObject;
                         if (textureDictionary.dictionary.ContainsKey(machine.GetComponent<GearCutter>().outputType))
                         {
-                            billboard.GetComponent<Renderer>().material.mainTexture = textureDictionary.dictionary[machine.GetComponent<GearCutter>().outputType];
+                            billboardTexture = textureDictionary.dictionary[machine.GetComponent<GearCutter>().outputType];
                         }
                     }
                 }
+
                 if (machine.GetComponent<Press>() != null)
                 {
                     if (machine.GetComponent<Press>().outputObject != null)
@@ -99,22 +108,24 @@ public class ConduitItem : MonoBehaviour
                         target = machine.GetComponent<Press>().outputObject;
                         if (textureDictionary.dictionary.ContainsKey(machine.GetComponent<Press>().outputType))
                         {
-                            billboard.GetComponent<Renderer>().material.mainTexture = textureDictionary.dictionary[machine.GetComponent<Press>().outputType];
+                            billboardTexture = textureDictionary.dictionary[machine.GetComponent<Press>().outputType];
                         }
                     }
                 }
+
                 if (machine.GetComponent<Retriever>() != null)
                 {
                     if (machine.GetComponent<Retriever>().outputObject != null)
                     {
                         target = machine.GetComponent<Retriever>().outputObject;
-                        if (textureDictionary.dictionary.ContainsKey(machine.GetComponent<Retriever>().outputObject.GetComponent<UniversalConduit>().type))
+                        if (textureDictionary.dictionary.ContainsKey(target.GetComponent<UniversalConduit>().type))
                         {
-                            billboard.GetComponent<Renderer>().material.mainTexture = textureDictionary.dictionary[machine.GetComponent<Retriever>().outputObject.GetComponent<UniversalConduit>().type];
-                            billboard2.GetComponent<Renderer>().material.mainTexture = textureDictionary.dictionary[machine.GetComponent<Retriever>().outputObject.GetComponent<UniversalConduit>().type];
+                            billboardTexture = textureDictionary.dictionary[target.GetComponent<UniversalConduit>().type];
+                            billboard2.GetComponent<Renderer>().material.mainTexture = textureDictionary.dictionary[target.GetComponent<UniversalConduit>().type];
                         }
                     }
                 }
+
                 if (machine.GetComponent<Smelter>() != null)
                 {
                     if (machine.GetComponent<Smelter>().outputObject != null)
@@ -122,7 +133,7 @@ public class ConduitItem : MonoBehaviour
                         target = machine.GetComponent<Smelter>().outputObject;
                         if (textureDictionary.dictionary.ContainsKey(machine.GetComponent<Smelter>().outputType))
                         {
-                            billboard.GetComponent<Renderer>().material.mainTexture = textureDictionary.dictionary[machine.GetComponent<Smelter>().outputType];
+                            billboardTexture = textureDictionary.dictionary[machine.GetComponent<Smelter>().outputType];
                         }
                     }
                 }
@@ -133,10 +144,11 @@ public class ConduitItem : MonoBehaviour
                         target = machine.GetComponent<UniversalConduit>().outputObject;
                         if (textureDictionary.dictionary.ContainsKey(machine.GetComponent<UniversalConduit>().type))
                         {
-                            billboard.GetComponent<Renderer>().material.mainTexture = textureDictionary.dictionary[machine.GetComponent<UniversalConduit>().type];
+                            billboardTexture = textureDictionary.dictionary[machine.GetComponent<UniversalConduit>().type];
                         }
                     }
                 }
+
                 if (machine.GetComponent<UniversalExtractor>() != null)
                 {
                     if (machine.GetComponent<UniversalExtractor>().outputObject != null)
@@ -144,11 +156,12 @@ public class ConduitItem : MonoBehaviour
                         target = machine.GetComponent<UniversalExtractor>().outputObject;
                         if (textureDictionary.dictionary.ContainsKey(machine.GetComponent<UniversalExtractor>().type))
                         {
-                            billboard.GetComponent<Renderer>().material.mainTexture = textureDictionary.dictionary[machine.GetComponent<UniversalExtractor>().type];
+                            billboardTexture = textureDictionary.dictionary[machine.GetComponent<UniversalExtractor>().type];
                         }
                     }
                 }
             }
+
             if (target != null)
             {
                 billboard.GetComponent<Renderer>().enabled = true;

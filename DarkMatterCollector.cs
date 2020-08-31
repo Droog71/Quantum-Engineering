@@ -26,7 +26,8 @@ public class DarkMatterCollector : MonoBehaviour
     public bool foundDarkMatter;
     private GameObject builtObjects;
 
-    void Start()
+    // Called by unity engine on start up to initialize variables
+    private void Start()
     {
         connectionLine = gameObject.AddComponent<LineRenderer>();
         powerReceiver = gameObject.AddComponent<PowerReceiver>();
@@ -38,72 +39,7 @@ public class DarkMatterCollector : MonoBehaviour
         builtObjects = GameObject.Find("Built_Objects");
     }
 
-    void OnDestroy()
-    {
-        if (inputLine != null)
-        {
-            Destroy(inputLine);
-        }
-    }
-
-    bool IsValidObject(GameObject obj)
-    {
-        if (obj != null)
-        {
-            return obj.transform.parent != builtObjects.transform && obj.activeInHierarchy;
-        }
-        return false;
-    }
-
-    private void FindDarkMatter()
-    {
-        DarkMatter[] allDarkMatter = FindObjectsOfType<DarkMatter>();
-        foreach (DarkMatter d in allDarkMatter)
-        {
-            GameObject obj = d.gameObject;
-            if (IsValidObject(obj))
-            {
-                float distance = Vector3.Distance(transform.position, obj.transform.position);
-                if (obj.GetComponent<DarkMatter>() != null && distance < 20)
-                {
-                    if (obj.GetComponent<DarkMatter>().collector == null)
-                    {
-                        obj.GetComponent<DarkMatter>().collector = gameObject;
-                    }
-                    if (obj.GetComponent<DarkMatter>().collector == gameObject)
-                    {
-                        if (inputLine == null && obj.GetComponent<LineRenderer>() == null)
-                        {
-                            inputLine = obj.AddComponent<LineRenderer>();
-                            inputLine.startWidth = 0.2f;
-                            inputLine.endWidth = 0.2f;
-                            inputLine.material = lineMat;
-                            inputLine.SetPosition(0, transform.position);
-                            inputLine.SetPosition(1, obj.transform.position);
-                        }
-                        foundDarkMatter = true;
-                    }
-                }
-            }
-        }
-    }
-
-    private void UpdatePowerReceiver()
-    {
-        powerReceiver.ID = ID;
-        power = powerReceiver.power;
-        powerON = powerReceiver.powerON;
-        powerObject = powerReceiver.powerObject;
-        if (powerReceiver.overClocked == true)
-        {
-            speed = powerReceiver.speed;
-        }
-        else
-        {
-            powerReceiver.speed = speed;
-        }
-    }
-
+    // Called once per frame by unity engine
     void Update()
     {
         updateTick += 1 * Time.deltaTime;
@@ -186,6 +122,76 @@ public class DarkMatterCollector : MonoBehaviour
                     FindDarkMatter();
                 }
             }
+        }
+    }
+
+    // Used to remove the connection line renderer when the block is destroyed
+    public void OnDestroy()
+    {
+        if (inputLine != null)
+        {
+            Destroy(inputLine);
+        }
+    }
+
+    // The object exists, is active and is not a standard building block
+    bool IsValidObject(GameObject obj)
+    {
+        if (obj != null)
+        {
+            return obj.transform.parent != builtObjects.transform && obj.activeInHierarchy;
+        }
+        return false;
+    }
+
+    // Finds a dark matter source node to harvest
+    private void FindDarkMatter()
+    {
+        DarkMatter[] allDarkMatter = FindObjectsOfType<DarkMatter>();
+        foreach (DarkMatter d in allDarkMatter)
+        {
+            GameObject obj = d.gameObject;
+            if (IsValidObject(obj))
+            {
+                float distance = Vector3.Distance(transform.position, obj.transform.position);
+                if (distance < 20)
+                {
+                    if (obj.GetComponent<DarkMatter>().collector == null)
+                    {
+                        obj.GetComponent<DarkMatter>().collector = gameObject;
+                    }
+                    if (obj.GetComponent<DarkMatter>().collector == gameObject)
+                    {
+                        if (inputLine == null && obj.GetComponent<LineRenderer>() == null)
+                        {
+                            inputLine = obj.AddComponent<LineRenderer>();
+                            inputLine.startWidth = 0.2f;
+                            inputLine.endWidth = 0.2f;
+                            inputLine.material = lineMat;
+                            inputLine.SetPosition(0, transform.position);
+                            inputLine.SetPosition(1, obj.transform.position);
+                        }
+                        foundDarkMatter = true;
+                    }
+                }
+            }
+        }
+    }
+
+    // Gets power values from power receiver
+    private void UpdatePowerReceiver()
+    {
+        powerReceiver.ID = ID;
+        power = powerReceiver.power;
+        powerON = powerReceiver.powerON;
+        powerObject = powerReceiver.powerObject;
+        if (powerReceiver.overClocked == true)
+        {
+            speed = powerReceiver.speed;
+        }
+        else
+        {
+            powerReceiver.speed = speed;
         }
     }
 }

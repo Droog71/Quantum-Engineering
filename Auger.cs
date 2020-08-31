@@ -21,7 +21,8 @@ public class Auger : MonoBehaviour
     public bool powerON;
     private int machineTimer;
 
-    void Start()
+    // Called by unity engine on start up to initialize variables
+    public void Start()
     {
         powerReceiver = gameObject.AddComponent<PowerReceiver>();
         connectionLine = gameObject.AddComponent<LineRenderer>();
@@ -32,23 +33,8 @@ public class Auger : MonoBehaviour
         connectionLine.enabled = false;
     }
 
-    private void UpdatePowerReceiver()
-    {
-        powerReceiver.ID = ID;
-        power = powerReceiver.power;
-        powerON = powerReceiver.powerON;
-        powerObject = powerReceiver.powerObject;
-        if (powerReceiver.overClocked == true)
-        {
-            speed = powerReceiver.speed;
-        }
-        else
-        {
-            powerReceiver.speed = speed;
-        }
-    }
-
-    void Update()
+    // Called once per frame by unity engine
+    public void Update()
     {
         updateTick += 1 * Time.deltaTime;
         if (updateTick > 0.5f + (address * 0.001f))
@@ -99,6 +85,23 @@ public class Auger : MonoBehaviour
                 GetComponent<Light>().enabled = false;
                 GetComponent<AudioSource>().enabled = false;
             }
+        }
+    }
+
+    // Gets power values from power receiver
+    private void UpdatePowerReceiver()
+    {
+        powerReceiver.ID = ID;
+        power = powerReceiver.power;
+        powerON = powerReceiver.powerON;
+        powerObject = powerReceiver.powerObject;
+        if (powerReceiver.overClocked == true)
+        {
+            speed = powerReceiver.speed;
+        }
+        else
+        {
+            powerReceiver.speed = speed;
         }
     }
 }

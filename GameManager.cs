@@ -66,9 +66,9 @@ public class GameManager : MonoBehaviour
     private Coroutine hazardRemovalCoroutine;
     List<Vector3> meteorShowerLocationList;
 
-    void Start()
+    // Called by unity engine on start up to initialize variables
+    public void Start()
     {
-        //Set up holder objects.
         ironBlocks = new GameObject[50];
         glass = new GameObject[50];
         steel = new GameObject[50];
@@ -114,20 +114,19 @@ public class GameManager : MonoBehaviour
             brickCount++;
         }
 
-        //Get a reference to the player.
+        // Get a reference to the player
         player = GameObject.Find("Player").GetComponent<PlayerController>();
 
-        //Get a reference to the rocket.
+        // Get a reference to the rocket
         rocketScript = rocketObject.GetComponent<Rocket>();
 
-        //Initiate meteor shower location list.
+        // Initiate meteor shower location list
         meteorShowerLocationList = new List<Vector3>();
     }
 
-    // Update is called once per frame
-    void Update()
+    // Called once per frame by unity engine
+    public void Update()
     {
-        //Debug.Log("Meteor Frequency: " + meteorFrequency);
         if (PlayerPrefsX.GetBool(GetComponent<StateManager>().WorldName + "Initialized") == false)
         {
             if (lander.GetComponent<InventoryManager>().initialized == true)
@@ -187,30 +186,27 @@ public class GameManager : MonoBehaviour
         {
             if (loadedBlockPhysics == false)
             {
-                //Load block physics toggle.
                 blockPhysics = PlayerPrefsX.GetBool(GetComponent<StateManager>().WorldName + "blockPhysics");
                 loadedBlockPhysics = true;
             }
             if (loadedHazardsEnabled == false)
             {
-                //Load hazards toggle.
                 hazardsEnabled = PlayerPrefsX.GetBool(GetComponent<StateManager>().WorldName + "hazardsEnabled");
                 loadedHazardsEnabled = true;
             }
             if (loadedMeteorTimer == false)
             {
-                //Load meteor shower timer.
                 meteorShowerTimer = PlayerPrefs.GetFloat(GetComponent<StateManager>().WorldName + "meteorShowerTimer");
                 loadedMeteorTimer = true;
             }
             if (loadedPirateTimer == false)
             {
-                //Load meteor shower timer.
                 pirateAttackTimer = PlayerPrefs.GetFloat(GetComponent<StateManager>().WorldName + "pirateAttackTimer");
                 loadedPirateTimer = true;
             }
         }
 
+        // A save game request is pending
         if (dataSaveRequested == true)
         {
             UnityEngine.Debug.Log("Waiting for state manager to finish current save operation...");
@@ -223,7 +219,7 @@ public class GameManager : MonoBehaviour
             }
         }
 
-        //Waiting for component destruction on combined meshes.
+        // Used to ensure components are removed before combining meshes
         if (waitingForDestroy == true)
         {
             waitTime += 1 * Time.deltaTime;
@@ -235,7 +231,7 @@ public class GameManager : MonoBehaviour
             }
         }
 
-        //Block dummy mesh deletion on init for combined mesh.
+        // Clear out dummy objects used for smooth transitions while combining meshes
         if (clearBrickDummies == true)
         {
             if (initBrickTimer < 3)
@@ -256,6 +252,8 @@ public class GameManager : MonoBehaviour
                 clearBrickDummies = false;
             }
         }
+
+        // Clear out dummy objects used for smooth transitions while combining meshes
         if (clearGlassDummies == true)
         {
             if (initGlassTimer < 3)
@@ -276,6 +274,8 @@ public class GameManager : MonoBehaviour
                 clearGlassDummies = false;
             }
         }
+
+        // Clear out dummy objects used for smooth transitions while combining meshes
         if (clearIronDummies == true)
         {
             if (initIronTimer < 3)
@@ -296,6 +296,8 @@ public class GameManager : MonoBehaviour
                 clearIronDummies = false;
             }
         }
+
+        // Clear out dummy objects used for smooth transitions while combining meshes
         if (clearSteelDummies == true)
         {
             if (initSteelTimer < 3)
@@ -317,12 +319,12 @@ public class GameManager : MonoBehaviour
             }
         }
 
-        //Pirate attacks and meteor showers
+        // Pirate attacks and meteor showers
         if (hazardsEnabled == true)
         {
             if (player.timeToDeliver == false && rocketScript.gameTime < 2000)
             {
-                //Pirate attacks
+                // Pirate attacks
                 if (rocketScript.day >= 10 && GetComponent<StateManager>().worldLoaded == true)
                 {
                     pirateAttackTimer += 1 * Time.deltaTime;
@@ -380,7 +382,7 @@ public class GameManager : MonoBehaviour
                     }
                 }
 
-                //Meteor showers
+                // Meteor showers
                 if (GetComponent<StateManager>().worldLoaded)
                 {
                     meteorShowerTimer += 1 * Time.deltaTime;
@@ -452,6 +454,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    // Removes all hazards from the world
     private void StopHazards()
     {
         pirateTimer = 0;
@@ -475,6 +478,7 @@ public class GameManager : MonoBehaviour
         hazardRemovalCoroutine = StartCoroutine(HazardRemovalCoroutine());
     }
 
+    // Removes all hazards from the world
     IEnumerator HazardRemovalCoroutine()
     {
         Meteor[] allMeteors = FindObjectsOfType<Meteor>();
@@ -497,7 +501,8 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public void RequestFinalSaveOperation() //Save all blocks before exiting the game.
+    // Saves the game on exit
+    public void RequestFinalSaveOperation()
     {
         if (working == false && exiting == false)
         {
@@ -509,27 +514,22 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    // Separates combined meshes into blocks
     public void SeparateBlocks(Vector3 target, string type, bool building)
     {
-        //Debug.Log("Chunk load called : Game Manager");
         if (working == false && exiting == false)
         {
-            //Debug.Log("Separating blocks : Game Manager");
             if (building == true)
             {
                 CombineBlocks();
             }
             separateCoroutine = StartCoroutine(BlockSeparationCoroutine(target, type));
         }
-        //StackTrace stackTrace = new StackTrace();
-        //UnityEngine.Debug.Log(stackTrace.GetFrame(1).GetMethod().Name);
         Transform[] allBlocks = builtObjects.GetComponentsInChildren<Transform>(true);
         totalBlockCount = allBlocks.Length;
-        //UnityEngine.Debug.Log("Total blocks: " + totalBlockCount);
         if (totalBlockCount >= 12000 && blockLimitReached == false)
         {
             blockLimitReached = true;
-            //UnityEngine.Debug.Log("Block limit reached!");
         }
         else if (totalBlockCount < 12000 && blockLimitReached == true)
         {
@@ -537,6 +537,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    // Separates combined meshes into blocks
     IEnumerator BlockSeparationCoroutine(Vector3 target, string type)
     {
         if (target != null)
@@ -551,10 +552,8 @@ public class GameManager : MonoBehaviour
             int totalSteel = 0;
 
             int ironSeprationInterval = 0;
-            //Debug.Log("Started mesh separation for iron at: " + System.DateTime.Now);
             foreach (GameObject obj in ironBlocks)
             {
-                //Separate all meshes within building range.
                 Transform[] blocks = ironBlocks[ironCount].GetComponentsInChildren<Transform>(true);
                 foreach (Transform i in blocks)
                 {
@@ -588,10 +587,8 @@ public class GameManager : MonoBehaviour
                     ironSeprationInterval = 0;
                 }
             }
-            //Debug.Log("Finished mesh separation for iron at: " + System.DateTime.Now);
 
             int glassSeprationInterval = 0;
-            //Debug.Log("Started mesh separation for glass at: " + System.DateTime.Now);
             foreach (GameObject obj in glass)
             {
                 Transform[] glassBlocks = glass[glassCount].GetComponentsInChildren<Transform>(true);
@@ -627,10 +624,8 @@ public class GameManager : MonoBehaviour
                     glassSeprationInterval = 0;
                 }
             }
-            //Debug.Log("Finished mesh separation for glass at: " + System.DateTime.Now);
 
             int steelSeprationInterval = 0;
-            //Debug.Log("Started mesh separation for steel at: " + System.DateTime.Now);
             foreach (GameObject obj in steel)
             {
                 Transform[] steelBlocks = steel[steelCount].GetComponentsInChildren<Transform>(true);
@@ -666,10 +661,8 @@ public class GameManager : MonoBehaviour
                     steelSeprationInterval = 0;
                 }
             }
-            //Debug.Log("Finished mesh separation for steel at: " + System.DateTime.Now);
 
             int brickSeprationInterval = 0;
-            //Debug.Log("Started mesh separation for brick at: " + System.DateTime.Now);
             foreach (GameObject obj in bricks)
             {
                 Transform[] brickBlocks = bricks[brickCount].GetComponentsInChildren<Transform>(true);
@@ -705,7 +698,6 @@ public class GameManager : MonoBehaviour
                     brickSeprationInterval = 0;
                 }
             }
-            //Debug.Log("Finished mesh separation for brick at: " + System.DateTime.Now);
 
             ironCount = 0;
             steelCount = 0;
@@ -713,7 +705,6 @@ public class GameManager : MonoBehaviour
             brickCount = 0;
             if (totalIron > 0)
             {
-                //Debug.Log("Started iron dummy creation: " + System.DateTime.Now);
                 foreach (GameObject obj in ironBlocks)
                 {
                     ironBlocksDummy[ironCount] = Instantiate(ironHolder, transform.position, transform.rotation);
@@ -730,13 +721,11 @@ public class GameManager : MonoBehaviour
                     Destroy(ironBlocks[ironCount].GetComponent<MeshFilter>());
                     ironCount++;
                 }
-                //Debug.Log("Finished iron dummy creation interval at: " + System.DateTime.Now);
                 ironMeshRequired = true;
                 waitingForDestroy = true;
             }
             if (totalGlass > 0)
             {
-                //Debug.Log("Started glass dummy creation at: " + System.DateTime.Now);
                 foreach (GameObject obj in glass)
                 {
                     glassDummy[glassCount] = Instantiate(glassHolder, transform.position, transform.rotation);
@@ -753,13 +742,11 @@ public class GameManager : MonoBehaviour
                     Destroy(glass[glassCount].GetComponent<MeshFilter>());
                     glassCount++;
                 }
-                //Debug.Log("Finished glass dummy creation interval at: " + System.DateTime.Now);
                 glassMeshRequired = true;
                 waitingForDestroy = true;
             }
             if (totalSteel > 0)
             {
-                //Debug.Log("Started steel dummy creation at: " + System.DateTime.Now);
                 foreach (GameObject obj in steel)
                 {
                     steelDummy[steelCount] = Instantiate(steelHolder, transform.position, transform.rotation);
@@ -776,13 +763,11 @@ public class GameManager : MonoBehaviour
                     Destroy(steel[steelCount].GetComponent<MeshFilter>());
                     steelCount++;
                 }
-                //Debug.Log("Finished steel dummy creation interval at: " + System.DateTime.Now);
                 steelMeshRequired = true;
                 waitingForDestroy = true;
             }
             if (totalBrick > 0)
             {
-                //Debug.Log("Started brick dummy creation interval at: " + System.DateTime.Now);
                 foreach (GameObject obj in bricks)
                 {
                     bricksDummy[brickCount] = Instantiate(brickHolder, transform.position, transform.rotation);
@@ -799,7 +784,6 @@ public class GameManager : MonoBehaviour
                     Destroy(bricks[brickCount].GetComponent<MeshFilter>());
                     brickCount++;
                 }
-                //Debug.Log("Finished brick dummy creation interval at: " + System.DateTime.Now);
                 brickMeshRequired = true;
                 waitingForDestroy = true;
             }
@@ -811,11 +795,11 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    // Creates combined meshes from placed building blocks
     public void CombineBlocks()
     {
         if (working == false && exiting == false)
         {
-            //Debug.Log("COMBINING IRON BLOCKS");
             working = true;
             int ironCount = 0;
             int steelCount = 0;
@@ -826,6 +810,7 @@ public class GameManager : MonoBehaviour
             int glassBlockCount = 0;
             int brickBlockCount = 0;
             GameObject[] allObjects = FindObjectsOfType<GameObject>();
+
             foreach (GameObject obj in allObjects)
             {
                 if (obj.GetComponent<IronBlock>() != null)
@@ -840,7 +825,6 @@ public class GameManager : MonoBehaviour
                         obj.transform.parent = ironBlocks[ironCount].transform;
                         if (initIron == false)
                         {
-                            //UnityEngine.Debug.Log("CREATING IRON BLOCK DUMMIES");
                             GameObject go = GameObject.CreatePrimitive(PrimitiveType.Cube);
                             go.transform.position = obj.transform.position;
                             go.transform.localScale = new Vector3(5, 5, 5);
@@ -851,7 +835,7 @@ public class GameManager : MonoBehaviour
                     }
                 }
             }
-            //Debug.Log("COMBINING GLASS");
+
             foreach (GameObject obj in allObjects)
             {
                 if (obj.GetComponent<Glass>() != null)
@@ -877,7 +861,7 @@ public class GameManager : MonoBehaviour
                     }
                 }
             }
-            //Debug.Log("COMBINING STEEL");
+
             foreach (GameObject obj in allObjects)
             {
                 if (obj.GetComponent<Steel>() != null)
@@ -903,7 +887,7 @@ public class GameManager : MonoBehaviour
                     }
                 }
             }
-            //Debug.Log("COMBINING BRICKS");
+
             foreach (GameObject obj in allObjects)
             {
                 if (obj.GetComponent<Brick>() != null)
@@ -918,7 +902,6 @@ public class GameManager : MonoBehaviour
                         obj.transform.parent = bricks[brickCount].transform;
                         if (initBrick == false)
                         {
-                            //UnityEngine.Debug.Log("CREATING BRICK BLOCK DUMMIES");
                             GameObject go = GameObject.CreatePrimitive(PrimitiveType.Cube);
                             go.transform.position = obj.transform.position;
                             go.transform.localScale = new Vector3(5, 5, 5);

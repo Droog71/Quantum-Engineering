@@ -30,7 +30,8 @@ public class GearCutter : MonoBehaviour
     public bool connectionFailed;
     private GameObject builtObjects;
 
-    void Start()
+    // Called by unity engine on start up to initialize variables
+    public void Start()
     {
         connectionLine = gameObject.AddComponent<LineRenderer>();
         powerReceiver = gameObject.AddComponent<PowerReceiver>();
@@ -42,7 +43,8 @@ public class GearCutter : MonoBehaviour
         builtObjects = GameObject.Find("Built_Objects");
     }
 
-    bool IsValidObject(GameObject obj)
+    // The object exists, is active and is not a standard building block
+    private bool IsValidObject(GameObject obj)
     {
         if (obj != null)
         {
@@ -51,6 +53,7 @@ public class GearCutter : MonoBehaviour
         return false;
     }
 
+    // The object is a potential output connection
     bool IsValidOutputObject(GameObject obj)
     {
         return outputObject == null && inputObject != null && obj != inputObject && obj != gameObject;

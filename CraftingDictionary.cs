@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 
+// This class provides the crafting recipe dictionary used by the crafting manager
 public class CraftingDictionary : MonoBehaviour
 {
     public Dictionary<string, CraftingRecipe> dictionary;

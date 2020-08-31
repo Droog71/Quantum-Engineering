@@ -1,8 +1,4 @@
-﻿using UnityEngine;
-using System.Collections;
-using System.Collections.Generic;
-
-public class CraftingRecipe
+﻿public class CraftingRecipe
 {
     public string[] ingredients;
     public int[] amounts;
