@@ -16,6 +16,7 @@ public class HeldItemSway : MonoBehaviour
         originalRotation = transform.localRotation;
     }
 
+    // Resets the object's rotation
     public void Reset()
     {
         transform.localRotation = originalRotation;

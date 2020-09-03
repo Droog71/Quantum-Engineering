@@ -14,14 +14,8 @@ public class InventoryManager : MonoBehaviour
     public int maxStackSize = 1000;
     public bool itemAdded;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
+    // Called once per frame by unity engine
+    public void Update()
     {
         if (ID != "unassigned" && initialized == false)
         {
@@ -71,6 +65,7 @@ public class InventoryManager : MonoBehaviour
         }
     }
 
+    // Saves the inventory's contents to disk
     public void SaveData()
     {
         if (initialized == true)
@@ -96,6 +91,7 @@ public class InventoryManager : MonoBehaviour
         }
     }
 
+    // Adds an item to the inventory
     public void AddItem(string type, int amount)
     {
         itemAdded = false;

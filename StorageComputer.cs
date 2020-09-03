@@ -18,21 +18,16 @@ public class StorageComputer : MonoBehaviour
     public GameObject conduitItem;
     public PowerReceiver powerReceiver;
 
-    void Start()
+    // Called by unity engine on start up to initialize variables
+    public void Start()
     {
         powerReceiver = gameObject.AddComponent<PowerReceiver>();
         computerContainerList = new List<InventoryManager>();
         spawnedConnectionList = new List<GameObject>();
     }
 
-    private void UpdatePowerReceiver()
-    {
-        powerReceiver.ID = ID;
-        powerON = powerReceiver.powerON;
-        powerObject = powerReceiver.powerObject;
-    }
-
-    void Update()
+    // Called once per frame by unity engine
+    public void Update()
     {
         updateTick += 1 * Time.deltaTime;
         if (updateTick > 0.5f + (address * 0.001f))
@@ -70,32 +65,6 @@ public class StorageComputer : MonoBehaviour
         }
     }
 
-    void OnDestroy()
-    {
-        GameObject[] spawnedConnections = spawnedConnectionList.ToArray();
-        foreach (GameObject obj in spawnedConnections)
-        {
-            if (obj != null)
-            {
-                obj.SetActive(false);
-            }
-        }
-    }
-
-    public void Reboot()
-    {
-        GameObject[] spawnedConnections = spawnedConnectionList.ToArray();
-        foreach (GameObject obj in spawnedConnections)
-        {
-            if (obj != null)
-            {
-                obj.SetActive(false);
-            }
-        }
-        initialized = false;
-        bootTimer = 0;
-    }
-
     // Called when player interacts with the computer.
     public void GetContainers()
     {
@@ -114,7 +83,7 @@ public class StorageComputer : MonoBehaviour
             GameObject containerObject = container.gameObject;
             if (container.initialized == true && containerObject.GetComponent<RailCart>() == null && containerObject.GetComponent<Retriever>() == null && containerObject.GetComponent<AutoCrafter>() == null && container.ID != "player" && container.ID != "Rocket")
             {
-                if (Vector3.Distance(transform.position,containerObject.transform.position) < 40)
+                if (Vector3.Distance(transform.position, containerObject.transform.position) < 40)
                 {
                     computerContainerList.Add(container);
                     GameObject spawnedConnection = Instantiate(connectionObject, containerObject.transform.position, containerObject.transform.rotation);
@@ -131,5 +100,41 @@ public class StorageComputer : MonoBehaviour
             }
         }
         computerContainers = computerContainerList.ToArray();
+    }
+
+    // Gets power values from power receiver
+    private void UpdatePowerReceiver()
+    {
+        powerReceiver.ID = ID;
+        powerON = powerReceiver.powerON;
+        powerObject = powerReceiver.powerObject;
+    }
+
+    // Removes all connections and allows the computer to search for storage containers.
+    public void Reboot()
+    {
+        GameObject[] spawnedConnections = spawnedConnectionList.ToArray();
+        foreach (GameObject obj in spawnedConnections)
+        {
+            if (obj != null)
+            {
+                obj.SetActive(false);
+            }
+        }
+        initialized = false;
+        bootTimer = 0;
+    }
+
+    // Removes line renderers when the machine is destroyed.
+    public void OnDestroy()
+    {
+        GameObject[] spawnedConnections = spawnedConnectionList.ToArray();
+        foreach (GameObject obj in spawnedConnections)
+        {
+            if (obj != null)
+            {
+                obj.SetActive(false);
+            }
+        }
     }
 }

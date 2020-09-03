@@ -157,9 +157,9 @@ public class Press : MonoBehaviour
                         }
                         else
                         {
-                            machineTimer = 0;
                             conduitItem.GetComponent<ConduitItem>().active = false;
                             GetComponent<Light>().enabled = false;
+                            machineTimer = 0;
                         }
                     }
                 }

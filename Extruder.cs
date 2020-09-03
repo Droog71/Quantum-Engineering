@@ -95,13 +95,11 @@ public class Extruder : MonoBehaviour
             {
                 if (inputObject.GetComponent<UniversalConduit>() != null)
                 {
-                    // Determine the item to be processed before it enters the inventory
                     if (amount < 1)
                     {
                         SetOutputType();
                     }
 
-                    // Disable effects when there is no input to this machine
                     if (inputObject.GetComponent<UniversalConduit>().conduitItem.GetComponent<ConduitItem>().active == false)
                     {
                         conduitItem.GetComponent<ConduitItem>().active = false;
@@ -111,7 +109,6 @@ public class Extruder : MonoBehaviour
             }
             else
             {
-                // With no input object, this machine is inactive
                 conduitItem.GetComponent<ConduitItem>().active = false;
                 GetComponent<Light>().enabled = false;
             }
@@ -235,6 +232,7 @@ public class Extruder : MonoBehaviour
                         {
                             conduitItem.GetComponent<ConduitItem>().active = false;
                             GetComponent<Light>().enabled = false;
+                            machineTimer = 0;
                         }
                     }
                 }

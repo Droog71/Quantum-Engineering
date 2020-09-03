@@ -11,7 +11,8 @@ public class InteractionController : MonoBehaviour
     private StorageInteraction storageInteraction;
     private BlockInteraction blockInteraction;
 
-    void Start()
+    // Called by unity engine on start up to initialize variables
+    public void Start()
     {
         playerController = GetComponent<PlayerController>();
         blockDictionary = GetComponent<BlockDictionary>();
@@ -20,7 +21,8 @@ public class InteractionController : MonoBehaviour
         blockInteraction = gameObject.AddComponent<BlockInteraction>();
     }
 
-    void Update()
+    // Called once per frame by unity engine
+    public void Update()
     {
         //RAYCAST AND ASSOCIATED DATA FOR INTERACTING WITH MACHINES AND OTHER OBJECTS
         if (Physics.Raycast(Camera.main.gameObject.transform.position, Camera.main.gameObject.transform.forward, out playerController.playerLookHit, 40))
@@ -151,6 +153,7 @@ public class InteractionController : MonoBehaviour
         }
     }
 
+    // Returns true if the object in question is a resource node
     private Boolean IsResource(GameObject obj)
     {
         if (obj.GetComponent<DarkMatter>() != null || obj.GetComponent<UniversalResource>() != null)
@@ -160,6 +163,7 @@ public class InteractionController : MonoBehaviour
         return false;
     }
 
+    // Returns true if the object in question is a storage container
     private Boolean IsStorageContainer(GameObject obj)
     {
         if (obj.GetComponent<InventoryManager>() != null && obj.GetComponent<Retriever>() == null && obj.GetComponent<AutoCrafter>() == null)
@@ -169,6 +173,7 @@ public class InteractionController : MonoBehaviour
         return false;
     }
 
+    // Destroys an object in the world and adds it's associated inventory item to the player's inventory
     public void CollectObject(string type)
     {
         bool spaceAvailable = false;
@@ -192,6 +197,7 @@ public class InteractionController : MonoBehaviour
         }
     }
 
+    // Opens the machine GUI
     public void OpenMachineGUI()
     {
         if (playerController.machineGUIopen == false)
@@ -231,6 +237,7 @@ public class InteractionController : MonoBehaviour
         }
     }
 
+    // Called when the player is no longer looking at any interactive objects
     private void EndInteraction()
     {
         if (playerController.machineGUIopen == true)

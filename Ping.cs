@@ -1,6 +1,5 @@
 ﻿using UnityEngine;
 using UnityEngine.SceneManagement;
-using System.Collections;
 
 public class Ping : MonoBehaviour
 {
@@ -16,7 +15,8 @@ public class Ping : MonoBehaviour
     public Material iceMat;
     public Material coalMat;
 
-    void Start()
+    // Called by unity engine on start up to initialize variables
+    public void Start()
     {
         if (SceneManager.GetActiveScene().name.Equals("QE_World_Atmo"))
         {
@@ -52,7 +52,8 @@ public class Ping : MonoBehaviour
         }
     }
 
-    void Update()
+    // Called once per frame by unity engine
+    public void Update()
     {
         transform.LookAt(GameObject.Find("Player").transform);
         timer += 1 * Time.deltaTime;

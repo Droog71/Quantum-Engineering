@@ -30,7 +30,8 @@ public class Smelter : MonoBehaviour
     public bool connectionFailed;
     private GameObject builtObjects;
 
-    void Start()
+    // Called by unity engine on start up to initialize variables
+    public void Start()
     {
         powerReceiver = gameObject.AddComponent<PowerReceiver>();
         connectionLine = gameObject.AddComponent<LineRenderer>();
@@ -42,23 +43,8 @@ public class Smelter : MonoBehaviour
         builtObjects = GameObject.Find("Built_Objects");
     }
 
-    private void UpdatePowerReceiver()
-    {
-        powerReceiver.ID = ID;
-        power = powerReceiver.power;
-        powerON = powerReceiver.powerON;
-        powerObject = powerReceiver.powerObject;
-        if (powerReceiver.overClocked == true)
-        {
-            speed = powerReceiver.speed;
-        }
-        else
-        {
-            powerReceiver.speed = speed;
-        }
-    }
-
-    void Update()
+    // Called once per frame by unity engine
+    public void Update()
     {
         updateTick += 1 * Time.deltaTime;
         if (updateTick > 0.5f + (address * 0.001f))
@@ -104,62 +90,7 @@ public class Smelter : MonoBehaviour
                 }
                 if (connectionFailed == false)
                 {
-                    GameObject[] allObjects = GameObject.FindGameObjectsWithTag("Built");
-                    foreach (GameObject obj in allObjects)
-                    {
-                        if (obj != null)
-                        {
-                            if (obj.transform.parent != builtObjects.transform)
-                            {
-                                if (obj.activeInHierarchy)
-                                {
-                                    if (obj.GetComponent<UniversalConduit>() != null)
-                                    {
-                                        float distance = Vector3.Distance(transform.position, obj.transform.position);
-                                        if (distance < 20)
-                                        {
-                                            if (outputObject == null)
-                                            {
-                                                if (inputObject != null)
-                                                {
-                                                    if (obj != inputObject && obj != this.gameObject)
-                                                    {
-                                                        if (obj.GetComponent<UniversalConduit>().inputObject == null)
-                                                        {
-                                                            if (creationMethod.Equals("spawned"))
-                                                            {
-                                                                //Debug.Log("trying to connect " + ID + " to " + obj.GetComponent<UniversalConduit>().ID + " vs " + outputID);
-                                                                if (obj.GetComponent<UniversalConduit>().ID.Equals(outputID))
-                                                                {
-                                                                    outputObject = obj;
-                                                                    obj.GetComponent<UniversalConduit>().type = outputType;
-                                                                    //Debug.Log("Setting " + ID + " output conduit type to: " + outputType);
-                                                                    obj.GetComponent<UniversalConduit>().inputObject = this.gameObject;
-                                                                    connectionLine.SetPosition(0, transform.position);
-                                                                    connectionLine.SetPosition(1, obj.transform.position);
-                                                                    connectionLine.enabled = true;
-                                                                    creationMethod = "built";
-                                                                }
-                                                            }
-                                                            else if (creationMethod.Equals("built"))
-                                                            {
-                                                                outputObject = obj;
-                                                                obj.GetComponent<UniversalConduit>().type = outputType;
-                                                                obj.GetComponent<UniversalConduit>().inputObject = this.gameObject;
-                                                                connectionLine.SetPosition(0, transform.position);
-                                                                connectionLine.SetPosition(1, obj.transform.position);
-                                                                connectionLine.enabled = true;
-                                                            }
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
+                    ConnectToOutput();
                 }
             }
             if (inputObject != null)
@@ -168,28 +99,9 @@ public class Smelter : MonoBehaviour
                 {
                     if (amount < 1)
                     {
-                        inputType = inputObject.GetComponent<UniversalConduit>().type;
-                        if (inputObject.GetComponent<UniversalConduit>().type.Equals("Copper Ore"))
-                        {
-                            outputType = "Copper Ingot";
-                        }
-                        if (inputObject.GetComponent<UniversalConduit>().type.Equals("Iron Ore"))
-                        {
-                            outputType = "Iron Ingot";
-                        }
-                        if (inputObject.GetComponent<UniversalConduit>().type.Equals("Tin Ore"))
-                        {
-                            outputType = "Tin Ingot";
-                        }
-                        if (inputObject.GetComponent<UniversalConduit>().type.Equals("Aluminum Ore"))
-                        {
-                            outputType = "Aluminum Ingot";
-                        }
-                        if (inputObject.GetComponent<UniversalConduit>().type.Equals("Regolith"))
-                        {
-                            outputType = "Glass Block";
-                        }
+                        SetOutputType();
                     }
+
                     if (inputObject.GetComponent<UniversalConduit>().conduitItem.GetComponent<ConduitItem>().active == false)
                     {
                         conduitItem.GetComponent<ConduitItem>().active = false;
@@ -200,68 +112,164 @@ public class Smelter : MonoBehaviour
             {
                 conduitItem.GetComponent<ConduitItem>().active = false;
             }
-            if (outputObject != null)
+
+            HandleOutput();
+
+            if (inputObject != null && outputObject != null)
             {
-                if (outputObject.GetComponent<UniversalConduit>() != null)
+                connectionAttempts = 0;
+            }
+        }
+    }
+
+    private void ConnectToOutput()
+    {
+        GameObject[] allObjects = GameObject.FindGameObjectsWithTag("Built");
+        foreach (GameObject obj in allObjects)
+        {
+            if (IsValidObject(obj))
+            {
+                if (obj.GetComponent<UniversalConduit>() != null)
                 {
-                    outputObject.GetComponent<UniversalConduit>().inputID = ID;
-                    outputObject.GetComponent<UniversalConduit>().type = outputType;
-                    outputObject.GetComponent<UniversalConduit>().speed = speed;
-                    //Debug.Log("Setting " + ID + " output conduit type to: " + outputType);
-                    outputID = outputObject.GetComponent<UniversalConduit>().ID;
-                    if (amount >= speed)
+                    float distance = Vector3.Distance(transform.position, obj.transform.position);
+                    if (IsValidOutputObject(obj) && distance < 20)
                     {
-                        if (outputType.Equals(outputObject.GetComponent<UniversalConduit>().type))
+                        if (obj.GetComponent<UniversalConduit>().inputObject == null)
                         {
-                            if (powerON == true && connectionFailed == false && inputObject != null && speed > 0)
+                            if (creationMethod.Equals("spawned") && obj.GetComponent<UniversalConduit>().ID.Equals(outputID))
                             {
-                                conduitItem.GetComponent<ConduitItem>().active = true;
-                                if (GetComponent<AudioSource>().isPlaying == false)
-                                {
-                                    GetComponent<AudioSource>().Play();
-                                    fireObject.SetActive(true);
-                                }
-                                machineTimer += 1;
-                                if (machineTimer > 5 - (address * 0.01f))
-                                {
-                                    outputObject.GetComponent<UniversalConduit>().amount += speed - heat;
-                                    amount -= speed - heat;
-                                    machineTimer = 0;
-                                }
+                                outputObject = obj;
+                                obj.GetComponent<UniversalConduit>().type = outputType;
+                                obj.GetComponent<UniversalConduit>().inputObject = this.gameObject;
+                                connectionLine.SetPosition(0, transform.position);
+                                connectionLine.SetPosition(1, obj.transform.position);
+                                connectionLine.enabled = true;
+                                creationMethod = "built";
                             }
-                            else
+                            else if (creationMethod.Equals("built"))
                             {
-                                conduitItem.GetComponent<ConduitItem>().active = false;
+                                outputObject = obj;
+                                obj.GetComponent<UniversalConduit>().type = outputType;
+                                obj.GetComponent<UniversalConduit>().inputObject = this.gameObject;
+                                connectionLine.SetPosition(0, transform.position);
+                                connectionLine.SetPosition(1, obj.transform.position);
+                                connectionLine.enabled = true;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private void SetOutputType()
+    {
+        inputType = inputObject.GetComponent<UniversalConduit>().type;
+        if (inputObject.GetComponent<UniversalConduit>().type.Equals("Copper Ore"))
+        {
+            outputType = "Copper Ingot";
+        }
+        if (inputObject.GetComponent<UniversalConduit>().type.Equals("Iron Ore"))
+        {
+            outputType = "Iron Ingot";
+        }
+        if (inputObject.GetComponent<UniversalConduit>().type.Equals("Tin Ore"))
+        {
+            outputType = "Tin Ingot";
+        }
+        if (inputObject.GetComponent<UniversalConduit>().type.Equals("Aluminum Ore"))
+        {
+            outputType = "Aluminum Ingot";
+        }
+        if (inputObject.GetComponent<UniversalConduit>().type.Equals("Regolith"))
+        {
+            outputType = "Glass Block";
+        }
+    }
+
+    private void HandleOutput()
+    {
+        if (outputObject != null)
+        {
+            if (outputObject.GetComponent<UniversalConduit>() != null)
+            {
+                outputObject.GetComponent<UniversalConduit>().inputID = ID;
+                outputObject.GetComponent<UniversalConduit>().type = outputType;
+                outputObject.GetComponent<UniversalConduit>().speed = speed;
+                outputID = outputObject.GetComponent<UniversalConduit>().ID;
+                if (amount >= speed)
+                {
+                    if (outputType.Equals(outputObject.GetComponent<UniversalConduit>().type))
+                    {
+                        if (powerON == true && connectionFailed == false && inputObject != null && speed > 0)
+                        {
+                            conduitItem.GetComponent<ConduitItem>().active = true;
+                            if (GetComponent<AudioSource>().isPlaying == false)
+                            {
+                                GetComponent<AudioSource>().Play();
+                                fireObject.SetActive(true);
+                            }
+                            machineTimer += 1;
+                            if (machineTimer > 5 - (address * 0.01f))
+                            {
+                                outputObject.GetComponent<UniversalConduit>().amount += speed - heat;
+                                amount -= speed - heat;
                                 machineTimer = 0;
                             }
                         }
                         else
                         {
                             conduitItem.GetComponent<ConduitItem>().active = false;
+                            machineTimer = 0;
                         }
                     }
                 }
-                else
+            }
+        }
+        else
+        {
+            conduitItem.GetComponent<ConduitItem>().active = false;
+            connectionLine.enabled = false;
+            if (connectionFailed == true)
+            {
+                if (creationMethod.Equals("spawned"))
                 {
-                    conduitItem.GetComponent<ConduitItem>().active = false;
+                    creationMethod = "built";
                 }
             }
-            else
-            {
-                conduitItem.GetComponent<ConduitItem>().active = false;
-                connectionLine.enabled = false;
-                if (connectionFailed == true)
-                {
-                    if (creationMethod.Equals("spawned"))
-                    {
-                        creationMethod = "built";
-                    }
-                }
-            }
-            if (inputObject != null && outputObject != null)
-            {
-                connectionAttempts = 0;
-            }
+        }
+    }
+
+    // The object exists, is active and is not a standard building block
+    private bool IsValidObject(GameObject obj)
+    {
+        if (obj != null)
+        {
+            return obj.transform.parent != builtObjects.transform && obj.activeInHierarchy;
+        }
+        return false;
+    }
+
+    // The object is a potential output connection
+    private bool IsValidOutputObject(GameObject obj)
+    {
+        return outputObject == null && inputObject != null && obj != inputObject && obj != gameObject;
+    }
+
+    // Gets power values from power receiver
+    private void UpdatePowerReceiver()
+    {
+        powerReceiver.ID = ID;
+        power = powerReceiver.power;
+        powerON = powerReceiver.powerON;
+        powerObject = powerReceiver.powerObject;
+        if (powerReceiver.overClocked == true)
+        {
+            speed = powerReceiver.speed;
+        }
+        else
+        {
+            powerReceiver.speed = speed;
         }
     }
 }

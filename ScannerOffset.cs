@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class ScannerOffset : MonoBehaviour
 {
@@ -8,10 +6,6 @@ public class ScannerOffset : MonoBehaviour
     public GameObject adjustedScanner;
     public GameObject adjustedScanner2;
 
-    void Start()
-    {
-
-    }
     void Update()
     {
         if (Camera.main.fieldOfView > 66.6667 && Camera.main.fieldOfView < 73.3334)

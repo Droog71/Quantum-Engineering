@@ -8,6 +8,7 @@ public class PlayerController : MonoBehaviour
     private Coroutine quitCoroutine;
     private Vector3 originalPosition;
     private LaserController laserController;
+    private BlockSelector blockSelector;
 
     public Vector3 destroyStartPosition;
     public Vector3 buildStartPosition;
@@ -189,7 +190,8 @@ public class PlayerController : MonoBehaviour
 
     public Material constructionMat;
 
-    void Start()
+    // Called by unity engine on start up to initialize variables
+    public void Start()
     {
         //REFERENCE TO THE STATE MANAGER
         stateManager = GameObject.Find("GameManager").GetComponent<StateManager>();
@@ -227,9 +229,12 @@ public class PlayerController : MonoBehaviour
             scannerFlash.GetComponent<Light>().color = Color.white;
             scannerFlash.GetComponent<Light>().intensity = 1;
         }
+
+        blockSelector = new BlockSelector(this);
     }
 
-    void Update()
+    // Called once per frame by unity engine
+    public void Update()
     {
         //DISABLE MOUSE LOOK DURING MAIN MENU SEQUENCE
         if (gameStarted == false)
@@ -956,394 +961,12 @@ public class PlayerController : MonoBehaviour
                 {
                     if (cInput.GetKeyDown("Next Item"))
                     {
-                        //Debug.Log("Build type: " + buildType);
-                        if (buildType.Equals("Glass Block"))
-                        {
-                            buildType = "Brick";
-                            previousBuildType = "Glass Block";
-                            nextBuildType = "Iron Block";
-                        }
-                        else if (buildType.Equals("Brick"))
-                        {
-                            buildType = "Iron Block";
-                            previousBuildType = "Brick";
-                            nextBuildType = "Iron Ramp";
-                        }
-                        else if (buildType.Equals("Iron Block"))
-                        {
-                            buildType = "Iron Ramp";
-                            previousBuildType = "Iron Block";
-                            nextBuildType = "Steel Block";
-                        }
-                        else if (buildType.Equals("Iron Ramp"))
-                        {
-                            buildType = "Steel Block";
-                            previousBuildType = "Iron Ramp";
-                            nextBuildType = "Steel Ramp";
-                        }
-                        else if (buildType.Equals("Steel Block"))
-                        {
-                            buildType = "Steel Ramp";
-                            previousBuildType = "Steel Block";
-                            nextBuildType = "Quantum Hatchway";
-                        }
-                        else if (buildType.Equals("Steel Ramp"))
-                        {
-                            buildType = "Quantum Hatchway";
-                            previousBuildType = "Steel Ramp";
-                            nextBuildType = "Storage Container";
-                        }
-                        else if (buildType.Equals("Quantum Hatchway"))
-                        {
-                            buildType = "Storage Container";
-                            previousBuildType = "Quantum Hatchway";
-                            nextBuildType = "Storage Computer";
-                        }
-                        else if (buildType.Equals("Storage Container"))
-                        {
-                            buildType = "Storage Computer";
-                            previousBuildType = "Storage Container";
-                            nextBuildType = "Electric Light";
-                        }
-                        else if (buildType.Equals("Storage Computer"))
-                        {
-                            buildType = "Electric Light";
-                            previousBuildType = "Storage Computer";
-                            nextBuildType = "Auger";
-                        }
-                        else if (buildType.Equals("Electric Light"))
-                        {
-                            buildType = "Auger";
-                            previousBuildType = "Electric Light";
-                            nextBuildType = "Extruder";
-                        }
-                        else if (buildType.Equals("Auger"))
-                        {
-                            buildType = "Extruder";
-                            previousBuildType = "Auger";
-                            nextBuildType = "Press";
-                        }
-                        else if (buildType.Equals("Extruder"))
-                        {
-                            buildType = "Press";
-                            previousBuildType = "Extruder";
-                            nextBuildType = "Smelter";
-                        }
-                        else if (buildType.Equals("Press"))
-                        {
-                            buildType = "Smelter";
-                            previousBuildType = "Press";
-                            nextBuildType = "Universal Conduit";
-                        }
-                        else if (buildType.Equals("Smelter"))
-                        {
-                            buildType = "Universal Conduit";
-                            previousBuildType = "Smelter";
-                            nextBuildType = "Retriever";
-                        }
-                        else if (buildType.Equals("Universal Conduit"))
-                        {
-                            buildType = "Retriever";
-                            previousBuildType = "Universal Conduit";
-                            nextBuildType = "Rail Cart Hub";
-                        }
-                        else if (buildType.Equals("Retriever"))
-                        {
-                            buildType = "Rail Cart Hub";
-                            previousBuildType = "Retriever";
-                            nextBuildType = "Rail Cart";
-                        }
-                        else if (buildType.Equals("Rail Cart Hub"))
-                        {
-                            buildType = "Rail Cart";
-                            previousBuildType = "Rail Cart Hub";
-                            nextBuildType = "Universal Extractor";
-                        }
-                        else if (buildType.Equals("Rail Cart"))
-                        {
-                            buildType = "Universal Extractor";
-                            previousBuildType = "Rail Cart";
-                            nextBuildType = "Solar Panel";
-                        }
-                        else if (buildType.Equals("Universal Extractor"))
-                        {
-                            buildType = "Solar Panel";
-                            previousBuildType = "Universal Extractor";
-                            nextBuildType = "Generator";
-                        }
-                        else if (buildType.Equals("Solar Panel"))
-                        {
-                            buildType = "Generator";
-                            previousBuildType = "Solar Panel";
-                            nextBuildType = "Nuclear Reactor";
-                        }
-                        else if (buildType.Equals("Generator"))
-                        {
-                            buildType = "Nuclear Reactor";
-                            previousBuildType = "Generator";
-                            nextBuildType = "Reactor Turbine";
-                        }
-                        else if (buildType.Equals("Nuclear Reactor"))
-                        {
-                            buildType = "Reactor Turbine";
-                            previousBuildType = "Nuclear Reactor";
-                            nextBuildType = "Power Conduit";
-                        }
-                        else if (buildType.Equals("Reactor Turbine"))
-                        {
-                            buildType = "Power Conduit";
-                            previousBuildType = "Reactor Turbine";
-                            nextBuildType = "Heat Exchanger";
-                        }
-                        else if (buildType.Equals("Power Conduit"))
-                        {
-                            buildType = "Heat Exchanger";
-                            previousBuildType = "Power Conduit";
-                            nextBuildType = "Alloy Smelter";
-                        }
-                        else if (buildType.Equals("Heat Exchanger"))
-                        {
-                            buildType = "Alloy Smelter";
-                            previousBuildType = "Heat Exchanger";
-                            nextBuildType = "Gear Cutter";
-                        }
-                        else if (buildType.Equals("Alloy Smelter"))
-                        {
-                            buildType = "Gear Cutter";
-                            previousBuildType = "Alloy Smelter";
-                            nextBuildType = "Auto Crafter";
-                        }
-                        else if (buildType.Equals("Gear Cutter"))
-                        {
-                            buildType = "Auto Crafter";
-                            previousBuildType = "Gear Cutter";
-                            nextBuildType = "Dark Matter Conduit";
-                        }
-                        else if (buildType.Equals("Auto Crafter"))
-                        {
-                            buildType = "Dark Matter Conduit";
-                            previousBuildType = "Auto Crafter";
-                            nextBuildType = "Dark Matter Collector";
-                        }
-                        else if (buildType.Equals("Dark Matter Conduit"))
-                        {
-                            buildType = "Dark Matter Collector";
-                            previousBuildType = "Dark Matter Conduit";
-                            nextBuildType = "Turret";
-                        }
-                        else if (buildType.Equals("Dark Matter Collector"))
-                        {
-                            buildType = "Turret";
-                            previousBuildType = "Dark Matter Collector";
-                            nextBuildType = "Glass Block";
-                        }
-                        else if (buildType.Equals("Turret"))
-                        {
-                            buildType = "Glass Block";
-                            previousBuildType = "Turret";
-                            nextBuildType = "Iron Block";
-                        }
-                        displayingBuildItem = true;
-                        buildItemDisplayTimer = 0;
-                        destroyTimer = 0;
-                        buildTimer = 0;
-                        playButtonSound();
+                        blockSelector.nextBlock();
                     }
 
                     if (cInput.GetKeyDown("Previous Item"))
                     {
-                        //Debug.Log("Build type: " + buildType);
-                        if (buildType.Equals("Turret"))
-                        {
-                            buildType = "Dark Matter Collector";
-                            previousBuildType = "Dark Matter Conduit";
-                            nextBuildType = "Turret";
-                        }
-                        else if (buildType.Equals("Dark Matter Collector"))
-                        {
-                            buildType = "Dark Matter Conduit";
-                            previousBuildType = "Auto Crafter";
-                            nextBuildType = "Dark Matter Collector";
-                        }
-                        else if (buildType.Equals("Dark Matter Conduit"))
-                        {
-                            buildType = "Auto Crafter";
-                            previousBuildType = "Gear Cutter";
-                            nextBuildType = "Dark Matter Conduit";
-                        }
-                        else if (buildType.Equals("Auto Crafter"))
-                        {
-                            buildType = "Gear Cutter";
-                            previousBuildType = "Alloy Smelter";
-                            nextBuildType = "Auto Crafter";
-                        }
-                        else if (buildType.Equals("Gear Cutter"))
-                        {
-                            buildType = "Alloy Smelter";
-                            previousBuildType = "Heat Exchanger";
-                            nextBuildType = "Gear Cutter";
-                        }
-                        else if (buildType.Equals("Alloy Smelter"))
-                        {
-                            buildType = "Heat Exchanger";
-                            previousBuildType = "Power Conduit";
-                            nextBuildType = "Alloy Smelter";
-                        }
-                        else if (buildType.Equals("Heat Exchanger"))
-                        {
-                            buildType = "Power Conduit";
-                            previousBuildType = "Reactor Turbine";
-                            nextBuildType = "Heat Exchanger";
-                        }
-                        else if (buildType.Equals("Power Conduit"))
-                        {
-                            buildType = "Reactor Turbine";
-                            previousBuildType = "Nuclear Reactor";
-                            nextBuildType = "Power Conduit";
-                        }
-                        else if (buildType.Equals("Reactor Turbine"))
-                        {
-                            buildType = "Nuclear Reactor";
-                            previousBuildType = "Generator";
-                            nextBuildType = "Reactor Turbine";
-                        }
-                        else if (buildType.Equals("Nuclear Reactor"))
-                        {
-                            buildType = "Generator";
-                            previousBuildType = "Solar Panel";
-                            nextBuildType = "Nuclear Reactor";
-                        }
-                        else if (buildType.Equals("Generator"))
-                        {
-                            buildType = "Solar Panel";
-                            previousBuildType = "Universal Extractor";
-                            nextBuildType = "Generator";
-                        }
-                        else if (buildType.Equals("Solar Panel"))
-                        {
-                            buildType = "Universal Extractor";
-                            previousBuildType = "Rail Cart";
-                            nextBuildType = "Solar Panel";
-                        }
-                        else if (buildType.Equals("Universal Extractor"))
-                        {
-                            buildType = "Rail Cart";
-                            previousBuildType = "Rail Cart Hub";
-                            nextBuildType = "Universal Extractor";
-                        }
-                        else if (buildType.Equals("Rail Cart"))
-                        {
-                            buildType = "Rail Cart Hub";
-                            previousBuildType = "Retriever";
-                            nextBuildType = "Rail Cart";
-                        }
-                        else if (buildType.Equals("Rail Cart Hub"))
-                        {
-                            buildType = "Retriever";
-                            previousBuildType = "Universal Conduit";
-                            nextBuildType = "Rail Cart Hub";
-                        }
-                        else if (buildType.Equals("Retriever"))
-                        {
-                            buildType = "Universal Conduit";
-                            previousBuildType = "Smelter";
-                            nextBuildType = "Retriever";
-                        }
-                        else if (buildType.Equals("Universal Conduit"))
-                        {
-                            buildType = "Smelter";
-                            previousBuildType = "Press";
-                            nextBuildType = "Universal Conduit";
-                        }
-                        else if (buildType.Equals("Smelter"))
-                        {
-                            buildType = "Press";
-                            previousBuildType = "Extruder";
-                            nextBuildType = "Smelter";
-                        }
-                        else if (buildType.Equals("Press"))
-                        {
-                            buildType = "Extruder";
-                            previousBuildType = "Auger";
-                            nextBuildType = "Press";
-                        }
-                        else if (buildType.Equals("Extruder"))
-                        {
-                            buildType = "Auger";
-                            previousBuildType = "Electric Light";
-                            nextBuildType = "Extruder";
-                        }
-                        else if (buildType.Equals("Auger"))
-                        {
-                            buildType = "Electric Light";
-                            previousBuildType = "Storage Computer";
-                            nextBuildType = "Auger";
-                        }
-                        else if (buildType.Equals("Electric Light"))
-                        {
-                            buildType = "Storage Computer";
-                            previousBuildType = "Storage Container";
-                            nextBuildType = "Electric Light";
-                        }
-                        else if (buildType.Equals("Storage Computer"))
-                        {
-                            buildType = "Storage Container";
-                            previousBuildType = "Quantum Hatchway";
-                            nextBuildType = "Storage Computer";
-                        }
-                        else if (buildType.Equals("Storage Container"))
-                        {
-                            buildType = "Quantum Hatchway";
-                            previousBuildType = "Steel Ramp";
-                            nextBuildType = "Storage Container";
-                        }
-                        else if (buildType.Equals("Quantum Hatchway"))
-                        {
-                            buildType = "Steel Ramp";
-                            previousBuildType = "Steel Block";
-                            nextBuildType = "Quantum Hatchway";
-                        }
-                        else if (buildType.Equals("Steel Ramp"))
-                        {
-                            buildType = "Steel Block";
-                            previousBuildType = "Iron Ramp";
-                            nextBuildType = "Steel Block";
-                        }
-                        else if (buildType.Equals("Steel Block"))
-                        {
-                            buildType = "Iron Ramp";
-                            previousBuildType = "Iron Block";
-                            nextBuildType = "Steel Block";
-                        }
-                        else if (buildType.Equals("Iron Ramp"))
-                        {
-                            buildType = "Iron Block";
-                            previousBuildType = "Brick";
-                            nextBuildType = "Iron Ramp";
-                        }
-                        else if (buildType.Equals("Iron Block"))
-                        {
-                            buildType = "Brick";
-                            previousBuildType = "Glass Block";
-                            nextBuildType = "Iron Block";
-                        }
-                        else if (buildType.Equals("Brick"))
-                        {
-                            buildType = "Glass Block";
-                            previousBuildType = "Turret";
-                            nextBuildType = "Iron Block";
-                        }
-                        else if (buildType.Equals("Glass Block"))
-                        {
-                            buildType = "Turret";
-                            previousBuildType = "Dark Matter Collector";
-                            nextBuildType = "Glass Block";
-                        }
-                        displayingBuildItem = true;
-                        buildItemDisplayTimer = 0;
-                        destroyTimer = 0;
-                        buildTimer = 0;
-                        playButtonSound();
+                        blockSelector.previousBlock();
                     }
                 }
 
@@ -1700,7 +1323,6 @@ public class PlayerController : MonoBehaviour
                 }
 
                 //WORLD SIZE LIMITATIONS
-                //Debug.Log(gameObject.transform.position);
                 if (gameObject.transform.position.x > 4500)
                 {
                     gameObject.transform.position = new Vector3(4490, gameObject.transform.position.y, gameObject.transform.position.z);

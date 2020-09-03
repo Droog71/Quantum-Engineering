@@ -18,11 +18,6 @@ public class RailCart : MonoBehaviour
         builtObjects = GameObject.Find("Built_Objects");
     }
 
-    void OnDestroy()
-    {
-
-    }
-
     void Update()
     {
         GetComponent<InventoryManager>().ID = ID;

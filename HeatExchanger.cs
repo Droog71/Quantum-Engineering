@@ -22,7 +22,8 @@ public class HeatExchanger : MonoBehaviour
     public bool connectionFailed;
     private GameObject builtObjects;
 
-    void Start()
+    // Called by unity engine on start up to initialize variables
+    public void Start()
     {
         connectionLine = gameObject.AddComponent<LineRenderer>();
         connectionLine.startWidth = 0.2f;
@@ -33,7 +34,8 @@ public class HeatExchanger : MonoBehaviour
         builtObjects = GameObject.Find("Built_Objects");
     }
 
-    void Update()
+    // Called once per frame by unity engine
+    public void Update()
     {
         updateTick += 1 * Time.deltaTime;
         if (updateTick > 0.5f + (address * 0.001f))
@@ -120,7 +122,8 @@ public class HeatExchanger : MonoBehaviour
         }
     }
 
-    bool IsValidObject(GameObject obj)
+    // The object exists, is active and is not a standard building block
+    private bool IsValidObject(GameObject obj)
     {
         if (obj != null)
         {
@@ -129,7 +132,8 @@ public class HeatExchanger : MonoBehaviour
         return false;
     }
 
-    void OnDestroy()
+    // Used to notify attached machines when the heat exchanger is destroyed
+    public void OnDestroy()
     {
         if (outputObject != null)
         {
@@ -196,6 +200,7 @@ public class HeatExchanger : MonoBehaviour
         }
     }
 
+    // Connects to the nearest compatible object
     private void ConnectToObject(GameObject obj)
     {
         if (obj.GetComponent<UniversalExtractor>() != null)
@@ -203,7 +208,7 @@ public class HeatExchanger : MonoBehaviour
             float distance = Vector3.Distance(transform.position, obj.transform.position);
             if (distance < 20)
             {
-                if (obj != this.gameObject)
+                if (obj != gameObject)
                 {
                     if (creationMethod.Equals("spawned"))
                     {
@@ -239,7 +244,7 @@ public class HeatExchanger : MonoBehaviour
             float distance = Vector3.Distance(transform.position, obj.transform.position);
             if (distance < 20)
             {
-                if (obj != this.gameObject)
+                if (obj != gameObject)
                 {
                     if (creationMethod.Equals("spawned"))
                     {
@@ -275,7 +280,7 @@ public class HeatExchanger : MonoBehaviour
             float distance = Vector3.Distance(transform.position, obj.transform.position);
             if (distance < 20)
             {
-                if (obj != this.gameObject)
+                if (obj != gameObject)
                 {
                     if (creationMethod.Equals("spawned"))
                     {
@@ -311,7 +316,7 @@ public class HeatExchanger : MonoBehaviour
             float distance = Vector3.Distance(transform.position, obj.transform.position);
             if (distance < 20)
             {
-                if (obj != this.gameObject)
+                if (obj != gameObject)
                 {
                     if (creationMethod.Equals("spawned"))
                     {
@@ -347,7 +352,7 @@ public class HeatExchanger : MonoBehaviour
             float distance = Vector3.Distance(transform.position, obj.transform.position);
             if (distance < 20)
             {
-                if (obj != this.gameObject)
+                if (obj != gameObject)
                 {
                     if (creationMethod.Equals("spawned"))
                     {
@@ -383,7 +388,7 @@ public class HeatExchanger : MonoBehaviour
             float distance = Vector3.Distance(transform.position, obj.transform.position);
             if (distance < 20)
             {
-                if (obj != this.gameObject)
+                if (obj != gameObject)
                 {
                     if (creationMethod.Equals("spawned"))
                     {
@@ -419,7 +424,7 @@ public class HeatExchanger : MonoBehaviour
             float distance = Vector3.Distance(transform.position, obj.transform.position);
             if (distance < 20)
             {
-                if (obj != this.gameObject)
+                if (obj != gameObject)
                 {
                     if (creationMethod.Equals("spawned"))
                     {
@@ -455,7 +460,7 @@ public class HeatExchanger : MonoBehaviour
             float distance = Vector3.Distance(transform.position, obj.transform.position);
             if (distance < 20)
             {
-                if (obj != this.gameObject)
+                if (obj != gameObject)
                 {
                     if (creationMethod.Equals("spawned"))
                     {
@@ -491,7 +496,7 @@ public class HeatExchanger : MonoBehaviour
             float distance = Vector3.Distance(transform.position, obj.transform.position);
             if (distance < 20)
             {
-                if (obj != this.gameObject)
+                if (obj != gameObject)
                 {
                     if (creationMethod.Equals("spawned"))
                     {
@@ -527,7 +532,7 @@ public class HeatExchanger : MonoBehaviour
             float distance = Vector3.Distance(transform.position, obj.transform.position);
             if (distance < 20)
             {
-                if (obj != this.gameObject)
+                if (obj != gameObject)
                 {
                     if (creationMethod.Equals("spawned"))
                     {
@@ -563,7 +568,7 @@ public class HeatExchanger : MonoBehaviour
             float distance = Vector3.Distance(transform.position, obj.transform.position);
             if (distance < 20)
             {
-                if (obj != this.gameObject)
+                if (obj != gameObject)
                 {
                     if (creationMethod.Equals("spawned"))
                     {
@@ -599,7 +604,7 @@ public class HeatExchanger : MonoBehaviour
             float distance = Vector3.Distance(transform.position, obj.transform.position);
             if (distance < 20)
             {
-                if (obj != this.gameObject)
+                if (obj != gameObject)
                 {
                     if (creationMethod.Equals("spawned"))
                     {
@@ -632,6 +637,7 @@ public class HeatExchanger : MonoBehaviour
         }
     }
 
+    // Sets the heat exchanger's output ID to the output object's ID
     private void SetOutputID()
     {
         if (outputObject.GetComponent<NuclearReactor>() != null)
@@ -688,6 +694,7 @@ public class HeatExchanger : MonoBehaviour
         }
     }
 
+    // Overall operation of the heat exchanger
     private void DoWork()
     {
         if (outputObject.GetComponent<UniversalExtractor>() != null)
@@ -704,7 +711,6 @@ public class HeatExchanger : MonoBehaviour
             }
             else
             {
-                //Debug.Log("Heat exchanger ran out of ice.");
                 outputObject.GetComponent<UniversalExtractor>().cooling = 0;
                 GetComponent<Light>().enabled = false;
                 GetComponent<AudioSource>().enabled = false;
@@ -724,7 +730,6 @@ public class HeatExchanger : MonoBehaviour
             }
             else
             {
-                //Debug.Log("Heat exchanger ran out of ice.");
                 outputObject.GetComponent<Retriever>().cooling = 0;
                 GetComponent<Light>().enabled = false;
                 GetComponent<AudioSource>().enabled = false;
@@ -744,7 +749,6 @@ public class HeatExchanger : MonoBehaviour
             }
             else
             {
-                //Debug.Log("Heat exchanger ran out of ice.");
                 outputObject.GetComponent<AutoCrafter>().cooling = 0;
                 GetComponent<Light>().enabled = false;
                 GetComponent<AudioSource>().enabled = false;
@@ -764,7 +768,6 @@ public class HeatExchanger : MonoBehaviour
             }
             else
             {
-                //Debug.Log("Heat exchanger ran out of ice.");
                 outputObject.GetComponent<DarkMatterCollector>().cooling = 0;
                 GetComponent<Light>().enabled = false;
                 GetComponent<AudioSource>().enabled = false;
@@ -784,7 +787,6 @@ public class HeatExchanger : MonoBehaviour
             }
             else
             {
-                //Debug.Log("Heat exchanger ran out of ice.");
                 outputObject.GetComponent<Auger>().cooling = 0;
                 GetComponent<Light>().enabled = false;
                 GetComponent<AudioSource>().enabled = false;
@@ -804,7 +806,6 @@ public class HeatExchanger : MonoBehaviour
             }
             else
             {
-                //Debug.Log("Heat exchanger ran out of ice.");
                 outputObject.GetComponent<NuclearReactor>().cooling = 0;
                 GetComponent<Light>().enabled = false;
                 GetComponent<AudioSource>().enabled = false;
@@ -824,7 +825,6 @@ public class HeatExchanger : MonoBehaviour
             }
             else
             {
-                //Debug.Log("Heat exchanger ran out of ice.");
                 outputObject.GetComponent<Smelter>().cooling = 0;
                 GetComponent<Light>().enabled = false;
                 GetComponent<AudioSource>().enabled = false;
@@ -844,7 +844,6 @@ public class HeatExchanger : MonoBehaviour
             }
             else
             {
-                //Debug.Log("Heat exchanger ran out of ice.");
                 outputObject.GetComponent<Extruder>().cooling = 0;
                 GetComponent<Light>().enabled = false;
                 GetComponent<AudioSource>().enabled = false;
@@ -864,7 +863,6 @@ public class HeatExchanger : MonoBehaviour
             }
             else
             {
-                //Debug.Log("Heat exchanger ran out of ice.");
                 outputObject.GetComponent<Press>().cooling = 0;
                 GetComponent<Light>().enabled = false;
                 GetComponent<AudioSource>().enabled = false;
@@ -884,7 +882,6 @@ public class HeatExchanger : MonoBehaviour
             }
             else
             {
-                //Debug.Log("Heat exchanger ran out of ice.");
                 outputObject.GetComponent<AlloySmelter>().cooling = 0;
                 GetComponent<Light>().enabled = false;
                 GetComponent<AudioSource>().enabled = false;
@@ -904,7 +901,6 @@ public class HeatExchanger : MonoBehaviour
             }
             else
             {
-                //Debug.Log("Heat exchanger ran out of ice.");
                 outputObject.GetComponent<GearCutter>().cooling = 0;
                 GetComponent<Light>().enabled = false;
                 GetComponent<AudioSource>().enabled = false;
@@ -921,7 +917,6 @@ public class HeatExchanger : MonoBehaviour
             }
             else
             {
-                //Debug.Log("Heat exchanger ran out of ice.");
                 outputObject.GetComponent<Turret>().cooling = 0;
                 GetComponent<Light>().enabled = false;
                 GetComponent<AudioSource>().enabled = false;

@@ -9,20 +9,21 @@ public class HeadBob : MonoBehaviour
     Quaternion originalRotation;
     public GameObject player;
 
-    // Start is called before the first frame update
-    void Start()
+    // Called by unity engine on start up to initialize variables
+    public void Start()
     {
         originalRotation = transform.localRotation;
     }
 
+    // Resets the camera rotation
     public void Reset()
     {
         transform.localRotation = originalRotation;
         timer = 0;
     }
 
-    // Update is called once per frame
-    void Update()
+    // Called once per frame by unity engine
+    public void Update()
     {
         if (active == true)
         {

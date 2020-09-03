@@ -809,52 +809,50 @@ public class GameManager : MonoBehaviour
             int steelBlockCount = 0;
             int glassBlockCount = 0;
             int brickBlockCount = 0;
-            GameObject[] allObjects = FindObjectsOfType<GameObject>();
 
-            foreach (GameObject obj in allObjects)
+            IronBlock[] allIronBlocks = FindObjectsOfType<IronBlock>();
+            foreach (IronBlock block in allIronBlocks)
             {
-                if (obj.GetComponent<IronBlock>() != null)
+                Transform[] blocks = ironBlocks[ironCount].GetComponentsInChildren<Transform>(true);
+                if (blocks.Length >= 300)
                 {
-                    Transform[] blocks = ironBlocks[ironCount].GetComponentsInChildren<Transform>(true);
-                    if (blocks.Length >= 300)
+                    ironCount++;
+                }
+                if (block.GetComponent<PhysicsHandler>().falling == false && block.GetComponent<PhysicsHandler>().fallingStack == false && block.GetComponent<PhysicsHandler>().needsSupportCheck == false)
+                {
+                    block.transform.parent = ironBlocks[ironCount].transform;
+                    if (initIron == false)
                     {
-                        ironCount++;
+                        GameObject go = GameObject.CreatePrimitive(PrimitiveType.Cube);
+                        go.transform.position = block.transform.position;
+                        go.transform.localScale = new Vector3(5, 5, 5);
+                        go.GetComponent<Renderer>().material = block.GetComponent<Renderer>().material;
+                        go.AddComponent<BlockDummy>().type = "iron";
                     }
-                    if (obj.GetComponent<PhysicsHandler>().falling == false && obj.GetComponent<PhysicsHandler>().fallingStack == false && obj.GetComponent<PhysicsHandler>().needsSupportCheck == false)
-                    {
-                        obj.transform.parent = ironBlocks[ironCount].transform;
-                        if (initIron == false)
-                        {
-                            GameObject go = GameObject.CreatePrimitive(PrimitiveType.Cube);
-                            go.transform.position = obj.transform.position;
-                            go.transform.localScale = new Vector3(5, 5, 5);
-                            go.GetComponent<Renderer>().material = obj.GetComponent<Renderer>().material;
-                            go.AddComponent<BlockDummy>().type = "iron";
-                        }
-                        ironBlockCount++;
-                    }
+                    ironBlockCount++;
                 }
             }
 
-            foreach (GameObject obj in allObjects)
+            Glass[] allGlassBlocks = FindObjectsOfType<Glass>();
+            foreach (Glass block in allGlassBlocks)
             {
-                if (obj.GetComponent<Glass>() != null)
+                if (block.GetComponent<Glass>() != null)
                 {
                     Transform[] blocks = glass[glassCount].GetComponentsInChildren<Transform>(true);
                     if (blocks.Length >= 300)
                     {
                         glassCount++;
                     }
-                    if (obj.GetComponent<PhysicsHandler>().falling == false && obj.GetComponent<PhysicsHandler>().fallingStack == false && obj.GetComponent<PhysicsHandler>().needsSupportCheck == false)
+                    if (block.GetComponent<PhysicsHandler>().falling == false && block.GetComponent<PhysicsHandler>().fallingStack == false && block.GetComponent<PhysicsHandler>().needsSupportCheck == false)
                     {
-                        obj.transform.parent = glass[glassCount].transform;
+                        block.transform.parent = glass[glassCount].transform;
                         if (initGlass == false)
                         {
                             //UnityEngine.Debug.Log("CREATING GLASS BLOCK DUMMIES");
                             GameObject go = GameObject.CreatePrimitive(PrimitiveType.Cube);
-                            go.transform.position = obj.transform.position;
+                            go.transform.position = block.transform.position;
                             go.transform.localScale = new Vector3(5, 5, 5);
-                            go.GetComponent<Renderer>().material = obj.GetComponent<Renderer>().material;
+                            go.GetComponent<Renderer>().material = block.GetComponent<Renderer>().material;
                             go.AddComponent<BlockDummy>().type = "glass";
                         }
                         glassBlockCount++;
@@ -862,25 +860,26 @@ public class GameManager : MonoBehaviour
                 }
             }
 
-            foreach (GameObject obj in allObjects)
+            Steel[] allSteelBlocks = FindObjectsOfType<Steel>();
+            foreach (Steel block in allSteelBlocks)
             {
-                if (obj.GetComponent<Steel>() != null)
+                if (block.GetComponent<Steel>() != null)
                 {
                     Transform[] blocks = steel[steelCount].GetComponentsInChildren<Transform>(true);
                     if (blocks.Length >= 300)
                     {
                         steelCount++;
                     }
-                    if (obj.GetComponent<PhysicsHandler>().falling == false && obj.GetComponent<PhysicsHandler>().fallingStack == false && obj.GetComponent<PhysicsHandler>().needsSupportCheck == false)
+                    if (block.GetComponent<PhysicsHandler>().falling == false && block.GetComponent<PhysicsHandler>().fallingStack == false && block.GetComponent<PhysicsHandler>().needsSupportCheck == false)
                     {
-                        obj.transform.parent = steel[steelCount].transform;
+                        block.transform.parent = steel[steelCount].transform;
                         if (initSteel == false)
                         {
                             //UnityEngine.Debug.Log("CREATING STEEL BLOCK DUMMIES");
                             GameObject go = GameObject.CreatePrimitive(PrimitiveType.Cube);
-                            go.transform.position = obj.transform.position;
+                            go.transform.position = block.transform.position;
                             go.transform.localScale = new Vector3(5, 5, 5);
-                            go.GetComponent<Renderer>().material = obj.GetComponent<Renderer>().material;
+                            go.GetComponent<Renderer>().material = block.GetComponent<Renderer>().material;
                             go.AddComponent<BlockDummy>().type = "steel";
                         }
                         steelBlockCount++;
@@ -888,24 +887,25 @@ public class GameManager : MonoBehaviour
                 }
             }
 
-            foreach (GameObject obj in allObjects)
+            Brick[] allBrickBlocks = FindObjectsOfType<Brick>();
+            foreach (Brick block in allBrickBlocks)
             {
-                if (obj.GetComponent<Brick>() != null)
+                if (block.GetComponent<Brick>() != null)
                 {
                     Transform[] blocks = bricks[brickCount].GetComponentsInChildren<Transform>(true);
                     if (blocks.Length >= 300)
                     {
                         brickCount++;
                     }
-                    if (obj.GetComponent<PhysicsHandler>().falling == false && obj.GetComponent<PhysicsHandler>().fallingStack == false && obj.GetComponent<PhysicsHandler>().needsSupportCheck == false)
+                    if (block.GetComponent<PhysicsHandler>().falling == false && block.GetComponent<PhysicsHandler>().fallingStack == false && block.GetComponent<PhysicsHandler>().needsSupportCheck == false)
                     {
-                        obj.transform.parent = bricks[brickCount].transform;
+                        block.transform.parent = bricks[brickCount].transform;
                         if (initBrick == false)
                         {
                             GameObject go = GameObject.CreatePrimitive(PrimitiveType.Cube);
-                            go.transform.position = obj.transform.position;
+                            go.transform.position = block.transform.position;
                             go.transform.localScale = new Vector3(5, 5, 5);
-                            go.GetComponent<Renderer>().material = obj.GetComponent<Renderer>().material;
+                            go.GetComponent<Renderer>().material = block.GetComponent<Renderer>().material;
                             go.AddComponent<BlockDummy>().type = "brick";
                         }
                         brickBlockCount++;

@@ -6,11 +6,6 @@ public class VP : MonoBehaviour
 {
     public GameObject cam;
 
-    void Start()
-    {
-
-    }
-
     public void PlayVideo(string video,bool looping,float volume)
     {
         cam.GetComponent<UnityEngine.Video.VideoPlayer>().url = Application.dataPath + "/Video/" + video;

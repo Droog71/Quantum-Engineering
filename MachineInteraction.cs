@@ -5,6 +5,7 @@ public class MachineInteraction : MonoBehaviour
     private PlayerController playerController;
     private InteractionController interactionController;
 
+    // Called by unity engine on start up to initialize variables
     public void Start()
     {
         playerController = GetComponent<PlayerController>();
@@ -457,7 +458,6 @@ public class MachineInteraction : MonoBehaviour
         }
         if (cInput.GetKeyDown("Interact"))
         {
-            interactionController.CollectObject("Dark Matter Conduit");
             interactionController.OpenMachineGUI();
         }
     }

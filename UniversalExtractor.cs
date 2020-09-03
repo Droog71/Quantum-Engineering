@@ -29,7 +29,8 @@ public class UniversalExtractor : MonoBehaviour
     private GameObject builtObjects;
     public PowerReceiver powerReceiver;
 
-    void Start()
+    // Called by unity engine on start up to initialize variables
+    public void Start()
     {
         powerReceiver = gameObject.AddComponent<PowerReceiver>();
         connectionLine = gameObject.AddComponent<LineRenderer>();
@@ -40,7 +41,8 @@ public class UniversalExtractor : MonoBehaviour
         builtObjects = GameObject.Find("Built_Objects");
     }
 
-    void OnDestroy()
+    // Used to remove the connection line renderer when the block is destroyed
+    public void OnDestroy()
     {
         if (inputLine != null)
         {
@@ -48,11 +50,13 @@ public class UniversalExtractor : MonoBehaviour
         }
     }
 
-    bool IsValidResource(GameObject obj)
+    // The object exists, is active and is a resource node
+    private bool IsValidResource(GameObject obj)
     {
         return obj != null && obj.transform.parent != builtObjects.transform && obj.activeInHierarchy && obj.GetComponent<UniversalResource>() != null;
     }
 
+    // Gets power values from power receiver
     private void UpdatePowerReceiver()
     {
         powerReceiver.ID = ID;
@@ -69,7 +73,8 @@ public class UniversalExtractor : MonoBehaviour
         }
     }
 
-    void Update()
+    // Called once per frame by unity engine
+    public void Update()
     {
         updateTick += 1 * Time.deltaTime;
         if (updateTick > 0.5f + (address * 0.001f))
@@ -122,7 +127,6 @@ public class UniversalExtractor : MonoBehaviour
                     GetComponent<Light>().enabled = false;
                     GetComponent<AudioSource>().enabled = false;
                 }
-                //Debug.Log("Smelter trying to add " + outputType + " to " + outputObject.GetComponent<InventoryManager>().ID);
                 type = inputObject.GetComponent<UniversalResource>().type;
             }
             else

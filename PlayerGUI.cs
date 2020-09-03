@@ -1,13 +1,12 @@
 ﻿using UnityEngine;
-using System.Collections;
 using System.Collections.Generic;
 
 public class PlayerGUI : MonoBehaviour
 {
     private PlayerController playerController;
     private InventoryManager playerInventory;
+    private Dictionary<string, Texture2D> td;
     private GuiCoordinates guiCoordinates;
-    private TextureDictionary textureDictionary;
     public GUISkin thisGUIskin;
     public GameObject videoPlayer;
     private bool schematic1;
@@ -22,8 +21,8 @@ public class PlayerGUI : MonoBehaviour
     {
         playerController = GetComponent<PlayerController>();
         playerInventory = GetComponent<InventoryManager>();
-        guiCoordinates = gameObject.AddComponent<GuiCoordinates>();
-        textureDictionary = gameObject.AddComponent<TextureDictionary>();
+        guiCoordinates = GetComponent<GuiCoordinates>();
+        td = GetComponent<TextureDictionary>().dictionary;
     }
 
     void OnGUI()
@@ -45,11 +44,11 @@ public class PlayerGUI : MonoBehaviour
             if (playerController.displayingBuildItem == true)
             {
                 GUI.Label(guiCoordinates.topRightInfoRect, "\n\nBuild item set to " + playerController.buildType);
-                GUI.DrawTexture(guiCoordinates.previousBuildItemTextureRect, textureDictionary.dictionary[playerController.previousBuildType]);
-                GUI.DrawTexture(guiCoordinates.buildItemTextureRect, textureDictionary.dictionary[playerController.buildType]);
-                GUI.DrawTexture(guiCoordinates.currentBuildItemTextureRect, textureDictionary.dictionary[playerController.buildType]);
-                GUI.DrawTexture(guiCoordinates.buildItemTextureRect, textureDictionary.dictionary["Selection Box"]);
-                GUI.DrawTexture(guiCoordinates.nextBuildItemTextureRect, textureDictionary.dictionary[playerController.nextBuildType]);
+                GUI.DrawTexture(guiCoordinates.previousBuildItemTextureRect, td[playerController.previousBuildType]);
+                GUI.DrawTexture(guiCoordinates.buildItemTextureRect, td[playerController.buildType]);
+                GUI.DrawTexture(guiCoordinates.currentBuildItemTextureRect, td[playerController.buildType]);
+                GUI.DrawTexture(guiCoordinates.buildItemTextureRect, td["Selection Box"]);
+                GUI.DrawTexture(guiCoordinates.nextBuildItemTextureRect, td[playerController.nextBuildType]);
                 int buildItemCount = 0;
                 foreach (InventorySlot slot in playerInventory.inventory)
                 {
@@ -89,7 +88,7 @@ public class PlayerGUI : MonoBehaviour
                 {
                     hourString = "" + hour;
                 }
-                GUI.DrawTexture(guiCoordinates.tabletBackgroundRect, textureDictionary.dictionary["Tablet"]);
+                GUI.DrawTexture(guiCoordinates.tabletBackgroundRect, td["Tablet"]);
                 GUI.Label(guiCoordinates.tabletMessageRect, playerController.currentTabletMessage);
                 GUI.Label(guiCoordinates.tabletTimeRect, "\nDay: " + day + " Hour: " + hourString + ", Income: $" + playerController.money.ToString("N0"));
                 if (GUI.Button(guiCoordinates.tabletButtonRect, "CLOSE"))
@@ -106,7 +105,7 @@ public class PlayerGUI : MonoBehaviour
             {
                 if (playerController.helpMenuOpen == false && playerController.optionsGUIopen == false && cGUI.showingInputGUI == false && playerController.exiting == false)
                 {
-                    GUI.DrawTexture(guiCoordinates.escapeMenuRect, textureDictionary.dictionary["Menu Background"]);
+                    GUI.DrawTexture(guiCoordinates.escapeMenuRect, td["Menu Background"]);
                     if (GUI.Button(guiCoordinates.escapeButton1Rect, "Resume"))
                     {
                         Cursor.visible = false;
@@ -149,7 +148,7 @@ public class PlayerGUI : MonoBehaviour
                 }
                 if (playerController.exiting == true)
                 {
-                    GUI.DrawTexture(guiCoordinates.savingBackgroundRect, textureDictionary.dictionary["Interface Background"]);
+                    GUI.DrawTexture(guiCoordinates.savingBackgroundRect, td["Interface Background"]);
                     GUI.Label(guiCoordinates.messageRect, "\n\n\n\n\nSaving world...");
                 }
             }
@@ -159,7 +158,7 @@ public class PlayerGUI : MonoBehaviour
             {
                 if (playerController.videoMenuOpen == false && playerController.schematicMenuOpen == false)
                 {
-                    GUI.DrawTexture(guiCoordinates.escapeMenuRect, textureDictionary.dictionary["Menu Background"]);
+                    GUI.DrawTexture(guiCoordinates.escapeMenuRect, td["Menu Background"]);
                     if (GUI.Button(guiCoordinates.escapeButton1Rect, "Videos"))
                     {
                         playerController.videoMenuOpen = true;
@@ -180,7 +179,7 @@ public class PlayerGUI : MonoBehaviour
                 {
                     if (playerController.mCam.GetComponent<UnityEngine.Video.VideoPlayer>().isPlaying == false)
                     {
-                        GUI.DrawTexture(guiCoordinates.videoMenuBackgroundRect, textureDictionary.dictionary["Menu Background"]);
+                        GUI.DrawTexture(guiCoordinates.videoMenuBackgroundRect, td["Menu Background"]);
                     }
                     if (playerController.mCam.GetComponent<UnityEngine.Video.VideoPlayer>().isPlaying == false)
                     {
@@ -271,7 +270,7 @@ public class PlayerGUI : MonoBehaviour
                 {
                     if (schematic1 == false || schematic2 == false || schematic3 == false || schematic4 == false || schematic5 == false || schematic6 == false || schematic7 == false)
                     {
-                        GUI.DrawTexture(guiCoordinates.schematicsMenuBackgroundRect, textureDictionary.dictionary["Menu Background"]);
+                        GUI.DrawTexture(guiCoordinates.schematicsMenuBackgroundRect, td["Menu Background"]);
                         if (GUI.Button(guiCoordinates.optionsButton1Rect, "Dark Matter"))
                         {
                             if (schematic1 == false)
@@ -339,31 +338,31 @@ public class PlayerGUI : MonoBehaviour
                     }
                     if (schematic1 == true)
                     {
-                        GUI.DrawTexture(new Rect(0, 0, ScreenWidth, ScreenHeight), textureDictionary.dictionary["Dark Matter Schematic"]);
+                        GUI.DrawTexture(new Rect(0, 0, ScreenWidth, ScreenHeight), td["Dark Matter Schematic"]);
                     }
                     if (schematic2 == true)
                     {
-                        GUI.DrawTexture(new Rect(0, 0, ScreenWidth, ScreenHeight), textureDictionary.dictionary["Plate Schematic"]);
+                        GUI.DrawTexture(new Rect(0, 0, ScreenWidth, ScreenHeight), td["Plate Schematic"]);
                     }
                     if (schematic3 == true)
                     {
-                        GUI.DrawTexture(new Rect(0, 0, ScreenWidth, ScreenHeight), textureDictionary.dictionary["Wire Schematic"]);
+                        GUI.DrawTexture(new Rect(0, 0, ScreenWidth, ScreenHeight), td["Wire Schematic"]);
                     }
                     if (schematic4 == true)
                     {
-                        GUI.DrawTexture(new Rect(0, 0, ScreenWidth, ScreenHeight), textureDictionary.dictionary["Gear Schematic"]);
+                        GUI.DrawTexture(new Rect(0, 0, ScreenWidth, ScreenHeight), td["Gear Schematic"]);
                     }
                     if (schematic5 == true)
                     {
-                        GUI.DrawTexture(new Rect(0, 0, ScreenWidth, ScreenHeight), textureDictionary.dictionary["Steel Schematic"]);
+                        GUI.DrawTexture(new Rect(0, 0, ScreenWidth, ScreenHeight), td["Steel Schematic"]);
                     }
                     if (schematic6 == true)
                     {
-                        GUI.DrawTexture(new Rect(0, 0, ScreenWidth, ScreenHeight), textureDictionary.dictionary["Bronze Schematic"]);
+                        GUI.DrawTexture(new Rect(0, 0, ScreenWidth, ScreenHeight), td["Bronze Schematic"]);
                     }
                     if (schematic7 == true)
                     {
-                        GUI.DrawTexture(new Rect(0, 0, ScreenWidth, ScreenHeight), textureDictionary.dictionary["Heat Exchanger Schematic"]);
+                        GUI.DrawTexture(new Rect(0, 0, ScreenWidth, ScreenHeight), td["Heat Exchanger Schematic"]);
                     }
                     if (schematic1 == true || schematic2 == true || schematic3 == true || schematic4 == true || schematic5 == true || schematic6 == true || schematic7 == true)
                     {
@@ -395,7 +394,7 @@ public class PlayerGUI : MonoBehaviour
             //OPTIONS MENU
             if (playerController.optionsGUIopen == true && cGUI.showingInputGUI == false)
             {
-                GUI.DrawTexture(guiCoordinates.optionsMenuBackgroundRect, textureDictionary.dictionary["Menu Background"]);
+                GUI.DrawTexture(guiCoordinates.optionsMenuBackgroundRect, td["Menu Background"]);
                 if (GUI.Button(guiCoordinates.optionsButton1Rect, "Bindings"))
                 {
                     cGUI.ToggleGUI();
@@ -548,9 +547,9 @@ public class PlayerGUI : MonoBehaviour
             //BUILDING INSTRUCTIONS
             if (playerController.building == true && playerController.tabletOpen == false)
             {
-                GUI.DrawTexture(guiCoordinates.buildInfoRectBG, textureDictionary.dictionary["Interface Background"]);
+                GUI.DrawTexture(guiCoordinates.buildInfoRectBG, td["Interface Background"]);
                 GUI.Label(guiCoordinates.buildInfoRect, "Right click to place block.\nPress F to collect.\nPress R to rotate.\nPress Q to stop building.");
-                GUI.DrawTexture(guiCoordinates.currentBuildItemTextureRect, textureDictionary.dictionary[playerController.buildType]);
+                GUI.DrawTexture(guiCoordinates.currentBuildItemTextureRect, td[playerController.buildType]);
                 int buildItemCount = 0;
                 foreach (InventorySlot slot in playerInventory.inventory)
                 {
@@ -574,7 +573,7 @@ public class PlayerGUI : MonoBehaviour
             {
                 if (playerController.paintColorSelected == false)
                 {
-                    GUI.DrawTexture(guiCoordinates.optionsMenuBackgroundRect, textureDictionary.dictionary["Interface Background"]);
+                    GUI.DrawTexture(guiCoordinates.optionsMenuBackgroundRect, td["Interface Background"]);
                     GUI.Label(guiCoordinates.optionsButton1Rect, "      Paint  Gun");
                     GUI.Label(guiCoordinates.optionsButton2Rect, "     Select Color");
                     GUI.Label(guiCoordinates.sliderLabel1Rect, "Red");
@@ -587,7 +586,7 @@ public class PlayerGUI : MonoBehaviour
                     playerController.paintGunTank.GetComponent<Renderer>().material.color = new Color(playerController.paintRed, playerController.paintGreen, playerController.paintBlue);
                     playerController.adjustedPaintGunTank.GetComponent<Renderer>().material.color = new Color(playerController.paintRed, playerController.paintGreen, playerController.paintBlue);
                     playerController.adjustedPaintGunTank2.GetComponent<Renderer>().material.color = new Color(playerController.paintRed, playerController.paintGreen, playerController.paintBlue);
-                    GUI.DrawTexture(guiCoordinates.optionsButton3Rect, textureDictionary.dictionary["Iron Block"]);
+                    GUI.DrawTexture(guiCoordinates.optionsButton3Rect, td["Iron Block"]);
                     GUI.color = Color.white;
                     if (GUI.Button(guiCoordinates.optionsButton8Rect, "DONE"))
                     {
@@ -617,7 +616,7 @@ public class PlayerGUI : MonoBehaviour
                     {
                         if (playerController.crosshairEnabled)
                         {
-                            GUI.DrawTexture(guiCoordinates.crosshairRect, textureDictionary.dictionary["Crosshair"]);
+                            GUI.DrawTexture(guiCoordinates.crosshairRect, td["Crosshair"]);
                         }
                     }
                 }

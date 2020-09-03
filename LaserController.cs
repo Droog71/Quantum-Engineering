@@ -4,40 +4,54 @@ using System.Collections.Generic;
 
 public class LaserController : MonoBehaviour
 {
-    GameManager game;
+    private GameManager game;
+    private PlayerController playerController;
 
-    void Start()
+    // Called by unity engine on start up to initialize variables
+    public void Start()
     {
         game = GameObject.Find("GameManager").GetComponent<GameManager>();
+        playerController = GameObject.Find("Player").GetComponent<PlayerController>();
     }
 
+    // Returns true if a message can be sent to the player's tablet
+    private bool CanSendDestructionMessage()
+    {
+        return playerController.timeToDeliver == false && playerController.meteorShowerWarningActive == false && playerController.pirateAttackWarningActive == false;
+    }
+
+    // Called when the player's laser cannon shoots something
     public void HitTarget(GameObject target,RaycastHit hit)
     {
         if (target.GetComponent<Meteor>() != null)
         {
             target.GetComponent<Meteor>().Explode();
         }
+
         if (target.GetComponent<Pirate>() != null)
         {
             target.GetComponent<Pirate>().TakeDamage();
         }
+
         if (target.tag.Equals("Built"))
         {
             if (target.GetComponent<PhysicsHandler>() != null)
             {
                 target.GetComponent<PhysicsHandler>().Explode();
             }
-            if (GameObject.Find("Player").GetComponent<PlayerController>().timeToDeliver == false && GameObject.Find("Player").GetComponent<PlayerController>().meteorShowerWarningActive == false && GameObject.Find("Player").GetComponent<PlayerController>().pirateAttackWarningActive == false)
+            if (CanSendDestructionMessage())
             {
-                if (GameObject.Find("Player").GetComponent<PlayerController>().destructionMessageActive == false)
+                if (playerController.destructionMessageActive == false)
                 {
-                    GameObject.Find("Player").GetComponent<PlayerController>().destructionMessageActive = true;
-                    GameObject.Find("Player").GetComponent<PlayerController>().currentTabletMessage = "";
+                    playerController.destructionMessageActive = true;
+                    playerController.currentTabletMessage = "";
                 }
-                GameObject.Find("Player").GetComponent<PlayerController>().currentTabletMessage += "ALERT: " + hit.collider.gameObject.name.Split('(')[0] + " destroyed by your laser cannon!\n";
-                GameObject.Find("Player").GetComponent<PlayerController>().destructionMessageCount += 1;
+                string objName = hit.collider.gameObject.name.Split('(')[0];
+                playerController.currentTabletMessage += "ALERT: " + objName + " destroyed by your laser cannon!\n";
+                playerController.destructionMessageCount += 1;
             }
         }
+
         if (target.tag.Equals("CombinedMesh"))
         {
             if (target.name.Equals("glassHolder(Clone)"))
@@ -47,15 +61,15 @@ public class LaserController : MonoBehaviour
                     if (chanceOfDestruction > 25)
                     {
                         game.SeparateBlocks(hit.point, "glass",false);
-                        if (GameObject.Find("Player").GetComponent<PlayerController>().timeToDeliver == false && GameObject.Find("Player").GetComponent<PlayerController>().meteorShowerWarningActive == false && GameObject.Find("Player").GetComponent<PlayerController>().pirateAttackWarningActive == false)
+                        if (CanSendDestructionMessage())
                         {
-                            if (GameObject.Find("Player").GetComponent<PlayerController>().destructionMessageActive == false)
+                            if (playerController.destructionMessageActive == false)
                             {
-                                GameObject.Find("Player").GetComponent<PlayerController>().destructionMessageActive = true;
-                                GameObject.Find("Player").GetComponent<PlayerController>().currentTabletMessage = "";
+                                playerController.destructionMessageActive = true;
+                                playerController.currentTabletMessage = "";
                             }
-                            GameObject.Find("Player").GetComponent<PlayerController>().currentTabletMessage += "ALERT: Some glass blocks were hit by your laser cannon!\n";
-                            GameObject.Find("Player").GetComponent<PlayerController>().destructionMessageCount += 1;
+                            playerController.currentTabletMessage += "ALERT: Some glass blocks were hit by your laser cannon!\n";
+                            playerController.destructionMessageCount += 1;
                         }
                     }
                 }
@@ -67,19 +81,20 @@ public class LaserController : MonoBehaviour
                     if (chanceOfDestruction > 50)
                     {
                         game.SeparateBlocks(hit.point, "brick",false);
-                        if (GameObject.Find("Player").GetComponent<PlayerController>().timeToDeliver == false && GameObject.Find("Player").GetComponent<PlayerController>().meteorShowerWarningActive == false && GameObject.Find("Player").GetComponent<PlayerController>().pirateAttackWarningActive == false)
+                        if (CanSendDestructionMessage())
                         {
-                            if (GameObject.Find("Player").GetComponent<PlayerController>().destructionMessageActive == false)
+                            if (playerController.destructionMessageActive == false)
                             {
-                                GameObject.Find("Player").GetComponent<PlayerController>().destructionMessageActive = true;
-                                GameObject.Find("Player").GetComponent<PlayerController>().currentTabletMessage = "";
+                                playerController.destructionMessageActive = true;
+                                playerController.currentTabletMessage = "";
                             }
-                            GameObject.Find("Player").GetComponent<PlayerController>().currentTabletMessage += "ALERT: Some bricks were hit by your laser cannon!\n";
-                            GameObject.Find("Player").GetComponent<PlayerController>().destructionMessageCount += 1;
+                            playerController.currentTabletMessage += "ALERT: Some bricks were hit by your laser cannon!\n";
+                            playerController.destructionMessageCount += 1;
                         }
                     }
                 }
             }
+
             if (target.name.Equals("ironHolder(Clone)"))
             {
                 int chanceOfDestruction = Random.Range(1, 101);
@@ -87,15 +102,15 @@ public class LaserController : MonoBehaviour
                     if (chanceOfDestruction > 75)
                     {
                         game.SeparateBlocks(hit.point, "iron",false);
-                        if (GameObject.Find("Player").GetComponent<PlayerController>().timeToDeliver == false && GameObject.Find("Player").GetComponent<PlayerController>().meteorShowerWarningActive == false && GameObject.Find("Player").GetComponent<PlayerController>().pirateAttackWarningActive == false)
+                        if (CanSendDestructionMessage())
                         {
-                            if (GameObject.Find("Player").GetComponent<PlayerController>().destructionMessageActive == false)
+                            if (playerController.destructionMessageActive == false)
                             {
-                                GameObject.Find("Player").GetComponent<PlayerController>().destructionMessageActive = true;
-                                GameObject.Find("Player").GetComponent<PlayerController>().currentTabletMessage = "";
+                                playerController.destructionMessageActive = true;
+                                playerController.currentTabletMessage = "";
                             }
-                            GameObject.Find("Player").GetComponent<PlayerController>().currentTabletMessage += "ALERT: Some iron blocks were hit by your laser cannon!\n";
-                            GameObject.Find("Player").GetComponent<PlayerController>().destructionMessageCount += 1;
+                            playerController.currentTabletMessage += "ALERT: Some iron blocks were hit by your laser cannon!\n";
+                            playerController.destructionMessageCount += 1;
                         }
                     }
                 }
@@ -107,15 +122,15 @@ public class LaserController : MonoBehaviour
                     if (chanceOfDestruction > 99)
                     {
                         game.SeparateBlocks(hit.point, "steel",false);
-                        if (GameObject.Find("Player").GetComponent<PlayerController>().timeToDeliver == false && GameObject.Find("Player").GetComponent<PlayerController>().meteorShowerWarningActive == false && GameObject.Find("Player").GetComponent<PlayerController>().pirateAttackWarningActive == false)
+                        if (CanSendDestructionMessage())
                         {
-                            if (GameObject.Find("Player").GetComponent<PlayerController>().destructionMessageActive == false)
+                            if (playerController.destructionMessageActive == false)
                             {
-                                GameObject.Find("Player").GetComponent<PlayerController>().destructionMessageActive = true;
-                                GameObject.Find("Player").GetComponent<PlayerController>().currentTabletMessage = "";
+                                playerController.destructionMessageActive = true;
+                                playerController.currentTabletMessage = "";
                             }
-                            GameObject.Find("Player").GetComponent<PlayerController>().currentTabletMessage += "ALERT: Some steel blocks were hit by your laser cannon!\n";
-                            GameObject.Find("Player").GetComponent<PlayerController>().destructionMessageCount += 1;
+                            playerController.currentTabletMessage += "ALERT: Some steel blocks were hit by your laser cannon!\n";
+                            playerController.destructionMessageCount += 1;
                         }
                     }
                 }

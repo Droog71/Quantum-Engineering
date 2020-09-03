@@ -108,10 +108,11 @@ public class DarkMatterConduit : MonoBehaviour
     // Returns true if the object is a storage container
     private bool IsStorageContainer(GameObject obj)
     {
-        return obj.GetComponent<InventoryManager>() != null 
-        && obj.GetComponent<Retriever>() == null 
-        && obj.GetComponent<AutoCrafter>() == null 
-        && !obj.GetComponent<InventoryManager>().ID.Equals("player");
+        if (obj.GetComponent<InventoryManager>() != null)
+        {
+            return obj.GetComponent<Retriever>() == null && obj.GetComponent<AutoCrafter>() == null && !obj.GetComponent<InventoryManager>().ID.Equals("player");
+        }
+        return false;
     }
 
     // Makes connections to collectors and other conduits
@@ -330,9 +331,9 @@ public class DarkMatterConduit : MonoBehaviour
                                     darkMatterAmount -= speed;
                                     if (storageComputerConduitItem != null)
                                     {
-                                        if (storageComputerConduitItem.textureDictionary != null)
+                                        if (storageComputerConduitItem.td != null)
                                         {
-                                            storageComputerConduitItem.billboard.GetComponent<Renderer>().material.mainTexture = storageComputerConduitItem.textureDictionary.dictionary["Dark Matter"];
+                                            storageComputerConduitItem.billboard.GetComponent<Renderer>().material.mainTexture = storageComputerConduitItem.td["Dark Matter"];
                                         }
                                         storageComputerConduitItem.target = manager.gameObject;
                                     }

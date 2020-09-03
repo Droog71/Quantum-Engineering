@@ -12,15 +12,16 @@ public class NuclearReactor : MonoBehaviour
     public int turbineCount;
     public bool sufficientCooling;
 
-    void Update()
+    // Called once per frame by unity engine
+    public void Update()
     {
         updateTick += 1 * Time.deltaTime;
         if (updateTick > 0.5f + (address * 0.001f))
         {
-            //Debug.Log(ID + " Machine update tick: " + address * 0.1f);
             GetComponent<PhysicsHandler>().UpdatePhysics();
             updateTick = 0;
             int currentTurbineCount = 0;
+
             if (Physics.Raycast(transform.position, transform.up, out RaycastHit reactorUpHit, 3))
             {
                 if (reactorUpHit.collider.gameObject.GetComponent<PowerSource>() != null)
@@ -81,6 +82,7 @@ public class NuclearReactor : MonoBehaviour
                     }
                 }
             }
+
             turbineCount = currentTurbineCount;
             if (cooling >= turbineCount * 5)
             {

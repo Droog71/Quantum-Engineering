@@ -24,8 +24,8 @@ public class MainMenu : MonoBehaviour
     AudioSource ambient;
     float waitForVideoTimer;
 
-    // Start is called before the first frame update
-    void Start()
+    // Called by unity engine on start up to initialize variables
+    public void Start()
     {
         worldList = new List<string>();
         videoPlayer.GetComponent<VP>().PlayVideo("QE_Title.webm",true,0);
@@ -41,13 +41,8 @@ public class MainMenu : MonoBehaviour
         }
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
-
-    void OnGUI()
+    // Called by unity engine for rendering and handling GUI events
+    public void OnGUI()
     {
         //STYLE
         GUI.skin = thisGUIskin;

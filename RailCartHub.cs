@@ -21,7 +21,8 @@ public class RailCartHub : MonoBehaviour
     public bool connectionFailed;
     public bool centralHub;
 
-    void Start()
+    // Called by unity engine on start up to initialize variables
+    public void Start()
     {
         connectionLine = gameObject.AddComponent<LineRenderer>();
         connectionLine.startWidth = 0.2f;
@@ -31,12 +32,12 @@ public class RailCartHub : MonoBehaviour
         connectionLine.enabled = false;
     }
 
-    void Update()
+    // Called once per frame by unity engine
+    public void Update()
     {
         updateTick += 1 * Time.deltaTime;
         if (updateTick > 0.5f + (address * 0.001f))
         {
-            //Debug.Log(ID + " Machine update tick: " + address * 0.1f);
             GetComponent<PhysicsHandler>().UpdatePhysics();
             updateTick = 0;
             if (inputObject == null || outputObject == null)
@@ -60,70 +61,7 @@ public class RailCartHub : MonoBehaviour
                 }
                 if (connectionFailed == false)
                 {
-                    RailCartHub[] allHubs = FindObjectsOfType<RailCartHub>();
-                    List<RailCartHub> hubList = new List<RailCartHub>();
-                    foreach (RailCartHub hub in allHubs)
-                    {
-                        if (hub.circuit == circuit)
-                        {
-                            hubList.Add(hub);
-                        }
-                    }
-                    if (hubList.Count < 2)
-                    {
-                        centralHub = true;
-                    }
-                    foreach (RailCartHub hub in hubList)
-                    {
-                        if (hub.gameObject.activeInHierarchy)
-                        {
-                            //Debug.Log(ID + " found object ID: " + hub.ID);
-                            float distance = Vector3.Distance(transform.position, hub.gameObject.transform.position);
-                            if (distance < range)
-                            {
-                                //Debug.Log(ID + " found object ID: " + hub.ID);
-                                if (outputObject == null)
-                                {
-                                    //Debug.Log(ID + " hub has no output yet");
-                                    if (inputObject != null || centralHub == true)
-                                    {
-                                        //Debug.Log(ID + " found object ID: "+hub.ID);
-                                        if (hub.gameObject != inputObject && hub.gameObject != this.gameObject || centralHub == true && hub.gameObject != this.gameObject)
-                                        {
-                                            //Debug.Log(ID + " hub is not our input and is not our self");
-                                            if (hub.inputObject == null)
-                                            {
-                                                //Debug.Log(ID + " target hub has no input object yet");
-                                                if (creationMethod.Equals("spawned"))
-                                                {
-                                                    //Debug.Log("trying to connect " + ID + " to " + hub.ID + " vs " + outputID);
-                                                    if (hub.ID.Equals(outputID))
-                                                    {
-                                                        outputObject = hub.gameObject;
-                                                        hub.inputObject = this.gameObject;
-                                                        connectionLine.SetPosition(0, transform.position);
-                                                        connectionLine.SetPosition(1, hub.gameObject.transform.position);
-                                                        connectionLine.enabled = true;
-                                                        creationMethod = "built";
-                                                    }
-                                                }
-                                                else if (creationMethod.Equals("built"))
-                                                {
-                                                    outputObject = hub.gameObject;
-                                                    outputID = hub.ID;
-                                                    hub.inputObject = this.gameObject;
-                                                    hub.inputID = ID;
-                                                    connectionLine.SetPosition(0, transform.position);
-                                                    connectionLine.SetPosition(1, hub.gameObject.transform.position);
-                                                    connectionLine.enabled = true;
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
+                    FindConnection();
                 }
             }
             if (inputObject != null)
@@ -148,6 +86,70 @@ public class RailCartHub : MonoBehaviour
             if (inputObject != null && outputObject != null)
             {
                 connectionAttempts = 0;
+            }
+        }
+    }
+
+    private bool ReadyToConnect()
+    {
+        if (outputObject == null)
+        {
+            return inputObject != null || centralHub == true;
+        }
+        return false;
+    }
+
+    private bool CanConnect(RailCartHub hub)
+    {
+        if (centralHub == true)
+        {
+            return hub.gameObject != gameObject && hub.inputObject == null;
+        }
+        return hub.gameObject != inputObject && hub.gameObject != gameObject && hub.inputObject == null;
+    }
+
+    private void FindConnection()
+    {
+        RailCartHub[] allHubs = FindObjectsOfType<RailCartHub>();
+        List<RailCartHub> hubList = new List<RailCartHub>();
+        foreach (RailCartHub hub in allHubs)
+        {
+            if (hub.circuit == circuit)
+            {
+                hubList.Add(hub);
+            }
+        }
+        centralHub |= hubList.Count < 2;
+        foreach (RailCartHub hub in hubList)
+        {
+            if (hub.gameObject.activeInHierarchy)
+            {
+                float distance = Vector3.Distance(transform.position, hub.gameObject.transform.position);
+                if (distance < range && ReadyToConnect())
+                {
+                    if (CanConnect(hub))
+                    {
+                        if (creationMethod.Equals("spawned") && hub.ID.Equals(outputID))
+                        {
+                            outputObject = hub.gameObject;
+                            hub.inputObject = gameObject;
+                            connectionLine.SetPosition(0, transform.position);
+                            connectionLine.SetPosition(1, hub.gameObject.transform.position);
+                            connectionLine.enabled = true;
+                            creationMethod = "built";
+                        }
+                        else if (creationMethod.Equals("built"))
+                        {
+                            outputObject = hub.gameObject;
+                            outputID = hub.ID;
+                            hub.inputObject = gameObject;
+                            hub.inputID = ID;
+                            connectionLine.SetPosition(0, transform.position);
+                            connectionLine.SetPosition(1, hub.gameObject.transform.position);
+                            connectionLine.enabled = true;
+                        }
+                    }
+                }
             }
         }
     }

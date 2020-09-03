@@ -4,12 +4,13 @@ using UnityEngine;
 
 public class Pirate : MonoBehaviour
 {
-    GameManager game;
-    GameObject target;
-    List<Vector3> targetLocationList;
-    Vector3 targetLocation;
-    float fireTimer;
-    LineRenderer laser;
+    private GameManager game;
+    private PlayerController playerController;
+    private GameObject target;
+    private List<Vector3> targetLocationList;
+    private Vector3 targetLocation;
+    private float fireTimer;
+    private LineRenderer laser;
     public Material laserMat;
     public GameObject cannon;
     public GameObject explosion;
@@ -17,17 +18,19 @@ public class Pirate : MonoBehaviour
     public GameObject damageExplosion;
     public bool destroying;
     public GameObject model;
-    Quaternion originalRotation;
-    float lifeSpan = 300;
-    float destroyTimer;
+    private Quaternion originalRotation;
+    private float lifeSpan = 300;
+    private float destroyTimer;
     public float integrity = 100;
 
+    // Reduces integrity of the object and spawns damage effects
     public void TakeDamage()
     {
         integrity -= 20;
         Instantiate(damageExplosion, transform.position, transform.rotation);
     }
 
+    // Destroys the object and spawns explosion effects
     public void Explode()
     {
         Instantiate(explosion, transform.position, transform.rotation);
@@ -39,9 +42,11 @@ public class Pirate : MonoBehaviour
         destroying = true;
     }
 
-    void Start()
+    // Called by unity engine on start up to initialize variables
+    public void Start()
     {
         game = GameObject.Find("GameManager").GetComponent<GameManager>();
+        playerController = GameObject.Find("Player").GetComponent<PlayerController>();
         originalRotation = transform.rotation;
         targetLocationList = new List<Vector3>();
         laser = gameObject.AddComponent<LineRenderer>();
@@ -53,7 +58,14 @@ public class Pirate : MonoBehaviour
         laser.enabled = false;
     }
 
-    void Update()
+    // Returns true if a message can be sent to the player's tablet
+    private bool CanSendDestructionMessage()
+    {
+        return playerController.timeToDeliver == false && playerController.meteorShowerWarningActive == false && playerController.pirateAttackWarningActive == false;
+    }
+
+    // Called once per frame by unity engine
+    public void Update()
     {
         //Despawning
         lifeSpan -= 1 * Time.deltaTime;
@@ -174,7 +186,6 @@ public class Pirate : MonoBehaviour
                 {
                     if (Physics.Linecast(transform.position, target.transform.position, out RaycastHit hit))
                     {
-                        //Debug.Log("Pirate shot: " + hit.collider.gameObject.name);
                         if (hit.collider.gameObject.tag.Equals("Built"))
                         {
                             int RandomDamage = Random.Range(1, 101);
@@ -182,15 +193,16 @@ public class Pirate : MonoBehaviour
                             {
                                 Instantiate(targetExplosion, hit.point, transform.rotation);
                                 Destroy(hit.collider.gameObject);
-                                if (GameObject.Find("Player").GetComponent<PlayerController>().timeToDeliver == false && GameObject.Find("Player").GetComponent<PlayerController>().meteorShowerWarningActive == false && GameObject.Find("Player").GetComponent<PlayerController>().pirateAttackWarningActive == false)
+                                if (CanSendDestructionMessage())
                                 {
-                                    if (GameObject.Find("Player").GetComponent<PlayerController>().destructionMessageActive == false)
+                                    if (playerController.destructionMessageActive == false)
                                     {
-                                        GameObject.Find("Player").GetComponent<PlayerController>().destructionMessageActive = true;
-                                        GameObject.Find("Player").GetComponent<PlayerController>().currentTabletMessage = "";
+                                        playerController.destructionMessageActive = true;
+                                        playerController.currentTabletMessage = "";
                                     }
-                                    GameObject.Find("Player").GetComponent<PlayerController>().currentTabletMessage += "ALERT: " + hit.collider.gameObject.name.Split('(')[0] + " destroyed by hostile spacecraft!\n";
-                                    GameObject.Find("Player").GetComponent<PlayerController>().destructionMessageCount += 1;
+                                    string objName = hit.collider.gameObject.name.Split('(')[0];
+                                    playerController.currentTabletMessage += "ALERT: " + objName + " destroyed by hostile spacecraft!\n";
+                                    playerController.destructionMessageCount += 1;
                                 }
                             }
                             else
@@ -208,15 +220,15 @@ public class Pirate : MonoBehaviour
                                     {
                                         Instantiate(targetExplosion, hit.point, transform.rotation);
                                         game.SeparateBlocks(hit.point, "glass",false);
-                                        if (GameObject.Find("Player").GetComponent<PlayerController>().timeToDeliver == false && GameObject.Find("Player").GetComponent<PlayerController>().meteorShowerWarningActive == false && GameObject.Find("Player").GetComponent<PlayerController>().pirateAttackWarningActive == false)
+                                        if (CanSendDestructionMessage())
                                         {
-                                            if (GameObject.Find("Player").GetComponent<PlayerController>().destructionMessageActive == false)
+                                            if (playerController.destructionMessageActive == false)
                                             {
-                                                GameObject.Find("Player").GetComponent<PlayerController>().destructionMessageActive = true;
-                                                GameObject.Find("Player").GetComponent<PlayerController>().currentTabletMessage = "";
+                                                playerController.destructionMessageActive = true;
+                                                playerController.currentTabletMessage = "";
                                             }
-                                            GameObject.Find("Player").GetComponent<PlayerController>().currentTabletMessage += "ALERT: Some glass blocks were attacked by hostile spacecraft!\n";
-                                            GameObject.Find("Player").GetComponent<PlayerController>().destructionMessageCount += 1;
+                                            playerController.currentTabletMessage += "ALERT: Some glass blocks were attacked by hostile spacecraft!\n";
+                                            playerController.destructionMessageCount += 1;
                                         }
                                     }
                                 }
@@ -229,15 +241,15 @@ public class Pirate : MonoBehaviour
                                     {
                                         Instantiate(targetExplosion, hit.point, transform.rotation);
                                         game.SeparateBlocks(hit.point, "brick",false);
-                                        if (GameObject.Find("Player").GetComponent<PlayerController>().timeToDeliver == false && GameObject.Find("Player").GetComponent<PlayerController>().meteorShowerWarningActive == false && GameObject.Find("Player").GetComponent<PlayerController>().pirateAttackWarningActive == false)
+                                        if (CanSendDestructionMessage())
                                         {
-                                            if (GameObject.Find("Player").GetComponent<PlayerController>().destructionMessageActive == false)
+                                            if (playerController.destructionMessageActive == false)
                                             {
-                                                GameObject.Find("Player").GetComponent<PlayerController>().destructionMessageActive = true;
-                                                GameObject.Find("Player").GetComponent<PlayerController>().currentTabletMessage = "";
+                                                playerController.destructionMessageActive = true;
+                                                playerController.currentTabletMessage = "";
                                             }
-                                            GameObject.Find("Player").GetComponent<PlayerController>().currentTabletMessage += "ALERT: Some bricks were attacked by hostile spacecraft!\n";
-                                            GameObject.Find("Player").GetComponent<PlayerController>().destructionMessageCount += 1;
+                                            playerController.currentTabletMessage += "ALERT: Some bricks were attacked by hostile spacecraft!\n";
+                                            playerController.destructionMessageCount += 1;
                                         }
                                     }
                                     else
@@ -254,15 +266,15 @@ public class Pirate : MonoBehaviour
                                     {
                                         Instantiate(targetExplosion, hit.point, transform.rotation);
                                         game.SeparateBlocks(hit.point, "iron", false);
-                                        if (GameObject.Find("Player").GetComponent<PlayerController>().timeToDeliver == false && GameObject.Find("Player").GetComponent<PlayerController>().meteorShowerWarningActive == false && GameObject.Find("Player").GetComponent<PlayerController>().pirateAttackWarningActive == false)
+                                        if (CanSendDestructionMessage())
                                         {
-                                            if (GameObject.Find("Player").GetComponent<PlayerController>().destructionMessageActive == false)
+                                            if (playerController.destructionMessageActive == false)
                                             {
-                                                GameObject.Find("Player").GetComponent<PlayerController>().destructionMessageActive = true;
-                                                GameObject.Find("Player").GetComponent<PlayerController>().currentTabletMessage = "";
+                                                playerController.destructionMessageActive = true;
+                                                playerController.currentTabletMessage = "";
                                             }
-                                            GameObject.Find("Player").GetComponent<PlayerController>().currentTabletMessage += "ALERT: Some iron blocks were attacked by hostile spacecraft!\n";
-                                            GameObject.Find("Player").GetComponent<PlayerController>().destructionMessageCount += 1;
+                                            playerController.currentTabletMessage += "ALERT: Some iron blocks were attacked by hostile spacecraft!\n";
+                                            playerController.destructionMessageCount += 1;
                                         }
                                     }
                                     else
@@ -279,15 +291,15 @@ public class Pirate : MonoBehaviour
                                     {
                                         Instantiate(targetExplosion, hit.point, transform.rotation);
                                         game.SeparateBlocks(hit.point, "steel", false);
-                                        if (GameObject.Find("Player").GetComponent<PlayerController>().timeToDeliver == false && GameObject.Find("Player").GetComponent<PlayerController>().meteorShowerWarningActive == false && GameObject.Find("Player").GetComponent<PlayerController>().pirateAttackWarningActive == false)
+                                        if (CanSendDestructionMessage())
                                         {
-                                            if (GameObject.Find("Player").GetComponent<PlayerController>().destructionMessageActive == false)
+                                            if (playerController.destructionMessageActive == false)
                                             {
-                                                GameObject.Find("Player").GetComponent<PlayerController>().destructionMessageActive = true;
-                                                GameObject.Find("Player").GetComponent<PlayerController>().currentTabletMessage = "";
+                                                playerController.destructionMessageActive = true;
+                                                playerController.currentTabletMessage = "";
                                             }
-                                            GameObject.Find("Player").GetComponent<PlayerController>().currentTabletMessage += "ALERT: Some steel blocks were attacked by hostile spacecraft!\n";
-                                            GameObject.Find("Player").GetComponent<PlayerController>().destructionMessageCount += 1;
+                                            playerController.currentTabletMessage += "ALERT: Some steel blocks were attacked by hostile spacecraft!\n";
+                                            playerController.destructionMessageCount += 1;
                                         }
                                     }
                                     else

@@ -9,7 +9,8 @@ public class Glass : MonoBehaviour
     public int address;
     private float updateTick;
 
-    void Update()
+    // Called once per frame by unity engine
+    public void Update()
     {
         updateTick += 1 * Time.deltaTime;
         if (updateTick > 0.5f + (address * 0.001f))

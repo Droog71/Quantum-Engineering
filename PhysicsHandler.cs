@@ -31,7 +31,8 @@ public class PhysicsHandler : MonoBehaviour
     public string creationMethod = "built";
     public bool needsSupportCheck;
 
-    void Start()
+    // Called by unity engine on start up to initialize variables
+    public void Start()
     {
         stateManager = GameObject.Find("GameManager").GetComponent<StateManager>();
         rb = gameObject.AddComponent<Rigidbody>();
@@ -50,11 +51,7 @@ public class PhysicsHandler : MonoBehaviour
         }
     }
 
-    void Update()
-    {
-
-    }
-
+    // Updates the physics state of the object
     public void UpdatePhysics()
     {
         if (stateManager.worldLoaded == true)
@@ -83,10 +80,6 @@ public class PhysicsHandler : MonoBehaviour
                         if (playerHit.collider.gameObject.GetComponent<PlayerController>() == null)
                         {
                             GetComponent<Collider>().isTrigger = true;
-                        }
-                        else
-                        {
-                            //Debug.Log("Block skipped duplicate check due to presence of player.");
                         }
                     }
                     else
@@ -121,7 +114,6 @@ public class PhysicsHandler : MonoBehaviour
                         {
                             buried = true;
                             needsSupportCheck = false;
-                            //Debug.Log("block found buried via raycast");
                         }
                     }
                     if (Physics.Raycast(transform.position, transform.up, out RaycastHit inGroundHit, 3))
@@ -130,7 +122,6 @@ public class PhysicsHandler : MonoBehaviour
                         {
                             buried = true;
                             needsSupportCheck = false;
-                            //Debug.Log("block found buried via raycast");
                         }
                     }
                     Vector3 buriedVector = new Vector3(transform.position.x, transform.position.y + 2.4f, transform.position.z);
@@ -140,7 +131,6 @@ public class PhysicsHandler : MonoBehaviour
                         {
                             buried = true;
                             needsSupportCheck = false;
-                            //Debug.Log("block found buried via raycast");
                         }
                     }
                     if (Physics.Raycast(transform.position, -transform.up, out RaycastHit stackHit, 5))
@@ -154,7 +144,6 @@ public class PhysicsHandler : MonoBehaviour
                                     if (supported == false)
                                     {
                                         fallingStack = true;
-                                        //GetComponent<Renderer>().material.color = Color.cyan;
                                     }
                                 }
                             }
@@ -173,7 +162,6 @@ public class PhysicsHandler : MonoBehaviour
                             falling = true;
                             rb.constraints = RigidbodyConstraints.FreezeRotation | ~RigidbodyConstraints.FreezePosition;
                             rb.isKinematic = false;
-                            //GetComponent<Renderer>().material.color = Color.blue;
                         }
                         else
                         {
@@ -232,7 +220,8 @@ public class PhysicsHandler : MonoBehaviour
         }
     }
 
-    void CheckForSupport()
+    // Checks whether or not a block is properly supported or should fall to the ground
+    private void CheckForSupport()
     {
         supported = false;
         supportedZpositive = 0;
@@ -248,7 +237,6 @@ public class PhysicsHandler : MonoBehaviour
         {
             if (dir == 1)
             {
-                //Debug.Log("dir 1");
                 float supportZ = 0;
                 hits = Physics.RaycastAll(transform.position, transform.forward, 200.0F);
                 foreach (RaycastHit supportHit in hits)
@@ -274,18 +262,6 @@ public class PhysicsHandler : MonoBehaviour
                     for (float z = transform.position.z; z < supportZ; z+=5)
                     {
                         Vector3 missingBlockVector = new Vector3(transform.position.x, transform.position.y + 5, z);
-                        //GameObject lineObject = GameObject.CreatePrimitive(PrimitiveType.Sphere);
-                        //lineObject.transform.position = missingBlockVector;
-                        //lineObject.GetComponent<Renderer>().enabled = false;
-                        //lineObject.GetComponent<Collider>().enabled = false;
-                        //LineRenderer debugLine = lineObject.AddComponent<LineRenderer>();
-                        //debugLine.startWidth = 0.2f;
-                        //debugLine.endWidth = 0.2f;
-                        //debugLine.loop = true;
-                        //debugLine.enabled = false;
-                        //debugLine.SetPosition(0, missingBlockVector);
-                        //debugLine.SetPosition(1, missingBlockVector - transform.up * 3);
-                        //debugLine.enabled = true;
                         if (!Physics.Raycast(missingBlockVector, -transform.up,3))
                         {
                             missingBlockZpositive = true;
@@ -295,7 +271,6 @@ public class PhysicsHandler : MonoBehaviour
             }
             if (dir == 2)
             {
-                //Debug.Log("dir 2");
                 float supportZ = 0;
                 hits = Physics.RaycastAll(transform.position, -transform.forward, 200.0F);
                 foreach (RaycastHit supportHit in hits)
@@ -321,18 +296,6 @@ public class PhysicsHandler : MonoBehaviour
                     for (float z = transform.position.z; z > supportZ; z-=5)
                     {
                         Vector3 missingBlockVector = new Vector3(transform.position.x, transform.position.y + 5, z);
-                        //GameObject lineObject = GameObject.CreatePrimitive(PrimitiveType.Sphere);
-                        //lineObject.transform.position = missingBlockVector;
-                        //lineObject.GetComponent<Renderer>().enabled = false;
-                        //lineObject.GetComponent<Collider>().enabled = false;
-                        //LineRenderer debugLine = lineObject.AddComponent<LineRenderer>();
-                        //debugLine.startWidth = 0.2f;
-                        //debugLine.endWidth = 0.2f;
-                        //debugLine.loop = true;
-                        //debugLine.enabled = false;
-                        //debugLine.SetPosition(0, missingBlockVector);
-                        //debugLine.SetPosition(1, missingBlockVector - transform.up * 3);
-                        //debugLine.enabled = true;
                         if (!Physics.Raycast(missingBlockVector, -transform.up, 3))
                         {
                             missingBlockZnegative = true;
@@ -342,7 +305,6 @@ public class PhysicsHandler : MonoBehaviour
             }
             if (dir == 3)
             {
-                //Debug.Log("dir 3");
                 float supportX = 0;
                 hits = Physics.RaycastAll(transform.position, transform.right, 200.0F);
                 foreach (RaycastHit supportHit in hits)
@@ -368,18 +330,6 @@ public class PhysicsHandler : MonoBehaviour
                     for (float x = transform.position.x; x < supportX; x+=5)
                     {
                         Vector3 missingBlockVector = new Vector3(x, transform.position.y + 5, transform.position.z);
-                        //GameObject lineObject = GameObject.CreatePrimitive(PrimitiveType.Sphere);
-                        //lineObject.transform.position = missingBlockVector;
-                        //lineObject.GetComponent<Renderer>().enabled = false;
-                        //lineObject.GetComponent<Collider>().enabled = false;
-                        //LineRenderer debugLine = lineObject.AddComponent<LineRenderer>();
-                        //debugLine.startWidth = 0.2f;
-                        //debugLine.endWidth = 0.2f;
-                        //debugLine.loop = true;
-                        //debugLine.enabled = false;
-                        //debugLine.SetPosition(0, missingBlockVector);
-                        //debugLine.SetPosition(1, missingBlockVector - transform.up * 3);
-                        //debugLine.enabled = true;
                         if (!Physics.Raycast(missingBlockVector, -transform.up, 3))
                         {
                             missingBlockXpositive = true;
@@ -389,7 +339,6 @@ public class PhysicsHandler : MonoBehaviour
             }
             if (dir == 4)
             {
-                //Debug.Log("dir 4");
                 float supportX = 0;
                 hits = Physics.RaycastAll(transform.position, -transform.right, 200.0F);
                 foreach (RaycastHit supportHit in hits)
@@ -415,18 +364,6 @@ public class PhysicsHandler : MonoBehaviour
                     for (float x = transform.position.x; x > supportX; x-=5)
                     {
                         Vector3 missingBlockVector = new Vector3(x, transform.position.y + 5, transform.position.z);
-                        //GameObject lineObject = GameObject.CreatePrimitive(PrimitiveType.Sphere);
-                        //lineObject.transform.position = missingBlockVector;
-                        //lineObject.GetComponent<Renderer>().enabled = false;
-                        //lineObject.GetComponent<Collider>().enabled = false;
-                        //LineRenderer debugLine = //lineObject.AddComponent<LineRenderer>();
-                        //debugLine.startWidth = 0.2f;
-                        //debugLine.endWidth = 0.2f;
-                        //debugLine.loop = true;
-                        //debugLine.enabled = false;
-                        //debugLine.SetPosition(0, missingBlockVector);
-                        //debugLine.SetPosition(1, missingBlockVector - transform.up * 3);
-                        //debugLine.enabled = true;
                         if (!Physics.Raycast(missingBlockVector, -transform.up, 3))
                         {
                             missingBlockXnegative = true;
@@ -445,7 +382,6 @@ public class PhysicsHandler : MonoBehaviour
                 {
                     supported = false;
                     missingBlockTimer = 0;
-                    //GetComponent<Renderer>().material.color = Color.yellow;
                 }
             }
             else
@@ -462,26 +398,15 @@ public class PhysicsHandler : MonoBehaviour
                 {
                     supported = false;
                     missingBlockTimer = 0;
-                    //Debug.Log("Partial structure collapse occuring!");
-                    //GetComponent<Renderer>().material.color = Color.yellow;
                 }
             }
             else if (missingBlockTimer > 0)
             {
                 missingBlockTimer = 0;
-                //Debug.Log("Structure collapse false alarm, timer reset.");
             }
         }
-        if (supported == true)
+        if (supported == false)
         {
-            //GetComponent<Renderer>().material.color = Color.green;
-        }
-        else
-        {
-            if (GetComponent<Renderer>().material.color != Color.yellow)
-            {
-                //GetComponent<Renderer>().material.color = Color.red;
-            }
             if (separatedBlocks == false)
             {
                 GameObject.Find("GameManager").GetComponent<GameManager>().SeparateBlocks(transform.position, "all",false);
@@ -494,17 +419,18 @@ public class PhysicsHandler : MonoBehaviour
         needsSupportCheck = false;
     }
 
-    void OnTriggerStay(Collider other)
+    // Called by unity engine once per physics update for every collider that is touching the trigger
+    public void OnTriggerStay(Collider other)
     {
         if (other.gameObject.tag.Equals("Landscape"))
         {
             buried = true;
             needsSupportCheck = false;
-            //Debug.Log("block found buried via trigger");
         }
     }
 
-    void OnTriggerEnter(Collider other)
+    // Called by unity engine when two objects collide
+    public void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.GetComponent<PhysicsHandler>() != null)
         {
@@ -521,6 +447,7 @@ public class PhysicsHandler : MonoBehaviour
         }
     }
 
+    // Destroyes the object and spawns explosion effects
     public void Explode()
     {
         Instantiate(explosion, transform.position, transform.rotation);
