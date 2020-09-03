@@ -84,12 +84,12 @@ public class StorageInteraction : MonoBehaviour
                     playerController.playerInventory.AddItem("Storage Container", 1);
                 }
                 Destroy(playerController.objectInSight);
-                playerController.playCraftingSound();
+                playerController.PlayCraftingSound();
             }
             else
             {
                 playerController.cannotCollect = true;
-                playerController.playCraftingSound();
+                playerController.PlayCraftingSound();
             }
         }
     }

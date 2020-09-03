@@ -122,6 +122,7 @@ public class Smelter : MonoBehaviour
         }
     }
 
+    // Connects to a conduit for output.
     private void ConnectToOutput()
     {
         GameObject[] allObjects = GameObject.FindGameObjectsWithTag("Built");
@@ -162,6 +163,7 @@ public class Smelter : MonoBehaviour
         }
     }
 
+    // Sets output item type based on the input item.
     private void SetOutputType()
     {
         inputType = inputObject.GetComponent<UniversalConduit>().type;
@@ -187,6 +189,7 @@ public class Smelter : MonoBehaviour
         }
     }
 
+    // Moves smelted items to the output conduit.
     private void HandleOutput()
     {
         if (outputObject != null)

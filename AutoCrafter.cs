@@ -162,85 +162,81 @@ public class AutoCrafter : MonoBehaviour
         return false;
     }
 
+    private bool IsStorageContainer(GameObject obj)
+    {
+        return obj != gameObject
+        && obj.GetComponent<InventoryManager>() != null
+        && !obj.GetComponent<InventoryManager>().ID.Equals("player")
+        && obj.GetComponent<Retriever>() == null
+        && obj.GetComponent<Rocket>() == null
+        && obj.GetComponent<AutoCrafter>() == null;
+    }
+
     // Connects the auto crafter to a storage inventory
     private void ConnectToObject(GameObject obj)
     {
-        if (obj.GetComponent<InventoryManager>() != null && !obj.GetComponent<InventoryManager>().ID.Equals("player") && obj.GetComponent<Retriever>() == null && obj.GetComponent<Rocket>() == null && obj.GetComponent<AutoCrafter>() == null && obj != gameObject)
+        if (inputObject == null && IsStorageContainer(obj))
         {
-            if (inputObject == null)
+            if (creationMethod.Equals("spawned") && obj.GetComponent<InventoryManager>().ID.Equals(inputID))
             {
-                if (creationMethod.Equals("spawned") && obj.GetComponent<InventoryManager>().ID.Equals(inputID))
+                float distance = Vector3.Distance(transform.position, obj.transform.position);
+                if (distance < 20 || obj.GetComponent<RailCart>() != null)
                 {
-                    float distance = Vector3.Distance(transform.position, obj.transform.position);
-                    if (distance < 20 || obj.GetComponent<RailCart>() != null)
+                    inputObject = obj;
+                    if (obj.GetComponent<RailCart>() != null)
                     {
-                        inputObject = obj;
-                        if (obj.GetComponent<RailCart>() != null)
-                        {
-                            inputID = obj.GetComponent<RailCart>().ID;
-                        }
-                        else
-                        {
-                            inputID = obj.GetComponent<InventoryManager>().ID;
-                        }
-                        craftingManager.inventoryManager = obj.GetComponent<InventoryManager>();
-                        connectionLine.SetPosition(0, transform.position);
-                        connectionLine.SetPosition(1, obj.transform.position);
-                        connectionLine.enabled = true;
-                        creationMethod = "built";
+                        inputID = obj.GetComponent<RailCart>().ID;
                     }
-                }
-                else if (creationMethod.Equals("built"))
-                {
-                    float distance = Vector3.Distance(transform.position, obj.transform.position);
-                    if (distance < 20)
+                    else
                     {
-                        inputObject = obj;
                         inputID = obj.GetComponent<InventoryManager>().ID;
-                        craftingManager.inventoryManager = obj.GetComponent<InventoryManager>();
-                        connectionLine.SetPosition(0, transform.position);
-                        connectionLine.SetPosition(1, obj.transform.position);
-                        connectionLine.enabled = true;
                     }
+                    craftingManager.inventoryManager = obj.GetComponent<InventoryManager>();
+                    connectionLine.SetPosition(0, transform.position);
+                    connectionLine.SetPosition(1, obj.transform.position);
+                    connectionLine.enabled = true;
+                    creationMethod = "built";
+                }
+            }
+            else if (creationMethod.Equals("built"))
+            {
+                float distance = Vector3.Distance(transform.position, obj.transform.position);
+                if (distance < 20)
+                {
+                    inputObject = obj;
+                    inputID = obj.GetComponent<InventoryManager>().ID;
+                    craftingManager.inventoryManager = obj.GetComponent<InventoryManager>();
+                    connectionLine.SetPosition(0, transform.position);
+                    connectionLine.SetPosition(1, obj.transform.position);
+                    connectionLine.enabled = true;
                 }
             }
         }
         if (obj.GetComponent<StorageComputer>() != null)
         {
-            if (inputObject == null)
+            float distance = Vector3.Distance(transform.position, obj.transform.position);
+            if (inputObject == null && distance < 20)
             {
-                if (creationMethod.Equals("spawned"))
+                if (creationMethod.Equals("spawned") && obj.GetComponent<StorageComputer>().ID.Equals(inputID))
                 {
-                    //Debug.Log("trying to connect " + ID + " to " + obj.GetComponent<InventoryManager>().ID + " vs " + outputID);
-                    if (obj.GetComponent<StorageComputer>().ID.Equals(inputID))
-                    {
-                        float distance = Vector3.Distance(transform.position, obj.transform.position);
-                        if (distance < 20)
-                        {
-                            inputObject = obj;
-                            inputID = obj.GetComponent<StorageComputer>().ID;
-                            craftingManager.storageComputerInventoryManager = obj.GetComponent<StorageComputer>().computerContainers;
-                            craftingManager.conduitItem = inputObject.GetComponent<StorageComputer>().conduitItem.GetComponent<ConduitItem>();
-                            connectionLine.SetPosition(0, transform.position);
-                            connectionLine.SetPosition(1, obj.transform.position);
-                            connectionLine.enabled = true;
-                            creationMethod = "built";
-                        }
-                    }
+                    inputObject = obj;
+                    inputID = obj.GetComponent<StorageComputer>().ID;
+                    craftingManager.storageComputerInventoryManager = obj.GetComponent<StorageComputer>().computerContainers;
+                    craftingManager.conduitItem = inputObject.GetComponent<StorageComputer>().conduitItem.GetComponent<ConduitItem>();
+                    connectionLine.SetPosition(0, transform.position);
+                    connectionLine.SetPosition(1, obj.transform.position);
+                    connectionLine.enabled = true;
+                    creationMethod = "built";
                 }
                 else if (creationMethod.Equals("built"))
                 {
-                    float distance = Vector3.Distance(transform.position, obj.transform.position);
-                    if (distance < 20)
-                    {
-                        inputObject = obj;
-                        inputID = obj.GetComponent<StorageComputer>().ID;
-                        craftingManager.storageComputerInventoryManager = obj.GetComponent<StorageComputer>().computerContainers;
-                        craftingManager.conduitItem = inputObject.GetComponent<StorageComputer>().conduitItem.GetComponent<ConduitItem>();
-                        connectionLine.SetPosition(0, transform.position);
-                        connectionLine.SetPosition(1, obj.transform.position);
-                        connectionLine.enabled = true;
-                    }
+                    inputObject = obj;
+                    inputID = obj.GetComponent<StorageComputer>().ID;
+                    craftingManager.storageComputerInventoryManager = obj.GetComponent<StorageComputer>().computerContainers;
+                    craftingManager.conduitItem = inputObject.GetComponent<StorageComputer>().conduitItem.GetComponent<ConduitItem>();
+                    connectionLine.SetPosition(0, transform.position);
+                    connectionLine.SetPosition(1, obj.transform.position);
+                    connectionLine.enabled = true;
                 }
             }
         }

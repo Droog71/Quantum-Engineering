@@ -200,7 +200,7 @@
         pc.buildItemDisplayTimer = 0;
         pc.destroyTimer = 0;
         pc.buildTimer = 0;
-        pc.playButtonSound();
+        pc.PlayButtonSound();
     }
 
     public void previousBlock()
@@ -396,6 +396,6 @@
         pc.buildItemDisplayTimer = 0;
         pc.destroyTimer = 0;
         pc.buildTimer = 0;
-        pc.playButtonSound();
+        pc.PlayButtonSound();
     }
 }

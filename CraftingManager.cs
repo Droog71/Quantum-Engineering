@@ -78,12 +78,12 @@ public class CraftingManager : MonoBehaviour
                         slots[i].typeInSlot = "nothing";
                     }
                 }
-                playerController.playCraftingSound();
+                playerController.PlayCraftingSound();
             }
         }
         else
         {
-            playerController.playMissingItemsSound();
+            playerController.PlayMissingItemsSound();
         }
     }
 

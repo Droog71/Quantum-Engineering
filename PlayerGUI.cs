@@ -5,7 +5,7 @@ public class PlayerGUI : MonoBehaviour
 {
     private PlayerController playerController;
     private InventoryManager playerInventory;
-    private Dictionary<string, Texture2D> td;
+    private TextureDictionary td;
     private GuiCoordinates guiCoordinates;
     public GUISkin thisGUIskin;
     public GameObject videoPlayer;
@@ -17,15 +17,17 @@ public class PlayerGUI : MonoBehaviour
     private bool schematic6;
     private bool schematic7;
 
-    void Start()
+    // Called by unity engine on start up to initialize variables
+    public void Start()
     {
         playerController = GetComponent<PlayerController>();
         playerInventory = GetComponent<InventoryManager>();
         guiCoordinates = GetComponent<GuiCoordinates>();
-        td = GetComponent<TextureDictionary>().dictionary;
+        td = GetComponent<TextureDictionary>();
     }
 
-    void OnGUI()
+    // Called by unity engine for rendering and handling GUI events
+    public void OnGUI()
     {
         //STYLE
         GUI.skin = thisGUIskin;
@@ -44,11 +46,11 @@ public class PlayerGUI : MonoBehaviour
             if (playerController.displayingBuildItem == true)
             {
                 GUI.Label(guiCoordinates.topRightInfoRect, "\n\nBuild item set to " + playerController.buildType);
-                GUI.DrawTexture(guiCoordinates.previousBuildItemTextureRect, td[playerController.previousBuildType]);
-                GUI.DrawTexture(guiCoordinates.buildItemTextureRect, td[playerController.buildType]);
-                GUI.DrawTexture(guiCoordinates.currentBuildItemTextureRect, td[playerController.buildType]);
-                GUI.DrawTexture(guiCoordinates.buildItemTextureRect, td["Selection Box"]);
-                GUI.DrawTexture(guiCoordinates.nextBuildItemTextureRect, td[playerController.nextBuildType]);
+                GUI.DrawTexture(guiCoordinates.previousBuildItemTextureRect, td.dictionary[playerController.previousBuildType]);
+                GUI.DrawTexture(guiCoordinates.buildItemTextureRect, td.dictionary[playerController.buildType]);
+                GUI.DrawTexture(guiCoordinates.currentBuildItemTextureRect, td.dictionary[playerController.buildType]);
+                GUI.DrawTexture(guiCoordinates.buildItemTextureRect, td.dictionary["Selection Box"]);
+                GUI.DrawTexture(guiCoordinates.nextBuildItemTextureRect, td.dictionary[playerController.nextBuildType]);
                 int buildItemCount = 0;
                 foreach (InventorySlot slot in playerInventory.inventory)
                 {
@@ -88,7 +90,7 @@ public class PlayerGUI : MonoBehaviour
                 {
                     hourString = "" + hour;
                 }
-                GUI.DrawTexture(guiCoordinates.tabletBackgroundRect, td["Tablet"]);
+                GUI.DrawTexture(guiCoordinates.tabletBackgroundRect, td.dictionary["Tablet"]);
                 GUI.Label(guiCoordinates.tabletMessageRect, playerController.currentTabletMessage);
                 GUI.Label(guiCoordinates.tabletTimeRect, "\nDay: " + day + " Hour: " + hourString + ", Income: $" + playerController.money.ToString("N0"));
                 if (GUI.Button(guiCoordinates.tabletButtonRect, "CLOSE"))
@@ -96,7 +98,7 @@ public class PlayerGUI : MonoBehaviour
                     Cursor.visible = false;
                     Cursor.lockState = CursorLockMode.Locked;
                     playerController.tabletOpen = false;
-                    playerController.playButtonSound();
+                    playerController.PlayButtonSound();
                 }
             }
 
@@ -105,7 +107,7 @@ public class PlayerGUI : MonoBehaviour
             {
                 if (playerController.helpMenuOpen == false && playerController.optionsGUIopen == false && cGUI.showingInputGUI == false && playerController.exiting == false)
                 {
-                    GUI.DrawTexture(guiCoordinates.escapeMenuRect, td["Menu Background"]);
+                    GUI.DrawTexture(guiCoordinates.escapeMenuRect, td.dictionary["Menu Background"]);
                     if (GUI.Button(guiCoordinates.escapeButton1Rect, "Resume"))
                     {
                         Cursor.visible = false;
@@ -116,17 +118,17 @@ public class PlayerGUI : MonoBehaviour
                         playerController.helpMenuOpen = false;
                         playerController.videoMenuOpen = false;
                         playerController.schematicMenuOpen = false;
-                        playerController.playButtonSound();
+                        playerController.PlayButtonSound();
                     }
                     if (GUI.Button(guiCoordinates.escapeButton2Rect, "Options"))
                     {
                         playerController.optionsGUIopen = true;
-                        playerController.playButtonSound();
+                        playerController.PlayButtonSound();
                     }
                     if (GUI.Button(guiCoordinates.escapeButton3Rect, "Help"))
                     {
                         playerController.helpMenuOpen = true;
-                        playerController.playButtonSound();
+                        playerController.PlayButtonSound();
                     }
                     if (GUI.Button(guiCoordinates.escapeButton4Rect, "Exit"))
                     {
@@ -143,12 +145,12 @@ public class PlayerGUI : MonoBehaviour
                         PlayerPrefs.Save();
                         playerController.exiting = true;
                         playerController.requestedExit = true;
-                        playerController.playButtonSound();
+                        playerController.PlayButtonSound();
                     }
                 }
                 if (playerController.exiting == true)
                 {
-                    GUI.DrawTexture(guiCoordinates.savingBackgroundRect, td["Interface Background"]);
+                    GUI.DrawTexture(guiCoordinates.savingBackgroundRect, td.dictionary["Interface Background"]);
                     GUI.Label(guiCoordinates.messageRect, "\n\n\n\n\nSaving world...");
                 }
             }
@@ -158,28 +160,28 @@ public class PlayerGUI : MonoBehaviour
             {
                 if (playerController.videoMenuOpen == false && playerController.schematicMenuOpen == false)
                 {
-                    GUI.DrawTexture(guiCoordinates.escapeMenuRect, td["Menu Background"]);
+                    GUI.DrawTexture(guiCoordinates.escapeMenuRect, td.dictionary["Menu Background"]);
                     if (GUI.Button(guiCoordinates.escapeButton1Rect, "Videos"))
                     {
                         playerController.videoMenuOpen = true;
-                        playerController.playButtonSound();
+                        playerController.PlayButtonSound();
                     }
                     if (GUI.Button(guiCoordinates.escapeButton2Rect, "Schematics"))
                     {
                         playerController.schematicMenuOpen = true;
-                        playerController.playButtonSound();
+                        playerController.PlayButtonSound();
                     }
                     if (GUI.Button(guiCoordinates.escapeButton4Rect, "BACK"))
                     {
                         playerController.helpMenuOpen = false;
-                        playerController.playButtonSound();
+                        playerController.PlayButtonSound();
                     }
                 }
                 if (playerController.videoMenuOpen == true)
                 {
                     if (playerController.mCam.GetComponent<UnityEngine.Video.VideoPlayer>().isPlaying == false)
                     {
-                        GUI.DrawTexture(guiCoordinates.videoMenuBackgroundRect, td["Menu Background"]);
+                        GUI.DrawTexture(guiCoordinates.videoMenuBackgroundRect, td.dictionary["Menu Background"]);
                     }
                     if (playerController.mCam.GetComponent<UnityEngine.Video.VideoPlayer>().isPlaying == false)
                     {
@@ -188,68 +190,68 @@ public class PlayerGUI : MonoBehaviour
                             Cursor.visible = false;
                             Cursor.lockState = CursorLockMode.Locked;
                             videoPlayer.GetComponent<VP>().PlayVideo("Guide.webm", false, 0.5f);
-                            playerController.playButtonSound();
+                            playerController.PlayButtonSound();
                         }
                         if (GUI.Button(guiCoordinates.optionsButton2Rect, "Dark Matter"))
                         {
                             Cursor.visible = false;
                             Cursor.lockState = CursorLockMode.Locked;
                             videoPlayer.GetComponent<VP>().PlayVideo("DarkMatter.webm", false, 0.5f);
-                            playerController.playButtonSound();
+                            playerController.PlayButtonSound();
                         }
                         if (GUI.Button(guiCoordinates.optionsButton3Rect, "Universal Extractor"))
                         {
                             Cursor.visible = false;
                             Cursor.lockState = CursorLockMode.Locked;
                             videoPlayer.GetComponent<VP>().PlayVideo("Extractor.webm", false, 0.5f);
-                            playerController.playButtonSound();
+                            playerController.PlayButtonSound();
                         }
                         if (GUI.Button(guiCoordinates.optionsButton4Rect, "Heat Exchanger"))
                         {
                             Cursor.visible = false;
                             Cursor.lockState = CursorLockMode.Locked;
                             videoPlayer.GetComponent<VP>().PlayVideo("HeatExchanger.webm", false, 0.5f);
-                            playerController.playButtonSound();
+                            playerController.PlayButtonSound();
                         }
                         if (GUI.Button(guiCoordinates.optionsButton5Rect, "Alloy Smelter"))
                         {
                             Cursor.visible = false;
                             Cursor.lockState = CursorLockMode.Locked;
                             videoPlayer.GetComponent<VP>().PlayVideo("AlloySmelter.webm", false, 0.5f);
-                            playerController.playButtonSound();
+                            playerController.PlayButtonSound();
                         }
                         if (GUI.Button(guiCoordinates.optionsButton6Rect, "Hazards"))
                         {
                             Cursor.visible = false;
                             Cursor.lockState = CursorLockMode.Locked;
                             videoPlayer.GetComponent<VP>().PlayVideo("Hazards.webm", false, 0.5f);
-                            playerController.playButtonSound();
+                            playerController.PlayButtonSound();
                         }
                         if (GUI.Button(guiCoordinates.optionsButton7Rect, "Rail Carts"))
                         {
                             Cursor.visible = false;
                             Cursor.lockState = CursorLockMode.Locked;
                             videoPlayer.GetComponent<VP>().PlayVideo("RailCarts.webm", false, 0.5f);
-                            playerController.playButtonSound();
+                            playerController.PlayButtonSound();
                         }
                         if (GUI.Button(guiCoordinates.optionsButton8Rect, "Storage Computers"))
                         {
                             Cursor.visible = false;
                             Cursor.lockState = CursorLockMode.Locked;
                             videoPlayer.GetComponent<VP>().PlayVideo("StorageComputers.webm", false, 0.5f);
-                            playerController.playButtonSound();
+                            playerController.PlayButtonSound();
                         }
                         if (GUI.Button(guiCoordinates.optionsButton9Rect, "Nuclear Reactors"))
                         {
                             Cursor.visible = false;
                             Cursor.lockState = CursorLockMode.Locked;
                             videoPlayer.GetComponent<VP>().PlayVideo("NuclearReactors.webm", false, 0.5f);
-                            playerController.playButtonSound();
+                            playerController.PlayButtonSound();
                         }
                         if (GUI.Button(guiCoordinates.optionsButton10Rect, "BACK"))
                         {
                             playerController.videoMenuOpen = false;
-                            playerController.playButtonSound();
+                            playerController.PlayButtonSound();
                         }
                     }
 
@@ -270,14 +272,14 @@ public class PlayerGUI : MonoBehaviour
                 {
                     if (schematic1 == false || schematic2 == false || schematic3 == false || schematic4 == false || schematic5 == false || schematic6 == false || schematic7 == false)
                     {
-                        GUI.DrawTexture(guiCoordinates.schematicsMenuBackgroundRect, td["Menu Background"]);
+                        GUI.DrawTexture(guiCoordinates.schematicsMenuBackgroundRect, td.dictionary["Menu Background"]);
                         if (GUI.Button(guiCoordinates.optionsButton1Rect, "Dark Matter"))
                         {
                             if (schematic1 == false)
                             {
                                 schematic1 = true;
                             }
-                            playerController.playButtonSound();
+                            playerController.PlayButtonSound();
                         }
                         if (GUI.Button(guiCoordinates.optionsButton2Rect, "Plates"))
                         {
@@ -285,7 +287,7 @@ public class PlayerGUI : MonoBehaviour
                             {
                                 schematic2 = true;
                             }
-                            playerController.playButtonSound();
+                            playerController.PlayButtonSound();
                         }
                         if (GUI.Button(guiCoordinates.optionsButton3Rect, "Wires"))
                         {
@@ -293,7 +295,7 @@ public class PlayerGUI : MonoBehaviour
                             {
                                 schematic3 = true;
                             }
-                            playerController.playButtonSound();
+                            playerController.PlayButtonSound();
                         }
                         if (GUI.Button(guiCoordinates.optionsButton4Rect, "Gears"))
                         {
@@ -301,7 +303,7 @@ public class PlayerGUI : MonoBehaviour
                             {
                                 schematic4 = true;
                             }
-                            playerController.playButtonSound();
+                            playerController.PlayButtonSound();
 
                         }
                         if (GUI.Button(guiCoordinates.optionsButton5Rect, "Steel"))
@@ -310,7 +312,7 @@ public class PlayerGUI : MonoBehaviour
                             {
                                 schematic5 = true;
                             }
-                            playerController.playButtonSound();
+                            playerController.PlayButtonSound();
 
                         }
                         if (GUI.Button(guiCoordinates.optionsButton6Rect, "Bronze"))
@@ -319,7 +321,7 @@ public class PlayerGUI : MonoBehaviour
                             {
                                 schematic6 = true;
                             }
-                            playerController.playButtonSound();
+                            playerController.PlayButtonSound();
 
                         }
                         if (GUI.Button(guiCoordinates.optionsButton7Rect, "Heat Exchangers"))
@@ -328,41 +330,41 @@ public class PlayerGUI : MonoBehaviour
                             {
                                 schematic7 = true;
                             }
-                            playerController.playButtonSound();
+                            playerController.PlayButtonSound();
                         }
                         if (GUI.Button(guiCoordinates.optionsButton8Rect, "BACK"))
                         {
                             playerController.schematicMenuOpen = false;
-                            playerController.playButtonSound();
+                            playerController.PlayButtonSound();
                         }
                     }
                     if (schematic1 == true)
                     {
-                        GUI.DrawTexture(new Rect(0, 0, ScreenWidth, ScreenHeight), td["Dark Matter Schematic"]);
+                        GUI.DrawTexture(new Rect(0, 0, ScreenWidth, ScreenHeight), td.dictionary["Dark Matter Schematic"]);
                     }
                     if (schematic2 == true)
                     {
-                        GUI.DrawTexture(new Rect(0, 0, ScreenWidth, ScreenHeight), td["Plate Schematic"]);
+                        GUI.DrawTexture(new Rect(0, 0, ScreenWidth, ScreenHeight), td.dictionary["Plate Schematic"]);
                     }
                     if (schematic3 == true)
                     {
-                        GUI.DrawTexture(new Rect(0, 0, ScreenWidth, ScreenHeight), td["Wire Schematic"]);
+                        GUI.DrawTexture(new Rect(0, 0, ScreenWidth, ScreenHeight), td.dictionary["Wire Schematic"]);
                     }
                     if (schematic4 == true)
                     {
-                        GUI.DrawTexture(new Rect(0, 0, ScreenWidth, ScreenHeight), td["Gear Schematic"]);
+                        GUI.DrawTexture(new Rect(0, 0, ScreenWidth, ScreenHeight), td.dictionary["Gear Schematic"]);
                     }
                     if (schematic5 == true)
                     {
-                        GUI.DrawTexture(new Rect(0, 0, ScreenWidth, ScreenHeight), td["Steel Schematic"]);
+                        GUI.DrawTexture(new Rect(0, 0, ScreenWidth, ScreenHeight), td.dictionary["Steel Schematic"]);
                     }
                     if (schematic6 == true)
                     {
-                        GUI.DrawTexture(new Rect(0, 0, ScreenWidth, ScreenHeight), td["Bronze Schematic"]);
+                        GUI.DrawTexture(new Rect(0, 0, ScreenWidth, ScreenHeight), td.dictionary["Bronze Schematic"]);
                     }
                     if (schematic7 == true)
                     {
-                        GUI.DrawTexture(new Rect(0, 0, ScreenWidth, ScreenHeight), td["Heat Exchanger Schematic"]);
+                        GUI.DrawTexture(new Rect(0, 0, ScreenWidth, ScreenHeight), td.dictionary["Heat Exchanger Schematic"]);
                     }
                     if (schematic1 == true || schematic2 == true || schematic3 == true || schematic4 == true || schematic5 == true || schematic6 == true || schematic7 == true)
                     {
@@ -375,7 +377,7 @@ public class PlayerGUI : MonoBehaviour
                             schematic5 = false;
                             schematic6 = false;
                             schematic7 = false;
-                            playerController.playButtonSound();
+                            playerController.PlayButtonSound();
                         }
                     }
                 }
@@ -394,22 +396,22 @@ public class PlayerGUI : MonoBehaviour
             //OPTIONS MENU
             if (playerController.optionsGUIopen == true && cGUI.showingInputGUI == false)
             {
-                GUI.DrawTexture(guiCoordinates.optionsMenuBackgroundRect, td["Menu Background"]);
+                GUI.DrawTexture(guiCoordinates.optionsMenuBackgroundRect, td.dictionary["Menu Background"]);
                 if (GUI.Button(guiCoordinates.optionsButton1Rect, "Bindings"))
                 {
                     cGUI.ToggleGUI();
-                    playerController.playButtonSound();
+                    playerController.PlayButtonSound();
                 }
-                string invertYInputDisplay = "";
+                string invertYInput = "";
                 if (GetComponent<MSCameraController>().CameraSettings.firstPerson.invertYInput == true)
                 {
-                    invertYInputDisplay = "ON";
+                    invertYInput = "ON";
                 }
                 else
                 {
-                    invertYInputDisplay = "OFF";
+                    invertYInput = "OFF";
                 }
-                if (GUI.Button(guiCoordinates.optionsButton2Rect, "Invert Y Axis: " + invertYInputDisplay))
+                if (GUI.Button(guiCoordinates.optionsButton2Rect, "Invert Y Axis: " + invertYInput))
                 {
                     if (GetComponent<MSCameraController>().CameraSettings.firstPerson.invertYInput)
                     {
@@ -419,7 +421,7 @@ public class PlayerGUI : MonoBehaviour
                     {
                         GetComponent<MSCameraController>().CameraSettings.firstPerson.invertYInput = true;
                     }
-                    playerController.playButtonSound();
+                    playerController.PlayButtonSound();
                 }
                 GUI.Label(guiCoordinates.sliderLabel1Rect, "X sensitivity");
                 GUI.Label(guiCoordinates.sliderLabel2Rect, "Y sensitivity");
@@ -452,7 +454,7 @@ public class PlayerGUI : MonoBehaviour
                         GameObject.Find("GameManager").GetComponent<GameManager>().blockPhysics = false;
                     }
                     PlayerPrefsX.SetBool(GameObject.Find("GameManager").GetComponent<StateManager>().WorldName + "blockPhysics", GameObject.Find("GameManager").GetComponent<GameManager>().blockPhysics);
-                    playerController.playButtonSound();
+                    playerController.PlayButtonSound();
                 }
                 string hazardsEnabledDisplay = "";
                 if (GameObject.Find("GameManager").GetComponent<GameManager>().hazardsEnabled == true)
@@ -474,12 +476,12 @@ public class PlayerGUI : MonoBehaviour
                         GameObject.Find("GameManager").GetComponent<GameManager>().hazardsEnabled = false;
                     }
                     PlayerPrefsX.SetBool(GameObject.Find("GameManager").GetComponent<StateManager>().WorldName + "hazardsEnabled", GameObject.Find("GameManager").GetComponent<GameManager>().hazardsEnabled);
-                    playerController.playButtonSound();
+                    playerController.PlayButtonSound();
                 }
                 if (GUI.Button(guiCoordinates.optionsButton11Rect, "BACK"))
                 {
                     playerController.optionsGUIopen = false;
-                    playerController.playButtonSound();
+                    playerController.PlayButtonSound();
                 }
             }
 
@@ -547,9 +549,9 @@ public class PlayerGUI : MonoBehaviour
             //BUILDING INSTRUCTIONS
             if (playerController.building == true && playerController.tabletOpen == false)
             {
-                GUI.DrawTexture(guiCoordinates.buildInfoRectBG, td["Interface Background"]);
+                GUI.DrawTexture(guiCoordinates.buildInfoRectBG, td.dictionary["Interface Background"]);
                 GUI.Label(guiCoordinates.buildInfoRect, "Right click to place block.\nPress F to collect.\nPress R to rotate.\nPress Q to stop building.");
-                GUI.DrawTexture(guiCoordinates.currentBuildItemTextureRect, td[playerController.buildType]);
+                GUI.DrawTexture(guiCoordinates.currentBuildItemTextureRect, td.dictionary[playerController.buildType]);
                 int buildItemCount = 0;
                 foreach (InventorySlot slot in playerInventory.inventory)
                 {
@@ -573,7 +575,7 @@ public class PlayerGUI : MonoBehaviour
             {
                 if (playerController.paintColorSelected == false)
                 {
-                    GUI.DrawTexture(guiCoordinates.optionsMenuBackgroundRect, td["Interface Background"]);
+                    GUI.DrawTexture(guiCoordinates.optionsMenuBackgroundRect, td.dictionary["Interface Background"]);
                     GUI.Label(guiCoordinates.optionsButton1Rect, "      Paint  Gun");
                     GUI.Label(guiCoordinates.optionsButton2Rect, "     Select Color");
                     GUI.Label(guiCoordinates.sliderLabel1Rect, "Red");
@@ -586,7 +588,7 @@ public class PlayerGUI : MonoBehaviour
                     playerController.paintGunTank.GetComponent<Renderer>().material.color = new Color(playerController.paintRed, playerController.paintGreen, playerController.paintBlue);
                     playerController.adjustedPaintGunTank.GetComponent<Renderer>().material.color = new Color(playerController.paintRed, playerController.paintGreen, playerController.paintBlue);
                     playerController.adjustedPaintGunTank2.GetComponent<Renderer>().material.color = new Color(playerController.paintRed, playerController.paintGreen, playerController.paintBlue);
-                    GUI.DrawTexture(guiCoordinates.optionsButton3Rect, td["Iron Block"]);
+                    GUI.DrawTexture(guiCoordinates.optionsButton3Rect, td.dictionary["Iron Block"]);
                     GUI.color = Color.white;
                     if (GUI.Button(guiCoordinates.optionsButton8Rect, "DONE"))
                     {
@@ -594,7 +596,7 @@ public class PlayerGUI : MonoBehaviour
                         Cursor.visible = false;
                         Cursor.lockState = CursorLockMode.Locked;
                         gameObject.GetComponent<MSCameraController>().enabled = true;
-                        playerController.playButtonSound();
+                        playerController.PlayButtonSound();
                     }
                 }
                 else if (playerController.lookingAtCombinedMesh == true)
@@ -616,7 +618,7 @@ public class PlayerGUI : MonoBehaviour
                     {
                         if (playerController.crosshairEnabled)
                         {
-                            GUI.DrawTexture(guiCoordinates.crosshairRect, td["Crosshair"]);
+                            GUI.DrawTexture(guiCoordinates.crosshairRect, td.dictionary["Crosshair"]);
                         }
                     }
                 }

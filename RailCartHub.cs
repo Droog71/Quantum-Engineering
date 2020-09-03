@@ -90,6 +90,7 @@ public class RailCartHub : MonoBehaviour
         }
     }
 
+    // Returns true if this hub is ready to connect to the next
     private bool ReadyToConnect()
     {
         if (outputObject == null)
@@ -99,6 +100,7 @@ public class RailCartHub : MonoBehaviour
         return false;
     }
 
+    // Returns true if the hub in question is a potential connection
     private bool CanConnect(RailCartHub hub)
     {
         if (centralHub == true)
@@ -108,6 +110,7 @@ public class RailCartHub : MonoBehaviour
         return hub.gameObject != inputObject && hub.gameObject != gameObject && hub.inputObject == null;
     }
 
+    // Finds the first hub within range
     private void FindConnection()
     {
         RailCartHub[] allHubs = FindObjectsOfType<RailCartHub>();

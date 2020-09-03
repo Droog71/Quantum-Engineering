@@ -5,7 +5,7 @@ public class MachineGUI : MonoBehaviour
 {
     private PlayerController playerController;
     private GuiCoordinates gc;
-    private Dictionary<string, Texture2D> td;
+    private TextureDictionary td;
     private bool hubStopWindowOpen;
 
     // Called by unity engine on start up to initialize variables
@@ -13,7 +13,7 @@ public class MachineGUI : MonoBehaviour
     {
         playerController = GetComponent<PlayerController>();
         gc = GetComponent<GuiCoordinates>();
-        td = GetComponent<TextureDictionary>().dictionary;
+        td = GetComponent<TextureDictionary>();
     }
 
     // Called by unity engine for rendering and handling GUI events
@@ -42,7 +42,7 @@ public class MachineGUI : MonoBehaviour
                     PowerConduit powerConduit = obj.GetComponent<PowerConduit>();
                     if (powerConduit.connectionFailed == false)
                     {
-                        GUI.DrawTexture(gc.FourButtonSpeedControlBGRect, td["Interface Background"]);
+                        GUI.DrawTexture(gc.FourButtonSpeedControlBGRect, td.dictionary["Interface Background"]);
                         GUI.Label(gc.outputLabelRect, "Range");
                         powerConduit.range = (int)GUI.HorizontalSlider(gc.outputControlButton2Rect, powerConduit.range, 6, 120);
                         if (GUI.Button(gc.outputControlButton3Rect, "Dual Output: " + powerConduit.dualOutput))
@@ -55,23 +55,23 @@ public class MachineGUI : MonoBehaviour
                             {
                                 powerConduit.dualOutput = true;
                             }
-                            playerController.playButtonSound();
+                            playerController.PlayButtonSound();
                         }
                         if (GUI.Button(gc.outputControlButton4Rect, "Close"))
                         {
                             playerController.machineGUIopen = false;
-                            playerController.playButtonSound();
+                            playerController.PlayButtonSound();
                         }
                     }
                     else
                     {
-                        GUI.DrawTexture(gc.speedControlBGRect, td["Interface Background"]);
+                        GUI.DrawTexture(gc.speedControlBGRect, td.dictionary["Interface Background"]);
                         GUI.Label(gc.outputLabelRect, "Offline");
                         if (GUI.Button(gc.outputControlButton2Rect, "Reboot"))
                         {
                             powerConduit.connectionAttempts = 0;
                             powerConduit.connectionFailed = false;
-                            playerController.playButtonSound();
+                            playerController.PlayButtonSound();
                         }
                     }
                 }
@@ -83,7 +83,7 @@ public class MachineGUI : MonoBehaviour
                     {
                         if (hubStopWindowOpen == false)
                         {
-                            GUI.DrawTexture(gc.FiveButtonSpeedControlBGRect, td["Interface Background"]);
+                            GUI.DrawTexture(gc.FiveButtonSpeedControlBGRect, td.dictionary["Interface Background"]);
                             GUI.Label(gc.railCartHubCircuitLabelRect, "Circuit");
                             int circuit = hub.circuit;
                             string circuitString = GUI.TextField(gc.railCartHubCircuitRect, circuit.ToString(), 3);
@@ -100,18 +100,18 @@ public class MachineGUI : MonoBehaviour
                             if (GUI.Button(gc.outputControlButton3Rect, "Stop Settings"))
                             {
                                 hubStopWindowOpen = true;
-                                playerController.playButtonSound();
+                                playerController.PlayButtonSound();
                             }
                             if (GUI.Button(gc.outputControlButton4Rect, "Close"))
                             {
                                 playerController.machineGUIopen = false;
                                 hubStopWindowOpen = false;
-                                playerController.playButtonSound();
+                                playerController.PlayButtonSound();
                             }
                         }
                         else
                         {
-                            GUI.DrawTexture(gc.FiveButtonSpeedControlBGRect, td["Interface Background"]);
+                            GUI.DrawTexture(gc.FiveButtonSpeedControlBGRect, td.dictionary["Interface Background"]);
                             GUI.Label(gc.longOutputLabelRect, "Stop Time");
                             if (GUI.Button(gc.outputControlButton0Rect, "Stop: " + hub.stop))
                             {
@@ -123,31 +123,31 @@ public class MachineGUI : MonoBehaviour
                                 {
                                     hub.stop = true;
                                 }
-                                playerController.playButtonSound();
+                                playerController.PlayButtonSound();
                             }
                             hub.stopTime = (int)GUI.HorizontalSlider(gc.outputControlButton2Rect, hub.stopTime, 0, 600);
                             if (GUI.Button(gc.outputControlButton3Rect, "Range Settings"))
                             {
                                 hubStopWindowOpen = false;
-                                playerController.playButtonSound();
+                                playerController.PlayButtonSound();
                             }
                             if (GUI.Button(gc.outputControlButton4Rect, "Close"))
                             {
                                 playerController.machineGUIopen = false;
                                 hubStopWindowOpen = false;
-                                playerController.playButtonSound();
+                                playerController.PlayButtonSound();
                             }
                         }
                     }
                     else
                     {
-                        GUI.DrawTexture(gc.speedControlBGRect, td["Interface Background"]);
+                        GUI.DrawTexture(gc.speedControlBGRect, td.dictionary["Interface Background"]);
                         GUI.Label(gc.outputLabelRect, "Offline");
                         if (GUI.Button(gc.outputControlButton2Rect, "Reboot"))
                         {
                             hub.connectionAttempts = 0;
                             hub.connectionFailed = false;
-                            playerController.playButtonSound();
+                            playerController.PlayButtonSound();
                         }
                     }
                 }
@@ -157,7 +157,7 @@ public class MachineGUI : MonoBehaviour
                     Retriever retriever = obj.GetComponent<Retriever>();
                     if (retriever.connectionFailed == false)
                     {
-                        GUI.DrawTexture(gc.FourButtonSpeedControlBGRect, td["Interface Background"]);
+                        GUI.DrawTexture(gc.FourButtonSpeedControlBGRect, td.dictionary["Interface Background"]);
                         if (retriever.power > 0)
                         {
                             GUI.Label(gc.outputLabelRect, "Output");
@@ -174,24 +174,24 @@ public class MachineGUI : MonoBehaviour
                                 playerController.inventoryOpen = true;
                                 playerController.storageGUIopen = true;
                                 playerController.machineGUIopen = false;
-                                playerController.playButtonSound();
+                                playerController.PlayButtonSound();
                             }
                         }
                         if (GUI.Button(gc.outputControlButton4Rect, "Close"))
                         {
                             playerController.machineGUIopen = false;
-                            playerController.playButtonSound();
+                            playerController.PlayButtonSound();
                         }
                     }
                     else
                     {
-                        GUI.DrawTexture(gc.speedControlBGRect, td["Interface Background"]);
+                        GUI.DrawTexture(gc.speedControlBGRect, td.dictionary["Interface Background"]);
                         GUI.Label(gc.outputLabelRect, "Offline");
                         if (GUI.Button(gc.outputControlButton2Rect, "Reboot"))
                         {
                             retriever.connectionAttempts = 0;
                             retriever.connectionFailed = false;
-                            playerController.playButtonSound();
+                            playerController.PlayButtonSound();
                         }
                     }
                 }
@@ -201,7 +201,7 @@ public class MachineGUI : MonoBehaviour
                     AutoCrafter autoCrafter = obj.GetComponent<AutoCrafter>();
                     if (autoCrafter.connectionFailed == false)
                     {
-                        GUI.DrawTexture(gc.FourButtonSpeedControlBGRect, td["Interface Background"]);
+                        GUI.DrawTexture(gc.FourButtonSpeedControlBGRect, td.dictionary["Interface Background"]);
                         if (autoCrafter.power > 0)
                         {
                             GUI.Label(gc.outputLabelRect, "Output");
@@ -218,31 +218,31 @@ public class MachineGUI : MonoBehaviour
                                 playerController.inventoryOpen = true;
                                 playerController.storageGUIopen = true;
                                 playerController.machineGUIopen = false;
-                                playerController.playButtonSound();
+                                playerController.PlayButtonSound();
                             }
                         }
                         if (GUI.Button(gc.outputControlButton4Rect, "Close"))
                         {
                             playerController.machineGUIopen = false;
-                            playerController.playButtonSound();
+                            playerController.PlayButtonSound();
                         }
                     }
                     else
                     {
-                        GUI.DrawTexture(gc.speedControlBGRect, td["Interface Background"]);
+                        GUI.DrawTexture(gc.speedControlBGRect, td.dictionary["Interface Background"]);
                         GUI.Label(gc.outputLabelRect, "Offline");
                         if (GUI.Button(gc.outputControlButton2Rect, "Reboot"))
                         {
                             autoCrafter.connectionAttempts = 0;
                             autoCrafter.connectionFailed = false;
-                            playerController.playButtonSound();
+                            playerController.PlayButtonSound();
                         }
                     }
                 }
 
                 if (obj.GetComponent<UniversalConduit>() != null)
                 {
-                    GUI.DrawTexture(gc.speedControlBGRect, td["Interface Background"]);
+                    GUI.DrawTexture(gc.speedControlBGRect, td.dictionary["Interface Background"]);
                     UniversalConduit conduit = obj.GetComponent<UniversalConduit>();
                     if (conduit.connectionFailed == false)
                     {
@@ -256,14 +256,14 @@ public class MachineGUI : MonoBehaviour
                         {
                             conduit.connectionAttempts = 0;
                             conduit.connectionFailed = false;
-                            playerController.playButtonSound();
+                            playerController.PlayButtonSound();
                         }
                     }
                 }
 
                 if (obj.GetComponent<DarkMatterConduit>() != null)
                 {
-                    GUI.DrawTexture(gc.speedControlBGRect, td["Interface Background"]);
+                    GUI.DrawTexture(gc.speedControlBGRect, td.dictionary["Interface Background"]);
                     DarkMatterConduit conduit = obj.GetComponent<DarkMatterConduit>();
                     if (conduit.connectionFailed == false)
                     {
@@ -277,14 +277,14 @@ public class MachineGUI : MonoBehaviour
                         {
                             conduit.connectionAttempts = 0;
                             conduit.connectionFailed = false;
-                            playerController.playButtonSound();
+                            playerController.PlayButtonSound();
                         }
                     }
                 }
 
                 if (obj.GetComponent<HeatExchanger>() != null)
                 {
-                    GUI.DrawTexture(gc.speedControlBGRect, td["Interface Background"]);
+                    GUI.DrawTexture(gc.speedControlBGRect, td.dictionary["Interface Background"]);
                     HeatExchanger hx = obj.GetComponent<HeatExchanger>();
                     if (hx.inputObject != null)
                     {
@@ -304,7 +304,7 @@ public class MachineGUI : MonoBehaviour
                                     {
                                         hx.connectionAttempts = 0;
                                         hx.connectionFailed = false;
-                                        playerController.playButtonSound();
+                                        playerController.PlayButtonSound();
                                     }
                                 }
                             }
@@ -326,7 +326,7 @@ public class MachineGUI : MonoBehaviour
 
                 if (obj.GetComponent<PowerSource>() != null)
                 {
-                    GUI.DrawTexture(gc.speedControlBGRect, td["Interface Background"]);
+                    GUI.DrawTexture(gc.speedControlBGRect, td.dictionary["Interface Background"]);
                     PowerSource powerSource = obj.GetComponent<PowerSource>();
                     if (powerSource.connectionFailed == true)
                     {
@@ -335,7 +335,7 @@ public class MachineGUI : MonoBehaviour
                         {
                             powerSource.connectionAttempts = 0;
                             powerSource.connectionFailed = false;
-                            playerController.playButtonSound();
+                            playerController.PlayButtonSound();
                         }
                     }
                     else
@@ -346,7 +346,7 @@ public class MachineGUI : MonoBehaviour
 
                 if (obj.GetComponent<Auger>() != null)
                 {
-                    GUI.DrawTexture(gc.speedControlBGRect, td["Interface Background"]);
+                    GUI.DrawTexture(gc.speedControlBGRect, td.dictionary["Interface Background"]);
                     Auger auger = obj.GetComponent<Auger>();
                     if (auger.power > 0)
                     {
@@ -361,7 +361,7 @@ public class MachineGUI : MonoBehaviour
 
                 if (obj.GetComponent<UniversalExtractor>() != null)
                 {
-                    GUI.DrawTexture(gc.speedControlBGRect, td["Interface Background"]);
+                    GUI.DrawTexture(gc.speedControlBGRect, td.dictionary["Interface Background"]);
                     UniversalExtractor extractor = obj.GetComponent<UniversalExtractor>();
                     if (extractor.connectionFailed == false)
                     {
@@ -372,7 +372,7 @@ public class MachineGUI : MonoBehaviour
                         }
                         else
                         {
-                            GUI.DrawTexture(gc.speedControlBGRect, td["Interface Background"]);
+                            GUI.DrawTexture(gc.speedControlBGRect, td.dictionary["Interface Background"]);
                             GUI.Label(gc.outputLabelRect, "No Power");
                         }
                     }
@@ -383,13 +383,13 @@ public class MachineGUI : MonoBehaviour
                         {
                             extractor.connectionAttempts = 0;
                             extractor.connectionFailed = false;
-                            playerController.playButtonSound();
+                            playerController.PlayButtonSound();
                         }
                     }
                 }
                 if (obj.GetComponent<DarkMatterCollector>() != null)
                 {
-                    GUI.DrawTexture(gc.speedControlBGRect, td["Interface Background"]);
+                    GUI.DrawTexture(gc.speedControlBGRect, td.dictionary["Interface Background"]);
                     DarkMatterCollector collector = obj.GetComponent<DarkMatterCollector>();
                     if (collector.connectionFailed == false)
                     {
@@ -410,14 +410,14 @@ public class MachineGUI : MonoBehaviour
                         {
                             collector.connectionAttempts = 0;
                             collector.connectionFailed = false;
-                            playerController.playButtonSound();
+                            playerController.PlayButtonSound();
                         }
                     }
                 }
 
                 if (obj.GetComponent<Smelter>() != null)
                 {
-                    GUI.DrawTexture(gc.speedControlBGRect, td["Interface Background"]);
+                    GUI.DrawTexture(gc.speedControlBGRect, td.dictionary["Interface Background"]);
                     Smelter smelter = obj.GetComponent<Smelter>();
                     if (smelter.connectionFailed == false)
                     {
@@ -439,14 +439,14 @@ public class MachineGUI : MonoBehaviour
                         {
                             smelter.connectionAttempts = 0;
                             smelter.connectionFailed = false;
-                            playerController.playButtonSound();
+                            playerController.PlayButtonSound();
                         }
                     }
                 }
 
                 if (obj.GetComponent<AlloySmelter>() != null)
                 {
-                    GUI.DrawTexture(gc.speedControlBGRect, td["Interface Background"]);
+                    GUI.DrawTexture(gc.speedControlBGRect, td.dictionary["Interface Background"]);
                     AlloySmelter alloySmelter = obj.GetComponent<AlloySmelter>();
                     if (alloySmelter.connectionFailed == false)
                     {
@@ -467,14 +467,14 @@ public class MachineGUI : MonoBehaviour
                         {
                             alloySmelter.connectionAttempts = 0;
                             alloySmelter.connectionFailed = false;
-                            playerController.playButtonSound();
+                            playerController.PlayButtonSound();
                         }
                     }
                 }
 
                 if (obj.GetComponent<Press>() != null)
                 {
-                    GUI.DrawTexture(gc.speedControlBGRect, td["Interface Background"]);
+                    GUI.DrawTexture(gc.speedControlBGRect, td.dictionary["Interface Background"]);
                     Press press = obj.GetComponent<Press>();
                     if (press.connectionFailed == false)
                     {
@@ -495,14 +495,14 @@ public class MachineGUI : MonoBehaviour
                         {
                             press.connectionAttempts = 0;
                             press.connectionFailed = false;
-                            playerController.playButtonSound();
+                            playerController.PlayButtonSound();
                         }
                     }
                 }
 
                 if (obj.GetComponent<Extruder>() != null)
                 {
-                    GUI.DrawTexture(gc.speedControlBGRect, td["Interface Background"]);
+                    GUI.DrawTexture(gc.speedControlBGRect, td.dictionary["Interface Background"]);
                     Extruder extruder = obj.GetComponent<Extruder>();
                     if (extruder.connectionFailed == false)
                     {
@@ -523,14 +523,14 @@ public class MachineGUI : MonoBehaviour
                         {
                             extruder.connectionAttempts = 0;
                             extruder.connectionFailed = false;
-                            playerController.playButtonSound();
+                            playerController.PlayButtonSound();
                         }
                     }
                 }
 
                 if (obj.GetComponent<Turret>() != null)
                 {
-                    GUI.DrawTexture(gc.speedControlBGRect, td["Interface Background"]);
+                    GUI.DrawTexture(gc.speedControlBGRect, td.dictionary["Interface Background"]);
                     Turret turret = obj.GetComponent<Turret>();
                     if (turret.power > 0)
                     {
@@ -552,7 +552,7 @@ public class MachineGUI : MonoBehaviour
 
                 if (obj.GetComponent<GearCutter>() != null)
                 {
-                    GUI.DrawTexture(gc.speedControlBGRect, td["Interface Background"]);
+                    GUI.DrawTexture(gc.speedControlBGRect, td.dictionary["Interface Background"]);
                     GearCutter gearCutter = obj.GetComponent<GearCutter>();
                     if (gearCutter.connectionFailed == false)
                     {
@@ -573,7 +573,7 @@ public class MachineGUI : MonoBehaviour
                         {
                             gearCutter.connectionAttempts = 0;
                             gearCutter.connectionFailed = false;
-                            playerController.playButtonSound();
+                            playerController.PlayButtonSound();
                         }
                     }
                 }

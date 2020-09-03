@@ -6,7 +6,7 @@ public class InfoHUD : MonoBehaviour
 {
     private PlayerController playerController;
     private GuiCoordinates gc;
-    private Dictionary<string, Texture2D> td;
+    private TextureDictionary td;
     private string machineDisplayID = "unassigned";
     private string machineDisplayOutputID = "unassigned";
     private string machineDisplayOutputID2 = "unassigned";
@@ -18,7 +18,7 @@ public class InfoHUD : MonoBehaviour
     {
         playerController = GetComponent<PlayerController>();
         gc = GetComponent<GuiCoordinates>();
-        td = GetComponent<TextureDictionary>().dictionary;
+        td = GetComponent<TextureDictionary>();
     }
 
     // Returns true if the info hud should be drawn
@@ -146,25 +146,25 @@ public class InfoHUD : MonoBehaviour
             else if (obj.GetComponent<IronBlock>() != null)
             {
                 GUI.Label(gc.messageRect, "Iron Block");
-                GUI.DrawTexture(gc.buildInfoRectBG, td["Interface Background"]);
+                GUI.DrawTexture(gc.buildInfoRectBG, td.dictionary["Interface Background"]);
                 GUI.Label(gc.buildInfoRect, "Press F to remove blocks.\nPress B to add blocks.\nPress Q to stop building.");
             }
             else if (obj.GetComponent<Steel>() != null)
             {
                 GUI.Label(gc.messageRect, "Steel Block");
-                GUI.DrawTexture(gc.buildInfoRectBG, td["Interface Background"]);
+                GUI.DrawTexture(gc.buildInfoRectBG, td.dictionary["Interface Background"]);
                 GUI.Label(gc.buildInfoRect, "Press F to remove blocks.\nPress B to add blocks.\nPress Q to stop building.");
             }
             else if (obj.GetComponent<Glass>() != null)
             {
                 GUI.Label(gc.messageRect, "Glass Block");
-                GUI.DrawTexture(gc.buildInfoRectBG, td["Interface Background"]);
+                GUI.DrawTexture(gc.buildInfoRectBG, td.dictionary["Interface Background"]);
                 GUI.Label(gc.buildInfoRect, "Press F to remove blocks.\nPress B to add blocks.\nPress Q to stop building.");
             }
             else if (obj.GetComponent<Brick>() != null)
             {
                 GUI.Label(gc.messageRect, "Brick Block");
-                GUI.DrawTexture(gc.buildInfoRectBG, td["Interface Background"]);
+                GUI.DrawTexture(gc.buildInfoRectBG, td.dictionary["Interface Background"]);
                 GUI.Label(gc.buildInfoRect, "Press F to remove blocks.\nPress B to add blocks.\nPress Q to stop building.");
             }
             else if (obj.GetComponent<ElectricLight>() != null)
@@ -178,7 +178,7 @@ public class InfoHUD : MonoBehaviour
             else if (obj.GetComponent<StorageComputer>() != null)
             {
                 GUI.Label(gc.messageRect, "Storage Computer" + "\nPress E to interact." + "\nPress F to Collect.");
-                GUI.DrawTexture(gc.infoRectBG, td["Interface Background"]);
+                GUI.DrawTexture(gc.infoRectBG, td.dictionary["Interface Background"]);
                 if (obj.GetComponent<StorageComputer>().initialized == true)
                 {
                     GUI.Label(gc.infoRect, "Storage Computer" + "\nID: " + machineDisplayID + "\nEnergized: " + playerController.machineHasPower);
@@ -200,7 +200,7 @@ public class InfoHUD : MonoBehaviour
                 GUI.Label(gc.messageRect, "Press F to collect.\nPress E to interact.");
                 if (playerController.machineInSight != null)
                 {
-                    GUI.DrawTexture(gc.infoRectBG, td["Interface Background"]);
+                    GUI.DrawTexture(gc.infoRectBG, td.dictionary["Interface Background"]);
                     if (obj.GetComponent<RailCartHub>().connectionFailed == false)
                     {
                         GUI.Label(gc.infoRect, "Rail Cart Hub" + 
@@ -223,7 +223,7 @@ public class InfoHUD : MonoBehaviour
                 GUI.Label(gc.messageRect, "Press F to collect.\nPress E to interact.");
                 if (playerController.machineInSight != null)
                 {
-                    GUI.DrawTexture(gc.infoRectBG, td["Interface Background"]);
+                    GUI.DrawTexture(gc.infoRectBG, td.dictionary["Interface Background"]);
                     if (obj.GetComponent<DarkMatterConduit>().connectionFailed == false)
                     {
                         GUI.Label(gc.infoRect, "Dark Matter Conduit" + 
@@ -246,7 +246,7 @@ public class InfoHUD : MonoBehaviour
                 GUI.Label(gc.messageRect, "Press F to collect.\nPress E to interact.");
                 if (playerController.machineInSight != null)
                 {
-                    GUI.DrawTexture(gc.infoRectBG, td["Interface Background"]);
+                    GUI.DrawTexture(gc.infoRectBG, td.dictionary["Interface Background"]);
                     if (obj.GetComponent<UniversalConduit>().connectionFailed == false)
                     {
                         GUI.Label(gc.infoRect, "Universal Conduit" + 
@@ -267,7 +267,7 @@ public class InfoHUD : MonoBehaviour
             else if (obj.GetComponent<PowerSource>() != null)
             {
                 GUI.Label(gc.messageRect, "Press F to collect.\nPress E to interact.");
-                GUI.DrawTexture(gc.infoRectBG, td["Interface Background"]);
+                GUI.DrawTexture(gc.infoRectBG, td.dictionary["Interface Background"]);
                 if (obj.GetComponent<PowerSource>().type == "Solar Panel")
                 {
                     if (obj.GetComponent<PowerSource>().connectionFailed == false && obj.GetComponent<PowerSource>().blocked == false)
@@ -321,7 +321,7 @@ public class InfoHUD : MonoBehaviour
                 GUI.Label(gc.messageRect, "Press F to collect.");
                 if (playerController.machineInSight != null)
                 {
-                    GUI.DrawTexture(gc.infoRectBG, td["Interface Background"]);
+                    GUI.DrawTexture(gc.infoRectBG, td.dictionary["Interface Background"]);
                     GUI.Label(gc.infoRect, "Nuclear Reactor" + 
                     "\nID: " + machineDisplayID + 
                     "\nCooling: " + playerController.machineCooling + " KBTU" + 
@@ -331,7 +331,7 @@ public class InfoHUD : MonoBehaviour
             else if (obj.GetComponent<PowerConduit>() != null)
             {
                 GUI.Label(gc.messageRect, "Press F to collect.\nPress E to interact.");
-                GUI.DrawTexture(gc.infoRectBG, td["Interface Background"]);
+                GUI.DrawTexture(gc.infoRectBG, td.dictionary["Interface Background"]);
                 if (obj.GetComponent<PowerConduit>().connectionFailed == false)
                 {
                     GUI.Label(gc.infoRect, "Power Conduit" +
@@ -349,7 +349,7 @@ public class InfoHUD : MonoBehaviour
             else if (obj.GetComponent<UniversalExtractor>() != null)
             {
                 GUI.Label(gc.messageRect, "Press F to collect.\nPress E to interact.");
-                GUI.DrawTexture(gc.infoRectBG, td["Interface Background"]);
+                GUI.DrawTexture(gc.infoRectBG, td.dictionary["Interface Background"]);
                 if (obj.GetComponent<UniversalExtractor>().connectionFailed == false)
                 {
                     GUI.Label(gc.infoRect, "Universal Extractor" + 
@@ -369,7 +369,7 @@ public class InfoHUD : MonoBehaviour
             else if (obj.GetComponent<Auger>() != null)
             {
                 GUI.Label(gc.messageRect, "Press F to collect.\nPress E to interact.");
-                GUI.DrawTexture(gc.infoRectBG, td["Interface Background"]);
+                GUI.DrawTexture(gc.infoRectBG, td.dictionary["Interface Background"]);
                 GUI.Label(gc.infoRect, "Auger" + 
                 "\nID: " + machineDisplayID + 
                 "\nEnergized: " + playerController.machineHasPower + 
@@ -382,7 +382,7 @@ public class InfoHUD : MonoBehaviour
             else if (obj.GetComponent<DarkMatterCollector>() != null)
             {
                 GUI.Label(gc.messageRect, "Press F to collect.\nPress E to interact.");
-                GUI.DrawTexture(gc.infoRectBG, td["Interface Background"]);
+                GUI.DrawTexture(gc.infoRectBG, td.dictionary["Interface Background"]);
                 if (obj.GetComponent<DarkMatterCollector>().connectionFailed == false)
                 {
                     GUI.Label(gc.infoRect, "Dark Matter Collector" + 
@@ -404,7 +404,7 @@ public class InfoHUD : MonoBehaviour
                 GUI.Label(gc.messageRect, "Press F to collect.\nPress E to interact.");
                 if (playerController.machineInSight != null)
                 {
-                    GUI.DrawTexture(gc.infoRectBG, td["Interface Background"]);
+                    GUI.DrawTexture(gc.infoRectBG, td.dictionary["Interface Background"]);
                     if (obj.GetComponent<Smelter>().connectionFailed == false)
                     {
                         GUI.Label(gc.infoRect, "Smelter" + 
@@ -431,7 +431,7 @@ public class InfoHUD : MonoBehaviour
                 GUI.Label(gc.messageRect, "Press F to collect.\nPress E to interact.");
                 if (playerController.machineInSight != null)
                 {
-                    GUI.DrawTexture(gc.infoRectBG, td["Interface Background"]);
+                    GUI.DrawTexture(gc.infoRectBG, td.dictionary["Interface Background"]);
                     if (obj.GetComponent<AlloySmelter>().connectionFailed == false)
                     {
                         GUI.Label(gc.infoRect, "Alloy Smelter" + 
@@ -461,7 +461,7 @@ public class InfoHUD : MonoBehaviour
                 GUI.Label(gc.messageRect, "Press F to collect.\nPress E to interact.");
                 if (playerController.machineInSight != null)
                 {
-                    GUI.DrawTexture(gc.infoRectBG, td["Interface Background"]);
+                    GUI.DrawTexture(gc.infoRectBG, td.dictionary["Interface Background"]);
                     if (obj.GetComponent<Press>().connectionFailed == false)
                     {
                         GUI.Label(gc.infoRect, "Press" + 
@@ -488,7 +488,7 @@ public class InfoHUD : MonoBehaviour
                 GUI.Label(gc.messageRect, "Press F to collect.\nPress E to interact.");
                 if (playerController.machineInSight != null)
                 {
-                    GUI.DrawTexture(gc.infoRectBG, td["Interface Background"]);
+                    GUI.DrawTexture(gc.infoRectBG, td.dictionary["Interface Background"]);
                     if (obj.GetComponent<Extruder>().connectionFailed == false)
                     {
                         GUI.Label(gc.infoRect, "Extruder" + 
@@ -515,7 +515,7 @@ public class InfoHUD : MonoBehaviour
                 GUI.Label(gc.messageRect, "Press F to collect.\nPress E to interact.");
                 if (playerController.machineInSight != null)
                 {
-                    GUI.DrawTexture(gc.infoRectBG, td["Interface Background"]);
+                    GUI.DrawTexture(gc.infoRectBG, td.dictionary["Interface Background"]);
                     if (obj.GetComponent<Retriever>().connectionFailed == false)
                     {
                         GUI.Label(gc.infoRect, "Retriever" + 
@@ -540,7 +540,7 @@ public class InfoHUD : MonoBehaviour
                 GUI.Label(gc.messageRect, "Press F to collect.\nPress E to interact.");
                 if (playerController.machineInSight != null)
                 {
-                    GUI.DrawTexture(gc.infoRectBG, td["Interface Background"]);
+                    GUI.DrawTexture(gc.infoRectBG, td.dictionary["Interface Background"]);
                     if (obj.GetComponent<AutoCrafter>().connectionFailed == false)
                     {
                         GUI.Label(gc.infoRect, "Auto Crafter" + 
@@ -565,7 +565,7 @@ public class InfoHUD : MonoBehaviour
                 GUI.Label(gc.messageRect, "Press F to collect.\nPress E to interact.");
                 if (playerController.machineInSight != null)
                 {
-                    GUI.DrawTexture(gc.infoRectBG, td["Interface Background"]);
+                    GUI.DrawTexture(gc.infoRectBG, td.dictionary["Interface Background"]);
                     if (obj.GetComponent<GearCutter>().connectionFailed == false)
                     {
                         GUI.Label(gc.infoRect, "Gear Cutter" + 
@@ -592,7 +592,7 @@ public class InfoHUD : MonoBehaviour
                 GUI.Label(gc.messageRect, "Press F to collect.\nPress E to interact.");
                 if (playerController.machineInSight != null)
                 {
-                    GUI.DrawTexture(gc.infoRectBG, td["Interface Background"]);
+                    GUI.DrawTexture(gc.infoRectBG, td.dictionary["Interface Background"]);
                     int rpm = (int)(60 / (0.2f + (3 - (playerController.machineSpeed * 0.1f))));
                     GUI.Label(gc.infoRect, "Turret" + 
                     "\nID: " + machineDisplayID + 
@@ -608,7 +608,7 @@ public class InfoHUD : MonoBehaviour
                 GUI.Label(gc.messageRect, "Press F to collect.\nPress E to interact.");
                 if (playerController.machineInSight != null)
                 {
-                    GUI.DrawTexture(gc.infoRectBG, td["Interface Background"]);
+                    GUI.DrawTexture(gc.infoRectBG, td.dictionary["Interface Background"]);
                     if (obj.GetComponent<HeatExchanger>().connectionFailed == false)
                     {
                         GUI.Label(gc.infoRect, "Heat Exchanger" + 
@@ -631,25 +631,25 @@ public class InfoHUD : MonoBehaviour
                 if (obj.name.Equals("ironHolder(Clone)"))
                 {
                     GUI.Label(gc.messageRect, "Iron Structure");
-                    GUI.DrawTexture(gc.buildInfoRectBG, td["Interface Background"]);
+                    GUI.DrawTexture(gc.buildInfoRectBG, td.dictionary["Interface Background"]);
                     GUI.Label(gc.buildInfoRect, "Press F to remove blocks.\nPress B to add blocks.\nPress Q to stop building.");
                 }
                 if (obj.name.Equals("glassHolder(Clone)"))
                 {
                     GUI.Label(gc.messageRect, "Glass Structure");
-                    GUI.DrawTexture(gc.buildInfoRectBG, td["Interface Background"]);
+                    GUI.DrawTexture(gc.buildInfoRectBG, td.dictionary["Interface Background"]);
                     GUI.Label(gc.buildInfoRect, "Press F to remove blocks.\nPress B to add blocks.\nPress Q to stop building.");
                 }
                 if (obj.name.Equals("steelHolder(Clone)"))
                 {
                     GUI.Label(gc.messageRect, "Steel Structure");
-                    GUI.DrawTexture(gc.buildInfoRectBG, td["Interface Background"]);
+                    GUI.DrawTexture(gc.buildInfoRectBG, td.dictionary["Interface Background"]);
                     GUI.Label(gc.buildInfoRect, "Press F to remove blocks.\nPress B to add blocks.\nPress Q to stop building.");
                 }
                 if (obj.name.Equals("brickHolder(Clone)"))
                 {
                     GUI.Label(gc.messageRect, "Brick Structure");
-                    GUI.DrawTexture(gc.buildInfoRectBG, td["Interface Background"]);
+                    GUI.DrawTexture(gc.buildInfoRectBG, td.dictionary["Interface Background"]);
                     GUI.Label(gc.buildInfoRect, "Press F to remove blocks.\nPress B to add blocks.\nPress Q to stop building.");
                 }
             }

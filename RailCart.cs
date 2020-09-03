@@ -13,37 +13,27 @@ public class RailCart : MonoBehaviour
     private float stopTimer;
     private GameObject builtObjects;
 
-    void Start()
+    // Called by unity engine on start up to initialize variables
+    public void Start()
     {
         builtObjects = GameObject.Find("Built_Objects");
     }
 
-    void Update()
+    // Called once per frame by unity engine
+    public void Update()
     {
         GetComponent<InventoryManager>().ID = ID;
         if (creationMethod.Equals("spawned"))
         {
             if (target == null && loadedTarget == false && !targetID.Equals(""))
             {
-                GameObject[] allObjects = GameObject.FindGameObjectsWithTag("Built");
-                foreach (GameObject obj in allObjects)
+                RailCartHub[] allHubs = FindObjectsOfType<RailCartHub>();
+                foreach (RailCartHub hub in allHubs)
                 {
-                    if (obj != null)
+                    if (hub.ID.Equals(targetID))
                     {
-                        if (obj.transform.parent != builtObjects.transform)
-                        {
-                            if (obj.activeInHierarchy)
-                            {
-                                if (obj.GetComponent<RailCartHub>() != null)
-                                {
-                                    if (obj.GetComponent<RailCartHub>().ID.Equals(targetID))
-                                    {
-                                        target = obj;
-                                        loadedTarget = true;
-                                    }
-                                }
-                            }
-                        }
+                        target = hub.gameObject;
+                        loadedTarget = true;
                     }
                 }
             }
@@ -57,10 +47,8 @@ public class RailCart : MonoBehaviour
                 if (target.GetComponent<RailCartHub>() != null)
                 {
                     targetID = target.GetComponent<RailCartHub>().ID;
-                    //Debug.Log(ID + " target is a hub");
                     if (target.GetComponent<RailCartHub>().stop == true)
                     {
-                        //Debug.Log(ID + " target is a stopping point");
                         if (GetComponent<AudioSource>().enabled == true)
                         {
                             GetComponent<AudioSource>().enabled = false;
@@ -71,14 +59,12 @@ public class RailCart : MonoBehaviour
                         }
                         else if (target.GetComponent<RailCartHub>().outputObject != null)
                         {
-                            //Debug.Log(ID + " finding next hub");
                             stopTimer = 0;
                             target = target.GetComponent<RailCartHub>().outputObject;
                         }
                     }
                     else if (target.GetComponent<RailCartHub>().outputObject != null)
                     {
-                        //Debug.Log(ID + " finding next hub");
                         stopTimer = 0;
                         target = target.GetComponent<RailCartHub>().outputObject;
                     }

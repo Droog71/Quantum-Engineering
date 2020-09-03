@@ -1,14 +1,12 @@
 ﻿using UnityEngine;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour
 {
+    private InputManager inputManager;
     private Coroutine quitCoroutine;
     private Vector3 originalPosition;
-    private LaserController laserController;
-    private BlockSelector blockSelector;
 
     public Vector3 destroyStartPosition;
     public Vector3 buildStartPosition;
@@ -22,6 +20,8 @@ public class PlayerController : MonoBehaviour
     public AudioSource guiSound;
     public GameObject objectInSight;
     public GameObject machineInSight;
+    public LaserController laserController;
+    public BlockSelector blockSelector;
 
     public bool outOfSpace;
     public bool cannotCollect;
@@ -60,19 +60,20 @@ public class PlayerController : MonoBehaviour
     public bool destroying;
     public bool requestedChunkLoad;
     public bool blockLimitMessage;
+    public bool requestedEscapeMenu;
+    public bool laserCannonActive;
+    public bool scannerActive;
+    public bool firing;
+    public bool scanning;
 
     private bool gotPosition;
     private bool gameStarted;
-    private bool laserCannonActive;
-    private bool scannerActive;
-    private bool firing;
-    private bool scanning;
     private bool meteorShowerWarningReceived;
     private bool pirateAttackWarningReceived;
     private bool destructionMessageReceived;
     private bool movedPlayer;
     private bool introDisplayed;
-    private bool requestedEscapeMenu;
+
 
     public string cubeloc = "up";
     public string machineID = "unassigned";
@@ -230,82 +231,61 @@ public class PlayerController : MonoBehaviour
             scannerFlash.GetComponent<Light>().intensity = 1;
         }
 
+        inputManager = new InputManager(this);
         blockSelector = new BlockSelector(this);
     }
 
     // Called once per frame by unity engine
     public void Update()
     {
-        //DISABLE MOUSE LOOK DURING MAIN MENU SEQUENCE
-        if (gameStarted == false)
-        {
-            gameObject.GetComponent<MSCameraController>().enabled = false;
-        }
-
-        //GET A REFERENCE TO THE MAIN CAMERA
+        // Get a refrence to the camera.
         if (mCam == null)
         {
             mCam = Camera.main;
+        }
+        else
+        {
             if (PlayerPrefs.GetFloat("FOV") != 0)
             {
                 mCam.fieldOfView = PlayerPrefs.GetFloat("FOV");
             }
+
             if (PlayerPrefs.GetFloat("DrawDistance") != 0)
             {
                 mCam.farClipPlane = PlayerPrefs.GetFloat("DrawDistance");
             }
-        }
 
-        //GET THE SPAWN LOCATION, FOR RESPAWNING THE PLAYER
-        if (gotPosition == false)
-        {
-            originalPosition = transform.position;
-            gotPosition = true;
-        }
+            // Disable mouse look during main menu sequence.
+            gameObject.GetComponent<MSCameraController>().enabled &= gameStarted != false;
 
-        //THE WORLD STATE MANAGER HAS FINISHED LOADING
-        if (stateManager.worldLoaded == true)
-        {
-            gameStarted = true;
-
-            //IF THIS IS A NEW WORLD, OPEN THE TABLET TO DISPLAY THE INTRO MESSAGE
-            if (PlayerPrefsX.GetBool(stateManager.WorldName + "oldWorld") == false)
+            // Get the spawn location, for respawning the player character.
+            if (gotPosition == false)
             {
-                if (GetComponent<MainMenu>().finishedLoading == true)
-                {
-                    if (introDisplayed == false)
-                    {
-                        Cursor.visible = true;
-                        Cursor.lockState = CursorLockMode.None;
-                        tabletOpen = true;
-                        GetComponent<MSCameraController>().cameras[0].volume = 2.5f;
-                        introDisplayed = true;
-                    }
-                }
+                originalPosition = transform.position;
+                gotPosition = true;
             }
 
-            if (movedPlayer == false && PlayerPrefsX.GetBool(stateManager.WorldName+"oldWorld") == true)
+            // The state manager has finished loading the world.
+            if (stateManager.worldLoaded == true)
             {
-                transform.position = PlayerPrefsX.GetVector3(stateManager.WorldName+"playerPosition");
-                transform.rotation = PlayerPrefsX.GetQuaternion(stateManager.WorldName + "playerRotation");
-                money = PlayerPrefs.GetInt(stateManager.WorldName + "money");
-                movedPlayer = true;
-            }
+                gameStarted = true;
 
-            //MAIN CAMERA WAS FOUND IN THE SCENE
-            if (mCam != null)
-            {
-                //IF NOTHING ELSE HAS HAPPENED YET, DISPLAY THE INTRO MESSAGE WHEN THE TABLET IS OPENED
-                if (currentTabletMessage.Equals("") && GameObject.Find("Rocket").GetComponent<Rocket>().day == 1 && (int)GameObject.Find("Rocket").GetComponent<Rocket>().gameTime < 200)
+                if (PlayerPrefsX.GetBool(stateManager.WorldName + "oldWorld") == false)
                 {
-                    currentTabletMessage = "To all deployed members of:\nQuantum Engineering, \nDark Matter Research, \nMoon Base Establishment Division" +
-                        "\n\n" + "Manufacture of Quantum Manifestation Projection Units \nis going ahead as planned. " + "Our systems show all \nengineers have " +
-                        "successfully arrived at their \ndesignated FOB establishment locations. " + "\nExpected return payload to planetary facilities \nat the end " +
-                        "of day 1 is currently 50 units \nof non-anomylous dark matter as planned. " + "\n\n" + "As always, thank you for your service." + "\n" +
-                        "Agrat Eirelis:" + "\n" + "Chief Officer," + "\n" + "Quantum Engineering," + "\n" + "Dark Matter Research," + "\n" + "Moon Base Establishment Division";
+                    OpenTabletOnFirstLoad();
                 }
 
-                //DESTRUCTION MESSAGES
+                if (movedPlayer == false && PlayerPrefsX.GetBool(stateManager.WorldName + "oldWorld") == true)
+                {
+                    MovePlayerToSavedLocation();
+                }
+
+                if (ShouldShowTabletIntro())
+                {
+                    ShowTabletIntro();
+                }
+
+                // Destruction messages.
                 if (destructionMessageActive == true)
                 {
                     if (destructionMessageCount > 10)
@@ -355,1045 +335,349 @@ public class PlayerController : MonoBehaviour
                     meteorShowerWarningReceived = false;
                 }
 
-                //ROCKET IS COMING TO COLLECT MATERIAL FROM THE PLAYER
                 if (timeToDeliver == true)
                 {
-                    deliveryWarningTimer += 1 * Time.deltaTime;
-                    if (deliveryWarningTimer > 30)
-                    {
-                        deliveryWarningTimer = 0;
-                    }
-                    int payload = GameObject.Find("Rocket").GetComponent<Rocket>().payloadRequired;
-                    currentTabletMessage = "Please load: "+payload+" dark matter\ninto the rocket near the lunar lander." 
-                        + "\nExpected return payload to planetary facilities \nat the end " +
-                        "of the day tomorrow is currently:" + "\n" + (payload*2) + " units of dark matter. "
-                         + "\n\n" + "As always, Thank you for your service." + "\n" +
-                        "Agrat Eirelis:" + "\n" + "Chief Officer," + "\n" + "Quantum Engineering," + "\n" 
-                         + "Dark Matter Research," + "\n" + "Moon Base Establishment Division";
-                    if (timeToDeliverWarningRecieved == false)
-                    {
-                        tablet.GetComponent<AudioSource>().Play();
-                        timeToDeliverWarningRecieved = true;
-                    }
+                    DisplayDeliveryWarning();
                 }
                 else
                 {
                     timeToDeliverWarningRecieved = false;
                 }
 
-                //CROSSHAIR
-                if (cInput.GetKeyDown("Crosshair") && exiting == false)
-                {
-                    if (crosshairEnabled == true)
-                    {
-                        crosshairEnabled = false;
-                    }
-                    else
-                    {
-                        crosshairEnabled = true;
-                    }
-                    playButtonSound();
-                }
-
-                //SPRINTING
-                if (cInput.GetKey("Sprint") && exiting == false)
-                {
-                    playerMoveSpeed = 25;
-                    footStepSoundFrquency = 0.25f;
-                }
-                else
-                {
-                    if (!Physics.Raycast(transform.position, -transform.up, out RaycastHit hit, 10))
-                    {
-                        playerMoveSpeed = 25;
-                        footStepSoundFrquency = 0.25f;
-                    }
-                    else
-                    {
-                        playerMoveSpeed = 15;
-                        footStepSoundFrquency = 0.5f;
-                    }
-                }
-
-                if (cInput.GetKeyDown("Sprint") || cInput.GetKeyUp("Sprint"))
-                {
-                    if (scannerActive == true)
-                    {
-                        scanner.GetComponent<HeldItemSway>().Reset();
-                    }
-                    if (laserCannonActive == true)
-                    {
-                        laserCannon.GetComponent<HeldItemSway>().Reset();
-                    }
-                    if (paintGunActive == true)
-                    {
-                        paintGun.GetComponent<HeldItemSway>().Reset();
-                    }
-                }
-
-                //MOVEMENT INPUT
-                if (exiting == false)
-                {
-                    if (cInput.GetKey("Walk Forward"))
-                    {
-                        if (!Physics.Raycast(mCam.gameObject.transform.position, mCam.gameObject.transform.forward, out RaycastHit hit, 5))
-                        {
-                            Vector3 moveDir = Vector3.Normalize(new Vector3(mCam.gameObject.transform.forward.x, 0, mCam.gameObject.transform.forward.z));
-                            gameObject.transform.position += moveDir * playerMoveSpeed * Time.deltaTime;
-                        }
-                        else if (hit.collider.gameObject.GetComponent<AirLock>() != null)
-                        {
-                            if (hit.collider.gameObject.GetComponent<Collider>().isTrigger == true)
-                            {
-                                Vector3 moveDir = Vector3.Normalize(new Vector3(mCam.gameObject.transform.forward.x, 0, mCam.gameObject.transform.forward.z));
-                                gameObject.transform.position += moveDir * playerMoveSpeed * Time.deltaTime;
-                            }
-                        }
-                    }
-                    if (cInput.GetKey("Walk Backward"))
-                    {
-                        if (!Physics.Raycast(mCam.gameObject.transform.position, -mCam.gameObject.transform.forward, out RaycastHit hit, 5))
-                        {
-                            Vector3 moveDir = Vector3.Normalize(new Vector3(mCam.gameObject.transform.forward.x, 0, mCam.gameObject.transform.forward.z));
-                            gameObject.transform.position -= moveDir * playerMoveSpeed * Time.deltaTime;
-                        }
-                    }
-                    if (cInput.GetKey("Strafe Left"))
-                    {
-                        if (!Physics.Raycast(mCam.gameObject.transform.position, -mCam.gameObject.transform.right, out RaycastHit hit, 5))
-                        {
-                            gameObject.transform.position -= mCam.gameObject.transform.right * playerMoveSpeed * Time.deltaTime;
-                        }
-                    }
-                    if (cInput.GetKey("Strafe Right"))
-                    {
-                        if (!Physics.Raycast(mCam.gameObject.transform.position, mCam.gameObject.transform.right, out RaycastHit hit, 5))
-                        {
-                            gameObject.transform.position += mCam.gameObject.transform.right * playerMoveSpeed * Time.deltaTime;
-                        }
-                    }
-                }
-
-                if (!cInput.GetKey("Jetpack") && cInput.GetKey("Walk Forward") || cInput.GetKey("Walk Backward") || cInput.GetKey("Strafe Left") || cInput.GetKey("Strafe Right"))
-                {
-                    if (exiting == false && Physics.Raycast(transform.position, -transform.up, out RaycastHit hit, 10))
-                    {
-                        //HEAD BOB
-                        mCam.GetComponent<HeadBob>().active = true;
-
-                        //HELD OBJECT MOVEMENT
-                        if (GetComponent<AudioSource>().isPlaying == true)
-                        {
-                            GetComponent<AudioSource>().Stop();
-                        }
-                        if (scannerActive == true)
-                        {
-                            scanner.GetComponent<HeldItemSway>().active = true;
-                        }
-                        else
-                        {
-                            scanner.GetComponent<HeldItemSway>().active = false;
-                        }
-                        if (laserCannonActive == true)
-                        {
-                            laserCannon.GetComponent<HeldItemSway>().active = true;
-                        }
-                        else
-                        {
-                            laserCannon.GetComponent<HeldItemSway>().active = false;
-                        }
-                        if (paintGunActive == true)
-                        {
-                            paintGun.GetComponent<HeldItemSway>().active = true;
-                        }
-                        else
-                        {
-                            paintGun.GetComponent<HeldItemSway>().active = false;
-                        }
-
-                        //FOOTSTEP SOUNDS
-                        footStepTimer += 1 * Time.deltaTime;
-                        if (footStepTimer >= footStepSoundFrquency)
-                        {
-                            footStepTimer = 0;
-                            if (hit.collider.gameObject.GetComponent<IronBlock>() != null || hit.collider.gameObject.GetComponent<Steel>() != null || hit.collider.gameObject.name.Equals("ironHolder(Clone)") || hit.collider.gameObject.name.Equals("steelHolder(Clone)"))
-                            {
-                                if (playerBody.GetComponent<AudioSource>().clip == footStep1 || playerBody.GetComponent<AudioSource>().clip == footStep2 || playerBody.GetComponent<AudioSource>().clip == footStep3 || playerBody.GetComponent<AudioSource>().clip == footStep4 || playerBody.GetComponent<AudioSource>().clip == metalFootStep1)
-                                {
-                                    playerBody.GetComponent<AudioSource>().clip = metalFootStep2;
-                                    playerBody.GetComponent<AudioSource>().Play();
-                                }
-                                else if (playerBody.GetComponent<AudioSource>().clip == metalFootStep2)
-                                {
-                                    playerBody.GetComponent<AudioSource>().clip = metalFootStep3;
-                                    playerBody.GetComponent<AudioSource>().Play();
-                                }
-                                else if (playerBody.GetComponent<AudioSource>().clip == metalFootStep3)
-                                {
-                                    playerBody.GetComponent<AudioSource>().clip = metalFootStep4;
-                                    playerBody.GetComponent<AudioSource>().Play();
-                                }
-                                else if (playerBody.GetComponent<AudioSource>().clip == metalFootStep4)
-                                {
-                                    playerBody.GetComponent<AudioSource>().clip = metalFootStep1;
-                                    playerBody.GetComponent<AudioSource>().Play();
-                                }
-                            }
-                            else
-                            {
-                                if (playerBody.GetComponent<AudioSource>().clip == footStep1 || playerBody.GetComponent<AudioSource>().clip == metalFootStep1 || playerBody.GetComponent<AudioSource>().clip == metalFootStep2 || playerBody.GetComponent<AudioSource>().clip == metalFootStep3 || playerBody.GetComponent<AudioSource>().clip == metalFootStep4)
-                                {
-                                    playerBody.GetComponent<AudioSource>().clip = footStep2;
-                                    playerBody.GetComponent<AudioSource>().Play();
-                                }
-                                else if (playerBody.GetComponent<AudioSource>().clip == footStep2)
-                                {
-                                    playerBody.GetComponent<AudioSource>().clip = footStep3;
-                                    playerBody.GetComponent<AudioSource>().Play();
-                                }
-                                else if (playerBody.GetComponent<AudioSource>().clip == footStep3)
-                                {
-                                    playerBody.GetComponent<AudioSource>().clip = footStep4;
-                                    playerBody.GetComponent<AudioSource>().Play();
-                                }
-                                else if (playerBody.GetComponent<AudioSource>().clip == footStep4)
-                                {
-                                    playerBody.GetComponent<AudioSource>().clip = footStep1;
-                                    playerBody.GetComponent<AudioSource>().Play();
-                                }
-                            }
-                        }
-                    }
-                    else if (exiting == false && GetComponent<AudioSource>().isPlaying == false)
-                    {
-                        GetComponent<AudioSource>().Play();
-                        mCam.GetComponent<HeadBob>().active = false;
-                        scanner.GetComponent<HeldItemSway>().active = false;
-                        laserCannon.GetComponent<HeldItemSway>().active = false;
-                        paintGun.GetComponent<HeldItemSway>().active = false;
-                    }
-                }
-                else if (!cInput.GetKey("Jetpack") && !cInput.GetKey("Walk Forward") && !cInput.GetKey("Walk Backward") && !cInput.GetKey("Strafe Left") && !cInput.GetKey("Strafe Right"))
-                {
-                    GetComponent<AudioSource>().Stop();
-                    mCam.GetComponent<HeadBob>().active = false;
-                    scanner.GetComponent<HeldItemSway>().active = false;
-                    laserCannon.GetComponent<HeldItemSway>().active = false;
-                    paintGun.GetComponent<HeldItemSway>().active = false;
-                }
-                else
-                {
-                    mCam.GetComponent<HeadBob>().active = false;
-                    scanner.GetComponent<HeldItemSway>().active = false;
-                    laserCannon.GetComponent<HeldItemSway>().active = false;
-                    paintGun.GetComponent<HeldItemSway>().active = false;
-                }
-
-                //WEAPON SELECTION
-                if (inventoryOpen == false && escapeMenuOpen == false && machineGUIopen == false && tabletOpen == false && building == false)
-                {
-                    if (cInput.GetKeyDown("Paint Gun"))
-                    {
-                        if (paintGunActive == false)
-                        {
-                            paintGunActive = true;
-                            paintGun.SetActive(true);
-                            laserCannon.SetActive(false);
-                            laserCannonActive = false;
-                            scanner.SetActive(false);
-                            scannerActive = false;
-                        }
-                        else
-                        {
-                            paintGun.SetActive(false);
-                            paintGunActive = false;
-                            paintColorSelected = false;
-                        }
-                    }
-                    if (paintGunActive == true)
-                    {
-                        if (Input.GetKeyDown(KeyCode.Mouse1))
-                        {
-                            paintGun.SetActive(false);
-                            paintGunActive = false;
-                            paintColorSelected = false;
-                        }
-                    }
-                    if (cInput.GetKeyDown("Paint Color"))
-                    {
-                        if (paintGunActive == true && paintColorSelected == true)
-                        {
-                            paintColorSelected = false;
-                        }
-                    }
-                    if (cInput.GetKeyDown("Scanner"))
-                    {
-                        if (building == true || destroying == true)
-                        {
-                            if (GameObject.Find("GameManager").GetComponent<GameManager>().working == false)
-                            {
-                                stoppingBuildCoRoutine = true;
-                                GameObject.Find("GameManager").GetComponent<GameManager>().CombineBlocks();
-                                separatedBlocks = false;
-                                destroyTimer = 0;
-                                buildTimer = 0;
-                                building = false;
-                                destroying = false;
-                            }
-                            else
-                            {
-                                requestedBuildingStop = true;
-                            }
-                        }
-                        if (!scanner.activeSelf)
-                        {
-                            paintGun.SetActive(false);
-                            paintGunActive = false;
-                            paintColorSelected = false;
-                            laserCannon.SetActive(false);
-                            laserCannonActive = false;
-                            scanner.SetActive(true);
-                            scannerActive = true;
-                        }
-                        else
-                        {
-                            scanner.SetActive(false);
-                            scannerActive = false;
-                        }
-                    }
-                    if (cInput.GetKeyDown("Laser Cannon"))
-                    {
-                        if (building == true || destroying == true)
-                        {
-                            if (GameObject.Find("GameManager").GetComponent<GameManager>().working == false)
-                            {
-                                stoppingBuildCoRoutine = true;
-                                GameObject.Find("GameManager").GetComponent<GameManager>().CombineBlocks();
-                                separatedBlocks = false;
-                                destroyTimer = 0;
-                                buildTimer = 0;
-                                building = false;
-                                destroying = false;
-                            }
-                            else
-                            {
-                                requestedBuildingStop = true;
-                            }
-                        }
-                        if (!laserCannon.activeSelf)
-                        {
-                            paintGun.SetActive(false);
-                            paintGunActive = false;
-                            paintColorSelected = false;
-                            scanner.SetActive(false);
-                            scannerActive = false;
-                            laserCannon.SetActive(true);
-                            laserCannonActive = true;
-                        }
-                        else
-                        {
-                            laserCannon.SetActive(false);
-                            laserCannonActive = false;
-                        }
-                    }
-                }
-                else
-                {
-                    laserCannon.SetActive(false);
-                    laserCannonActive = false;
-                    scanner.SetActive(false);
-                    scannerActive = false;
-                }
-
-                //FIRING THE LASER CANNON OR THE SCANNER
-                if (cInput.GetKeyDown("Fire") && exiting == false)
-                {
-                    if (laserCannonActive == true && inventoryOpen == false && escapeMenuOpen == false && machineGUIopen == false && tabletOpen == false)
-                    {
-                        if (firing == false)
-                        {
-                            firing = true;
-                            laserCannon.GetComponent<AudioSource>().Play();
-                            muzzleFlash.SetActive(true);
-                            if (Physics.Raycast(mCam.gameObject.transform.position, mCam.gameObject.transform.forward, out RaycastHit hit, 1000))
-                            {
-                                Instantiate(weaponHit, hit.point, transform.rotation);
-                                laserController.HitTarget(hit.collider.gameObject,hit);
-                            }
-                        }
-                    }
-
-                    if (scannerActive == true && inventoryOpen == false && escapeMenuOpen == false && machineGUIopen == false && tabletOpen == false)
-                    {
-                        if (scanning == false)
-                        {
-                            scanning = true;
-                            scanner.GetComponent<AudioSource>().Play();
-                            scannerFlash.SetActive(true);
-                            GameObject[] allObjects = FindObjectsOfType<GameObject>();
-                            foreach (GameObject obj in allObjects)
-                            {
-                                float distance = Vector3.Distance(transform.position, obj.transform.position);
-                                if (distance < 2000)
-                                {
-                                    if (obj.GetComponent<UniversalResource>() != null)
-                                    {
-                                        GameObject newPing = Instantiate(ping, new Vector3(obj.transform.position.x, obj.transform.position.y + 15, obj.transform.position.z), transform.rotation);
-                                        if (obj.GetComponent<UniversalResource>().type.Equals("Iron Ore"))
-                                        {
-                                            newPing.GetComponent<Ping>().type = "iron";
-                                        }
-                                        if (obj.GetComponent<UniversalResource>().type.Equals("Tin Ore"))
-                                        {
-                                            newPing.GetComponent<Ping>().type = "tin";
-                                        }
-                                        if (obj.GetComponent<UniversalResource>().type.Equals("Copper Ore"))
-                                        {
-                                            newPing.GetComponent<Ping>().type = "copper";
-                                        }
-                                        if (obj.GetComponent<UniversalResource>().type.Equals("Aluminum Ore"))
-                                        {
-                                            newPing.GetComponent<Ping>().type = "aluminum";
-                                        }
-                                        if (obj.GetComponent<UniversalResource>().type.Equals("Ice"))
-                                        {
-                                            newPing.GetComponent<Ping>().type = "ice";
-                                        }
-                                        if (obj.GetComponent<UniversalResource>().type.Equals("Coal"))
-                                        {
-                                            newPing.GetComponent<Ping>().type = "coal";
-                                        }
-                                    }
-                                    else if (obj.GetComponent<DarkMatter>() != null)
-                                    {
-                                        GameObject newPing = Instantiate(ping, new Vector3(obj.transform.position.x, obj.transform.position.y + 15, obj.transform.position.z), transform.rotation);
-                                        newPing.GetComponent<Ping>().type = "darkMatter";
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-                if (firing == true)
-                {
-                    if (!laserCannon.GetComponent<AudioSource>().isPlaying)
-                    {
-                        muzzleFlash.SetActive(false);
-                        firing = false;
-                    }
-                }
-                if (scanning == true)
-                {
-                    if (!scanner.GetComponent<AudioSource>().isPlaying)
-                    {
-                        scannerFlash.SetActive(false);
-                        scanning = false;
-                    }
-                }
-
-                //HEADLAMP
-                if (cInput.GetKeyDown("Headlamp") && exiting == false)
-                {
-                    if (headlamp.GetComponent<Light>()!= null)
-                    {
-                        if (headlamp.GetComponent<Light>().enabled == true)
-                        {
-                            headlamp.GetComponent<Light>().enabled = false;
-                        }
-                        else
-                        {
-                            headlamp.GetComponent<Light>().enabled = true;
-                        }
-                    }
-                    playButtonSound();
-                }
-
-                //JETPACK
-                if (cInput.GetKey("Jetpack") && exiting == false)
-                {
-                    if (GetComponent<AudioSource>().isPlaying == false)
-                    {
-                        GetComponent<AudioSource>().Play();
-                    }
-                    if (gameObject.transform.position.y < 500 && !Physics.Raycast(transform.position, transform.up, out RaycastHit upHit, 5))
-                    {
-                        gameObject.transform.position += Vector3.up * 25 * Time.deltaTime;
-                    }
-                    mCam.GetComponent<HeadBob>().active = false;
-                    scanner.GetComponent<HeldItemSway>().active = false;
-                    laserCannon.GetComponent<HeldItemSway>().active = false;
-                    paintGun.GetComponent<HeldItemSway>().active = false;
-                }
-                else if (!cInput.GetKey("Walk Forward") && !cInput.GetKey("Walk Backward") && !cInput.GetKey("Strafe Left") && !cInput.GetKey("Strafe Right"))
-                {
-                    if (GetComponent<AudioSource>().isPlaying == true)
-                    {
-                        GetComponent<AudioSource>().Stop();
-                    }
-                }
-
-                //REMOVING BLOCKS
                 if (destroying == true)
                 {
-                    destroyTimer += 1 * Time.deltaTime;
-                    if (destroyTimer >= 30)
-                    {
-                        if (GameObject.Find("GameManager").GetComponent<GameManager>().working == false)
-                        {
-                            stoppingBuildCoRoutine = true;
-                            GameObject.Find("GameManager").GetComponent<GameManager>().CombineBlocks();
-                            destroyTimer = 0;
-                            buildTimer = 0;
-                            building = false;
-                            destroying = false;
-                            separatedBlocks = false;
-                        }
-                        else
-                        {
-                            requestedBuildingStop = true;
-                        }
-                    }
-                    else
-                    {
-                        float distance = Vector3.Distance(transform.position, destroyStartPosition);
-                        if (distance > 15)
-                        {
-                            //Debug.Log("new chunk loaded");
-                            if (GameObject.Find("GameManager").GetComponent<GameManager>().working == false)
-                            {
-                                GameObject.Find("GameManager").GetComponent<GameManager>().SeparateBlocks(transform.position, "all",true);
-                                separatedBlocks = true;
-                            }
-                            else
-                            {
-                                requestedChunkLoad = true;
-                            }
-                            destroyStartPosition = transform.position;
-                        }
-                    }
+                    ModifyCombinedMeshes();
                 }
 
-                //STOPPING CONSTRUCTION COROUTINES
                 if (requestedBuildingStop == true)
                 {
-                    if (GameObject.Find("GameManager").GetComponent<GameManager>().working == false)
-                    {
-                        stoppingBuildCoRoutine = true;
-                        GameObject.Find("GameManager").GetComponent<GameManager>().CombineBlocks();
-                        separatedBlocks = false;
-                        destroyTimer = 0;
-                        buildTimer = 0;
-                        building = false;
-                        destroying = false;
-                        requestedBuildingStop = false;
-                    }
-                    else
-                    {
-                        requestedBuildingStop = true;
-                    }
-                }
-                if (stoppingBuildCoRoutine == true)
-                {
-                    if (GameObject.Find("GameManager").GetComponent<GameManager>().working == false)
-                    {
-                        stoppingBuildCoRoutine = false;
-                    }
+                    HandleBuildingStopRequest();
                 }
 
-                //CHUNK LOADING
+                // The player controller is notified that the game manager finished combining meshes.
+                if (stoppingBuildCoRoutine == true && GameObject.Find("GameManager").GetComponent<GameManager>().working == false)
+                {
+                    stoppingBuildCoRoutine = false;
+                }
+
                 if (requestedChunkLoad == true)
                 {
-                    if (GameObject.Find("GameManager").GetComponent<GameManager>().working == false)
-                    {
-                        if (destroying == false)
-                        {
-                            GameObject.Find("GameManager").GetComponent<GameManager>().SeparateBlocks(transform.position, "all", true);
-                        }
-                        else
-                        {
-                            GameObject.Find("GameManager").GetComponent<GameManager>().SeparateBlocks(transform.position, "all", false);
-                        }
-                        separatedBlocks = true;
-                        requestedChunkLoad = false;
-                    }
+                    HandleChunkLoadRequest();
                 }
 
-                //BUILD MULTIPLIER
-                if (building == true)
-                {
-                    if (buildType.Equals("Glass Block") || buildType.Equals("Brick") || buildType.Equals("Iron Block") || buildType.Equals("Steel Block") || buildType.Equals("Steel Ramp") || buildType.Equals("Iron Ramp"))
-                    {
-                        if (cInput.GetKey("Build Amount +"))
-                        {
-                            if (buildMultiplier < 100)
-                            {
-                                buildIncrementTimer += 1 * Time.deltaTime;
-                                if (buildIncrementTimer >= 0.1f)
-                                {
-                                    buildMultiplier += 1;
-                                    destroyTimer = 0;
-                                    buildTimer = 0;
-                                    buildIncrementTimer = 0;
-                                    playButtonSound();
-                                }
-                            }
-                        }
-                        if (cInput.GetKey("Build Amount  -"))
-                        {
-                            if (buildMultiplier > 1)
-                            {
-                                buildIncrementTimer += 1 * Time.deltaTime;
-                                if (buildIncrementTimer >= 0.1f)
-                                {
-                                    buildMultiplier -= 1;
-                                    destroyTimer = 0;
-                                    buildTimer = 0;
-                                    buildIncrementTimer = 0;
-                                    playButtonSound();
-                                }
-                            }
-                        }
-                    }
-                }
-
-                //SELECTING CURRENT BLOCK TO BUILD WITH
-                if (escapeMenuOpen == false && inventoryOpen == false && optionsGUIopen == false && machineGUIopen == false)
-                {
-                    if (cInput.GetKeyDown("Next Item"))
-                    {
-                        blockSelector.nextBlock();
-                    }
-
-                    if (cInput.GetKeyDown("Previous Item"))
-                    {
-                        blockSelector.previousBlock();
-                    }
-                }
-
-                if (displayingBuildItem == true)
-                {
-                    buildItemDisplayTimer += 1 * Time.deltaTime;
-                    if (buildItemDisplayTimer > 3)
-                    {
-                        displayingBuildItem = false;
-                        buildItemDisplayTimer = 0;
-                    }
-                }
-
-                //IF THE PLAYER HAS SELECTED AN ITEM AND HAS THAT ITEM IN THE INVENTORY, BEGIN BUILDING ON KEY PRESS
-                if (cInput.GetKeyDown("Build"))
-                {
-                    if (inventoryOpen == false && escapeMenuOpen == false && machineGUIopen == false && tabletOpen == false && paintGunActive == false)
-                    {
-                        bool foundItems = false;
-                        foreach (InventorySlot slot in playerInventory.inventory)
-                        {
-                            if (foundItems == false)
-                            {
-                                if (slot.amountInSlot > 0)
-                                {
-                                    if (slot.typeInSlot.Equals(buildType))
-                                    {
-                                        foundItems = true;
-                                    }
-                                }
-                            }
-                        }
-                        if (foundItems == true)
-                        {
-                            building = true;
-                            Cursor.visible = false;
-                            Cursor.lockState = CursorLockMode.Locked;
-                            inventoryOpen = false;
-                            craftingGUIopen = false;
-                            storageGUIopen = false;
-                            if (scannerActive == true)
-                            {
-                                scanner.SetActive(false);
-                                scannerActive = false;
-                            }
-                            if (laserCannonActive == true)
-                            {
-                                laserCannon.SetActive(false);
-                                laserCannonActive = false;
-                            }
-                        }
-                    }
-                }
-
-                //ACTIVATE INVENTORY GUI ON KEY PRESS
-                if (cInput.GetKeyDown("Inventory"))
-                {
-                    if (inventoryOpen == false && escapeMenuOpen == false && machineGUIopen == false && tabletOpen == false)
-                    {
-                        if (building == true || destroying == true)
-                        {
-                            if (GameObject.Find("GameManager").GetComponent<GameManager>().working == false)
-                            {
-                                stoppingBuildCoRoutine = true;
-                                GameObject.Find("GameManager").GetComponent<GameManager>().CombineBlocks();
-                                separatedBlocks = false;
-                                destroyTimer = 0;
-                                buildTimer = 0;
-                                building = false;
-                                destroying = false;
-                            }
-                            else
-                            {
-                                requestedBuildingStop = true;
-                            }
-                        }
-                        Cursor.visible = true;
-                        Cursor.lockState = CursorLockMode.None;
-                        machineGUIopen = false;
-                        inventoryOpen = true;
-                    }
-                    else
-                    {
-                        Cursor.visible = false;
-                        Cursor.lockState = CursorLockMode.Locked;
-                        inventoryOpen = false;
-                        craftingGUIopen = false;
-                        storageGUIopen = false;
-                        machineGUIopen = false;
-                    }
-                }
-
-                //ACTIVATE CRAFTING GUI ON KEY PRESS
-                if (cInput.GetKeyDown("Crafting"))
-                {
-                    if (inventoryOpen == false && escapeMenuOpen == false && machineGUIopen == false && tabletOpen == false)
-                    {
-                        if (building == true || destroying == true)
-                        {
-                            if (GameObject.Find("GameManager").GetComponent<GameManager>().working == false)
-                            {
-                                stoppingBuildCoRoutine = true;
-                                GameObject.Find("GameManager").GetComponent<GameManager>().CombineBlocks();
-                                separatedBlocks = false;
-                                destroyTimer = 0;
-                                buildTimer = 0;
-                                building = false;
-                                destroying = false;
-                            }
-                            else
-                            {
-                                requestedBuildingStop = true;
-                            }
-                        }
-                        Cursor.visible = true;
-                        Cursor.lockState = CursorLockMode.None;
-                        machineGUIopen = false;
-                        inventoryOpen = true;
-                        craftingGUIopen = true;
-                    }
-                    else
-                    {
-                        Cursor.visible = false;
-                        Cursor.lockState = CursorLockMode.Locked;
-                        inventoryOpen = false;
-                        craftingGUIopen = false;
-                        storageGUIopen = false;
-                        machineGUIopen = false;
-                    }
-                }
-
-                //ACTIVATE TABLET GUI ON KEY PRESS
-                if (cInput.GetKeyDown("Tablet"))
-                {
-                    if (tabletOpen == false && inventoryOpen == false && escapeMenuOpen == false && machineGUIopen == false)
-                    {
-                        if (building == true || destroying == true)
-                        {
-                            if (GameObject.Find("GameManager").GetComponent<GameManager>().working == false)
-                            {
-                                stoppingBuildCoRoutine = true;
-                                GameObject.Find("GameManager").GetComponent<GameManager>().CombineBlocks();
-                                separatedBlocks = false;
-                                destroyTimer = 0;
-                                buildTimer = 0;
-                                building = false;
-                                destroying = false;
-                            }
-                            else
-                            {
-                                requestedBuildingStop = true;
-                            }
-                        }
-                        Cursor.visible = true;
-                        Cursor.lockState = CursorLockMode.None;
-                        tabletOpen = true;
-                    }
-                    else
-                    {
-                        Cursor.visible = false;
-                        Cursor.lockState = CursorLockMode.Locked;
-                        tabletOpen = false;
-                    }
-                }
-
-                //OPEN OPTIONS/EXIT MENU WHEN ESCAPE KEY IS PRESSED
-                if (Input.GetKeyDown(KeyCode.Escape) && exiting == false)
-                {
-                    if (inventoryOpen == true)
-                    {
-                        if (building == true || destroying == true)
-                        {
-                            if (GameObject.Find("GameManager").GetComponent<GameManager>().working == false)
-                            {
-                                stoppingBuildCoRoutine = true;
-                                GameObject.Find("GameManager").GetComponent<GameManager>().CombineBlocks();
-                                separatedBlocks = false;
-                                destroyTimer = 0;
-                                buildTimer = 0;
-                                building = false;
-                                destroying = false;
-                            }
-                            else
-                            {
-                                requestedBuildingStop = true;
-                            }
-                        }
-                        Cursor.visible = true;
-                        Cursor.lockState = CursorLockMode.None;
-                        gameObject.GetComponent<MSCameraController>().enabled = false;
-                        inventoryOpen = false;
-                        craftingGUIopen = false;
-                        storageGUIopen = false;
-                    }
-                    else if (machineGUIopen == true)
-                    {
-                        if (building == true || destroying == true)
-                        {
-                            if (GameObject.Find("GameManager").GetComponent<GameManager>().working == false)
-                            {
-                                stoppingBuildCoRoutine = true;
-                                GameObject.Find("GameManager").GetComponent<GameManager>().CombineBlocks();
-                                separatedBlocks = false;
-                                destroyTimer = 0;
-                                buildTimer = 0;
-                                building = false;
-                                destroying = false;
-                            }
-                            else
-                            {
-                                requestedBuildingStop = true;
-                            }
-                        }
-                        Cursor.visible = true;
-                        Cursor.lockState = CursorLockMode.None;
-                        gameObject.GetComponent<MSCameraController>().enabled = false;
-                        machineGUIopen = false;
-                    }
-                    else if (tabletOpen == true)
-                    {
-                        if (building == true || destroying == true)
-                        {
-                            if (GameObject.Find("GameManager").GetComponent<GameManager>().working == false)
-                            {
-                                stoppingBuildCoRoutine = true;
-                                GameObject.Find("GameManager").GetComponent<GameManager>().CombineBlocks();
-                                separatedBlocks = false;
-                                destroyTimer = 0;
-                                buildTimer = 0;
-                                building = false;
-                                destroying = false;
-                            }
-                            else
-                            {
-                                requestedBuildingStop = true;
-                            }
-                        }
-                        Cursor.visible = true;
-                        Cursor.lockState = CursorLockMode.None;
-                        gameObject.GetComponent<MSCameraController>().enabled = false;
-                        tabletOpen = false;
-                    }
-                    else if (paintGunActive == true && paintColorSelected == false)
-                    {
-                        if (building == true || destroying == true)
-                        {
-                            if (GameObject.Find("GameManager").GetComponent<GameManager>().working == false)
-                            {
-                                stoppingBuildCoRoutine = true;
-                                GameObject.Find("GameManager").GetComponent<GameManager>().CombineBlocks();
-                                separatedBlocks = false;
-                                destroyTimer = 0;
-                                buildTimer = 0;
-                                building = false;
-                                destroying = false;
-                            }
-                            else
-                            {
-                                requestedBuildingStop = true;
-                            }
-                        }
-                        Cursor.visible = true;
-                        Cursor.lockState = CursorLockMode.None;
-                        gameObject.GetComponent<MSCameraController>().enabled = false;
-                        paintGun.SetActive(false);
-                        paintGunActive = false;
-                        paintColorSelected = false;
-                    }
-                    else if (paintGunActive == true && paintColorSelected == true)
-                    {
-                        paintGun.SetActive(false);
-                        paintGunActive = false;
-                        paintColorSelected = false;
-                    }
-                    else if (escapeMenuOpen == false)
-                    {
-                        requestedEscapeMenu = true;
-                    }
-                    else
-                    {
-                        Cursor.visible = false;
-                        Cursor.lockState = CursorLockMode.Locked;
-                        gameObject.GetComponent<MSCameraController>().enabled = true;
-                        if (cGUI.showingInputGUI == true)
-                        {
-                            cGUI.ToggleGUI();
-                        }
-                        escapeMenuOpen = false;
-                        optionsGUIopen = false;
-                        helpMenuOpen = false;
-                        videoMenuOpen = false;
-                        schematicMenuOpen = false;
-                    }
-                }
-
-                //LOCKING AND UNLOCKING MOUSE CURSOR FOR GUI
-                if (cGUI.showingInputGUI == true || inventoryOpen == true || escapeMenuOpen == true || machineGUIopen == true || tabletOpen == true || paintGunActive == true && paintColorSelected == false)
+                // Locking or unlocking the mouse cursor for GUI interaction.
+                if (GuiOpen())
                 {
                     Cursor.visible = true;
                     Cursor.lockState = CursorLockMode.None;
                     gameObject.GetComponent<MSCameraController>().enabled = false;
                 }
-                if (cGUI.showingInputGUI == false && inventoryOpen == false && escapeMenuOpen == false && machineGUIopen == false && tabletOpen == false && paintGunActive == false)
+                else
                 {
                     Cursor.visible = false;
                     Cursor.lockState = CursorLockMode.Locked;
                     gameObject.GetComponent<MSCameraController>().enabled = true;
                 }
 
-                //OPENING ESCAPE MENU
                 if (requestedEscapeMenu == true)
                 {
-                    if (building == true || destroying == true)
-                    {
-                        if (GameObject.Find("GameManager").GetComponent<GameManager>().working == false)
-                        {
-                            stoppingBuildCoRoutine = true;
-                            GameObject.Find("GameManager").GetComponent<GameManager>().CombineBlocks();
-                            separatedBlocks = false;
-                            destroyTimer = 0;
-                            buildTimer = 0;
-                            building = false;
-                            destroying = false;
-                        }
-                        else
-                        {
-                            requestedBuildingStop = true;
-                        }
-                    }
-                    else if (GameObject.Find("GameManager").GetComponent<GameManager>().working == false)
-                    {
-                        Cursor.visible = true;
-                        Cursor.lockState = CursorLockMode.None;
-                        gameObject.GetComponent<MSCameraController>().enabled = false;
-                        escapeMenuOpen = true;
-                        requestedEscapeMenu = false;
-                    }
+                    HandleEscapeMenuRequest();
                 }
 
-                //EXITING THE GAME
                 if (requestedExit == true)
                 {
-                    requestedExitTimer += 1 * Time.deltaTime;
-                    if (requestedExitTimer >= 5)
-                    {
-                        if (GameObject.Find("GameManager").GetComponent<GameManager>().working == false)
-                        {
-                            GameObject.Find("GameManager").GetComponent<GameManager>().RequestFinalSaveOperation();
-                            quitCoroutine = StartCoroutine(Quit());
-                            requestedExitTimer = 0;
-                            requestedExit = false;
-                        }
-                    }
+                    HandleExitRequest();
                 }
 
-                //WORLD SIZE LIMITATIONS
-                if (gameObject.transform.position.x > 4500)
+                if (storageInventory != null && storageGUIopen == true)
                 {
-                    gameObject.transform.position = new Vector3(4490, gameObject.transform.position.y, gameObject.transform.position.z);
+                    CheckStorageDistance();
                 }
-                if (gameObject.transform.position.z > 4500)
-                {
-                    gameObject.transform.position = new Vector3(gameObject.transform.position.x, gameObject.transform.position.y, 4490);
-                }
-                if (gameObject.transform.position.x < -4500)
-                {
-                    gameObject.transform.position = new Vector3(-4490, gameObject.transform.position.y, gameObject.transform.position.z);
-                }
-                if (gameObject.transform.position.z < -4500)
-                {
-                    gameObject.transform.position = new Vector3(gameObject.transform.position.x, gameObject.transform.position.y, -4490);
-                }
-                if (gameObject.transform.position.y > 500)
-                {
-                    gameObject.transform.position = new Vector3(gameObject.transform.position.x, 490, gameObject.transform.position.z);
-                }
-                if (gameObject.transform.position.y < -100)
-                {
-                    gameObject.transform.position = new Vector3(gameObject.transform.position.x, 500, gameObject.transform.position.z);
-                }
-            }
 
-            //CLOSE STORAGE CONTAINERS WHEN THE PLAYER MOVES AWAY FROM THEM
-            if (storageInventory != null && storageGUIopen == true)
-            {
-                if (remoteStorageActive == false)
-                {
-                    float distance = Vector3.Distance(transform.position, storageInventory.gameObject.transform.position);
-                    if (distance > 40)
-                    {
-                        storageGUIopen = false;
-                    }
-                }
-                else
-                {
-                    float distance = Vector3.Distance(transform.position, currentStorageComputer.transform.position);
-                    if (distance > 40)
-                    {
-                        storageGUIopen = false;
-                    }
-                }
+                // Input manager.
+                inputManager.HandleInput();
+                EnforceWorldLimits();
             }
         }
     }
 
-    public void playButtonSound()
+    // Plays a sound.
+    public void PlayButtonSound()
     {
         guiSound.volume = 0.15f;
         guiSound.clip = buttonClip;
         guiSound.Play();
     }
 
-    public void playCraftingSound()
+    // Plays a sound.
+    public void PlayCraftingSound()
     {
         guiSound.volume = 0.3f;
         guiSound.clip = craftingClip;
         guiSound.Play();
     }
 
-    public void playMissingItemsSound()
+    // Plays a sound.
+    public void PlayMissingItemsSound()
     {
         guiSound.volume = 0.15f;
         guiSound.clip = missingItemsClip;
         guiSound.Play();
     }
 
-    //THIS FUNCTION HANDLES SAVING OF DATA AND EXITING THE GAME
+    // Returns true if any GUI is open
+    private bool GuiOpen()
+    {
+        return cGUI.showingInputGUI == true
+        || inventoryOpen == true
+        || escapeMenuOpen == true
+        || machineGUIopen == true
+        || tabletOpen == true
+        || (paintGunActive == true && paintColorSelected == false);
+    }
+
+    // Returns true at the beginning of the first in-game day when the intro should be displayed on the tablet.
+    private bool ShouldShowTabletIntro()
+    {
+        return currentTabletMessage.Equals("")
+        && GameObject.Find("Rocket").GetComponent<Rocket>().day == 1
+        && (int)GameObject.Find("Rocket").GetComponent<Rocket>().gameTime < 200;
+    }
+
+    // Displays the intro message on the tablet.
+    private void ShowTabletIntro()
+    {
+        currentTabletMessage = "To all deployed members of:\nQuantum Engineering, \nDark Matter Research, \nMoon Base Establishment Division" +
+        "\n\n" + "Manufacture of Quantum Manifestation Projection Units \nis going ahead as planned. " + "Our systems show all \nengineers have " +
+        "successfully arrived at their \ndesignated FOB establishment locations. " + "\nExpected return payload to planetary facilities \nat the end " +
+        "of day 1 is currently 50 units \nof non-anomylous dark matter as planned. " + "\n\n" + "As always, thank you for your service." + "\n" +
+        "Agrat Eirelis:" + "\n" + "Chief Officer," + "\n" + "Quantum Engineering," + "\n" + "Dark Matter Research," + "\n" + "Moon Base Establishment Division";
+    }
+
+    // Moves the player to their previous location when a game is loaded.
+    private void MovePlayerToSavedLocation()
+    {
+        transform.position = PlayerPrefsX.GetVector3(stateManager.WorldName + "playerPosition");
+        transform.rotation = PlayerPrefsX.GetQuaternion(stateManager.WorldName + "playerRotation");
+        money = PlayerPrefs.GetInt(stateManager.WorldName + "money");
+        movedPlayer = true;
+    }
+
+    // Opens the tablet to display a message the first time the world is loaded.
+    private void OpenTabletOnFirstLoad() 
+    {
+        if (GetComponent<MainMenu>().finishedLoading == true)
+        {
+            if (introDisplayed == false)
+            {
+                Cursor.visible = true;
+                Cursor.lockState = CursorLockMode.None;
+                tabletOpen = true;
+                GetComponent<MSCameraController>().cameras[0].volume = 2.5f;
+                introDisplayed = true;
+            }
+        }
+    }
+
+    // Displays a message on the player's tablet when the rocket is landing to collect dark matter.
+    private void DisplayDeliveryWarning()
+    {
+        deliveryWarningTimer += 1 * Time.deltaTime;
+        if (deliveryWarningTimer > 30)
+        {
+            deliveryWarningTimer = 0;
+        }
+
+        int payload = GameObject.Find("Rocket").GetComponent<Rocket>().payloadRequired;
+
+        currentTabletMessage = "Please load: " + payload + " dark matter\ninto the rocket near the lunar lander."
+        + "\nExpected return payload to planetary facilities \nat the end " +
+        "of the day tomorrow is currently:" + "\n" + (payload * 2) + " units of dark matter. "
+        + "\n\n" + "As always, Thank you for your service." + "\n" +
+        "Agrat Eirelis:" + "\n" + "Chief Officer," + "\n" + "Quantum Engineering," + "\n"
+        + "Dark Matter Research," + "\n" + "Moon Base Establishment Division";
+
+        if (timeToDeliverWarningRecieved == false)
+        {
+            tablet.GetComponent<AudioSource>().Play();
+            timeToDeliverWarningRecieved = true;
+        }
+    }
+
+    private void HandleBuildingStopRequest()
+    {
+        if (GameObject.Find("GameManager").GetComponent<GameManager>().working == false)
+        {
+            stoppingBuildCoRoutine = true;
+            GameObject.Find("GameManager").GetComponent<GameManager>().CombineBlocks();
+            separatedBlocks = false;
+            destroyTimer = 0;
+            buildTimer = 0;
+            building = false;
+            destroying = false;
+            requestedBuildingStop = false;
+        }
+        else
+        {
+            requestedBuildingStop = true;
+        }
+    }
+
+    // Handles the sending of chunk load requests for modifying combined meshes.
+    private void ModifyCombinedMeshes()
+    {
+        destroyTimer += 1 * Time.deltaTime;
+        if (destroyTimer >= 30)
+        {
+            if (GameObject.Find("GameManager").GetComponent<GameManager>().working == false)
+            {
+                stoppingBuildCoRoutine = true;
+                GameObject.Find("GameManager").GetComponent<GameManager>().CombineBlocks();
+                destroyTimer = 0;
+                buildTimer = 0;
+                building = false;
+                destroying = false;
+                separatedBlocks = false;
+            }
+            else
+            {
+                requestedBuildingStop = true;
+            }
+        }
+        else
+        {
+            float distance = Vector3.Distance(transform.position, destroyStartPosition);
+            if (distance > 15)
+            {
+                if (GameObject.Find("GameManager").GetComponent<GameManager>().working == false)
+                {
+                    GameObject.Find("GameManager").GetComponent<GameManager>().SeparateBlocks(transform.position, "all", true);
+                    separatedBlocks = true;
+                }
+                else
+                {
+                    requestedChunkLoad = true;
+                }
+                destroyStartPosition = transform.position;
+            }
+        }
+    }
+
+    // Handles requests to load chunks of blocks from combined meshes near the player.
+    private void HandleChunkLoadRequest()
+    {
+        if (GameObject.Find("GameManager").GetComponent<GameManager>().working == false)
+        {
+            if (destroying == false)
+            {
+                GameObject.Find("GameManager").GetComponent<GameManager>().SeparateBlocks(transform.position, "all", true);
+            }
+            else
+            {
+                GameObject.Find("GameManager").GetComponent<GameManager>().SeparateBlocks(transform.position, "all", false);
+            }
+            separatedBlocks = true;
+            requestedChunkLoad = false;
+        }
+    }
+
+    // Handles requests to open the escape menu, stopping appropriate coroutines.
+    private void HandleEscapeMenuRequest()
+    {
+        if (building == true || destroying == true)
+        {
+            if (GameObject.Find("GameManager").GetComponent<GameManager>().working == false)
+            {
+                stoppingBuildCoRoutine = true;
+                GameObject.Find("GameManager").GetComponent<GameManager>().CombineBlocks();
+                separatedBlocks = false;
+                destroyTimer = 0;
+                buildTimer = 0;
+                building = false;
+                destroying = false;
+            }
+            else
+            {
+                requestedBuildingStop = true;
+            }
+        }
+        else if (GameObject.Find("GameManager").GetComponent<GameManager>().working == false)
+        {
+            Cursor.visible = true;
+            Cursor.lockState = CursorLockMode.None;
+            gameObject.GetComponent<MSCameraController>().enabled = false;
+            escapeMenuOpen = true;
+            requestedEscapeMenu = false;
+        }
+    }
+
+    // Enforces world size limitations.
+    private void EnforceWorldLimits()
+    {
+        if (gameObject.transform.position.x > 4500)
+        {
+            gameObject.transform.position = new Vector3(4490, gameObject.transform.position.y, gameObject.transform.position.z);
+        }
+        if (gameObject.transform.position.z > 4500)
+        {
+            gameObject.transform.position = new Vector3(gameObject.transform.position.x, gameObject.transform.position.y, 4490);
+        }
+        if (gameObject.transform.position.x < -4500)
+        {
+            gameObject.transform.position = new Vector3(-4490, gameObject.transform.position.y, gameObject.transform.position.z);
+        }
+        if (gameObject.transform.position.z < -4500)
+        {
+            gameObject.transform.position = new Vector3(gameObject.transform.position.x, gameObject.transform.position.y, -4490);
+        }
+        if (gameObject.transform.position.y > 500)
+        {
+            gameObject.transform.position = new Vector3(gameObject.transform.position.x, 490, gameObject.transform.position.z);
+        }
+        if (gameObject.transform.position.y < -100)
+        {
+            gameObject.transform.position = new Vector3(gameObject.transform.position.x, 500, gameObject.transform.position.z);
+        }
+    }
+
+    // Handles requests to exit the game
+    private void HandleExitRequest()
+    {
+        requestedExitTimer += 1 * Time.deltaTime;
+        if (requestedExitTimer >= 5)
+        {
+            if (GameObject.Find("GameManager").GetComponent<GameManager>().working == false)
+            {
+                GameObject.Find("GameManager").GetComponent<GameManager>().RequestFinalSaveOperation();
+                quitCoroutine = StartCoroutine(Quit());
+                requestedExitTimer = 0;
+                requestedExit = false;
+            }
+        }
+    }
+
+    // Closes the storage GUI if the player has moved too far from the container.
+    private void CheckStorageDistance()
+    {
+        if (remoteStorageActive == false)
+        {
+            float distance = Vector3.Distance(transform.position, storageInventory.gameObject.transform.position);
+            if (distance > 40)
+            {
+                storageGUIopen = false;
+            }
+        }
+        else
+        {
+            float distance = Vector3.Distance(transform.position, currentStorageComputer.transform.position);
+            if (distance > 40)
+            {
+                storageGUIopen = false;
+            }
+        }
+    }
+
+    // Handles safely saving data and shutting down the game.
     public static IEnumerator Quit()
     {
         float f = 0;

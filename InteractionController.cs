@@ -188,12 +188,12 @@ public class InteractionController : MonoBehaviour
         {
             playerController.playerInventory.AddItem(type, 1);
             Destroy(playerController.objectInSight);
-            playerController.playCraftingSound();
+            playerController.PlayCraftingSound();
         }
         else
         {
             playerController.cannotCollect = true;
-            playerController.playMissingItemsSound();
+            playerController.PlayMissingItemsSound();
         }
     }
 

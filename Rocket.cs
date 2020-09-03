@@ -13,12 +13,14 @@ public class Rocket : MonoBehaviour
     private PlayerController player;
     private bool initialized;
 
-    void Start()
+    // Called by unity engine on start up to initialize variables
+    public void Start()
     {
         player = GameObject.Find("Player").GetComponent<PlayerController>();
     }
 
-    void Update()
+    // Called once per frame by unity engine
+    public void Update()
     {
         if (GameObject.Find("GameManager").GetComponent<StateManager>().worldLoaded == true)
         {
@@ -88,7 +90,6 @@ public class Rocket : MonoBehaviour
                     }
                     else
                     {
-                        //Debug.Log("Rocket landing.");
                         GetComponent<AudioSource>().enabled = true;
                         exhaust.SetActive(true);
                         transform.position -= transform.up * 25 * Time.deltaTime;
@@ -125,7 +126,6 @@ public class Rocket : MonoBehaviour
                 {
                     if (transform.position.y < 2000)
                     {
-                        //Debug.Log("Rocket leaving");
                         GetComponent<AudioSource>().enabled = true;
                         exhaust.SetActive(true);
                         transform.position += transform.up * 25 * Time.deltaTime;
@@ -145,7 +145,6 @@ public class Rocket : MonoBehaviour
                         readyForTakeOff = false;
                         GetComponent<AudioSource>().enabled = false;
                         exhaust.SetActive(false);
-                        //Debug.Log("Rocket waiting.");
                     }
                 }
             }
