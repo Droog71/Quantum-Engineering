@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using System.Collections.Generic;
 
 public class InventoryGUI : MonoBehaviour
 {
@@ -443,32 +442,35 @@ public class InventoryGUI : MonoBehaviour
                     }
                 }
 
-                //BUTTON WHICH OPENS THE CRAFTING GUI
-                if (playerController.storageGUIopen == false)
+                if (playerController.marketGUIopen == false)
                 {
-                    if (GUI.Button(gc.craftingButtonRect, "CRAFTING"))
+                    //BUTTON WHICH OPENS THE CRAFTING GUI
+                    if (playerController.storageGUIopen == false)
                     {
-                        if (playerController.craftingGUIopen == false && playerController.storageGUIopen == false)
+                        if (GUI.Button(gc.craftingButtonRect, "CRAFTING"))
                         {
-                            playerController.craftingGUIopen = true;
+                            if (playerController.craftingGUIopen == false && playerController.storageGUIopen == false)
+                            {
+                                playerController.craftingGUIopen = true;
+                            }
+                            else
+                            {
+                                playerController.craftingGUIopen = false;
+                            }
+                            playerController.PlayButtonSound();
                         }
-                        else
-                        {
-                            playerController.craftingGUIopen = false;
-                        }
+                    }
+
+                    //BUTTON THAT CLOSES THE INVENTORY GUI
+                    if (GUI.Button(gc.closeButtonRect, "CLOSE"))
+                    {
+                        Cursor.visible = false;
+                        Cursor.lockState = CursorLockMode.Locked;
+                        playerController.inventoryOpen = false;
+                        playerController.craftingGUIopen = false;
+                        playerController.storageGUIopen = false;
                         playerController.PlayButtonSound();
                     }
-                }
-
-                //BUTTON THAT CLOSES THE INVENTORY GUI
-                if (GUI.Button(gc.closeButtonRect, "CLOSE"))
-                {
-                    Cursor.visible = false;
-                    Cursor.lockState = CursorLockMode.Locked;
-                    playerController.inventoryOpen = false;
-                    playerController.craftingGUIopen = false;
-                    playerController.storageGUIopen = false;
-                    playerController.PlayButtonSound();
                 }
 
                 //CRAFTING GUI

@@ -228,6 +228,47 @@ public class ActionManager
         }
     }
 
+    // Toggles the crafting GUI.
+    public void ToggleMarketGUI()
+    {
+        if (pc.inventoryOpen == false && pc.escapeMenuOpen == false && pc.machineGUIopen == false && pc.tabletOpen == false)
+        {
+            if (pc.building == true || pc.destroying == true)
+            {
+                if (GameObject.Find("GameManager").GetComponent<GameManager>().working == false)
+                {
+                    pc.stoppingBuildCoRoutine = true;
+                    GameObject.Find("GameManager").GetComponent<GameManager>().CombineBlocks();
+                    pc.separatedBlocks = false;
+                    pc.destroyTimer = 0;
+                    pc.buildTimer = 0;
+                    pc.building = false;
+                    pc.destroying = false;
+                }
+                else
+                {
+                    pc.requestedBuildingStop = true;
+                }
+            }
+            Cursor.visible = true;
+            Cursor.lockState = CursorLockMode.None;
+            pc.machineGUIopen = false;
+            pc.inventoryOpen = true;
+            pc.marketGUIopen = true;
+            pc.craftingGUIopen = false;
+        }
+        else
+        {
+            Cursor.visible = false;
+            Cursor.lockState = CursorLockMode.Locked;
+            pc.inventoryOpen = false;
+            pc.marketGUIopen = false;
+            pc.craftingGUIopen = false;
+            pc.storageGUIopen = false;
+            pc.machineGUIopen = false;
+        }
+    }
+
     // Toggles the tablet GUI.
     public void ToggleTablet()
     {
@@ -660,6 +701,7 @@ public class ActionManager
         pc.inventoryOpen = false;
         pc.craftingGUIopen = false;
         pc.storageGUIopen = false;
+        pc.marketGUIopen = false;
     }
 
     // Closes machine GUI.
@@ -715,7 +757,7 @@ public class ActionManager
     }
 
     // Closes all GUI windows.
-    public void CloseAllGUI()
+    public void CloseMenus()
     {
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;

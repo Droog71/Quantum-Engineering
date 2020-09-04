@@ -31,6 +31,7 @@ public class cInputInit : MonoBehaviour
         cInput.SetKey("Build Axis", "V", Keys.V);
         cInput.SetKey("Inventory", "I", Keys.I);
         cInput.SetKey("Crafting", "C", Keys.C);
+        cInput.SetKey("Market", "M", Keys.M);
         cInput.SetKey("Headlamp", "H", Keys.H);
         cInput.SetKey("Scanner", "F1", Keys.F1);
         cInput.SetKey("Laser Cannon", "F2", Keys.F2);

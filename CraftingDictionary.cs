@@ -28,7 +28,7 @@ public class CraftingDictionary : MonoBehaviour
             { "Rail Cart Hub", new CraftingRecipe(new string[] { "Iron Plate", "Iron Pipe", "Circuit Board" }, new int[] { 6, 10, 1 }, "Rail Cart Hub", 1) },
             { "Rail Cart", new CraftingRecipe(new string[] { "Electric Motor", "Copper Wire", "Tin Plate", "Aluminum Gear", "Storage Container", "Solar Panel" }, new int[] { 2, 10, 4, 8, 1, 1 }, "Rail Cart", 1) },
             { "Circuit Board", new CraftingRecipe(new string[] { "Tin Plate", "Glass Block", "Copper Wire", "Dark Matter" }, new int[] { 1, 1, 2, 1}, "Circuit Board", 1) },
-            { "Motor", new CraftingRecipe(new string[] { "Iron Plate", "Iron Pipe", "Iron Gear", "Copper Wire" }, new int[] { 2, 1, 2, 10}, "Electric Motor", 1) },
+            { "Electric Motor", new CraftingRecipe(new string[] { "Iron Plate", "Iron Pipe", "Iron Gear", "Copper Wire" }, new int[] { 2, 1, 2, 10}, "Electric Motor", 1) },
             { "Auto Crafter", new CraftingRecipe(new string[] { "Bronze Gear", "Steel Plate", "Electric Motor", "Circuit Board", "Dark Matter" }, new int[] { 4, 4, 4, 4, 4 }, "Auto Crafter", 1) },
             { "Solar Panel", new CraftingRecipe(new string[] { "Iron Plate", "Iron Pipe", "Copper Wire", "Copper Plate", "Glass Block" }, new int[] { 4, 4, 4, 4, 4 }, "Solar Panel", 1) },
             { "Power Conduit", new CraftingRecipe(new string[] { "Aluminum Plate", "Copper Wire", "Glass Block" }, new int[] { 4, 4, 4 }, "Power Conduit", 1) },

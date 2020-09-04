@@ -30,6 +30,7 @@ public class PlayerController : MonoBehaviour
     public bool storageGUIopen;
     public bool machineGUIopen;
     public bool craftingGUIopen;
+    public bool marketGUIopen;
     public bool remoteStorageActive;
     public bool escapeMenuOpen;
     public bool machineHasPower;

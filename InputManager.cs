@@ -250,6 +250,12 @@ public class InputManager
             am.ToggleCraftingGUI();
         }
 
+        //ACTIVATE MARKET GUI ON KEY PRESS
+        if (cInput.GetKeyDown("Market"))
+        {
+            am.ToggleMarketGUI();
+        }
+
         //ACTIVATE TABLET GUI ON KEY PRESS
         if (cInput.GetKeyDown("Tablet"))
         {
@@ -283,7 +289,7 @@ public class InputManager
             }
             else
             {
-                am.CloseAllGUI();
+                am.CloseMenus();
             }
         }
     }
