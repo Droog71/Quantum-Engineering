@@ -426,7 +426,7 @@ public class PlayerController : MonoBehaviour
     }
 
     // Returns true if any GUI is open
-    private bool GuiOpen()
+    public bool GuiOpen()
     {
         return cGUI.showingInputGUI == true
         || inventoryOpen == true

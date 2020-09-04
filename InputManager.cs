@@ -3,26 +3,32 @@
 public class InputManager
 {
     private PlayerController pc;
+    private ActionManager am;
 
     public InputManager(PlayerController pc)
     {
         this.pc = pc;
+        am = new ActionManager(pc);
     }
 
+    // Returns true if the player's current build type is a standard block.
+    private bool PlacingStandardBlock()
+    {
+        return pc.buildType.Equals("Glass Block")
+        || pc.buildType.Equals("Brick")
+        || pc.buildType.Equals("Iron Block")
+        || pc.buildType.Equals("Steel Block")
+        || pc.buildType.Equals("Steel Ramp")
+        || pc.buildType.Equals("Iron Ramp");
+    }
+
+    // Recieves all actions from cInput.
     public void HandleInput()
     {
         //CROSSHAIR
         if (cInput.GetKeyDown("Crosshair") && pc.exiting == false)
         {
-            if (pc.crosshairEnabled == true)
-            {
-                pc.crosshairEnabled = false;
-            }
-            else
-            {
-                pc.crosshairEnabled = true;
-            }
-            pc.PlayButtonSound();
+            am.ToggleCrosshair();
         }
 
         //SPRINTING
@@ -47,18 +53,7 @@ public class InputManager
 
         if (cInput.GetKeyDown("Sprint") || cInput.GetKeyUp("Sprint"))
         {
-            if (pc.scannerActive == true)
-            {
-                pc.scanner.GetComponent<HeldItemSway>().Reset();
-            }
-            if (pc.laserCannonActive == true)
-            {
-                pc.laserCannon.GetComponent<HeldItemSway>().Reset();
-            }
-            if (pc.paintGunActive == true)
-            {
-                pc.paintGun.GetComponent<HeldItemSway>().Reset();
-            }
+            am.ResetHeldItemSway();
         }
 
         //MOVEMENT INPUT
@@ -66,157 +61,42 @@ public class InputManager
         {
             if (cInput.GetKey("Walk Forward"))
             {
-                if (!Physics.Raycast(pc.mCam.gameObject.transform.position, pc.mCam.gameObject.transform.forward, out RaycastHit hit, 5))
-                {
-                    Vector3 moveDir = Vector3.Normalize(new Vector3(pc.mCam.gameObject.transform.forward.x, 0, pc.mCam.gameObject.transform.forward.z));
-                    pc.gameObject.transform.position += moveDir * pc.playerMoveSpeed * Time.deltaTime;
-                }
-                else if (hit.collider.gameObject.GetComponent<AirLock>() != null)
-                {
-                    if (hit.collider.gameObject.GetComponent<Collider>().isTrigger == true)
-                    {
-                        Vector3 moveDir = Vector3.Normalize(new Vector3(pc.mCam.gameObject.transform.forward.x, 0, pc.mCam.gameObject.transform.forward.z));
-                        pc.gameObject.transform.position += moveDir * pc.playerMoveSpeed * Time.deltaTime;
-                    }
-                }
+                am.WalkForward();
             }
             if (cInput.GetKey("Walk Backward"))
             {
-                if (!Physics.Raycast(pc.mCam.gameObject.transform.position, -pc.mCam.gameObject.transform.forward, out RaycastHit hit, 5))
-                {
-                    Vector3 moveDir = Vector3.Normalize(new Vector3(pc.mCam.gameObject.transform.forward.x, 0, pc.mCam.gameObject.transform.forward.z));
-                    pc.gameObject.transform.position -= moveDir * pc.playerMoveSpeed * Time.deltaTime;
-                }
+                am.WalkBackward();
             }
             if (cInput.GetKey("Strafe Left"))
             {
-                if (!Physics.Raycast(pc.mCam.gameObject.transform.position, -pc.mCam.gameObject.transform.right, out RaycastHit hit, 5))
-                {
-                    pc.gameObject.transform.position -= pc.mCam.gameObject.transform.right * pc.playerMoveSpeed * Time.deltaTime;
-                }
+                am.StrafeLeft();
             }
             if (cInput.GetKey("Strafe Right"))
             {
-                if (!Physics.Raycast(pc.mCam.gameObject.transform.position, pc.mCam.gameObject.transform.right, out RaycastHit hit, 5))
-                {
-                    pc.gameObject.transform.position += pc.mCam.gameObject.transform.right * pc.playerMoveSpeed * Time.deltaTime;
-                }
+                am.StrafeRight();
             }
         }
 
-        if (!cInput.GetKey("Jetpack") && cInput.GetKey("Walk Forward") || cInput.GetKey("Walk Backward") || cInput.GetKey("Strafe Left") || cInput.GetKey("Strafe Right"))
+        if (!cInput.GetKey("Jetpack") && (cInput.GetKey("Walk Forward") || cInput.GetKey("Walk Backward") || cInput.GetKey("Strafe Left") || cInput.GetKey("Strafe Right")))
         {
             if (pc.exiting == false && Physics.Raycast(pc.gameObject.transform.position, -pc.gameObject.transform.up, out RaycastHit hit, 10))
             {
-                //HEAD BOB
-                pc.mCam.GetComponent<HeadBob>().active = true;
-
-                //HELD OBJECT MOVEMENT
-                if (pc.gameObject.GetComponent<AudioSource>().isPlaying == true)
-                {
-                    pc.gameObject.GetComponent<AudioSource>().Stop();
-                }
-                if (pc.scannerActive == true)
-                {
-                    pc.scanner.GetComponent<HeldItemSway>().active = true;
-                }
-                else
-                {
-                    pc.scanner.GetComponent<HeldItemSway>().active = false;
-                }
-                if (pc.laserCannonActive == true)
-                {
-                    pc.laserCannon.GetComponent<HeldItemSway>().active = true;
-                }
-                else
-                {
-                    pc.laserCannon.GetComponent<HeldItemSway>().active = false;
-                }
-                if (pc.paintGunActive == true)
-                {
-                    pc.paintGun.GetComponent<HeldItemSway>().active = true;
-                }
-                else
-                {
-                    pc.paintGun.GetComponent<HeldItemSway>().active = false;
-                }
-
-                //FOOTSTEP SOUNDS
-                pc.footStepTimer += 1 * Time.deltaTime;
-                if (pc.footStepTimer >= pc.footStepSoundFrquency)
-                {
-                    pc.footStepTimer = 0;
-                    if (hit.collider.gameObject.GetComponent<IronBlock>() != null || hit.collider.gameObject.GetComponent<Steel>() != null || hit.collider.gameObject.name.Equals("ironHolder(Clone)") || hit.collider.gameObject.name.Equals("steelHolder(Clone)"))
-                    {
-                        if (pc.playerBody.GetComponent<AudioSource>().clip == pc.footStep1 || pc.playerBody.GetComponent<AudioSource>().clip == pc.footStep2 || pc.playerBody.GetComponent<AudioSource>().clip == pc.footStep3 || pc.playerBody.GetComponent<AudioSource>().clip == pc.footStep4 || pc.playerBody.GetComponent<AudioSource>().clip == pc.metalFootStep1)
-                        {
-                            pc.playerBody.GetComponent<AudioSource>().clip = pc.metalFootStep2;
-                            pc.playerBody.GetComponent<AudioSource>().Play();
-                        }
-                        else if (pc.playerBody.GetComponent<AudioSource>().clip == pc.metalFootStep2)
-                        {
-                            pc.playerBody.GetComponent<AudioSource>().clip = pc.metalFootStep3;
-                            pc.playerBody.GetComponent<AudioSource>().Play();
-                        }
-                        else if (pc.playerBody.GetComponent<AudioSource>().clip == pc.metalFootStep3)
-                        {
-                            pc.playerBody.GetComponent<AudioSource>().clip = pc.metalFootStep4;
-                            pc.playerBody.GetComponent<AudioSource>().Play();
-                        }
-                        else if (pc.playerBody.GetComponent<AudioSource>().clip == pc.metalFootStep4)
-                        {
-                            pc.playerBody.GetComponent<AudioSource>().clip = pc.metalFootStep1;
-                            pc.playerBody.GetComponent<AudioSource>().Play();
-                        }
-                    }
-                    else
-                    {
-                        if (pc.playerBody.GetComponent<AudioSource>().clip == pc.footStep1 || pc.playerBody.GetComponent<AudioSource>().clip == pc.metalFootStep1 || pc.playerBody.GetComponent<AudioSource>().clip == pc.metalFootStep2 || pc.playerBody.GetComponent<AudioSource>().clip == pc.metalFootStep3 || pc.playerBody.GetComponent<AudioSource>().clip == pc.metalFootStep4)
-                        {
-                            pc.playerBody.GetComponent<AudioSource>().clip = pc.footStep2;
-                            pc.playerBody.GetComponent<AudioSource>().Play();
-                        }
-                        else if (pc.playerBody.GetComponent<AudioSource>().clip == pc.footStep2)
-                        {
-                            pc.playerBody.GetComponent<AudioSource>().clip = pc.footStep3;
-                            pc.playerBody.GetComponent<AudioSource>().Play();
-                        }
-                        else if (pc.playerBody.GetComponent<AudioSource>().clip == pc.footStep3)
-                        {
-                            pc.playerBody.GetComponent<AudioSource>().clip = pc.footStep4;
-                            pc.playerBody.GetComponent<AudioSource>().Play();
-                        }
-                        else if (pc.playerBody.GetComponent<AudioSource>().clip == pc.footStep4)
-                        {
-                            pc.playerBody.GetComponent<AudioSource>().clip = pc.footStep1;
-                            pc.playerBody.GetComponent<AudioSource>().Play();
-                        }
-                    }
-                }
+                am.DoGroundEffects(hit);
             }
             else if (pc.exiting == false && pc.gameObject.GetComponent<AudioSource>().isPlaying == false)
             {
                 pc.gameObject.GetComponent<AudioSource>().Play();
-                pc.mCam.GetComponent<HeadBob>().active = false;
-                pc.scanner.GetComponent<HeldItemSway>().active = false;
-                pc.laserCannon.GetComponent<HeldItemSway>().active = false;
-                pc.paintGun.GetComponent<HeldItemSway>().active = false;
+                am.StopGroundEffects();
             }
         }
         else if (!cInput.GetKey("Jetpack") && !cInput.GetKey("Walk Forward") && !cInput.GetKey("Walk Backward") && !cInput.GetKey("Strafe Left") && !cInput.GetKey("Strafe Right"))
         {
             pc.gameObject.GetComponent<AudioSource>().Stop();
-            pc.mCam.GetComponent<HeadBob>().active = false;
-            pc.scanner.GetComponent<HeldItemSway>().active = false;
-            pc.laserCannon.GetComponent<HeldItemSway>().active = false;
-            pc.paintGun.GetComponent<HeldItemSway>().active = false;
+            am.StopGroundEffects();
         }
         else
         {
-            pc.mCam.GetComponent<HeadBob>().active = false;
-            pc.scanner.GetComponent<HeldItemSway>().active = false;
-            pc.laserCannon.GetComponent<HeldItemSway>().active = false;
-            pc.paintGun.GetComponent<HeldItemSway>().active = false;
+            am.StopGroundEffects();
         }
 
         //WEAPON SELECTION
@@ -224,29 +104,13 @@ public class InputManager
         {
             if (cInput.GetKeyDown("Paint Gun"))
             {
-                if (pc.paintGunActive == false)
-                {
-                    pc.paintGunActive = true;
-                    pc.paintGun.SetActive(true);
-                    pc.laserCannon.SetActive(false);
-                    pc.laserCannonActive = false;
-                    pc.scanner.SetActive(false);
-                    pc.scannerActive = false;
-                }
-                else
-                {
-                    pc.paintGun.SetActive(false);
-                    pc.paintGunActive = false;
-                    pc.paintColorSelected = false;
-                }
+                am.TogglePaintGun();
             }
             if (pc.paintGunActive == true)
             {
                 if (Input.GetKeyDown(KeyCode.Mouse1))
                 {
-                    pc.paintGun.SetActive(false);
-                    pc.paintGunActive = false;
-                    pc.paintColorSelected = false;
+                    am.TogglePaintGun();
                 }
             }
             if (cInput.GetKeyDown("Paint Color"))
@@ -258,73 +122,11 @@ public class InputManager
             }
             if (cInput.GetKeyDown("Scanner"))
             {
-                if (pc.building == true || pc.destroying == true)
-                {
-                    if (GameObject.Find("GameManager").GetComponent<GameManager>().working == false)
-                    {
-                        pc.stoppingBuildCoRoutine = true;
-                        GameObject.Find("GameManager").GetComponent<GameManager>().CombineBlocks();
-                        pc.separatedBlocks = false;
-                        pc.destroyTimer = 0;
-                        pc.buildTimer = 0;
-                        pc.building = false;
-                        pc.destroying = false;
-                    }
-                    else
-                    {
-                        pc.requestedBuildingStop = true;
-                    }
-                }
-                if (!pc.scanner.activeSelf)
-                {
-                    pc.paintGun.SetActive(false);
-                    pc.paintGunActive = false;
-                    pc.paintColorSelected = false;
-                    pc.laserCannon.SetActive(false);
-                    pc.laserCannonActive = false;
-                    pc.scanner.SetActive(true);
-                    pc.scannerActive = true;
-                }
-                else
-                {
-                    pc.scanner.SetActive(false);
-                    pc.scannerActive = false;
-                }
+                am.ToggleScanner();
             }
             if (cInput.GetKeyDown("Laser Cannon"))
             {
-                if (pc.building == true || pc.destroying == true)
-                {
-                    if (GameObject.Find("GameManager").GetComponent<GameManager>().working == false)
-                    {
-                        pc.stoppingBuildCoRoutine = true;
-                        GameObject.Find("GameManager").GetComponent<GameManager>().CombineBlocks();
-                        pc.separatedBlocks = false;
-                        pc.destroyTimer = 0;
-                        pc.buildTimer = 0;
-                        pc.building = false;
-                        pc.destroying = false;
-                    }
-                    else
-                    {
-                        pc.requestedBuildingStop = true;
-                    }
-                }
-                if (!pc.laserCannon.activeSelf)
-                {
-                    pc.paintGun.SetActive(false);
-                    pc.paintGunActive = false;
-                    pc.paintColorSelected = false;
-                    pc.scanner.SetActive(false);
-                    pc.scannerActive = false;
-                    pc.laserCannon.SetActive(true);
-                    pc.laserCannonActive = true;
-                }
-                else
-                {
-                    pc.laserCannon.SetActive(false);
-                    pc.laserCannonActive = false;
-                }
+                am.ToggleLaserCannon();
             }
         }
         else
@@ -338,72 +140,19 @@ public class InputManager
         //FIRING THE LASER CANNON OR THE SCANNER
         if (cInput.GetKeyDown("Fire") && pc.exiting == false)
         {
-            if (pc.laserCannonActive == true && pc.inventoryOpen == false && pc.escapeMenuOpen == false && pc.machineGUIopen == false && pc.tabletOpen == false)
+            if (!pc.GuiOpen())
             {
-                if (pc.firing == false)
+                if (pc.laserCannonActive)
                 {
-                    pc.firing = true;
-                    pc.laserCannon.GetComponent<AudioSource>().Play();
-                    pc.muzzleFlash.SetActive(true);
-                    if (Physics.Raycast(pc.mCam.gameObject.transform.position, pc.mCam.gameObject.transform.forward, out RaycastHit hit, 1000))
-                    {
-                        Object.Instantiate(pc.weaponHit, hit.point, pc.gameObject.transform.rotation);
-                        pc.laserController.HitTarget(hit.collider.gameObject, hit);
-                    }
+                    am.FireLaserCannon();
                 }
-            }
-
-            if (pc.scannerActive == true && pc.inventoryOpen == false && pc.escapeMenuOpen == false && pc.machineGUIopen == false && pc.tabletOpen == false)
-            {
-                if (pc.scanning == false)
+                if (pc.scannerActive)
                 {
-                    pc.scanning = true;
-                    pc.scanner.GetComponent<AudioSource>().Play();
-                    pc.scannerFlash.SetActive(true);
-                    GameObject[] allObjects = Object.FindObjectsOfType<GameObject>();
-                    foreach (GameObject obj in allObjects)
-                    {
-                        float distance = Vector3.Distance(pc.gameObject.transform.position, obj.transform.position);
-                        if (distance < 2000)
-                        {
-                            if (obj.GetComponent<UniversalResource>() != null)
-                            {
-                                GameObject newPing = Object.Instantiate(pc.ping, new Vector3(obj.transform.position.x, obj.transform.position.y + 15, obj.transform.position.z), pc.gameObject.transform.rotation);
-                                if (obj.GetComponent<UniversalResource>().type.Equals("Iron Ore"))
-                                {
-                                    newPing.GetComponent<Ping>().type = "iron";
-                                }
-                                if (obj.GetComponent<UniversalResource>().type.Equals("Tin Ore"))
-                                {
-                                    newPing.GetComponent<Ping>().type = "tin";
-                                }
-                                if (obj.GetComponent<UniversalResource>().type.Equals("Copper Ore"))
-                                {
-                                    newPing.GetComponent<Ping>().type = "copper";
-                                }
-                                if (obj.GetComponent<UniversalResource>().type.Equals("Aluminum Ore"))
-                                {
-                                    newPing.GetComponent<Ping>().type = "aluminum";
-                                }
-                                if (obj.GetComponent<UniversalResource>().type.Equals("Ice"))
-                                {
-                                    newPing.GetComponent<Ping>().type = "ice";
-                                }
-                                if (obj.GetComponent<UniversalResource>().type.Equals("Coal"))
-                                {
-                                    newPing.GetComponent<Ping>().type = "coal";
-                                }
-                            }
-                            else if (obj.GetComponent<DarkMatter>() != null)
-                            {
-                                GameObject newPing = Object.Instantiate(pc.ping, new Vector3(obj.transform.position.x, obj.transform.position.y + 15, obj.transform.position.z), pc.gameObject.transform.rotation);
-                                newPing.GetComponent<Ping>().type = "darkMatter";
-                            }
-                        }
-                    }
+                    am.ScannerPing();
                 }
             }
         }
+
         if (pc.firing == true)
         {
             if (!pc.laserCannon.GetComponent<AudioSource>().isPlaying)
@@ -412,6 +161,7 @@ public class InputManager
                 pc.firing = false;
             }
         }
+
         if (pc.scanning == true)
         {
             if (!pc.scanner.GetComponent<AudioSource>().isPlaying)
@@ -421,38 +171,15 @@ public class InputManager
             }
         }
 
-        //HEADLAMP
         if (cInput.GetKeyDown("Headlamp") && pc.exiting == false)
         {
-            if (pc.headlamp.GetComponent<Light>() != null)
-            {
-                if (pc.headlamp.GetComponent<Light>().enabled == true)
-                {
-                    pc.headlamp.GetComponent<Light>().enabled = false;
-                }
-                else
-                {
-                    pc.headlamp.GetComponent<Light>().enabled = true;
-                }
-            }
-            pc.PlayButtonSound();
+            am.ToggleHeadLamp();
         }
 
         //JETPACK
         if (cInput.GetKey("Jetpack") && pc.exiting == false)
         {
-            if (pc.gameObject.GetComponent<AudioSource>().isPlaying == false)
-            {
-                pc.gameObject.GetComponent<AudioSource>().Play();
-            }
-            if (pc.gameObject.transform.position.y < 500 && !Physics.Raycast(pc.gameObject.transform.position, pc.gameObject.transform.up, out RaycastHit upHit, 5))
-            {
-                pc.gameObject.transform.position += Vector3.up * 25 * Time.deltaTime;
-            }
-            pc.mCam.GetComponent<HeadBob>().active = false;
-            pc.scanner.GetComponent<HeldItemSway>().active = false;
-            pc.laserCannon.GetComponent<HeldItemSway>().active = false;
-            pc.paintGun.GetComponent<HeldItemSway>().active = false;
+            am.JetPackThrust();
         }
         else if (!cInput.GetKey("Walk Forward") && !cInput.GetKey("Walk Backward") && !cInput.GetKey("Strafe Left") && !cInput.GetKey("Strafe Right"))
         {
@@ -463,40 +190,15 @@ public class InputManager
         }
 
         //BUILD MULTIPLIER
-        if (pc.building == true)
+        if (pc.building == true && PlacingStandardBlock())
         {
-            if (pc.buildType.Equals("Glass Block") || pc.buildType.Equals("Brick") || pc.buildType.Equals("Iron Block") || pc.buildType.Equals("Steel Block") || pc.buildType.Equals("Steel Ramp") || pc.buildType.Equals("Iron Ramp"))
+            if (cInput.GetKey("Build Amount +") && pc.buildMultiplier < 100)
             {
-                if (cInput.GetKey("Build Amount +"))
-                {
-                    if (pc.buildMultiplier < 100)
-                    {
-                        pc.buildIncrementTimer += 1 * Time.deltaTime;
-                        if (pc.buildIncrementTimer >= 0.1f)
-                        {
-                            pc.buildMultiplier += 1;
-                            pc.destroyTimer = 0;
-                            pc.buildTimer = 0;
-                            pc.buildIncrementTimer = 0;
-                            pc.PlayButtonSound();
-                        }
-                    }
-                }
-                if (cInput.GetKey("Build Amount  -"))
-                {
-                    if (pc.buildMultiplier > 1)
-                    {
-                        pc.buildIncrementTimer += 1 * Time.deltaTime;
-                        if (pc.buildIncrementTimer >= 0.1f)
-                        {
-                            pc.buildMultiplier -= 1;
-                            pc.destroyTimer = 0;
-                            pc.buildTimer = 0;
-                            pc.buildIncrementTimer = 0;
-                            pc.PlayButtonSound();
-                        }
-                    }
-                }
+                am.IncreaseBuildAmount();
+            }
+            if (cInput.GetKey("Build Amount  -") && pc.buildMultiplier > 1)
+            {
+                am.DecreaseBuildAmount();
             }
         }
 
@@ -527,153 +229,31 @@ public class InputManager
         //IF THE PLAYER HAS SELECTED AN ITEM AND HAS THAT ITEM IN THE INVENTORY, BEGIN BUILDING ON KEY PRESS
         if (cInput.GetKeyDown("Build"))
         {
-            if (pc.inventoryOpen == false && pc.escapeMenuOpen == false && pc.machineGUIopen == false && pc.tabletOpen == false && pc.paintGunActive == false)
-            {
-                bool foundItems = false;
-                foreach (InventorySlot slot in pc.playerInventory.inventory)
-                {
-                    if (foundItems == false)
-                    {
-                        if (slot.amountInSlot > 0)
-                        {
-                            if (slot.typeInSlot.Equals(pc.buildType))
-                            {
-                                foundItems = true;
-                            }
-                        }
-                    }
-                }
-                if (foundItems == true)
-                {
-                    pc.building = true;
-                    Cursor.visible = false;
-                    Cursor.lockState = CursorLockMode.Locked;
-                    pc.inventoryOpen = false;
-                    pc.craftingGUIopen = false;
-                    pc.storageGUIopen = false;
-                    if (pc.scannerActive == true)
-                    {
-                        pc.scanner.SetActive(false);
-                        pc.scannerActive = false;
-                    }
-                    if (pc.laserCannonActive == true)
-                    {
-                        pc.laserCannon.SetActive(false);
-                        pc.laserCannonActive = false;
-                    }
-                }
-            }
+            am.StartBuildMode();
+        }
+
+        //CANCEL BUILDING ON KEY PRESS
+        if (cInput.GetKeyDown("Stop Building"))
+        {
+            am.StopBuilding();
         }
 
         //ACTIVATE INVENTORY GUI ON KEY PRESS
         if (cInput.GetKeyDown("Inventory"))
         {
-            if (pc.inventoryOpen == false && pc.escapeMenuOpen == false && pc.machineGUIopen == false && pc.tabletOpen == false)
-            {
-                if (pc.building == true || pc.destroying == true)
-                {
-                    if (GameObject.Find("GameManager").GetComponent<GameManager>().working == false)
-                    {
-                        pc.stoppingBuildCoRoutine = true;
-                        GameObject.Find("GameManager").GetComponent<GameManager>().CombineBlocks();
-                        pc.separatedBlocks = false;
-                        pc.destroyTimer = 0;
-                        pc.buildTimer = 0;
-                        pc.building = false;
-                        pc.destroying = false;
-                    }
-                    else
-                    {
-                        pc.requestedBuildingStop = true;
-                    }
-                }
-                Cursor.visible = true;
-                Cursor.lockState = CursorLockMode.None;
-                pc.machineGUIopen = false;
-                pc.inventoryOpen = true;
-            }
-            else
-            {
-                Cursor.visible = false;
-                Cursor.lockState = CursorLockMode.Locked;
-                pc.inventoryOpen = false;
-                pc.craftingGUIopen = false;
-                pc.storageGUIopen = false;
-                pc.machineGUIopen = false;
-            }
+            am.ToggleInventory();
         }
 
         //ACTIVATE CRAFTING GUI ON KEY PRESS
         if (cInput.GetKeyDown("Crafting"))
         {
-            if (pc.inventoryOpen == false && pc.escapeMenuOpen == false && pc.machineGUIopen == false && pc.tabletOpen == false)
-            {
-                if (pc.building == true || pc.destroying == true)
-                {
-                    if (GameObject.Find("GameManager").GetComponent<GameManager>().working == false)
-                    {
-                        pc.stoppingBuildCoRoutine = true;
-                        GameObject.Find("GameManager").GetComponent<GameManager>().CombineBlocks();
-                        pc.separatedBlocks = false;
-                        pc.destroyTimer = 0;
-                        pc.buildTimer = 0;
-                        pc.building = false;
-                        pc.destroying = false;
-                    }
-                    else
-                    {
-                        pc.requestedBuildingStop = true;
-                    }
-                }
-                Cursor.visible = true;
-                Cursor.lockState = CursorLockMode.None;
-                pc.machineGUIopen = false;
-                pc.inventoryOpen = true;
-                pc.craftingGUIopen = true;
-            }
-            else
-            {
-                Cursor.visible = false;
-                Cursor.lockState = CursorLockMode.Locked;
-                pc.inventoryOpen = false;
-                pc.craftingGUIopen = false;
-                pc.storageGUIopen = false;
-                pc.machineGUIopen = false;
-            }
+            am.ToggleCraftingGUI();
         }
 
         //ACTIVATE TABLET GUI ON KEY PRESS
         if (cInput.GetKeyDown("Tablet"))
         {
-            if (pc.tabletOpen == false && pc.inventoryOpen == false && pc.escapeMenuOpen == false && pc.machineGUIopen == false)
-            {
-                if (pc.building == true || pc.destroying == true)
-                {
-                    if (GameObject.Find("GameManager").GetComponent<GameManager>().working == false)
-                    {
-                        pc.stoppingBuildCoRoutine = true;
-                        GameObject.Find("GameManager").GetComponent<GameManager>().CombineBlocks();
-                        pc.separatedBlocks = false;
-                        pc.destroyTimer = 0;
-                        pc.buildTimer = 0;
-                        pc.building = false;
-                        pc.destroying = false;
-                    }
-                    else
-                    {
-                        pc.requestedBuildingStop = true;
-                    }
-                }
-                Cursor.visible = true;
-                Cursor.lockState = CursorLockMode.None;
-                pc.tabletOpen = true;
-            }
-            else
-            {
-                Cursor.visible = false;
-                Cursor.lockState = CursorLockMode.Locked;
-                pc.tabletOpen = false;
-            }
+            am.ToggleTablet();
         }
 
         //OPEN OPTIONS/EXIT MENU WHEN ESCAPE KEY IS PRESSED
@@ -681,105 +261,17 @@ public class InputManager
         {
             if (pc.inventoryOpen == true)
             {
-                if (pc.building == true || pc.destroying == true)
-                {
-                    if (GameObject.Find("GameManager").GetComponent<GameManager>().working == false)
-                    {
-                        pc.stoppingBuildCoRoutine = true;
-                        GameObject.Find("GameManager").GetComponent<GameManager>().CombineBlocks();
-                        pc.separatedBlocks = false;
-                        pc.destroyTimer = 0;
-                        pc.buildTimer = 0;
-                        pc.building = false;
-                        pc.destroying = false;
-                    }
-                    else
-                    {
-                        pc.requestedBuildingStop = true;
-                    }
-                }
-                Cursor.visible = true;
-                Cursor.lockState = CursorLockMode.None;
-                pc.gameObject.GetComponent<MSCameraController>().enabled = false;
-                pc.inventoryOpen = false;
-                pc.craftingGUIopen = false;
-                pc.storageGUIopen = false;
+                am.CloseInventory();
             }
             else if (pc.machineGUIopen == true)
             {
-                if (pc.building == true || pc.destroying == true)
-                {
-                    if (GameObject.Find("GameManager").GetComponent<GameManager>().working == false)
-                    {
-                        pc.stoppingBuildCoRoutine = true;
-                        GameObject.Find("GameManager").GetComponent<GameManager>().CombineBlocks();
-                        pc.separatedBlocks = false;
-                        pc.destroyTimer = 0;
-                        pc.buildTimer = 0;
-                        pc.building = false;
-                        pc.destroying = false;
-                    }
-                    else
-                    {
-                        pc.requestedBuildingStop = true;
-                    }
-                }
-                Cursor.visible = true;
-                Cursor.lockState = CursorLockMode.None;
-                pc.gameObject.GetComponent<MSCameraController>().enabled = false;
-                pc.machineGUIopen = false;
+                am.CloseMachineGUI();
             }
             else if (pc.tabletOpen == true)
             {
-                if (pc.building == true || pc.destroying == true)
-                {
-                    if (GameObject.Find("GameManager").GetComponent<GameManager>().working == false)
-                    {
-                        pc.stoppingBuildCoRoutine = true;
-                        GameObject.Find("GameManager").GetComponent<GameManager>().CombineBlocks();
-                        pc.separatedBlocks = false;
-                        pc.destroyTimer = 0;
-                        pc.buildTimer = 0;
-                        pc.building = false;
-                        pc.destroying = false;
-                    }
-                    else
-                    {
-                        pc.requestedBuildingStop = true;
-                    }
-                }
-                Cursor.visible = true;
-                Cursor.lockState = CursorLockMode.None;
-                pc.gameObject.GetComponent<MSCameraController>().enabled = false;
-                pc.tabletOpen = false;
+                am.CloseTablet();
             }
-            else if (pc.paintGunActive == true && pc.paintColorSelected == false)
-            {
-                if (pc.building == true || pc.destroying == true)
-                {
-                    if (GameObject.Find("GameManager").GetComponent<GameManager>().working == false)
-                    {
-                        pc.stoppingBuildCoRoutine = true;
-                        GameObject.Find("GameManager").GetComponent<GameManager>().CombineBlocks();
-                        pc.separatedBlocks = false;
-                        pc.destroyTimer = 0;
-                        pc.buildTimer = 0;
-                        pc.building = false;
-                        pc.destroying = false;
-                    }
-                    else
-                    {
-                        pc.requestedBuildingStop = true;
-                    }
-                }
-                Cursor.visible = true;
-                Cursor.lockState = CursorLockMode.None;
-                pc.gameObject.GetComponent<MSCameraController>().enabled = false;
-                pc.paintGun.SetActive(false);
-                pc.paintGunActive = false;
-                pc.paintColorSelected = false;
-            }
-            else if (pc.paintGunActive == true && pc.paintColorSelected == true)
+            else if (pc.paintGunActive == true)
             {
                 pc.paintGun.SetActive(false);
                 pc.paintGunActive = false;
@@ -791,18 +283,7 @@ public class InputManager
             }
             else
             {
-                Cursor.visible = false;
-                Cursor.lockState = CursorLockMode.Locked;
-                pc.gameObject.GetComponent<MSCameraController>().enabled = true;
-                if (cGUI.showingInputGUI == true)
-                {
-                    cGUI.ToggleGUI();
-                }
-                pc.escapeMenuOpen = false;
-                pc.optionsGUIopen = false;
-                pc.helpMenuOpen = false;
-                pc.videoMenuOpen = false;
-                pc.schematicMenuOpen = false;
+                am.CloseAllGUI();
             }
         }
     }

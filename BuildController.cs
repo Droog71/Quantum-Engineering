@@ -72,28 +72,6 @@ public class BuildController : MonoBehaviour
                 }
             }
 
-            //CANCEL BUILDING ON KEY PRESS
-            if (cInput.GetKeyDown("Stop Building"))
-            {
-                if (playerController.building == true)
-                {
-                    if (GameObject.Find("GameManager").GetComponent<GameManager>().working == false)
-                    {
-                        playerController.stoppingBuildCoRoutine = true;
-                        GameObject.Find("GameManager").GetComponent<GameManager>().CombineBlocks();
-                        playerController.separatedBlocks = false;
-                        playerController.destroyTimer = 0;
-                        playerController.buildTimer = 0;
-                        playerController.building = false;
-                        playerController.destroying = false;
-                    }
-                    else
-                    {
-                        playerController.requestedBuildingStop = true;
-                    }
-                }
-            }
-
             if (playerController.buildObject == null)
             {
                 CreateBuildObject();
