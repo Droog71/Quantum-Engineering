@@ -100,7 +100,7 @@ public class InputManager
         }
 
         //WEAPON SELECTION
-        if (pc.inventoryOpen == false && pc.escapeMenuOpen == false && pc.machineGUIopen == false && pc.tabletOpen == false && pc.building == false)
+        if (!pc.GuiOpen())
         {
             if (cInput.GetKeyDown("Paint Gun"))
             {
@@ -203,7 +203,7 @@ public class InputManager
         }
 
         //SELECTING CURRENT BLOCK TO BUILD WITH
-        if (pc.escapeMenuOpen == false && pc.inventoryOpen == false && pc.optionsGUIopen == false && pc.machineGUIopen == false)
+        if (!pc.GuiOpen())
         {
             if (cInput.GetKeyDown("Next Item"))
             {
@@ -272,6 +272,10 @@ public class InputManager
             else if (pc.machineGUIopen == true)
             {
                 am.CloseMachineGUI();
+            }
+            else if (pc.marketGUIopen == true)
+            {
+                am.ToggleMarketGUI();
             }
             else if (pc.tabletOpen == true)
             {

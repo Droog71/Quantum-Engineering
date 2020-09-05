@@ -355,7 +355,7 @@ public class InventoryGUI : MonoBehaviour
                                     {
                                         if (playerInventory.inventory[inventoryDropSlot].amountInSlot <= playerInventory.maxStackSize - playerController.amountToDrag)
                                         {
-                                            playerInventory.AddItemToSlot(playerController.itemToDrag, playerController.amountToDrag, 0);
+                                            playerInventory.AddItemToSlot(playerController.itemToDrag, playerController.amountToDrag, inventoryDropSlot);
                                             playerController.slotDraggingFrom.amountInSlot -= playerController.amountToDrag;
                                             if (playerController.slotDraggingFrom.amountInSlot <= 0)
                                             {

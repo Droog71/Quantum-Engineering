@@ -209,6 +209,11 @@ public class GuiCoordinates : MonoBehaviour
     public Rect sliderLabel5Rect;
     public Rect schematicCloseRect;
 
+    //MARKET
+    public Rect marketMessageRect;
+    public Rect marketMessageLabelRect;
+    public Rect marketMessageButtonRect;
+
     void Start()
     {
         //ASPECT RATIO
@@ -487,5 +492,10 @@ public class GuiCoordinates : MonoBehaviour
         //BUILDING INSTRUCTIONS
         buildInfoRectBG = new Rect(0, (ScreenHeight * 0.75f), (ScreenWidth * 0.40f), (ScreenHeight * 0.25f));
         buildInfoRect = new Rect((ScreenWidth * 0.04f), (ScreenHeight * 0.80f), (ScreenWidth * 0.35f), (ScreenHeight * 0.20f));
+
+        //MARKET MESSAGE
+        marketMessageRect = new Rect(((ScreenWidth / 2) - 300), ((ScreenHeight / 2) - 200), 600, 400);
+        marketMessageLabelRect = new Rect(((ScreenWidth / 2) - 175), ((ScreenHeight / 2) - 100), 400, 100);
+        marketMessageButtonRect = new Rect(((ScreenWidth / 2) - (ScreenWidth * 0.07f)), ((ScreenHeight / 2) + 30), (ScreenWidth * 0.14f), (ScreenHeight * 0.05f));
     }
 }

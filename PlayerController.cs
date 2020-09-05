@@ -434,6 +434,7 @@ public class PlayerController : MonoBehaviour
         || escapeMenuOpen == true
         || machineGUIopen == true
         || tabletOpen == true
+        || marketGUIopen == true
         || (paintGunActive == true && paintColorSelected == false);
     }
 

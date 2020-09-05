@@ -154,7 +154,7 @@ public class ActionManager
     // Toggles the inventory GUI.
     public void ToggleInventory()
     {
-        if (pc.inventoryOpen == false && pc.escapeMenuOpen == false && pc.machineGUIopen == false && pc.tabletOpen == false)
+        if (!pc.GuiOpen())
         {
             if (pc.building == true || pc.destroying == true)
             {
@@ -183,6 +183,7 @@ public class ActionManager
             Cursor.visible = false;
             Cursor.lockState = CursorLockMode.Locked;
             pc.inventoryOpen = false;
+            pc.marketGUIopen = false;
             pc.craftingGUIopen = false;
             pc.storageGUIopen = false;
             pc.machineGUIopen = false;
@@ -192,7 +193,7 @@ public class ActionManager
     // Toggles the crafting GUI.
     public void ToggleCraftingGUI()
     {
-        if (pc.inventoryOpen == false && pc.escapeMenuOpen == false && pc.machineGUIopen == false && pc.tabletOpen == false)
+        if (!pc.GuiOpen())
         {
             if (pc.building == true || pc.destroying == true)
             {
@@ -222,6 +223,7 @@ public class ActionManager
             Cursor.visible = false;
             Cursor.lockState = CursorLockMode.Locked;
             pc.inventoryOpen = false;
+            pc.marketGUIopen = false;
             pc.craftingGUIopen = false;
             pc.storageGUIopen = false;
             pc.machineGUIopen = false;
@@ -231,7 +233,7 @@ public class ActionManager
     // Toggles the crafting GUI.
     public void ToggleMarketGUI()
     {
-        if (pc.inventoryOpen == false && pc.escapeMenuOpen == false && pc.machineGUIopen == false && pc.tabletOpen == false)
+        if (!pc.GuiOpen())
         {
             if (pc.building == true || pc.destroying == true)
             {
@@ -253,9 +255,10 @@ public class ActionManager
             Cursor.visible = true;
             Cursor.lockState = CursorLockMode.None;
             pc.machineGUIopen = false;
-            pc.inventoryOpen = true;
-            pc.marketGUIopen = true;
             pc.craftingGUIopen = false;
+            pc.marketGUIopen = true;
+            float distance = Vector3.Distance(pc.gameObject.transform.position, GameObject.Find("Rocket").transform.position);
+            pc.inventoryOpen = distance <= 40;
         }
         else
         {
@@ -272,7 +275,7 @@ public class ActionManager
     // Toggles the tablet GUI.
     public void ToggleTablet()
     {
-        if (pc.tabletOpen == false && pc.inventoryOpen == false && pc.escapeMenuOpen == false && pc.machineGUIopen == false)
+        if (!pc.GuiOpen())
         {
             if (pc.building == true || pc.destroying == true)
             {
