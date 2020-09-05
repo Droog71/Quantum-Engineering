@@ -57,6 +57,10 @@ public class Turret : MonoBehaviour
             }
             if (game != null)
             {
+                if (speed > power)
+                {
+                    speed = speed > 30 ? 30 : power;
+                }
                 if (speed > 1)
                 {
                     heat = speed - 1 - cooling;

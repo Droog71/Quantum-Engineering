@@ -60,6 +60,10 @@ public class Retriever : MonoBehaviour
             UpdatePowerReceiver();
 
             updateTick = 0;
+            if (speed > power)
+            {
+                speed = power;
+            }
             if (speed > 1 && retrievingIce == false)
             {
                 heat = speed - 1 - cooling;
@@ -170,12 +174,18 @@ public class Retriever : MonoBehaviour
     // Returns true if the object in question is a storage container.
     private bool IsStorageContainer(GameObject obj)
     {
-        return obj != gameObject
-        && !obj.GetComponent<InventoryManager>().ID.Equals("player")
-        && obj.GetComponent<InventoryManager>() != null
-        && obj.GetComponent<Rocket>() == null
-        && obj.GetComponent<Retriever>() == null
-        && obj.GetComponent<AutoCrafter>() == null;
+        if (obj != null)
+        {
+            if (obj.GetComponent<InventoryManager>() != null)
+            {
+                return obj != gameObject
+                && obj.GetComponent<Rocket>() == null
+                && obj.GetComponent<Retriever>() == null
+                && obj.GetComponent<AutoCrafter>() == null
+                && !obj.GetComponent<InventoryManager>().ID.Equals("player");
+            }
+        }
+        return false;
     }
 
     // Connects the retriever to an inventory manager for input and a conduit for output.

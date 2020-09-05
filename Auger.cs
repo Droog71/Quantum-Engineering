@@ -43,6 +43,10 @@ public class Auger : MonoBehaviour
             UpdatePowerReceiver();
 
             updateTick = 0;
+            if (speed > power)
+            {
+                speed = power;
+            }
             if (speed > 1)
             {
                 heat = speed - 1 - cooling;
@@ -55,6 +59,7 @@ public class Auger : MonoBehaviour
             {
                 heat = 0;
             }
+
             if (outputObject != null)
             {
                 connectionLine.SetPosition(0, transform.position);

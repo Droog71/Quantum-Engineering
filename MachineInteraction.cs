@@ -688,7 +688,7 @@ public class MachineInteraction : MonoBehaviour
         }
         if (cInput.GetKeyDown("Collect Object"))
         {
-            interactionController.CollectObject("Retreiver");
+            interactionController.CollectObject("Retriever");
         }
         if (cInput.GetKeyDown("Interact"))
         {

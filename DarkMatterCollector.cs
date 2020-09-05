@@ -49,7 +49,10 @@ public class DarkMatterCollector : MonoBehaviour
             UpdatePowerReceiver();
 
             updateTick = 0;
-
+            if (speed > power)
+            {
+                speed = power;
+            }
             if (speed > 1)
             {
                 heat = speed - 1 - cooling;
@@ -58,7 +61,6 @@ public class DarkMatterCollector : MonoBehaviour
             {
                 heat = 0;
             }
-
             if (heat < 0)
             {
                 heat = 0;

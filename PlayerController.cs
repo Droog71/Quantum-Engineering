@@ -243,9 +243,6 @@ public class PlayerController : MonoBehaviour
         if (mCam == null)
         {
             mCam = Camera.main;
-        }
-        else
-        {
             if (PlayerPrefs.GetFloat("FOV") != 0)
             {
                 mCam.fieldOfView = PlayerPrefs.GetFloat("FOV");
@@ -255,7 +252,9 @@ public class PlayerController : MonoBehaviour
             {
                 mCam.farClipPlane = PlayerPrefs.GetFloat("DrawDistance");
             }
-
+        }
+        else
+        {
             // Disable mouse look during main menu sequence.
             gameObject.GetComponent<MSCameraController>().enabled &= gameStarted != false;
 

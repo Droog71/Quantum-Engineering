@@ -610,7 +610,7 @@ public class PlayerGUI : MonoBehaviour
             }
 
             //CROSSHAIR
-            if (!playerController.inventoryOpen && !playerController.machineGUIopen)
+            if (!playerController.inventoryOpen && !playerController.machineGUIopen && !playerController.marketGUIopen)
             {
                 if (!playerController.escapeMenuOpen && !playerController.tabletOpen && !playerController.paintGunActive)
                 {
