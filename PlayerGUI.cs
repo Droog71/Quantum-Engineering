@@ -26,6 +26,28 @@ public class PlayerGUI : MonoBehaviour
         td = GetComponent<TextureDictionary>();
     }
 
+    // Returns true if the escape menu should be displayed.
+    private bool MenuAvailable()
+    {
+        return playerController.helpMenuOpen == false
+        && playerController.optionsGUIopen == false
+        && cGUI.showingInputGUI == false
+        && playerController.exiting == false
+        && playerController.requestedSave == false
+        && GameObject.Find("GameManager").GetComponent<GameManager>().dataSaveRequested == false
+        && GameObject.Find("GameManager").GetComponent<StateManager>().saving == false;
+
+    }
+
+    private bool SavingMessageRequired()
+    {
+        return playerController.exiting == true
+        || playerController.requestedSave == true
+        || GameObject.Find("GameManager").GetComponent<GameManager>().dataSaveRequested == true
+        || GameObject.Find("GameManager").GetComponent<StateManager>().saving == true;
+
+    }
+
     // Called by unity engine for rendering and handling GUI events
     public void OnGUI()
     {
@@ -105,7 +127,7 @@ public class PlayerGUI : MonoBehaviour
             //OPTIONS/EXIT MENU
             if (playerController.escapeMenuOpen == true)
             {
-                if (playerController.helpMenuOpen == false && playerController.optionsGUIopen == false && cGUI.showingInputGUI == false && playerController.exiting == false)
+                if (MenuAvailable())
                 {
                     GUI.DrawTexture(guiCoordinates.escapeMenuRect, td.dictionary["Menu Background"]);
                     if (GUI.Button(guiCoordinates.escapeButton1Rect, "Resume"))
@@ -120,38 +142,35 @@ public class PlayerGUI : MonoBehaviour
                         playerController.schematicMenuOpen = false;
                         playerController.PlayButtonSound();
                     }
-                    if (GUI.Button(guiCoordinates.escapeButton2Rect, "Options"))
+                    if (GUI.Button(guiCoordinates.escapeButton2Rect, "Save"))
+                    {
+                        playerController.requestedSave = true;
+                        playerController.PlayButtonSound();
+                    }
+                    if (GUI.Button(guiCoordinates.escapeButton3Rect, "Options"))
                     {
                         playerController.optionsGUIopen = true;
                         playerController.PlayButtonSound();
                     }
-                    if (GUI.Button(guiCoordinates.escapeButton3Rect, "Help"))
+                    if (GUI.Button(guiCoordinates.escapeButton4Rect, "Help"))
                     {
                         playerController.helpMenuOpen = true;
                         playerController.PlayButtonSound();
                     }
-                    if (GUI.Button(guiCoordinates.escapeButton4Rect, "Exit"))
+                    if (GUI.Button(guiCoordinates.escapeButton5Rect, "Exit"))
                     {
-                        PlayerPrefs.SetFloat("xSensitivity", GetComponent<MSCameraController>().CameraSettings.firstPerson.sensibilityX);
-                        PlayerPrefs.SetFloat("ySensitivity", GetComponent<MSCameraController>().CameraSettings.firstPerson.sensibilityY);
-                        PlayerPrefsX.SetBool("mouseInverted", GetComponent<MSCameraController>().CameraSettings.firstPerson.invertYInput);
-                        PlayerPrefs.SetFloat("FOV", playerController.mCam.fieldOfView);
-                        PlayerPrefs.SetFloat("DrawDistance", playerController.mCam.farClipPlane);
-                        PlayerPrefsX.SetVector3(playerController.stateManager.WorldName + "playerPosition", transform.position);
-                        PlayerPrefsX.SetQuaternion(playerController.stateManager.WorldName + "playerRotation", transform.rotation);
-                        PlayerPrefs.SetInt(playerController.stateManager.WorldName + "money", playerController.money);
-                        PlayerPrefsX.SetBool(playerController.stateManager.WorldName + "oldWorld", true);
-                        PlayerPrefs.SetFloat("volume", GetComponent<MSCameraController>().cameras[0].volume);
-                        PlayerPrefs.Save();
                         playerController.exiting = true;
-                        playerController.requestedExit = true;
+                        playerController.requestedSave = true;
                         playerController.PlayButtonSound();
                     }
                 }
-                if (playerController.exiting == true)
+                else
                 {
-                    GUI.DrawTexture(guiCoordinates.savingBackgroundRect, td.dictionary["Interface Background"]);
-                    GUI.Label(guiCoordinates.messageRect, "\n\n\n\n\nSaving world...");
+                    if (SavingMessageRequired())
+                    {
+                        GUI.DrawTexture(guiCoordinates.savingBackgroundRect, td.dictionary["Interface Background"]);
+                        GUI.Label(guiCoordinates.messageRect, "\n\n\n\n\nSaving world...");
+                    }
                 }
             }
 
@@ -453,7 +472,7 @@ public class PlayerGUI : MonoBehaviour
                     {
                         GameObject.Find("GameManager").GetComponent<GameManager>().blockPhysics = false;
                     }
-                    PlayerPrefsX.SetBool(GameObject.Find("GameManager").GetComponent<StateManager>().WorldName + "blockPhysics", GameObject.Find("GameManager").GetComponent<GameManager>().blockPhysics);
+                    FileBasedPrefs.SetBool(GameObject.Find("GameManager").GetComponent<StateManager>().WorldName + "blockPhysics", GameObject.Find("GameManager").GetComponent<GameManager>().blockPhysics);
                     playerController.PlayButtonSound();
                 }
                 string hazardsEnabledDisplay = "";
@@ -475,11 +494,12 @@ public class PlayerGUI : MonoBehaviour
                     {
                         GameObject.Find("GameManager").GetComponent<GameManager>().hazardsEnabled = false;
                     }
-                    PlayerPrefsX.SetBool(GameObject.Find("GameManager").GetComponent<StateManager>().WorldName + "hazardsEnabled", GameObject.Find("GameManager").GetComponent<GameManager>().hazardsEnabled);
+                    FileBasedPrefs.SetBool(GameObject.Find("GameManager").GetComponent<StateManager>().WorldName + "hazardsEnabled", GameObject.Find("GameManager").GetComponent<GameManager>().hazardsEnabled);
                     playerController.PlayButtonSound();
                 }
                 if (GUI.Button(guiCoordinates.optionsButton11Rect, "BACK"))
                 {
+                    playerController.ApplySettings();
                     playerController.optionsGUIopen = false;
                     playerController.PlayButtonSound();
                 }

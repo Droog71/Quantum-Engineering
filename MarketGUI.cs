@@ -62,9 +62,9 @@ public class MarketGUI : MonoBehaviour
             Dictionary<string, int> pd = new Dictionary<string, int>();
             foreach (KeyValuePair<string, int> i in priceDictionary)
             {
-                if (PlayerPrefs.GetInt(i.Key) != 0)
+                if (FileBasedPrefs.GetInt(i.Key) != 0)
                 {
-                    pd.Add(i.Key, PlayerPrefs.GetInt(i.Key));
+                    pd.Add(i.Key, FileBasedPrefs.GetInt(i.Key));
                 }
                 else
                 {
@@ -80,7 +80,7 @@ public class MarketGUI : MonoBehaviour
     {
         foreach (KeyValuePair<string, int> i in priceDictionary)
         {
-            PlayerPrefs.SetInt(i.Key, i.Value);
+            FileBasedPrefs.SetInt(i.Key, i.Value);
         }
     }
 
@@ -93,7 +93,7 @@ public class MarketGUI : MonoBehaviour
             {
                 pc.money -= priceDictionary[item];
                 priceDictionary[item] += (int)(priceDictionary[item] * 0.05f);
-                PlayerPrefs.SetInt(pc.stateManager.WorldName + "money", pc.money);
+                FileBasedPrefs.SetInt(pc.stateManager.WorldName + "money", pc.money);
                 SavePrices();
                 pc.PlayCraftingSound();
             }
@@ -126,7 +126,7 @@ public class MarketGUI : MonoBehaviour
             }
             pc.money += priceDictionary[item];
             priceDictionary[item] -= (int)(priceDictionary[item] * 0.05f);
-            PlayerPrefs.SetInt(pc.stateManager.WorldName + "money", pc.money);
+            FileBasedPrefs.SetInt(pc.stateManager.WorldName + "money", pc.money);
             SavePrices();
             pc.PlayCraftingSound();
         }

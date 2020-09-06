@@ -767,6 +767,7 @@ public class ActionManager
     // Closes all GUI windows.
     public void CloseMenus()
     {
+        pc.ApplySettings();
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
         pc.gameObject.GetComponent<MSCameraController>().enabled = true;

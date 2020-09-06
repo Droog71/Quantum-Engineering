@@ -22,6 +22,7 @@ public class MachineInteraction : MonoBehaviour
 
     public void InteractWithAirLock()
     {
+        AirLock airLock = playerController.objectInSight.GetComponent<AirLock>();
         if (cInput.GetKeyDown("Collect Object"))
         {
             interactionController.CollectObject("Quantum Hatchway");
@@ -36,26 +37,27 @@ public class MachineInteraction : MonoBehaviour
                     a.ToggleOpen();
                 }
             }
-            if (playerController.objectInSight.GetComponent<AirLock>().open == true)
+            if (airLock.open == true)
             {
-                playerController.objectInSight.GetComponent<AirLock>().openObject.GetComponent<AudioSource>().Play();
+                airLock.openObject.GetComponent<AudioSource>().Play();
             }
             else
             {
-                playerController.objectInSight.GetComponent<AirLock>().closedObject.GetComponent<AudioSource>().Play();
+                airLock.closedObject.GetComponent<AudioSource>().Play();
             }
         }
     }
 
     public void InteractWithPowerSource()
     {
+        PowerSource powerSource = playerController.objectInSight.GetComponent<PowerSource>();
         playerController.machineInSight = playerController.objectInSight;
-        playerController.machineID = playerController.objectInSight.GetComponent<PowerSource>().ID;
-        playerController.machineOutputID = playerController.objectInSight.GetComponent<PowerSource>().outputID;
+        playerController.machineID = powerSource.ID;
+        playerController.machineOutputID = powerSource.outputID;
 
-        if (playerController.objectInSight.GetComponent<PowerSource>().type.Equals("Solar Panel"))
+        if (powerSource.type.Equals("Solar Panel"))
         {
-            if (playerController.objectInSight.GetComponent<PowerSource>().blocked == false)
+            if (powerSource.blocked == false)
             {
                 playerController.machinePower = 1;
             }
@@ -64,11 +66,11 @@ public class MachineInteraction : MonoBehaviour
                 playerController.machinePower = 0;
             }
         }
-        else if (playerController.objectInSight.GetComponent<PowerSource>().type.Equals("Generator"))
+        else if (powerSource.type.Equals("Generator"))
         {
-            playerController.machineAmount = playerController.objectInSight.GetComponent<PowerSource>().fuelAmount;
-            playerController.machineType = playerController.objectInSight.GetComponent<PowerSource>().fuelType;
-            if (playerController.objectInSight.GetComponent<PowerSource>().outOfFuel == false)
+            playerController.machineAmount = powerSource.fuelAmount;
+            playerController.machineType = powerSource.fuelType;
+            if (powerSource.outOfFuel == false)
             {
                 playerController.machinePower = 10;
             }
@@ -77,9 +79,9 @@ public class MachineInteraction : MonoBehaviour
                 playerController.machinePower = 0;
             }
         }
-        else if (playerController.objectInSight.GetComponent<PowerSource>().type.Equals("Reactor Turbine"))
+        else if (powerSource.type.Equals("Reactor Turbine"))
         {
-            if (playerController.objectInSight.GetComponent<PowerSource>().noReactor == false)
+            if (powerSource.noReactor == false)
             {
                 playerController.machinePower = 100;
             }
@@ -91,7 +93,7 @@ public class MachineInteraction : MonoBehaviour
 
         if (cInput.GetKeyDown("Collect Object"))
         {
-            interactionController.CollectObject(playerController.objectInSight.GetComponent<PowerSource>().type);
+            interactionController.CollectObject(powerSource.type);
         }
         if (cInput.GetKeyDown("Interact"))
         {
@@ -101,9 +103,10 @@ public class MachineInteraction : MonoBehaviour
 
     public void InteractWithNuclearReactor()
     {
+        NuclearReactor reactor = playerController.objectInSight.GetComponent<NuclearReactor>();
         playerController.machineInSight = playerController.objectInSight;
-        playerController.machineID = playerController.objectInSight.GetComponent<NuclearReactor>().ID;
-        playerController.machineCooling = playerController.objectInSight.GetComponent<NuclearReactor>().cooling;
+        playerController.machineID = reactor.ID;
+        playerController.machineCooling = reactor.cooling;
         if (cInput.GetKeyDown("Collect Object"))
         {
             interactionController.CollectObject("Nuclear Reactor");
@@ -112,12 +115,13 @@ public class MachineInteraction : MonoBehaviour
 
     public void InteractWithPowerConduit()
     {
+        PowerConduit powerConduit = playerController.objectInSight.GetComponent<PowerConduit>();
         playerController.machineInSight = playerController.objectInSight;
-        playerController.machineID = playerController.objectInSight.GetComponent<PowerConduit>().ID;
-        playerController.machineOutputID = playerController.objectInSight.GetComponent<PowerConduit>().outputID1;
-        playerController.machineOutputID2 = playerController.objectInSight.GetComponent<PowerConduit>().outputID2;
-        playerController.machinePower = playerController.objectInSight.GetComponent<PowerConduit>().powerAmount;
-        playerController.machineRange = playerController.objectInSight.GetComponent<PowerConduit>().range;
+        playerController.machineID = powerConduit.ID;
+        playerController.machineOutputID = powerConduit.outputID1;
+        playerController.machineOutputID2 = powerConduit.outputID2;
+        playerController.machinePower = powerConduit.powerAmount;
+        playerController.machineRange = powerConduit.range;
         if (playerController.machineRange < 10)
         {
             playerController.machineRange = 10;
@@ -134,13 +138,14 @@ public class MachineInteraction : MonoBehaviour
 
     public void InteractWithTurret()
     {
+        Turret turret = playerController.objectInSight.GetComponent<Turret>();
         playerController.machineInSight = playerController.objectInSight;
-        playerController.machineID = playerController.objectInSight.GetComponent<Turret>().ID;
-        playerController.machineHasPower = playerController.objectInSight.GetComponent<Turret>().powerON;
-        playerController.machineSpeed = playerController.objectInSight.GetComponent<Turret>().speed;
-        playerController.machinePower = playerController.objectInSight.GetComponent<Turret>().power;
-        playerController.machineHeat = playerController.objectInSight.GetComponent<Turret>().heat;
-        playerController.machineCooling = playerController.objectInSight.GetComponent<Turret>().cooling;
+        playerController.machineID = turret.ID;
+        playerController.machineHasPower = turret.powerON;
+        playerController.machineSpeed = turret.speed;
+        playerController.machinePower = turret.power;
+        playerController.machineHeat = turret.heat;
+        playerController.machineCooling = turret.cooling;
         if (cInput.GetKeyDown("Collect Object"))
         {
             interactionController.CollectObject("Turret");
@@ -153,15 +158,16 @@ public class MachineInteraction : MonoBehaviour
 
     public void InteractWithUniversalExtractor()
     {
+        UniversalExtractor extractor = playerController.objectInSight.GetComponent<UniversalExtractor>();
         playerController.machineInSight = playerController.objectInSight;
-        playerController.machineID = playerController.objectInSight.GetComponent<UniversalExtractor>().ID;
-        playerController.collectorAmount = playerController.objectInSight.GetComponent<UniversalExtractor>().amount;
-        playerController.machineHasPower = playerController.objectInSight.GetComponent<UniversalExtractor>().powerON;
-        playerController.machinePower = playerController.objectInSight.GetComponent<UniversalExtractor>().power;
-        playerController.machineSpeed = playerController.objectInSight.GetComponent<UniversalExtractor>().speed;
-        playerController.machineHeat = playerController.objectInSight.GetComponent<UniversalExtractor>().heat;
-        playerController.machineCooling = playerController.objectInSight.GetComponent<UniversalExtractor>().cooling;
-        playerController.machineType = playerController.objectInSight.GetComponent<UniversalExtractor>().type;
+        playerController.machineID = extractor.ID;
+        playerController.collectorAmount = extractor.amount;
+        playerController.machineHasPower = extractor.powerON;
+        playerController.machinePower = extractor.power;
+        playerController.machineSpeed = extractor.speed;
+        playerController.machineHeat = extractor.heat;
+        playerController.machineCooling = extractor.cooling;
+        playerController.machineType = extractor.type;
         if (cInput.GetKeyDown("Collect Object"))
         {
             interactionController.CollectObject("Universal Extractor");
@@ -174,14 +180,15 @@ public class MachineInteraction : MonoBehaviour
 
     public void InteractWithAuger()
     {
+        Auger auger = playerController.objectInSight.GetComponent<Auger>();
         playerController.machineInSight = playerController.objectInSight;
-        playerController.machineID = playerController.objectInSight.GetComponent<Auger>().ID;
-        playerController.collectorAmount = playerController.objectInSight.GetComponent<Auger>().amount;
-        playerController.machineHasPower = playerController.objectInSight.GetComponent<Auger>().powerON;
-        playerController.machinePower = playerController.objectInSight.GetComponent<Auger>().power;
-        playerController.machineSpeed = playerController.objectInSight.GetComponent<Auger>().speed;
-        playerController.machineHeat = playerController.objectInSight.GetComponent<Auger>().heat;
-        playerController.machineCooling = playerController.objectInSight.GetComponent<Auger>().cooling;
+        playerController.machineID = auger.ID;
+        playerController.collectorAmount = auger.amount;
+        playerController.machineHasPower = auger.powerON;
+        playerController.machinePower = auger.power;
+        playerController.machineSpeed = auger.speed;
+        playerController.machineHeat = auger.heat;
+        playerController.machineCooling = auger.cooling;
         if (cInput.GetKeyDown("Collect Object"))
         {
             interactionController.CollectObject("Auger");
@@ -194,14 +201,15 @@ public class MachineInteraction : MonoBehaviour
 
     public void InteractWithDarkMatterCollector()
     {
+        DarkMatterCollector collector = playerController.objectInSight.GetComponent<DarkMatterCollector>();
         playerController.machineInSight = playerController.objectInSight;
-        playerController.machineID = playerController.objectInSight.GetComponent<DarkMatterCollector>().ID;
-        playerController.collectorAmount = playerController.objectInSight.GetComponent<DarkMatterCollector>().darkMatterAmount;
-        playerController.machineHasPower = playerController.objectInSight.GetComponent<DarkMatterCollector>().powerON;
-        playerController.machinePower = playerController.objectInSight.GetComponent<DarkMatterCollector>().power;
-        playerController.machineSpeed = playerController.objectInSight.GetComponent<DarkMatterCollector>().speed;
-        playerController.machineHeat = playerController.objectInSight.GetComponent<DarkMatterCollector>().heat;
-        playerController.machineCooling = playerController.objectInSight.GetComponent<DarkMatterCollector>().cooling;
+        playerController.machineID = collector.ID;
+        playerController.collectorAmount = collector.darkMatterAmount;
+        playerController.machineHasPower = collector.powerON;
+        playerController.machinePower = collector.power;
+        playerController.machineSpeed = collector.speed;
+        playerController.machineHeat = collector.heat;
+        playerController.machineCooling = collector.cooling;
         if (cInput.GetKeyDown("Collect Object"))
         {
             interactionController.CollectObject("Dark Matter Collector");
@@ -221,142 +229,145 @@ public class MachineInteraction : MonoBehaviour
 
     public void InteractWithUniversalConduit()
     {
+        UniversalConduit conduit = playerController.objectInSight.GetComponent<UniversalConduit>();
         playerController.machineInSight = playerController.objectInSight;
-        playerController.machineAmount = playerController.objectInSight.GetComponent<UniversalConduit>().amount;
-        playerController.machineID = playerController.objectInSight.GetComponent<UniversalConduit>().ID;
-        playerController.machineType = playerController.objectInSight.GetComponent<UniversalConduit>().type;
-        playerController.machineSpeed = playerController.objectInSight.GetComponent<UniversalConduit>().speed;
-        playerController.machineRange = playerController.objectInSight.GetComponent<UniversalConduit>().range;
+        playerController.machineAmount = conduit.amount;
+        playerController.machineID = conduit.ID;
+        playerController.machineType = conduit.type;
+        playerController.machineSpeed = conduit.speed;
+        playerController.machineRange = conduit.range;
         if (playerController.machineRange < 10)
         {
             playerController.machineRange = 10;
         }
-        if (playerController.objectInSight.GetComponent<UniversalConduit>().inputObject != null)
+        if (conduit.inputObject != null)
         {
-            if (playerController.objectInSight.GetComponent<UniversalConduit>().inputObject.GetComponent<UniversalConduit>() != null)
+            GameObject conduitInput = conduit.inputObject;
+            if (conduitInput.GetComponent<UniversalConduit>() != null)
             {
-                playerController.machineInputID = playerController.objectInSight.GetComponent<UniversalConduit>().inputObject.GetComponent<UniversalConduit>().ID;
-                playerController.machineInputAmount = playerController.objectInSight.GetComponent<UniversalConduit>().inputObject.GetComponent<UniversalConduit>().amount;
-                playerController.machineInputType = playerController.objectInSight.GetComponent<UniversalConduit>().inputObject.GetComponent<UniversalConduit>().type;
+                playerController.machineInputID = conduitInput.GetComponent<UniversalConduit>().ID;
+                playerController.machineInputAmount = conduitInput.GetComponent<UniversalConduit>().amount;
+                playerController.machineInputType = conduitInput.GetComponent<UniversalConduit>().type;
             }
-            if (playerController.objectInSight.GetComponent<UniversalConduit>().inputObject.GetComponent<UniversalExtractor>() != null)
+            if (conduitInput.GetComponent<UniversalExtractor>() != null)
             {
-                playerController.machineInputID = playerController.objectInSight.GetComponent<UniversalConduit>().inputObject.GetComponent<UniversalExtractor>().ID;
-                playerController.machineInputAmount = playerController.objectInSight.GetComponent<UniversalConduit>().inputObject.GetComponent<UniversalExtractor>().amount;
-                playerController.machineInputType = playerController.objectInSight.GetComponent<UniversalConduit>().inputObject.GetComponent<UniversalExtractor>().type;
+                playerController.machineInputID = conduitInput.GetComponent<UniversalExtractor>().ID;
+                playerController.machineInputAmount = conduitInput.GetComponent<UniversalExtractor>().amount;
+                playerController.machineInputType = conduitInput.GetComponent<UniversalExtractor>().type;
             }
-            if (playerController.objectInSight.GetComponent<UniversalConduit>().inputObject.GetComponent<Auger>() != null)
+            if (conduitInput.GetComponent<Auger>() != null)
             {
-                playerController.machineInputID = playerController.objectInSight.GetComponent<UniversalConduit>().inputObject.GetComponent<Auger>().ID;
-                playerController.machineInputAmount = playerController.objectInSight.GetComponent<UniversalConduit>().inputObject.GetComponent<Auger>().amount;
+                playerController.machineInputID = conduitInput.GetComponent<Auger>().ID;
+                playerController.machineInputAmount = conduitInput.GetComponent<Auger>().amount;
                 playerController.machineInputType = "Regolith";
             }
-            if (playerController.objectInSight.GetComponent<UniversalConduit>().inputObject.GetComponent<Smelter>() != null)
+            if (conduitInput.GetComponent<Smelter>() != null)
             {
-                playerController.machineInputID = playerController.objectInSight.GetComponent<UniversalConduit>().inputObject.GetComponent<Smelter>().ID;
-                playerController.machineInputAmount = playerController.objectInSight.GetComponent<UniversalConduit>().inputObject.GetComponent<Smelter>().amount;
-                playerController.machineInputType = playerController.objectInSight.GetComponent<UniversalConduit>().inputObject.GetComponent<Smelter>().outputType;
+                playerController.machineInputID = conduitInput.GetComponent<Smelter>().ID;
+                playerController.machineInputAmount = conduitInput.GetComponent<Smelter>().amount;
+                playerController.machineInputType = conduitInput.GetComponent<Smelter>().outputType;
             }
-            if (playerController.objectInSight.GetComponent<UniversalConduit>().inputObject.GetComponent<Press>() != null)
+            if (conduitInput.GetComponent<Press>() != null)
             {
-                playerController.machineInputID = playerController.objectInSight.GetComponent<UniversalConduit>().inputObject.GetComponent<Press>().ID;
-                playerController.machineInputAmount = playerController.objectInSight.GetComponent<UniversalConduit>().inputObject.GetComponent<Press>().amount;
-                playerController.machineInputType = playerController.objectInSight.GetComponent<UniversalConduit>().inputObject.GetComponent<Press>().outputType;
+                playerController.machineInputID = conduitInput.GetComponent<Press>().ID;
+                playerController.machineInputAmount = conduitInput.GetComponent<Press>().amount;
+                playerController.machineInputType = conduitInput.GetComponent<Press>().outputType;
             }
-            if (playerController.objectInSight.GetComponent<UniversalConduit>().inputObject.GetComponent<AlloySmelter>() != null)
+            if (conduitInput.GetComponent<AlloySmelter>() != null)
             {
-                playerController.machineInputID = playerController.objectInSight.GetComponent<UniversalConduit>().inputObject.GetComponent<AlloySmelter>().ID;
-                playerController.machineInputAmount = playerController.objectInSight.GetComponent<UniversalConduit>().inputObject.GetComponent<AlloySmelter>().amount;
-                playerController.machineInputType = playerController.objectInSight.GetComponent<UniversalConduit>().inputObject.GetComponent<AlloySmelter>().outputType;
+                playerController.machineInputID = conduitInput.GetComponent<AlloySmelter>().ID;
+                playerController.machineInputAmount = conduitInput.GetComponent<AlloySmelter>().amount;
+                playerController.machineInputType = conduitInput.GetComponent<AlloySmelter>().outputType;
             }
-            if (playerController.objectInSight.GetComponent<UniversalConduit>().inputObject.GetComponent<Extruder>() != null)
+            if (conduitInput.GetComponent<Extruder>() != null)
             {
-                playerController.machineInputID = playerController.objectInSight.GetComponent<UniversalConduit>().inputObject.GetComponent<Extruder>().ID;
-                playerController.machineInputAmount = playerController.objectInSight.GetComponent<UniversalConduit>().inputObject.GetComponent<Extruder>().amount;
-                playerController.machineInputType = playerController.objectInSight.GetComponent<UniversalConduit>().inputObject.GetComponent<Extruder>().outputType;
+                playerController.machineInputID = conduitInput.GetComponent<Extruder>().ID;
+                playerController.machineInputAmount = conduitInput.GetComponent<Extruder>().amount;
+                playerController.machineInputType = conduitInput.GetComponent<Extruder>().outputType;
             }
-            if (playerController.objectInSight.GetComponent<UniversalConduit>().inputObject.GetComponent<Retriever>() != null)
+            if (conduitInput.GetComponent<Retriever>() != null)
             {
-                playerController.machineInputID = playerController.objectInSight.GetComponent<UniversalConduit>().inputObject.GetComponent<Retriever>().ID;
-                playerController.machineInputType = playerController.objectInSight.GetComponent<UniversalConduit>().inputObject.GetComponent<Retriever>().currentType;
+                playerController.machineInputID = conduitInput.GetComponent<Retriever>().ID;
+                playerController.machineInputType = conduitInput.GetComponent<Retriever>().currentType;
             }
-            if (playerController.objectInSight.GetComponent<UniversalConduit>().inputObject.GetComponent<HeatExchanger>() != null)
+            if (conduitInput.GetComponent<HeatExchanger>() != null)
             {
-                playerController.machineInputID = playerController.objectInSight.GetComponent<UniversalConduit>().inputObject.GetComponent<HeatExchanger>().ID;
-                playerController.machineInputAmount = playerController.objectInSight.GetComponent<UniversalConduit>().inputObject.GetComponent<HeatExchanger>().amount;
-                playerController.machineInputType = playerController.objectInSight.GetComponent<UniversalConduit>().inputObject.GetComponent<HeatExchanger>().inputType;
+                playerController.machineInputID = conduitInput.GetComponent<HeatExchanger>().ID;
+                playerController.machineInputAmount = conduitInput.GetComponent<HeatExchanger>().amount;
+                playerController.machineInputType = conduitInput.GetComponent<HeatExchanger>().inputType;
             }
-            if (playerController.objectInSight.GetComponent<UniversalConduit>().inputObject.GetComponent<GearCutter>() != null)
+            if (conduitInput.GetComponent<GearCutter>() != null)
             {
-                playerController.machineInputID = playerController.objectInSight.GetComponent<UniversalConduit>().inputObject.GetComponent<GearCutter>().ID;
-                playerController.machineInputAmount = playerController.objectInSight.GetComponent<UniversalConduit>().inputObject.GetComponent<GearCutter>().amount;
-                playerController.machineInputType = playerController.objectInSight.GetComponent<UniversalConduit>().inputObject.GetComponent<GearCutter>().outputType;
+                playerController.machineInputID = conduitInput.GetComponent<GearCutter>().ID;
+                playerController.machineInputAmount = conduitInput.GetComponent<GearCutter>().amount;
+                playerController.machineInputType = conduitInput.GetComponent<GearCutter>().outputType;
             }
         }
-        if (playerController.objectInSight.GetComponent<UniversalConduit>().outputObject != null)
+        if (conduit.outputObject != null)
         {
-            if (playerController.objectInSight.GetComponent<UniversalConduit>().outputObject.GetComponent<PowerSource>() != null)
+            GameObject conduitOutput = conduit.outputObject;
+            if (conduitOutput.GetComponent<PowerSource>() != null)
             {
-                playerController.machineOutputID = playerController.objectInSight.GetComponent<UniversalConduit>().outputObject.GetComponent<PowerSource>().ID;
-                playerController.machineOutputAmount = playerController.objectInSight.GetComponent<UniversalConduit>().outputObject.GetComponent<PowerSource>().fuelAmount;
-                playerController.machineOutputType = playerController.objectInSight.GetComponent<UniversalConduit>().outputObject.GetComponent<PowerSource>().fuelType;
+                playerController.machineOutputID = conduitOutput.GetComponent<PowerSource>().ID;
+                playerController.machineOutputAmount = conduitOutput.GetComponent<PowerSource>().fuelAmount;
+                playerController.machineOutputType = conduitOutput.GetComponent<PowerSource>().fuelType;
             }
-            if (playerController.objectInSight.GetComponent<UniversalConduit>().outputObject.GetComponent<UniversalConduit>() != null)
+            if (conduitOutput.GetComponent<UniversalConduit>() != null)
             {
-                playerController.machineOutputID = playerController.objectInSight.GetComponent<UniversalConduit>().outputObject.GetComponent<UniversalConduit>().ID;
-                playerController.machineOutputAmount = playerController.objectInSight.GetComponent<UniversalConduit>().outputObject.GetComponent<UniversalConduit>().amount;
-                playerController.machineOutputType = playerController.objectInSight.GetComponent<UniversalConduit>().outputObject.GetComponent<UniversalConduit>().type;
+                playerController.machineOutputID = conduitOutput.GetComponent<UniversalConduit>().ID;
+                playerController.machineOutputAmount = conduitOutput.GetComponent<UniversalConduit>().amount;
+                playerController.machineOutputType = conduitOutput.GetComponent<UniversalConduit>().type;
             }
-            if (playerController.objectInSight.GetComponent<UniversalConduit>().outputObject.GetComponent<Smelter>() != null)
+            if (conduitOutput.GetComponent<Smelter>() != null)
             {
-                playerController.machineOutputID = playerController.objectInSight.GetComponent<UniversalConduit>().outputObject.GetComponent<Smelter>().ID;
-                playerController.machineOutputAmount = playerController.objectInSight.GetComponent<UniversalConduit>().outputObject.GetComponent<Smelter>().amount;
-                playerController.machineOutputType = playerController.objectInSight.GetComponent<UniversalConduit>().outputObject.GetComponent<Smelter>().inputType;
+                playerController.machineOutputID = conduitOutput.GetComponent<Smelter>().ID;
+                playerController.machineOutputAmount = conduitOutput.GetComponent<Smelter>().amount;
+                playerController.machineOutputType = conduitOutput.GetComponent<Smelter>().inputType;
             }
-            if (playerController.objectInSight.GetComponent<UniversalConduit>().outputObject.GetComponent<Press>() != null)
+            if (conduitOutput.GetComponent<Press>() != null)
             {
-                playerController.machineOutputID = playerController.objectInSight.GetComponent<UniversalConduit>().outputObject.GetComponent<Press>().ID;
-                playerController.machineOutputAmount = playerController.objectInSight.GetComponent<UniversalConduit>().outputObject.GetComponent<Press>().amount;
-                playerController.machineOutputType = playerController.objectInSight.GetComponent<UniversalConduit>().outputObject.GetComponent<Press>().inputType;
+                playerController.machineOutputID = conduitOutput.GetComponent<Press>().ID;
+                playerController.machineOutputAmount = conduitOutput.GetComponent<Press>().amount;
+                playerController.machineOutputType = conduitOutput.GetComponent<Press>().inputType;
             }
-            if (playerController.objectInSight.GetComponent<UniversalConduit>().outputObject.GetComponent<Extruder>() != null)
+            if (conduitOutput.GetComponent<Extruder>() != null)
             {
-                playerController.machineOutputID = playerController.objectInSight.GetComponent<UniversalConduit>().outputObject.GetComponent<Extruder>().ID;
-                playerController.machineOutputAmount = playerController.objectInSight.GetComponent<UniversalConduit>().outputObject.GetComponent<Extruder>().amount;
-                playerController.machineOutputType = playerController.objectInSight.GetComponent<UniversalConduit>().outputObject.GetComponent<Extruder>().inputType;
+                playerController.machineOutputID = conduitOutput.GetComponent<Extruder>().ID;
+                playerController.machineOutputAmount = conduitOutput.GetComponent<Extruder>().amount;
+                playerController.machineOutputType = conduitOutput.GetComponent<Extruder>().inputType;
             }
-            if (playerController.objectInSight.GetComponent<UniversalConduit>().outputObject.GetComponent<HeatExchanger>() != null)
+            if (conduitOutput.GetComponent<HeatExchanger>() != null)
             {
-                playerController.machineOutputID = playerController.objectInSight.GetComponent<UniversalConduit>().outputObject.GetComponent<HeatExchanger>().ID;
-                playerController.machineOutputAmount = playerController.objectInSight.GetComponent<UniversalConduit>().outputObject.GetComponent<HeatExchanger>().amount;
-                playerController.machineOutputType = playerController.objectInSight.GetComponent<UniversalConduit>().outputObject.GetComponent<HeatExchanger>().inputType;
+                playerController.machineOutputID = conduitOutput.GetComponent<HeatExchanger>().ID;
+                playerController.machineOutputAmount = conduitOutput.GetComponent<HeatExchanger>().amount;
+                playerController.machineOutputType = conduitOutput.GetComponent<HeatExchanger>().inputType;
             }
-            if (playerController.objectInSight.GetComponent<UniversalConduit>().outputObject.GetComponent<GearCutter>() != null)
+            if (conduitOutput.GetComponent<GearCutter>() != null)
             {
-                playerController.machineOutputID = playerController.objectInSight.GetComponent<UniversalConduit>().outputObject.GetComponent<GearCutter>().ID;
-                playerController.machineOutputAmount = playerController.objectInSight.GetComponent<UniversalConduit>().outputObject.GetComponent<GearCutter>().amount;
-                playerController.machineOutputType = playerController.objectInSight.GetComponent<UniversalConduit>().outputObject.GetComponent<GearCutter>().inputType;
+                playerController.machineOutputID = conduitOutput.GetComponent<GearCutter>().ID;
+                playerController.machineOutputAmount = conduitOutput.GetComponent<GearCutter>().amount;
+                playerController.machineOutputType = conduitOutput.GetComponent<GearCutter>().inputType;
             }
-            if (playerController.objectInSight.GetComponent<UniversalConduit>().outputObject.GetComponent<AlloySmelter>() != null)
+            if (conduitOutput.GetComponent<AlloySmelter>() != null)
             {
-                playerController.machineOutputID = playerController.objectInSight.GetComponent<UniversalConduit>().outputObject.GetComponent<AlloySmelter>().ID;
-                playerController.machineOutputAmount = playerController.objectInSight.GetComponent<UniversalConduit>().outputObject.GetComponent<AlloySmelter>().amount;
-                if (playerController.objectInSight.GetComponent<UniversalConduit>().type.Equals(playerController.objectInSight.GetComponent<UniversalConduit>().outputObject.GetComponent<AlloySmelter>().inputType1))
+                playerController.machineOutputID = conduitOutput.GetComponent<AlloySmelter>().ID;
+                playerController.machineOutputAmount = conduitOutput.GetComponent<AlloySmelter>().amount;
+                if (conduit.type.Equals(conduitOutput.GetComponent<AlloySmelter>().inputType1))
                 {
-                    playerController.machineOutputType = playerController.objectInSight.GetComponent<UniversalConduit>().outputObject.GetComponent<AlloySmelter>().inputType1;
+                    playerController.machineOutputType = conduitOutput.GetComponent<AlloySmelter>().inputType1;
                 }
-                else if (playerController.objectInSight.GetComponent<UniversalConduit>().type.Equals(playerController.objectInSight.GetComponent<UniversalConduit>().outputObject.GetComponent<AlloySmelter>().inputType2))
+                else if (conduit.type.Equals(conduitOutput.GetComponent<AlloySmelter>().inputType2))
                 {
-                    playerController.machineOutputType = playerController.objectInSight.GetComponent<UniversalConduit>().outputObject.GetComponent<AlloySmelter>().inputType2;
+                    playerController.machineOutputType = conduitOutput.GetComponent<AlloySmelter>().inputType2;
                 }
             }
-            if (playerController.objectInSight.GetComponent<UniversalConduit>().outputObject.GetComponent<InventoryManager>() != null)
+            if (conduitOutput.GetComponent<InventoryManager>() != null)
             {
-                playerController.machineOutputID = playerController.objectInSight.GetComponent<UniversalConduit>().outputObject.GetComponent<InventoryManager>().ID;
+                playerController.machineOutputID = conduitOutput.GetComponent<InventoryManager>().ID;
                 int storageTotal = 0;
-                foreach (InventorySlot slot in playerController.objectInSight.GetComponent<UniversalConduit>().outputObject.GetComponent<InventoryManager>().inventory)
+                foreach (InventorySlot slot in conduitOutput.GetComponent<InventoryManager>().inventory)
                 {
-                    if (slot.typeInSlot.Equals(playerController.objectInSight.GetComponent<UniversalConduit>().type))
+                    if (slot.typeInSlot.Equals(conduit.type))
                     {
                         storageTotal += slot.amountInSlot;
                         playerController.machineOutputType = slot.typeInSlot;
@@ -364,15 +375,15 @@ public class MachineInteraction : MonoBehaviour
                 }
                 playerController.machineOutputAmount = storageTotal;
             }
-            if (playerController.objectInSight.GetComponent<UniversalConduit>().outputObject.GetComponent<StorageComputer>() != null)
+            if (conduitOutput.GetComponent<StorageComputer>() != null)
             {
-                playerController.machineOutputID = playerController.objectInSight.GetComponent<UniversalConduit>().outputObject.GetComponent<StorageComputer>().ID;
+                playerController.machineOutputID = conduitOutput.GetComponent<StorageComputer>().ID;
                 int storageTotal = 0;
-                foreach (InventoryManager manager in playerController.objectInSight.GetComponent<UniversalConduit>().outputObject.GetComponent<StorageComputer>().computerContainers)
+                foreach (InventoryManager manager in conduitOutput.GetComponent<StorageComputer>().computerContainers)
                 {
                     foreach (InventorySlot slot in manager.inventory)
                     {
-                        if (slot.typeInSlot.Equals(playerController.objectInSight.GetComponent<UniversalConduit>().type))
+                        if (slot.typeInSlot.Equals(conduit.type))
                         {
                             storageTotal += slot.amountInSlot;
                             playerController.machineOutputType = slot.typeInSlot;
@@ -394,43 +405,44 @@ public class MachineInteraction : MonoBehaviour
 
     public void InteractWithDarkMatterConduit()
     {
+        DarkMatterConduit dmConduit = playerController.objectInSight.GetComponent<DarkMatterConduit>();
         playerController.machineInSight = playerController.objectInSight;
-        playerController.machineAmount = playerController.objectInSight.GetComponent<DarkMatterConduit>().darkMatterAmount;
-        playerController.machineID = playerController.objectInSight.GetComponent<DarkMatterConduit>().ID;
-        playerController.machineSpeed = playerController.objectInSight.GetComponent<DarkMatterConduit>().speed;
-        playerController.machineRange = playerController.objectInSight.GetComponent<DarkMatterConduit>().range;
+        playerController.machineAmount = dmConduit.darkMatterAmount;
+        playerController.machineID = dmConduit.ID;
+        playerController.machineSpeed = dmConduit.speed;
+        playerController.machineRange = dmConduit.range;
         if (playerController.machineRange < 10)
         {
             playerController.machineRange = 10;
         }
-        if (playerController.objectInSight.GetComponent<DarkMatterConduit>().inputObject != null)
+        if (dmConduit.inputObject != null)
         {
-            if (playerController.objectInSight.GetComponent<DarkMatterConduit>().inputObject.GetComponent<DarkMatterConduit>() != null)
+            if (dmConduit.inputObject.GetComponent<DarkMatterConduit>() != null)
             {
-                playerController.machineInputID = playerController.objectInSight.GetComponent<DarkMatterConduit>().inputObject.GetComponent<DarkMatterConduit>().ID;
-                playerController.machineInputAmount = playerController.objectInSight.GetComponent<DarkMatterConduit>().inputObject.GetComponent<DarkMatterConduit>().darkMatterAmount;
+                playerController.machineInputID = dmConduit.inputObject.GetComponent<DarkMatterConduit>().ID;
+                playerController.machineInputAmount = dmConduit.inputObject.GetComponent<DarkMatterConduit>().darkMatterAmount;
                 playerController.machineInputType = "Dark Matter";
             }
-            if (playerController.objectInSight.GetComponent<DarkMatterConduit>().inputObject.GetComponent<DarkMatterCollector>() != null)
+            if (dmConduit.inputObject.GetComponent<DarkMatterCollector>() != null)
             {
-                playerController.machineInputID = playerController.objectInSight.GetComponent<DarkMatterConduit>().inputObject.GetComponent<DarkMatterCollector>().ID;
-                playerController.machineInputAmount = playerController.objectInSight.GetComponent<DarkMatterConduit>().inputObject.GetComponent<DarkMatterCollector>().darkMatterAmount;
+                playerController.machineInputID = dmConduit.inputObject.GetComponent<DarkMatterCollector>().ID;
+                playerController.machineInputAmount = dmConduit.inputObject.GetComponent<DarkMatterCollector>().darkMatterAmount;
                 playerController.machineInputType = "Dark Matter";
             }
         }
-        if (playerController.objectInSight.GetComponent<DarkMatterConduit>().outputObject != null)
+        if (dmConduit.outputObject != null)
         {
-            if (playerController.objectInSight.GetComponent<DarkMatterConduit>().outputObject.GetComponent<DarkMatterConduit>() != null)
+            if (dmConduit.outputObject.GetComponent<DarkMatterConduit>() != null)
             {
-                playerController.machineOutputID = playerController.objectInSight.GetComponent<DarkMatterConduit>().outputObject.GetComponent<DarkMatterConduit>().ID;
-                playerController.machineOutputAmount = playerController.objectInSight.GetComponent<DarkMatterConduit>().outputObject.GetComponent<DarkMatterConduit>().darkMatterAmount;
+                playerController.machineOutputID = dmConduit.outputObject.GetComponent<DarkMatterConduit>().ID;
+                playerController.machineOutputAmount = dmConduit.outputObject.GetComponent<DarkMatterConduit>().darkMatterAmount;
                 playerController.machineOutputType = "Dark Matter";
             }
-            if (playerController.objectInSight.GetComponent<DarkMatterConduit>().outputObject.GetComponent<StorageComputer>() != null)
+            if (dmConduit.outputObject.GetComponent<StorageComputer>() != null)
             {
-                playerController.machineOutputID = playerController.objectInSight.GetComponent<DarkMatterConduit>().outputObject.GetComponent<StorageComputer>().ID;
+                playerController.machineOutputID = dmConduit.outputObject.GetComponent<StorageComputer>().ID;
                 int storageTotal = 0;
-                foreach (InventoryManager manager in playerController.objectInSight.GetComponent<DarkMatterConduit>().outputObject.GetComponent<StorageComputer>().computerContainers)
+                foreach (InventoryManager manager in dmConduit.outputObject.GetComponent<StorageComputer>().computerContainers)
                 {
                     foreach (InventorySlot slot in manager.inventory)
                     {
@@ -443,11 +455,11 @@ public class MachineInteraction : MonoBehaviour
                 }
                 playerController.machineOutputAmount = storageTotal;
             }
-            if (playerController.objectInSight.GetComponent<DarkMatterConduit>().outputObject.GetComponent<InventoryManager>() != null)
+            if (dmConduit.outputObject.GetComponent<InventoryManager>() != null)
             {
-                playerController.machineOutputID = playerController.objectInSight.GetComponent<DarkMatterConduit>().outputObject.GetComponent<InventoryManager>().ID;
+                playerController.machineOutputID = dmConduit.outputObject.GetComponent<InventoryManager>().ID;
                 int storageTotal = 0;
-                foreach (InventorySlot slot in playerController.objectInSight.GetComponent<DarkMatterConduit>().outputObject.GetComponent<InventoryManager>().inventory)
+                foreach (InventorySlot slot in dmConduit.outputObject.GetComponent<InventoryManager>().inventory)
                 {
                     if (slot.typeInSlot.Equals("Dark Matter"))
                     {
@@ -470,31 +482,32 @@ public class MachineInteraction : MonoBehaviour
 
     public void InteractWithSmelter()
     {
+        Smelter smelter = playerController.objectInSight.GetComponent<Smelter>();
         playerController.machineInSight = playerController.objectInSight;
-        playerController.machineAmount = playerController.objectInSight.GetComponent<Smelter>().amount;
-        playerController.machineID = playerController.objectInSight.GetComponent<Smelter>().ID;
-        playerController.machineHasPower = playerController.objectInSight.GetComponent<Smelter>().powerON;
-        playerController.machineType = playerController.objectInSight.GetComponent<Smelter>().inputType;
-        playerController.machinePower = playerController.objectInSight.GetComponent<Smelter>().power;
-        playerController.machineSpeed = playerController.objectInSight.GetComponent<Smelter>().speed;
-        playerController.machineHeat = playerController.objectInSight.GetComponent<Smelter>().heat;
-        playerController.machineCooling = playerController.objectInSight.GetComponent<Smelter>().cooling;
-        if (playerController.objectInSight.GetComponent<Smelter>().inputObject != null)
+        playerController.machineAmount = smelter.amount;
+        playerController.machineID = smelter.ID;
+        playerController.machineHasPower = smelter.powerON;
+        playerController.machineType = smelter.inputType;
+        playerController.machinePower = smelter.power;
+        playerController.machineSpeed = smelter.speed;
+        playerController.machineHeat = smelter.heat;
+        playerController.machineCooling = smelter.cooling;
+        if (smelter.inputObject != null)
         {
-            if (playerController.objectInSight.GetComponent<Smelter>().inputObject.GetComponent<UniversalConduit>() != null)
+            if (smelter.inputObject.GetComponent<UniversalConduit>() != null)
             {
-                playerController.machineInputID = playerController.objectInSight.GetComponent<Smelter>().inputObject.GetComponent<UniversalConduit>().ID;
-                playerController.machineInputAmount = playerController.objectInSight.GetComponent<Smelter>().inputObject.GetComponent<UniversalConduit>().amount;
-                playerController.machineInputType = playerController.objectInSight.GetComponent<Smelter>().inputObject.GetComponent<UniversalConduit>().type;
+                playerController.machineInputID = smelter.inputObject.GetComponent<UniversalConduit>().ID;
+                playerController.machineInputAmount = smelter.inputObject.GetComponent<UniversalConduit>().amount;
+                playerController.machineInputType = smelter.inputObject.GetComponent<UniversalConduit>().type;
             }
         }
-        if (playerController.objectInSight.GetComponent<Smelter>().outputObject != null)
+        if (smelter.outputObject != null)
         {
-            if (playerController.objectInSight.GetComponent<Smelter>().outputObject.GetComponent<UniversalConduit>() != null)
+            if (smelter.outputObject.GetComponent<UniversalConduit>() != null)
             {
-                playerController.machineOutputID = playerController.objectInSight.GetComponent<Smelter>().outputObject.GetComponent<UniversalConduit>().ID;
-                playerController.machineOutputAmount = playerController.objectInSight.GetComponent<Smelter>().outputObject.GetComponent<UniversalConduit>().amount;
-                playerController.machineOutputType = playerController.objectInSight.GetComponent<Smelter>().outputObject.GetComponent<UniversalConduit>().type;
+                playerController.machineOutputID = smelter.outputObject.GetComponent<UniversalConduit>().ID;
+                playerController.machineOutputAmount = smelter.outputObject.GetComponent<UniversalConduit>().amount;
+                playerController.machineOutputType = smelter.outputObject.GetComponent<UniversalConduit>().type;
             }
         }
         if (cInput.GetKeyDown("Collect Object"))
@@ -516,42 +529,43 @@ public class MachineInteraction : MonoBehaviour
 
     public void InteractWithAlloySmelter()
     {
+        AlloySmelter alloySmelter = playerController.objectInSight.GetComponent<AlloySmelter>();
         playerController.machineInSight = playerController.objectInSight;
-        playerController.machineAmount = playerController.objectInSight.GetComponent<AlloySmelter>().amount;
-        playerController.machineAmount2 = playerController.objectInSight.GetComponent<AlloySmelter>().amount2;
-        playerController.machineID = playerController.objectInSight.GetComponent<AlloySmelter>().ID;
-        playerController.machineHasPower = playerController.objectInSight.GetComponent<AlloySmelter>().powerON;
-        playerController.machineType = playerController.objectInSight.GetComponent<AlloySmelter>().inputType1;
-        playerController.machineType2 = playerController.objectInSight.GetComponent<AlloySmelter>().inputType2;
-        playerController.machinePower = playerController.objectInSight.GetComponent<AlloySmelter>().power;
-        playerController.machineSpeed = playerController.objectInSight.GetComponent<AlloySmelter>().speed;
-        playerController.machineHeat = playerController.objectInSight.GetComponent<AlloySmelter>().heat;
-        playerController.machineCooling = playerController.objectInSight.GetComponent<AlloySmelter>().cooling;
-        if (playerController.objectInSight.GetComponent<AlloySmelter>().inputObject1 != null)
+        playerController.machineAmount = alloySmelter.amount;
+        playerController.machineAmount2 = alloySmelter.amount2;
+        playerController.machineID = alloySmelter.ID;
+        playerController.machineHasPower = alloySmelter.powerON;
+        playerController.machineType = alloySmelter.inputType1;
+        playerController.machineType2 = alloySmelter.inputType2;
+        playerController.machinePower = alloySmelter.power;
+        playerController.machineSpeed = alloySmelter.speed;
+        playerController.machineHeat = alloySmelter.heat;
+        playerController.machineCooling = alloySmelter.cooling;
+        if (alloySmelter.inputObject1 != null)
         {
-            if (playerController.objectInSight.GetComponent<AlloySmelter>().inputObject1.GetComponent<UniversalConduit>() != null)
+            if (alloySmelter.inputObject1.GetComponent<UniversalConduit>() != null)
             {
-                playerController.machineInputID = playerController.objectInSight.GetComponent<AlloySmelter>().inputObject1.GetComponent<UniversalConduit>().ID;
-                playerController.machineInputAmount = playerController.objectInSight.GetComponent<AlloySmelter>().inputObject1.GetComponent<UniversalConduit>().amount;
-                playerController.machineInputType = playerController.objectInSight.GetComponent<AlloySmelter>().inputObject1.GetComponent<UniversalConduit>().type;
+                playerController.machineInputID = alloySmelter.inputObject1.GetComponent<UniversalConduit>().ID;
+                playerController.machineInputAmount = alloySmelter.inputObject1.GetComponent<UniversalConduit>().amount;
+                playerController.machineInputType = alloySmelter.inputObject1.GetComponent<UniversalConduit>().type;
             }
         }
-        if (playerController.objectInSight.GetComponent<AlloySmelter>().inputObject2 != null)
+        if (alloySmelter.inputObject2 != null)
         {
-            if (playerController.objectInSight.GetComponent<AlloySmelter>().inputObject2.GetComponent<UniversalConduit>() != null)
+            if (alloySmelter.inputObject2.GetComponent<UniversalConduit>() != null)
             {
-                playerController.machineInputID2 = playerController.objectInSight.GetComponent<AlloySmelter>().inputObject2.GetComponent<UniversalConduit>().ID;
-                playerController.machineInputAmount2 = playerController.objectInSight.GetComponent<AlloySmelter>().inputObject2.GetComponent<UniversalConduit>().amount;
-                playerController.machineInputType2 = playerController.objectInSight.GetComponent<AlloySmelter>().inputObject2.GetComponent<UniversalConduit>().type;
+                playerController.machineInputID2 = alloySmelter.inputObject2.GetComponent<UniversalConduit>().ID;
+                playerController.machineInputAmount2 = alloySmelter.inputObject2.GetComponent<UniversalConduit>().amount;
+                playerController.machineInputType2 = alloySmelter.inputObject2.GetComponent<UniversalConduit>().type;
             }
         }
-        if (playerController.objectInSight.GetComponent<AlloySmelter>().outputObject != null)
+        if (alloySmelter.outputObject != null)
         {
-            if (playerController.objectInSight.GetComponent<AlloySmelter>().outputObject.GetComponent<UniversalConduit>() != null)
+            if (alloySmelter.outputObject.GetComponent<UniversalConduit>() != null)
             {
-                playerController.machineOutputID = playerController.objectInSight.GetComponent<AlloySmelter>().outputObject.GetComponent<UniversalConduit>().ID;
-                playerController.machineOutputAmount = playerController.objectInSight.GetComponent<AlloySmelter>().outputObject.GetComponent<UniversalConduit>().amount;
-                playerController.machineOutputType = playerController.objectInSight.GetComponent<AlloySmelter>().outputObject.GetComponent<UniversalConduit>().type;
+                playerController.machineOutputID = alloySmelter.outputObject.GetComponent<UniversalConduit>().ID;
+                playerController.machineOutputAmount = alloySmelter.outputObject.GetComponent<UniversalConduit>().amount;
+                playerController.machineOutputType = alloySmelter.outputObject.GetComponent<UniversalConduit>().type;
             }
         }
         if (cInput.GetKeyDown("Collect Object"))
@@ -573,31 +587,32 @@ public class MachineInteraction : MonoBehaviour
 
     public void InteractWithExtruder()
     {
+        Extruder extruder = playerController.objectInSight.GetComponent<Extruder>();
         playerController.machineInSight = playerController.objectInSight;
-        playerController.machineAmount = playerController.objectInSight.GetComponent<Extruder>().amount;
-        playerController.machineID = playerController.objectInSight.GetComponent<Extruder>().ID;
-        playerController.machineHasPower = playerController.objectInSight.GetComponent<Extruder>().powerON;
-        playerController.machineType = playerController.objectInSight.GetComponent<Extruder>().inputType;
-        playerController.machinePower = playerController.objectInSight.GetComponent<Extruder>().power;
-        playerController.machineSpeed = playerController.objectInSight.GetComponent<Extruder>().speed;
-        playerController.machineHeat = playerController.objectInSight.GetComponent<Extruder>().heat;
-        playerController.machineCooling = playerController.objectInSight.GetComponent<Extruder>().cooling;
-        if (playerController.objectInSight.GetComponent<Extruder>().inputObject != null)
+        playerController.machineAmount = extruder.amount;
+        playerController.machineID = extruder.ID;
+        playerController.machineHasPower = extruder.powerON;
+        playerController.machineType = extruder.inputType;
+        playerController.machinePower = extruder.power;
+        playerController.machineSpeed = extruder.speed;
+        playerController.machineHeat = extruder.heat;
+        playerController.machineCooling = extruder.cooling;
+        if (extruder.inputObject != null)
         {
-            if (playerController.objectInSight.GetComponent<Extruder>().inputObject.GetComponent<UniversalConduit>() != null)
+            if (extruder.inputObject.GetComponent<UniversalConduit>() != null)
             {
-                playerController.machineInputID = playerController.objectInSight.GetComponent<Extruder>().inputObject.GetComponent<UniversalConduit>().ID;
-                playerController.machineInputAmount = playerController.objectInSight.GetComponent<Extruder>().inputObject.GetComponent<UniversalConduit>().amount;
-                playerController.machineInputType = playerController.objectInSight.GetComponent<Extruder>().inputObject.GetComponent<UniversalConduit>().type;
+                playerController.machineInputID = extruder.inputObject.GetComponent<UniversalConduit>().ID;
+                playerController.machineInputAmount = extruder.inputObject.GetComponent<UniversalConduit>().amount;
+                playerController.machineInputType = extruder.inputObject.GetComponent<UniversalConduit>().type;
             }
         }
-        if (playerController.objectInSight.GetComponent<Extruder>().outputObject != null)
+        if (extruder.outputObject != null)
         {
-            if (playerController.objectInSight.GetComponent<Extruder>().outputObject.GetComponent<UniversalConduit>() != null)
+            if (extruder.outputObject.GetComponent<UniversalConduit>() != null)
             {
-                playerController.machineOutputID = playerController.objectInSight.GetComponent<Extruder>().outputObject.GetComponent<UniversalConduit>().ID;
-                playerController.machineOutputAmount = playerController.objectInSight.GetComponent<Extruder>().outputObject.GetComponent<UniversalConduit>().amount;
-                playerController.machineOutputType = playerController.objectInSight.GetComponent<Extruder>().outputObject.GetComponent<UniversalConduit>().type;
+                playerController.machineOutputID = extruder.outputObject.GetComponent<UniversalConduit>().ID;
+                playerController.machineOutputAmount = extruder.outputObject.GetComponent<UniversalConduit>().amount;
+                playerController.machineOutputType = extruder.outputObject.GetComponent<UniversalConduit>().type;
             }
         }
         if (cInput.GetKeyDown("Collect Object"))
@@ -619,25 +634,26 @@ public class MachineInteraction : MonoBehaviour
 
     public void InteractWithRailCartHub()
     {
+        RailCartHub railCartHub = playerController.objectInSight.GetComponent<RailCartHub>();
         playerController.machineInSight = playerController.objectInSight;
-        playerController.machineID = playerController.objectInSight.GetComponent<RailCartHub>().ID;
-        playerController.machineRange = playerController.objectInSight.GetComponent<RailCartHub>().range;
+        playerController.machineID = railCartHub.ID;
+        playerController.machineRange = railCartHub.range;
         if (playerController.machineRange < 10)
         {
             playerController.machineRange = 10;
         }
-        if (playerController.objectInSight.GetComponent<RailCartHub>().inputObject != null)
+        if (railCartHub.inputObject != null)
         {
-            if (playerController.objectInSight.GetComponent<RailCartHub>().inputObject.GetComponent<RailCartHub>() != null)
+            if (railCartHub.inputObject.GetComponent<RailCartHub>() != null)
             {
-                playerController.machineInputID = playerController.objectInSight.GetComponent<RailCartHub>().inputObject.GetComponent<RailCartHub>().ID;
+                playerController.machineInputID = railCartHub.inputObject.GetComponent<RailCartHub>().ID;
             }
         }
-        if (playerController.objectInSight.GetComponent<RailCartHub>().outputObject != null)
+        if (railCartHub.outputObject != null)
         {
-            if (playerController.objectInSight.GetComponent<RailCartHub>().outputObject.GetComponent<RailCartHub>() != null)
+            if (railCartHub.outputObject.GetComponent<RailCartHub>() != null)
             {
-                playerController.machineOutputID = playerController.objectInSight.GetComponent<RailCartHub>().outputObject.GetComponent<RailCartHub>().ID;
+                playerController.machineOutputID = railCartHub.outputObject.GetComponent<RailCartHub>().ID;
             }
         }
         if (cInput.GetKeyDown("Collect Object"))
@@ -652,44 +668,45 @@ public class MachineInteraction : MonoBehaviour
 
     public void InteractWithRetriever()
     {
+        Retriever retriever = playerController.objectInSight.GetComponent<Retriever>();
         playerController.machineInSight = playerController.objectInSight;
-        playerController.machineID = playerController.objectInSight.GetComponent<Retriever>().ID;
-        playerController.machineHasPower = playerController.objectInSight.GetComponent<Retriever>().powerON;
-        if (playerController.objectInSight.GetComponent<Retriever>().type.Count > 1)
+        playerController.machineID = retriever.ID;
+        playerController.machineHasPower = retriever.powerON;
+        if (retriever.type.Count > 1)
         {
             playerController.machineType = "multiple items";
         }
-        else if (playerController.objectInSight.GetComponent<Retriever>().type.Count > 0)
+        else if (retriever.type.Count > 0)
         {
-            playerController.machineType = playerController.objectInSight.GetComponent<Retriever>().type[0];
+            playerController.machineType = retriever.type[0];
         }
         else
         {
             playerController.machineType = "nothing";
         }
-        playerController.machinePower = playerController.objectInSight.GetComponent<Retriever>().power;
-        playerController.machineSpeed = playerController.objectInSight.GetComponent<Retriever>().speed;
-        playerController.machineHeat = playerController.objectInSight.GetComponent<Retriever>().heat;
-        playerController.machineCooling = playerController.objectInSight.GetComponent<Retriever>().cooling;
+        playerController.machinePower = retriever.power;
+        playerController.machineSpeed = retriever.speed;
+        playerController.machineHeat = retriever.heat;
+        playerController.machineCooling = retriever.cooling;
         playerController.storageInventory = playerController.objectInSight.GetComponent<InventoryManager>();
-        if (playerController.objectInSight.GetComponent<Retriever>().inputObject != null)
+        if (retriever.inputObject != null)
         {
-            if (playerController.objectInSight.GetComponent<Retriever>().inputObject.GetComponent<InventoryManager>() != null)
+            if (retriever.inputObject.GetComponent<InventoryManager>() != null)
             {
-                playerController.machineInputID = playerController.objectInSight.GetComponent<Retriever>().inputObject.GetComponent<InventoryManager>().ID;
+                playerController.machineInputID = retriever.inputObject.GetComponent<InventoryManager>().ID;
             }
-            if (playerController.objectInSight.GetComponent<Retriever>().inputObject.GetComponent<StorageComputer>() != null)
+            if (retriever.inputObject.GetComponent<StorageComputer>() != null)
             {
-                playerController.machineInputID = playerController.objectInSight.GetComponent<Retriever>().inputObject.GetComponent<StorageComputer>().ID;
+                playerController.machineInputID = retriever.inputObject.GetComponent<StorageComputer>().ID;
             }
         }
-        if (playerController.objectInSight.GetComponent<Retriever>().outputObject != null)
+        if (retriever.outputObject != null)
         {
-            if (playerController.objectInSight.GetComponent<Retriever>().outputObject.GetComponent<UniversalConduit>() != null)
+            if (retriever.outputObject.GetComponent<UniversalConduit>() != null)
             {
-                playerController.machineOutputID = playerController.objectInSight.GetComponent<Retriever>().outputObject.GetComponent<UniversalConduit>().ID;
-                playerController.machineOutputAmount = playerController.objectInSight.GetComponent<Retriever>().outputObject.GetComponent<UniversalConduit>().amount;
-                playerController.machineOutputType = playerController.objectInSight.GetComponent<Retriever>().outputObject.GetComponent<UniversalConduit>().type;
+                playerController.machineOutputID = retriever.outputObject.GetComponent<UniversalConduit>().ID;
+                playerController.machineOutputAmount = retriever.outputObject.GetComponent<UniversalConduit>().amount;
+                playerController.machineOutputType = retriever.outputObject.GetComponent<UniversalConduit>().type;
             }
         }
         if (cInput.GetKeyDown("Collect Object"))
@@ -712,65 +729,66 @@ public class MachineInteraction : MonoBehaviour
 
     public void InteractWithHeatExchanger()
     {
+        HeatExchanger heatExchanger = playerController.objectInSight.GetComponent<HeatExchanger>();
         playerController.machineInSight = playerController.objectInSight;
-        playerController.machineAmount = playerController.objectInSight.GetComponent<HeatExchanger>().amount;
-        playerController.machineID = playerController.objectInSight.GetComponent<HeatExchanger>().ID;
-        playerController.machineType = playerController.objectInSight.GetComponent<HeatExchanger>().inputType;
-        playerController.machineSpeed = playerController.objectInSight.GetComponent<HeatExchanger>().speed;
-        if (playerController.objectInSight.GetComponent<HeatExchanger>().inputObject != null)
+        playerController.machineAmount = heatExchanger.amount;
+        playerController.machineID = heatExchanger.ID;
+        playerController.machineType = heatExchanger.inputType;
+        playerController.machineSpeed = heatExchanger.speed;
+        if (heatExchanger.inputObject != null)
         {
-            if (playerController.objectInSight.GetComponent<HeatExchanger>().inputObject.GetComponent<UniversalConduit>() != null)
+            if (heatExchanger.inputObject.GetComponent<UniversalConduit>() != null)
             {
-                playerController.machineInputID = playerController.objectInSight.GetComponent<HeatExchanger>().inputObject.GetComponent<UniversalConduit>().ID;
-                playerController.machineInputAmount = playerController.objectInSight.GetComponent<HeatExchanger>().inputObject.GetComponent<UniversalConduit>().amount;
-                playerController.machineInputType = playerController.objectInSight.GetComponent<HeatExchanger>().inputObject.GetComponent<UniversalConduit>().type;
+                playerController.machineInputID = heatExchanger.inputObject.GetComponent<UniversalConduit>().ID;
+                playerController.machineInputAmount = heatExchanger.inputObject.GetComponent<UniversalConduit>().amount;
+                playerController.machineInputType = heatExchanger.inputObject.GetComponent<UniversalConduit>().type;
             }
         }
-        if (playerController.objectInSight.GetComponent<HeatExchanger>().outputObject != null)
+        if (heatExchanger.outputObject != null)
         {
-            if (playerController.objectInSight.GetComponent<HeatExchanger>().outputObject.GetComponent<UniversalExtractor>() != null)
+            if (heatExchanger.outputObject.GetComponent<UniversalExtractor>() != null)
             {
-                playerController.machineOutputID = playerController.objectInSight.GetComponent<HeatExchanger>().outputObject.GetComponent<UniversalExtractor>().ID;
+                playerController.machineOutputID = heatExchanger.outputObject.GetComponent<UniversalExtractor>().ID;
             }
-            if (playerController.objectInSight.GetComponent<HeatExchanger>().outputObject.GetComponent<DarkMatterCollector>() != null)
+            if (heatExchanger.outputObject.GetComponent<DarkMatterCollector>() != null)
             {
-                playerController.machineOutputID = playerController.objectInSight.GetComponent<HeatExchanger>().outputObject.GetComponent<DarkMatterCollector>().ID;
+                playerController.machineOutputID = heatExchanger.outputObject.GetComponent<DarkMatterCollector>().ID;
             }
-            if (playerController.objectInSight.GetComponent<HeatExchanger>().outputObject.GetComponent<Auger>() != null)
+            if (heatExchanger.outputObject.GetComponent<Auger>() != null)
             {
-                playerController.machineOutputID = playerController.objectInSight.GetComponent<HeatExchanger>().outputObject.GetComponent<Auger>().ID;
+                playerController.machineOutputID = heatExchanger.outputObject.GetComponent<Auger>().ID;
             }
-            if (playerController.objectInSight.GetComponent<HeatExchanger>().outputObject.GetComponent<Smelter>() != null)
+            if (heatExchanger.outputObject.GetComponent<Smelter>() != null)
             {
-                playerController.machineOutputID = playerController.objectInSight.GetComponent<HeatExchanger>().outputObject.GetComponent<Smelter>().ID;
+                playerController.machineOutputID = heatExchanger.outputObject.GetComponent<Smelter>().ID;
             }
-            if (playerController.objectInSight.GetComponent<HeatExchanger>().outputObject.GetComponent<Extruder>() != null)
+            if (heatExchanger.outputObject.GetComponent<Extruder>() != null)
             {
-                playerController.machineOutputID = playerController.objectInSight.GetComponent<HeatExchanger>().outputObject.GetComponent<Extruder>().ID;
+                playerController.machineOutputID = heatExchanger.outputObject.GetComponent<Extruder>().ID;
             }
-            if (playerController.objectInSight.GetComponent<HeatExchanger>().outputObject.GetComponent<Retriever>() != null)
+            if (heatExchanger.outputObject.GetComponent<Retriever>() != null)
             {
-                playerController.machineOutputID = playerController.objectInSight.GetComponent<HeatExchanger>().outputObject.GetComponent<Retriever>().ID;
+                playerController.machineOutputID = heatExchanger.outputObject.GetComponent<Retriever>().ID;
             }
-            if (playerController.objectInSight.GetComponent<HeatExchanger>().outputObject.GetComponent<AutoCrafter>() != null)
+            if (heatExchanger.outputObject.GetComponent<AutoCrafter>() != null)
             {
-                playerController.machineOutputID = playerController.objectInSight.GetComponent<HeatExchanger>().outputObject.GetComponent<AutoCrafter>().ID;
+                playerController.machineOutputID = heatExchanger.outputObject.GetComponent<AutoCrafter>().ID;
             }
-            if (playerController.objectInSight.GetComponent<HeatExchanger>().outputObject.GetComponent<Press>() != null)
+            if (heatExchanger.outputObject.GetComponent<Press>() != null)
             {
-                playerController.machineOutputID = playerController.objectInSight.GetComponent<HeatExchanger>().outputObject.GetComponent<Press>().ID;
+                playerController.machineOutputID = heatExchanger.outputObject.GetComponent<Press>().ID;
             }
-            if (playerController.objectInSight.GetComponent<HeatExchanger>().outputObject.GetComponent<AlloySmelter>() != null)
+            if (heatExchanger.outputObject.GetComponent<AlloySmelter>() != null)
             {
-                playerController.machineOutputID = playerController.objectInSight.GetComponent<HeatExchanger>().outputObject.GetComponent<AlloySmelter>().ID;
+                playerController.machineOutputID = heatExchanger.outputObject.GetComponent<AlloySmelter>().ID;
             }
-            if (playerController.objectInSight.GetComponent<HeatExchanger>().outputObject.GetComponent<GearCutter>() != null)
+            if (heatExchanger.outputObject.GetComponent<GearCutter>() != null)
             {
-                playerController.machineOutputID = playerController.objectInSight.GetComponent<HeatExchanger>().outputObject.GetComponent<GearCutter>().ID;
+                playerController.machineOutputID = heatExchanger.outputObject.GetComponent<GearCutter>().ID;
             }
-            if (playerController.objectInSight.GetComponent<HeatExchanger>().outputObject.GetComponent<Turret>() != null)
+            if (heatExchanger.outputObject.GetComponent<Turret>() != null)
             {
-                playerController.machineOutputID = playerController.objectInSight.GetComponent<HeatExchanger>().outputObject.GetComponent<Turret>().ID;
+                playerController.machineOutputID = heatExchanger.outputObject.GetComponent<Turret>().ID;
             }
         }
         if (cInput.GetKeyDown("Collect Object"))
@@ -792,31 +810,32 @@ public class MachineInteraction : MonoBehaviour
 
     public void InteractWithGearCutter()
     {
+        GearCutter gearCutter = playerController.objectInSight.GetComponent<GearCutter>();
         playerController.machineInSight = playerController.objectInSight;
-        playerController.machineAmount = playerController.objectInSight.GetComponent<GearCutter>().amount;
-        playerController.machineID = playerController.objectInSight.GetComponent<GearCutter>().ID;
-        playerController.machineHasPower = playerController.objectInSight.GetComponent<GearCutter>().powerON;
-        playerController.machineType = playerController.objectInSight.GetComponent<GearCutter>().inputType;
-        playerController.machinePower = playerController.objectInSight.GetComponent<GearCutter>().power;
-        playerController.machineSpeed = playerController.objectInSight.GetComponent<GearCutter>().speed;
-        playerController.machineHeat = playerController.objectInSight.GetComponent<GearCutter>().heat;
-        playerController.machineCooling = playerController.objectInSight.GetComponent<GearCutter>().cooling;
-        if (playerController.objectInSight.GetComponent<GearCutter>().inputObject != null)
+        playerController.machineAmount = gearCutter.amount;
+        playerController.machineID = gearCutter.ID;
+        playerController.machineHasPower = gearCutter.powerON;
+        playerController.machineType = gearCutter.inputType;
+        playerController.machinePower = gearCutter.power;
+        playerController.machineSpeed = gearCutter.speed;
+        playerController.machineHeat = gearCutter.heat;
+        playerController.machineCooling = gearCutter.cooling;
+        if (gearCutter.inputObject != null)
         {
-            if (playerController.objectInSight.GetComponent<GearCutter>().inputObject.GetComponent<UniversalConduit>() != null)
+            if (gearCutter.inputObject.GetComponent<UniversalConduit>() != null)
             {
-                playerController.machineInputID = playerController.objectInSight.GetComponent<GearCutter>().inputObject.GetComponent<UniversalConduit>().ID;
-                playerController.machineInputAmount = playerController.objectInSight.GetComponent<GearCutter>().inputObject.GetComponent<UniversalConduit>().amount;
-                playerController.machineInputType = playerController.objectInSight.GetComponent<GearCutter>().inputObject.GetComponent<UniversalConduit>().type;
+                playerController.machineInputID = gearCutter.inputObject.GetComponent<UniversalConduit>().ID;
+                playerController.machineInputAmount = gearCutter.inputObject.GetComponent<UniversalConduit>().amount;
+                playerController.machineInputType = gearCutter.inputObject.GetComponent<UniversalConduit>().type;
             }
         }
-        if (playerController.objectInSight.GetComponent<GearCutter>().outputObject != null)
+        if (gearCutter.outputObject != null)
         {
-            if (playerController.objectInSight.GetComponent<GearCutter>().outputObject.GetComponent<UniversalConduit>() != null)
+            if (gearCutter.outputObject.GetComponent<UniversalConduit>() != null)
             {
-                playerController.machineOutputID = playerController.objectInSight.GetComponent<GearCutter>().outputObject.GetComponent<UniversalConduit>().ID;
-                playerController.machineOutputAmount = playerController.objectInSight.GetComponent<GearCutter>().outputObject.GetComponent<UniversalConduit>().amount;
-                playerController.machineOutputType = playerController.objectInSight.GetComponent<GearCutter>().outputObject.GetComponent<UniversalConduit>().type;
+                playerController.machineOutputID = gearCutter.outputObject.GetComponent<UniversalConduit>().ID;
+                playerController.machineOutputAmount = gearCutter.outputObject.GetComponent<UniversalConduit>().amount;
+                playerController.machineOutputType = gearCutter.outputObject.GetComponent<UniversalConduit>().type;
             }
         }
         if (cInput.GetKeyDown("Collect Object"))
@@ -838,31 +857,32 @@ public class MachineInteraction : MonoBehaviour
 
     public void InteractWithPress()
     {
+        Press press = playerController.objectInSight.GetComponent<Press>();
         playerController.machineInSight = playerController.objectInSight;
-        playerController.machineAmount = playerController.objectInSight.GetComponent<Press>().amount;
-        playerController.machineID = playerController.objectInSight.GetComponent<Press>().ID;
-        playerController.machineHasPower = playerController.objectInSight.GetComponent<Press>().powerON;
-        playerController.machineType = playerController.objectInSight.GetComponent<Press>().inputType;
-        playerController.machinePower = playerController.objectInSight.GetComponent<Press>().power;
-        playerController.machineSpeed = playerController.objectInSight.GetComponent<Press>().speed;
-        playerController.machineHeat = playerController.objectInSight.GetComponent<Press>().heat;
-        playerController.machineCooling = playerController.objectInSight.GetComponent<Press>().cooling;
-        if (playerController.objectInSight.GetComponent<Press>().inputObject != null)
+        playerController.machineAmount = press.amount;
+        playerController.machineID = press.ID;
+        playerController.machineHasPower = press.powerON;
+        playerController.machineType = press.inputType;
+        playerController.machinePower = press.power;
+        playerController.machineSpeed = press.speed;
+        playerController.machineHeat = press.heat;
+        playerController.machineCooling = press.cooling;
+        if (press.inputObject != null)
         {
-            if (playerController.objectInSight.GetComponent<Press>().inputObject.GetComponent<UniversalConduit>() != null)
+            if (press.inputObject.GetComponent<UniversalConduit>() != null)
             {
-                playerController.machineInputID = playerController.objectInSight.GetComponent<Press>().inputObject.GetComponent<UniversalConduit>().ID;
-                playerController.machineInputAmount = playerController.objectInSight.GetComponent<Press>().inputObject.GetComponent<UniversalConduit>().amount;
-                playerController.machineInputType = playerController.objectInSight.GetComponent<Press>().inputObject.GetComponent<UniversalConduit>().type;
+                playerController.machineInputID = press.inputObject.GetComponent<UniversalConduit>().ID;
+                playerController.machineInputAmount = press.inputObject.GetComponent<UniversalConduit>().amount;
+                playerController.machineInputType = press.inputObject.GetComponent<UniversalConduit>().type;
             }
         }
-        if (playerController.objectInSight.GetComponent<Press>().outputObject != null)
+        if (press.outputObject != null)
         {
-            if (playerController.objectInSight.GetComponent<Press>().outputObject.GetComponent<UniversalConduit>() != null)
+            if (press.outputObject.GetComponent<UniversalConduit>() != null)
             {
-                playerController.machineOutputID = playerController.objectInSight.GetComponent<Press>().outputObject.GetComponent<UniversalConduit>().ID;
-                playerController.machineOutputAmount = playerController.objectInSight.GetComponent<Press>().outputObject.GetComponent<UniversalConduit>().amount;
-                playerController.machineOutputType = playerController.objectInSight.GetComponent<Press>().outputObject.GetComponent<UniversalConduit>().type;
+                playerController.machineOutputID = press.outputObject.GetComponent<UniversalConduit>().ID;
+                playerController.machineOutputAmount = press.outputObject.GetComponent<UniversalConduit>().amount;
+                playerController.machineOutputType = press.outputObject.GetComponent<UniversalConduit>().type;
             }
         }
         if (cInput.GetKeyDown("Collect Object"))
@@ -884,24 +904,25 @@ public class MachineInteraction : MonoBehaviour
 
     public void InteractWithAutoCrafter()
     {
+        AutoCrafter autoCrafter = playerController.objectInSight.GetComponent<AutoCrafter>();
         playerController.machineInSight = playerController.objectInSight;
-        playerController.machineID = playerController.objectInSight.GetComponent<AutoCrafter>().ID;
-        playerController.machineHasPower = playerController.objectInSight.GetComponent<AutoCrafter>().powerON;
-        playerController.machineType = playerController.objectInSight.GetComponent<AutoCrafter>().type;
-        playerController.machinePower = playerController.objectInSight.GetComponent<AutoCrafter>().power;
-        playerController.machineSpeed = playerController.objectInSight.GetComponent<AutoCrafter>().speed;
-        playerController.machineHeat = playerController.objectInSight.GetComponent<AutoCrafter>().heat;
-        playerController.machineCooling = playerController.objectInSight.GetComponent<AutoCrafter>().cooling;
+        playerController.machineID = autoCrafter.ID;
+        playerController.machineHasPower = autoCrafter.powerON;
+        playerController.machineType = autoCrafter.type;
+        playerController.machinePower = autoCrafter.power;
+        playerController.machineSpeed = autoCrafter.speed;
+        playerController.machineHeat = autoCrafter.heat;
+        playerController.machineCooling = autoCrafter.cooling;
         playerController.storageInventory = playerController.objectInSight.GetComponent<InventoryManager>();
-        if (playerController.objectInSight.GetComponent<AutoCrafter>().inputObject != null)
+        if (autoCrafter.inputObject != null)
         {
-            if (playerController.objectInSight.GetComponent<AutoCrafter>().inputObject.GetComponent<InventoryManager>() != null)
+            if (autoCrafter.inputObject.GetComponent<InventoryManager>() != null)
             {
-                playerController.machineInputID = playerController.objectInSight.GetComponent<AutoCrafter>().inputObject.GetComponent<InventoryManager>().ID;
+                playerController.machineInputID = autoCrafter.inputObject.GetComponent<InventoryManager>().ID;
             }
-            if (playerController.objectInSight.GetComponent<AutoCrafter>().inputObject.GetComponent<StorageComputer>() != null)
+            if (autoCrafter.inputObject.GetComponent<StorageComputer>() != null)
             {
-                playerController.machineInputID = playerController.objectInSight.GetComponent<AutoCrafter>().inputObject.GetComponent<StorageComputer>().ID;
+                playerController.machineInputID = autoCrafter.inputObject.GetComponent<StorageComputer>().ID;
             }
         }
         if (cInput.GetKeyDown("Collect Object"))

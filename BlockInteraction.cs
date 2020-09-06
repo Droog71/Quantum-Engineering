@@ -92,19 +92,19 @@ public class BlockInteraction : MonoBehaviour
                 playerController.objectInSight.GetComponent<Renderer>().material.color = new Color(playerController.paintRed, playerController.paintGreen, playerController.paintBlue);
                 if (playerController.objectInSight.name.Equals("brickHolder(Clone)"))
                 {
-                    PlayerPrefsX.SetBool(playerController.stateManager.WorldName + "brickHolder" + playerController.objectInSight.GetComponent<MeshPainter>().ID + "painted", true);
+                    FileBasedPrefs.SetBool(playerController.stateManager.WorldName + "brickHolder" + playerController.objectInSight.GetComponent<MeshPainter>().ID + "painted", true);
                 }
                 if (playerController.objectInSight.name.Equals("glassHolder(Clone)"))
                 {
-                    PlayerPrefsX.SetBool(playerController.stateManager.WorldName + "glassHolder" + playerController.objectInSight.GetComponent<MeshPainter>().ID + "painted", true);
+                    FileBasedPrefs.SetBool(playerController.stateManager.WorldName + "glassHolder" + playerController.objectInSight.GetComponent<MeshPainter>().ID + "painted", true);
                 }
                 if (playerController.objectInSight.name.Equals("ironHolder(Clone)"))
                 {
-                    PlayerPrefsX.SetBool(playerController.stateManager.WorldName + "ironHolder" + playerController.objectInSight.GetComponent<MeshPainter>().ID + "painted", true);
+                    FileBasedPrefs.SetBool(playerController.stateManager.WorldName + "ironHolder" + playerController.objectInSight.GetComponent<MeshPainter>().ID + "painted", true);
                 }
                 if (playerController.objectInSight.name.Equals("steelHolder(Clone)"))
                 {
-                    PlayerPrefsX.SetBool(playerController.stateManager.WorldName + "steelHolder" + playerController.objectInSight.GetComponent<MeshPainter>().ID + "painted", true);
+                    FileBasedPrefs.SetBool(playerController.stateManager.WorldName + "steelHolder" + playerController.objectInSight.GetComponent<MeshPainter>().ID + "painted", true);
                 }
             }
         }

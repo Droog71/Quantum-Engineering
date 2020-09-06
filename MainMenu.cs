@@ -32,10 +32,10 @@ public class MainMenu : MonoBehaviour
         buttonSounds = menuSoundObject.GetComponent<AudioSource>();
         ambient = ambientSoundObject.GetComponent<AudioSource>();
         ambient.Play();
-        if (PlayerPrefsX.GetBool("changingWorld") == true)
+        if (FileBasedPrefs.GetBool("changingWorld") == true)
         {
-            PlayerPrefsX.SetBool("changingWorld", false);
-            GameObject.Find("GameManager").GetComponent<StateManager>().WorldName = PlayerPrefs.GetString("worldName");
+            FileBasedPrefs.SetBool("changingWorld", false);
+            GameObject.Find("GameManager").GetComponent<StateManager>().WorldName = FileBasedPrefs.GetString("worldName");
             worldSelected = true;
             ambient.enabled = false;
         }
@@ -119,12 +119,12 @@ public class MainMenu : MonoBehaviour
                             }
                             else
                             {
-                                if (PlayerPrefsX.GetBool(worldName+"sceneChangeRequired") == true)
+                                if (FileBasedPrefs.GetBool(worldName+"sceneChangeRequired") == true)
                                 {
                                     PlayerPrefsX.SetStringArray("Worlds", worldList.ToArray());
-                                    PlayerPrefsX.SetBool("changingWorld", true);
-                                    PlayerPrefs.SetString("worldName", worldName);
-                                    PlayerPrefsX.SetBool(worldName + "sceneChangeRequired", true);
+                                    FileBasedPrefs.SetBool("changingWorld", true);
+                                    FileBasedPrefs.SetString("worldName", worldName);
+                                    FileBasedPrefs.SetBool(worldName + "sceneChangeRequired", true);
                                     SceneManager.LoadScene(1);
                                 }
                                 else
@@ -139,12 +139,12 @@ public class MainMenu : MonoBehaviour
                         }
                         else if (worldList.Contains(worldName))
                         {
-                            if (PlayerPrefsX.GetBool(worldName + "sceneChangeRequired") == true)
+                            if (FileBasedPrefs.GetBool(worldName + "sceneChangeRequired") == true)
                             {
                                 PlayerPrefsX.SetStringArray("Worlds", worldList.ToArray());
-                                PlayerPrefsX.SetBool("changingWorld", true);
-                                PlayerPrefs.SetString("worldName", worldName);
-                                PlayerPrefsX.SetBool(worldName + "sceneChangeRequired", true);
+                                FileBasedPrefs.SetBool("changingWorld", true);
+                                FileBasedPrefs.SetString("worldName", worldName);
+                                FileBasedPrefs.SetBool(worldName + "sceneChangeRequired", true);
                                 SceneManager.LoadScene(1);
                             }
                             else
@@ -307,9 +307,9 @@ public class MainMenu : MonoBehaviour
                 {
                     buttonSounds.Play();
                     PlayerPrefsX.SetStringArray("Worlds", worldList.ToArray());
-                    PlayerPrefsX.SetBool("changingWorld", true);
+                    FileBasedPrefs.SetBool("changingWorld", true);
                     PlayerPrefs.SetString("worldName", worldName);
-                    PlayerPrefsX.SetBool(worldName+"sceneChangeRequired", true);
+                    FileBasedPrefs.SetBool(worldName+"sceneChangeRequired", true);
                     SceneManager.LoadScene(1);
                 }
             }
@@ -319,7 +319,7 @@ public class MainMenu : MonoBehaviour
                 GUI.Label(deletePromptLabelRect, "Delete all world data?");
                 if (GUI.Button(deletePromptButton1Rect, "Yes"))
                 {
-                    PlayerPrefs.DeleteAll();
+                    FileBasedPrefs.DeleteAll();
                     deletePrompt = false;
                     buttonSounds.Play();
                 }

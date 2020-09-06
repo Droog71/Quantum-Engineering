@@ -172,6 +172,7 @@ public class GuiCoordinates : MonoBehaviour
     public Rect escapeButton2Rect;
     public Rect escapeButton3Rect;
     public Rect escapeButton4Rect;
+    public Rect escapeButton5Rect;
 
     //TABLET MESSAGES
     public Rect topLeftInfoRect;
@@ -446,11 +447,12 @@ public class GuiCoordinates : MonoBehaviour
         outputControlButton4Rect = new Rect((ScreenWidth * 0.25f), (ScreenHeight * 0.52f), (ScreenWidth * 0.14f), (ScreenHeight * 0.05f));
 
         //OPTIONS/EXIT MENU
-        escapeMenuRect = new Rect((ScreenWidth * 0.4f), (ScreenHeight * 0.30f), (ScreenWidth * 0.2f), (ScreenHeight * 0.37f));
+        escapeMenuRect = new Rect((ScreenWidth * 0.4f), (ScreenHeight * 0.30f), (ScreenWidth * 0.2f), (ScreenHeight * 0.452f));
         escapeButton1Rect = new Rect((ScreenWidth * 0.43f), (ScreenHeight * 0.34f), (ScreenWidth * 0.14f), (ScreenHeight * 0.05f));
         escapeButton2Rect = new Rect((ScreenWidth * 0.43f), (ScreenHeight * 0.42f), (ScreenWidth * 0.14f), (ScreenHeight * 0.05f));
         escapeButton3Rect = new Rect((ScreenWidth * 0.43f), (ScreenHeight * 0.50f), (ScreenWidth * 0.14f), (ScreenHeight * 0.05f));
         escapeButton4Rect = new Rect((ScreenWidth * 0.43f), (ScreenHeight * 0.58f), (ScreenWidth * 0.14f), (ScreenHeight * 0.05f));
+        escapeButton5Rect = new Rect((ScreenWidth * 0.43f), (ScreenHeight * 0.66f), (ScreenWidth * 0.14f), (ScreenHeight * 0.05f));
 
         //TABLET MESSAGES
         topLeftInfoRect = new Rect(0, 0, (ScreenWidth * 0.5f), (ScreenHeight * 0.2f));

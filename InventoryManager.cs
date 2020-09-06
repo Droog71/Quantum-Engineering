@@ -27,11 +27,11 @@ public class InventoryManager : MonoBehaviour
                 while (count <= 15)
                 {
                     inventory[count] = gameObject.AddComponent<InventorySlot>();
-                    string countType = PlayerPrefs.GetString(game.WorldName + "inventory" + ID + "slot" + count + "type");
+                    string countType = FileBasedPrefs.GetString(game.WorldName + "inventory" + ID + "slot" + count + "type");
                     if (!countType.Equals(""))
                     {
-                        inventory[count].typeInSlot = PlayerPrefs.GetString(game.WorldName + "inventory" + ID + "slot" + count + "type");
-                        inventory[count].amountInSlot = PlayerPrefs.GetInt(game.WorldName + "inventory" + ID + "slot" + count + "amount");
+                        inventory[count].typeInSlot = FileBasedPrefs.GetString(game.WorldName + "inventory" + ID + "slot" + count + "type");
+                        inventory[count].amountInSlot = FileBasedPrefs.GetInt(game.WorldName + "inventory" + ID + "slot" + count + "amount");
                     }
                     count++;
                 }
@@ -75,8 +75,8 @@ public class InventoryManager : MonoBehaviour
                 int originalCount = 0;
                 while (originalCount <= 15)
                 {
-                    PlayerPrefs.SetString(game.WorldName + "inventory" + originalID + "slot" + originalCount + "type", "nothing");
-                    PlayerPrefs.SetInt(game.WorldName + "inventory" + originalID + "slot" + originalCount + "amount", 0);
+                    FileBasedPrefs.SetString(game.WorldName + "inventory" + originalID + "slot" + originalCount + "type", "nothing");
+                    FileBasedPrefs.SetInt(game.WorldName + "inventory" + originalID + "slot" + originalCount + "amount", 0);
                     originalCount++;
                 }
                 originalID = ID;
@@ -84,8 +84,8 @@ public class InventoryManager : MonoBehaviour
             int count = 0;
             while (count <= 15)
             {
-                PlayerPrefs.SetString(game.WorldName + "inventory" + ID + "slot" + count + "type", inventory[count].typeInSlot);
-                PlayerPrefs.SetInt(game.WorldName + "inventory" + ID + "slot" + count + "amount", inventory[count].amountInSlot);
+                FileBasedPrefs.SetString(game.WorldName + "inventory" + ID + "slot" + count + "type", inventory[count].typeInSlot);
+                FileBasedPrefs.SetInt(game.WorldName + "inventory" + ID + "slot" + count + "amount", inventory[count].amountInSlot);
                 count++;
             }
         }

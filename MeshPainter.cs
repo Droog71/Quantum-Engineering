@@ -13,49 +13,49 @@ public class MeshPainter : MonoBehaviour
         string worldName = GameObject.Find("GameManager").GetComponent<StateManager>().WorldName;
         if (gameObject.name.Equals("ironHolder(Clone)"))
         {
-            if (PlayerPrefsX.GetBool(worldName + "ironHolder" + ID + "painted") == true)
+            if (FileBasedPrefs.GetBool(worldName + "ironHolder" + ID + "painted") == true)
             {
-                GetComponent<Renderer>().material.color = new Color(PlayerPrefs.GetFloat(worldName + "ironHolder" + ID + "Red"), PlayerPrefs.GetFloat(worldName + "ironHolder" + ID + "Green"), PlayerPrefs.GetFloat(worldName + "ironHolder" + ID + "Blue"));
+                GetComponent<Renderer>().material.color = new Color(FileBasedPrefs.GetFloat(worldName + "ironHolder" + ID + "Red"), FileBasedPrefs.GetFloat(worldName + "ironHolder" + ID + "Green"), FileBasedPrefs.GetFloat(worldName + "ironHolder" + ID + "Blue"));
                 Transform[] blocks = gameObject.GetComponentsInChildren<Transform>(true);
                 foreach (Transform T in blocks)
                 {
-                    T.gameObject.GetComponent<Renderer>().material.color = new Color(PlayerPrefs.GetFloat(worldName + "ironHolder" + ID + "Red"), PlayerPrefs.GetFloat(worldName + "ironHolder" + ID + "Green"), PlayerPrefs.GetFloat(worldName + "ironHolder" + ID + "Blue"));
+                    T.gameObject.GetComponent<Renderer>().material.color = new Color(FileBasedPrefs.GetFloat(worldName + "ironHolder" + ID + "Red"), FileBasedPrefs.GetFloat(worldName + "ironHolder" + ID + "Green"), FileBasedPrefs.GetFloat(worldName + "ironHolder" + ID + "Blue"));
                 }
             }
         }
         if (gameObject.name.Equals("steelHolder(Clone)"))
         {
-            if (PlayerPrefsX.GetBool(worldName + "steelHolder" + ID + "painted") == true)
+            if (FileBasedPrefs.GetBool(worldName + "steelHolder" + ID + "painted") == true)
             {
-                GetComponent<Renderer>().material.color = new Color(PlayerPrefs.GetFloat(worldName + "steelHolder" + ID + "Red"), PlayerPrefs.GetFloat(worldName + "steelHolder" + ID + "Green"), PlayerPrefs.GetFloat(worldName + "steelHolder" + ID + "Blue"));
+                GetComponent<Renderer>().material.color = new Color(FileBasedPrefs.GetFloat(worldName + "steelHolder" + ID + "Red"), FileBasedPrefs.GetFloat(worldName + "steelHolder" + ID + "Green"), FileBasedPrefs.GetFloat(worldName + "steelHolder" + ID + "Blue"));
                 Transform[] blocks = gameObject.GetComponentsInChildren<Transform>(true);
                 foreach (Transform T in blocks)
                 {
-                    T.gameObject.GetComponent<Renderer>().material.color = new Color(PlayerPrefs.GetFloat(worldName + "steelHolder" + ID + "Red"), PlayerPrefs.GetFloat(worldName + "steelHolder" + ID + "Green"), PlayerPrefs.GetFloat(worldName + "steelHolder" + ID + "Blue"));
+                    T.gameObject.GetComponent<Renderer>().material.color = new Color(FileBasedPrefs.GetFloat(worldName + "steelHolder" + ID + "Red"), FileBasedPrefs.GetFloat(worldName + "steelHolder" + ID + "Green"), FileBasedPrefs.GetFloat(worldName + "steelHolder" + ID + "Blue"));
                 }
             }
         }
         if (gameObject.name.Equals("brickHolder(Clone)"))
         {
-            if (PlayerPrefsX.GetBool(worldName + "brickHolder" + ID + "painted") == true)
+            if (FileBasedPrefs.GetBool(worldName + "brickHolder" + ID + "painted") == true)
             {
-                GetComponent<Renderer>().material.color = new Color(PlayerPrefs.GetFloat(worldName + "brickHolder" + ID + "Red"), PlayerPrefs.GetFloat(worldName + "brickHolder" + ID + "Green"), PlayerPrefs.GetFloat(worldName + "brickHolder" + ID + "Blue"));
+                GetComponent<Renderer>().material.color = new Color(FileBasedPrefs.GetFloat(worldName + "brickHolder" + ID + "Red"), FileBasedPrefs.GetFloat(worldName + "brickHolder" + ID + "Green"), FileBasedPrefs.GetFloat(worldName + "brickHolder" + ID + "Blue"));
                 Transform[] blocks = gameObject.GetComponentsInChildren<Transform>(true);
                 foreach (Transform T in blocks)
                 {
-                    T.gameObject.GetComponent<Renderer>().material.color = new Color(PlayerPrefs.GetFloat(worldName + "brickHolder" + ID + "Red"), PlayerPrefs.GetFloat(worldName + "brickHolder" + ID + "Green"), PlayerPrefs.GetFloat(worldName + "brickHolder" + ID + "Blue"));
+                    T.gameObject.GetComponent<Renderer>().material.color = new Color(FileBasedPrefs.GetFloat(worldName + "brickHolder" + ID + "Red"), FileBasedPrefs.GetFloat(worldName + "brickHolder" + ID + "Green"), FileBasedPrefs.GetFloat(worldName + "brickHolder" + ID + "Blue"));
                 }
             }
        }
         if (gameObject.name.Equals("glassHolder(Clone)"))
         {
-            if (PlayerPrefsX.GetBool(worldName + "glassHolder" + ID + "painted") == true)
+            if (FileBasedPrefs.GetBool(worldName + "glassHolder" + ID + "painted") == true)
             {
-                GetComponent<Renderer>().material.color = new Color(PlayerPrefs.GetFloat(worldName + "glassHolder" + ID + "Red"), PlayerPrefs.GetFloat(worldName + "glassHolder" + ID + "Green"), PlayerPrefs.GetFloat(worldName + "glassHolder" + ID + "Blue"));
+                GetComponent<Renderer>().material.color = new Color(FileBasedPrefs.GetFloat(worldName + "glassHolder" + ID + "Red"), FileBasedPrefs.GetFloat(worldName + "glassHolder" + ID + "Green"), FileBasedPrefs.GetFloat(worldName + "glassHolder" + ID + "Blue"));
                 Transform[] blocks = gameObject.GetComponentsInChildren<Transform>(true);
                 foreach (Transform T in blocks)
                 {
-                    T.gameObject.GetComponent<Renderer>().material.color = new Color(PlayerPrefs.GetFloat(worldName + "glassHolder" + ID + "Red"), PlayerPrefs.GetFloat(worldName + "glassHolder" + ID + "Green"), PlayerPrefs.GetFloat(worldName + "glassHolder" + ID + "Blue"));
+                    T.gameObject.GetComponent<Renderer>().material.color = new Color(FileBasedPrefs.GetFloat(worldName + "glassHolder" + ID + "Red"), FileBasedPrefs.GetFloat(worldName + "glassHolder" + ID + "Green"), FileBasedPrefs.GetFloat(worldName + "glassHolder" + ID + "Blue"));
                 }
             }
         }
@@ -76,18 +76,18 @@ public class MeshPainter : MonoBehaviour
     private IEnumerator SaveDataCoRoutine()
     {
         string worldName = GameObject.Find("GameManager").GetComponent<StateManager>().WorldName;
-        if (gameObject.name.Equals("ironHolder(Clone)") && PlayerPrefsX.GetBool(worldName + "ironHolder" + ID + "painted") == true)
+        if (gameObject.name.Equals("ironHolder(Clone)") && FileBasedPrefs.GetBool(worldName + "ironHolder" + ID + "painted") == true)
         {
-            PlayerPrefs.SetFloat(worldName + "ironHolder" + ID + "Red", GetComponent<Renderer>().material.color.r);
-            PlayerPrefs.SetFloat(worldName + "ironHolder" + ID + "Green", GetComponent<Renderer>().material.color.g);
-            PlayerPrefs.SetFloat(worldName + "ironHolder" + ID + "Blue", GetComponent<Renderer>().material.color.b);
+            FileBasedPrefs.SetFloat(worldName + "ironHolder" + ID + "Red", GetComponent<Renderer>().material.color.r);
+            FileBasedPrefs.SetFloat(worldName + "ironHolder" + ID + "Green", GetComponent<Renderer>().material.color.g);
+            FileBasedPrefs.SetFloat(worldName + "ironHolder" + ID + "Blue", GetComponent<Renderer>().material.color.b);
             Transform[] blocks = gameObject.GetComponentsInChildren<Transform>(true);
             int paintInterval = 0;
             foreach (Transform T in blocks)
             {
                 if (T != null)
                 {
-                    T.gameObject.GetComponent<Renderer>().material.color = new Color(PlayerPrefs.GetFloat(worldName + "ironHolder" + ID + "Red"), PlayerPrefs.GetFloat(worldName + "ironHolder" + ID + "Green"), PlayerPrefs.GetFloat(worldName + "ironHolder" + ID + "Blue"));
+                    T.gameObject.GetComponent<Renderer>().material.color = new Color(FileBasedPrefs.GetFloat(worldName + "ironHolder" + ID + "Red"), FileBasedPrefs.GetFloat(worldName + "ironHolder" + ID + "Green"), FileBasedPrefs.GetFloat(worldName + "ironHolder" + ID + "Blue"));
                 }
                 paintInterval++;
                 if (paintInterval >= 10)
@@ -97,18 +97,18 @@ public class MeshPainter : MonoBehaviour
                 }
             }
         }
-        if (gameObject.name.Equals("steelHolder(Clone)") && PlayerPrefsX.GetBool(worldName + "steelHolder" + ID + "painted") == true)
+        if (gameObject.name.Equals("steelHolder(Clone)") && FileBasedPrefs.GetBool(worldName + "steelHolder" + ID + "painted") == true)
         {
-            PlayerPrefs.SetFloat(worldName + "steelHolder" + ID + "Red", GetComponent<Renderer>().material.color.r);
-            PlayerPrefs.SetFloat(worldName + "steelHolder" + ID + "Green", GetComponent<Renderer>().material.color.g);
-            PlayerPrefs.SetFloat(worldName + "steelHolder" + ID + "Blue", GetComponent<Renderer>().material.color.b);
+            FileBasedPrefs.SetFloat(worldName + "steelHolder" + ID + "Red", GetComponent<Renderer>().material.color.r);
+            FileBasedPrefs.SetFloat(worldName + "steelHolder" + ID + "Green", GetComponent<Renderer>().material.color.g);
+            FileBasedPrefs.SetFloat(worldName + "steelHolder" + ID + "Blue", GetComponent<Renderer>().material.color.b);
             Transform[] blocks = gameObject.GetComponentsInChildren<Transform>(true);
             int paintInterval = 0;
             foreach (Transform T in blocks)
             {
                 if (T != null)
                 {
-                    T.gameObject.GetComponent<Renderer>().material.color = new Color(PlayerPrefs.GetFloat(worldName + "steelHolder" + ID + "Red"), PlayerPrefs.GetFloat(worldName + "steelHolder" + ID + "Green"), PlayerPrefs.GetFloat(worldName + "steelHolder" + ID + "Blue"));
+                    T.gameObject.GetComponent<Renderer>().material.color = new Color(FileBasedPrefs.GetFloat(worldName + "steelHolder" + ID + "Red"), FileBasedPrefs.GetFloat(worldName + "steelHolder" + ID + "Green"), FileBasedPrefs.GetFloat(worldName + "steelHolder" + ID + "Blue"));
                 }
                 paintInterval++;
                 if (paintInterval >= 10)
@@ -118,18 +118,18 @@ public class MeshPainter : MonoBehaviour
                 }
             }
         }
-        if (gameObject.name.Equals("brickHolder(Clone)") && PlayerPrefsX.GetBool(worldName + "brickHolder" + ID + "painted") == true)
+        if (gameObject.name.Equals("brickHolder(Clone)") && FileBasedPrefs.GetBool(worldName + "brickHolder" + ID + "painted") == true)
         {
-            PlayerPrefs.SetFloat(worldName + "brickHolder" + ID + "Red", GetComponent<Renderer>().material.color.r);
-            PlayerPrefs.SetFloat(worldName + "brickHolder" + ID + "Green", GetComponent<Renderer>().material.color.g);
-            PlayerPrefs.SetFloat(worldName + "brickHolder" + ID + "Blue", GetComponent<Renderer>().material.color.b);
+            FileBasedPrefs.SetFloat(worldName + "brickHolder" + ID + "Red", GetComponent<Renderer>().material.color.r);
+            FileBasedPrefs.SetFloat(worldName + "brickHolder" + ID + "Green", GetComponent<Renderer>().material.color.g);
+            FileBasedPrefs.SetFloat(worldName + "brickHolder" + ID + "Blue", GetComponent<Renderer>().material.color.b);
             Transform[] blocks = gameObject.GetComponentsInChildren<Transform>(true);
             int paintInterval = 0;
             foreach (Transform T in blocks)
             {
                 if (T != null)
                 {
-                    T.gameObject.GetComponent<Renderer>().material.color = new Color(PlayerPrefs.GetFloat(worldName + "brickHolder" + ID + "Red"), PlayerPrefs.GetFloat(worldName + "brickHolder" + ID + "Green"), PlayerPrefs.GetFloat(worldName + "brickHolder" + ID + "Blue"));
+                    T.gameObject.GetComponent<Renderer>().material.color = new Color(FileBasedPrefs.GetFloat(worldName + "brickHolder" + ID + "Red"), FileBasedPrefs.GetFloat(worldName + "brickHolder" + ID + "Green"), FileBasedPrefs.GetFloat(worldName + "brickHolder" + ID + "Blue"));
                 }
                 paintInterval++;
                 if (paintInterval >= 10)
@@ -139,18 +139,18 @@ public class MeshPainter : MonoBehaviour
                 }
             }
         }
-        if (gameObject.name.Equals("glassHolder(Clone)") && PlayerPrefsX.GetBool(worldName + "glassHolder" + ID + "painted") == true)
+        if (gameObject.name.Equals("glassHolder(Clone)") && FileBasedPrefs.GetBool(worldName + "glassHolder" + ID + "painted") == true)
         {
-            PlayerPrefs.SetFloat(worldName + "glassHolder" + ID + "Red", GetComponent<Renderer>().material.color.r);
-            PlayerPrefs.SetFloat(worldName + "glassHolder" + ID + "Green", GetComponent<Renderer>().material.color.g);
-            PlayerPrefs.SetFloat(worldName + "glassHolder" + ID + "Blue", GetComponent<Renderer>().material.color.b);
+            FileBasedPrefs.SetFloat(worldName + "glassHolder" + ID + "Red", GetComponent<Renderer>().material.color.r);
+            FileBasedPrefs.SetFloat(worldName + "glassHolder" + ID + "Green", GetComponent<Renderer>().material.color.g);
+            FileBasedPrefs.SetFloat(worldName + "glassHolder" + ID + "Blue", GetComponent<Renderer>().material.color.b);
             Transform[] blocks = gameObject.GetComponentsInChildren<Transform>(true);
             int paintInterval = 0;
             foreach (Transform T in blocks)
             {
                 if (T != null)
                 {
-                    T.gameObject.GetComponent<Renderer>().material.color = new Color(PlayerPrefs.GetFloat(worldName + "glassHolder" + ID + "Red"), PlayerPrefs.GetFloat(worldName + "glassHolder" + ID + "Green"), PlayerPrefs.GetFloat(worldName + "glassHolder" + ID + "Blue"));
+                    T.gameObject.GetComponent<Renderer>().material.color = new Color(FileBasedPrefs.GetFloat(worldName + "glassHolder" + ID + "Red"), FileBasedPrefs.GetFloat(worldName + "glassHolder" + ID + "Green"), FileBasedPrefs.GetFloat(worldName + "glassHolder" + ID + "Blue"));
                 }
                 paintInterval++;
                 if (paintInterval >= 10)

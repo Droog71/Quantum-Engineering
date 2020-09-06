@@ -1,11 +1,12 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.IO;
 using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour
 {
     private InputManager inputManager;
-    private Coroutine quitCoroutine;
+    private Coroutine saveCoroutine;
     private Vector3 originalPosition;
 
     public Vector3 destroyStartPosition;
@@ -41,7 +42,7 @@ public class PlayerController : MonoBehaviour
     public bool draggingItem;
     public bool displayingBuildItem;
     public bool exiting;
-    public bool requestedExit;
+    public bool requestedSave;
     public bool invalidAugerPlacement;
     public bool invalidRailCartPlacement;
     public bool helpMenuOpen;
@@ -54,7 +55,6 @@ public class PlayerController : MonoBehaviour
     public bool paintColorSelected;
     public bool videoMenuOpen;
     public bool schematicMenuOpen;
-    public bool backupCreated;
     public bool crosshairEnabled = true;
     public bool stoppingBuildCoRoutine;
     public bool separatedBlocks;
@@ -113,7 +113,7 @@ public class PlayerController : MonoBehaviour
     public float paintRed;
     public float paintGreen;
     public float paintBlue;
-    public float requestedExitTimer;
+    public float requestedSaveTimer;
     public float blockLimitMessageTimer;
 
     public int playerMoveSpeed;
@@ -205,15 +205,15 @@ public class PlayerController : MonoBehaviour
         //LOAD MOUSE SETTINGS
         Cursor.visible = true;
         Cursor.lockState = CursorLockMode.None;
-        if (PlayerPrefs.GetFloat("xSensitivity") != 0)
+        if (FileBasedPrefs.GetFloat("xSensitivity") != 0)
         {
             GetComponent<MSCameraController>().CameraSettings.firstPerson.sensibilityX = PlayerPrefs.GetFloat("xSensitivity");
         }
-        if (PlayerPrefs.GetFloat("ySensitivity") != 0)
+        if (FileBasedPrefs.GetFloat("ySensitivity") != 0)
         {
             GetComponent<MSCameraController>().CameraSettings.firstPerson.sensibilityY = PlayerPrefs.GetFloat("ySensitivity");
         }
-        GetComponent<MSCameraController>().CameraSettings.firstPerson.invertYInput = PlayerPrefsX.GetBool("mouseInverted");
+        GetComponent<MSCameraController>().CameraSettings.firstPerson.invertYInput = PlayerPrefsX.GetPersistentBool("mouseInverted");
 
         //LOAD VOLUME SETTING
         AudioListener.volume = PlayerPrefs.GetFloat("volume");
@@ -243,12 +243,12 @@ public class PlayerController : MonoBehaviour
         if (mCam == null)
         {
             mCam = Camera.main;
-            if (PlayerPrefs.GetFloat("FOV") != 0)
+            if (FileBasedPrefs.GetFloat("FOV") != 0)
             {
                 mCam.fieldOfView = PlayerPrefs.GetFloat("FOV");
             }
 
-            if (PlayerPrefs.GetFloat("DrawDistance") != 0)
+            if (FileBasedPrefs.GetFloat("DrawDistance") != 0)
             {
                 mCam.farClipPlane = PlayerPrefs.GetFloat("DrawDistance");
             }
@@ -270,12 +270,12 @@ public class PlayerController : MonoBehaviour
             {
                 gameStarted = true;
 
-                if (PlayerPrefsX.GetBool(stateManager.WorldName + "oldWorld") == false)
+                if (FileBasedPrefs.GetBool(stateManager.WorldName + "oldWorld") == false)
                 {
                     OpenTabletOnFirstLoad();
                 }
 
-                if (movedPlayer == false && PlayerPrefsX.GetBool(stateManager.WorldName + "oldWorld") == true)
+                if (movedPlayer == false && FileBasedPrefs.GetBool(stateManager.WorldName + "oldWorld") == true)
                 {
                     MovePlayerToSavedLocation();
                 }
@@ -384,9 +384,9 @@ public class PlayerController : MonoBehaviour
                     HandleEscapeMenuRequest();
                 }
 
-                if (requestedExit == true)
+                if (requestedSave == true)
                 {
-                    HandleExitRequest();
+                    HandleSaveRequest();
                 }
 
                 if (storageInventory != null && storageGUIopen == true)
@@ -399,6 +399,27 @@ public class PlayerController : MonoBehaviour
                 EnforceWorldLimits();
             }
         }
+    }
+
+    // Saves the player's location and money.
+    public void SavePlayerData()
+    {
+        PlayerPrefsX.SetVector3(stateManager.WorldName + "playerPosition", transform.position);
+        PlayerPrefsX.SetQuaternion(stateManager.WorldName + "playerRotation", transform.rotation);
+        FileBasedPrefs.SetInt(stateManager.WorldName + "money", money);
+        FileBasedPrefs.SetBool(stateManager.WorldName + "oldWorld", true);
+    }
+
+    // Applies global settings.
+    public void ApplySettings()
+    {
+        PlayerPrefsX.SetPersistentBool("mouseInverted", GetComponent<MSCameraController>().CameraSettings.firstPerson.invertYInput);
+        PlayerPrefs.SetFloat("xSensitivity", GetComponent<MSCameraController>().CameraSettings.firstPerson.sensibilityX);
+        PlayerPrefs.SetFloat("ySensitivity", GetComponent<MSCameraController>().CameraSettings.firstPerson.sensibilityY);
+        PlayerPrefs.SetFloat("FOV", mCam.fieldOfView);
+        PlayerPrefs.SetFloat("DrawDistance", mCam.farClipPlane);
+        PlayerPrefs.SetFloat("volume", GetComponent<MSCameraController>().cameras[0].volume);
+        PlayerPrefs.Save();
     }
 
     // Plays a sound.
@@ -460,7 +481,7 @@ public class PlayerController : MonoBehaviour
     {
         transform.position = PlayerPrefsX.GetVector3(stateManager.WorldName + "playerPosition");
         transform.rotation = PlayerPrefsX.GetQuaternion(stateManager.WorldName + "playerRotation");
-        money = PlayerPrefs.GetInt(stateManager.WorldName + "money");
+        money = FileBasedPrefs.GetInt(stateManager.WorldName + "money");
         movedPlayer = true;
     }
 
@@ -642,17 +663,18 @@ public class PlayerController : MonoBehaviour
     }
 
     // Handles requests to exit the game
-    private void HandleExitRequest()
+    private void HandleSaveRequest()
     {
-        requestedExitTimer += 1 * Time.deltaTime;
-        if (requestedExitTimer >= 5)
+        requestedSaveTimer += 1 * Time.deltaTime;
+        if (requestedSaveTimer >= 5)
         {
             if (GameObject.Find("GameManager").GetComponent<GameManager>().working == false)
             {
-                GameObject.Find("GameManager").GetComponent<GameManager>().RequestFinalSaveOperation();
-                quitCoroutine = StartCoroutine(Quit());
-                requestedExitTimer = 0;
-                requestedExit = false;
+                SavePlayerData();
+                GameObject.Find("GameManager").GetComponent<GameManager>().RequestSaveOperation();
+                saveCoroutine = StartCoroutine(Save());
+                requestedSaveTimer = 0;
+                requestedSave = false;
             }
         }
     }
@@ -679,7 +701,7 @@ public class PlayerController : MonoBehaviour
     }
 
     // Handles safely saving data and shutting down the game.
-    public static IEnumerator Quit()
+    public static IEnumerator Save()
     {
         float f = 0;
         while (f < 6000)
@@ -687,24 +709,23 @@ public class PlayerController : MonoBehaviour
             f++;
             if (GameObject.Find("GameManager").GetComponent<GameManager>().blocksCombined == false)
             {
-                if (GameObject.Find("GameManager").GetComponent<GameManager>().savingData == true)
+                if (GameObject.Find("GameManager").GetComponent<GameManager>().dataSaveRequested == false)
                 {
-                    if (GameObject.Find("GameManager").GetComponent<StateManager>().dataSaved == true)
+                    if (GameObject.Find("GameManager").GetComponent<StateManager>().saving == false)
                     {
-                        if (GameObject.Find("Player").GetComponent<PlayerController>().backupCreated == false)
-                        {
-                            Debug.Log("Creating backup...");
-                            string osType = System.Environment.OSVersion.ToString().Split(' ')[0];
-                            if (osType.Equals("Unix"))
-                            {
-                                System.IO.File.Copy("/home/" + System.Environment.UserName + "/.config/unity3d/Droog71/Quantum Engineering/prefs", "/home/" + System.Environment.UserName + "/.config/unity3d/Droog71/Quantum Engineering/" + GameObject.Find("GameManager").GetComponent<StateManager>().WorldName, true);
-                            }
-                            GameObject.Find("Player").GetComponent<PlayerController>().backupCreated = true;
-                        }
-                        if (!Application.isEditor)
+                        Debug.Log("Creating backup...");
+                        string fileName = GameObject.Find("GameManager").GetComponent<StateManager>().WorldName;
+                        string destinationPath = Path.Combine(Application.persistentDataPath, "SaveData/" + fileName + ".bak");
+                        File.Copy(FileBasedPrefs.GetSaveFilePath(), destinationPath, true);
+
+                        if (!Application.isEditor && GameObject.Find("Player").GetComponent<PlayerController>().exiting == true)
                         {
                             Debug.Log("Shutting down...");
                             System.Diagnostics.Process.GetCurrentProcess().Kill();
+                        }
+                        else
+                        {
+                            break;
                         }
                     }
                 }

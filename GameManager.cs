@@ -28,11 +28,9 @@ public class GameManager : MonoBehaviour
     public bool hazardsEnabled = true;
     private float meteorTimer;
     private float pirateTimer;
-    public bool savingData;
     public bool dataSaveRequested;
     public bool blocksCombined;
     public bool working;
-    public bool exiting;
     private bool waitingForDestroy;
     private float waitTime;
     public bool initGlass;
@@ -127,7 +125,7 @@ public class GameManager : MonoBehaviour
     // Called once per frame by unity engine
     public void Update()
     {
-        if (PlayerPrefsX.GetBool(GetComponent<StateManager>().WorldName + "Initialized") == false)
+        if (FileBasedPrefs.GetBool(GetComponent<StateManager>().WorldName + "Initialized") == false)
         {
             if (lander.GetComponent<InventoryManager>().initialized == true)
             {
@@ -179,29 +177,29 @@ public class GameManager : MonoBehaviour
                     lander.GetComponent<InventoryManager>().AddItem("Dark Matter Conduit", 1);
                     lander.GetComponent<InventoryManager>().AddItem("Dark Matter Collector", 1);
                 }
-                PlayerPrefsX.SetBool(GetComponent<StateManager>().WorldName + "Initialized", true);
+                FileBasedPrefs.SetBool(GetComponent<StateManager>().WorldName + "Initialized", true);
             }
         }
         else
         {
             if (loadedBlockPhysics == false)
             {
-                blockPhysics = PlayerPrefsX.GetBool(GetComponent<StateManager>().WorldName + "blockPhysics");
+                blockPhysics = FileBasedPrefs.GetBool(GetComponent<StateManager>().WorldName + "blockPhysics");
                 loadedBlockPhysics = true;
             }
             if (loadedHazardsEnabled == false)
             {
-                hazardsEnabled = PlayerPrefsX.GetBool(GetComponent<StateManager>().WorldName + "hazardsEnabled");
+                hazardsEnabled = FileBasedPrefs.GetBool(GetComponent<StateManager>().WorldName + "hazardsEnabled");
                 loadedHazardsEnabled = true;
             }
             if (loadedMeteorTimer == false)
             {
-                meteorShowerTimer = PlayerPrefs.GetFloat(GetComponent<StateManager>().WorldName + "meteorShowerTimer");
+                meteorShowerTimer = FileBasedPrefs.GetFloat(GetComponent<StateManager>().WorldName + "meteorShowerTimer");
                 loadedMeteorTimer = true;
             }
             if (loadedPirateTimer == false)
             {
-                pirateAttackTimer = PlayerPrefs.GetFloat(GetComponent<StateManager>().WorldName + "pirateAttackTimer");
+                pirateAttackTimer = FileBasedPrefs.GetFloat(GetComponent<StateManager>().WorldName + "pirateAttackTimer");
                 loadedPirateTimer = true;
             }
         }
@@ -209,12 +207,10 @@ public class GameManager : MonoBehaviour
         // A save game request is pending
         if (dataSaveRequested == true)
         {
-            UnityEngine.Debug.Log("Waiting for state manager to finish current save operation...");
-            if (GetComponent<StateManager>().dataSaved == true && savingData == false)
+            if (GetComponent<StateManager>().saving == false)
             {
-                UnityEngine.Debug.Log("Saving structures...");
+                UnityEngine.Debug.Log("Saving world...");
                 GetComponent<StateManager>().SaveData();
-                savingData = true;
                 dataSaveRequested = false;
             }
         }
@@ -330,7 +326,7 @@ public class GameManager : MonoBehaviour
                     pirateAttackTimer += 1 * Time.deltaTime;
                     if (loadedPirateTimer == true)
                     {
-                        PlayerPrefs.SetFloat(GetComponent<StateManager>().WorldName + "pirateAttackTimer", pirateAttackTimer);
+                        FileBasedPrefs.SetFloat(GetComponent<StateManager>().WorldName + "pirateAttackTimer", pirateAttackTimer);
                     }
                     if (pirateAttackTimer >= 530 & pirateAttackTimer < 540)
                     {
@@ -390,7 +386,7 @@ public class GameManager : MonoBehaviour
 
                 if (loadedMeteorTimer == true)
                 {
-                    PlayerPrefs.SetFloat(GetComponent<StateManager>().WorldName + "meteorShowerTimer", meteorShowerTimer);
+                    FileBasedPrefs.SetFloat(GetComponent<StateManager>().WorldName + "meteorShowerTimer", meteorShowerTimer);
                 }
                 if (meteorShowerTimer >= 530 && meteorShowerTimer < 540)
                 {
@@ -463,11 +459,11 @@ public class GameManager : MonoBehaviour
         meteorShowerTimer = 120;
         if (loadedMeteorTimer == true)
         {
-            PlayerPrefs.SetFloat(GetComponent<StateManager>().WorldName + "meteorShowerTimer", meteorShowerTimer);
+            FileBasedPrefs.SetFloat(GetComponent<StateManager>().WorldName + "meteorShowerTimer", meteorShowerTimer);
         }
         if (loadedPirateTimer == true)
         {
-            PlayerPrefs.SetFloat(GetComponent<StateManager>().WorldName + "pirateAttackTimer", pirateAttackTimer);
+            FileBasedPrefs.SetFloat(GetComponent<StateManager>().WorldName + "pirateAttackTimer", pirateAttackTimer);
         }
         if (player != null)
         {
@@ -502,22 +498,20 @@ public class GameManager : MonoBehaviour
     }
 
     // Saves the game on exit
-    public void RequestFinalSaveOperation()
+    public void RequestSaveOperation()
     {
-        if (working == false && exiting == false)
+        if (working == false && GetComponent<StateManager>().saving == false)
         {
-            UnityEngine.Debug.Log("Requesting final save operation...");
-            exiting = true;
+            UnityEngine.Debug.Log("Requesting save operation...");
             dataSaveRequested = true;
             blocksCombined = false;
-            GetComponent<StateManager>().exiting = true;
         }
     }
 
     // Separates combined meshes into blocks
     public void SeparateBlocks(Vector3 target, string type, bool building)
     {
-        if (working == false && exiting == false)
+        if (working == false && GetComponent<StateManager>().saving == false)
         {
             if (building == true)
             {
@@ -798,7 +792,7 @@ public class GameManager : MonoBehaviour
     // Creates combined meshes from placed building blocks
     public void CombineBlocks()
     {
-        if (working == false && exiting == false)
+        if (working == false && GetComponent<StateManager>().saving == false)
         {
             working = true;
             int ironCount = 0;
@@ -1081,7 +1075,7 @@ public class GameManager : MonoBehaviour
             {
                 initIron = true;
                 clearIronDummies = true;
-                PlayerPrefsX.SetBool(GetComponent<StateManager>().WorldName + "initIron", true);
+                FileBasedPrefs.SetBool(GetComponent<StateManager>().WorldName + "initIron", true);
             }
             //Debug.Log("Finished mesh combine for iron at: " + System.DateTime.Now);
         }
@@ -1147,7 +1141,7 @@ public class GameManager : MonoBehaviour
             {
                 initGlass = true;
                 clearGlassDummies = true;
-                PlayerPrefsX.SetBool(GetComponent<StateManager>().WorldName + "initGlass", true);
+                FileBasedPrefs.SetBool(GetComponent<StateManager>().WorldName + "initGlass", true);
             }
             //Debug.Log("Finished mesh combine for glass at: " + System.DateTime.Now);
         }
@@ -1213,7 +1207,7 @@ public class GameManager : MonoBehaviour
             {
                 initSteel = true;
                 clearSteelDummies = true;
-                PlayerPrefsX.SetBool(GetComponent<StateManager>().WorldName + "initSteel", true);
+                FileBasedPrefs.SetBool(GetComponent<StateManager>().WorldName + "initSteel", true);
             }
             //Debug.Log("Finished mesh combine for steel at: " + System.DateTime.Now);
         }
@@ -1279,7 +1273,7 @@ public class GameManager : MonoBehaviour
             {
                 initBrick = true;
                 clearBrickDummies = true;
-                PlayerPrefsX.SetBool(GetComponent<StateManager>().WorldName + "initBrick", true);
+                FileBasedPrefs.SetBool(GetComponent<StateManager>().WorldName + "initBrick", true);
             }
         }
 

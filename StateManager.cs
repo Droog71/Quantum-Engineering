@@ -5,11 +5,9 @@ using UnityEngine.Networking;
 public class StateManager : MonoBehaviour
 {
     //BUILDING
-    float updateTick;
-    private bool saving;
+    public bool saving;
     public bool dataSaved;
     public bool worldLoaded = false;
-    public bool exiting;
     public GameObject DarkMatterCollector;
     public GameObject DarkMatterConduit;
     public GameObject IronBlock;
@@ -57,7 +55,7 @@ public class StateManager : MonoBehaviour
 
     void LoadWorld()
     {
-        if (Loaded == false && PlayerPrefs.GetInt(WorldName + "ConstructionTotal") != 0)
+        if (Loaded == false && FileBasedPrefs.GetInt(WorldName + "ConstructionTotal") != 0)
         {
             ConstructionCount = 0;
             do
@@ -65,333 +63,332 @@ public class StateManager : MonoBehaviour
                 PartNumber = ConstructionCount.ToString();
                 ObjectPrintingLocation = PlayerPrefsX.GetVector3(WorldName + PartNumber + "Position");
                 ObjectPrintingRotation = PlayerPrefsX.GetQuaternion(WorldName + PartNumber + "Rotation");
-                ObjectName = PlayerPrefs.GetString(WorldName + PartNumber + "Name");
+                ObjectName = FileBasedPrefs.GetString(WorldName + PartNumber + "Name");
                 if (ObjectName != "" && ObjectPrintingLocation != EmptyVector)
                 {
                     if (ObjectName == WorldName + "AirLock")
                     {
                         GameObject PrintedPart = Instantiate(AirLock, ObjectPrintingLocation, ObjectPrintingRotation);
-                        PrintedPart.GetComponent<PhysicsHandler>().falling = PlayerPrefsX.GetBool(ObjectName + PartNumber + "falling");
-                        PrintedPart.GetComponent<PhysicsHandler>().fallingStack = PlayerPrefsX.GetBool(ObjectName + PartNumber + "fallingStack");
+                        PrintedPart.GetComponent<PhysicsHandler>().falling = FileBasedPrefs.GetBool(ObjectName + PartNumber + "falling");
+                        PrintedPart.GetComponent<PhysicsHandler>().fallingStack = FileBasedPrefs.GetBool(ObjectName + PartNumber + "fallingStack");
                         PrintedPart.GetComponent<PhysicsHandler>().creationMethod = "spawned";
                     }
                     if (ObjectName == WorldName + "DarkMatterCollector")
                     {
                         GameObject PrintedPart = Instantiate(DarkMatterCollector, ObjectPrintingLocation, ObjectPrintingRotation);
-                        PrintedPart.GetComponent<DarkMatterCollector>().speed = PlayerPrefs.GetInt(ObjectName + PartNumber + "speed");
-                        PrintedPart.GetComponent<DarkMatterCollector>().darkMatterAmount = PlayerPrefs.GetFloat(ObjectName + PartNumber + "darkMatterAmount");
+                        PrintedPart.GetComponent<DarkMatterCollector>().speed = FileBasedPrefs.GetInt(ObjectName + PartNumber + "speed");
+                        PrintedPart.GetComponent<DarkMatterCollector>().darkMatterAmount = FileBasedPrefs.GetFloat(ObjectName + PartNumber + "darkMatterAmount");
                         PrintedPart.GetComponent<DarkMatterCollector>().creationMethod = "spawned";
-                        PrintedPart.GetComponent<PhysicsHandler>().falling = PlayerPrefsX.GetBool(ObjectName + PartNumber + "falling");
-                        PrintedPart.GetComponent<PhysicsHandler>().fallingStack = PlayerPrefsX.GetBool(ObjectName + PartNumber + "fallingStack");
+                        PrintedPart.GetComponent<PhysicsHandler>().falling = FileBasedPrefs.GetBool(ObjectName + PartNumber + "falling");
+                        PrintedPart.GetComponent<PhysicsHandler>().fallingStack = FileBasedPrefs.GetBool(ObjectName + PartNumber + "fallingStack");
                         PrintedPart.GetComponent<PhysicsHandler>().creationMethod = "spawned";
                     }
                     if (ObjectName == WorldName + "DarkMatterConduit")
                     {
                         GameObject PrintedPart = Instantiate(DarkMatterConduit, ObjectPrintingLocation, ObjectPrintingRotation);
-                        PrintedPart.GetComponent<DarkMatterConduit>().inputID = PlayerPrefs.GetString(ObjectName + PartNumber + "inputID");
-                        PrintedPart.GetComponent<DarkMatterConduit>().outputID = PlayerPrefs.GetString(ObjectName + PartNumber + "outputID");
-                        PrintedPart.GetComponent<DarkMatterConduit>().speed = PlayerPrefs.GetInt(ObjectName + PartNumber + "speed");
-                        PrintedPart.GetComponent<DarkMatterConduit>().range = PlayerPrefs.GetInt(ObjectName + PartNumber + "range");
-                        PrintedPart.GetComponent<DarkMatterConduit>().darkMatterAmount = PlayerPrefs.GetFloat(ObjectName + PartNumber + "darkMatterAmount");
+                        PrintedPart.GetComponent<DarkMatterConduit>().inputID = FileBasedPrefs.GetString(ObjectName + PartNumber + "inputID");
+                        PrintedPart.GetComponent<DarkMatterConduit>().outputID = FileBasedPrefs.GetString(ObjectName + PartNumber + "outputID");
+                        PrintedPart.GetComponent<DarkMatterConduit>().speed = FileBasedPrefs.GetInt(ObjectName + PartNumber + "speed");
+                        PrintedPart.GetComponent<DarkMatterConduit>().range = FileBasedPrefs.GetInt(ObjectName + PartNumber + "range");
+                        PrintedPart.GetComponent<DarkMatterConduit>().darkMatterAmount = FileBasedPrefs.GetFloat(ObjectName + PartNumber + "darkMatterAmount");
                         PrintedPart.GetComponent<DarkMatterConduit>().creationMethod = "spawned";
-                        PrintedPart.GetComponent<PhysicsHandler>().falling = PlayerPrefsX.GetBool(ObjectName + PartNumber + "falling");
-                        PrintedPart.GetComponent<PhysicsHandler>().fallingStack = PlayerPrefsX.GetBool(ObjectName + PartNumber + "fallingStack");
+                        PrintedPart.GetComponent<PhysicsHandler>().falling = FileBasedPrefs.GetBool(ObjectName + PartNumber + "falling");
+                        PrintedPart.GetComponent<PhysicsHandler>().fallingStack = FileBasedPrefs.GetBool(ObjectName + PartNumber + "fallingStack");
                         PrintedPart.GetComponent<PhysicsHandler>().creationMethod = "spawned";
                     }
                     if (ObjectName == WorldName + "RailCartHub")
                     {
                         GameObject PrintedPart = Instantiate(RailCartHub, ObjectPrintingLocation, ObjectPrintingRotation);
-                        PrintedPart.GetComponent<RailCartHub>().inputID = PlayerPrefs.GetString(ObjectName + PartNumber + "inputID");
-                        PrintedPart.GetComponent<RailCartHub>().outputID = PlayerPrefs.GetString(ObjectName + PartNumber + "outputID");
-                        PrintedPart.GetComponent<RailCartHub>().range = PlayerPrefs.GetInt(ObjectName + PartNumber + "range");
-                        PrintedPart.GetComponent<RailCartHub>().stop = PlayerPrefsX.GetBool(ObjectName + PartNumber + "stop");
-                        PrintedPart.GetComponent<RailCartHub>().circuit = PlayerPrefs.GetInt(ObjectName + PartNumber + "circuit");
-                        PrintedPart.GetComponent<RailCartHub>().stopTime = PlayerPrefs.GetFloat(ObjectName + PartNumber + "stopTime");
-                        PrintedPart.GetComponent<RailCartHub>().centralHub = PlayerPrefsX.GetBool(ObjectName + PartNumber + "centralHub");
+                        PrintedPart.GetComponent<RailCartHub>().inputID = FileBasedPrefs.GetString(ObjectName + PartNumber + "inputID");
+                        PrintedPart.GetComponent<RailCartHub>().outputID = FileBasedPrefs.GetString(ObjectName + PartNumber + "outputID");
+                        PrintedPart.GetComponent<RailCartHub>().range = FileBasedPrefs.GetInt(ObjectName + PartNumber + "range");
+                        PrintedPart.GetComponent<RailCartHub>().stop = FileBasedPrefs.GetBool(ObjectName + PartNumber + "stop");
+                        PrintedPart.GetComponent<RailCartHub>().circuit = FileBasedPrefs.GetInt(ObjectName + PartNumber + "circuit");
+                        PrintedPart.GetComponent<RailCartHub>().stopTime = FileBasedPrefs.GetFloat(ObjectName + PartNumber + "stopTime");
+                        PrintedPart.GetComponent<RailCartHub>().centralHub = FileBasedPrefs.GetBool(ObjectName + PartNumber + "centralHub");
                         PrintedPart.GetComponent<RailCartHub>().creationMethod = "spawned";
-                        PrintedPart.GetComponent<PhysicsHandler>().falling = PlayerPrefsX.GetBool(ObjectName + PartNumber + "falling");
-                        PrintedPart.GetComponent<PhysicsHandler>().fallingStack = PlayerPrefsX.GetBool(ObjectName + PartNumber + "fallingStack");
+                        PrintedPart.GetComponent<PhysicsHandler>().falling = FileBasedPrefs.GetBool(ObjectName + PartNumber + "falling");
+                        PrintedPart.GetComponent<PhysicsHandler>().fallingStack = FileBasedPrefs.GetBool(ObjectName + PartNumber + "fallingStack");
                         PrintedPart.GetComponent<PhysicsHandler>().creationMethod = "spawned";
                     }
                     if (ObjectName == WorldName + "RailCart")
                     {
                         GameObject PrintedPart = Instantiate(RailCart, ObjectPrintingLocation, ObjectPrintingRotation);
                         PrintedPart.GetComponent<RailCart>().creationMethod = "spawned";
-                        PrintedPart.GetComponent<RailCart>().targetID = PlayerPrefs.GetString(ObjectName + PartNumber + "targetID");
+                        PrintedPart.GetComponent<RailCart>().targetID = FileBasedPrefs.GetString(ObjectName + PartNumber + "targetID");
                     }
                     if (ObjectName == WorldName + "UniversalConduit")
                     {
                         GameObject PrintedPart = Instantiate(UniversalConduit, ObjectPrintingLocation, ObjectPrintingRotation);
-                        PrintedPart.GetComponent<UniversalConduit>().inputID = PlayerPrefs.GetString(ObjectName + PartNumber + "inputID");
-                        PrintedPart.GetComponent<UniversalConduit>().outputID = PlayerPrefs.GetString(ObjectName + PartNumber + "outputID");
-                        PrintedPart.GetComponent<UniversalConduit>().type = PlayerPrefs.GetString(ObjectName + PartNumber + "type");
-                        PrintedPart.GetComponent<UniversalConduit>().speed = PlayerPrefs.GetInt(ObjectName + PartNumber + "speed");
-                        PrintedPart.GetComponent<UniversalConduit>().range = PlayerPrefs.GetInt(ObjectName + PartNumber + "range");
-                        PrintedPart.GetComponent<UniversalConduit>().amount = PlayerPrefs.GetFloat(ObjectName + PartNumber + "amount");
+                        PrintedPart.GetComponent<UniversalConduit>().inputID = FileBasedPrefs.GetString(ObjectName + PartNumber + "inputID");
+                        PrintedPart.GetComponent<UniversalConduit>().outputID = FileBasedPrefs.GetString(ObjectName + PartNumber + "outputID");
+                        PrintedPart.GetComponent<UniversalConduit>().type = FileBasedPrefs.GetString(ObjectName + PartNumber + "type");
+                        PrintedPart.GetComponent<UniversalConduit>().speed = FileBasedPrefs.GetInt(ObjectName + PartNumber + "speed");
+                        PrintedPart.GetComponent<UniversalConduit>().range = FileBasedPrefs.GetInt(ObjectName + PartNumber + "range");
+                        PrintedPart.GetComponent<UniversalConduit>().amount = FileBasedPrefs.GetFloat(ObjectName + PartNumber + "amount");
                         PrintedPart.GetComponent<UniversalConduit>().creationMethod = "spawned";
-                        PrintedPart.GetComponent<PhysicsHandler>().falling = PlayerPrefsX.GetBool(ObjectName + PartNumber + "falling");
-                        PrintedPart.GetComponent<PhysicsHandler>().fallingStack = PlayerPrefsX.GetBool(ObjectName + PartNumber + "fallingStack");
+                        PrintedPart.GetComponent<PhysicsHandler>().falling = FileBasedPrefs.GetBool(ObjectName + PartNumber + "falling");
+                        PrintedPart.GetComponent<PhysicsHandler>().fallingStack = FileBasedPrefs.GetBool(ObjectName + PartNumber + "fallingStack");
                         PrintedPart.GetComponent<PhysicsHandler>().creationMethod = "spawned";
                     }
                     if (ObjectName == WorldName + "Retriever")
                     {
                         GameObject PrintedPart = Instantiate(Retriever, ObjectPrintingLocation, ObjectPrintingRotation);
-                        PrintedPart.GetComponent<Retriever>().inputID = PlayerPrefs.GetString(ObjectName + PartNumber + "inputID");
-                        PrintedPart.GetComponent<Retriever>().outputID = PlayerPrefs.GetString(ObjectName + PartNumber + "outputID");
-                        PrintedPart.GetComponent<Retriever>().speed = PlayerPrefs.GetInt(ObjectName + PartNumber + "speed");
-                        PrintedPart.GetComponent<Retriever>().amount = PlayerPrefs.GetFloat(ObjectName + PartNumber + "amount");
+                        PrintedPart.GetComponent<Retriever>().inputID = FileBasedPrefs.GetString(ObjectName + PartNumber + "inputID");
+                        PrintedPart.GetComponent<Retriever>().outputID = FileBasedPrefs.GetString(ObjectName + PartNumber + "outputID");
+                        PrintedPart.GetComponent<Retriever>().speed = FileBasedPrefs.GetInt(ObjectName + PartNumber + "speed");
+                        PrintedPart.GetComponent<Retriever>().amount = FileBasedPrefs.GetFloat(ObjectName + PartNumber + "amount");
                         PrintedPart.GetComponent<Retriever>().creationMethod = "spawned";
-                        PrintedPart.GetComponent<PhysicsHandler>().falling = PlayerPrefsX.GetBool(ObjectName + PartNumber + "falling");
-                        PrintedPart.GetComponent<PhysicsHandler>().fallingStack = PlayerPrefsX.GetBool(ObjectName + PartNumber + "fallingStack");
+                        PrintedPart.GetComponent<PhysicsHandler>().falling = FileBasedPrefs.GetBool(ObjectName + PartNumber + "falling");
+                        PrintedPart.GetComponent<PhysicsHandler>().fallingStack = FileBasedPrefs.GetBool(ObjectName + PartNumber + "fallingStack");
                         PrintedPart.GetComponent<PhysicsHandler>().creationMethod = "spawned";
-                        //Debug.Log("Spawning " + ObjectName + " with input ID of " + PlayerPrefs.GetString(ObjectName + PartNumber + "inputID"));
                     }
                     if (ObjectName == WorldName + "AutoCrafter")
                     {
                         GameObject PrintedPart = Instantiate(AutoCrafter, ObjectPrintingLocation, ObjectPrintingRotation);
-                        PrintedPart.GetComponent<AutoCrafter>().inputID = PlayerPrefs.GetString(ObjectName + PartNumber + "inputID");
-                        PrintedPart.GetComponent<AutoCrafter>().speed = PlayerPrefs.GetInt(ObjectName + PartNumber + "speed");
+                        PrintedPart.GetComponent<AutoCrafter>().inputID = FileBasedPrefs.GetString(ObjectName + PartNumber + "inputID");
+                        PrintedPart.GetComponent<AutoCrafter>().speed = FileBasedPrefs.GetInt(ObjectName + PartNumber + "speed");
                         PrintedPart.GetComponent<AutoCrafter>().creationMethod = "spawned";
-                        PrintedPart.GetComponent<PhysicsHandler>().falling = PlayerPrefsX.GetBool(ObjectName + PartNumber + "falling");
-                        PrintedPart.GetComponent<PhysicsHandler>().fallingStack = PlayerPrefsX.GetBool(ObjectName + PartNumber + "fallingStack");
+                        PrintedPart.GetComponent<PhysicsHandler>().falling = FileBasedPrefs.GetBool(ObjectName + PartNumber + "falling");
+                        PrintedPart.GetComponent<PhysicsHandler>().fallingStack = FileBasedPrefs.GetBool(ObjectName + PartNumber + "fallingStack");
                         PrintedPart.GetComponent<PhysicsHandler>().creationMethod = "spawned";
                     }
                     if (ObjectName == WorldName + "Smelter")
                     {
                         GameObject PrintedPart = Instantiate(Smelter, ObjectPrintingLocation, ObjectPrintingRotation);
-                        PrintedPart.GetComponent<Smelter>().inputID = PlayerPrefs.GetString(ObjectName + PartNumber + "inputID");
-                        PrintedPart.GetComponent<Smelter>().outputID = PlayerPrefs.GetString(ObjectName + PartNumber + "outputID");
-                        PrintedPart.GetComponent<Smelter>().inputType = PlayerPrefs.GetString(ObjectName + PartNumber + "inputType");
-                        PrintedPart.GetComponent<Smelter>().outputType = PlayerPrefs.GetString(ObjectName + PartNumber + "outputType");
-                        PrintedPart.GetComponent<Smelter>().speed = PlayerPrefs.GetInt(ObjectName + PartNumber + "speed");
-                        PrintedPart.GetComponent<Smelter>().amount = PlayerPrefs.GetFloat(ObjectName + PartNumber + "amount");
+                        PrintedPart.GetComponent<Smelter>().inputID = FileBasedPrefs.GetString(ObjectName + PartNumber + "inputID");
+                        PrintedPart.GetComponent<Smelter>().outputID = FileBasedPrefs.GetString(ObjectName + PartNumber + "outputID");
+                        PrintedPart.GetComponent<Smelter>().inputType = FileBasedPrefs.GetString(ObjectName + PartNumber + "inputType");
+                        PrintedPart.GetComponent<Smelter>().outputType = FileBasedPrefs.GetString(ObjectName + PartNumber + "outputType");
+                        PrintedPart.GetComponent<Smelter>().speed = FileBasedPrefs.GetInt(ObjectName + PartNumber + "speed");
+                        PrintedPart.GetComponent<Smelter>().amount = FileBasedPrefs.GetFloat(ObjectName + PartNumber + "amount");
                         PrintedPart.GetComponent<Smelter>().creationMethod = "spawned";
-                        PrintedPart.GetComponent<PhysicsHandler>().falling = PlayerPrefsX.GetBool(ObjectName + PartNumber + "falling");
-                        PrintedPart.GetComponent<PhysicsHandler>().fallingStack = PlayerPrefsX.GetBool(ObjectName + PartNumber + "fallingStack");
+                        PrintedPart.GetComponent<PhysicsHandler>().falling = FileBasedPrefs.GetBool(ObjectName + PartNumber + "falling");
+                        PrintedPart.GetComponent<PhysicsHandler>().fallingStack = FileBasedPrefs.GetBool(ObjectName + PartNumber + "fallingStack");
                         PrintedPart.GetComponent<PhysicsHandler>().creationMethod = "spawned";
                     }
                     if (ObjectName == WorldName + "HeatExchanger")
                     {
                         GameObject PrintedPart = Instantiate(HeatExchanger, ObjectPrintingLocation, ObjectPrintingRotation);
-                        PrintedPart.GetComponent<HeatExchanger>().inputID = PlayerPrefs.GetString(ObjectName + PartNumber + "inputID");
-                        PrintedPart.GetComponent<HeatExchanger>().outputID = PlayerPrefs.GetString(ObjectName + PartNumber + "outputID");
-                        PrintedPart.GetComponent<HeatExchanger>().speed = PlayerPrefs.GetInt(ObjectName + PartNumber + "speed");
-                        PrintedPart.GetComponent<HeatExchanger>().amount = PlayerPrefs.GetFloat(ObjectName + PartNumber + "amount");
-                        PrintedPart.GetComponent<HeatExchanger>().inputType = PlayerPrefs.GetString(ObjectName + PartNumber + "inputType");
+                        PrintedPart.GetComponent<HeatExchanger>().inputID = FileBasedPrefs.GetString(ObjectName + PartNumber + "inputID");
+                        PrintedPart.GetComponent<HeatExchanger>().outputID = FileBasedPrefs.GetString(ObjectName + PartNumber + "outputID");
+                        PrintedPart.GetComponent<HeatExchanger>().speed = FileBasedPrefs.GetInt(ObjectName + PartNumber + "speed");
+                        PrintedPart.GetComponent<HeatExchanger>().amount = FileBasedPrefs.GetFloat(ObjectName + PartNumber + "amount");
+                        PrintedPart.GetComponent<HeatExchanger>().inputType = FileBasedPrefs.GetString(ObjectName + PartNumber + "inputType");
                         PrintedPart.GetComponent<HeatExchanger>().creationMethod = "spawned";
-                        PrintedPart.GetComponent<PhysicsHandler>().falling = PlayerPrefsX.GetBool(ObjectName + PartNumber + "falling");
-                        PrintedPart.GetComponent<PhysicsHandler>().fallingStack = PlayerPrefsX.GetBool(ObjectName + PartNumber + "fallingStack");
+                        PrintedPart.GetComponent<PhysicsHandler>().falling = FileBasedPrefs.GetBool(ObjectName + PartNumber + "falling");
+                        PrintedPart.GetComponent<PhysicsHandler>().fallingStack = FileBasedPrefs.GetBool(ObjectName + PartNumber + "fallingStack");
                         PrintedPart.GetComponent<PhysicsHandler>().creationMethod = "spawned";
                     }
                     if (ObjectName == WorldName + "SolarPanel")
                     {
                         GameObject PrintedPart = Instantiate(SolarPanel, ObjectPrintingLocation, ObjectPrintingRotation);
-                        PrintedPart.GetComponent<PowerSource>().outputID = PlayerPrefs.GetString(ObjectName + PartNumber + "outputID");
+                        PrintedPart.GetComponent<PowerSource>().outputID = FileBasedPrefs.GetString(ObjectName + PartNumber + "outputID");
                         PrintedPart.GetComponent<PowerSource>().creationMethod = "spawned";
-                        PrintedPart.GetComponent<PhysicsHandler>().falling = PlayerPrefsX.GetBool(ObjectName + PartNumber + "falling");
-                        PrintedPart.GetComponent<PhysicsHandler>().fallingStack = PlayerPrefsX.GetBool(ObjectName + PartNumber + "fallingStack");
+                        PrintedPart.GetComponent<PhysicsHandler>().falling = FileBasedPrefs.GetBool(ObjectName + PartNumber + "falling");
+                        PrintedPart.GetComponent<PhysicsHandler>().fallingStack = FileBasedPrefs.GetBool(ObjectName + PartNumber + "fallingStack");
                         PrintedPart.GetComponent<PhysicsHandler>().creationMethod = "spawned";
                     }
                     if (ObjectName == WorldName + "Generator")
                     {
                         GameObject PrintedPart = Instantiate(Generator, ObjectPrintingLocation, ObjectPrintingRotation);
-                        PrintedPart.GetComponent<PowerSource>().outputID = PlayerPrefs.GetString(ObjectName + PartNumber + "outputID");
+                        PrintedPart.GetComponent<PowerSource>().outputID = FileBasedPrefs.GetString(ObjectName + PartNumber + "outputID");
                         PrintedPart.GetComponent<PowerSource>().creationMethod = "spawned";
-                        PrintedPart.GetComponent<PowerSource>().fuelType = PlayerPrefs.GetString(ObjectName + PartNumber + "fuelType");
-                        PrintedPart.GetComponent<PowerSource>().fuelAmount = PlayerPrefs.GetInt(ObjectName + PartNumber + "fuelAmount");
-                        PrintedPart.GetComponent<PhysicsHandler>().falling = PlayerPrefsX.GetBool(ObjectName + PartNumber + "falling");
-                        PrintedPart.GetComponent<PhysicsHandler>().fallingStack = PlayerPrefsX.GetBool(ObjectName + PartNumber + "fallingStack");
+                        PrintedPart.GetComponent<PowerSource>().fuelType = FileBasedPrefs.GetString(ObjectName + PartNumber + "fuelType");
+                        PrintedPart.GetComponent<PowerSource>().fuelAmount = FileBasedPrefs.GetInt(ObjectName + PartNumber + "fuelAmount");
+                        PrintedPart.GetComponent<PhysicsHandler>().falling = FileBasedPrefs.GetBool(ObjectName + PartNumber + "falling");
+                        PrintedPart.GetComponent<PhysicsHandler>().fallingStack = FileBasedPrefs.GetBool(ObjectName + PartNumber + "fallingStack");
                         PrintedPart.GetComponent<PhysicsHandler>().creationMethod = "spawned";
                     }
                     if (ObjectName == WorldName + "NuclearReactor")
                     {
                         GameObject PrintedPart = Instantiate(NuclearReactor, ObjectPrintingLocation, ObjectPrintingRotation);
                         PrintedPart.GetComponent<NuclearReactor>().creationMethod = "spawned";
-                        PrintedPart.GetComponent<PhysicsHandler>().falling = PlayerPrefsX.GetBool(ObjectName + PartNumber + "falling");
-                        PrintedPart.GetComponent<PhysicsHandler>().fallingStack = PlayerPrefsX.GetBool(ObjectName + PartNumber + "fallingStack");
+                        PrintedPart.GetComponent<PhysicsHandler>().falling = FileBasedPrefs.GetBool(ObjectName + PartNumber + "falling");
+                        PrintedPart.GetComponent<PhysicsHandler>().fallingStack = FileBasedPrefs.GetBool(ObjectName + PartNumber + "fallingStack");
                         PrintedPart.GetComponent<PhysicsHandler>().creationMethod = "spawned";
                     }
                     if (ObjectName == WorldName + "ReactorTurbine")
                     {
                         GameObject PrintedPart = Instantiate(ReactorTurbine, ObjectPrintingLocation, ObjectPrintingRotation);
-                        PrintedPart.GetComponent<PowerSource>().outputID = PlayerPrefs.GetString(ObjectName + PartNumber + "outputID");
+                        PrintedPart.GetComponent<PowerSource>().outputID = FileBasedPrefs.GetString(ObjectName + PartNumber + "outputID");
                         PrintedPart.GetComponent<PowerSource>().creationMethod = "spawned";
-                        PrintedPart.GetComponent<PhysicsHandler>().falling = PlayerPrefsX.GetBool(ObjectName + PartNumber + "falling");
-                        PrintedPart.GetComponent<PhysicsHandler>().fallingStack = PlayerPrefsX.GetBool(ObjectName + PartNumber + "fallingStack");
+                        PrintedPart.GetComponent<PhysicsHandler>().falling = FileBasedPrefs.GetBool(ObjectName + PartNumber + "falling");
+                        PrintedPart.GetComponent<PhysicsHandler>().fallingStack = FileBasedPrefs.GetBool(ObjectName + PartNumber + "fallingStack");
                         PrintedPart.GetComponent<PhysicsHandler>().creationMethod = "spawned";
                     }
                     if (ObjectName == WorldName + "PowerConduit")
                     {
                         GameObject PrintedPart = Instantiate(PowerConduit, ObjectPrintingLocation, ObjectPrintingRotation);
-                        PrintedPart.GetComponent<PowerConduit>().inputID = PlayerPrefs.GetString(ObjectName + PartNumber + "inputID");
-                        PrintedPart.GetComponent<PowerConduit>().outputID1 = PlayerPrefs.GetString(ObjectName + PartNumber + "outputID1");
-                        PrintedPart.GetComponent<PowerConduit>().outputID2 = PlayerPrefs.GetString(ObjectName + PartNumber + "outputID2");
-                        PrintedPart.GetComponent<PowerConduit>().dualOutput = PlayerPrefsX.GetBool(ObjectName + PartNumber + "dualOutput");
-                        PrintedPart.GetComponent<PowerConduit>().range = PlayerPrefs.GetInt(ObjectName + PartNumber + "range");
-                        PrintedPart.GetComponent<PowerConduit>().powerAmount = PlayerPrefs.GetInt(ObjectName + PartNumber + "powerAmount");
+                        PrintedPart.GetComponent<PowerConduit>().inputID = FileBasedPrefs.GetString(ObjectName + PartNumber + "inputID");
+                        PrintedPart.GetComponent<PowerConduit>().outputID1 = FileBasedPrefs.GetString(ObjectName + PartNumber + "outputID1");
+                        PrintedPart.GetComponent<PowerConduit>().outputID2 = FileBasedPrefs.GetString(ObjectName + PartNumber + "outputID2");
+                        PrintedPart.GetComponent<PowerConduit>().dualOutput = FileBasedPrefs.GetBool(ObjectName + PartNumber + "dualOutput");
+                        PrintedPart.GetComponent<PowerConduit>().range = FileBasedPrefs.GetInt(ObjectName + PartNumber + "range");
+                        PrintedPart.GetComponent<PowerConduit>().powerAmount = FileBasedPrefs.GetInt(ObjectName + PartNumber + "powerAmount");
                         PrintedPart.GetComponent<PowerConduit>().creationMethod = "spawned";
-                        PrintedPart.GetComponent<PhysicsHandler>().falling = PlayerPrefsX.GetBool(ObjectName + PartNumber + "falling");
-                        PrintedPart.GetComponent<PhysicsHandler>().fallingStack = PlayerPrefsX.GetBool(ObjectName + PartNumber + "fallingStack");
+                        PrintedPart.GetComponent<PhysicsHandler>().falling = FileBasedPrefs.GetBool(ObjectName + PartNumber + "falling");
+                        PrintedPart.GetComponent<PhysicsHandler>().fallingStack = FileBasedPrefs.GetBool(ObjectName + PartNumber + "fallingStack");
                         PrintedPart.GetComponent<PhysicsHandler>().creationMethod = "spawned";
                     }
                     if (ObjectName == WorldName + "Auger")
                     {
                         GameObject PrintedPart = Instantiate(Auger, ObjectPrintingLocation, ObjectPrintingRotation);
-                        PrintedPart.GetComponent<Auger>().speed = PlayerPrefs.GetInt(ObjectName + PartNumber + "speed");
-                        PrintedPart.GetComponent<Auger>().amount = PlayerPrefs.GetFloat(ObjectName + PartNumber + "amount");
+                        PrintedPart.GetComponent<Auger>().speed = FileBasedPrefs.GetInt(ObjectName + PartNumber + "speed");
+                        PrintedPart.GetComponent<Auger>().amount = FileBasedPrefs.GetFloat(ObjectName + PartNumber + "amount");
                         PrintedPart.GetComponent<Auger>().creationMethod = "spawned";
-                        PrintedPart.GetComponent<PhysicsHandler>().falling = PlayerPrefsX.GetBool(ObjectName + PartNumber + "falling");
-                        PrintedPart.GetComponent<PhysicsHandler>().fallingStack = PlayerPrefsX.GetBool(ObjectName + PartNumber + "fallingStack");
+                        PrintedPart.GetComponent<PhysicsHandler>().falling = FileBasedPrefs.GetBool(ObjectName + PartNumber + "falling");
+                        PrintedPart.GetComponent<PhysicsHandler>().fallingStack = FileBasedPrefs.GetBool(ObjectName + PartNumber + "fallingStack");
                         PrintedPart.GetComponent<PhysicsHandler>().creationMethod = "spawned";
                     }
                     if (ObjectName == WorldName + "ElectricLight")
                     {
                         GameObject PrintedPart = Instantiate(ElectricLight, ObjectPrintingLocation, ObjectPrintingRotation);
                         PrintedPart.GetComponent<ElectricLight>().creationMethod = "spawned";
-                        PrintedPart.GetComponent<PhysicsHandler>().falling = PlayerPrefsX.GetBool(ObjectName + PartNumber + "falling");
-                        PrintedPart.GetComponent<PhysicsHandler>().fallingStack = PlayerPrefsX.GetBool(ObjectName + PartNumber + "fallingStack");
+                        PrintedPart.GetComponent<PhysicsHandler>().falling = FileBasedPrefs.GetBool(ObjectName + PartNumber + "falling");
+                        PrintedPart.GetComponent<PhysicsHandler>().fallingStack = FileBasedPrefs.GetBool(ObjectName + PartNumber + "fallingStack");
                         PrintedPart.GetComponent<PhysicsHandler>().creationMethod = "spawned";
                     }
                     if (ObjectName == WorldName + "Turret")
                     {
                         GameObject PrintedPart = Instantiate(Turret, ObjectPrintingLocation, ObjectPrintingRotation);
-                        PrintedPart.GetComponent<Turret>().speed = PlayerPrefs.GetInt(ObjectName + PartNumber + "speed");
+                        PrintedPart.GetComponent<Turret>().speed = FileBasedPrefs.GetInt(ObjectName + PartNumber + "speed");
                         PrintedPart.GetComponent<Turret>().creationMethod = "spawned";
-                        PrintedPart.GetComponent<PhysicsHandler>().falling = PlayerPrefsX.GetBool(ObjectName + PartNumber + "falling");
-                        PrintedPart.GetComponent<PhysicsHandler>().fallingStack = PlayerPrefsX.GetBool(ObjectName + PartNumber + "fallingStack");
+                        PrintedPart.GetComponent<PhysicsHandler>().falling = FileBasedPrefs.GetBool(ObjectName + PartNumber + "falling");
+                        PrintedPart.GetComponent<PhysicsHandler>().fallingStack = FileBasedPrefs.GetBool(ObjectName + PartNumber + "fallingStack");
                         PrintedPart.GetComponent<PhysicsHandler>().creationMethod = "spawned";
                     }
                     if (ObjectName == WorldName + "AlloySmelter")
                     {
                         GameObject PrintedPart = Instantiate(AlloySmelter, ObjectPrintingLocation, ObjectPrintingRotation);
-                        PrintedPart.GetComponent<AlloySmelter>().inputID1 = PlayerPrefs.GetString(ObjectName + PartNumber + "inputID1");
-                        PrintedPart.GetComponent<AlloySmelter>().inputID2 = PlayerPrefs.GetString(ObjectName + PartNumber + "inputID2");
-                        PrintedPart.GetComponent<AlloySmelter>().inputType1 = PlayerPrefs.GetString(ObjectName + PartNumber + "inputType1");
-                        PrintedPart.GetComponent<AlloySmelter>().inputType2 = PlayerPrefs.GetString(ObjectName + PartNumber + "inputType2");
-                        PrintedPart.GetComponent<AlloySmelter>().outputType = PlayerPrefs.GetString(ObjectName + PartNumber + "outputType");
-                        PrintedPart.GetComponent<AlloySmelter>().outputID = PlayerPrefs.GetString(ObjectName + PartNumber + "outputID");
-                        PrintedPart.GetComponent<AlloySmelter>().speed = PlayerPrefs.GetInt(ObjectName + PartNumber + "speed");
-                        PrintedPart.GetComponent<AlloySmelter>().amount = PlayerPrefs.GetFloat(ObjectName + PartNumber + "amount");
-                        PrintedPart.GetComponent<AlloySmelter>().amount2 = PlayerPrefs.GetFloat(ObjectName + PartNumber + "amount2");
-                        PrintedPart.GetComponent<AlloySmelter>().outputAmount = PlayerPrefs.GetFloat(ObjectName + PartNumber + "outputAmount");
+                        PrintedPart.GetComponent<AlloySmelter>().inputID1 = FileBasedPrefs.GetString(ObjectName + PartNumber + "inputID1");
+                        PrintedPart.GetComponent<AlloySmelter>().inputID2 = FileBasedPrefs.GetString(ObjectName + PartNumber + "inputID2");
+                        PrintedPart.GetComponent<AlloySmelter>().inputType1 = FileBasedPrefs.GetString(ObjectName + PartNumber + "inputType1");
+                        PrintedPart.GetComponent<AlloySmelter>().inputType2 = FileBasedPrefs.GetString(ObjectName + PartNumber + "inputType2");
+                        PrintedPart.GetComponent<AlloySmelter>().outputType = FileBasedPrefs.GetString(ObjectName + PartNumber + "outputType");
+                        PrintedPart.GetComponent<AlloySmelter>().outputID = FileBasedPrefs.GetString(ObjectName + PartNumber + "outputID");
+                        PrintedPart.GetComponent<AlloySmelter>().speed = FileBasedPrefs.GetInt(ObjectName + PartNumber + "speed");
+                        PrintedPart.GetComponent<AlloySmelter>().amount = FileBasedPrefs.GetFloat(ObjectName + PartNumber + "amount");
+                        PrintedPart.GetComponent<AlloySmelter>().amount2 = FileBasedPrefs.GetFloat(ObjectName + PartNumber + "amount2");
+                        PrintedPart.GetComponent<AlloySmelter>().outputAmount = FileBasedPrefs.GetFloat(ObjectName + PartNumber + "outputAmount");
                         PrintedPart.GetComponent<AlloySmelter>().creationMethod = "spawned";
-                        PrintedPart.GetComponent<PhysicsHandler>().falling = PlayerPrefsX.GetBool(ObjectName + PartNumber + "falling");
-                        PrintedPart.GetComponent<PhysicsHandler>().fallingStack = PlayerPrefsX.GetBool(ObjectName + PartNumber + "fallingStack");
+                        PrintedPart.GetComponent<PhysicsHandler>().falling = FileBasedPrefs.GetBool(ObjectName + PartNumber + "falling");
+                        PrintedPart.GetComponent<PhysicsHandler>().fallingStack = FileBasedPrefs.GetBool(ObjectName + PartNumber + "fallingStack");
                         PrintedPart.GetComponent<PhysicsHandler>().creationMethod = "spawned";
                     }
                     if (ObjectName == WorldName + "Press")
                     {
                         GameObject PrintedPart = Instantiate(Press, ObjectPrintingLocation, ObjectPrintingRotation);
-                        PrintedPart.GetComponent<Press>().inputID = PlayerPrefs.GetString(ObjectName + PartNumber + "inputID");
-                        PrintedPart.GetComponent<Press>().outputID = PlayerPrefs.GetString(ObjectName + PartNumber + "outputID");
-                        PrintedPart.GetComponent<Press>().inputType = PlayerPrefs.GetString(ObjectName + PartNumber + "inputType");
-                        PrintedPart.GetComponent<Press>().outputType = PlayerPrefs.GetString(ObjectName + PartNumber + "outputType");
-                        PrintedPart.GetComponent<Press>().speed = PlayerPrefs.GetInt(ObjectName + PartNumber + "speed");
-                        PrintedPart.GetComponent<Press>().amount = PlayerPrefs.GetFloat(ObjectName + PartNumber + "amount");
+                        PrintedPart.GetComponent<Press>().inputID = FileBasedPrefs.GetString(ObjectName + PartNumber + "inputID");
+                        PrintedPart.GetComponent<Press>().outputID = FileBasedPrefs.GetString(ObjectName + PartNumber + "outputID");
+                        PrintedPart.GetComponent<Press>().inputType = FileBasedPrefs.GetString(ObjectName + PartNumber + "inputType");
+                        PrintedPart.GetComponent<Press>().outputType = FileBasedPrefs.GetString(ObjectName + PartNumber + "outputType");
+                        PrintedPart.GetComponent<Press>().speed = FileBasedPrefs.GetInt(ObjectName + PartNumber + "speed");
+                        PrintedPart.GetComponent<Press>().amount = FileBasedPrefs.GetFloat(ObjectName + PartNumber + "amount");
                         PrintedPart.GetComponent<Press>().creationMethod = "spawned";
-                        PrintedPart.GetComponent<PhysicsHandler>().falling = PlayerPrefsX.GetBool(ObjectName + PartNumber + "falling");
-                        PrintedPart.GetComponent<PhysicsHandler>().fallingStack = PlayerPrefsX.GetBool(ObjectName + PartNumber + "fallingStack");
+                        PrintedPart.GetComponent<PhysicsHandler>().falling = FileBasedPrefs.GetBool(ObjectName + PartNumber + "falling");
+                        PrintedPart.GetComponent<PhysicsHandler>().fallingStack = FileBasedPrefs.GetBool(ObjectName + PartNumber + "fallingStack");
                         PrintedPart.GetComponent<PhysicsHandler>().creationMethod = "spawned";
                     }
                     if (ObjectName == WorldName + "Extruder")
                     {
                         GameObject PrintedPart = Instantiate(Extruder, ObjectPrintingLocation, ObjectPrintingRotation);
-                        PrintedPart.GetComponent<Extruder>().inputID = PlayerPrefs.GetString(ObjectName + PartNumber + "inputID");
-                        PrintedPart.GetComponent<Extruder>().outputID = PlayerPrefs.GetString(ObjectName + PartNumber + "outputID");
-                        PrintedPart.GetComponent<Extruder>().inputType = PlayerPrefs.GetString(ObjectName + PartNumber + "inputType");
-                        PrintedPart.GetComponent<Extruder>().outputType = PlayerPrefs.GetString(ObjectName + PartNumber + "outputType");
-                        PrintedPart.GetComponent<Extruder>().speed = PlayerPrefs.GetInt(ObjectName + PartNumber + "speed");
-                        PrintedPart.GetComponent<Extruder>().amount = PlayerPrefs.GetFloat(ObjectName + PartNumber + "amount");
+                        PrintedPart.GetComponent<Extruder>().inputID = FileBasedPrefs.GetString(ObjectName + PartNumber + "inputID");
+                        PrintedPart.GetComponent<Extruder>().outputID = FileBasedPrefs.GetString(ObjectName + PartNumber + "outputID");
+                        PrintedPart.GetComponent<Extruder>().inputType = FileBasedPrefs.GetString(ObjectName + PartNumber + "inputType");
+                        PrintedPart.GetComponent<Extruder>().outputType = FileBasedPrefs.GetString(ObjectName + PartNumber + "outputType");
+                        PrintedPart.GetComponent<Extruder>().speed = FileBasedPrefs.GetInt(ObjectName + PartNumber + "speed");
+                        PrintedPart.GetComponent<Extruder>().amount = FileBasedPrefs.GetFloat(ObjectName + PartNumber + "amount");
                         PrintedPart.GetComponent<Extruder>().creationMethod = "spawned";
-                        PrintedPart.GetComponent<PhysicsHandler>().falling = PlayerPrefsX.GetBool(ObjectName + PartNumber + "falling");
-                        PrintedPart.GetComponent<PhysicsHandler>().fallingStack = PlayerPrefsX.GetBool(ObjectName + PartNumber + "fallingStack");
+                        PrintedPart.GetComponent<PhysicsHandler>().falling = FileBasedPrefs.GetBool(ObjectName + PartNumber + "falling");
+                        PrintedPart.GetComponent<PhysicsHandler>().fallingStack = FileBasedPrefs.GetBool(ObjectName + PartNumber + "fallingStack");
                         PrintedPart.GetComponent<PhysicsHandler>().creationMethod = "spawned";
                     }
                     if (ObjectName == WorldName + "GearCutter")
                     {
                         GameObject PrintedPart = Instantiate(GearCutter, ObjectPrintingLocation, ObjectPrintingRotation);
-                        PrintedPart.GetComponent<GearCutter>().inputID = PlayerPrefs.GetString(ObjectName + PartNumber + "inputID");
-                        PrintedPart.GetComponent<GearCutter>().outputID = PlayerPrefs.GetString(ObjectName + PartNumber + "outputID");
-                        PrintedPart.GetComponent<GearCutter>().inputType = PlayerPrefs.GetString(ObjectName + PartNumber + "inputType");
-                        PrintedPart.GetComponent<GearCutter>().outputType = PlayerPrefs.GetString(ObjectName + PartNumber + "outputType");
-                        PrintedPart.GetComponent<GearCutter>().speed = PlayerPrefs.GetInt(ObjectName + PartNumber + "speed");
-                        PrintedPart.GetComponent<GearCutter>().amount = PlayerPrefs.GetFloat(ObjectName + PartNumber + "amount");
+                        PrintedPart.GetComponent<GearCutter>().inputID = FileBasedPrefs.GetString(ObjectName + PartNumber + "inputID");
+                        PrintedPart.GetComponent<GearCutter>().outputID = FileBasedPrefs.GetString(ObjectName + PartNumber + "outputID");
+                        PrintedPart.GetComponent<GearCutter>().inputType = FileBasedPrefs.GetString(ObjectName + PartNumber + "inputType");
+                        PrintedPart.GetComponent<GearCutter>().outputType = FileBasedPrefs.GetString(ObjectName + PartNumber + "outputType");
+                        PrintedPart.GetComponent<GearCutter>().speed = FileBasedPrefs.GetInt(ObjectName + PartNumber + "speed");
+                        PrintedPart.GetComponent<GearCutter>().amount = FileBasedPrefs.GetFloat(ObjectName + PartNumber + "amount");
                         PrintedPart.GetComponent<GearCutter>().creationMethod = "spawned";
-                        PrintedPart.GetComponent<PhysicsHandler>().falling = PlayerPrefsX.GetBool(ObjectName + PartNumber + "falling");
-                        PrintedPart.GetComponent<PhysicsHandler>().fallingStack = PlayerPrefsX.GetBool(ObjectName + PartNumber + "fallingStack");
+                        PrintedPart.GetComponent<PhysicsHandler>().falling = FileBasedPrefs.GetBool(ObjectName + PartNumber + "falling");
+                        PrintedPart.GetComponent<PhysicsHandler>().fallingStack = FileBasedPrefs.GetBool(ObjectName + PartNumber + "fallingStack");
                         PrintedPart.GetComponent<PhysicsHandler>().creationMethod = "spawned";
                     }
                     if (ObjectName == WorldName + "UniversalExtractor")
                     {
                         GameObject PrintedPart = Instantiate(UniversalExtractor, ObjectPrintingLocation, ObjectPrintingRotation);
-                        PrintedPart.GetComponent<UniversalExtractor>().speed = PlayerPrefs.GetInt(ObjectName + PartNumber + "speed");
-                        PrintedPart.GetComponent<UniversalExtractor>().amount = PlayerPrefs.GetFloat(ObjectName + PartNumber + "amount");
-                        PrintedPart.GetComponent<UniversalExtractor>().type = PlayerPrefs.GetString(ObjectName + PartNumber + "type");
+                        PrintedPart.GetComponent<UniversalExtractor>().speed = FileBasedPrefs.GetInt(ObjectName + PartNumber + "speed");
+                        PrintedPart.GetComponent<UniversalExtractor>().amount = FileBasedPrefs.GetFloat(ObjectName + PartNumber + "amount");
+                        PrintedPart.GetComponent<UniversalExtractor>().type = FileBasedPrefs.GetString(ObjectName + PartNumber + "type");
                         PrintedPart.GetComponent<UniversalExtractor>().creationMethod = "spawned";
-                        PrintedPart.GetComponent<PhysicsHandler>().falling = PlayerPrefsX.GetBool(ObjectName + PartNumber + "falling");
-                        PrintedPart.GetComponent<PhysicsHandler>().fallingStack = PlayerPrefsX.GetBool(ObjectName + PartNumber + "fallingStack");
+                        PrintedPart.GetComponent<PhysicsHandler>().falling = FileBasedPrefs.GetBool(ObjectName + PartNumber + "falling");
+                        PrintedPart.GetComponent<PhysicsHandler>().fallingStack = FileBasedPrefs.GetBool(ObjectName + PartNumber + "fallingStack");
                         PrintedPart.GetComponent<PhysicsHandler>().creationMethod = "spawned";
                     }
                     if (ObjectName == WorldName + "StorageContainer")
                     {
                         GameObject PrintedPart = Instantiate(StorageContainer, ObjectPrintingLocation, ObjectPrintingRotation);
-                        PrintedPart.GetComponent<PhysicsHandler>().falling = PlayerPrefsX.GetBool(ObjectName + PartNumber + "falling");
-                        PrintedPart.GetComponent<PhysicsHandler>().fallingStack = PlayerPrefsX.GetBool(ObjectName + PartNumber + "fallingStack");
+                        PrintedPart.GetComponent<PhysicsHandler>().falling = FileBasedPrefs.GetBool(ObjectName + PartNumber + "falling");
+                        PrintedPart.GetComponent<PhysicsHandler>().fallingStack = FileBasedPrefs.GetBool(ObjectName + PartNumber + "fallingStack");
                         PrintedPart.GetComponent<PhysicsHandler>().creationMethod = "spawned";
                     }
                     if (ObjectName == WorldName + "StorageComputer")
                     {
                         GameObject PrintedPart = Instantiate(StorageComputer, ObjectPrintingLocation, ObjectPrintingRotation);
-                        PrintedPart.GetComponent<PhysicsHandler>().falling = PlayerPrefsX.GetBool(ObjectName + PartNumber + "falling");
-                        PrintedPart.GetComponent<PhysicsHandler>().fallingStack = PlayerPrefsX.GetBool(ObjectName + PartNumber + "fallingStack");
+                        PrintedPart.GetComponent<PhysicsHandler>().falling = FileBasedPrefs.GetBool(ObjectName + PartNumber + "falling");
+                        PrintedPart.GetComponent<PhysicsHandler>().fallingStack = FileBasedPrefs.GetBool(ObjectName + PartNumber + "fallingStack");
                         PrintedPart.GetComponent<PhysicsHandler>().creationMethod = "spawned";
                     }
                     if (ObjectName == WorldName + "IronBlock")
                     {
                         GameObject PrintedPart = Instantiate(IronBlock, ObjectPrintingLocation, ObjectPrintingRotation);
                         PrintedPart.GetComponent<IronBlock>().creationMethod = "spawned";
-                        PrintedPart.GetComponent<PhysicsHandler>().falling = PlayerPrefsX.GetBool(ObjectName + PartNumber + "falling");
-                        PrintedPart.GetComponent<PhysicsHandler>().fallingStack = PlayerPrefsX.GetBool(ObjectName + PartNumber + "fallingStack");
+                        PrintedPart.GetComponent<PhysicsHandler>().falling = FileBasedPrefs.GetBool(ObjectName + PartNumber + "falling");
+                        PrintedPart.GetComponent<PhysicsHandler>().fallingStack = FileBasedPrefs.GetBool(ObjectName + PartNumber + "fallingStack");
                         PrintedPart.GetComponent<PhysicsHandler>().creationMethod = "spawned";
                     }
                     if (ObjectName == WorldName + "IronRamp")
                     {
                         GameObject PrintedPart = Instantiate(IronRamp, ObjectPrintingLocation, ObjectPrintingRotation);
                         PrintedPart.GetComponent<IronBlock>().creationMethod = "spawned";
-                        PrintedPart.GetComponent<PhysicsHandler>().falling = PlayerPrefsX.GetBool(ObjectName + PartNumber + "falling");
-                        PrintedPart.GetComponent<PhysicsHandler>().fallingStack = PlayerPrefsX.GetBool(ObjectName + PartNumber + "fallingStack");
+                        PrintedPart.GetComponent<PhysicsHandler>().falling = FileBasedPrefs.GetBool(ObjectName + PartNumber + "falling");
+                        PrintedPart.GetComponent<PhysicsHandler>().fallingStack = FileBasedPrefs.GetBool(ObjectName + PartNumber + "fallingStack");
                         PrintedPart.GetComponent<PhysicsHandler>().creationMethod = "spawned";
                     }
                     if (ObjectName == WorldName + "Steel")
                     {
                         GameObject PrintedPart = Instantiate(Steel, ObjectPrintingLocation, ObjectPrintingRotation);
                         PrintedPart.GetComponent<Steel>().creationMethod = "spawned";
-                        PrintedPart.GetComponent<PhysicsHandler>().falling = PlayerPrefsX.GetBool(ObjectName + PartNumber + "falling");
-                        PrintedPart.GetComponent<PhysicsHandler>().fallingStack = PlayerPrefsX.GetBool(ObjectName + PartNumber + "fallingStack");
+                        PrintedPart.GetComponent<PhysicsHandler>().falling = FileBasedPrefs.GetBool(ObjectName + PartNumber + "falling");
+                        PrintedPart.GetComponent<PhysicsHandler>().fallingStack = FileBasedPrefs.GetBool(ObjectName + PartNumber + "fallingStack");
                         PrintedPart.GetComponent<PhysicsHandler>().creationMethod = "spawned";
                     }
                     if (ObjectName == WorldName + "SteelRamp")
                     {
                         GameObject PrintedPart = Instantiate(SteelRamp, ObjectPrintingLocation, ObjectPrintingRotation);
                         PrintedPart.GetComponent<Steel>().creationMethod = "spawned";
-                        PrintedPart.GetComponent<PhysicsHandler>().falling = PlayerPrefsX.GetBool(ObjectName + PartNumber + "falling");
-                        PrintedPart.GetComponent<PhysicsHandler>().fallingStack = PlayerPrefsX.GetBool(ObjectName + PartNumber + "fallingStack");
+                        PrintedPart.GetComponent<PhysicsHandler>().falling = FileBasedPrefs.GetBool(ObjectName + PartNumber + "falling");
+                        PrintedPart.GetComponent<PhysicsHandler>().fallingStack = FileBasedPrefs.GetBool(ObjectName + PartNumber + "fallingStack");
                         PrintedPart.GetComponent<PhysicsHandler>().creationMethod = "spawned";
                     }
                     if (ObjectName == WorldName + "Brick")
                     {
                         GameObject PrintedPart = Instantiate(Brick, ObjectPrintingLocation, ObjectPrintingRotation);
                         PrintedPart.GetComponent<Brick>().creationMethod = "spawned";
-                        PrintedPart.GetComponent<PhysicsHandler>().falling = PlayerPrefsX.GetBool(ObjectName + PartNumber + "falling");
-                        PrintedPart.GetComponent<PhysicsHandler>().fallingStack = PlayerPrefsX.GetBool(ObjectName + PartNumber + "fallingStack");
+                        PrintedPart.GetComponent<PhysicsHandler>().falling = FileBasedPrefs.GetBool(ObjectName + PartNumber + "falling");
+                        PrintedPart.GetComponent<PhysicsHandler>().fallingStack = FileBasedPrefs.GetBool(ObjectName + PartNumber + "fallingStack");
                         PrintedPart.GetComponent<PhysicsHandler>().creationMethod = "spawned";
                     }
                     if (ObjectName == WorldName + "Glass")
                     {
                         GameObject PrintedPart = Instantiate(Glass, ObjectPrintingLocation, ObjectPrintingRotation);
                         PrintedPart.GetComponent<Glass>().creationMethod = "spawned";
-                        PrintedPart.GetComponent<PhysicsHandler>().falling = PlayerPrefsX.GetBool(ObjectName + PartNumber + "falling");
-                        PrintedPart.GetComponent<PhysicsHandler>().fallingStack = PlayerPrefsX.GetBool(ObjectName + PartNumber + "fallingStack");
+                        PrintedPart.GetComponent<PhysicsHandler>().falling = FileBasedPrefs.GetBool(ObjectName + PartNumber + "falling");
+                        PrintedPart.GetComponent<PhysicsHandler>().fallingStack = FileBasedPrefs.GetBool(ObjectName + PartNumber + "fallingStack");
                         PrintedPart.GetComponent<PhysicsHandler>().creationMethod = "spawned";
                     }
                     ConstructionCount++;
@@ -401,14 +398,13 @@ public class StateManager : MonoBehaviour
                     ConstructionCount++;
                 }
             }
-            while (ConstructionCount <= PlayerPrefs.GetInt(WorldName + "ConstructionTotal"));
-            //Debug.Log("Spawned "+ConstructionCount+" objects.");
+            while (ConstructionCount <= FileBasedPrefs.GetInt(WorldName + "ConstructionTotal"));
         }
         Loaded = true;
-        GetComponent<GameManager>().initGlass = PlayerPrefsX.GetBool(WorldName + "initGlass");
-        GetComponent<GameManager>().initBrick = PlayerPrefsX.GetBool(WorldName + "initBrick");
-        GetComponent<GameManager>().initIron = PlayerPrefsX.GetBool(WorldName + "initIron");
-        GetComponent<GameManager>().initSteel = PlayerPrefsX.GetBool(WorldName + "initSteel");
+        GetComponent<GameManager>().initGlass = FileBasedPrefs.GetBool(WorldName + "initGlass");
+        GetComponent<GameManager>().initBrick = FileBasedPrefs.GetBool(WorldName + "initBrick");
+        GetComponent<GameManager>().initIron = FileBasedPrefs.GetBool(WorldName + "initIron");
+        GetComponent<GameManager>().initSteel = FileBasedPrefs.GetBool(WorldName + "initSteel");
         GameObject.Find("GameManager").GetComponent<GameManager>().CombineBlocks();
     }
 
@@ -417,22 +413,8 @@ public class StateManager : MonoBehaviour
     {
         if (GameObject.Find("Player").GetComponent<MainMenu>().worldSelected == true && worldLoaded == false)
         {
-            //Debug.Log("Loading world: " + WorldName);
             LoadWorld();
             worldLoaded = true;
-        }
-        if (worldLoaded == true)
-        {
-            updateTick += 1 * Time.deltaTime;
-            if (updateTick > 1)
-            {
-                //SAVING WORLD STATE
-                if (saving == false && exiting == false)
-                {
-                    SaveData();
-                }
-                updateTick = 0;
-            }
         }
     }
 
@@ -465,18 +447,18 @@ public class StateManager : MonoBehaviour
                         go.GetComponent<Auger>().address = ConstructionCount;
                         int speed = go.GetComponent<Auger>().speed;
                         float amount = go.GetComponent<Auger>().amount;
-                        PlayerPrefs.SetInt(PartName + PartNumber + "speed", speed);
-                        PlayerPrefs.SetFloat(PartName + PartNumber + "amount", amount);
-                        PlayerPrefsX.SetBool(PartName + PartNumber + "falling", go.GetComponent<PhysicsHandler>().falling);
-                        PlayerPrefsX.SetBool(PartName + PartNumber + "fallingStack", go.GetComponent<PhysicsHandler>().fallingStack);
+                        FileBasedPrefs.SetInt(PartName + PartNumber + "speed", speed);
+                        FileBasedPrefs.SetFloat(PartName + PartNumber + "amount", amount);
+                        FileBasedPrefs.SetBool(PartName + PartNumber + "falling", go.GetComponent<PhysicsHandler>().falling);
+                        FileBasedPrefs.SetBool(PartName + PartNumber + "fallingStack", go.GetComponent<PhysicsHandler>().fallingStack);
                     }
                     if (go.GetComponent<ElectricLight>() != null)
                     {
                         PartName = WorldName + "ElectricLight";
                         go.GetComponent<ElectricLight>().ID = (PartName + PartNumber);
                         go.GetComponent<ElectricLight>().address = ConstructionCount;
-                        PlayerPrefsX.SetBool(PartName + PartNumber + "falling", go.GetComponent<PhysicsHandler>().falling);
-                        PlayerPrefsX.SetBool(PartName + PartNumber + "fallingStack", go.GetComponent<PhysicsHandler>().fallingStack);
+                        FileBasedPrefs.SetBool(PartName + PartNumber + "falling", go.GetComponent<PhysicsHandler>().falling);
+                        FileBasedPrefs.SetBool(PartName + PartNumber + "fallingStack", go.GetComponent<PhysicsHandler>().fallingStack);
                     }
                     if (go.GetComponent<DarkMatterCollector>() != null)
                     {
@@ -485,10 +467,10 @@ public class StateManager : MonoBehaviour
                         go.GetComponent<DarkMatterCollector>().address = ConstructionCount;
                         int speed = go.GetComponent<DarkMatterCollector>().speed;
                         float darkMatterAmount = go.GetComponent<DarkMatterCollector>().darkMatterAmount;
-                        PlayerPrefs.SetInt(PartName + PartNumber + "speed", speed);
-                        PlayerPrefs.SetFloat(PartName + PartNumber + "darkMatterAmount", darkMatterAmount);
-                        PlayerPrefsX.SetBool(PartName + PartNumber + "falling", go.GetComponent<PhysicsHandler>().falling);
-                        PlayerPrefsX.SetBool(PartName + PartNumber + "fallingStack", go.GetComponent<PhysicsHandler>().fallingStack);
+                        FileBasedPrefs.SetInt(PartName + PartNumber + "speed", speed);
+                        FileBasedPrefs.SetFloat(PartName + PartNumber + "darkMatterAmount", darkMatterAmount);
+                        FileBasedPrefs.SetBool(PartName + PartNumber + "falling", go.GetComponent<PhysicsHandler>().falling);
+                        FileBasedPrefs.SetBool(PartName + PartNumber + "fallingStack", go.GetComponent<PhysicsHandler>().fallingStack);
                     }
                     if (go.GetComponent<DarkMatterConduit>() != null)
                     {
@@ -500,14 +482,13 @@ public class StateManager : MonoBehaviour
                         int speed = go.GetComponent<DarkMatterConduit>().speed;
                         float darkMatterAmount = go.GetComponent<DarkMatterConduit>().darkMatterAmount;
                         int range = go.GetComponent<DarkMatterConduit>().range;
-                        PlayerPrefs.SetString(PartName + PartNumber + "inputID", inputID);
-                        PlayerPrefs.SetString(PartName + PartNumber + "outputID", outputID);
-                        PlayerPrefs.SetInt(PartName + PartNumber + "speed", speed);
-                        PlayerPrefs.SetInt(PartName + PartNumber + "range", range);
-                        PlayerPrefs.SetFloat(PartName + PartNumber + "darkMatterAmount", darkMatterAmount);
-                        PlayerPrefsX.SetBool(PartName + PartNumber + "falling", go.GetComponent<PhysicsHandler>().falling);
-                        PlayerPrefsX.SetBool(PartName + PartNumber + "fallingStack", go.GetComponent<PhysicsHandler>().fallingStack);
-                        //Debug.Log("Saving " + PartName + PartNumber + " with outputID of " + outputID);
+                        FileBasedPrefs.SetString(PartName + PartNumber + "inputID", inputID);
+                        FileBasedPrefs.SetString(PartName + PartNumber + "outputID", outputID);
+                        FileBasedPrefs.SetInt(PartName + PartNumber + "speed", speed);
+                        FileBasedPrefs.SetInt(PartName + PartNumber + "range", range);
+                        FileBasedPrefs.SetFloat(PartName + PartNumber + "darkMatterAmount", darkMatterAmount);
+                        FileBasedPrefs.SetBool(PartName + PartNumber + "falling", go.GetComponent<PhysicsHandler>().falling);
+                        FileBasedPrefs.SetBool(PartName + PartNumber + "fallingStack", go.GetComponent<PhysicsHandler>().fallingStack);
                     }
                     if (go.GetComponent<RailCart>() != null)
                     {
@@ -519,8 +500,7 @@ public class StateManager : MonoBehaviour
                         {
                             go.GetComponent<InventoryManager>().SaveData();
                         }
-                        PlayerPrefs.SetString(PartName + PartNumber + "targetID", targetID);
-                        //Debug.Log("Saving " + PartName + PartNumber + " with outputID of " + outputID);
+                        FileBasedPrefs.SetString(PartName + PartNumber + "targetID", targetID);
                     }
                     if (go.GetComponent<RailCartHub>() != null)
                     {
@@ -534,16 +514,15 @@ public class StateManager : MonoBehaviour
                         bool stop = go.GetComponent<RailCartHub>().stop;
                         int circuit = go.GetComponent<RailCartHub>().circuit;
                         float stopTime = go.GetComponent<RailCartHub>().stopTime;
-                        PlayerPrefs.SetString(PartName + PartNumber + "inputID", inputID);
-                        PlayerPrefs.SetString(PartName + PartNumber + "outputID", outputID);
-                        PlayerPrefs.SetInt(PartName + PartNumber + "range", range);
-                        PlayerPrefs.SetInt(PartName + PartNumber + "circuit", circuit);
-                        PlayerPrefsX.SetBool(PartName + PartNumber + "centralHub", centralHub);
-                        PlayerPrefsX.SetBool(PartName + PartNumber + "stop", stop);
-                        PlayerPrefs.SetFloat(PartName + PartNumber + "stopTime", stopTime);
-                        PlayerPrefsX.SetBool(PartName + PartNumber + "falling", go.GetComponent<PhysicsHandler>().falling);
-                        PlayerPrefsX.SetBool(PartName + PartNumber + "fallingStack", go.GetComponent<PhysicsHandler>().fallingStack);
-                        //Debug.Log("Saving " + PartName + PartNumber + " with outputID of " + outputID);
+                        FileBasedPrefs.SetString(PartName + PartNumber + "inputID", inputID);
+                        FileBasedPrefs.SetString(PartName + PartNumber + "outputID", outputID);
+                        FileBasedPrefs.SetInt(PartName + PartNumber + "range", range);
+                        FileBasedPrefs.SetInt(PartName + PartNumber + "circuit", circuit);
+                        FileBasedPrefs.SetBool(PartName + PartNumber + "centralHub", centralHub);
+                        FileBasedPrefs.SetBool(PartName + PartNumber + "stop", stop);
+                        FileBasedPrefs.SetFloat(PartName + PartNumber + "stopTime", stopTime);
+                        FileBasedPrefs.SetBool(PartName + PartNumber + "falling", go.GetComponent<PhysicsHandler>().falling);
+                        FileBasedPrefs.SetBool(PartName + PartNumber + "fallingStack", go.GetComponent<PhysicsHandler>().fallingStack);
                     }
                     if (go.GetComponent<UniversalConduit>() != null)
                     {
@@ -556,15 +535,14 @@ public class StateManager : MonoBehaviour
                         int speed = go.GetComponent<UniversalConduit>().speed;
                         int range = go.GetComponent<UniversalConduit>().range;
                         float amount = go.GetComponent<UniversalConduit>().amount;
-                        PlayerPrefs.SetString(PartName + PartNumber + "inputID", inputID);
-                        PlayerPrefs.SetString(PartName + PartNumber + "outputID", outputID);
-                        PlayerPrefs.SetString(PartName + PartNumber + "type", type);
-                        PlayerPrefs.SetInt(PartName + PartNumber + "speed", speed);
-                        PlayerPrefs.SetInt(PartName + PartNumber + "range", range);
-                        PlayerPrefs.SetFloat(PartName + PartNumber + "amount", amount);
-                        PlayerPrefsX.SetBool(PartName + PartNumber + "falling", go.GetComponent<PhysicsHandler>().falling);
-                        PlayerPrefsX.SetBool(PartName + PartNumber + "fallingStack", go.GetComponent<PhysicsHandler>().fallingStack);
-                        //Debug.Log("Saving " + PartName + PartNumber + " with outputID of " + outputID);
+                        FileBasedPrefs.SetString(PartName + PartNumber + "inputID", inputID);
+                        FileBasedPrefs.SetString(PartName + PartNumber + "outputID", outputID);
+                        FileBasedPrefs.SetString(PartName + PartNumber + "type", type);
+                        FileBasedPrefs.SetInt(PartName + PartNumber + "speed", speed);
+                        FileBasedPrefs.SetInt(PartName + PartNumber + "range", range);
+                        FileBasedPrefs.SetFloat(PartName + PartNumber + "amount", amount);
+                        FileBasedPrefs.SetBool(PartName + PartNumber + "falling", go.GetComponent<PhysicsHandler>().falling);
+                        FileBasedPrefs.SetBool(PartName + PartNumber + "fallingStack", go.GetComponent<PhysicsHandler>().fallingStack);
                     }
                     if (go.GetComponent<HeatExchanger>() != null)
                     {
@@ -576,14 +554,13 @@ public class StateManager : MonoBehaviour
                         string inputType = go.GetComponent<HeatExchanger>().inputType;
                         int speed = go.GetComponent<HeatExchanger>().speed;
                         float amount = go.GetComponent<HeatExchanger>().amount;
-                        PlayerPrefs.SetString(PartName + PartNumber + "inputID", inputID);
-                        PlayerPrefs.SetString(PartName + PartNumber + "outputID", outputID);
-                        PlayerPrefs.SetString(PartName + PartNumber + "inputType", inputType);
-                        PlayerPrefs.SetInt(PartName + PartNumber + "speed", speed);
-                        PlayerPrefs.SetFloat(PartName + PartNumber + "amount", amount);
-                        PlayerPrefsX.SetBool(PartName + PartNumber + "falling", go.GetComponent<PhysicsHandler>().falling);
-                        PlayerPrefsX.SetBool(PartName + PartNumber + "fallingStack", go.GetComponent<PhysicsHandler>().fallingStack);
-                        //Debug.Log("Saving " + PartName + PartNumber + " with outputID of " + outputID);
+                        FileBasedPrefs.SetString(PartName + PartNumber + "inputID", inputID);
+                        FileBasedPrefs.SetString(PartName + PartNumber + "outputID", outputID);
+                        FileBasedPrefs.SetString(PartName + PartNumber + "inputType", inputType);
+                        FileBasedPrefs.SetInt(PartName + PartNumber + "speed", speed);
+                        FileBasedPrefs.SetFloat(PartName + PartNumber + "amount", amount);
+                        FileBasedPrefs.SetBool(PartName + PartNumber + "falling", go.GetComponent<PhysicsHandler>().falling);
+                        FileBasedPrefs.SetBool(PartName + PartNumber + "fallingStack", go.GetComponent<PhysicsHandler>().fallingStack);
                     }
                     if (go.GetComponent<Retriever>() != null)
                     {
@@ -594,17 +571,16 @@ public class StateManager : MonoBehaviour
                         string outputID = go.GetComponent<Retriever>().outputID;
                         int speed = go.GetComponent<Retriever>().speed;
                         float amount = go.GetComponent<Retriever>().amount;
-                        PlayerPrefs.SetString(PartName + PartNumber + "inputID", inputID);
-                        PlayerPrefs.SetString(PartName + PartNumber + "outputID", outputID);
-                        PlayerPrefs.SetInt(PartName + PartNumber + "speed", speed);
-                        PlayerPrefs.SetFloat(PartName + PartNumber + "amount", amount);
-                        PlayerPrefsX.SetBool(PartName + PartNumber + "falling", go.GetComponent<PhysicsHandler>().falling);
-                        PlayerPrefsX.SetBool(PartName + PartNumber + "fallingStack", go.GetComponent<PhysicsHandler>().fallingStack);
+                        FileBasedPrefs.SetString(PartName + PartNumber + "inputID", inputID);
+                        FileBasedPrefs.SetString(PartName + PartNumber + "outputID", outputID);
+                        FileBasedPrefs.SetInt(PartName + PartNumber + "speed", speed);
+                        FileBasedPrefs.SetFloat(PartName + PartNumber + "amount", amount);
+                        FileBasedPrefs.SetBool(PartName + PartNumber + "falling", go.GetComponent<PhysicsHandler>().falling);
+                        FileBasedPrefs.SetBool(PartName + PartNumber + "fallingStack", go.GetComponent<PhysicsHandler>().fallingStack);
                         if (go.GetComponent<InventoryManager>() != null)
                         {
                             go.GetComponent<InventoryManager>().SaveData();
                         }
-                        //Debug.Log("Saving " + PartName + PartNumber + " with inputID of " + inputID);
                     }
                     if (go.GetComponent<AutoCrafter>() != null)
                     {
@@ -613,15 +589,14 @@ public class StateManager : MonoBehaviour
                         go.GetComponent<AutoCrafter>().ID = (PartName + PartNumber);
                         string inputID = go.GetComponent<AutoCrafter>().inputID;
                         int speed = go.GetComponent<AutoCrafter>().speed;
-                        PlayerPrefs.SetString(PartName + PartNumber + "inputID", inputID);
-                        PlayerPrefs.SetInt(PartName + PartNumber + "speed", speed);
-                        PlayerPrefsX.SetBool(PartName + PartNumber + "falling", go.GetComponent<PhysicsHandler>().falling);
-                        PlayerPrefsX.SetBool(PartName + PartNumber + "fallingStack", go.GetComponent<PhysicsHandler>().fallingStack);
+                        FileBasedPrefs.SetString(PartName + PartNumber + "inputID", inputID);
+                        FileBasedPrefs.SetInt(PartName + PartNumber + "speed", speed);
+                        FileBasedPrefs.SetBool(PartName + PartNumber + "falling", go.GetComponent<PhysicsHandler>().falling);
+                        FileBasedPrefs.SetBool(PartName + PartNumber + "fallingStack", go.GetComponent<PhysicsHandler>().fallingStack);
                         if (go.GetComponent<InventoryManager>() != null)
                         {
                             go.GetComponent<InventoryManager>().SaveData();
                         }
-                        //Debug.Log("Saving " + PartName + PartNumber + " with outputID of " + outputID);
                     }
                     if (go.GetComponent<Smelter>() != null)
                     {
@@ -634,15 +609,14 @@ public class StateManager : MonoBehaviour
                         string outputType = go.GetComponent<Smelter>().outputType;
                         int speed = go.GetComponent<Smelter>().speed;
                         float amount = go.GetComponent<Smelter>().amount;
-                        PlayerPrefs.SetString(PartName + PartNumber + "inputID", inputID);
-                        PlayerPrefs.SetString(PartName + PartNumber + "outputID", outputID);
-                        PlayerPrefs.SetString(PartName + PartNumber + "inputType", inputType);
-                        PlayerPrefs.SetString(PartName + PartNumber + "outputType", outputType);
-                        PlayerPrefs.SetInt(PartName + PartNumber + "speed", speed);
-                        PlayerPrefs.SetFloat(PartName + PartNumber + "amount", amount);
-                        PlayerPrefsX.SetBool(PartName + PartNumber + "falling", go.GetComponent<PhysicsHandler>().falling);
-                        PlayerPrefsX.SetBool(PartName + PartNumber + "fallingStack", go.GetComponent<PhysicsHandler>().fallingStack);
-                        //Debug.Log("Saving " + PartName + PartNumber + " with outputID of " + outputID);
+                        FileBasedPrefs.SetString(PartName + PartNumber + "inputID", inputID);
+                        FileBasedPrefs.SetString(PartName + PartNumber + "outputID", outputID);
+                        FileBasedPrefs.SetString(PartName + PartNumber + "inputType", inputType);
+                        FileBasedPrefs.SetString(PartName + PartNumber + "outputType", outputType);
+                        FileBasedPrefs.SetInt(PartName + PartNumber + "speed", speed);
+                        FileBasedPrefs.SetFloat(PartName + PartNumber + "amount", amount);
+                        FileBasedPrefs.SetBool(PartName + PartNumber + "falling", go.GetComponent<PhysicsHandler>().falling);
+                        FileBasedPrefs.SetBool(PartName + PartNumber + "fallingStack", go.GetComponent<PhysicsHandler>().fallingStack);
                     }
                     if (go.GetComponent<Turret>() != null)
                     {
@@ -650,10 +624,9 @@ public class StateManager : MonoBehaviour
                         go.GetComponent<Turret>().address = ConstructionCount;
                         go.GetComponent<Turret>().ID = (PartName + PartNumber);
                         int speed = go.GetComponent<Turret>().speed;
-                        PlayerPrefs.SetInt(PartName + PartNumber + "speed", speed);
-                        PlayerPrefsX.SetBool(PartName + PartNumber + "falling", go.GetComponent<PhysicsHandler>().falling);
-                        PlayerPrefsX.SetBool(PartName + PartNumber + "fallingStack", go.GetComponent<PhysicsHandler>().fallingStack);
-                        //Debug.Log("Saving " + PartName + PartNumber + " with outputID of " + outputID);
+                        FileBasedPrefs.SetInt(PartName + PartNumber + "speed", speed);
+                        FileBasedPrefs.SetBool(PartName + PartNumber + "falling", go.GetComponent<PhysicsHandler>().falling);
+                        FileBasedPrefs.SetBool(PartName + PartNumber + "fallingStack", go.GetComponent<PhysicsHandler>().fallingStack);
                     }
                     if (go.GetComponent<PowerSource>() != null)
                     {
@@ -674,21 +647,19 @@ public class StateManager : MonoBehaviour
                         string outputID = go.GetComponent<PowerSource>().outputID;
                         string fuelType = go.GetComponent<PowerSource>().fuelType;
                         int fuelAmount = go.GetComponent<PowerSource>().fuelAmount;
-                        PlayerPrefs.SetString(PartName + PartNumber + "outputID", outputID);
-                        PlayerPrefs.SetString(PartName + PartNumber + "fuelType", outputID);
-                        PlayerPrefs.SetInt(PartName + PartNumber + "fuelAmount", fuelAmount);
-                        PlayerPrefsX.SetBool(PartName + PartNumber + "falling", go.GetComponent<PhysicsHandler>().falling);
-                        PlayerPrefsX.SetBool(PartName + PartNumber + "fallingStack", go.GetComponent<PhysicsHandler>().fallingStack);
-                        //Debug.Log("Saving " + PartName + PartNumber + " with outputID of " + outputID);
+                        FileBasedPrefs.SetString(PartName + PartNumber + "outputID", outputID);
+                        FileBasedPrefs.SetString(PartName + PartNumber + "fuelType", outputID);
+                        FileBasedPrefs.SetInt(PartName + PartNumber + "fuelAmount", fuelAmount);
+                        FileBasedPrefs.SetBool(PartName + PartNumber + "falling", go.GetComponent<PhysicsHandler>().falling);
+                        FileBasedPrefs.SetBool(PartName + PartNumber + "fallingStack", go.GetComponent<PhysicsHandler>().fallingStack);
                     }
                     if (go.GetComponent<NuclearReactor>() != null)
                     {
                         PartName = WorldName + "NuclearReactor";
                         go.GetComponent<NuclearReactor>().address = ConstructionCount;
                         go.GetComponent<NuclearReactor>().ID = (PartName + PartNumber);
-                        PlayerPrefsX.SetBool(PartName + PartNumber + "falling", go.GetComponent<PhysicsHandler>().falling);
-                        PlayerPrefsX.SetBool(PartName + PartNumber + "fallingStack", go.GetComponent<PhysicsHandler>().fallingStack);
-                        //Debug.Log("Saving " + PartName + PartNumber + " with outputID of " + outputID);
+                        FileBasedPrefs.SetBool(PartName + PartNumber + "falling", go.GetComponent<PhysicsHandler>().falling);
+                        FileBasedPrefs.SetBool(PartName + PartNumber + "fallingStack", go.GetComponent<PhysicsHandler>().fallingStack);
                     }
                     if (go.GetComponent<PowerConduit>() != null)
                     {
@@ -701,14 +672,13 @@ public class StateManager : MonoBehaviour
                         bool dualOutput = go.GetComponent<PowerConduit>().dualOutput;
                         int range = go.GetComponent<PowerConduit>().range;
                         int powerAmount = go.GetComponent<PowerConduit>().powerAmount;
-                        PlayerPrefs.SetString(PartName + PartNumber + "inputID", inputID);
-                        PlayerPrefs.SetString(PartName + PartNumber + "outputID1", outputID1);
-                        PlayerPrefs.SetString(PartName + PartNumber + "outputID2", outputID2);
-                        PlayerPrefsX.SetBool(PartName + PartNumber + "dualOutput", dualOutput);
-                        PlayerPrefs.SetInt(PartName + PartNumber + "range", range);
-                        PlayerPrefsX.SetBool(PartName + PartNumber + "falling", go.GetComponent<PhysicsHandler>().falling);
-                        PlayerPrefsX.SetBool(PartName + PartNumber + "fallingStack", go.GetComponent<PhysicsHandler>().fallingStack);
-                        //Debug.Log("Saving " + PartName + PartNumber + " with outputID of " + outputID);
+                        FileBasedPrefs.SetString(PartName + PartNumber + "inputID", inputID);
+                        FileBasedPrefs.SetString(PartName + PartNumber + "outputID1", outputID1);
+                        FileBasedPrefs.SetString(PartName + PartNumber + "outputID2", outputID2);
+                        FileBasedPrefs.SetBool(PartName + PartNumber + "dualOutput", dualOutput);
+                        FileBasedPrefs.SetInt(PartName + PartNumber + "range", range);
+                        FileBasedPrefs.SetBool(PartName + PartNumber + "falling", go.GetComponent<PhysicsHandler>().falling);
+                        FileBasedPrefs.SetBool(PartName + PartNumber + "fallingStack", go.GetComponent<PhysicsHandler>().fallingStack);
                     }
                     if (go.GetComponent<AlloySmelter>() != null)
                     {
@@ -726,19 +696,18 @@ public class StateManager : MonoBehaviour
                         float amount = go.GetComponent<AlloySmelter>().amount;
                         float amount2 = go.GetComponent<AlloySmelter>().amount2;
                         float outputAmount = go.GetComponent<AlloySmelter>().outputAmount;
-                        PlayerPrefs.SetString(PartName + PartNumber + "inputID1", inputID1);
-                        PlayerPrefs.SetString(PartName + PartNumber + "inputID2", inputID2);
-                        PlayerPrefs.SetString(PartName + PartNumber + "inputType1", inputType1);
-                        PlayerPrefs.SetString(PartName + PartNumber + "inputType2", inputType2);
-                        PlayerPrefs.SetString(PartName + PartNumber + "outputType", outputType);
-                        PlayerPrefs.SetString(PartName + PartNumber + "outputID", outputID);
-                        PlayerPrefs.SetInt(PartName + PartNumber + "speed", speed);
-                        PlayerPrefs.SetFloat(PartName + PartNumber + "amount", amount);
-                        PlayerPrefs.SetFloat(PartName + PartNumber + "amount2", amount2);
-                        PlayerPrefs.SetFloat(PartName + PartNumber + "amount", outputAmount);
-                        PlayerPrefsX.SetBool(PartName + PartNumber + "falling", go.GetComponent<PhysicsHandler>().falling);
-                        PlayerPrefsX.SetBool(PartName + PartNumber + "fallingStack", go.GetComponent<PhysicsHandler>().fallingStack);
-                        //Debug.Log("Saving " + PartName + PartNumber + " with outputID of " + outputID);
+                        FileBasedPrefs.SetString(PartName + PartNumber + "inputID1", inputID1);
+                        FileBasedPrefs.SetString(PartName + PartNumber + "inputID2", inputID2);
+                        FileBasedPrefs.SetString(PartName + PartNumber + "inputType1", inputType1);
+                        FileBasedPrefs.SetString(PartName + PartNumber + "inputType2", inputType2);
+                        FileBasedPrefs.SetString(PartName + PartNumber + "outputType", outputType);
+                        FileBasedPrefs.SetString(PartName + PartNumber + "outputID", outputID);
+                        FileBasedPrefs.SetInt(PartName + PartNumber + "speed", speed);
+                        FileBasedPrefs.SetFloat(PartName + PartNumber + "amount", amount);
+                        FileBasedPrefs.SetFloat(PartName + PartNumber + "amount2", amount2);
+                        FileBasedPrefs.SetFloat(PartName + PartNumber + "amount", outputAmount);
+                        FileBasedPrefs.SetBool(PartName + PartNumber + "falling", go.GetComponent<PhysicsHandler>().falling);
+                        FileBasedPrefs.SetBool(PartName + PartNumber + "fallingStack", go.GetComponent<PhysicsHandler>().fallingStack);
                     }
                     if (go.GetComponent<Press>() != null)
                     {
@@ -751,15 +720,14 @@ public class StateManager : MonoBehaviour
                         string outputID = go.GetComponent<Press>().outputID;
                         int speed = go.GetComponent<Press>().speed;
                         float amount = go.GetComponent<Press>().amount;
-                        PlayerPrefs.SetString(PartName + PartNumber + "inputID", inputID);
-                        PlayerPrefs.SetString(PartName + PartNumber + "inputType", inputType);
-                        PlayerPrefs.SetString(PartName + PartNumber + "outputType", outputType);
-                        PlayerPrefs.SetString(PartName + PartNumber + "outputID", outputID);
-                        PlayerPrefs.SetInt(PartName + PartNumber + "speed", speed);
-                        PlayerPrefs.SetFloat(PartName + PartNumber + "amount", amount);
-                        PlayerPrefsX.SetBool(PartName + PartNumber + "falling", go.GetComponent<PhysicsHandler>().falling);
-                        PlayerPrefsX.SetBool(PartName + PartNumber + "fallingStack", go.GetComponent<PhysicsHandler>().fallingStack);
-                        //Debug.Log("Saving " + PartName + PartNumber + " with outputID of " + outputID);
+                        FileBasedPrefs.SetString(PartName + PartNumber + "inputID", inputID);
+                        FileBasedPrefs.SetString(PartName + PartNumber + "inputType", inputType);
+                        FileBasedPrefs.SetString(PartName + PartNumber + "outputType", outputType);
+                        FileBasedPrefs.SetString(PartName + PartNumber + "outputID", outputID);
+                        FileBasedPrefs.SetInt(PartName + PartNumber + "speed", speed);
+                        FileBasedPrefs.SetFloat(PartName + PartNumber + "amount", amount);
+                        FileBasedPrefs.SetBool(PartName + PartNumber + "falling", go.GetComponent<PhysicsHandler>().falling);
+                        FileBasedPrefs.SetBool(PartName + PartNumber + "fallingStack", go.GetComponent<PhysicsHandler>().fallingStack);
                     }
                     if (go.GetComponent<Extruder>() != null)
                     {
@@ -772,15 +740,14 @@ public class StateManager : MonoBehaviour
                         string outputID = go.GetComponent<Extruder>().outputID;
                         int speed = go.GetComponent<Extruder>().speed;
                         float amount = go.GetComponent<Extruder>().amount;
-                        PlayerPrefs.SetString(PartName + PartNumber + "inputID", inputID);
-                        PlayerPrefs.SetString(PartName + PartNumber + "inputType", inputType);
-                        PlayerPrefs.SetString(PartName + PartNumber + "outputType", outputType);
-                        PlayerPrefs.SetString(PartName + PartNumber + "outputID", outputID);
-                        PlayerPrefs.SetInt(PartName + PartNumber + "speed", speed);
-                        PlayerPrefs.SetFloat(PartName + PartNumber + "amount", amount);
-                        PlayerPrefsX.SetBool(PartName + PartNumber + "falling", go.GetComponent<PhysicsHandler>().falling);
-                        PlayerPrefsX.SetBool(PartName + PartNumber + "fallingStack", go.GetComponent<PhysicsHandler>().fallingStack);
-                        //Debug.Log("Saving " + PartName + PartNumber + " with outputID of " + outputID);
+                        FileBasedPrefs.SetString(PartName + PartNumber + "inputID", inputID);
+                        FileBasedPrefs.SetString(PartName + PartNumber + "inputType", inputType);
+                        FileBasedPrefs.SetString(PartName + PartNumber + "outputType", outputType);
+                        FileBasedPrefs.SetString(PartName + PartNumber + "outputID", outputID);
+                        FileBasedPrefs.SetInt(PartName + PartNumber + "speed", speed);
+                        FileBasedPrefs.SetFloat(PartName + PartNumber + "amount", amount);
+                        FileBasedPrefs.SetBool(PartName + PartNumber + "falling", go.GetComponent<PhysicsHandler>().falling);
+                        FileBasedPrefs.SetBool(PartName + PartNumber + "fallingStack", go.GetComponent<PhysicsHandler>().fallingStack);
                     }
                     if (go.GetComponent<GearCutter>() != null)
                     {
@@ -793,15 +760,14 @@ public class StateManager : MonoBehaviour
                         string outputID = go.GetComponent<GearCutter>().outputID;
                         int speed = go.GetComponent<GearCutter>().speed;
                         float amount = go.GetComponent<GearCutter>().amount;
-                        PlayerPrefs.SetString(PartName + PartNumber + "inputID", inputID);
-                        PlayerPrefs.SetString(PartName + PartNumber + "inputType", inputType);
-                        PlayerPrefs.SetString(PartName + PartNumber + "outputType", outputType);
-                        PlayerPrefs.SetString(PartName + PartNumber + "outputID", outputID);
-                        PlayerPrefs.SetInt(PartName + PartNumber + "speed", speed);
-                        PlayerPrefs.SetFloat(PartName + PartNumber + "amount", amount);
-                        PlayerPrefsX.SetBool(PartName + PartNumber + "falling", go.GetComponent<PhysicsHandler>().falling);
-                        PlayerPrefsX.SetBool(PartName + PartNumber + "fallingStack", go.GetComponent<PhysicsHandler>().fallingStack);
-                        //Debug.Log("Saving " + PartName + PartNumber + " with outputID of " + outputID);
+                        FileBasedPrefs.SetString(PartName + PartNumber + "inputID", inputID);
+                        FileBasedPrefs.SetString(PartName + PartNumber + "inputType", inputType);
+                        FileBasedPrefs.SetString(PartName + PartNumber + "outputType", outputType);
+                        FileBasedPrefs.SetString(PartName + PartNumber + "outputID", outputID);
+                        FileBasedPrefs.SetInt(PartName + PartNumber + "speed", speed);
+                        FileBasedPrefs.SetFloat(PartName + PartNumber + "amount", amount);
+                        FileBasedPrefs.SetBool(PartName + PartNumber + "falling", go.GetComponent<PhysicsHandler>().falling);
+                        FileBasedPrefs.SetBool(PartName + PartNumber + "fallingStack", go.GetComponent<PhysicsHandler>().fallingStack);
                     }
                     if (go.GetComponent<UniversalExtractor>() != null)
                     {
@@ -811,11 +777,11 @@ public class StateManager : MonoBehaviour
                         int speed = go.GetComponent<UniversalExtractor>().speed;
                         float amount = go.GetComponent<UniversalExtractor>().amount;
                         string type = go.GetComponent<UniversalExtractor>().type;
-                        PlayerPrefs.SetInt(PartName + PartNumber + "speed", speed);
-                        PlayerPrefs.SetFloat(PartName + PartNumber + "amount", amount);
-                        PlayerPrefs.SetString(PartName + PartNumber + "type", type);
-                        PlayerPrefsX.SetBool(PartName + PartNumber + "falling", go.GetComponent<PhysicsHandler>().falling);
-                        PlayerPrefsX.SetBool(PartName + PartNumber + "fallingStack", go.GetComponent<PhysicsHandler>().fallingStack);
+                        FileBasedPrefs.SetInt(PartName + PartNumber + "speed", speed);
+                        FileBasedPrefs.SetFloat(PartName + PartNumber + "amount", amount);
+                        FileBasedPrefs.SetString(PartName + PartNumber + "type", type);
+                        FileBasedPrefs.SetBool(PartName + PartNumber + "falling", go.GetComponent<PhysicsHandler>().falling);
+                        FileBasedPrefs.SetBool(PartName + PartNumber + "fallingStack", go.GetComponent<PhysicsHandler>().fallingStack);
                     }
                     if (go.GetComponent<InventoryManager>() != null && go.GetComponent<RailCart>() == null && go.GetComponent<PlayerController>() == null && go.GetComponent<Retriever>() == null && go.GetComponent<AutoCrafter>() == null)
                     {
@@ -823,42 +789,38 @@ public class StateManager : MonoBehaviour
                         go.GetComponent<InventoryManager>().ID = (PartName + PartNumber);
                         go.GetComponent<InventoryManager>().address = ConstructionCount;
                         go.GetComponent<InventoryManager>().SaveData();
-                        PlayerPrefsX.SetBool(PartName + PartNumber + "falling", go.GetComponent<PhysicsHandler>().falling);
-                        PlayerPrefsX.SetBool(PartName + PartNumber + "fallingStack", go.GetComponent<PhysicsHandler>().fallingStack);
+                        FileBasedPrefs.SetBool(PartName + PartNumber + "falling", go.GetComponent<PhysicsHandler>().falling);
+                        FileBasedPrefs.SetBool(PartName + PartNumber + "fallingStack", go.GetComponent<PhysicsHandler>().fallingStack);
                     }
                     if (go.GetComponent<StorageComputer>() != null)
                     {
                         PartName = WorldName + "StorageComputer";
                         go.GetComponent<StorageComputer>().address = ConstructionCount;
                         go.GetComponent<StorageComputer>().ID = (PartName + PartNumber);
-                        PlayerPrefsX.SetBool(PartName + PartNumber + "falling", go.GetComponent<PhysicsHandler>().falling);
-                        PlayerPrefsX.SetBool(PartName + PartNumber + "fallingStack", go.GetComponent<PhysicsHandler>().fallingStack);
+                        FileBasedPrefs.SetBool(PartName + PartNumber + "falling", go.GetComponent<PhysicsHandler>().falling);
+                        FileBasedPrefs.SetBool(PartName + PartNumber + "fallingStack", go.GetComponent<PhysicsHandler>().fallingStack);
                     }
                     if (go.GetComponent<AirLock>() != null)
                     {
                         PartName = WorldName + "AirLock";
                         go.GetComponent<AirLock>().address = ConstructionCount;
                         go.GetComponent<AirLock>().ID = (PartName + PartNumber);
-                        PlayerPrefsX.SetBool(PartName + PartNumber + "falling", go.GetComponent<PhysicsHandler>().falling);
-                        PlayerPrefsX.SetBool(PartName + PartNumber + "fallingStack", go.GetComponent<PhysicsHandler>().fallingStack);
+                        FileBasedPrefs.SetBool(PartName + PartNumber + "falling", go.GetComponent<PhysicsHandler>().falling);
+                        FileBasedPrefs.SetBool(PartName + PartNumber + "fallingStack", go.GetComponent<PhysicsHandler>().fallingStack);
                     }
 
-                    PlayerPrefs.SetString(WorldName + PartNumber + "Name", PartName);
+                    FileBasedPrefs.SetString(WorldName + PartNumber + "Name", PartName);
                     PlayerPrefsX.SetVector3(WorldName + PartNumber + "Position", PartPosition);
                     PlayerPrefsX.SetQuaternion(WorldName + PartNumber + "Rotation", PartRotation);
 
                     ConstructionCount++;
 
-                    if (exiting == false)
+                    saveInterval++;
+                    if (saveInterval >= 10)
                     {
-                        saveInterval++;
-                        if (saveInterval >= 10)
-                        {
-                            yield return null;
-                            saveInterval = 0;
-                        }
+                        yield return null;
+                        saveInterval = 0;
                     }
-                    //Debug.Log("saving data...");
                 }
             }
         }
@@ -883,11 +845,11 @@ public class StateManager : MonoBehaviour
                     }
                     T.gameObject.GetComponent<IronBlock>().ID = (PartName + PartNumber);
                     T.gameObject.GetComponent<IronBlock>().address = ConstructionCount;
-                    PlayerPrefs.SetString(WorldName + PartNumber + "Name", PartName);
+                    FileBasedPrefs.SetString(WorldName + PartNumber + "Name", PartName);
                     PlayerPrefsX.SetVector3(WorldName + PartNumber + "Position", PartPosition);
                     PlayerPrefsX.SetQuaternion(WorldName + PartNumber + "Rotation", PartRotation);
-                    PlayerPrefsX.SetBool(PartName + PartNumber + "falling", T.gameObject.GetComponent<PhysicsHandler>().falling);
-                    PlayerPrefsX.SetBool(PartName + PartNumber + "fallingStack", T.gameObject.GetComponent<PhysicsHandler>().fallingStack);
+                    FileBasedPrefs.SetBool(PartName + PartNumber + "falling", T.gameObject.GetComponent<PhysicsHandler>().falling);
+                    FileBasedPrefs.SetBool(PartName + PartNumber + "fallingStack", T.gameObject.GetComponent<PhysicsHandler>().fallingStack);
                     ConstructionCount++;
                 }
                 if (T.gameObject.GetComponent<Steel>() != null)
@@ -902,11 +864,11 @@ public class StateManager : MonoBehaviour
                     }
                     T.gameObject.GetComponent<Steel>().ID = (PartName + PartNumber);
                     T.gameObject.GetComponent<Steel>().address = ConstructionCount;
-                    PlayerPrefs.SetString(WorldName + PartNumber + "Name", PartName);
+                    FileBasedPrefs.SetString(WorldName + PartNumber + "Name", PartName);
                     PlayerPrefsX.SetVector3(WorldName + PartNumber + "Position", PartPosition);
                     PlayerPrefsX.SetQuaternion(WorldName + PartNumber + "Rotation", PartRotation);
-                    PlayerPrefsX.SetBool(PartName + PartNumber + "falling", T.gameObject.GetComponent<PhysicsHandler>().falling);
-                    PlayerPrefsX.SetBool(PartName + PartNumber + "fallingStack", T.gameObject.GetComponent<PhysicsHandler>().fallingStack);
+                    FileBasedPrefs.SetBool(PartName + PartNumber + "falling", T.gameObject.GetComponent<PhysicsHandler>().falling);
+                    FileBasedPrefs.SetBool(PartName + PartNumber + "fallingStack", T.gameObject.GetComponent<PhysicsHandler>().fallingStack);
                     ConstructionCount++;
                 }
                 if (T.gameObject.GetComponent<Brick>() != null)
@@ -914,11 +876,11 @@ public class StateManager : MonoBehaviour
                     PartName = WorldName + "Brick";
                     T.gameObject.GetComponent<Brick>().ID = (PartName + PartNumber);
                     T.gameObject.GetComponent<Brick>().address = ConstructionCount;
-                    PlayerPrefs.SetString(WorldName + PartNumber + "Name", PartName);
+                    FileBasedPrefs.SetString(WorldName + PartNumber + "Name", PartName);
                     PlayerPrefsX.SetVector3(WorldName + PartNumber + "Position", PartPosition);
                     PlayerPrefsX.SetQuaternion(WorldName + PartNumber + "Rotation", PartRotation);
-                    PlayerPrefsX.SetBool(PartName + PartNumber + "falling", T.gameObject.GetComponent<PhysicsHandler>().falling);
-                    PlayerPrefsX.SetBool(PartName + PartNumber + "fallingStack", T.gameObject.GetComponent<PhysicsHandler>().fallingStack);
+                    FileBasedPrefs.SetBool(PartName + PartNumber + "falling", T.gameObject.GetComponent<PhysicsHandler>().falling);
+                    FileBasedPrefs.SetBool(PartName + PartNumber + "fallingStack", T.gameObject.GetComponent<PhysicsHandler>().fallingStack);
                     ConstructionCount++;
                 }
                 if (T.gameObject.GetComponent<Glass>() != null)
@@ -926,34 +888,30 @@ public class StateManager : MonoBehaviour
                     PartName = WorldName + "Glass";
                     T.gameObject.GetComponent<Glass>().ID = (PartName + PartNumber);
                     T.gameObject.GetComponent<Glass>().address = ConstructionCount;
-                    PlayerPrefs.SetString(WorldName + PartNumber + "Name", PartName);
+                    FileBasedPrefs.SetString(WorldName + PartNumber + "Name", PartName);
                     PlayerPrefsX.SetVector3(WorldName + PartNumber + "Position", PartPosition);
                     PlayerPrefsX.SetQuaternion(WorldName + PartNumber + "Rotation", PartRotation);
-                    PlayerPrefsX.SetBool(PartName + PartNumber + "falling", T.gameObject.GetComponent<PhysicsHandler>().falling);
-                    PlayerPrefsX.SetBool(PartName + PartNumber + "fallingStack", T.gameObject.GetComponent<PhysicsHandler>().fallingStack);
+                    FileBasedPrefs.SetBool(PartName + PartNumber + "falling", T.gameObject.GetComponent<PhysicsHandler>().falling);
+                    FileBasedPrefs.SetBool(PartName + PartNumber + "fallingStack", T.gameObject.GetComponent<PhysicsHandler>().fallingStack);
                     ConstructionCount++;
                 }
 
-                if (exiting == false)
+                saveInterval++;
+                if (saveInterval >= 10)
                 {
-                    saveInterval++;
-                    if (saveInterval >= 10)
-                    {
-                        yield return null;
-                        saveInterval = 0;
-                    }
+                    yield return null;
+                    saveInterval = 0;
                 }
-                //Debug.Log("saving data...");
             }
         }
 
         if (ConstructionCount != 0)
         {
-            PlayerPrefs.SetInt(WorldName + "ConstructionTotal", ConstructionCount);
+            FileBasedPrefs.SetInt(WorldName + "ConstructionTotal", ConstructionCount);
         }
-        //Debug.Log("Total Objects = "+PlayerPrefs.GetInt(WorldName + "ConstructionTotal"));
+
+        FileBasedPrefs.ManuallySave();
         dataSaved = true;
         saving = false;
-        //Debug.Log("Data Saved: " + dataSaved);
     }
 }
