@@ -263,6 +263,12 @@ public class MarketGUI : MonoBehaviour
                     }
 
                     GUI.DrawTexture(gc.craftingBackgroundRect, td.dictionary["Interface Background"]);
+                    int f = GUI.skin.label.fontSize;
+                    GUI.skin.label.fontSize = 24;
+                    GUI.color = new Color(0.44f, 0.72f, 0.82f, 1);
+                    GUI.Label(gc.marketTitleRect, "MARKET");
+                    GUI.skin.label.fontSize = f;
+                    GUI.color = Color.white;
 
                     if (GUI.Button(gc.button1Rect, "Storage Container"))
                     {

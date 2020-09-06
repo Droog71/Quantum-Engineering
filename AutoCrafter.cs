@@ -53,7 +53,7 @@ public class AutoCrafter : MonoBehaviour
             UpdatePowerReceiver();
 
             updateTick = 0;
-            if (speed > power)
+            if (speed > power && power != 0)
             {
                 speed = power;
             }
@@ -146,14 +146,6 @@ public class AutoCrafter : MonoBehaviour
         power = powerReceiver.power;
         powerON = powerReceiver.powerON;
         powerObject = powerReceiver.powerObject;
-        if (powerReceiver.overClocked == true)
-        {
-            speed = powerReceiver.speed;
-        }
-        else
-        {
-            powerReceiver.speed = speed;
-        }
     }
 
     // The object exists, is active and is not a standard building block

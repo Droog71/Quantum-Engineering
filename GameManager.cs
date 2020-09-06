@@ -1281,31 +1281,21 @@ public class GameManager : MonoBehaviour
                 clearBrickDummies = true;
                 PlayerPrefsX.SetBool(GetComponent<StateManager>().WorldName + "initBrick", true);
             }
-            //Debug.Log("Finished mesh combine for bricks at: " + System.DateTime.Now);
         }
 
-        GameObject[] allObjects = FindObjectsOfType<GameObject>();
+        HolderDummy[] allHolders = FindObjectsOfType<HolderDummy>();
         int dummyDestroyInterval = 0;
-        //Debug.Log("Started destruction of dummy objects at: "+System.DateTime.Now);
-        foreach (GameObject obj in allObjects)
+        foreach (HolderDummy h in allHolders)
         {
-            if (obj != null)
+            Destroy(h.gameObject);
+            dummyDestroyInterval++;
+            if (dummyDestroyInterval >= 50)
             {
-                if (obj.GetComponent<HolderDummy>() != null)
-                {
-                    Destroy(obj);
-                    dummyDestroyInterval++;
-                    if (dummyDestroyInterval >= 50)
-                    {
-                        yield return null;
-                        dummyDestroyInterval = 0;
-                    }
-                }
+                yield return null;
+                dummyDestroyInterval = 0;
             }
         }
         working = false;
-        //Debug.Log("Finished destruction of dummy objects at: " + System.DateTime.Now);
-        //UnityEngine.Debug.Log("Glass: " + initGlass + " Iron: " + initIron + " Steel: " + initSteel + " Brick: " + initBrick);
     }
 }
 

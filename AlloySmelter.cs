@@ -59,7 +59,7 @@ public class AlloySmelter : MonoBehaviour
 
             updateTick = 0;
 
-            if (speed > power)
+            if (speed > power && power != 0)
             {
                 speed = power;
             }
@@ -188,11 +188,13 @@ public class AlloySmelter : MonoBehaviour
         {
             if (amount < 1)
             {
-                inputType1 = inputObject1.GetComponent<UniversalConduit>().type;
+                if (inputObject1.GetComponent<UniversalConduit>().type != "" && inputObject1.GetComponent<UniversalConduit>().type != "nothing")
+                    inputType1 = inputObject1.GetComponent<UniversalConduit>().type;
             }
             if (amount2 < 1)
             {
-                inputType2 = inputObject2.GetComponent<UniversalConduit>().type;
+                if (inputObject2.GetComponent<UniversalConduit>().type != "" && inputObject2.GetComponent<UniversalConduit>().type != "nothing")
+                    inputType2 = inputObject2.GetComponent<UniversalConduit>().type;
             }
 
             if (inputObject1.GetComponent<UniversalConduit>().type.Equals("Copper Ingot") && inputObject2.GetComponent<UniversalConduit>().type.Equals("Tin Ingot"))
@@ -355,13 +357,5 @@ public class AlloySmelter : MonoBehaviour
         power = powerReceiver.power;
         powerON = powerReceiver.powerON;
         powerObject = powerReceiver.powerObject;
-        if (powerReceiver.overClocked == true)
-        {
-            speed = powerReceiver.speed;
-        }
-        else
-        {
-            powerReceiver.speed = speed;
-        }
     }
 }

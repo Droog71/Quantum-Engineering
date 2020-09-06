@@ -100,12 +100,6 @@ public class PowerSource : MonoBehaviour
             {
                 outputObject.GetComponent<PowerReceiver>().powerON = false;
             }
-
-            if (outputObject.GetComponent<PowerReceiver>().power < outputObject.GetComponent<PowerReceiver>().speed && outputObject.GetComponent<PowerReceiver>().speed > 1)
-            {
-                outputObject.GetComponent<PowerReceiver>().speed = outputObject.GetComponent<PowerReceiver>().power;
-                outputObject.GetComponent<PowerReceiver>().overClocked = true;
-            }
         }
     }
 

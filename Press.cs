@@ -53,7 +53,7 @@ public class Press : MonoBehaviour
             UpdatePowerReceiver();
 
             updateTick = 0;
-            if (speed > power)
+            if (speed > power && power != 0)
             {
                 speed = power;
             }
@@ -186,32 +186,36 @@ public class Press : MonoBehaviour
     // Sets the appropriate output item according to the input
     private void SetOutputType()
     {
-        inputType = inputObject.GetComponent<UniversalConduit>().type;
-        if (inputObject.GetComponent<UniversalConduit>().type.Equals("Copper Ingot"))
+        string incoming = inputObject.GetComponent<UniversalConduit>().type;
+        if (incoming != "" && incoming != "nothing")
+        {
+            inputType = inputObject.GetComponent<UniversalConduit>().type;
+        }
+        if (inputType.Equals("Copper Ingot"))
         {
             outputType = "Copper Plate";
         }
-        if (inputObject.GetComponent<UniversalConduit>().type.Equals("Iron Ingot"))
+        if (inputType.Equals("Iron Ingot"))
         {
             outputType = "Iron Plate";
         }
-        if (inputObject.GetComponent<UniversalConduit>().type.Equals("Tin Ingot"))
+        if (inputType.Equals("Tin Ingot"))
         {
             outputType = "Tin Plate";
         }
-        if (inputObject.GetComponent<UniversalConduit>().type.Equals("Bronze Ingot"))
+        if (inputType.Equals("Bronze Ingot"))
         {
             outputType = "Bronze Plate";
         }
-        if (inputObject.GetComponent<UniversalConduit>().type.Equals("Steel Ingot"))
+        if (inputType.Equals("Steel Ingot"))
         {
             outputType = "Steel Plate";
         }
-        if (inputObject.GetComponent<UniversalConduit>().type.Equals("Aluminum Ingot"))
+        if (inputType.Equals("Aluminum Ingot"))
         {
             outputType = "Aluminum Plate";
         }
-        if (inputObject.GetComponent<UniversalConduit>().type.Equals("Regolith"))
+        if (inputType.Equals("Regolith"))
         {
             outputType = "Brick";
         }
@@ -274,13 +278,5 @@ public class Press : MonoBehaviour
         power = powerReceiver.power;
         powerON = powerReceiver.powerON;
         powerObject = powerReceiver.powerObject;
-        if (powerReceiver.overClocked == true)
-        {
-            speed = powerReceiver.speed;
-        }
-        else
-        {
-            powerReceiver.speed = speed;
-        }
     }
 }

@@ -136,7 +136,6 @@ public class PowerConduit : MonoBehaviour
             if (outputObject1.GetComponent<PowerReceiver>() != null)
             {
                 outputObject1.GetComponent<PowerReceiver>().power = 0;
-                outputObject1.GetComponent<PowerReceiver>().speed = 1;
                 outputObject1.GetComponent<PowerReceiver>().powerON = false;
             }
             if (outputObject1.GetComponent<PowerConduit>() != null)
@@ -149,7 +148,6 @@ public class PowerConduit : MonoBehaviour
             if (outputObject2.GetComponent<PowerReceiver>() != null)
             {
                 outputObject2.GetComponent<PowerReceiver>().power = 0;
-                outputObject2.GetComponent<PowerReceiver>().speed = 1;
                 outputObject2.GetComponent<PowerReceiver>().powerON = false;
             }
             if (outputObject2.GetComponent<PowerConduit>() != null)
@@ -482,7 +480,7 @@ public class PowerConduit : MonoBehaviour
         }
         if (dualOutput == true)
         {
-            GameObject[] allObjects = FindObjectsOfType<GameObject>();
+            GameObject[] allObjects = GameObject.FindGameObjectsWithTag("Built");
             foreach (GameObject obj in allObjects)
             {
                 float distance = Vector3.Distance(transform.position, obj.transform.position);

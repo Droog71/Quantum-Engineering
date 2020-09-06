@@ -49,7 +49,7 @@ public class DarkMatterCollector : MonoBehaviour
             UpdatePowerReceiver();
 
             updateTick = 0;
-            if (speed > power)
+            if (speed > power && power != 0)
             {
                 speed = power;
             }
@@ -187,13 +187,5 @@ public class DarkMatterCollector : MonoBehaviour
         power = powerReceiver.power;
         powerON = powerReceiver.powerON;
         powerObject = powerReceiver.powerObject;
-        if (powerReceiver.overClocked == true)
-        {
-            speed = powerReceiver.speed;
-        }
-        else
-        {
-            powerReceiver.speed = speed;
-        }
     }
 }

@@ -16,7 +16,6 @@ public class HeatExchanger : MonoBehaviour
     private LineRenderer connectionLine;
     private float updateTick;
     public int address;
-    public string type;
     private int machineTimer;
     public int connectionAttempts;
     public bool connectionFailed;
@@ -82,10 +81,6 @@ public class HeatExchanger : MonoBehaviour
                     inputType = inputObject.GetComponent<UniversalConduit>().type;
                     if (inputObject.GetComponent<UniversalConduit>().type.Equals("Ice"))
                     {
-                        if (speed > inputObject.GetComponent<UniversalConduit>().speed)
-                        {
-                            speed = inputObject.GetComponent<UniversalConduit>().speed;
-                        }
                         if (amount >= speed && speed > 0)
                         {
                             providingCooling = true;

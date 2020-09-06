@@ -284,7 +284,7 @@ public class MachineInteraction : MonoBehaviour
             {
                 playerController.machineInputID = playerController.objectInSight.GetComponent<UniversalConduit>().inputObject.GetComponent<HeatExchanger>().ID;
                 playerController.machineInputAmount = playerController.objectInSight.GetComponent<UniversalConduit>().inputObject.GetComponent<HeatExchanger>().amount;
-                playerController.machineInputType = playerController.objectInSight.GetComponent<UniversalConduit>().inputObject.GetComponent<HeatExchanger>().type;
+                playerController.machineInputType = playerController.objectInSight.GetComponent<UniversalConduit>().inputObject.GetComponent<HeatExchanger>().inputType;
             }
             if (playerController.objectInSight.GetComponent<UniversalConduit>().inputObject.GetComponent<GearCutter>() != null)
             {
@@ -295,6 +295,12 @@ public class MachineInteraction : MonoBehaviour
         }
         if (playerController.objectInSight.GetComponent<UniversalConduit>().outputObject != null)
         {
+            if (playerController.objectInSight.GetComponent<UniversalConduit>().outputObject.GetComponent<PowerSource>() != null)
+            {
+                playerController.machineOutputID = playerController.objectInSight.GetComponent<UniversalConduit>().outputObject.GetComponent<PowerSource>().ID;
+                playerController.machineOutputAmount = playerController.objectInSight.GetComponent<UniversalConduit>().outputObject.GetComponent<PowerSource>().fuelAmount;
+                playerController.machineOutputType = playerController.objectInSight.GetComponent<UniversalConduit>().outputObject.GetComponent<PowerSource>().fuelType;
+            }
             if (playerController.objectInSight.GetComponent<UniversalConduit>().outputObject.GetComponent<UniversalConduit>() != null)
             {
                 playerController.machineOutputID = playerController.objectInSight.GetComponent<UniversalConduit>().outputObject.GetComponent<UniversalConduit>().ID;

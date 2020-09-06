@@ -29,6 +29,9 @@ public class GuiCoordinates : MonoBehaviour
     public Rect storageSearchLabelRect;
     public Rect storageComputerMessageRect;
 
+    public Rect craftingTitleRect;
+    public Rect marketTitleRect;
+
     public Rect craftingPreviousRect;
     public Rect craftingNextRect;
 
@@ -224,7 +227,7 @@ public class GuiCoordinates : MonoBehaviour
         messageRect = new Rect((ScreenWidth * 0.48f), (ScreenHeight * 0.49f), (ScreenWidth * 0.5f), (ScreenHeight * 0.5f));
         highMessageRect = new Rect((ScreenWidth * 0.48f), (ScreenHeight * 0.30f), (ScreenWidth * 0.5f), (ScreenHeight * 0.5f));
         longHighMessageRect = new Rect((ScreenWidth * 0.44f), (ScreenHeight * 0.30f), (ScreenWidth * 0.55f), (ScreenHeight * 0.5f));
-        savingBackgroundRect = new Rect((ScreenWidth * 0.45f), (ScreenHeight * 0.56f), (ScreenWidth * 0.14f), (ScreenHeight * 0.05f));
+        savingBackgroundRect = new Rect((ScreenWidth * 0.445f), (ScreenHeight * 0.555f), (ScreenWidth * 0.14f), (ScreenHeight * 0.05f));
 
         //CROSSHAIR
         crosshairRect = new Rect((ScreenWidth * 0.48f), (ScreenHeight * 0.47f), (ScreenWidth * 0.04f), (ScreenHeight * 0.06f));
@@ -244,6 +247,9 @@ public class GuiCoordinates : MonoBehaviour
         storageComputerSearchRect = new Rect((ScreenWidth * 0.28f), (ScreenHeight * 0.28f), (ScreenWidth * 0.12f), (ScreenHeight * 0.025f));
         storageSearchLabelRect = new Rect((ScreenWidth * 0.32f), (ScreenHeight * 0.26f), (ScreenWidth * 0.2f), (ScreenHeight * 0.5f));
         storageComputerMessageRect = new Rect((ScreenWidth * 0.42f), (ScreenHeight * 0.28f), (ScreenWidth * 0.2f), (ScreenHeight * 0.5f));
+
+        craftingTitleRect = new Rect((ScreenWidth * 0.25f), (ScreenHeight * 0.60f), (ScreenWidth * 0.20f), (ScreenHeight * 0.10f));
+        marketTitleRect = new Rect((ScreenWidth * 0.265f), (ScreenHeight * 0.60f), (ScreenWidth * 0.20f), (ScreenHeight * 0.10f));
 
         craftingPreviousRect = new Rect((ScreenWidth * 0.08f), (ScreenHeight * 0.63f), (ScreenWidth * 0.07f), (ScreenHeight * 0.025f));
         craftingNextRect = new Rect((ScreenWidth * 0.45f), (ScreenHeight * 0.63f), (ScreenWidth * 0.07f), (ScreenHeight * 0.025f));

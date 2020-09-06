@@ -53,7 +53,7 @@ public class Smelter : MonoBehaviour
             UpdatePowerReceiver();
 
             updateTick = 0;
-            if (speed > power)
+            if (speed > power && power != 0)
             {
                 speed = power;
             }
@@ -170,24 +170,28 @@ public class Smelter : MonoBehaviour
     // Sets output item type based on the input item.
     private void SetOutputType()
     {
-        inputType = inputObject.GetComponent<UniversalConduit>().type;
-        if (inputObject.GetComponent<UniversalConduit>().type.Equals("Copper Ore"))
+        string incoming = inputObject.GetComponent<UniversalConduit>().type;
+        if (incoming != "" && incoming != "nothing")
+        {
+            inputType = inputObject.GetComponent<UniversalConduit>().type;
+        }
+        if (inputType.Equals("Copper Ore"))
         {
             outputType = "Copper Ingot";
         }
-        if (inputObject.GetComponent<UniversalConduit>().type.Equals("Iron Ore"))
+        if (inputType.Equals("Iron Ore"))
         {
             outputType = "Iron Ingot";
         }
-        if (inputObject.GetComponent<UniversalConduit>().type.Equals("Tin Ore"))
+        if (inputType.Equals("Tin Ore"))
         {
             outputType = "Tin Ingot";
         }
-        if (inputObject.GetComponent<UniversalConduit>().type.Equals("Aluminum Ore"))
+        if (inputType.Equals("Aluminum Ore"))
         {
             outputType = "Aluminum Ingot";
         }
-        if (inputObject.GetComponent<UniversalConduit>().type.Equals("Regolith"))
+        if (inputType.Equals("Regolith"))
         {
             outputType = "Glass Block";
         }
@@ -270,13 +274,5 @@ public class Smelter : MonoBehaviour
         power = powerReceiver.power;
         powerON = powerReceiver.powerON;
         powerObject = powerReceiver.powerObject;
-        if (powerReceiver.overClocked == true)
-        {
-            speed = powerReceiver.speed;
-        }
-        else
-        {
-            powerReceiver.speed = speed;
-        }
     }
 }

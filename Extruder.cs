@@ -52,7 +52,7 @@ public class Extruder : MonoBehaviour
             UpdatePowerReceiver();
 
             updateTick = 0;
-            if (speed > power)
+            if (speed > power && power != 0)
             {
                 speed = power;
             }
@@ -184,7 +184,11 @@ public class Extruder : MonoBehaviour
     // Sets the appropriate output item according to the input
     private void SetOutputType()
     {
-        inputType = inputObject.GetComponent<UniversalConduit>().type;
+        string incoming = inputObject.GetComponent<UniversalConduit>().type;
+        if (incoming != "" && incoming != "nothing")
+        {
+            inputType = inputObject.GetComponent<UniversalConduit>().type;
+        }
         if (inputObject.GetComponent<UniversalConduit>().type.Equals("Copper Ingot"))
         {
             outputType = "Copper Wire";
@@ -261,13 +265,5 @@ public class Extruder : MonoBehaviour
         power = powerReceiver.power;
         powerON = powerReceiver.powerON;
         powerObject = powerReceiver.powerObject;
-        if (powerReceiver.overClocked == true)
-        {
-            speed = powerReceiver.speed;
-        }
-        else
-        {
-            powerReceiver.speed = speed;
-        }
     }
 }

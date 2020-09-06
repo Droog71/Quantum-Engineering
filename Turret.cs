@@ -57,7 +57,7 @@ public class Turret : MonoBehaviour
             }
             if (game != null)
             {
-                if (speed > power)
+                if (speed > power && power != 0)
                 {
                     speed = speed > 30 ? 30 : power;
                 }
@@ -229,13 +229,5 @@ public class Turret : MonoBehaviour
         power = powerReceiver.power;
         powerON = powerReceiver.powerON;
         powerObject = powerReceiver.powerObject;
-        if (powerReceiver.overClocked == true)
-        {
-            speed = powerReceiver.speed;
-        }
-        else
-        {
-            powerReceiver.speed = speed;
-        }
     }
 }

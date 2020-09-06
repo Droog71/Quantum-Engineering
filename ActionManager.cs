@@ -521,52 +521,57 @@ public class ActionManager
             pc.scanning = true;
             pc.scanner.GetComponent<AudioSource>().Play();
             pc.scannerFlash.SetActive(true);
-            GameObject[] allObjects = Object.FindObjectsOfType<GameObject>();
-            foreach (GameObject obj in allObjects)
+            UniversalResource[] allResources = Object.FindObjectsOfType<UniversalResource>();
+            foreach (UniversalResource resource in allResources)
             {
-                float distance = Vector3.Distance(pc.gameObject.transform.position, obj.transform.position);
+                float distance = Vector3.Distance(pc.gameObject.transform.position, resource.gameObject.transform.position);
                 if (distance < 2000)
                 {
-                    float x = obj.transform.position.x;
-                    float y = obj.transform.position.y + 15;
-                    float z = obj.transform.position.z;
-
+                    float x = resource.gameObject.transform.position.x;
+                    float y = resource.gameObject.transform.position.y + 15;
+                    float z = resource.gameObject.transform.position.z;
                     Vector3 pos = new Vector3(x, y, z);
                     Quaternion rot = pc.gameObject.transform.rotation;
-
                     GameObject newPing = Object.Instantiate(pc.ping, pos, rot);
-
-                    if (obj.GetComponent<UniversalResource>() != null)
+                    if (resource.type.Equals("Iron Ore"))
                     {
-                        if (obj.GetComponent<UniversalResource>().type.Equals("Iron Ore"))
-                        {
-                            newPing.GetComponent<Ping>().type = "iron";
-                        }
-                        if (obj.GetComponent<UniversalResource>().type.Equals("Tin Ore"))
-                        {
-                            newPing.GetComponent<Ping>().type = "tin";
-                        }
-                        if (obj.GetComponent<UniversalResource>().type.Equals("Copper Ore"))
-                        {
-                            newPing.GetComponent<Ping>().type = "copper";
-                        }
-                        if (obj.GetComponent<UniversalResource>().type.Equals("Aluminum Ore"))
-                        {
-                            newPing.GetComponent<Ping>().type = "aluminum";
-                        }
-                        if (obj.GetComponent<UniversalResource>().type.Equals("Ice"))
-                        {
-                            newPing.GetComponent<Ping>().type = "ice";
-                        }
-                        if (obj.GetComponent<UniversalResource>().type.Equals("Coal"))
-                        {
-                            newPing.GetComponent<Ping>().type = "coal";
-                        }
+                        newPing.GetComponent<Ping>().type = "iron";
                     }
-                    else if (obj.GetComponent<DarkMatter>() != null)
+                    if (resource.type.Equals("Tin Ore"))
                     {
-                        newPing.GetComponent<Ping>().type = "darkMatter";
+                        newPing.GetComponent<Ping>().type = "tin";
                     }
+                    if (resource.type.Equals("Copper Ore"))
+                    {
+                        newPing.GetComponent<Ping>().type = "copper";
+                    }
+                    if (resource.type.Equals("Aluminum Ore"))
+                    {
+                        newPing.GetComponent<Ping>().type = "aluminum";
+                    }
+                    if (resource.type.Equals("Ice"))
+                    {
+                        newPing.GetComponent<Ping>().type = "ice";
+                    }
+                    if (resource.type.Equals("Coal"))
+                    {
+                        newPing.GetComponent<Ping>().type = "coal";
+                    }
+                }
+            }
+            DarkMatter[] allDarkMatter = Object.FindObjectsOfType<DarkMatter>();
+            foreach (DarkMatter dm in allDarkMatter)
+            {
+                float distance = Vector3.Distance(pc.gameObject.transform.position, dm.gameObject.transform.position);
+                if (distance < 2000)
+                {
+                    float x = dm.gameObject.transform.position.x;
+                    float y = dm.gameObject.transform.position.y + 15;
+                    float z = dm.gameObject.transform.position.z;
+                    Vector3 pos = new Vector3(x, y, z);
+                    Quaternion rot = pc.gameObject.transform.rotation;
+                    GameObject newPing = Object.Instantiate(pc.ping, pos, rot);
+                    newPing.GetComponent<Ping>().type = "darkMatter";
                 }
             }
         }

@@ -53,17 +53,12 @@ public class StateManager : MonoBehaviour
     private Quaternion ObjectPrintingRotation;
     private Quaternion PartRotation = Quaternion.Euler(new Vector3(0.0f, 0.0f, 0.0f));
     private Coroutine saveCoroutine;
-
-    //Whether or not initialization has completed.
     public bool Loaded = false;
 
     void LoadWorld()
     {
-        //LOADING BUILT OBJECTS
-        //Debug.Log("Game Starting");
         if (Loaded == false && PlayerPrefs.GetInt(WorldName + "ConstructionTotal") != 0)
         {
-            //Debug.Log("Getting Objects");
             ConstructionCount = 0;
             do
             {
@@ -71,7 +66,6 @@ public class StateManager : MonoBehaviour
                 ObjectPrintingLocation = PlayerPrefsX.GetVector3(WorldName + PartNumber + "Position");
                 ObjectPrintingRotation = PlayerPrefsX.GetQuaternion(WorldName + PartNumber + "Rotation");
                 ObjectName = PlayerPrefs.GetString(WorldName + PartNumber + "Name");
-                //Debug.Log("Spawning " + ObjectName + " " + PartNumber + " at " + ObjectPrintingLocation);
                 if (ObjectName != "" && ObjectPrintingLocation != EmptyVector)
                 {
                     if (ObjectName == WorldName + "AirLock")
@@ -85,6 +79,7 @@ public class StateManager : MonoBehaviour
                     {
                         GameObject PrintedPart = Instantiate(DarkMatterCollector, ObjectPrintingLocation, ObjectPrintingRotation);
                         PrintedPart.GetComponent<DarkMatterCollector>().speed = PlayerPrefs.GetInt(ObjectName + PartNumber + "speed");
+                        PrintedPart.GetComponent<DarkMatterCollector>().darkMatterAmount = PlayerPrefs.GetFloat(ObjectName + PartNumber + "darkMatterAmount");
                         PrintedPart.GetComponent<DarkMatterCollector>().creationMethod = "spawned";
                         PrintedPart.GetComponent<PhysicsHandler>().falling = PlayerPrefsX.GetBool(ObjectName + PartNumber + "falling");
                         PrintedPart.GetComponent<PhysicsHandler>().fallingStack = PlayerPrefsX.GetBool(ObjectName + PartNumber + "fallingStack");
@@ -97,6 +92,7 @@ public class StateManager : MonoBehaviour
                         PrintedPart.GetComponent<DarkMatterConduit>().outputID = PlayerPrefs.GetString(ObjectName + PartNumber + "outputID");
                         PrintedPart.GetComponent<DarkMatterConduit>().speed = PlayerPrefs.GetInt(ObjectName + PartNumber + "speed");
                         PrintedPart.GetComponent<DarkMatterConduit>().range = PlayerPrefs.GetInt(ObjectName + PartNumber + "range");
+                        PrintedPart.GetComponent<DarkMatterConduit>().darkMatterAmount = PlayerPrefs.GetFloat(ObjectName + PartNumber + "darkMatterAmount");
                         PrintedPart.GetComponent<DarkMatterConduit>().creationMethod = "spawned";
                         PrintedPart.GetComponent<PhysicsHandler>().falling = PlayerPrefsX.GetBool(ObjectName + PartNumber + "falling");
                         PrintedPart.GetComponent<PhysicsHandler>().fallingStack = PlayerPrefsX.GetBool(ObjectName + PartNumber + "fallingStack");
@@ -128,8 +124,10 @@ public class StateManager : MonoBehaviour
                         GameObject PrintedPart = Instantiate(UniversalConduit, ObjectPrintingLocation, ObjectPrintingRotation);
                         PrintedPart.GetComponent<UniversalConduit>().inputID = PlayerPrefs.GetString(ObjectName + PartNumber + "inputID");
                         PrintedPart.GetComponent<UniversalConduit>().outputID = PlayerPrefs.GetString(ObjectName + PartNumber + "outputID");
+                        PrintedPart.GetComponent<UniversalConduit>().type = PlayerPrefs.GetString(ObjectName + PartNumber + "type");
                         PrintedPart.GetComponent<UniversalConduit>().speed = PlayerPrefs.GetInt(ObjectName + PartNumber + "speed");
                         PrintedPart.GetComponent<UniversalConduit>().range = PlayerPrefs.GetInt(ObjectName + PartNumber + "range");
+                        PrintedPart.GetComponent<UniversalConduit>().amount = PlayerPrefs.GetFloat(ObjectName + PartNumber + "amount");
                         PrintedPart.GetComponent<UniversalConduit>().creationMethod = "spawned";
                         PrintedPart.GetComponent<PhysicsHandler>().falling = PlayerPrefsX.GetBool(ObjectName + PartNumber + "falling");
                         PrintedPart.GetComponent<PhysicsHandler>().fallingStack = PlayerPrefsX.GetBool(ObjectName + PartNumber + "fallingStack");
@@ -141,6 +139,7 @@ public class StateManager : MonoBehaviour
                         PrintedPart.GetComponent<Retriever>().inputID = PlayerPrefs.GetString(ObjectName + PartNumber + "inputID");
                         PrintedPart.GetComponent<Retriever>().outputID = PlayerPrefs.GetString(ObjectName + PartNumber + "outputID");
                         PrintedPart.GetComponent<Retriever>().speed = PlayerPrefs.GetInt(ObjectName + PartNumber + "speed");
+                        PrintedPart.GetComponent<Retriever>().amount = PlayerPrefs.GetFloat(ObjectName + PartNumber + "amount");
                         PrintedPart.GetComponent<Retriever>().creationMethod = "spawned";
                         PrintedPart.GetComponent<PhysicsHandler>().falling = PlayerPrefsX.GetBool(ObjectName + PartNumber + "falling");
                         PrintedPart.GetComponent<PhysicsHandler>().fallingStack = PlayerPrefsX.GetBool(ObjectName + PartNumber + "fallingStack");
@@ -162,7 +161,10 @@ public class StateManager : MonoBehaviour
                         GameObject PrintedPart = Instantiate(Smelter, ObjectPrintingLocation, ObjectPrintingRotation);
                         PrintedPart.GetComponent<Smelter>().inputID = PlayerPrefs.GetString(ObjectName + PartNumber + "inputID");
                         PrintedPart.GetComponent<Smelter>().outputID = PlayerPrefs.GetString(ObjectName + PartNumber + "outputID");
+                        PrintedPart.GetComponent<Smelter>().inputType = PlayerPrefs.GetString(ObjectName + PartNumber + "inputType");
+                        PrintedPart.GetComponent<Smelter>().outputType = PlayerPrefs.GetString(ObjectName + PartNumber + "outputType");
                         PrintedPart.GetComponent<Smelter>().speed = PlayerPrefs.GetInt(ObjectName + PartNumber + "speed");
+                        PrintedPart.GetComponent<Smelter>().amount = PlayerPrefs.GetFloat(ObjectName + PartNumber + "amount");
                         PrintedPart.GetComponent<Smelter>().creationMethod = "spawned";
                         PrintedPart.GetComponent<PhysicsHandler>().falling = PlayerPrefsX.GetBool(ObjectName + PartNumber + "falling");
                         PrintedPart.GetComponent<PhysicsHandler>().fallingStack = PlayerPrefsX.GetBool(ObjectName + PartNumber + "fallingStack");
@@ -174,6 +176,8 @@ public class StateManager : MonoBehaviour
                         PrintedPart.GetComponent<HeatExchanger>().inputID = PlayerPrefs.GetString(ObjectName + PartNumber + "inputID");
                         PrintedPart.GetComponent<HeatExchanger>().outputID = PlayerPrefs.GetString(ObjectName + PartNumber + "outputID");
                         PrintedPart.GetComponent<HeatExchanger>().speed = PlayerPrefs.GetInt(ObjectName + PartNumber + "speed");
+                        PrintedPart.GetComponent<HeatExchanger>().amount = PlayerPrefs.GetFloat(ObjectName + PartNumber + "amount");
+                        PrintedPart.GetComponent<HeatExchanger>().inputType = PlayerPrefs.GetString(ObjectName + PartNumber + "inputType");
                         PrintedPart.GetComponent<HeatExchanger>().creationMethod = "spawned";
                         PrintedPart.GetComponent<PhysicsHandler>().falling = PlayerPrefsX.GetBool(ObjectName + PartNumber + "falling");
                         PrintedPart.GetComponent<PhysicsHandler>().fallingStack = PlayerPrefsX.GetBool(ObjectName + PartNumber + "fallingStack");
@@ -224,6 +228,7 @@ public class StateManager : MonoBehaviour
                         PrintedPart.GetComponent<PowerConduit>().outputID2 = PlayerPrefs.GetString(ObjectName + PartNumber + "outputID2");
                         PrintedPart.GetComponent<PowerConduit>().dualOutput = PlayerPrefsX.GetBool(ObjectName + PartNumber + "dualOutput");
                         PrintedPart.GetComponent<PowerConduit>().range = PlayerPrefs.GetInt(ObjectName + PartNumber + "range");
+                        PrintedPart.GetComponent<PowerConduit>().powerAmount = PlayerPrefs.GetInt(ObjectName + PartNumber + "powerAmount");
                         PrintedPart.GetComponent<PowerConduit>().creationMethod = "spawned";
                         PrintedPart.GetComponent<PhysicsHandler>().falling = PlayerPrefsX.GetBool(ObjectName + PartNumber + "falling");
                         PrintedPart.GetComponent<PhysicsHandler>().fallingStack = PlayerPrefsX.GetBool(ObjectName + PartNumber + "fallingStack");
@@ -233,6 +238,7 @@ public class StateManager : MonoBehaviour
                     {
                         GameObject PrintedPart = Instantiate(Auger, ObjectPrintingLocation, ObjectPrintingRotation);
                         PrintedPart.GetComponent<Auger>().speed = PlayerPrefs.GetInt(ObjectName + PartNumber + "speed");
+                        PrintedPart.GetComponent<Auger>().amount = PlayerPrefs.GetFloat(ObjectName + PartNumber + "amount");
                         PrintedPart.GetComponent<Auger>().creationMethod = "spawned";
                         PrintedPart.GetComponent<PhysicsHandler>().falling = PlayerPrefsX.GetBool(ObjectName + PartNumber + "falling");
                         PrintedPart.GetComponent<PhysicsHandler>().fallingStack = PlayerPrefsX.GetBool(ObjectName + PartNumber + "fallingStack");
@@ -260,8 +266,14 @@ public class StateManager : MonoBehaviour
                         GameObject PrintedPart = Instantiate(AlloySmelter, ObjectPrintingLocation, ObjectPrintingRotation);
                         PrintedPart.GetComponent<AlloySmelter>().inputID1 = PlayerPrefs.GetString(ObjectName + PartNumber + "inputID1");
                         PrintedPart.GetComponent<AlloySmelter>().inputID2 = PlayerPrefs.GetString(ObjectName + PartNumber + "inputID2");
+                        PrintedPart.GetComponent<AlloySmelter>().inputType1 = PlayerPrefs.GetString(ObjectName + PartNumber + "inputType1");
+                        PrintedPart.GetComponent<AlloySmelter>().inputType2 = PlayerPrefs.GetString(ObjectName + PartNumber + "inputType2");
+                        PrintedPart.GetComponent<AlloySmelter>().outputType = PlayerPrefs.GetString(ObjectName + PartNumber + "outputType");
                         PrintedPart.GetComponent<AlloySmelter>().outputID = PlayerPrefs.GetString(ObjectName + PartNumber + "outputID");
                         PrintedPart.GetComponent<AlloySmelter>().speed = PlayerPrefs.GetInt(ObjectName + PartNumber + "speed");
+                        PrintedPart.GetComponent<AlloySmelter>().amount = PlayerPrefs.GetFloat(ObjectName + PartNumber + "amount");
+                        PrintedPart.GetComponent<AlloySmelter>().amount2 = PlayerPrefs.GetFloat(ObjectName + PartNumber + "amount2");
+                        PrintedPart.GetComponent<AlloySmelter>().outputAmount = PlayerPrefs.GetFloat(ObjectName + PartNumber + "outputAmount");
                         PrintedPart.GetComponent<AlloySmelter>().creationMethod = "spawned";
                         PrintedPart.GetComponent<PhysicsHandler>().falling = PlayerPrefsX.GetBool(ObjectName + PartNumber + "falling");
                         PrintedPart.GetComponent<PhysicsHandler>().fallingStack = PlayerPrefsX.GetBool(ObjectName + PartNumber + "fallingStack");
@@ -272,7 +284,10 @@ public class StateManager : MonoBehaviour
                         GameObject PrintedPart = Instantiate(Press, ObjectPrintingLocation, ObjectPrintingRotation);
                         PrintedPart.GetComponent<Press>().inputID = PlayerPrefs.GetString(ObjectName + PartNumber + "inputID");
                         PrintedPart.GetComponent<Press>().outputID = PlayerPrefs.GetString(ObjectName + PartNumber + "outputID");
+                        PrintedPart.GetComponent<Press>().inputType = PlayerPrefs.GetString(ObjectName + PartNumber + "inputType");
+                        PrintedPart.GetComponent<Press>().outputType = PlayerPrefs.GetString(ObjectName + PartNumber + "outputType");
                         PrintedPart.GetComponent<Press>().speed = PlayerPrefs.GetInt(ObjectName + PartNumber + "speed");
+                        PrintedPart.GetComponent<Press>().amount = PlayerPrefs.GetFloat(ObjectName + PartNumber + "amount");
                         PrintedPart.GetComponent<Press>().creationMethod = "spawned";
                         PrintedPart.GetComponent<PhysicsHandler>().falling = PlayerPrefsX.GetBool(ObjectName + PartNumber + "falling");
                         PrintedPart.GetComponent<PhysicsHandler>().fallingStack = PlayerPrefsX.GetBool(ObjectName + PartNumber + "fallingStack");
@@ -283,7 +298,10 @@ public class StateManager : MonoBehaviour
                         GameObject PrintedPart = Instantiate(Extruder, ObjectPrintingLocation, ObjectPrintingRotation);
                         PrintedPart.GetComponent<Extruder>().inputID = PlayerPrefs.GetString(ObjectName + PartNumber + "inputID");
                         PrintedPart.GetComponent<Extruder>().outputID = PlayerPrefs.GetString(ObjectName + PartNumber + "outputID");
+                        PrintedPart.GetComponent<Extruder>().inputType = PlayerPrefs.GetString(ObjectName + PartNumber + "inputType");
+                        PrintedPart.GetComponent<Extruder>().outputType = PlayerPrefs.GetString(ObjectName + PartNumber + "outputType");
                         PrintedPart.GetComponent<Extruder>().speed = PlayerPrefs.GetInt(ObjectName + PartNumber + "speed");
+                        PrintedPart.GetComponent<Extruder>().amount = PlayerPrefs.GetFloat(ObjectName + PartNumber + "amount");
                         PrintedPart.GetComponent<Extruder>().creationMethod = "spawned";
                         PrintedPart.GetComponent<PhysicsHandler>().falling = PlayerPrefsX.GetBool(ObjectName + PartNumber + "falling");
                         PrintedPart.GetComponent<PhysicsHandler>().fallingStack = PlayerPrefsX.GetBool(ObjectName + PartNumber + "fallingStack");
@@ -294,7 +312,10 @@ public class StateManager : MonoBehaviour
                         GameObject PrintedPart = Instantiate(GearCutter, ObjectPrintingLocation, ObjectPrintingRotation);
                         PrintedPart.GetComponent<GearCutter>().inputID = PlayerPrefs.GetString(ObjectName + PartNumber + "inputID");
                         PrintedPart.GetComponent<GearCutter>().outputID = PlayerPrefs.GetString(ObjectName + PartNumber + "outputID");
+                        PrintedPart.GetComponent<GearCutter>().inputType = PlayerPrefs.GetString(ObjectName + PartNumber + "inputType");
+                        PrintedPart.GetComponent<GearCutter>().outputType = PlayerPrefs.GetString(ObjectName + PartNumber + "outputType");
                         PrintedPart.GetComponent<GearCutter>().speed = PlayerPrefs.GetInt(ObjectName + PartNumber + "speed");
+                        PrintedPart.GetComponent<GearCutter>().amount = PlayerPrefs.GetFloat(ObjectName + PartNumber + "amount");
                         PrintedPart.GetComponent<GearCutter>().creationMethod = "spawned";
                         PrintedPart.GetComponent<PhysicsHandler>().falling = PlayerPrefsX.GetBool(ObjectName + PartNumber + "falling");
                         PrintedPart.GetComponent<PhysicsHandler>().fallingStack = PlayerPrefsX.GetBool(ObjectName + PartNumber + "fallingStack");
@@ -304,6 +325,8 @@ public class StateManager : MonoBehaviour
                     {
                         GameObject PrintedPart = Instantiate(UniversalExtractor, ObjectPrintingLocation, ObjectPrintingRotation);
                         PrintedPart.GetComponent<UniversalExtractor>().speed = PlayerPrefs.GetInt(ObjectName + PartNumber + "speed");
+                        PrintedPart.GetComponent<UniversalExtractor>().amount = PlayerPrefs.GetFloat(ObjectName + PartNumber + "amount");
+                        PrintedPart.GetComponent<UniversalExtractor>().type = PlayerPrefs.GetString(ObjectName + PartNumber + "type");
                         PrintedPart.GetComponent<UniversalExtractor>().creationMethod = "spawned";
                         PrintedPart.GetComponent<PhysicsHandler>().falling = PlayerPrefsX.GetBool(ObjectName + PartNumber + "falling");
                         PrintedPart.GetComponent<PhysicsHandler>().fallingStack = PlayerPrefsX.GetBool(ObjectName + PartNumber + "fallingStack");
@@ -441,7 +464,9 @@ public class StateManager : MonoBehaviour
                         go.GetComponent<Auger>().ID = (PartName + PartNumber);
                         go.GetComponent<Auger>().address = ConstructionCount;
                         int speed = go.GetComponent<Auger>().speed;
+                        float amount = go.GetComponent<Auger>().amount;
                         PlayerPrefs.SetInt(PartName + PartNumber + "speed", speed);
+                        PlayerPrefs.SetFloat(PartName + PartNumber + "amount", amount);
                         PlayerPrefsX.SetBool(PartName + PartNumber + "falling", go.GetComponent<PhysicsHandler>().falling);
                         PlayerPrefsX.SetBool(PartName + PartNumber + "fallingStack", go.GetComponent<PhysicsHandler>().fallingStack);
                     }
@@ -459,7 +484,9 @@ public class StateManager : MonoBehaviour
                         go.GetComponent<DarkMatterCollector>().ID = (PartName + PartNumber);
                         go.GetComponent<DarkMatterCollector>().address = ConstructionCount;
                         int speed = go.GetComponent<DarkMatterCollector>().speed;
+                        float darkMatterAmount = go.GetComponent<DarkMatterCollector>().darkMatterAmount;
                         PlayerPrefs.SetInt(PartName + PartNumber + "speed", speed);
+                        PlayerPrefs.SetFloat(PartName + PartNumber + "darkMatterAmount", darkMatterAmount);
                         PlayerPrefsX.SetBool(PartName + PartNumber + "falling", go.GetComponent<PhysicsHandler>().falling);
                         PlayerPrefsX.SetBool(PartName + PartNumber + "fallingStack", go.GetComponent<PhysicsHandler>().fallingStack);
                     }
@@ -471,11 +498,13 @@ public class StateManager : MonoBehaviour
                         string inputID = go.GetComponent<DarkMatterConduit>().inputID;
                         string outputID = go.GetComponent<DarkMatterConduit>().outputID;
                         int speed = go.GetComponent<DarkMatterConduit>().speed;
+                        float darkMatterAmount = go.GetComponent<DarkMatterConduit>().darkMatterAmount;
                         int range = go.GetComponent<DarkMatterConduit>().range;
                         PlayerPrefs.SetString(PartName + PartNumber + "inputID", inputID);
                         PlayerPrefs.SetString(PartName + PartNumber + "outputID", outputID);
                         PlayerPrefs.SetInt(PartName + PartNumber + "speed", speed);
                         PlayerPrefs.SetInt(PartName + PartNumber + "range", range);
+                        PlayerPrefs.SetFloat(PartName + PartNumber + "darkMatterAmount", darkMatterAmount);
                         PlayerPrefsX.SetBool(PartName + PartNumber + "falling", go.GetComponent<PhysicsHandler>().falling);
                         PlayerPrefsX.SetBool(PartName + PartNumber + "fallingStack", go.GetComponent<PhysicsHandler>().fallingStack);
                         //Debug.Log("Saving " + PartName + PartNumber + " with outputID of " + outputID);
@@ -523,12 +552,16 @@ public class StateManager : MonoBehaviour
                         go.GetComponent<UniversalConduit>().ID = (PartName + PartNumber);
                         string inputID = go.GetComponent<UniversalConduit>().inputID;
                         string outputID = go.GetComponent<UniversalConduit>().outputID;
+                        string type = go.GetComponent<UniversalConduit>().type;
                         int speed = go.GetComponent<UniversalConduit>().speed;
                         int range = go.GetComponent<UniversalConduit>().range;
+                        float amount = go.GetComponent<UniversalConduit>().amount;
                         PlayerPrefs.SetString(PartName + PartNumber + "inputID", inputID);
                         PlayerPrefs.SetString(PartName + PartNumber + "outputID", outputID);
+                        PlayerPrefs.SetString(PartName + PartNumber + "type", type);
                         PlayerPrefs.SetInt(PartName + PartNumber + "speed", speed);
                         PlayerPrefs.SetInt(PartName + PartNumber + "range", range);
+                        PlayerPrefs.SetFloat(PartName + PartNumber + "amount", amount);
                         PlayerPrefsX.SetBool(PartName + PartNumber + "falling", go.GetComponent<PhysicsHandler>().falling);
                         PlayerPrefsX.SetBool(PartName + PartNumber + "fallingStack", go.GetComponent<PhysicsHandler>().fallingStack);
                         //Debug.Log("Saving " + PartName + PartNumber + " with outputID of " + outputID);
@@ -540,10 +573,14 @@ public class StateManager : MonoBehaviour
                         go.GetComponent<HeatExchanger>().ID = (PartName + PartNumber);
                         string inputID = go.GetComponent<HeatExchanger>().inputID;
                         string outputID = go.GetComponent<HeatExchanger>().outputID;
+                        string inputType = go.GetComponent<HeatExchanger>().inputType;
                         int speed = go.GetComponent<HeatExchanger>().speed;
+                        float amount = go.GetComponent<HeatExchanger>().amount;
                         PlayerPrefs.SetString(PartName + PartNumber + "inputID", inputID);
                         PlayerPrefs.SetString(PartName + PartNumber + "outputID", outputID);
+                        PlayerPrefs.SetString(PartName + PartNumber + "inputType", inputType);
                         PlayerPrefs.SetInt(PartName + PartNumber + "speed", speed);
+                        PlayerPrefs.SetFloat(PartName + PartNumber + "amount", amount);
                         PlayerPrefsX.SetBool(PartName + PartNumber + "falling", go.GetComponent<PhysicsHandler>().falling);
                         PlayerPrefsX.SetBool(PartName + PartNumber + "fallingStack", go.GetComponent<PhysicsHandler>().fallingStack);
                         //Debug.Log("Saving " + PartName + PartNumber + " with outputID of " + outputID);
@@ -556,9 +593,11 @@ public class StateManager : MonoBehaviour
                         string inputID = go.GetComponent<Retriever>().inputID;
                         string outputID = go.GetComponent<Retriever>().outputID;
                         int speed = go.GetComponent<Retriever>().speed;
+                        float amount = go.GetComponent<Retriever>().amount;
                         PlayerPrefs.SetString(PartName + PartNumber + "inputID", inputID);
                         PlayerPrefs.SetString(PartName + PartNumber + "outputID", outputID);
                         PlayerPrefs.SetInt(PartName + PartNumber + "speed", speed);
+                        PlayerPrefs.SetFloat(PartName + PartNumber + "amount", amount);
                         PlayerPrefsX.SetBool(PartName + PartNumber + "falling", go.GetComponent<PhysicsHandler>().falling);
                         PlayerPrefsX.SetBool(PartName + PartNumber + "fallingStack", go.GetComponent<PhysicsHandler>().fallingStack);
                         if (go.GetComponent<InventoryManager>() != null)
@@ -591,10 +630,16 @@ public class StateManager : MonoBehaviour
                         go.GetComponent<Smelter>().ID = (PartName + PartNumber);
                         string inputID = go.GetComponent<Smelter>().inputID;
                         string outputID = go.GetComponent<Smelter>().outputID;
+                        string inputType = go.GetComponent<Smelter>().inputType;
+                        string outputType = go.GetComponent<Smelter>().outputType;
                         int speed = go.GetComponent<Smelter>().speed;
+                        float amount = go.GetComponent<Smelter>().amount;
                         PlayerPrefs.SetString(PartName + PartNumber + "inputID", inputID);
                         PlayerPrefs.SetString(PartName + PartNumber + "outputID", outputID);
+                        PlayerPrefs.SetString(PartName + PartNumber + "inputType", inputType);
+                        PlayerPrefs.SetString(PartName + PartNumber + "outputType", outputType);
                         PlayerPrefs.SetInt(PartName + PartNumber + "speed", speed);
+                        PlayerPrefs.SetFloat(PartName + PartNumber + "amount", amount);
                         PlayerPrefsX.SetBool(PartName + PartNumber + "falling", go.GetComponent<PhysicsHandler>().falling);
                         PlayerPrefsX.SetBool(PartName + PartNumber + "fallingStack", go.GetComponent<PhysicsHandler>().fallingStack);
                         //Debug.Log("Saving " + PartName + PartNumber + " with outputID of " + outputID);
@@ -655,6 +700,7 @@ public class StateManager : MonoBehaviour
                         string outputID2 = go.GetComponent<PowerConduit>().outputID2;
                         bool dualOutput = go.GetComponent<PowerConduit>().dualOutput;
                         int range = go.GetComponent<PowerConduit>().range;
+                        int powerAmount = go.GetComponent<PowerConduit>().powerAmount;
                         PlayerPrefs.SetString(PartName + PartNumber + "inputID", inputID);
                         PlayerPrefs.SetString(PartName + PartNumber + "outputID1", outputID1);
                         PlayerPrefs.SetString(PartName + PartNumber + "outputID2", outputID2);
@@ -672,12 +718,24 @@ public class StateManager : MonoBehaviour
 
                         string inputID1 = go.GetComponent<AlloySmelter>().inputID1;
                         string inputID2 = go.GetComponent<AlloySmelter>().inputID2;
+                        string inputType1 = go.GetComponent<AlloySmelter>().inputType1;
+                        string inputType2 = go.GetComponent<AlloySmelter>().inputType2;
+                        string outputType = go.GetComponent<AlloySmelter>().outputType;
                         string outputID = go.GetComponent<AlloySmelter>().outputID;
                         int speed = go.GetComponent<AlloySmelter>().speed;
+                        float amount = go.GetComponent<AlloySmelter>().amount;
+                        float amount2 = go.GetComponent<AlloySmelter>().amount2;
+                        float outputAmount = go.GetComponent<AlloySmelter>().outputAmount;
                         PlayerPrefs.SetString(PartName + PartNumber + "inputID1", inputID1);
                         PlayerPrefs.SetString(PartName + PartNumber + "inputID2", inputID2);
+                        PlayerPrefs.SetString(PartName + PartNumber + "inputType1", inputType1);
+                        PlayerPrefs.SetString(PartName + PartNumber + "inputType2", inputType2);
+                        PlayerPrefs.SetString(PartName + PartNumber + "outputType", outputType);
                         PlayerPrefs.SetString(PartName + PartNumber + "outputID", outputID);
                         PlayerPrefs.SetInt(PartName + PartNumber + "speed", speed);
+                        PlayerPrefs.SetFloat(PartName + PartNumber + "amount", amount);
+                        PlayerPrefs.SetFloat(PartName + PartNumber + "amount2", amount2);
+                        PlayerPrefs.SetFloat(PartName + PartNumber + "amount", outputAmount);
                         PlayerPrefsX.SetBool(PartName + PartNumber + "falling", go.GetComponent<PhysicsHandler>().falling);
                         PlayerPrefsX.SetBool(PartName + PartNumber + "fallingStack", go.GetComponent<PhysicsHandler>().fallingStack);
                         //Debug.Log("Saving " + PartName + PartNumber + " with outputID of " + outputID);
@@ -688,11 +746,17 @@ public class StateManager : MonoBehaviour
                         go.GetComponent<Press>().address = ConstructionCount;
                         go.GetComponent<Press>().ID = (PartName + PartNumber);
                         string inputID = go.GetComponent<Press>().inputID;
+                        string inputType = go.GetComponent<Press>().inputType;
+                        string outputType = go.GetComponent<Press>().outputType;
                         string outputID = go.GetComponent<Press>().outputID;
                         int speed = go.GetComponent<Press>().speed;
+                        float amount = go.GetComponent<Press>().amount;
                         PlayerPrefs.SetString(PartName + PartNumber + "inputID", inputID);
+                        PlayerPrefs.SetString(PartName + PartNumber + "inputType", inputType);
+                        PlayerPrefs.SetString(PartName + PartNumber + "outputType", outputType);
                         PlayerPrefs.SetString(PartName + PartNumber + "outputID", outputID);
                         PlayerPrefs.SetInt(PartName + PartNumber + "speed", speed);
+                        PlayerPrefs.SetFloat(PartName + PartNumber + "amount", amount);
                         PlayerPrefsX.SetBool(PartName + PartNumber + "falling", go.GetComponent<PhysicsHandler>().falling);
                         PlayerPrefsX.SetBool(PartName + PartNumber + "fallingStack", go.GetComponent<PhysicsHandler>().fallingStack);
                         //Debug.Log("Saving " + PartName + PartNumber + " with outputID of " + outputID);
@@ -703,11 +767,17 @@ public class StateManager : MonoBehaviour
                         go.GetComponent<Extruder>().address = ConstructionCount;
                         go.GetComponent<Extruder>().ID = (PartName + PartNumber);
                         string inputID = go.GetComponent<Extruder>().inputID;
+                        string inputType = go.GetComponent<Extruder>().inputType;
+                        string outputType = go.GetComponent<Extruder>().outputType;
                         string outputID = go.GetComponent<Extruder>().outputID;
                         int speed = go.GetComponent<Extruder>().speed;
+                        float amount = go.GetComponent<Extruder>().amount;
                         PlayerPrefs.SetString(PartName + PartNumber + "inputID", inputID);
+                        PlayerPrefs.SetString(PartName + PartNumber + "inputType", inputType);
+                        PlayerPrefs.SetString(PartName + PartNumber + "outputType", outputType);
                         PlayerPrefs.SetString(PartName + PartNumber + "outputID", outputID);
                         PlayerPrefs.SetInt(PartName + PartNumber + "speed", speed);
+                        PlayerPrefs.SetFloat(PartName + PartNumber + "amount", amount);
                         PlayerPrefsX.SetBool(PartName + PartNumber + "falling", go.GetComponent<PhysicsHandler>().falling);
                         PlayerPrefsX.SetBool(PartName + PartNumber + "fallingStack", go.GetComponent<PhysicsHandler>().fallingStack);
                         //Debug.Log("Saving " + PartName + PartNumber + " with outputID of " + outputID);
@@ -718,11 +788,17 @@ public class StateManager : MonoBehaviour
                         go.GetComponent<GearCutter>().address = ConstructionCount;
                         go.GetComponent<GearCutter>().ID = (PartName + PartNumber);
                         string inputID = go.GetComponent<GearCutter>().inputID;
+                        string inputType = go.GetComponent<GearCutter>().inputType;
+                        string outputType = go.GetComponent<GearCutter>().outputType;
                         string outputID = go.GetComponent<GearCutter>().outputID;
                         int speed = go.GetComponent<GearCutter>().speed;
+                        float amount = go.GetComponent<GearCutter>().amount;
                         PlayerPrefs.SetString(PartName + PartNumber + "inputID", inputID);
+                        PlayerPrefs.SetString(PartName + PartNumber + "inputType", inputType);
+                        PlayerPrefs.SetString(PartName + PartNumber + "outputType", outputType);
                         PlayerPrefs.SetString(PartName + PartNumber + "outputID", outputID);
                         PlayerPrefs.SetInt(PartName + PartNumber + "speed", speed);
+                        PlayerPrefs.SetFloat(PartName + PartNumber + "amount", amount);
                         PlayerPrefsX.SetBool(PartName + PartNumber + "falling", go.GetComponent<PhysicsHandler>().falling);
                         PlayerPrefsX.SetBool(PartName + PartNumber + "fallingStack", go.GetComponent<PhysicsHandler>().fallingStack);
                         //Debug.Log("Saving " + PartName + PartNumber + " with outputID of " + outputID);
@@ -733,7 +809,11 @@ public class StateManager : MonoBehaviour
                         go.GetComponent<UniversalExtractor>().address = ConstructionCount;
                         go.GetComponent<UniversalExtractor>().ID = (PartName + PartNumber);
                         int speed = go.GetComponent<UniversalExtractor>().speed;
+                        float amount = go.GetComponent<UniversalExtractor>().amount;
+                        string type = go.GetComponent<UniversalExtractor>().type;
                         PlayerPrefs.SetInt(PartName + PartNumber + "speed", speed);
+                        PlayerPrefs.SetFloat(PartName + PartNumber + "amount", amount);
+                        PlayerPrefs.SetString(PartName + PartNumber + "type", type);
                         PlayerPrefsX.SetBool(PartName + PartNumber + "falling", go.GetComponent<PhysicsHandler>().falling);
                         PlayerPrefsX.SetBool(PartName + PartNumber + "fallingStack", go.GetComponent<PhysicsHandler>().fallingStack);
                     }
