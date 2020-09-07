@@ -4,6 +4,8 @@ using System.Collections.Generic;
 public class PlayerGUI : MonoBehaviour
 {
     private PlayerController playerController;
+    private GameManager gameManager;
+    private StateManager stateManager;
     private InventoryManager playerInventory;
     private TextureDictionary td;
     private GuiCoordinates guiCoordinates;
@@ -22,6 +24,8 @@ public class PlayerGUI : MonoBehaviour
     {
         playerController = GetComponent<PlayerController>();
         playerInventory = GetComponent<InventoryManager>();
+        gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
+        stateManager = GameObject.Find("GameManager").GetComponent<StateManager>();
         guiCoordinates = GetComponent<GuiCoordinates>();
         td = GetComponent<TextureDictionary>();
     }
@@ -34,18 +38,57 @@ public class PlayerGUI : MonoBehaviour
         && cGUI.showingInputGUI == false
         && playerController.exiting == false
         && playerController.requestedSave == false
-        && GameObject.Find("GameManager").GetComponent<GameManager>().dataSaveRequested == false
-        && GameObject.Find("GameManager").GetComponent<StateManager>().saving == false;
+        && gameManager.dataSaveRequested == false
+        && stateManager.saving == false;
 
+    }
+
+    private bool IsStandardBlock(string type)
+    {
+        return type == "Brick"
+        || type == "Glass Block"
+        || type == "Iron Block"
+        || type == "Iron Ramp"
+        || type == "Steel Block"
+        || type == "Steel Ramp";
     }
 
     private bool SavingMessageRequired()
     {
         return playerController.exiting == true
         || playerController.requestedSave == true
-        || GameObject.Find("GameManager").GetComponent<GameManager>().dataSaveRequested == true
-        || GameObject.Find("GameManager").GetComponent<StateManager>().saving == true;
+        || gameManager.dataSaveRequested == true
+        || stateManager.saving == true;
+    }
 
+    private bool TabletNotificationRequired()
+    {
+        return playerController.meteorShowerWarningActive == true
+        || playerController.timeToDeliverWarningRecieved == true
+        || playerController.pirateAttackWarningActive == true
+        || playerController.destructionMessageActive == true;
+    }
+
+    private void ClearSchematic()
+    {
+        schematic1 = false;
+        schematic2 = false;
+        schematic3 = false;
+        schematic4 = false;
+        schematic5 = false;
+        schematic6 = false;
+        schematic7 = false;
+    }
+
+    private bool SchematicActive()
+    {
+        return schematic1 == true
+        || schematic2 == true
+        || schematic3 == true
+        || schematic4 == true
+        || schematic5 == true
+        || schematic6 == true
+        || schematic7 == true;
     }
 
     // Called by unity engine for rendering and handling GUI events
@@ -85,7 +128,7 @@ public class PlayerGUI : MonoBehaviour
             }
 
             //METEOR SHOWER WARNINGS
-            if (playerController.meteorShowerWarningActive == true || playerController.timeToDeliverWarningRecieved == true || playerController.pirateAttackWarningActive == true || playerController.destructionMessageActive == true)
+            if (TabletNotificationRequired())
             {
                 GUI.Label(guiCoordinates.topLeftInfoRect, "Urgent message received! Check your tablet for more information.");
             }
@@ -289,7 +332,7 @@ public class PlayerGUI : MonoBehaviour
                 }
                 if (playerController.schematicMenuOpen == true)
                 {
-                    if (schematic1 == false || schematic2 == false || schematic3 == false || schematic4 == false || schematic5 == false || schematic6 == false || schematic7 == false)
+                    if (!SchematicActive())
                     {
                         GUI.DrawTexture(guiCoordinates.schematicsMenuBackgroundRect, td.dictionary["Menu Background"]);
                         if (GUI.Button(guiCoordinates.optionsButton1Rect, "Dark Matter"))
@@ -385,30 +428,18 @@ public class PlayerGUI : MonoBehaviour
                     {
                         GUI.DrawTexture(new Rect(0, 0, ScreenWidth, ScreenHeight), td.dictionary["Heat Exchanger Schematic"]);
                     }
-                    if (schematic1 == true || schematic2 == true || schematic3 == true || schematic4 == true || schematic5 == true || schematic6 == true || schematic7 == true)
+                    if (SchematicActive())
                     {
                         if (GUI.Button(guiCoordinates.schematicCloseRect,"CLOSE") || Input.anyKey)
                         {
-                            schematic1 = false;
-                            schematic2 = false;
-                            schematic3 = false;
-                            schematic4 = false;
-                            schematic5 = false;
-                            schematic6 = false;
-                            schematic7 = false;
+                            ClearSchematic();
                             playerController.PlayButtonSound();
                         }
                     }
                 }
                 else
                 {
-                    schematic1 = false;
-                    schematic2 = false;
-                    schematic3 = false;
-                    schematic4 = false;
-                    schematic5 = false;
-                    schematic6 = false;
-                    schematic7 = false;
+                    ClearSchematic();
                 }
             }
 
@@ -447,14 +478,15 @@ public class PlayerGUI : MonoBehaviour
                 GUI.Label(guiCoordinates.sliderLabel3Rect, "Volume");
                 GUI.Label(guiCoordinates.sliderLabel4Rect, "FOV");
                 GUI.Label(guiCoordinates.sliderLabel5Rect, "Draw Distance");
-                GetComponent<MSCameraController>().CameraSettings.firstPerson.sensibilityX = GUI.HorizontalSlider(guiCoordinates.optionsButton4Rect, GetComponent<MSCameraController>().CameraSettings.firstPerson.sensibilityX, 0, 10);
-                GetComponent<MSCameraController>().CameraSettings.firstPerson.sensibilityY = GUI.HorizontalSlider(guiCoordinates.optionsButton5Rect, GetComponent<MSCameraController>().CameraSettings.firstPerson.sensibilityY, 0, 10);
+                MSACC_SettingsCameraFirstPerson cs = GetComponent<MSCameraController>().CameraSettings.firstPerson;
+                cs.sensibilityX = GUI.HorizontalSlider(guiCoordinates.optionsButton4Rect, cs.sensibilityX, 0, 10);
+                cs.sensibilityY = GUI.HorizontalSlider(guiCoordinates.optionsButton5Rect, cs.sensibilityY, 0, 10);
                 AudioListener.volume = GUI.HorizontalSlider(guiCoordinates.optionsButton6Rect, AudioListener.volume, 0, 5);
                 GetComponent<MSCameraController>().cameras[0].volume = AudioListener.volume;
                 playerController.mCam.fieldOfView = GUI.HorizontalSlider(guiCoordinates.optionsButton7Rect, playerController.mCam.fieldOfView, 60, 80);
                 playerController.mCam.farClipPlane = GUI.HorizontalSlider(guiCoordinates.optionsButton8Rect, playerController.mCam.farClipPlane, 1000, 100000);
                 string blockPhysicsDisplay = "";
-                if (GameObject.Find("GameManager").GetComponent<GameManager>().blockPhysics == true)
+                if (gameManager.blockPhysics == true)
                 {
                     blockPhysicsDisplay = "ON";
                 }
@@ -464,19 +496,19 @@ public class PlayerGUI : MonoBehaviour
                 }
                 if (GUI.Button(guiCoordinates.optionsButton9Rect, "Block Physics: "+ blockPhysicsDisplay))
                 {
-                    if (GameObject.Find("GameManager").GetComponent<GameManager>().blockPhysics == false)
+                    if (gameManager.blockPhysics == false)
                     {
-                        GameObject.Find("GameManager").GetComponent<GameManager>().blockPhysics = true;
+                        gameManager.blockPhysics = true;
                     }
                     else
                     {
-                        GameObject.Find("GameManager").GetComponent<GameManager>().blockPhysics = false;
+                        gameManager.blockPhysics = false;
                     }
-                    FileBasedPrefs.SetBool(GameObject.Find("GameManager").GetComponent<StateManager>().WorldName + "blockPhysics", GameObject.Find("GameManager").GetComponent<GameManager>().blockPhysics);
+                    PlayerPrefsX.SetPersistentBool("blockPhysics", gameManager.blockPhysics);
                     playerController.PlayButtonSound();
                 }
                 string hazardsEnabledDisplay = "";
-                if (GameObject.Find("GameManager").GetComponent<GameManager>().hazardsEnabled == true)
+                if (gameManager.hazardsEnabled == true)
                 {
                     hazardsEnabledDisplay = "ON";
                 }
@@ -486,15 +518,15 @@ public class PlayerGUI : MonoBehaviour
                 }
                 if (GUI.Button(guiCoordinates.optionsButton10Rect, "Hazards: " + hazardsEnabledDisplay))
                 {
-                    if (GameObject.Find("GameManager").GetComponent<GameManager>().hazardsEnabled == false)
+                    if (gameManager.hazardsEnabled == false)
                     {
-                        GameObject.Find("GameManager").GetComponent<GameManager>().hazardsEnabled = true;
+                        gameManager.hazardsEnabled = true;
                     }
                     else
                     {
-                        GameObject.Find("GameManager").GetComponent<GameManager>().hazardsEnabled = false;
+                        gameManager.hazardsEnabled = false;
                     }
-                    FileBasedPrefs.SetBool(GameObject.Find("GameManager").GetComponent<StateManager>().WorldName + "hazardsEnabled", GameObject.Find("GameManager").GetComponent<GameManager>().hazardsEnabled);
+                    PlayerPrefsX.SetPersistentBool("hazardsEnabled", gameManager.hazardsEnabled);
                     playerController.PlayButtonSound();
                 }
                 if (GUI.Button(guiCoordinates.optionsButton11Rect, "BACK"))
@@ -580,7 +612,7 @@ public class PlayerGUI : MonoBehaviour
                         buildItemCount += slot.amountInSlot;
                     }
                 }
-                if (playerController.buildType == "Brick" || playerController.buildType == "Glass Block" || playerController.buildType == "Iron Block" || playerController.buildType == "Iron Ramp" || playerController.buildType == "Steel Block" || playerController.buildType == "Steel Ramp")
+                if (IsStandardBlock(playerController.buildType))
                 {
                     GUI.Label(guiCoordinates.buildItemCountRect, "" + buildItemCount + "\nx" + playerController.buildMultiplier);
                 }
@@ -604,10 +636,14 @@ public class PlayerGUI : MonoBehaviour
                     playerController.paintRed = GUI.HorizontalSlider(guiCoordinates.optionsButton4Rect, playerController.paintRed, 0, 1);
                     playerController.paintGreen = GUI.HorizontalSlider(guiCoordinates.optionsButton5Rect, playerController.paintGreen, 0, 1);
                     playerController.paintBlue = GUI.HorizontalSlider(guiCoordinates.optionsButton6Rect, playerController.paintBlue, 0, 1);
-                    GUI.color = new Color(playerController.paintRed, playerController.paintGreen, playerController.paintBlue);
-                    playerController.paintGunTank.GetComponent<Renderer>().material.color = new Color(playerController.paintRed, playerController.paintGreen, playerController.paintBlue);
-                    playerController.adjustedPaintGunTank.GetComponent<Renderer>().material.color = new Color(playerController.paintRed, playerController.paintGreen, playerController.paintBlue);
-                    playerController.adjustedPaintGunTank2.GetComponent<Renderer>().material.color = new Color(playerController.paintRed, playerController.paintGreen, playerController.paintBlue);
+                    Color paintcolor = new Color(playerController.paintRed, playerController.paintGreen, playerController.paintBlue);
+                    Material tankMat = playerController.paintGunTank.GetComponent<Renderer>().material;
+                    Material adjTankMat = playerController.adjustedPaintGunTank.GetComponent<Renderer>().material;
+                    Material adjTank2Mat = playerController.adjustedPaintGunTank2.GetComponent<Renderer>().material;
+                    tankMat.color = paintcolor;
+                    adjTankMat.color = paintcolor;
+                    adjTank2Mat.color = paintcolor;
+                    GUI.color = paintcolor;
                     GUI.DrawTexture(guiCoordinates.optionsButton3Rect, td.dictionary["Iron Block"]);
                     GUI.color = Color.white;
                     if (GUI.Button(guiCoordinates.optionsButton8Rect, "DONE"))

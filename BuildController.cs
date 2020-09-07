@@ -4,6 +4,7 @@ using System;
 public class BuildController : MonoBehaviour
 {
     private PlayerController playerController;
+    private GameManager gameManager;
     private BlockDictionary blockDictionary;
     LineRenderer dirLine;
     public Material lineMat;
@@ -12,7 +13,8 @@ public class BuildController : MonoBehaviour
     public void Start()
     {
         playerController = GetComponent<PlayerController>();
-        blockDictionary = GetComponent<BlockDictionary>();
+        gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
+        blockDictionary = new BlockDictionary(playerController);
         builtObjects = GameObject.Find("Built_Objects");
     }
 
@@ -27,7 +29,7 @@ public class BuildController : MonoBehaviour
                 if (GameObject.Find("GameManager").GetComponent<GameManager>().working == false)
                 {
                     playerController.stoppingBuildCoRoutine = true;
-                    GameObject.Find("GameManager").GetComponent<GameManager>().CombineBlocks();
+                    gameManager.meshManager.CombineBlocks();
                     playerController.separatedBlocks = false;
                     playerController.destroyTimer = 0;
                     playerController.buildTimer = 0;
@@ -42,9 +44,9 @@ public class BuildController : MonoBehaviour
 
             if (playerController.separatedBlocks == false)
             {
-                if (GameObject.Find("GameManager").GetComponent<GameManager>().working == false)
+                if (gameManager.working == false)
                 {
-                    GameObject.Find("GameManager").GetComponent<GameManager>().SeparateBlocks(transform.position, "all", true);
+                    gameManager.meshManager.SeparateBlocks(transform.position, "all", true);
                     playerController.separatedBlocks = true;
                 }
                 else
@@ -59,9 +61,9 @@ public class BuildController : MonoBehaviour
                 if (distance > 15)
                 {
                     //Debug.Log("new chunk loaded");
-                    if (GameObject.Find("GameManager").GetComponent<GameManager>().working == false)
+                    if (gameManager.working == false)
                     {
-                        GameObject.Find("GameManager").GetComponent<GameManager>().SeparateBlocks(transform.position, "all", true);
+                        gameManager.meshManager.SeparateBlocks(transform.position, "all", true);
                         playerController.separatedBlocks = true;
                     }
                     else
@@ -135,9 +137,9 @@ public class BuildController : MonoBehaviour
                     else
                     {
                         playerController.buildObject.GetComponent<MeshRenderer>().material.color = Color.red;
-                        if (GameObject.Find("GameManager").GetComponent<GameManager>().working == false)
+                        if (gameManager.working == false)
                         {
-                            GameObject.Find("GameManager").GetComponent<GameManager>().SeparateBlocks(buildHit.point, "all", true);
+                            gameManager.meshManager.SeparateBlocks(buildHit.point, "all", true);
                         }
                     }
                 }
@@ -312,10 +314,10 @@ public class BuildController : MonoBehaviour
         }
         if (foundItems == false)
         {
-            if (GameObject.Find("GameManager").GetComponent<GameManager>().working == false)
+            if (gameManager.working == false)
             {
                 playerController.stoppingBuildCoRoutine = true;
-                GameObject.Find("GameManager").GetComponent<GameManager>().CombineBlocks();
+                gameManager.meshManager.CombineBlocks();
                 playerController.separatedBlocks = false;
                 playerController.destroyTimer = 0;
                 playerController.buildTimer = 0;
@@ -390,10 +392,10 @@ public class BuildController : MonoBehaviour
         }
         if (foundItems == false)
         {
-            if (GameObject.Find("GameManager").GetComponent<GameManager>().working == false)
+            if (gameManager.working == false)
             {
                 playerController.stoppingBuildCoRoutine = true;
-                GameObject.Find("GameManager").GetComponent<GameManager>().CombineBlocks();
+                gameManager.meshManager.CombineBlocks();
                 playerController.separatedBlocks = false;
                 playerController.destroyTimer = 0;
                 playerController.buildTimer = 0;

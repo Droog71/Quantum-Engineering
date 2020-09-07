@@ -41,19 +41,58 @@ public class StateManager : MonoBehaviour
     public GameObject Brick;
     public GameObject BuiltObjects;
     public string WorldName = "World";
-    private int ConstructionCount = 0;
-    private string PartNumber = "";
-    private string PartName = "";
+    private float updateTick;
     private string ObjectName = "";
+    public string PartName = "";
+    public Vector3 PartPosition = new Vector3(0.0f, 0.0f, 0.0f);
+    public Quaternion PartRotation = Quaternion.Euler(new Vector3(0.0f, 0.0f, 0.0f));
+    public string PartNumber = "";
+    public bool Loaded = false;
+    public bool assigningIDs;
+    public int ConstructionCount = 0;
     private Vector3 EmptyVector = new Vector3(0.0f, 0.0f, 0.0f);
-    private Vector3 PartPosition = new Vector3(0.0f, 0.0f, 0.0f);
     private Vector3 ObjectPrintingLocation;
     private Quaternion ObjectPrintingRotation;
-    private Quaternion PartRotation = Quaternion.Euler(new Vector3(0.0f, 0.0f, 0.0f));
+    private AddressManager addressManager;
+    private SaveManager saveManager;
+    private Coroutine addressingCoroutine;
     private Coroutine saveCoroutine;
-    public bool Loaded = false;
 
-    void LoadWorld()
+    // Called by unity engine before the first update.
+    public void Start()
+    {
+        saveManager = new SaveManager(this);
+    }
+
+    // Update is called once per frame
+    public void Update()
+    {
+        if (GameObject.Find("Player").GetComponent<MainMenu>().worldSelected == true && worldLoaded == false)
+        {
+            LoadWorld();
+            worldLoaded = true;
+        }
+        if (worldLoaded == true)
+        {
+            if (addressManager == null)
+            {
+                addressManager = new AddressManager(this);
+            }
+
+            updateTick += 1 * Time.deltaTime;
+            if (updateTick > 1)
+            {
+                if (saving == false)
+                {
+                    AssignIDs();
+                }
+                updateTick = 0;
+            }
+        }
+    }
+
+    // Loads a saved world.
+    private void LoadWorld()
     {
         if (Loaded == false && FileBasedPrefs.GetInt(WorldName + "ConstructionTotal") != 0)
         {
@@ -405,513 +444,29 @@ public class StateManager : MonoBehaviour
         GetComponent<GameManager>().initBrick = FileBasedPrefs.GetBool(WorldName + "initBrick");
         GetComponent<GameManager>().initIron = FileBasedPrefs.GetBool(WorldName + "initIron");
         GetComponent<GameManager>().initSteel = FileBasedPrefs.GetBool(WorldName + "initSteel");
-        GameObject.Find("GameManager").GetComponent<GameManager>().CombineBlocks();
+        GameObject.Find("GameManager").GetComponent<GameManager>().meshManager.CombineBlocks();
     }
 
-    // Update is called once per frame
-    void Update()
+    // Assigns ID to objects in the world.
+    private void AssignIDs()
     {
-        if (GameObject.Find("Player").GetComponent<MainMenu>().worldSelected == true && worldLoaded == false)
-        {
-            LoadWorld();
-            worldLoaded = true;
-        }
+        addressingCoroutine = StartCoroutine(addressManager.AddressingCoroutine());
     }
 
-    //SAVING BUILT OBJECTS
+    // Saves the game.
     public void SaveData()
     {
-        saveCoroutine = StartCoroutine(SaveDataCoroutine());
+        if (assigningIDs == false)
+            saveCoroutine = StartCoroutine(saveManager.SaveDataCoroutine());
     }
 
-    IEnumerator SaveDataCoroutine()
+    // Returns true if the object in question is a storage container.
+    public bool IsStorageContainer(GameObject go)
     {
-        dataSaved = false;
-        saving = true;
-        ConstructionCount = 0;
-        int saveInterval = 0;
-        GameObject[] allObjects = GameObject.FindGameObjectsWithTag("Built");
-        foreach (GameObject go in allObjects)
-        {
-            if (go != null)
-            {
-                if (go.transform.parent != BuiltObjects.transform)
-                {
-                    PartPosition = go.transform.position;
-                    PartRotation = go.transform.rotation;
-                    PartNumber = ConstructionCount.ToString();
-                    if (go.GetComponent<Auger>() != null)
-                    {
-                        PartName = WorldName + "Auger";
-                        go.GetComponent<Auger>().ID = (PartName + PartNumber);
-                        go.GetComponent<Auger>().address = ConstructionCount;
-                        int speed = go.GetComponent<Auger>().speed;
-                        float amount = go.GetComponent<Auger>().amount;
-                        FileBasedPrefs.SetInt(PartName + PartNumber + "speed", speed);
-                        FileBasedPrefs.SetFloat(PartName + PartNumber + "amount", amount);
-                        FileBasedPrefs.SetBool(PartName + PartNumber + "falling", go.GetComponent<PhysicsHandler>().falling);
-                        FileBasedPrefs.SetBool(PartName + PartNumber + "fallingStack", go.GetComponent<PhysicsHandler>().fallingStack);
-                    }
-                    if (go.GetComponent<ElectricLight>() != null)
-                    {
-                        PartName = WorldName + "ElectricLight";
-                        go.GetComponent<ElectricLight>().ID = (PartName + PartNumber);
-                        go.GetComponent<ElectricLight>().address = ConstructionCount;
-                        FileBasedPrefs.SetBool(PartName + PartNumber + "falling", go.GetComponent<PhysicsHandler>().falling);
-                        FileBasedPrefs.SetBool(PartName + PartNumber + "fallingStack", go.GetComponent<PhysicsHandler>().fallingStack);
-                    }
-                    if (go.GetComponent<DarkMatterCollector>() != null)
-                    {
-                        PartName = WorldName + "DarkMatterCollector";
-                        go.GetComponent<DarkMatterCollector>().ID = (PartName + PartNumber);
-                        go.GetComponent<DarkMatterCollector>().address = ConstructionCount;
-                        int speed = go.GetComponent<DarkMatterCollector>().speed;
-                        float darkMatterAmount = go.GetComponent<DarkMatterCollector>().darkMatterAmount;
-                        FileBasedPrefs.SetInt(PartName + PartNumber + "speed", speed);
-                        FileBasedPrefs.SetFloat(PartName + PartNumber + "darkMatterAmount", darkMatterAmount);
-                        FileBasedPrefs.SetBool(PartName + PartNumber + "falling", go.GetComponent<PhysicsHandler>().falling);
-                        FileBasedPrefs.SetBool(PartName + PartNumber + "fallingStack", go.GetComponent<PhysicsHandler>().fallingStack);
-                    }
-                    if (go.GetComponent<DarkMatterConduit>() != null)
-                    {
-                        PartName = WorldName + "DarkMatterConduit";
-                        go.GetComponent<DarkMatterConduit>().address = ConstructionCount;
-                        go.GetComponent<DarkMatterConduit>().ID = (PartName + PartNumber);
-                        string inputID = go.GetComponent<DarkMatterConduit>().inputID;
-                        string outputID = go.GetComponent<DarkMatterConduit>().outputID;
-                        int speed = go.GetComponent<DarkMatterConduit>().speed;
-                        float darkMatterAmount = go.GetComponent<DarkMatterConduit>().darkMatterAmount;
-                        int range = go.GetComponent<DarkMatterConduit>().range;
-                        FileBasedPrefs.SetString(PartName + PartNumber + "inputID", inputID);
-                        FileBasedPrefs.SetString(PartName + PartNumber + "outputID", outputID);
-                        FileBasedPrefs.SetInt(PartName + PartNumber + "speed", speed);
-                        FileBasedPrefs.SetInt(PartName + PartNumber + "range", range);
-                        FileBasedPrefs.SetFloat(PartName + PartNumber + "darkMatterAmount", darkMatterAmount);
-                        FileBasedPrefs.SetBool(PartName + PartNumber + "falling", go.GetComponent<PhysicsHandler>().falling);
-                        FileBasedPrefs.SetBool(PartName + PartNumber + "fallingStack", go.GetComponent<PhysicsHandler>().fallingStack);
-                    }
-                    if (go.GetComponent<RailCart>() != null)
-                    {
-                        PartName = WorldName + "RailCart";
-                        go.GetComponent<RailCart>().address = ConstructionCount;
-                        go.GetComponent<RailCart>().ID = (PartName + PartNumber);
-                        string targetID = go.GetComponent<RailCart>().targetID;
-                        if (go.GetComponent<InventoryManager>() != null)
-                        {
-                            go.GetComponent<InventoryManager>().SaveData();
-                        }
-                        FileBasedPrefs.SetString(PartName + PartNumber + "targetID", targetID);
-                    }
-                    if (go.GetComponent<RailCartHub>() != null)
-                    {
-                        PartName = WorldName + "RailCartHub";
-                        go.GetComponent<RailCartHub>().address = ConstructionCount;
-                        go.GetComponent<RailCartHub>().ID = (PartName + PartNumber);
-                        string inputID = go.GetComponent<RailCartHub>().inputID;
-                        string outputID = go.GetComponent<RailCartHub>().outputID;
-                        int range = go.GetComponent<RailCartHub>().range;
-                        bool centralHub = go.GetComponent<RailCartHub>().centralHub;
-                        bool stop = go.GetComponent<RailCartHub>().stop;
-                        int circuit = go.GetComponent<RailCartHub>().circuit;
-                        float stopTime = go.GetComponent<RailCartHub>().stopTime;
-                        FileBasedPrefs.SetString(PartName + PartNumber + "inputID", inputID);
-                        FileBasedPrefs.SetString(PartName + PartNumber + "outputID", outputID);
-                        FileBasedPrefs.SetInt(PartName + PartNumber + "range", range);
-                        FileBasedPrefs.SetInt(PartName + PartNumber + "circuit", circuit);
-                        FileBasedPrefs.SetBool(PartName + PartNumber + "centralHub", centralHub);
-                        FileBasedPrefs.SetBool(PartName + PartNumber + "stop", stop);
-                        FileBasedPrefs.SetFloat(PartName + PartNumber + "stopTime", stopTime);
-                        FileBasedPrefs.SetBool(PartName + PartNumber + "falling", go.GetComponent<PhysicsHandler>().falling);
-                        FileBasedPrefs.SetBool(PartName + PartNumber + "fallingStack", go.GetComponent<PhysicsHandler>().fallingStack);
-                    }
-                    if (go.GetComponent<UniversalConduit>() != null)
-                    {
-                        PartName = WorldName + "UniversalConduit";
-                        go.GetComponent<UniversalConduit>().address = ConstructionCount;
-                        go.GetComponent<UniversalConduit>().ID = (PartName + PartNumber);
-                        string inputID = go.GetComponent<UniversalConduit>().inputID;
-                        string outputID = go.GetComponent<UniversalConduit>().outputID;
-                        string type = go.GetComponent<UniversalConduit>().type;
-                        int speed = go.GetComponent<UniversalConduit>().speed;
-                        int range = go.GetComponent<UniversalConduit>().range;
-                        float amount = go.GetComponent<UniversalConduit>().amount;
-                        FileBasedPrefs.SetString(PartName + PartNumber + "inputID", inputID);
-                        FileBasedPrefs.SetString(PartName + PartNumber + "outputID", outputID);
-                        FileBasedPrefs.SetString(PartName + PartNumber + "type", type);
-                        FileBasedPrefs.SetInt(PartName + PartNumber + "speed", speed);
-                        FileBasedPrefs.SetInt(PartName + PartNumber + "range", range);
-                        FileBasedPrefs.SetFloat(PartName + PartNumber + "amount", amount);
-                        FileBasedPrefs.SetBool(PartName + PartNumber + "falling", go.GetComponent<PhysicsHandler>().falling);
-                        FileBasedPrefs.SetBool(PartName + PartNumber + "fallingStack", go.GetComponent<PhysicsHandler>().fallingStack);
-                    }
-                    if (go.GetComponent<HeatExchanger>() != null)
-                    {
-                        PartName = WorldName + "HeatExchanger";
-                        go.GetComponent<HeatExchanger>().address = ConstructionCount;
-                        go.GetComponent<HeatExchanger>().ID = (PartName + PartNumber);
-                        string inputID = go.GetComponent<HeatExchanger>().inputID;
-                        string outputID = go.GetComponent<HeatExchanger>().outputID;
-                        string inputType = go.GetComponent<HeatExchanger>().inputType;
-                        int speed = go.GetComponent<HeatExchanger>().speed;
-                        float amount = go.GetComponent<HeatExchanger>().amount;
-                        FileBasedPrefs.SetString(PartName + PartNumber + "inputID", inputID);
-                        FileBasedPrefs.SetString(PartName + PartNumber + "outputID", outputID);
-                        FileBasedPrefs.SetString(PartName + PartNumber + "inputType", inputType);
-                        FileBasedPrefs.SetInt(PartName + PartNumber + "speed", speed);
-                        FileBasedPrefs.SetFloat(PartName + PartNumber + "amount", amount);
-                        FileBasedPrefs.SetBool(PartName + PartNumber + "falling", go.GetComponent<PhysicsHandler>().falling);
-                        FileBasedPrefs.SetBool(PartName + PartNumber + "fallingStack", go.GetComponent<PhysicsHandler>().fallingStack);
-                    }
-                    if (go.GetComponent<Retriever>() != null)
-                    {
-                        PartName = WorldName + "Retriever";
-                        go.GetComponent<Retriever>().address = ConstructionCount;
-                        go.GetComponent<Retriever>().ID = (PartName + PartNumber);
-                        string inputID = go.GetComponent<Retriever>().inputID;
-                        string outputID = go.GetComponent<Retriever>().outputID;
-                        int speed = go.GetComponent<Retriever>().speed;
-                        float amount = go.GetComponent<Retriever>().amount;
-                        FileBasedPrefs.SetString(PartName + PartNumber + "inputID", inputID);
-                        FileBasedPrefs.SetString(PartName + PartNumber + "outputID", outputID);
-                        FileBasedPrefs.SetInt(PartName + PartNumber + "speed", speed);
-                        FileBasedPrefs.SetFloat(PartName + PartNumber + "amount", amount);
-                        FileBasedPrefs.SetBool(PartName + PartNumber + "falling", go.GetComponent<PhysicsHandler>().falling);
-                        FileBasedPrefs.SetBool(PartName + PartNumber + "fallingStack", go.GetComponent<PhysicsHandler>().fallingStack);
-                        if (go.GetComponent<InventoryManager>() != null)
-                        {
-                            go.GetComponent<InventoryManager>().SaveData();
-                        }
-                    }
-                    if (go.GetComponent<AutoCrafter>() != null)
-                    {
-                        PartName = WorldName + "AutoCrafter";
-                        go.GetComponent<AutoCrafter>().address = ConstructionCount;
-                        go.GetComponent<AutoCrafter>().ID = (PartName + PartNumber);
-                        string inputID = go.GetComponent<AutoCrafter>().inputID;
-                        int speed = go.GetComponent<AutoCrafter>().speed;
-                        FileBasedPrefs.SetString(PartName + PartNumber + "inputID", inputID);
-                        FileBasedPrefs.SetInt(PartName + PartNumber + "speed", speed);
-                        FileBasedPrefs.SetBool(PartName + PartNumber + "falling", go.GetComponent<PhysicsHandler>().falling);
-                        FileBasedPrefs.SetBool(PartName + PartNumber + "fallingStack", go.GetComponent<PhysicsHandler>().fallingStack);
-                        if (go.GetComponent<InventoryManager>() != null)
-                        {
-                            go.GetComponent<InventoryManager>().SaveData();
-                        }
-                    }
-                    if (go.GetComponent<Smelter>() != null)
-                    {
-                        PartName = WorldName + "Smelter";
-                        go.GetComponent<Smelter>().address = ConstructionCount;
-                        go.GetComponent<Smelter>().ID = (PartName + PartNumber);
-                        string inputID = go.GetComponent<Smelter>().inputID;
-                        string outputID = go.GetComponent<Smelter>().outputID;
-                        string inputType = go.GetComponent<Smelter>().inputType;
-                        string outputType = go.GetComponent<Smelter>().outputType;
-                        int speed = go.GetComponent<Smelter>().speed;
-                        float amount = go.GetComponent<Smelter>().amount;
-                        FileBasedPrefs.SetString(PartName + PartNumber + "inputID", inputID);
-                        FileBasedPrefs.SetString(PartName + PartNumber + "outputID", outputID);
-                        FileBasedPrefs.SetString(PartName + PartNumber + "inputType", inputType);
-                        FileBasedPrefs.SetString(PartName + PartNumber + "outputType", outputType);
-                        FileBasedPrefs.SetInt(PartName + PartNumber + "speed", speed);
-                        FileBasedPrefs.SetFloat(PartName + PartNumber + "amount", amount);
-                        FileBasedPrefs.SetBool(PartName + PartNumber + "falling", go.GetComponent<PhysicsHandler>().falling);
-                        FileBasedPrefs.SetBool(PartName + PartNumber + "fallingStack", go.GetComponent<PhysicsHandler>().fallingStack);
-                    }
-                    if (go.GetComponent<Turret>() != null)
-                    {
-                        PartName = WorldName + "Turret";
-                        go.GetComponent<Turret>().address = ConstructionCount;
-                        go.GetComponent<Turret>().ID = (PartName + PartNumber);
-                        int speed = go.GetComponent<Turret>().speed;
-                        FileBasedPrefs.SetInt(PartName + PartNumber + "speed", speed);
-                        FileBasedPrefs.SetBool(PartName + PartNumber + "falling", go.GetComponent<PhysicsHandler>().falling);
-                        FileBasedPrefs.SetBool(PartName + PartNumber + "fallingStack", go.GetComponent<PhysicsHandler>().fallingStack);
-                    }
-                    if (go.GetComponent<PowerSource>() != null)
-                    {
-                        if (go.GetComponent<PowerSource>().type == "Solar Panel")
-                        {
-                            PartName = WorldName + "SolarPanel";
-                        }
-                        else if (go.GetComponent<PowerSource>().type == "Generator")
-                        {
-                            PartName = WorldName + "Generator";
-                        }
-                        else if (go.GetComponent<PowerSource>().type == "Reactor Turbine")
-                        {
-                            PartName = WorldName + "ReactorTurbine";
-                        }
-                        go.GetComponent<PowerSource>().address = ConstructionCount;
-                        go.GetComponent<PowerSource>().ID = (PartName + PartNumber);
-                        string outputID = go.GetComponent<PowerSource>().outputID;
-                        string fuelType = go.GetComponent<PowerSource>().fuelType;
-                        int fuelAmount = go.GetComponent<PowerSource>().fuelAmount;
-                        FileBasedPrefs.SetString(PartName + PartNumber + "outputID", outputID);
-                        FileBasedPrefs.SetString(PartName + PartNumber + "fuelType", outputID);
-                        FileBasedPrefs.SetInt(PartName + PartNumber + "fuelAmount", fuelAmount);
-                        FileBasedPrefs.SetBool(PartName + PartNumber + "falling", go.GetComponent<PhysicsHandler>().falling);
-                        FileBasedPrefs.SetBool(PartName + PartNumber + "fallingStack", go.GetComponent<PhysicsHandler>().fallingStack);
-                    }
-                    if (go.GetComponent<NuclearReactor>() != null)
-                    {
-                        PartName = WorldName + "NuclearReactor";
-                        go.GetComponent<NuclearReactor>().address = ConstructionCount;
-                        go.GetComponent<NuclearReactor>().ID = (PartName + PartNumber);
-                        FileBasedPrefs.SetBool(PartName + PartNumber + "falling", go.GetComponent<PhysicsHandler>().falling);
-                        FileBasedPrefs.SetBool(PartName + PartNumber + "fallingStack", go.GetComponent<PhysicsHandler>().fallingStack);
-                    }
-                    if (go.GetComponent<PowerConduit>() != null)
-                    {
-                        PartName = WorldName + "PowerConduit";
-                        go.GetComponent<PowerConduit>().address = ConstructionCount;
-                        go.GetComponent<PowerConduit>().ID = (PartName + PartNumber);
-                        string inputID = go.GetComponent<PowerConduit>().inputID;
-                        string outputID1 = go.GetComponent<PowerConduit>().outputID1;
-                        string outputID2 = go.GetComponent<PowerConduit>().outputID2;
-                        bool dualOutput = go.GetComponent<PowerConduit>().dualOutput;
-                        int range = go.GetComponent<PowerConduit>().range;
-                        int powerAmount = go.GetComponent<PowerConduit>().powerAmount;
-                        FileBasedPrefs.SetString(PartName + PartNumber + "inputID", inputID);
-                        FileBasedPrefs.SetString(PartName + PartNumber + "outputID1", outputID1);
-                        FileBasedPrefs.SetString(PartName + PartNumber + "outputID2", outputID2);
-                        FileBasedPrefs.SetBool(PartName + PartNumber + "dualOutput", dualOutput);
-                        FileBasedPrefs.SetInt(PartName + PartNumber + "range", range);
-                        FileBasedPrefs.SetBool(PartName + PartNumber + "falling", go.GetComponent<PhysicsHandler>().falling);
-                        FileBasedPrefs.SetBool(PartName + PartNumber + "fallingStack", go.GetComponent<PhysicsHandler>().fallingStack);
-                    }
-                    if (go.GetComponent<AlloySmelter>() != null)
-                    {
-                        PartName = WorldName + "AlloySmelter";
-                        go.GetComponent<AlloySmelter>().address = ConstructionCount;
-                        go.GetComponent<AlloySmelter>().ID = (PartName + PartNumber);
-
-                        string inputID1 = go.GetComponent<AlloySmelter>().inputID1;
-                        string inputID2 = go.GetComponent<AlloySmelter>().inputID2;
-                        string inputType1 = go.GetComponent<AlloySmelter>().inputType1;
-                        string inputType2 = go.GetComponent<AlloySmelter>().inputType2;
-                        string outputType = go.GetComponent<AlloySmelter>().outputType;
-                        string outputID = go.GetComponent<AlloySmelter>().outputID;
-                        int speed = go.GetComponent<AlloySmelter>().speed;
-                        float amount = go.GetComponent<AlloySmelter>().amount;
-                        float amount2 = go.GetComponent<AlloySmelter>().amount2;
-                        float outputAmount = go.GetComponent<AlloySmelter>().outputAmount;
-                        FileBasedPrefs.SetString(PartName + PartNumber + "inputID1", inputID1);
-                        FileBasedPrefs.SetString(PartName + PartNumber + "inputID2", inputID2);
-                        FileBasedPrefs.SetString(PartName + PartNumber + "inputType1", inputType1);
-                        FileBasedPrefs.SetString(PartName + PartNumber + "inputType2", inputType2);
-                        FileBasedPrefs.SetString(PartName + PartNumber + "outputType", outputType);
-                        FileBasedPrefs.SetString(PartName + PartNumber + "outputID", outputID);
-                        FileBasedPrefs.SetInt(PartName + PartNumber + "speed", speed);
-                        FileBasedPrefs.SetFloat(PartName + PartNumber + "amount", amount);
-                        FileBasedPrefs.SetFloat(PartName + PartNumber + "amount2", amount2);
-                        FileBasedPrefs.SetFloat(PartName + PartNumber + "amount", outputAmount);
-                        FileBasedPrefs.SetBool(PartName + PartNumber + "falling", go.GetComponent<PhysicsHandler>().falling);
-                        FileBasedPrefs.SetBool(PartName + PartNumber + "fallingStack", go.GetComponent<PhysicsHandler>().fallingStack);
-                    }
-                    if (go.GetComponent<Press>() != null)
-                    {
-                        PartName = WorldName + "Press";
-                        go.GetComponent<Press>().address = ConstructionCount;
-                        go.GetComponent<Press>().ID = (PartName + PartNumber);
-                        string inputID = go.GetComponent<Press>().inputID;
-                        string inputType = go.GetComponent<Press>().inputType;
-                        string outputType = go.GetComponent<Press>().outputType;
-                        string outputID = go.GetComponent<Press>().outputID;
-                        int speed = go.GetComponent<Press>().speed;
-                        float amount = go.GetComponent<Press>().amount;
-                        FileBasedPrefs.SetString(PartName + PartNumber + "inputID", inputID);
-                        FileBasedPrefs.SetString(PartName + PartNumber + "inputType", inputType);
-                        FileBasedPrefs.SetString(PartName + PartNumber + "outputType", outputType);
-                        FileBasedPrefs.SetString(PartName + PartNumber + "outputID", outputID);
-                        FileBasedPrefs.SetInt(PartName + PartNumber + "speed", speed);
-                        FileBasedPrefs.SetFloat(PartName + PartNumber + "amount", amount);
-                        FileBasedPrefs.SetBool(PartName + PartNumber + "falling", go.GetComponent<PhysicsHandler>().falling);
-                        FileBasedPrefs.SetBool(PartName + PartNumber + "fallingStack", go.GetComponent<PhysicsHandler>().fallingStack);
-                    }
-                    if (go.GetComponent<Extruder>() != null)
-                    {
-                        PartName = WorldName + "Extruder";
-                        go.GetComponent<Extruder>().address = ConstructionCount;
-                        go.GetComponent<Extruder>().ID = (PartName + PartNumber);
-                        string inputID = go.GetComponent<Extruder>().inputID;
-                        string inputType = go.GetComponent<Extruder>().inputType;
-                        string outputType = go.GetComponent<Extruder>().outputType;
-                        string outputID = go.GetComponent<Extruder>().outputID;
-                        int speed = go.GetComponent<Extruder>().speed;
-                        float amount = go.GetComponent<Extruder>().amount;
-                        FileBasedPrefs.SetString(PartName + PartNumber + "inputID", inputID);
-                        FileBasedPrefs.SetString(PartName + PartNumber + "inputType", inputType);
-                        FileBasedPrefs.SetString(PartName + PartNumber + "outputType", outputType);
-                        FileBasedPrefs.SetString(PartName + PartNumber + "outputID", outputID);
-                        FileBasedPrefs.SetInt(PartName + PartNumber + "speed", speed);
-                        FileBasedPrefs.SetFloat(PartName + PartNumber + "amount", amount);
-                        FileBasedPrefs.SetBool(PartName + PartNumber + "falling", go.GetComponent<PhysicsHandler>().falling);
-                        FileBasedPrefs.SetBool(PartName + PartNumber + "fallingStack", go.GetComponent<PhysicsHandler>().fallingStack);
-                    }
-                    if (go.GetComponent<GearCutter>() != null)
-                    {
-                        PartName = WorldName + "GearCutter";
-                        go.GetComponent<GearCutter>().address = ConstructionCount;
-                        go.GetComponent<GearCutter>().ID = (PartName + PartNumber);
-                        string inputID = go.GetComponent<GearCutter>().inputID;
-                        string inputType = go.GetComponent<GearCutter>().inputType;
-                        string outputType = go.GetComponent<GearCutter>().outputType;
-                        string outputID = go.GetComponent<GearCutter>().outputID;
-                        int speed = go.GetComponent<GearCutter>().speed;
-                        float amount = go.GetComponent<GearCutter>().amount;
-                        FileBasedPrefs.SetString(PartName + PartNumber + "inputID", inputID);
-                        FileBasedPrefs.SetString(PartName + PartNumber + "inputType", inputType);
-                        FileBasedPrefs.SetString(PartName + PartNumber + "outputType", outputType);
-                        FileBasedPrefs.SetString(PartName + PartNumber + "outputID", outputID);
-                        FileBasedPrefs.SetInt(PartName + PartNumber + "speed", speed);
-                        FileBasedPrefs.SetFloat(PartName + PartNumber + "amount", amount);
-                        FileBasedPrefs.SetBool(PartName + PartNumber + "falling", go.GetComponent<PhysicsHandler>().falling);
-                        FileBasedPrefs.SetBool(PartName + PartNumber + "fallingStack", go.GetComponent<PhysicsHandler>().fallingStack);
-                    }
-                    if (go.GetComponent<UniversalExtractor>() != null)
-                    {
-                        PartName = WorldName + "UniversalExtractor";
-                        go.GetComponent<UniversalExtractor>().address = ConstructionCount;
-                        go.GetComponent<UniversalExtractor>().ID = (PartName + PartNumber);
-                        int speed = go.GetComponent<UniversalExtractor>().speed;
-                        float amount = go.GetComponent<UniversalExtractor>().amount;
-                        string type = go.GetComponent<UniversalExtractor>().type;
-                        FileBasedPrefs.SetInt(PartName + PartNumber + "speed", speed);
-                        FileBasedPrefs.SetFloat(PartName + PartNumber + "amount", amount);
-                        FileBasedPrefs.SetString(PartName + PartNumber + "type", type);
-                        FileBasedPrefs.SetBool(PartName + PartNumber + "falling", go.GetComponent<PhysicsHandler>().falling);
-                        FileBasedPrefs.SetBool(PartName + PartNumber + "fallingStack", go.GetComponent<PhysicsHandler>().fallingStack);
-                    }
-                    if (go.GetComponent<InventoryManager>() != null && go.GetComponent<RailCart>() == null && go.GetComponent<PlayerController>() == null && go.GetComponent<Retriever>() == null && go.GetComponent<AutoCrafter>() == null)
-                    {
-                        PartName = WorldName + "StorageContainer";
-                        go.GetComponent<InventoryManager>().ID = (PartName + PartNumber);
-                        go.GetComponent<InventoryManager>().address = ConstructionCount;
-                        go.GetComponent<InventoryManager>().SaveData();
-                        FileBasedPrefs.SetBool(PartName + PartNumber + "falling", go.GetComponent<PhysicsHandler>().falling);
-                        FileBasedPrefs.SetBool(PartName + PartNumber + "fallingStack", go.GetComponent<PhysicsHandler>().fallingStack);
-                    }
-                    if (go.GetComponent<StorageComputer>() != null)
-                    {
-                        PartName = WorldName + "StorageComputer";
-                        go.GetComponent<StorageComputer>().address = ConstructionCount;
-                        go.GetComponent<StorageComputer>().ID = (PartName + PartNumber);
-                        FileBasedPrefs.SetBool(PartName + PartNumber + "falling", go.GetComponent<PhysicsHandler>().falling);
-                        FileBasedPrefs.SetBool(PartName + PartNumber + "fallingStack", go.GetComponent<PhysicsHandler>().fallingStack);
-                    }
-                    if (go.GetComponent<AirLock>() != null)
-                    {
-                        PartName = WorldName + "AirLock";
-                        go.GetComponent<AirLock>().address = ConstructionCount;
-                        go.GetComponent<AirLock>().ID = (PartName + PartNumber);
-                        FileBasedPrefs.SetBool(PartName + PartNumber + "falling", go.GetComponent<PhysicsHandler>().falling);
-                        FileBasedPrefs.SetBool(PartName + PartNumber + "fallingStack", go.GetComponent<PhysicsHandler>().fallingStack);
-                    }
-
-                    FileBasedPrefs.SetString(WorldName + PartNumber + "Name", PartName);
-                    PlayerPrefsX.SetVector3(WorldName + PartNumber + "Position", PartPosition);
-                    PlayerPrefsX.SetQuaternion(WorldName + PartNumber + "Rotation", PartRotation);
-
-                    ConstructionCount++;
-
-                    saveInterval++;
-                    if (saveInterval >= 10)
-                    {
-                        yield return null;
-                        saveInterval = 0;
-                    }
-                }
-            }
-        }
-
-        Transform[] allTransforms = BuiltObjects.GetComponentsInChildren<Transform>(true);
-        foreach (Transform T in allTransforms)
-        {
-            if (T != null)
-            {
-                PartPosition = T.position;
-                PartRotation = T.rotation;
-                PartNumber = ConstructionCount.ToString();
-                if (T.gameObject.GetComponent<IronBlock>() != null)
-                {
-                    if (T.gameObject.name.Equals("IronRamp(Clone)"))
-                    {
-                        PartName = WorldName + "IronRamp";
-                    }
-                    else
-                    {
-                        PartName = WorldName + "IronBlock";
-                    }
-                    T.gameObject.GetComponent<IronBlock>().ID = (PartName + PartNumber);
-                    T.gameObject.GetComponent<IronBlock>().address = ConstructionCount;
-                    FileBasedPrefs.SetString(WorldName + PartNumber + "Name", PartName);
-                    PlayerPrefsX.SetVector3(WorldName + PartNumber + "Position", PartPosition);
-                    PlayerPrefsX.SetQuaternion(WorldName + PartNumber + "Rotation", PartRotation);
-                    FileBasedPrefs.SetBool(PartName + PartNumber + "falling", T.gameObject.GetComponent<PhysicsHandler>().falling);
-                    FileBasedPrefs.SetBool(PartName + PartNumber + "fallingStack", T.gameObject.GetComponent<PhysicsHandler>().fallingStack);
-                    ConstructionCount++;
-                }
-                if (T.gameObject.GetComponent<Steel>() != null)
-                {
-                    if (T.gameObject.name.Equals("SteelRamp(Clone)"))
-                    {
-                        PartName = WorldName + "SteelRamp";
-                    }
-                    else
-                    {
-                        PartName = WorldName + "Steel";
-                    }
-                    T.gameObject.GetComponent<Steel>().ID = (PartName + PartNumber);
-                    T.gameObject.GetComponent<Steel>().address = ConstructionCount;
-                    FileBasedPrefs.SetString(WorldName + PartNumber + "Name", PartName);
-                    PlayerPrefsX.SetVector3(WorldName + PartNumber + "Position", PartPosition);
-                    PlayerPrefsX.SetQuaternion(WorldName + PartNumber + "Rotation", PartRotation);
-                    FileBasedPrefs.SetBool(PartName + PartNumber + "falling", T.gameObject.GetComponent<PhysicsHandler>().falling);
-                    FileBasedPrefs.SetBool(PartName + PartNumber + "fallingStack", T.gameObject.GetComponent<PhysicsHandler>().fallingStack);
-                    ConstructionCount++;
-                }
-                if (T.gameObject.GetComponent<Brick>() != null)
-                {
-                    PartName = WorldName + "Brick";
-                    T.gameObject.GetComponent<Brick>().ID = (PartName + PartNumber);
-                    T.gameObject.GetComponent<Brick>().address = ConstructionCount;
-                    FileBasedPrefs.SetString(WorldName + PartNumber + "Name", PartName);
-                    PlayerPrefsX.SetVector3(WorldName + PartNumber + "Position", PartPosition);
-                    PlayerPrefsX.SetQuaternion(WorldName + PartNumber + "Rotation", PartRotation);
-                    FileBasedPrefs.SetBool(PartName + PartNumber + "falling", T.gameObject.GetComponent<PhysicsHandler>().falling);
-                    FileBasedPrefs.SetBool(PartName + PartNumber + "fallingStack", T.gameObject.GetComponent<PhysicsHandler>().fallingStack);
-                    ConstructionCount++;
-                }
-                if (T.gameObject.GetComponent<Glass>() != null)
-                {
-                    PartName = WorldName + "Glass";
-                    T.gameObject.GetComponent<Glass>().ID = (PartName + PartNumber);
-                    T.gameObject.GetComponent<Glass>().address = ConstructionCount;
-                    FileBasedPrefs.SetString(WorldName + PartNumber + "Name", PartName);
-                    PlayerPrefsX.SetVector3(WorldName + PartNumber + "Position", PartPosition);
-                    PlayerPrefsX.SetQuaternion(WorldName + PartNumber + "Rotation", PartRotation);
-                    FileBasedPrefs.SetBool(PartName + PartNumber + "falling", T.gameObject.GetComponent<PhysicsHandler>().falling);
-                    FileBasedPrefs.SetBool(PartName + PartNumber + "fallingStack", T.gameObject.GetComponent<PhysicsHandler>().fallingStack);
-                    ConstructionCount++;
-                }
-
-                saveInterval++;
-                if (saveInterval >= 10)
-                {
-                    yield return null;
-                    saveInterval = 0;
-                }
-            }
-        }
-
-        if (ConstructionCount != 0)
-        {
-            FileBasedPrefs.SetInt(WorldName + "ConstructionTotal", ConstructionCount);
-        }
-
-        FileBasedPrefs.ManuallySave();
-        dataSaved = true;
-        saving = false;
+        return go.GetComponent<InventoryManager>() != null
+        && go.GetComponent<RailCart>() == null
+        && go.GetComponent<PlayerController>() == null
+        && go.GetComponent<Retriever>() == null
+        && go.GetComponent<AutoCrafter>() == null;
     }
 }

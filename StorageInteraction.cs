@@ -4,11 +4,13 @@ public class StorageInteraction : MonoBehaviour
 {
     private PlayerController playerController;
     private InteractionController interactionController;
+    private GameManager gameManager;
 
     public void Start()
     {
         playerController = GetComponent<PlayerController>();
         interactionController = GetComponent<InteractionController>();
+        gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
     }
 
     public void InteractWithStorageContainer()
@@ -22,7 +24,7 @@ public class StorageInteraction : MonoBehaviour
                     if (GameObject.Find("GameManager").GetComponent<GameManager>().working == false)
                     {
                         playerController.stoppingBuildCoRoutine = true;
-                        GameObject.Find("GameManager").GetComponent<GameManager>().CombineBlocks();
+                        gameManager.meshManager.CombineBlocks();
                         playerController.separatedBlocks = false;
                         playerController.destroyTimer = 0;
                         playerController.buildTimer = 0;
@@ -108,7 +110,7 @@ public class StorageInteraction : MonoBehaviour
                     if (GameObject.Find("GameManager").GetComponent<GameManager>().working == false)
                     {
                         playerController.stoppingBuildCoRoutine = true;
-                        GameObject.Find("GameManager").GetComponent<GameManager>().CombineBlocks();
+                        gameManager.meshManager.CombineBlocks();
                         playerController.separatedBlocks = false;
                         playerController.destroyTimer = 0;
                         playerController.buildTimer = 0;

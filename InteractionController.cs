@@ -15,7 +15,7 @@ public class InteractionController : MonoBehaviour
     public void Start()
     {
         playerController = GetComponent<PlayerController>();
-        blockDictionary = GetComponent<BlockDictionary>();
+        blockDictionary = new BlockDictionary(playerController);
         machineInteraction = gameObject.AddComponent<MachineInteraction>();
         storageInteraction = gameObject.AddComponent<StorageInteraction>();
         blockInteraction = gameObject.AddComponent<BlockInteraction>();
@@ -204,10 +204,11 @@ public class InteractionController : MonoBehaviour
         {
             if (playerController.building == true)
             {
-                if (GameObject.Find("GameManager").GetComponent<GameManager>().working == false)
+                GameManager manager = GameObject.Find("GameManager").GetComponent<GameManager>();
+                if (manager.working == false)
                 {
                     playerController.stoppingBuildCoRoutine = true;
-                    GameObject.Find("GameManager").GetComponent<GameManager>().CombineBlocks();
+                    manager.meshManager.CombineBlocks();
                     playerController.separatedBlocks = false;
                     playerController.destroyTimer = 0;
                     playerController.buildTimer = 0;

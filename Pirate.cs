@@ -219,7 +219,7 @@ public class Pirate : MonoBehaviour
                                     if (chanceOfDestruction > 25)
                                     {
                                         Instantiate(targetExplosion, hit.point, transform.rotation);
-                                        game.SeparateBlocks(hit.point, "glass",false);
+                                        game.meshManager.SeparateBlocks(hit.point, "glass",false);
                                         if (CanSendDestructionMessage())
                                         {
                                             if (playerController.destructionMessageActive == false)
@@ -240,7 +240,7 @@ public class Pirate : MonoBehaviour
                                     if (chanceOfDestruction > 50)
                                     {
                                         Instantiate(targetExplosion, hit.point, transform.rotation);
-                                        game.SeparateBlocks(hit.point, "brick",false);
+                                        game.meshManager.SeparateBlocks(hit.point, "brick",false);
                                         if (CanSendDestructionMessage())
                                         {
                                             if (playerController.destructionMessageActive == false)
@@ -265,7 +265,7 @@ public class Pirate : MonoBehaviour
                                     if (chanceOfDestruction > 75)
                                     {
                                         Instantiate(targetExplosion, hit.point, transform.rotation);
-                                        game.SeparateBlocks(hit.point, "iron", false);
+                                        game.meshManager.SeparateBlocks(hit.point, "iron", false);
                                         if (CanSendDestructionMessage())
                                         {
                                             if (playerController.destructionMessageActive == false)
@@ -290,7 +290,7 @@ public class Pirate : MonoBehaviour
                                     if (chanceOfDestruction > 99)
                                     {
                                         Instantiate(targetExplosion, hit.point, transform.rotation);
-                                        game.SeparateBlocks(hit.point, "steel", false);
+                                        game.meshManager.SeparateBlocks(hit.point, "steel", false);
                                         if (CanSendDestructionMessage())
                                         {
                                             if (playerController.destructionMessageActive == false)

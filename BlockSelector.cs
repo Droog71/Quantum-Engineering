@@ -360,7 +360,7 @@
         {
             pc.buildType = "Steel Block";
             pc.previousBuildType = "Iron Ramp";
-            pc.nextBuildType = "Steel Block";
+            pc.nextBuildType = "Steel Ramp";
         }
         else if (pc.buildType.Equals("Steel Block"))
         {

@@ -62,7 +62,7 @@ public class Meteor : MonoBehaviour
                         {
                             if (chanceOfDestruction > 25)
                             {
-                                game.SeparateBlocks(transform.position, "glass", false);
+                                game.meshManager.SeparateBlocks(transform.position, "glass", false);
                                 if (CanSendDestructionMessage())
                                 {
                                     if (playerController.destructionMessageActive == false)
@@ -83,7 +83,7 @@ public class Meteor : MonoBehaviour
                         {
                             if (chanceOfDestruction > 50)
                             {
-                                game.SeparateBlocks(transform.position, "brick", false);
+                                game.meshManager.SeparateBlocks(transform.position, "brick", false);
                                 if (CanSendDestructionMessage())
                                 {
                                     if (playerController.destructionMessageActive == false)
@@ -104,7 +104,7 @@ public class Meteor : MonoBehaviour
                         {
                             if (chanceOfDestruction > 75)
                             {
-                                game.SeparateBlocks(transform.position, "iron", false);
+                                game.meshManager.SeparateBlocks(transform.position, "iron", false);
                                 if (CanSendDestructionMessage())
                                 {
                                     if (playerController.destructionMessageActive == false)
@@ -125,7 +125,7 @@ public class Meteor : MonoBehaviour
                         {
                             if (chanceOfDestruction > 99)
                             {
-                                game.SeparateBlocks(transform.position, "steel", false);
+                                game.meshManager.SeparateBlocks(transform.position, "steel", false);
                                 if (CanSendDestructionMessage())
                                 {
                                     if (playerController.destructionMessageActive == false)

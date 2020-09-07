@@ -69,9 +69,10 @@ public class BlockInteraction : MonoBehaviour
         playerController.lookingAtCombinedMesh = true;
         if (cInput.GetKeyDown("Collect Object") && playerController.paintGunActive == false)
         {
-            if (GameObject.Find("GameManager").GetComponent<GameManager>().working == false)
+            GameManager manager = GameObject.Find("GameManager").GetComponent<GameManager>();
+            if (manager.working == false)
             {
-                GameObject.Find("GameManager").GetComponent<GameManager>().SeparateBlocks(transform.position, "all", true);
+                manager.meshManager.SeparateBlocks(transform.position, "all", true);
                 playerController.separatedBlocks = true;
             }
             else

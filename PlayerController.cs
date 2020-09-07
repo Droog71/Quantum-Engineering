@@ -13,6 +13,7 @@ public class PlayerController : MonoBehaviour
     public Vector3 buildStartPosition;
     public RaycastHit playerLookHit;
     public StateManager stateManager;
+    public GameManager gameManager;
     public Camera mCam;
     public InventoryManager playerInventory;
     public InventoryManager storageInventory;
@@ -195,12 +196,14 @@ public class PlayerController : MonoBehaviour
     // Called by unity engine on start up to initialize variables
     public void Start()
     {
-        //REFERENCE TO THE STATE MANAGER
+        //REFERENCE TO THE GAME AND STATE MANAGER
+        gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
         stateManager = GameObject.Find("GameManager").GetComponent<StateManager>();
+
 
         //INITIALIZE COMPONENT CLASSES
         playerInventory = GetComponent<InventoryManager>();
-        laserController = GetComponent<LaserController>();
+        laserController = new LaserController(this, gameManager);
 
         //LOAD MOUSE SETTINGS
         Cursor.visible = true;
@@ -355,7 +358,7 @@ public class PlayerController : MonoBehaviour
                 }
 
                 // The player controller is notified that the game manager finished combining meshes.
-                if (stoppingBuildCoRoutine == true && GameObject.Find("GameManager").GetComponent<GameManager>().working == false)
+                if (stoppingBuildCoRoutine == true && gameManager.working == false)
                 {
                     stoppingBuildCoRoutine = false;
                 }
@@ -528,10 +531,10 @@ public class PlayerController : MonoBehaviour
 
     private void HandleBuildingStopRequest()
     {
-        if (GameObject.Find("GameManager").GetComponent<GameManager>().working == false)
+        if (gameManager.working == false)
         {
             stoppingBuildCoRoutine = true;
-            GameObject.Find("GameManager").GetComponent<GameManager>().CombineBlocks();
+            gameManager.meshManager.CombineBlocks();
             separatedBlocks = false;
             destroyTimer = 0;
             buildTimer = 0;
@@ -551,10 +554,10 @@ public class PlayerController : MonoBehaviour
         destroyTimer += 1 * Time.deltaTime;
         if (destroyTimer >= 30)
         {
-            if (GameObject.Find("GameManager").GetComponent<GameManager>().working == false)
+            if (gameManager.working == false)
             {
                 stoppingBuildCoRoutine = true;
-                GameObject.Find("GameManager").GetComponent<GameManager>().CombineBlocks();
+                gameManager.meshManager.CombineBlocks();
                 destroyTimer = 0;
                 buildTimer = 0;
                 building = false;
@@ -571,9 +574,9 @@ public class PlayerController : MonoBehaviour
             float distance = Vector3.Distance(transform.position, destroyStartPosition);
             if (distance > 15)
             {
-                if (GameObject.Find("GameManager").GetComponent<GameManager>().working == false)
+                if (gameManager.working == false)
                 {
-                    GameObject.Find("GameManager").GetComponent<GameManager>().SeparateBlocks(transform.position, "all", true);
+                    gameManager.meshManager.SeparateBlocks(transform.position, "all", true);
                     separatedBlocks = true;
                 }
                 else
@@ -588,15 +591,15 @@ public class PlayerController : MonoBehaviour
     // Handles requests to load chunks of blocks from combined meshes near the player.
     private void HandleChunkLoadRequest()
     {
-        if (GameObject.Find("GameManager").GetComponent<GameManager>().working == false)
+        if (gameManager.working == false)
         {
             if (destroying == false)
             {
-                GameObject.Find("GameManager").GetComponent<GameManager>().SeparateBlocks(transform.position, "all", true);
+                gameManager.meshManager.SeparateBlocks(transform.position, "all", true);
             }
             else
             {
-                GameObject.Find("GameManager").GetComponent<GameManager>().SeparateBlocks(transform.position, "all", false);
+                gameManager.meshManager.SeparateBlocks(transform.position, "all", false);
             }
             separatedBlocks = true;
             requestedChunkLoad = false;
@@ -608,10 +611,10 @@ public class PlayerController : MonoBehaviour
     {
         if (building == true || destroying == true)
         {
-            if (GameObject.Find("GameManager").GetComponent<GameManager>().working == false)
+            if (gameManager.working == false)
             {
                 stoppingBuildCoRoutine = true;
-                GameObject.Find("GameManager").GetComponent<GameManager>().CombineBlocks();
+                gameManager.meshManager.CombineBlocks();
                 separatedBlocks = false;
                 destroyTimer = 0;
                 buildTimer = 0;
@@ -623,7 +626,7 @@ public class PlayerController : MonoBehaviour
                 requestedBuildingStop = true;
             }
         }
-        else if (GameObject.Find("GameManager").GetComponent<GameManager>().working == false)
+        else if (gameManager.working == false)
         {
             Cursor.visible = true;
             Cursor.lockState = CursorLockMode.None;
@@ -668,7 +671,7 @@ public class PlayerController : MonoBehaviour
         requestedSaveTimer += 1 * Time.deltaTime;
         if (requestedSaveTimer >= 5)
         {
-            if (GameObject.Find("GameManager").GetComponent<GameManager>().working == false)
+            if (gameManager.working == false)
             {
                 SavePlayerData();
                 GameObject.Find("GameManager").GetComponent<GameManager>().RequestSaveOperation();
@@ -725,6 +728,7 @@ public class PlayerController : MonoBehaviour
                         }
                         else
                         {
+                            Debug.Log("Shutting down...");
                             break;
                         }
                     }

@@ -3,10 +3,12 @@
 public class ActionManager
 {
     private PlayerController pc;
+    private CombinedMeshManager meshManager;
 
     public ActionManager(PlayerController pc)
     {
         this.pc = pc;
+        meshManager = pc.gameManager.meshManager;
     }
 
     // Toggles the crosshair.
@@ -48,7 +50,7 @@ public class ActionManager
             if (GameObject.Find("GameManager").GetComponent<GameManager>().working == false)
             {
                 pc.stoppingBuildCoRoutine = true;
-                GameObject.Find("GameManager").GetComponent<GameManager>().CombineBlocks();
+                meshManager.CombineBlocks();
                 pc.separatedBlocks = false;
                 pc.destroyTimer = 0;
                 pc.buildTimer = 0;
@@ -85,7 +87,7 @@ public class ActionManager
             if (GameObject.Find("GameManager").GetComponent<GameManager>().working == false)
             {
                 pc.stoppingBuildCoRoutine = true;
-                GameObject.Find("GameManager").GetComponent<GameManager>().CombineBlocks();
+                meshManager.CombineBlocks();
                 pc.separatedBlocks = false;
                 pc.destroyTimer = 0;
                 pc.buildTimer = 0;
@@ -137,7 +139,7 @@ public class ActionManager
             if (GameObject.Find("GameManager").GetComponent<GameManager>().working == false)
             {
                 pc.stoppingBuildCoRoutine = true;
-                GameObject.Find("GameManager").GetComponent<GameManager>().CombineBlocks();
+                meshManager.CombineBlocks();
                 pc.separatedBlocks = false;
                 pc.destroyTimer = 0;
                 pc.buildTimer = 0;
@@ -161,7 +163,7 @@ public class ActionManager
                 if (GameObject.Find("GameManager").GetComponent<GameManager>().working == false)
                 {
                     pc.stoppingBuildCoRoutine = true;
-                    GameObject.Find("GameManager").GetComponent<GameManager>().CombineBlocks();
+                    meshManager.CombineBlocks();
                     pc.separatedBlocks = false;
                     pc.destroyTimer = 0;
                     pc.buildTimer = 0;
@@ -200,7 +202,7 @@ public class ActionManager
                 if (GameObject.Find("GameManager").GetComponent<GameManager>().working == false)
                 {
                     pc.stoppingBuildCoRoutine = true;
-                    GameObject.Find("GameManager").GetComponent<GameManager>().CombineBlocks();
+                    meshManager.CombineBlocks();
                     pc.separatedBlocks = false;
                     pc.destroyTimer = 0;
                     pc.buildTimer = 0;
@@ -240,7 +242,7 @@ public class ActionManager
                 if (GameObject.Find("GameManager").GetComponent<GameManager>().working == false)
                 {
                     pc.stoppingBuildCoRoutine = true;
-                    GameObject.Find("GameManager").GetComponent<GameManager>().CombineBlocks();
+                    meshManager.CombineBlocks();
                     pc.separatedBlocks = false;
                     pc.destroyTimer = 0;
                     pc.buildTimer = 0;
@@ -282,7 +284,7 @@ public class ActionManager
                 if (GameObject.Find("GameManager").GetComponent<GameManager>().working == false)
                 {
                     pc.stoppingBuildCoRoutine = true;
-                    GameObject.Find("GameManager").GetComponent<GameManager>().CombineBlocks();
+                    meshManager.CombineBlocks();
                     pc.separatedBlocks = false;
                     pc.destroyTimer = 0;
                     pc.buildTimer = 0;
@@ -665,7 +667,7 @@ public class ActionManager
             if (GameObject.Find("GameManager").GetComponent<GameManager>().working == false)
             {
                 pc.stoppingBuildCoRoutine = true;
-                GameObject.Find("GameManager").GetComponent<GameManager>().CombineBlocks();
+                meshManager.CombineBlocks();
                 pc.separatedBlocks = false;
                 pc.destroyTimer = 0;
                 pc.buildTimer = 0;
@@ -691,7 +693,7 @@ public class ActionManager
             if (GameObject.Find("GameManager").GetComponent<GameManager>().working == false)
             {
                 pc.stoppingBuildCoRoutine = true;
-                GameObject.Find("GameManager").GetComponent<GameManager>().CombineBlocks();
+                meshManager.CombineBlocks();
                 pc.separatedBlocks = false;
                 pc.destroyTimer = 0;
                 pc.buildTimer = 0;
@@ -720,7 +722,7 @@ public class ActionManager
             if (GameObject.Find("GameManager").GetComponent<GameManager>().working == false)
             {
                 pc.stoppingBuildCoRoutine = true;
-                GameObject.Find("GameManager").GetComponent<GameManager>().CombineBlocks();
+                meshManager.CombineBlocks();
                 pc.separatedBlocks = false;
                 pc.destroyTimer = 0;
                 pc.buildTimer = 0;
@@ -746,7 +748,7 @@ public class ActionManager
             if (GameObject.Find("GameManager").GetComponent<GameManager>().working == false)
             {
                 pc.stoppingBuildCoRoutine = true;
-                GameObject.Find("GameManager").GetComponent<GameManager>().CombineBlocks();
+                meshManager.CombineBlocks();
                 pc.separatedBlocks = false;
                 pc.destroyTimer = 0;
                 pc.buildTimer = 0;

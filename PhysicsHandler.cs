@@ -27,6 +27,7 @@ public class PhysicsHandler : MonoBehaviour
     private float supportCheckTimer;
     private float worldLoadTimer;
     private bool worldLoadComplete;
+    private GameManager gameManager;
     private StateManager stateManager;
     public string creationMethod = "built";
     public bool needsSupportCheck;
@@ -34,7 +35,8 @@ public class PhysicsHandler : MonoBehaviour
     // Called by unity engine on start up to initialize variables
     public void Start()
     {
-        stateManager = GameObject.Find("GameManager").GetComponent<StateManager>();
+        gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
+        stateManager = gameManager.GetComponent<StateManager>();
         rb = gameObject.AddComponent<Rigidbody>();
         rb.constraints = RigidbodyConstraints.FreezeRotation | RigidbodyConstraints.FreezePosition;
         rb.isKinematic = true;
@@ -156,7 +158,7 @@ public class PhysicsHandler : MonoBehaviour
                         {
                             if (separatedBlocks == false)
                             {
-                                GameObject.Find("GameManager").GetComponent<GameManager>().SeparateBlocks(transform.position, "all", false);
+                                gameManager.meshManager.SeparateBlocks(transform.position, "all", false);
                                 separatedBlocks = true;
                             }
                             falling = true;
@@ -409,7 +411,7 @@ public class PhysicsHandler : MonoBehaviour
         {
             if (separatedBlocks == false)
             {
-                GameObject.Find("GameManager").GetComponent<GameManager>().SeparateBlocks(transform.position, "all",false);
+                gameManager.meshManager.SeparateBlocks(transform.position, "all",false);
                 separatedBlocks = true;
             }
             falling = true;

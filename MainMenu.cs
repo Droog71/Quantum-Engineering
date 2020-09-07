@@ -308,7 +308,7 @@ public class MainMenu : MonoBehaviour
                     buttonSounds.Play();
                     PlayerPrefsX.SetStringArray("Worlds", worldList.ToArray());
                     FileBasedPrefs.SetBool("changingWorld", true);
-                    PlayerPrefs.SetString("worldName", worldName);
+                    FileBasedPrefs.SetString("worldName", worldName);
                     FileBasedPrefs.SetBool(worldName+"sceneChangeRequired", true);
                     SceneManager.LoadScene(1);
                 }

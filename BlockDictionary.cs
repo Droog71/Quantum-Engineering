@@ -3,16 +3,21 @@ using System;
 using System.Collections.Generic;
 
 //This class contains GameObject dictionaries for easily referencing different machines and other blocks
-public class BlockDictionary : MonoBehaviour
+public class BlockDictionary
 {
+    private PlayerController playerController;
     public Dictionary<string, GameObject> machineDictionary;
     public Dictionary<string, GameObject> blockDictionary;
     public Type[] machineTypes;
 
-    void Start()
+    public BlockDictionary(PlayerController playerController)
     {
-        PlayerController playerController = GetComponent<PlayerController>();
+        this.playerController = playerController;
+        Init();
+    }
 
+    private void Init()
+    {
         blockDictionary = new Dictionary<string, GameObject>
         {
             { "Brick", playerController.brick },

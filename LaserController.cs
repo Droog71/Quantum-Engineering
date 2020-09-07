@@ -1,17 +1,14 @@
 ﻿using UnityEngine;
-using System.Collections;
-using System.Collections.Generic;
 
-public class LaserController : MonoBehaviour
+public class LaserController
 {
     private GameManager game;
     private PlayerController playerController;
 
-    // Called by unity engine on start up to initialize variables
-    public void Start()
+    public LaserController(PlayerController playerController, GameManager game)
     {
-        game = GameObject.Find("GameManager").GetComponent<GameManager>();
-        playerController = GameObject.Find("Player").GetComponent<PlayerController>();
+        this.playerController = playerController;
+        this.game = game;
     }
 
     // Returns true if a message can be sent to the player's tablet
@@ -60,7 +57,7 @@ public class LaserController : MonoBehaviour
                 {
                     if (chanceOfDestruction > 25)
                     {
-                        game.SeparateBlocks(hit.point, "glass",false);
+                        game.meshManager.SeparateBlocks(hit.point, "glass",false);
                         if (CanSendDestructionMessage())
                         {
                             if (playerController.destructionMessageActive == false)
@@ -80,7 +77,7 @@ public class LaserController : MonoBehaviour
                 {
                     if (chanceOfDestruction > 50)
                     {
-                        game.SeparateBlocks(hit.point, "brick",false);
+                        game.meshManager.SeparateBlocks(hit.point, "brick",false);
                         if (CanSendDestructionMessage())
                         {
                             if (playerController.destructionMessageActive == false)
@@ -101,7 +98,7 @@ public class LaserController : MonoBehaviour
                 {
                     if (chanceOfDestruction > 75)
                     {
-                        game.SeparateBlocks(hit.point, "iron",false);
+                        game.meshManager.SeparateBlocks(hit.point, "iron",false);
                         if (CanSendDestructionMessage())
                         {
                             if (playerController.destructionMessageActive == false)
@@ -121,7 +118,7 @@ public class LaserController : MonoBehaviour
                 {
                     if (chanceOfDestruction > 99)
                     {
-                        game.SeparateBlocks(hit.point, "steel",false);
+                        game.meshManager.SeparateBlocks(hit.point, "steel",false);
                         if (CanSendDestructionMessage())
                         {
                             if (playerController.destructionMessageActive == false)
