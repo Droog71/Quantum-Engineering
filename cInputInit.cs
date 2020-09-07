@@ -29,6 +29,7 @@ public class cInputInit : MonoBehaviour
         cInput.SetKey("Collect Object", "F", Keys.F);
         cInput.SetKey("Rotate Block", "R", Keys.R);
         cInput.SetKey("Build Axis", "V", Keys.V);
+        cInput.SetKey("Auto Axis", "Y", Keys.Y);
         cInput.SetKey("Inventory", "I", Keys.I);
         cInput.SetKey("Crafting", "C", Keys.C);
         cInput.SetKey("Market", "M", Keys.M);

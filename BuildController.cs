@@ -6,10 +6,12 @@ public class BuildController : MonoBehaviour
     private PlayerController playerController;
     private GameManager gameManager;
     private BlockDictionary blockDictionary;
-    LineRenderer dirLine;
+    private LineRenderer dirLine;
     public Material lineMat;
     public GameObject builtObjects;
+    public bool autoAxis;
 
+    // Called by unity engine on start up to initialize variables
     public void Start()
     {
         playerController = GetComponent<PlayerController>();
@@ -18,9 +20,9 @@ public class BuildController : MonoBehaviour
         builtObjects = GameObject.Find("Built_Objects");
     }
 
+    // Called once per frame by unity engine
     public void Update()
     {
-        //PLACING BLOCKS
         if (playerController.building == true)
         {
             playerController.buildTimer += 1 * Time.deltaTime;
@@ -102,12 +104,19 @@ public class BuildController : MonoBehaviour
                             playerController.buildObject.transform.Rotate(transform.up * 90);
                             playerController.destroyTimer = 0;
                             playerController.buildTimer = 0;
+                            playerController.PlayButtonSound();
                         }
 
                         //BUILD AXIS
                         if (cInput.GetKeyDown("Build Axis"))
                         {
                             ChangeBuildAxis();
+                            playerController.PlayButtonSound();
+                        }
+                        if (cInput.GetKeyDown("Auto Axis"))
+                        {
+                            autoAxis = !autoAxis;
+                            playerController.PlayButtonSound();
                         }
 
                         SetupBuildAxis(hit);
@@ -122,6 +131,10 @@ public class BuildController : MonoBehaviour
                     if (buildHit.collider.gameObject.tag != "CombinedMesh")
                     {
                         playerController.buildObject.GetComponent<MeshRenderer>().material.color = Color.white;
+                        if (autoAxis == true)
+                        {
+                            AutoSelectBuildAxis(buildHit);
+                        }
                         if (cInput.GetKeyDown("Place Object"))
                         {
                             if (blockDictionary.machineDictionary.ContainsKey(playerController.buildType))
@@ -151,6 +164,7 @@ public class BuildController : MonoBehaviour
         }
     }
 
+    // Creates the block placement cursor.
     private void CreateBuildObject()
     {
         playerController.buildObject = GameObject.CreatePrimitive(PrimitiveType.Cube);
@@ -171,6 +185,51 @@ public class BuildController : MonoBehaviour
         dirLine.enabled = true;
     }
 
+    // Automatically selects build axis based on raycast.
+    private void AutoSelectBuildAxis(RaycastHit buildHit)
+    {
+        Vector3 hitPoint = buildHit.point;
+        Vector3 blockPos = buildHit.collider.transform.position;
+        float xDif = hitPoint.x - blockPos.x;
+        float yDif = hitPoint.y - blockPos.y;
+        float zDif = hitPoint.z - blockPos.z;
+        float xnDif = blockPos.x - hitPoint.x;
+        float ynDif = blockPos.y - hitPoint.y;
+        float znDif = blockPos.z - hitPoint.z;
+
+        if (hitPoint.x > blockPos.x)
+        {
+            if (xDif > yDif && xDif > zDif)
+                playerController.cubeloc = "left";
+        }
+        if (hitPoint.x < blockPos.x)
+        {
+            if (xnDif > ynDif && xnDif > znDif)
+                playerController.cubeloc = "right";
+        }
+        if (hitPoint.y > blockPos.y)
+        {
+            if (yDif > xDif && yDif > zDif)
+                playerController.cubeloc = "up";
+        }
+        if (hitPoint.y < blockPos.y)
+        {
+            if (ynDif > xnDif && ynDif > znDif)
+                playerController.cubeloc = "down";
+        }
+        if (hitPoint.z > blockPos.z)
+        {
+            if (zDif > xDif && zDif > yDif)
+                playerController.cubeloc = "front";
+        }
+        if (hitPoint.z < blockPos.z)
+        {
+            if (znDif > xnDif && znDif > ynDif)
+                playerController.cubeloc = "back";
+        }
+    }
+
+    // Changes the axis along which blocks will be placed.
     private void ChangeBuildAxis()
     {
         switch (playerController.cubeloc)
@@ -198,6 +257,7 @@ public class BuildController : MonoBehaviour
         playerController.buildTimer = 0;
     }
 
+    // Implements the current build axis.
     private void SetupBuildAxis(RaycastHit hit)
     {
         Vector3 placementPoint = hit.transform.position;
@@ -234,10 +294,10 @@ public class BuildController : MonoBehaviour
         dirLine.SetPosition(1, dirVector);
     }
 
+    // Prepares cursor for free block placement, ie: not attached to another block.
     private void SetupFreePlacement(RaycastHit hit)
     {
         Vector3 placementPoint = new Vector3(hit.point.x, (hit.point.y + 2.4f), hit.point.z);
-        //BLOCK ROTATION
         if (cInput.GetKeyDown("Rotate Block"))
         {
             playerController.buildObject.transform.Rotate(transform.up * 90);
@@ -252,6 +312,7 @@ public class BuildController : MonoBehaviour
         dirLine.SetPosition(1, dirVector);
     }
 
+    // Places a machine in the world.
     private void BuildMachine(string type, RaycastHit hit)
     {
         bool foundItems = false;
@@ -331,6 +392,7 @@ public class BuildController : MonoBehaviour
         }
     }
 
+    // Places standard building blocks in the world.
     private void BuildBlock(string type)
     {
         bool foundItems = false;

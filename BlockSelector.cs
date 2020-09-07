@@ -7,9 +7,9 @@
         this.pc = pc;
     }
 
-    public void nextBlock()
+    // Changes the currently selected building block.
+    public void NextBlock()
     {
-        //Debug.Log("Build type: " + buildType);
         if (pc.buildType.Equals("Glass Block"))
         {
             pc.buildType = "Brick";
@@ -203,9 +203,9 @@
         pc.PlayButtonSound();
     }
 
-    public void previousBlock()
+    // Changes the currently selected building block.
+    public void PreviousBlock()
     {
-        //Debug.Log("Build type: " + buildType);
         if (pc.buildType.Equals("Turret"))
         {
             pc.buildType = "Dark Matter Collector";

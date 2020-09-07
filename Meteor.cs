@@ -1,15 +1,15 @@
 ﻿using UnityEngine;
-using System.Collections;
 
 public class Meteor : MonoBehaviour
 {
     public GameObject explosion;
     public GameObject fire;
+    public float altitude;
+    public bool destroying;
     private GameManager game;
     private PlayerController playerController;
-    public bool destroying;
-    float destroyTimer;
-    public float altitude;
+    private float destroyTimer;
+
 
     // Called by unity engine on start up to initialize variables
     public void Start()

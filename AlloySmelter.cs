@@ -3,36 +3,36 @@
 public class AlloySmelter : MonoBehaviour
 {
     public int speed = 1;
+    public string ID = "unassigned";
+    public string creationMethod = "built";
     public int power;
     public int heat;
     public int cooling;
-    public bool hasHeatExchanger;
     public float amount;
     public float amount2;
     public float outputAmount;
     public string inputType1;
     public string inputType2;
     public string outputType;
-    public string ID = "unassigned";
     public string inputID1;
     public string inputID2;
     public string outputID;
+    public PowerReceiver powerReceiver;
     public GameObject fireObject;
-    public bool powerON;
-    public string creationMethod = "built";
     public GameObject inputObject1;
     public GameObject inputObject2;
     public GameObject outputObject;
     public GameObject powerObject;
     public GameObject conduitItem;
     public Material lineMat;
-    private LineRenderer connectionLine;
-    public PowerReceiver powerReceiver;
-    private float updateTick;
-    public int address;
-    private int machineTimer;
-    public int connectionAttempts;
+    public bool hasHeatExchanger;
+    public bool powerON;
     public bool connectionFailed;
+    public int address;
+    public int connectionAttempts;
+    private LineRenderer connectionLine;
+    private float updateTick;
+    private int machineTimer;
     private GameObject builtObjects;
 
     // Called by unity engine on start up to initialize variables

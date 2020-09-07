@@ -207,12 +207,12 @@ public class InputManager
         {
             if (cInput.GetKeyDown("Next Item"))
             {
-                pc.blockSelector.nextBlock();
+                pc.blockSelector.NextBlock();
             }
 
             if (cInput.GetKeyDown("Previous Item"))
             {
-                pc.blockSelector.previousBlock();
+                pc.blockSelector.PreviousBlock();
             }
         }
 
@@ -267,7 +267,7 @@ public class InputManager
         {
             if (pc.inventoryOpen == true)
             {
-                am.CloseInventory();
+                am.ToggleInventory();
             }
             else if (pc.machineGUIopen == true)
             {

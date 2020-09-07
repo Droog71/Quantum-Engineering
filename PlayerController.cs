@@ -208,15 +208,18 @@ public class PlayerController : MonoBehaviour
         //LOAD MOUSE SETTINGS
         Cursor.visible = true;
         Cursor.lockState = CursorLockMode.None;
-        if (FileBasedPrefs.GetFloat("xSensitivity") != 0)
+        if (FileBasedPrefs.initialized == true)
         {
-            GetComponent<MSCameraController>().CameraSettings.firstPerson.sensibilityX = PlayerPrefs.GetFloat("xSensitivity");
+            if (FileBasedPrefs.GetFloat("xSensitivity") != 0)
+            {
+                GetComponent<MSCameraController>().CameraSettings.firstPerson.sensibilityX = PlayerPrefs.GetFloat("xSensitivity");
+            }
+            if (FileBasedPrefs.GetFloat("ySensitivity") != 0)
+            {
+                GetComponent<MSCameraController>().CameraSettings.firstPerson.sensibilityY = PlayerPrefs.GetFloat("ySensitivity");
+            }
+            GetComponent<MSCameraController>().CameraSettings.firstPerson.invertYInput = PlayerPrefsX.GetPersistentBool("mouseInverted");
         }
-        if (FileBasedPrefs.GetFloat("ySensitivity") != 0)
-        {
-            GetComponent<MSCameraController>().CameraSettings.firstPerson.sensibilityY = PlayerPrefs.GetFloat("ySensitivity");
-        }
-        GetComponent<MSCameraController>().CameraSettings.firstPerson.invertYInput = PlayerPrefsX.GetPersistentBool("mouseInverted");
 
         //LOAD VOLUME SETTING
         AudioListener.volume = PlayerPrefs.GetFloat("volume");
@@ -246,14 +249,17 @@ public class PlayerController : MonoBehaviour
         if (mCam == null)
         {
             mCam = Camera.main;
-            if (FileBasedPrefs.GetFloat("FOV") != 0)
+            if (FileBasedPrefs.initialized == true)
             {
-                mCam.fieldOfView = PlayerPrefs.GetFloat("FOV");
-            }
+                if (FileBasedPrefs.GetFloat("FOV") != 0)
+                {
+                    mCam.fieldOfView = PlayerPrefs.GetFloat("FOV");
+                }
 
-            if (FileBasedPrefs.GetFloat("DrawDistance") != 0)
-            {
-                mCam.farClipPlane = PlayerPrefs.GetFloat("DrawDistance");
+                if (FileBasedPrefs.GetFloat("DrawDistance") != 0)
+                {
+                    mCam.farClipPlane = PlayerPrefs.GetFloat("DrawDistance");
+                }
             }
         }
         else

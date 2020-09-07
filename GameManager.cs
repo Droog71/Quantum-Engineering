@@ -132,197 +132,200 @@ public class GameManager : MonoBehaviour
     // Called once per frame by unity engine
     public void Update()
     {
-        if (FileBasedPrefs.GetBool(GetComponent<StateManager>().WorldName + "Initialized") == false)
+        if (FileBasedPrefs.initialized == true)
         {
-            if (lander.GetComponent<InventoryManager>().initialized == true)
+            if (FileBasedPrefs.GetBool(GetComponent<StateManager>().WorldName + "Initialized") == false)
             {
-                if (GetComponent<StateManager>().WorldName.Equals("devMachineTest"))
+                if (lander.GetComponent<InventoryManager>().initialized == true)
                 {
-                    lander.GetComponent<InventoryManager>().AddItem("Universal Extractor", 1000);
-                    lander.GetComponent<InventoryManager>().AddItem("Universal Conduit", 1000);
-                    lander.GetComponent<InventoryManager>().AddItem("Storage Container", 1000);
-                    lander.GetComponent<InventoryManager>().AddItem("Solar Panel", 1000);
-                    lander.GetComponent<InventoryManager>().AddItem("Reactor Turbine", 1000);
-                    lander.GetComponent<InventoryManager>().AddItem("Nuclear Reactor", 1000);
-                    lander.GetComponent<InventoryManager>().AddItem("Smelter", 1000);
-                    lander.GetComponent<InventoryManager>().AddItem("Press", 1000);
-                    lander.GetComponent<InventoryManager>().AddItem("Extruder", 1000);
-                    lander.GetComponent<InventoryManager>().AddItem("Auger", 1000);
-                    lander.GetComponent<InventoryManager>().AddItem("Alloy Smelter", 1000);
-                    lander.GetComponent<InventoryManager>().AddItem("Heat Exchanger", 1000);
-                    lander.GetComponent<InventoryManager>().AddItem("Turret", 1000);
-                    lander.GetComponent<InventoryManager>().AddItem("Dark Matter Collector", 1000);
-                    lander.GetComponent<InventoryManager>().AddItem("Dark Matter Conduit", 1000);
-                    lander.GetComponent<InventoryManager>().AddItem("Storage Computer", 1000);
+                    if (GetComponent<StateManager>().WorldName.Equals("devMachineTest"))
+                    {
+                        lander.GetComponent<InventoryManager>().AddItem("Universal Extractor", 1000);
+                        lander.GetComponent<InventoryManager>().AddItem("Universal Conduit", 1000);
+                        lander.GetComponent<InventoryManager>().AddItem("Storage Container", 1000);
+                        lander.GetComponent<InventoryManager>().AddItem("Solar Panel", 1000);
+                        lander.GetComponent<InventoryManager>().AddItem("Reactor Turbine", 1000);
+                        lander.GetComponent<InventoryManager>().AddItem("Nuclear Reactor", 1000);
+                        lander.GetComponent<InventoryManager>().AddItem("Smelter", 1000);
+                        lander.GetComponent<InventoryManager>().AddItem("Press", 1000);
+                        lander.GetComponent<InventoryManager>().AddItem("Extruder", 1000);
+                        lander.GetComponent<InventoryManager>().AddItem("Auger", 1000);
+                        lander.GetComponent<InventoryManager>().AddItem("Alloy Smelter", 1000);
+                        lander.GetComponent<InventoryManager>().AddItem("Heat Exchanger", 1000);
+                        lander.GetComponent<InventoryManager>().AddItem("Turret", 1000);
+                        lander.GetComponent<InventoryManager>().AddItem("Dark Matter Collector", 1000);
+                        lander.GetComponent<InventoryManager>().AddItem("Dark Matter Conduit", 1000);
+                        lander.GetComponent<InventoryManager>().AddItem("Storage Computer", 1000);
+                    }
+                    else if (GetComponent<StateManager>().WorldName.Equals("devBuildTest"))
+                    {
+                        lander.GetComponent<InventoryManager>().AddItem("Brick", 1000);
+                        lander.GetComponent<InventoryManager>().AddItem("Brick", 1000);
+                        lander.GetComponent<InventoryManager>().AddItem("Brick", 1000);
+                        lander.GetComponent<InventoryManager>().AddItem("Brick", 1000);
+                        lander.GetComponent<InventoryManager>().AddItem("Iron Block", 1000);
+                        lander.GetComponent<InventoryManager>().AddItem("Iron Block", 1000);
+                        lander.GetComponent<InventoryManager>().AddItem("Iron Block", 1000);
+                        lander.GetComponent<InventoryManager>().AddItem("Iron Block", 1000);
+                        lander.GetComponent<InventoryManager>().AddItem("Steel Block", 1000);
+                        lander.GetComponent<InventoryManager>().AddItem("Steel Block", 1000);
+                        lander.GetComponent<InventoryManager>().AddItem("Steel Block", 1000);
+                        lander.GetComponent<InventoryManager>().AddItem("Steel Block", 1000);
+                        lander.GetComponent<InventoryManager>().AddItem("Glass Block", 1000);
+                        lander.GetComponent<InventoryManager>().AddItem("Glass Block", 1000);
+                        lander.GetComponent<InventoryManager>().AddItem("Glass Block", 1000);
+                        lander.GetComponent<InventoryManager>().AddItem("Glass Block", 1000);
+                    }
+                    else
+                    {
+                        lander.GetComponent<InventoryManager>().AddItem("Solar Panel", 9);
+                        lander.GetComponent<InventoryManager>().AddItem("Universal Conduit", 8);
+                        lander.GetComponent<InventoryManager>().AddItem("Storage Container", 4);
+                        lander.GetComponent<InventoryManager>().AddItem("Smelter", 3);
+                        lander.GetComponent<InventoryManager>().AddItem("Universal Extractor", 2);
+                        lander.GetComponent<InventoryManager>().AddItem("Dark Matter Conduit", 1);
+                        lander.GetComponent<InventoryManager>().AddItem("Dark Matter Collector", 1);
+                    }
+                    FileBasedPrefs.SetBool(GetComponent<StateManager>().WorldName + "Initialized", true);
                 }
-                else if (GetComponent<StateManager>().WorldName.Equals("devBuildTest"))
+            }
+            else
+            {
+                if (loadedBlockPhysics == false)
                 {
-                    lander.GetComponent<InventoryManager>().AddItem("Brick", 1000);
-                    lander.GetComponent<InventoryManager>().AddItem("Brick", 1000);
-                    lander.GetComponent<InventoryManager>().AddItem("Brick", 1000);
-                    lander.GetComponent<InventoryManager>().AddItem("Brick", 1000);
-                    lander.GetComponent<InventoryManager>().AddItem("Iron Block", 1000);
-                    lander.GetComponent<InventoryManager>().AddItem("Iron Block", 1000);
-                    lander.GetComponent<InventoryManager>().AddItem("Iron Block", 1000);
-                    lander.GetComponent<InventoryManager>().AddItem("Iron Block", 1000);
-                    lander.GetComponent<InventoryManager>().AddItem("Steel Block", 1000);
-                    lander.GetComponent<InventoryManager>().AddItem("Steel Block", 1000);
-                    lander.GetComponent<InventoryManager>().AddItem("Steel Block", 1000);
-                    lander.GetComponent<InventoryManager>().AddItem("Steel Block", 1000);
-                    lander.GetComponent<InventoryManager>().AddItem("Glass Block", 1000);
-                    lander.GetComponent<InventoryManager>().AddItem("Glass Block", 1000);
-                    lander.GetComponent<InventoryManager>().AddItem("Glass Block", 1000);
-                    lander.GetComponent<InventoryManager>().AddItem("Glass Block", 1000);
+                    blockPhysics = PlayerPrefsX.GetPersistentBool("blockPhysics");
+                    loadedBlockPhysics = true;
+                }
+                if (loadedHazardsEnabled == false)
+                {
+                    hazardsEnabled = PlayerPrefsX.GetPersistentBool("hazardsEnabled");
+                    loadedHazardsEnabled = true;
+                }
+                if (loadedMeteorTimer == false)
+                {
+                    meteorShowerTimer = FileBasedPrefs.GetFloat(GetComponent<StateManager>().WorldName + "meteorShowerTimer");
+                    loadedMeteorTimer = true;
+                }
+                if (loadedPirateTimer == false)
+                {
+                    pirateAttackTimer = FileBasedPrefs.GetFloat(GetComponent<StateManager>().WorldName + "pirateAttackTimer");
+                    loadedPirateTimer = true;
+                }
+            }
+
+            // A save game request is pending
+            if (dataSaveRequested == true)
+            {
+                if (GetComponent<StateManager>().saving == false && GetComponent<StateManager>().assigningIDs == false)
+                {
+                    Debug.Log("Saving world...");
+                    GetComponent<StateManager>().SaveData();
+                    dataSaveRequested = false;
+                }
+            }
+
+            // Used to ensure components are removed before combining meshes
+            if (waitingForDestroy == true)
+            {
+                waitTime += 1 * Time.deltaTime;
+                if (waitTime > 1)
+                {
+                    meshManager.CombineMeshes();
+                    waitTime = 0;
+                    waitingForDestroy = false;
+                }
+            }
+
+            // Clear out dummy objects used for smooth transitions while combining meshes
+            if (clearBrickDummies == true)
+            {
+                if (initBrickTimer < 3)
+                {
+                    initBrickTimer += 1 * Time.deltaTime;
                 }
                 else
                 {
-                    lander.GetComponent<InventoryManager>().AddItem("Solar Panel", 9);
-                    lander.GetComponent<InventoryManager>().AddItem("Universal Conduit", 8);
-                    lander.GetComponent<InventoryManager>().AddItem("Storage Container", 4);
-                    lander.GetComponent<InventoryManager>().AddItem("Smelter", 3);
-                    lander.GetComponent<InventoryManager>().AddItem("Universal Extractor", 2);
-                    lander.GetComponent<InventoryManager>().AddItem("Dark Matter Conduit", 1);
-                    lander.GetComponent<InventoryManager>().AddItem("Dark Matter Collector", 1);
-                }
-                FileBasedPrefs.SetBool(GetComponent<StateManager>().WorldName + "Initialized", true);
-            }
-        }
-        else
-        {
-            if (loadedBlockPhysics == false)
-            {
-                blockPhysics = PlayerPrefsX.GetPersistentBool("blockPhysics");
-                loadedBlockPhysics = true;
-            }
-            if (loadedHazardsEnabled == false)
-            {
-                hazardsEnabled = PlayerPrefsX.GetPersistentBool("hazardsEnabled");
-                loadedHazardsEnabled = true;
-            }
-            if (loadedMeteorTimer == false)
-            {
-                meteorShowerTimer = FileBasedPrefs.GetFloat(GetComponent<StateManager>().WorldName + "meteorShowerTimer");
-                loadedMeteorTimer = true;
-            }
-            if (loadedPirateTimer == false)
-            {
-                pirateAttackTimer = FileBasedPrefs.GetFloat(GetComponent<StateManager>().WorldName + "pirateAttackTimer");
-                loadedPirateTimer = true;
-            }
-        }
-
-        // A save game request is pending
-        if (dataSaveRequested == true)
-        {
-            if (GetComponent<StateManager>().saving == false && GetComponent<StateManager>().assigningIDs == false)
-            {
-                Debug.Log("Saving world...");
-                GetComponent<StateManager>().SaveData();
-                dataSaveRequested = false;
-            }
-        }
-
-        // Used to ensure components are removed before combining meshes
-        if (waitingForDestroy == true)
-        {
-            waitTime += 1 * Time.deltaTime;
-            if (waitTime > 1)
-            {
-                meshManager.CombineMeshes();
-                waitTime = 0;
-                waitingForDestroy = false;
-            }
-        }
-
-        // Clear out dummy objects used for smooth transitions while combining meshes
-        if (clearBrickDummies == true)
-        {
-            if (initBrickTimer < 3)
-            {
-                initBrickTimer += 1 * Time.deltaTime;
-            }
-            else
-            {
-                BlockDummy[] dummies = FindObjectsOfType<BlockDummy>();
-                foreach (BlockDummy dummy in dummies)
-                {
-                    if (dummy.type.Equals("brick"))
+                    BlockDummy[] dummies = FindObjectsOfType<BlockDummy>();
+                    foreach (BlockDummy dummy in dummies)
                     {
-                        Destroy(dummy.gameObject);
+                        if (dummy.type.Equals("brick"))
+                        {
+                            Destroy(dummy.gameObject);
+                        }
                     }
+                    initBrickTimer = 0;
+                    clearBrickDummies = false;
                 }
-                initBrickTimer = 0;
-                clearBrickDummies = false;
             }
-        }
 
-        // Clear out dummy objects used for smooth transitions while combining meshes
-        if (clearGlassDummies == true)
-        {
-            if (initGlassTimer < 3)
+            // Clear out dummy objects used for smooth transitions while combining meshes
+            if (clearGlassDummies == true)
             {
-                initGlassTimer += 1 * Time.deltaTime;
-            }
-            else
-            {
-                BlockDummy[] dummies = FindObjectsOfType<BlockDummy>();
-                foreach (BlockDummy dummy in dummies)
+                if (initGlassTimer < 3)
                 {
-                    if (dummy.type.Equals("glass"))
-                    {
-                        Destroy(dummy.gameObject);
-                    }
+                    initGlassTimer += 1 * Time.deltaTime;
                 }
-                initGlassTimer = 0;
-                clearGlassDummies = false;
-            }
-        }
-
-        // Clear out dummy objects used for smooth transitions while combining meshes
-        if (clearIronDummies == true)
-        {
-            if (initIronTimer < 3)
-            {
-                initIronTimer += 1 * Time.deltaTime;
-            }
-            else
-            {
-                BlockDummy[] dummies = FindObjectsOfType<BlockDummy>();
-                foreach (BlockDummy dummy in dummies)
+                else
                 {
-                    if (dummy.type.Equals("iron"))
+                    BlockDummy[] dummies = FindObjectsOfType<BlockDummy>();
+                    foreach (BlockDummy dummy in dummies)
                     {
-                        Destroy(dummy.gameObject);
+                        if (dummy.type.Equals("glass"))
+                        {
+                            Destroy(dummy.gameObject);
+                        }
                     }
+                    initGlassTimer = 0;
+                    clearGlassDummies = false;
                 }
-                initIronTimer = 0;
-                clearIronDummies = false;
             }
-        }
 
-        // Clear out dummy objects used for smooth transitions while combining meshes
-        if (clearSteelDummies == true)
-        {
-            if (initSteelTimer < 3)
+            // Clear out dummy objects used for smooth transitions while combining meshes
+            if (clearIronDummies == true)
             {
-                initSteelTimer += 1 * Time.deltaTime;
-            }
-            else
-            {
-                BlockDummy[] dummies = FindObjectsOfType<BlockDummy>();
-                foreach (BlockDummy dummy in dummies)
+                if (initIronTimer < 3)
                 {
-                    if (dummy.type.Equals("steel"))
-                    {
-                        Destroy(dummy.gameObject);
-                    }
+                    initIronTimer += 1 * Time.deltaTime;
                 }
-                initSteelTimer = 0;
-                clearSteelDummies = false;
+                else
+                {
+                    BlockDummy[] dummies = FindObjectsOfType<BlockDummy>();
+                    foreach (BlockDummy dummy in dummies)
+                    {
+                        if (dummy.type.Equals("iron"))
+                        {
+                            Destroy(dummy.gameObject);
+                        }
+                    }
+                    initIronTimer = 0;
+                    clearIronDummies = false;
+                }
             }
-        }
 
-        hazardManager.UpdateHazards();
+            // Clear out dummy objects used for smooth transitions while combining meshes
+            if (clearSteelDummies == true)
+            {
+                if (initSteelTimer < 3)
+                {
+                    initSteelTimer += 1 * Time.deltaTime;
+                }
+                else
+                {
+                    BlockDummy[] dummies = FindObjectsOfType<BlockDummy>();
+                    foreach (BlockDummy dummy in dummies)
+                    {
+                        if (dummy.type.Equals("steel"))
+                        {
+                            Destroy(dummy.gameObject);
+                        }
+                    }
+                    initSteelTimer = 0;
+                    clearSteelDummies = false;
+                }
+            }
+
+            hazardManager.UpdateHazards();
+        }
     }
 
     // Saves the game on exit

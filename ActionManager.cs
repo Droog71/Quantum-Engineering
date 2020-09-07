@@ -47,7 +47,7 @@ public class ActionManager
     {
         if (pc.building == true || pc.destroying == true)
         {
-            if (GameObject.Find("GameManager").GetComponent<GameManager>().working == false)
+            if (pc.gameManager.working == false)
             {
                 pc.stoppingBuildCoRoutine = true;
                 meshManager.CombineBlocks();
@@ -84,7 +84,7 @@ public class ActionManager
     {
         if (pc.building == true || pc.destroying == true)
         {
-            if (GameObject.Find("GameManager").GetComponent<GameManager>().working == false)
+            if (pc.gameManager.working == false)
             {
                 pc.stoppingBuildCoRoutine = true;
                 meshManager.CombineBlocks();
@@ -136,7 +136,7 @@ public class ActionManager
         }
         if (pc.building == true || pc.destroying == true)
         {
-            if (GameObject.Find("GameManager").GetComponent<GameManager>().working == false)
+            if (pc.gameManager.working == false)
             {
                 pc.stoppingBuildCoRoutine = true;
                 meshManager.CombineBlocks();
@@ -160,7 +160,7 @@ public class ActionManager
         {
             if (pc.building == true || pc.destroying == true)
             {
-                if (GameObject.Find("GameManager").GetComponent<GameManager>().working == false)
+                if (pc.gameManager.working == false)
                 {
                     pc.stoppingBuildCoRoutine = true;
                     meshManager.CombineBlocks();
@@ -199,7 +199,7 @@ public class ActionManager
         {
             if (pc.building == true || pc.destroying == true)
             {
-                if (GameObject.Find("GameManager").GetComponent<GameManager>().working == false)
+                if (pc.gameManager.working == false)
                 {
                     pc.stoppingBuildCoRoutine = true;
                     meshManager.CombineBlocks();
@@ -239,7 +239,7 @@ public class ActionManager
         {
             if (pc.building == true || pc.destroying == true)
             {
-                if (GameObject.Find("GameManager").GetComponent<GameManager>().working == false)
+                if (pc.gameManager.working == false)
                 {
                     pc.stoppingBuildCoRoutine = true;
                     meshManager.CombineBlocks();
@@ -281,7 +281,7 @@ public class ActionManager
         {
             if (pc.building == true || pc.destroying == true)
             {
-                if (GameObject.Find("GameManager").GetComponent<GameManager>().working == false)
+                if (pc.gameManager.working == false)
                 {
                     pc.stoppingBuildCoRoutine = true;
                     meshManager.CombineBlocks();
@@ -664,7 +664,7 @@ public class ActionManager
     {
         if (pc.building == true)
         {
-            if (GameObject.Find("GameManager").GetComponent<GameManager>().working == false)
+            if (pc.gameManager.working == false)
             {
                 pc.stoppingBuildCoRoutine = true;
                 meshManager.CombineBlocks();
@@ -685,41 +685,12 @@ public class ActionManager
         }
     }
 
-    // Closes inventory GUI.
-    public void CloseInventory()
-    {
-        if (pc.building == true || pc.destroying == true)
-        {
-            if (GameObject.Find("GameManager").GetComponent<GameManager>().working == false)
-            {
-                pc.stoppingBuildCoRoutine = true;
-                meshManager.CombineBlocks();
-                pc.separatedBlocks = false;
-                pc.destroyTimer = 0;
-                pc.buildTimer = 0;
-                pc.building = false;
-                pc.destroying = false;
-            }
-            else
-            {
-                pc.requestedBuildingStop = true;
-            }
-        }
-        Cursor.visible = true;
-        Cursor.lockState = CursorLockMode.None;
-        pc.gameObject.GetComponent<MSCameraController>().enabled = false;
-        pc.inventoryOpen = false;
-        pc.craftingGUIopen = false;
-        pc.storageGUIopen = false;
-        pc.marketGUIopen = false;
-    }
-
     // Closes machine GUI.
     public void CloseMachineGUI()
     {
         if (pc.building == true || pc.destroying == true)
         {
-            if (GameObject.Find("GameManager").GetComponent<GameManager>().working == false)
+            if (pc.gameManager.working == false)
             {
                 pc.stoppingBuildCoRoutine = true;
                 meshManager.CombineBlocks();
@@ -745,7 +716,7 @@ public class ActionManager
     {
         if (pc.building == true || pc.destroying == true)
         {
-            if (GameObject.Find("GameManager").GetComponent<GameManager>().working == false)
+            if (pc.gameManager.working == false)
             {
                 pc.stoppingBuildCoRoutine = true;
                 meshManager.CombineBlocks();

@@ -11,14 +11,14 @@ public class Auger : MonoBehaviour
     public GameObject outputObject;
     public GameObject powerObject;
     public GameObject conduitItem;
+    public PowerReceiver powerReceiver;
     public Material lineMat;
     public string ID = "unassigned";
     public string creationMethod;
-    private LineRenderer connectionLine;
-    public PowerReceiver powerReceiver;
-    private float updateTick;
     public int address;
     public bool powerON;
+    private LineRenderer connectionLine;
+    private float updateTick;
     private int machineTimer;
 
     // Called by unity engine on start up to initialize variables

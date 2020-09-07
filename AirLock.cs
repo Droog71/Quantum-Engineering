@@ -1,18 +1,17 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class AirLock : MonoBehaviour
 {
+    private float updateTick;
     public string ID = "unassigned";
     public int address;
-    private float updateTick;
     public bool open;
     public GameObject openObject;
     public GameObject closedObject;
     public GameObject effects;
 
-    void Start()
+    // Called by unity engine on start up to initialize variables
+    public void Start()
     {
         if (QualitySettings.GetQualityLevel() < 3)
         {
@@ -20,7 +19,8 @@ public class AirLock : MonoBehaviour
         }
     }
 
-    void Update()
+    // Called once per frame by unity engine
+    public void Update()
     {
         updateTick += 1 * Time.deltaTime;
         if (updateTick > 0.5f + (address * 0.001f))

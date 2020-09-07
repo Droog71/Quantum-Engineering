@@ -10,6 +10,7 @@ public class AddressManager
         this.stateManager = stateManager;
     }
 
+    // Assigns ID to all objects in the world.
     public IEnumerator AddressingCoroutine()
     {
         stateManager.assigningIDs = true;

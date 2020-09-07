@@ -5,12 +5,14 @@ public class BlockInteraction : MonoBehaviour
     private PlayerController playerController;
     private InteractionController interactionController;
 
+    // Called by unity engine on start up to initialize variables
     public void Start()
     {
         playerController = GetComponent<PlayerController>();
         interactionController = GetComponent<InteractionController>();
     }
 
+    // Called once per frame when the player is looking at an iron block.
     public void InteractWithIronBlock()
     {
         if (cInput.GetKeyDown("Collect Object"))
@@ -30,6 +32,7 @@ public class BlockInteraction : MonoBehaviour
         }
     }
 
+    // Called once per frame when the player is looking at a steel block.
     public void InteractWithSteelBlock()
     {
         if (cInput.GetKeyDown("Collect Object"))
@@ -48,6 +51,7 @@ public class BlockInteraction : MonoBehaviour
         }
     }
 
+    // Called once per frame when the player is looking at a glass block.
     public void InteractWithGlass()
     {
         if (cInput.GetKeyDown("Collect Object"))
@@ -56,6 +60,7 @@ public class BlockInteraction : MonoBehaviour
         }
     }
 
+    // Called once per frame when the player is looking at a brick block.
     public void InteractWithBricks()
     {
         if (cInput.GetKeyDown("Collect Object"))
@@ -64,6 +69,7 @@ public class BlockInteraction : MonoBehaviour
         }
     }
 
+    // Called once per frame when the player is looking at a combined mesh object.
     public void InteractWithCombinedMesh()
     {
         playerController.lookingAtCombinedMesh = true;

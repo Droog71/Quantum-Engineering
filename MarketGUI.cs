@@ -11,6 +11,7 @@ public class MarketGUI : MonoBehaviour
     private bool selling;
     private bool loadedValues;
 
+    // Called by unity engine on start up to initialize variables
     public void Start()
     {
         pc = GetComponent<PlayerController>();
@@ -76,6 +77,7 @@ public class MarketGUI : MonoBehaviour
         }
     }
 
+    // Saves world specific item prices.
     private void SavePrices()
     {
         foreach (KeyValuePair<string, int> i in priceDictionary)
@@ -84,6 +86,7 @@ public class MarketGUI : MonoBehaviour
         }
     }
 
+    // Buy an item from the market.
     private void BuyItem(string item)
     {
         if (pc.money >= priceDictionary[item])
@@ -104,6 +107,7 @@ public class MarketGUI : MonoBehaviour
         }
     }
 
+    // Sell an item to the market.
     private void SellItem(string item)
     {
         InventorySlot sellSlot = null;
@@ -136,6 +140,7 @@ public class MarketGUI : MonoBehaviour
         }
     }
 
+    // Called by unity engine for rendering and handling GUI events
     public void OnGUI()
     {
         //STYLE

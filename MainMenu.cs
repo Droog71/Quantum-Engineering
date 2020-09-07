@@ -2,12 +2,11 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using System.Linq;
+using System.IO;
 
 public class MainMenu : MonoBehaviour
 {
     public GUISkin thisGUIskin;
-    List<string> worldList;
-    string worldName = "Enter World Name";
     public Texture2D titleTexture;
     public Texture2D title2Texture;
     public Texture2D worlListBackground;
@@ -15,30 +14,91 @@ public class MainMenu : MonoBehaviour
     public GameObject menuSoundObject;
     public GameObject ambientSoundObject;
     public bool worldSelected;
-    bool playingVideo;
-    bool deletePrompt;
-    bool escapePrompt;
-    bool worldSelectPrompt;
     public bool finishedLoading;
-    AudioSource buttonSounds;
-    AudioSource ambient;
-    float waitForVideoTimer;
+    private string worldName = "Enter World Name";
+    private StateManager stateManager;
+    private List<string> worldList;
+    private AudioSource buttonSounds;
+    private AudioSource ambient;
+    private float waitForVideoTimer;
+    private bool worldSelectPrompt;
+    private bool playingVideo;
+    private bool deletePrompt;
+    private bool escapePrompt;
 
     // Called by unity engine on start up to initialize variables
     public void Start()
     {
+        stateManager = GameObject.Find("GameManager").GetComponent<StateManager>();
         worldList = new List<string>();
         videoPlayer.GetComponent<VP>().PlayVideo("QE_Title.webm",true,0);
         buttonSounds = menuSoundObject.GetComponent<AudioSource>();
         ambient = ambientSoundObject.GetComponent<AudioSource>();
         ambient.Play();
-        if (FileBasedPrefs.GetBool("changingWorld") == true)
+        if (PlayerPrefsX.GetPersistentBool("changingWorld") == true)
         {
-            FileBasedPrefs.SetBool("changingWorld", false);
-            GameObject.Find("GameManager").GetComponent<StateManager>().WorldName = FileBasedPrefs.GetString("worldName");
+            PlayerPrefsX.SetPersistentBool("changingWorld", false);
+            FileBasedPrefs.SetWorldName(worldName);
+            stateManager.WorldName = PlayerPrefs.GetString("worldName");
             worldSelected = true;
             ambient.enabled = false;
         }
+    }
+
+    private void SelectWorld()
+    {
+        if (worldSelected == false && worldName != "Enter World Name")
+        {
+            worldList = PlayerPrefsX.GetPersistentStringArray("Worlds").ToList();
+            if (worldList.Count < 10)
+            {
+                if (!worldList.Contains(worldName))
+                {
+                    worldList.Add(worldName);
+                    worldSelectPrompt = true;
+                }
+                else
+                {
+                    if (PlayerPrefsX.GetPersistentBool(worldName + "sceneChangeRequired") == true)
+                    {
+                        ChangeScene();
+                    }
+                    else
+                    {
+                        StartGame();
+                    }
+                }
+            }
+            else if (worldList.Contains(worldName))
+            {
+                if (PlayerPrefsX.GetPersistentBool(worldName + "sceneChangeRequired") == true)
+                {
+                    ChangeScene();
+                }
+                else
+                {
+                    StartGame();
+                }
+            }
+        }
+    }
+
+    private void ChangeScene()
+    {
+        PlayerPrefsX.SetPersistentStringArray("Worlds", worldList.ToArray());
+        PlayerPrefsX.SetPersistentBool("changingWorld", true);
+        PlayerPrefs.SetString("worldName", worldName);
+        PlayerPrefsX.SetPersistentBool(worldName + "sceneChangeRequired", true);
+        SceneManager.LoadScene(1);
+    }
+
+    private void StartGame()
+    {
+        PlayerPrefsX.SetPersistentStringArray("Worlds", worldList.ToArray());
+        FileBasedPrefs.SetWorldName(worldName);
+        stateManager.WorldName = worldName;
+        worldSelected = true;
+        ambient.enabled = false;
     }
 
     // Called by unity engine for rendering and handling GUI events
@@ -105,238 +165,199 @@ public class MainMenu : MonoBehaviour
             }
             if (GUI.Button(new Rect(ScreenWidth * 0.58f, ScreenHeight * 0.4f, ScreenWidth * 0.15f, ScreenHeight * 0.03f), "START GAME") || Event.current.keyCode.Equals(KeyCode.Return))
             {
-                if (worldSelected == false && worldName != "Enter World Name")
-                {
-                    if (PlayerPrefsX.GetStringArray("Worlds") != null)
-                    {
-                        worldList = PlayerPrefsX.GetStringArray("Worlds").ToList<string>();
-                        if (PlayerPrefsX.GetStringArray("Worlds").Length < 10)
-                        {
-                            if (!worldList.Contains(worldName))
-                            {
-                                worldList.Add(worldName);
-                                worldSelectPrompt = true;
-                            }
-                            else
-                            {
-                                if (FileBasedPrefs.GetBool(worldName+"sceneChangeRequired") == true)
-                                {
-                                    PlayerPrefsX.SetStringArray("Worlds", worldList.ToArray());
-                                    FileBasedPrefs.SetBool("changingWorld", true);
-                                    FileBasedPrefs.SetString("worldName", worldName);
-                                    FileBasedPrefs.SetBool(worldName + "sceneChangeRequired", true);
-                                    SceneManager.LoadScene(1);
-                                }
-                                else
-                                {
-                                    PlayerPrefsX.SetStringArray("Worlds", worldList.ToArray());
-                                    GameObject.Find("GameManager").GetComponent<StateManager>().WorldName = worldName;
-                                    worldSelected = true;
-                                    ambient.enabled = false;
-
-                                }
-                            }
-                        }
-                        else if (worldList.Contains(worldName))
-                        {
-                            if (FileBasedPrefs.GetBool(worldName + "sceneChangeRequired") == true)
-                            {
-                                PlayerPrefsX.SetStringArray("Worlds", worldList.ToArray());
-                                FileBasedPrefs.SetBool("changingWorld", true);
-                                FileBasedPrefs.SetString("worldName", worldName);
-                                FileBasedPrefs.SetBool(worldName + "sceneChangeRequired", true);
-                                SceneManager.LoadScene(1);
-                            }
-                            else
-                            {
-                                PlayerPrefsX.SetStringArray("Worlds", worldList.ToArray());
-                                GameObject.Find("GameManager").GetComponent<StateManager>().WorldName = worldName;
-                                worldSelected = true;
-                                ambient.enabled = false;
-
-                            }
-                        }
-                    }
-                }
                 buttonSounds.Play();
+                SelectWorld();
             }
-            worldName = GUI.TextField(new Rect(ScreenWidth * 0.41f, ScreenHeight * 0.4f, ScreenWidth * 0.15f, ScreenHeight * 0.03f), worldName, 16);
+
             GUI.DrawTexture(worldListBackgroundRect, worlListBackground);
             GUI.Label(worldListTitleRect, "SAVED WORLDS");
-            if (PlayerPrefsX.GetStringArray("Worlds").Length > 0)
+
+            string[] worlds = PlayerPrefsX.GetPersistentStringArray("Worlds");
+            if (worlds.Length > 0)
             {
-                GUI.Label(world1Rect, "1. " + PlayerPrefsX.GetStringArray("Worlds")[0]);
+                GUI.Label(world1Rect, "1. " + worlds[0]);
             }
-            if (PlayerPrefsX.GetStringArray("Worlds").Length > 1)
+            if (worlds.Length > 1)
             {
-                GUI.Label(world2Rect, "2. " + PlayerPrefsX.GetStringArray("Worlds")[1]);
+                GUI.Label(world2Rect, "2. " + worlds[1]);
             }
-            if (PlayerPrefsX.GetStringArray("Worlds").Length > 2)
+            if (worlds.Length > 2)
             {
-                GUI.Label(world3Rect, "3. " + PlayerPrefsX.GetStringArray("Worlds")[2]);
+                GUI.Label(world3Rect, "3. " + worlds[2]);
             }
-            if (PlayerPrefsX.GetStringArray("Worlds").Length > 3)
+            if (worlds.Length > 3)
             {
-                GUI.Label(world4Rect, "4. " + PlayerPrefsX.GetStringArray("Worlds")[3]);
+                GUI.Label(world4Rect, "4. " + worlds[3]);
             }
-            if (PlayerPrefsX.GetStringArray("Worlds").Length > 4)
+            if (worlds.Length > 4)
             {
-                GUI.Label(world5Rect, "5. " + PlayerPrefsX.GetStringArray("Worlds")[4]);
+                GUI.Label(world5Rect, "5. " + worlds[4]);
             }
-            if (PlayerPrefsX.GetStringArray("Worlds").Length > 5)
+            if (worlds.Length > 5)
             {
-                GUI.Label(world6Rect, "6. " + PlayerPrefsX.GetStringArray("Worlds")[5]);
+                GUI.Label(world6Rect, "6. " + worlds[5]);
             }
-            if (PlayerPrefsX.GetStringArray("Worlds").Length > 6)
+            if (worlds.Length > 6)
             {
-                GUI.Label(world7Rect, "7. " + PlayerPrefsX.GetStringArray("Worlds")[6]);
+                GUI.Label(world7Rect, "7. " + worlds[6]);
             }
-            if (PlayerPrefsX.GetStringArray("Worlds").Length > 7)
+            if (worlds.Length > 7)
             {
-                GUI.Label(world8Rect, "8. " + PlayerPrefsX.GetStringArray("Worlds")[7]);
+                GUI.Label(world8Rect, "8. " + worlds[7]);
             }
-            if (PlayerPrefsX.GetStringArray("Worlds").Length > 8)
+            if (worlds.Length > 8)
             {
-                GUI.Label(world9Rect, "9. " + PlayerPrefsX.GetStringArray("Worlds")[8]);
+                GUI.Label(world9Rect, "9. " + worlds[8]);
             }
-            if (PlayerPrefsX.GetStringArray("Worlds").Length > 9)
+            if (worlds.Length > 9)
             {
-                GUI.Label(world10Rect, "10. " + PlayerPrefsX.GetStringArray("Worlds")[9]);
+                GUI.Label(world10Rect, "10. " + worlds[9]);
             }
+
+            worldName = GUI.TextField(new Rect(ScreenWidth * 0.41f, ScreenHeight * 0.4f, ScreenWidth * 0.15f, ScreenHeight * 0.03f), worldName, 16);
+
             if (GUI.Button(buttonRect1, "1"))
             {
-                if (PlayerPrefsX.GetStringArray("Worlds").Length > 0)
-                {
-                    worldName = PlayerPrefsX.GetStringArray("Worlds")[0];  
-                }
                 buttonSounds.Play();
+                if (worlds.Length > 0)
+                {
+                    worldName = worlds[0];  
+                }
             }
             if (GUI.Button(buttonRect2, "2"))
             {
-                if (PlayerPrefsX.GetStringArray("Worlds").Length > 1)
-                {
-                    worldName = PlayerPrefsX.GetStringArray("Worlds")[1];                  
-                }
                 buttonSounds.Play();
+                if (worlds.Length > 1)
+                {
+                    worldName = worlds[1];
+                }
             }
             if (GUI.Button(buttonRect3, "3"))
             {
-                if (PlayerPrefsX.GetStringArray("Worlds").Length > 2)
-                {
-                    worldName = PlayerPrefsX.GetStringArray("Worlds")[2];
-                }
                 buttonSounds.Play();
+                if (worlds.Length > 2)
+                {
+                    worldName = worlds[2];
+                }
             }
             if (GUI.Button(buttonRect4, "4"))
             {
-                if (PlayerPrefsX.GetStringArray("Worlds").Length > 3)
-                {
-                    worldName = PlayerPrefsX.GetStringArray("Worlds")[3];
-                }
                 buttonSounds.Play();
+                if (worlds.Length > 3)
+                {
+                    worldName = worlds[3];
+                }
             }
             if (GUI.Button(buttonRect5, "5"))
             {
-                if (PlayerPrefsX.GetStringArray("Worlds").Length > 4)
-                {
-                    worldName = PlayerPrefsX.GetStringArray("Worlds")[4];
-                }
                 buttonSounds.Play();
+                if (worlds.Length > 4)
+                {
+                    worldName = worlds[4];
+                }
             }
             if (GUI.Button(buttonRect6, "6"))
             {
-                if (PlayerPrefsX.GetStringArray("Worlds").Length > 5)
-                {
-                    worldName = PlayerPrefsX.GetStringArray("Worlds")[5];  
-                }
                 buttonSounds.Play();
+                if (worlds.Length > 5)
+                {
+                    worldName = worlds[5];  
+                }
             }
             if (GUI.Button(buttonRect7, "7"))
             {
-                if (PlayerPrefsX.GetStringArray("Worlds").Length > 6)
-                {
-                    worldName = PlayerPrefsX.GetStringArray("Worlds")[6];
-                }
                 buttonSounds.Play();
+                if (worlds.Length > 6)
+                {
+                    worldName = worlds[6];
+                }
             }
             if (GUI.Button(buttonRect8, "8"))
             {
-                if (PlayerPrefsX.GetStringArray("Worlds").Length > 7)
-                {
-                    worldName = PlayerPrefsX.GetStringArray("Worlds")[7];
-                }
                 buttonSounds.Play();
+                if (worlds.Length > 7)
+                {
+                    worldName = worlds[7];
+                }
             }
             if (GUI.Button(buttonRect9, "9"))
             {
-            if (PlayerPrefsX.GetStringArray("Worlds").Length > 8)
-                {
-                    worldName = PlayerPrefsX.GetStringArray("Worlds")[8];
-                }
                 buttonSounds.Play();
+                if (worlds.Length > 8)
+                {
+                    worldName = worlds[8];
+                }
             }
             if (GUI.Button(buttonRect10, "10"))
             {
-                if (PlayerPrefsX.GetStringArray("Worlds").Length > 9)
-                {
-                    worldName = PlayerPrefsX.GetStringArray("Worlds")[9];
-                }
                 buttonSounds.Play();
+                if (worlds.Length > 9)
+                {
+                    worldName = worlds[9];
+                }
             }
-            if (Input.GetKeyDown(KeyCode.F12))
+            if (Input.GetKeyDown(KeyCode.Delete))
             {
+                buttonSounds.Play();
                 if (deletePrompt == false && escapePrompt == false)
                 {
                     deletePrompt = true;
                 }
-                buttonSounds.Play();
             }
+
             if (worldSelectPrompt == true)
             {
                 GUI.DrawTexture(deletePromptBackgroundRect, worlListBackground);
                 GUI.Label(escapePromptLabelRect, "Choose location");
                 if (GUI.Button(deletePromptButton1Rect, "Kepler-1625"))
                 {
-                    PlayerPrefsX.SetStringArray("Worlds", worldList.ToArray());
-                    GameObject.Find("GameManager").GetComponent<StateManager>().WorldName = worldName;
-                    worldSelected = true;
-                    ambient.enabled = false;
                     buttonSounds.Play();
+                    StartGame();
                 }
                 if (GUI.Button(deletePromptButton2Rect, "Gliese 876"))
                 {
                     buttonSounds.Play();
-                    PlayerPrefsX.SetStringArray("Worlds", worldList.ToArray());
-                    FileBasedPrefs.SetBool("changingWorld", true);
-                    FileBasedPrefs.SetString("worldName", worldName);
-                    FileBasedPrefs.SetBool(worldName+"sceneChangeRequired", true);
-                    SceneManager.LoadScene(1);
+                    ChangeScene();
                 }
             }
+
             if (deletePrompt == true)
             {
                 GUI.DrawTexture(deletePromptBackgroundRect, worlListBackground);
-                GUI.Label(deletePromptLabelRect, "Delete all world data?");
+                GUI.Label(deletePromptLabelRect, "Delete selected world?");
                 if (GUI.Button(deletePromptButton1Rect, "Yes"))
                 {
-                    FileBasedPrefs.DeleteAll();
-                    deletePrompt = false;
                     buttonSounds.Play();
+                    string worldFile = "SaveData/" + worldName + ".sav";
+                    string filePath = Path.Combine(Application.persistentDataPath, worldFile);
+                    File.Delete(filePath);
+                    worldList = worlds.ToList();
+                    foreach (string w in worlds)
+                    {
+                        if (w == "worldName")
+                        {
+                            worldList.Remove(w);
+                        }
+                    }
+                    PlayerPrefsX.SetPersistentStringArray("Worlds", worldList.ToArray());
+                    deletePrompt = false;
                 }
                 if (GUI.Button(deletePromptButton2Rect, "No"))
                 {
-                    deletePrompt = false;
                     buttonSounds.Play();
+                    deletePrompt = false;
                 }
             }
+
             if (Input.GetKeyDown(KeyCode.Escape))
             {
+                buttonSounds.Play();
                 if (escapePrompt == false && deletePrompt == false)
                 {
                     escapePrompt = true;
                 }
-                buttonSounds.Play();
             }
+
             if (escapePrompt == true)
             {
                 GUI.DrawTexture(deletePromptBackgroundRect, worlListBackground);
@@ -351,16 +372,16 @@ public class MainMenu : MonoBehaviour
                 }
                 if (GUI.Button(deletePromptButton2Rect, "No"))
                 {
-                    escapePrompt = false;
                     buttonSounds.Play();
+                    escapePrompt = false;
                 }
             }
         }
-        else if (GameObject.Find("GameManager").GetComponent<StateManager>().Loaded == false && finishedLoading == false)
+        else if (stateManager.Loaded == false && finishedLoading == false)
         {
             GUI.Label(loadingMessageRect, "Loading...");
         }
-        else if (GameObject.Find("GameManager").GetComponent<GameManager>().working == true && finishedLoading == false)
+        else if (stateManager.GetComponent<GameManager>().working == true && finishedLoading == false)
         {
             GUI.Label(loadingMessageRect, "Loading...");
         }

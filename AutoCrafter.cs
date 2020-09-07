@@ -3,29 +3,29 @@
 public class AutoCrafter : MonoBehaviour
 {
     public int speed = 1;
+    public string ID = "unassigned";
+    public string creationMethod = "built";
+    public int address;
+    public int connectionAttempts;
     public int power;
     public int heat;
     public int cooling;
     public bool powerON;
+    public bool connectionFailed;
+    public bool hasHeatExchanger;
     public string type;
-    public string ID = "unassigned";
     public string inputID;
-    public string creationMethod = "built";
+    public PowerReceiver powerReceiver;
+    public GameObject storageComputerConduitItemObject;
     public GameObject inputObject;
     public GameObject powerObject;
     public GameObject conduitItem;
     public Material lineMat;
-    private LineRenderer connectionLine;
-    public PowerReceiver powerReceiver;
     private float updateTick;
-    public int address;
-    public bool hasHeatExchanger;
+    private int machineTimer;
+    private LineRenderer connectionLine;
     private CraftingManager craftingManager;
     private CraftingDictionary craftingDictionary;
-    private int machineTimer;
-    public int connectionAttempts;
-    public bool connectionFailed;
-    public GameObject storageComputerConduitItemObject;
     private GameObject builtObjects;
 
     // Called by unity engine on start up to initialize variables
