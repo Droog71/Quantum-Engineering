@@ -1,12 +1,10 @@
 ﻿using UnityEngine;
-using System.Collections;
-using System.Collections.Generic;
 
 public class InfoHUD : MonoBehaviour
 {
     private PlayerController playerController;
-    private GuiCoordinates gc;
-    private TextureDictionary td;
+    private GuiCoordinates guiCoordinates;
+    private TextureDictionary textureDictionary;
     private string machineDisplayID = "unassigned";
     private string machineDisplayOutputID = "unassigned";
     private string machineDisplayOutputID2 = "unassigned";
@@ -17,8 +15,8 @@ public class InfoHUD : MonoBehaviour
     public void Start()
     {
         playerController = GetComponent<PlayerController>();
-        gc = GetComponent<GuiCoordinates>();
-        td = GetComponent<TextureDictionary>();
+        guiCoordinates = GetComponent<GuiCoordinates>();
+        textureDictionary = GetComponent<TextureDictionary>();
     }
 
     // Returns true if the info hud should be drawn
@@ -50,6 +48,8 @@ public class InfoHUD : MonoBehaviour
         if (ShouldDrawInfoHud())
         {
             GameObject obj = playerController.objectInSight;
+
+            GUI.DrawTexture(guiCoordinates.messageBackgroundRect, textureDictionary.dictionary["Interface Background"]);
 
             if (playerController.machineID.Equals("Lander") || playerController.machineID.Equals("Rocket"))
             {
@@ -120,90 +120,95 @@ public class InfoHUD : MonoBehaviour
             {
                 if (obj.GetComponent<RailCart>() != null)
                 {
-                    GUI.Label(gc.messageRect, "Rail Cart" + "\nPress E to interact." + "\nPress F to Collect.");
+                    GUI.Label(guiCoordinates.messageRect, "Rail Cart" + "\nPress E to interact." + "\nPress F to Collect.");
                 }
                 else if (obj.GetComponent<InventoryManager>().ID.Equals("Lander"))
                 {
-                    GUI.Label(gc.messageRect, "Lunar Lander" + "\nPress E to interact.");
+                    GUI.Label(guiCoordinates.messageRect, "\nLunar Lander" + "\nPress E to interact.");
                 }
                 else if (obj.GetComponent<InventoryManager>().ID.Equals("Rocket"))
                 {
-                    GUI.Label(gc.messageRect, "Rocket" + "\nPress E to interact.");
+                    GUI.Label(guiCoordinates.messageRect, "\nRocket" + "\nPress E to interact.");
                 }
                 else
                 {
-                    GUI.Label(gc.messageRect, "Storage Container" + "\nPress E to open." + "\nPress F to Collect.");
+                    GUI.Label(guiCoordinates.messageRect, "Storage Container" + "\nPress E to open." + "\nPress F to Collect.");
                 }
             }
-            else if (obj.GetComponent<DarkMatter>() != null)
+            else if (obj.GetComponent<DarkMatter>() != null || obj.GetComponent<UniversalResource>() != null)
             {
-                GUI.Label(gc.messageRect, "Dark Matter");
-            }
-            else if (obj.GetComponent<UniversalResource>() != null)
-            {
-                GUI.Label(gc.messageRect, obj.GetComponent<UniversalResource>().type);
+                string resourceName = obj.GetComponent<DarkMatter>() != null ? "Dark Matter" : obj.GetComponent<UniversalResource>().type;
+                int f = GUI.skin.label.fontSize;
+                GUI.skin.label.fontSize = 16;
+                GUIContent content = new GUIContent(resourceName);
+                GUIStyle style = GUI.skin.box;
+                style.alignment = TextAnchor.MiddleCenter;
+                Vector2 size = style.CalcSize(content);
+                Rect resourceInfoRect = new Rect((ScreenWidth / 2) - (size.x / 2), (ScreenHeight - 70) - (size.y / 2), size.x, size.y);
+                GUI.Label(resourceInfoRect, resourceName);
+                GUI.skin.label.fontSize = f;
             }
             else if (obj.GetComponent<IronBlock>() != null)
             {
-                GUI.Label(gc.messageRect, "Iron Block");
-                GUI.DrawTexture(gc.buildInfoRectBG, td.dictionary["Interface Background"]);
-                GUI.Label(gc.buildInfoRect, "Press F to remove blocks.\nPress B to add blocks.\nPress Q to stop building.");
+                GUI.Label(guiCoordinates.messageRect, "Iron Block");
+                GUI.DrawTexture(guiCoordinates.buildInfoRectBG, textureDictionary.dictionary["Interface Background"]);
+                GUI.Label(guiCoordinates.buildInfoRect, "Press F to remove blocks.\nPress B to add blocks.\nPress Q to stop building.");
             }
             else if (obj.GetComponent<Steel>() != null)
             {
-                GUI.Label(gc.messageRect, "Steel Block");
-                GUI.DrawTexture(gc.buildInfoRectBG, td.dictionary["Interface Background"]);
-                GUI.Label(gc.buildInfoRect, "Press F to remove blocks.\nPress B to add blocks.\nPress Q to stop building.");
+                GUI.Label(guiCoordinates.messageRect, "Steel Block");
+                GUI.DrawTexture(guiCoordinates.buildInfoRectBG, textureDictionary.dictionary["Interface Background"]);
+                GUI.Label(guiCoordinates.buildInfoRect, "Press F to remove blocks.\nPress B to add blocks.\nPress Q to stop building.");
             }
             else if (obj.GetComponent<Glass>() != null)
             {
-                GUI.Label(gc.messageRect, "Glass Block");
-                GUI.DrawTexture(gc.buildInfoRectBG, td.dictionary["Interface Background"]);
-                GUI.Label(gc.buildInfoRect, "Press F to remove blocks.\nPress B to add blocks.\nPress Q to stop building.");
+                GUI.Label(guiCoordinates.messageRect, "Glass Block");
+                GUI.DrawTexture(guiCoordinates.buildInfoRectBG, textureDictionary.dictionary["Interface Background"]);
+                GUI.Label(guiCoordinates.buildInfoRect, "Press F to remove blocks.\nPress B to add blocks.\nPress Q to stop building.");
             }
             else if (obj.GetComponent<Brick>() != null)
             {
-                GUI.Label(gc.messageRect, "Brick Block");
-                GUI.DrawTexture(gc.buildInfoRectBG, td.dictionary["Interface Background"]);
-                GUI.Label(gc.buildInfoRect, "Press F to remove blocks.\nPress B to add blocks.\nPress Q to stop building.");
+                GUI.Label(guiCoordinates.messageRect, "Brick Block");
+                GUI.DrawTexture(guiCoordinates.buildInfoRectBG, textureDictionary.dictionary["Interface Background"]);
+                GUI.Label(guiCoordinates.buildInfoRect, "Press F to remove blocks.\nPress B to add blocks.\nPress Q to stop building.");
             }
             else if (obj.GetComponent<ElectricLight>() != null)
             {
-                GUI.Label(gc.messageRect, "Electric Light" + "\nPress F to Collect.");
+                GUI.Label(guiCoordinates.messageRect, "\nElectric Light" + "\nPress F to Collect.");
             }
             else if (obj.GetComponent<AirLock>() != null)
             {
-                GUI.Label(gc.messageRect, "Quantum Hatchway" + "\nPress E to interact." + "\nPress F to Collect.");
+                GUI.Label(guiCoordinates.messageRect, "Quantum Hatchway" + "\nPress E to interact." + "\nPress F to Collect.");
             }
             else if (obj.GetComponent<StorageComputer>() != null)
             {
-                GUI.Label(gc.messageRect, "Storage Computer" + "\nPress E to interact." + "\nPress F to Collect.");
-                GUI.DrawTexture(gc.infoRectBG, td.dictionary["Interface Background"]);
+                GUI.Label(guiCoordinates.messageRect, "Storage Computer" + "\nPress E to interact." + "\nPress F to Collect.");
+                GUI.DrawTexture(guiCoordinates.infoRectBG, textureDictionary.dictionary["Interface Background"]);
                 if (obj.GetComponent<StorageComputer>().initialized == true)
                 {
-                    GUI.Label(gc.infoRect, "Storage Computer" + "\nID: " + machineDisplayID + "\nEnergized: " + playerController.machineHasPower);
+                    GUI.Label(guiCoordinates.infoRect, "Storage Computer" + "\nID: " + machineDisplayID + "\nEnergized: " + playerController.machineHasPower);
                 }
                 else
                 {
                     if (obj.GetComponent<StorageComputer>().bootTimer > 0)
                     {
-                        GUI.Label(gc.infoRect, "Storage Computer" + "\nBooting up...");
+                        GUI.Label(guiCoordinates.infoRect, "Storage Computer" + "\nBooting up...");
                     }
                     else
                     {
-                        GUI.Label(gc.infoRect, "Storage Computer" + "\nOffline");
+                        GUI.Label(guiCoordinates.infoRect, "Storage Computer" + "\nOffline");
                     }
                 }
             }
             else if (obj.GetComponent<RailCartHub>() != null)
             {
-                GUI.Label(gc.messageRect, "Press F to collect.\nPress E to interact.");
+                GUI.Label(guiCoordinates.messageRect, "\nPress F to collect.\nPress E to interact.");
                 if (playerController.machineInSight != null)
                 {
-                    GUI.DrawTexture(gc.infoRectBG, td.dictionary["Interface Background"]);
+                    GUI.DrawTexture(guiCoordinates.infoRectBG, textureDictionary.dictionary["Interface Background"]);
                     if (obj.GetComponent<RailCartHub>().connectionFailed == false)
                     {
-                        GUI.Label(gc.infoRect, "Rail Cart Hub" + 
+                        GUI.Label(guiCoordinates.infoRect, "Rail Cart Hub" + 
                         "\nID: " + machineDisplayID + 
                         "\nCircuit: " + obj.GetComponent<RailCartHub>().circuit + 
                         "\nRange: " + playerController.machineRange / 10 + " meters" + 
@@ -214,19 +219,19 @@ public class InfoHUD : MonoBehaviour
                     }
                     else
                     {
-                        GUI.Label(gc.infoRect, "Rail Cart Hub" + "\nOffline");
+                        GUI.Label(guiCoordinates.infoRect, "Rail Cart Hub" + "\nOffline");
                     }
                 }
             }
             else if (obj.GetComponent<DarkMatterConduit>() != null)
             {
-                GUI.Label(gc.messageRect, "Press F to collect.\nPress E to interact.");
+                GUI.Label(guiCoordinates.messageRect, "\nPress F to collect.\nPress E to interact.");
                 if (playerController.machineInSight != null)
                 {
-                    GUI.DrawTexture(gc.infoRectBG, td.dictionary["Interface Background"]);
+                    GUI.DrawTexture(guiCoordinates.infoRectBG, textureDictionary.dictionary["Interface Background"]);
                     if (obj.GetComponent<DarkMatterConduit>().connectionFailed == false)
                     {
-                        GUI.Label(gc.infoRect, "Dark Matter Conduit" + 
+                        GUI.Label(guiCoordinates.infoRect, "Dark Matter Conduit" + 
                         "\nID: " + machineDisplayID + 
                         "\nRange: " + playerController.machineRange / 10 + " meters" + 
                         "\nHolding: " + (int)playerController.machineAmount + " Dark Matter" + 
@@ -237,19 +242,19 @@ public class InfoHUD : MonoBehaviour
                     }
                     else
                     {
-                        GUI.Label(gc.infoRect, "Dark Matter Conduit" + "\nOffline");
+                        GUI.Label(guiCoordinates.infoRect, "Dark Matter Conduit" + "\nOffline");
                     }
                 }
             }
             else if (obj.GetComponent<UniversalConduit>() != null)
             {
-                GUI.Label(gc.messageRect, "Press F to collect.\nPress E to interact.");
+                GUI.Label(guiCoordinates.messageRect, "\nPress F to collect.\nPress E to interact.");
                 if (playerController.machineInSight != null)
                 {
-                    GUI.DrawTexture(gc.infoRectBG, td.dictionary["Interface Background"]);
+                    GUI.DrawTexture(guiCoordinates.infoRectBG, textureDictionary.dictionary["Interface Background"]);
                     if (obj.GetComponent<UniversalConduit>().connectionFailed == false)
                     {
-                        GUI.Label(gc.infoRect, "Universal Conduit" + 
+                        GUI.Label(guiCoordinates.infoRect, "Universal Conduit" + 
                         "\nID: " + machineDisplayID + 
                         "\nRange: " + playerController.machineRange / 10 + " meters" + 
                         "\nHolding: " + (int)playerController.machineAmount + " " + playerController.machineType + 
@@ -260,37 +265,37 @@ public class InfoHUD : MonoBehaviour
                     }
                     else
                     {
-                        GUI.Label(gc.infoRect, "Universal Conduit" + "\nOffline");
+                        GUI.Label(guiCoordinates.infoRect, "Universal Conduit" + "\nOffline");
                     }
                 }
             }
             else if (obj.GetComponent<PowerSource>() != null)
             {
-                GUI.Label(gc.messageRect, "Press F to collect.\nPress E to interact.");
-                GUI.DrawTexture(gc.infoRectBG, td.dictionary["Interface Background"]);
+                GUI.Label(guiCoordinates.messageRect, "\nPress F to collect.\nPress E to interact.");
+                GUI.DrawTexture(guiCoordinates.infoRectBG, textureDictionary.dictionary["Interface Background"]);
                 if (obj.GetComponent<PowerSource>().type == "Solar Panel")
                 {
                     if (obj.GetComponent<PowerSource>().connectionFailed == false && obj.GetComponent<PowerSource>().blocked == false)
                     {
-                        GUI.Label(gc.infoRect, "Solar Panel" + 
+                        GUI.Label(guiCoordinates.infoRect, "Solar Panel" + 
                         "\nID: " + machineDisplayID + 
                         "\nOutput ID: " + machineDisplayOutputID + 
                         "\nPower: " + playerController.machinePower + " MW");
                     }
                     else if (obj.GetComponent<PowerSource>().connectionFailed == true)
                     {
-                        GUI.Label(gc.infoRect, "Solar Panel" + "\nOffline");
+                        GUI.Label(guiCoordinates.infoRect, "Solar Panel" + "\nOffline");
                     }
                     else if (obj.GetComponent<PowerSource>().blocked == true)
                     {
-                        GUI.Label(gc.infoRect, "Solar Panel" + "\nBlocked");
+                        GUI.Label(guiCoordinates.infoRect, "Solar Panel" + "\nBlocked");
                     }
                 }
                 else if (obj.GetComponent<PowerSource>().type == "Generator")
                 {
                     if (obj.GetComponent<PowerSource>().connectionFailed == false)
                     {
-                        GUI.Label(gc.infoRect, "Generator" + 
+                        GUI.Label(guiCoordinates.infoRect, "Generator" + 
                         "\nID: " + machineDisplayID + 
                         "\nOutput ID: " + machineDisplayOutputID + 
                         "\nPower: " + playerController.machinePower + " MW" + 
@@ -298,31 +303,31 @@ public class InfoHUD : MonoBehaviour
                     }
                     else
                     {
-                        GUI.Label(gc.infoRect, "Generator" + "\nOffline");
+                        GUI.Label(guiCoordinates.infoRect, "Generator" + "\nOffline");
                     }
                 }
                 else if (obj.GetComponent<PowerSource>().type == "Reactor Turbine")
                 {
                     if (obj.GetComponent<PowerSource>().connectionFailed == false)
                     {
-                        GUI.Label(gc.infoRect, "Reactor Turbine" + 
+                        GUI.Label(guiCoordinates.infoRect, "Reactor Turbine" + 
                         "\nID: " + machineDisplayID + 
                         "\nOutput ID: " + machineDisplayOutputID + 
                         "\nPower: " + playerController.machinePower + " MW");
                     }
                     else
                     {
-                        GUI.Label(gc.infoRect, "Reactor Turbine" + "\nOffline");
+                        GUI.Label(guiCoordinates.infoRect, "Reactor Turbine" + "\nOffline");
                     }
                 }
             }
             else if (obj.GetComponent<NuclearReactor>() != null)
             {
-                GUI.Label(gc.messageRect, "Press F to collect.");
+                GUI.Label(guiCoordinates.messageRect, "Press F to collect.");
                 if (playerController.machineInSight != null)
                 {
-                    GUI.DrawTexture(gc.infoRectBG, td.dictionary["Interface Background"]);
-                    GUI.Label(gc.infoRect, "Nuclear Reactor" + 
+                    GUI.DrawTexture(guiCoordinates.infoRectBG, textureDictionary.dictionary["Interface Background"]);
+                    GUI.Label(guiCoordinates.infoRect, "Nuclear Reactor" + 
                     "\nID: " + machineDisplayID + 
                     "\nCooling: " + playerController.machineCooling + " KBTU" + 
                     "\nRequired Cooling: " + obj.GetComponent<NuclearReactor>().turbineCount * 5 + " KBTU");
@@ -330,11 +335,11 @@ public class InfoHUD : MonoBehaviour
             }
             else if (obj.GetComponent<PowerConduit>() != null)
             {
-                GUI.Label(gc.messageRect, "Press F to collect.\nPress E to interact.");
-                GUI.DrawTexture(gc.infoRectBG, td.dictionary["Interface Background"]);
+                GUI.Label(guiCoordinates.messageRect, "\nPress F to collect.\nPress E to interact.");
+                GUI.DrawTexture(guiCoordinates.infoRectBG, textureDictionary.dictionary["Interface Background"]);
                 if (obj.GetComponent<PowerConduit>().connectionFailed == false)
                 {
-                    GUI.Label(gc.infoRect, "Power Conduit" +
+                    GUI.Label(guiCoordinates.infoRect, "Power Conduit" +
                     "\nID: " + machineDisplayID + 
                     "\nRange: " + playerController.machineRange / 10 + " meters" + 
                     "\nPower: " + playerController.machinePower + " MW" + 
@@ -343,16 +348,16 @@ public class InfoHUD : MonoBehaviour
                 }
                 else
                 {
-                    GUI.Label(gc.infoRect, "Power Conduit" + "\nOffline");
+                    GUI.Label(guiCoordinates.infoRect, "Power Conduit" + "\nOffline");
                 }
             }
             else if (obj.GetComponent<UniversalExtractor>() != null)
             {
-                GUI.Label(gc.messageRect, "Press F to collect.\nPress E to interact.");
-                GUI.DrawTexture(gc.infoRectBG, td.dictionary["Interface Background"]);
+                GUI.Label(guiCoordinates.messageRect, "\nPress F to collect.\nPress E to interact.");
+                GUI.DrawTexture(guiCoordinates.infoRectBG, textureDictionary.dictionary["Interface Background"]);
                 if (obj.GetComponent<UniversalExtractor>().connectionFailed == false)
                 {
-                    GUI.Label(gc.infoRect, "Universal Extractor" + 
+                    GUI.Label(guiCoordinates.infoRect, "Universal Extractor" + 
                     "\nID: " + machineDisplayID + 
                     "\nEnergized: " + playerController.machineHasPower + 
                     "\nPower: " + playerController.machinePower + " MW" + 
@@ -363,14 +368,14 @@ public class InfoHUD : MonoBehaviour
                 }
                 else
                 {
-                    GUI.Label(gc.infoRect, "Universal Extractor" + "\nOffline");
+                    GUI.Label(guiCoordinates.infoRect, "Universal Extractor" + "\nOffline");
                 }
             }
             else if (obj.GetComponent<Auger>() != null)
             {
-                GUI.Label(gc.messageRect, "Press F to collect.\nPress E to interact.");
-                GUI.DrawTexture(gc.infoRectBG, td.dictionary["Interface Background"]);
-                GUI.Label(gc.infoRect, "Auger" + 
+                GUI.Label(guiCoordinates.messageRect, "\nPress F to collect.\nPress E to interact.");
+                GUI.DrawTexture(guiCoordinates.infoRectBG, textureDictionary.dictionary["Interface Background"]);
+                GUI.Label(guiCoordinates.infoRect, "Auger" + 
                 "\nID: " + machineDisplayID + 
                 "\nEnergized: " + playerController.machineHasPower + 
                 "\nPower: " + playerController.machinePower + " MW" + 
@@ -381,11 +386,11 @@ public class InfoHUD : MonoBehaviour
             }
             else if (obj.GetComponent<DarkMatterCollector>() != null)
             {
-                GUI.Label(gc.messageRect, "Press F to collect.\nPress E to interact.");
-                GUI.DrawTexture(gc.infoRectBG, td.dictionary["Interface Background"]);
+                GUI.Label(guiCoordinates.messageRect, "\nPress F to collect.\nPress E to interact.");
+                GUI.DrawTexture(guiCoordinates.infoRectBG, textureDictionary.dictionary["Interface Background"]);
                 if (obj.GetComponent<DarkMatterCollector>().connectionFailed == false)
                 {
-                    GUI.Label(gc.infoRect, "Dark Matter Collector" + 
+                    GUI.Label(guiCoordinates.infoRect, "Dark Matter Collector" + 
                     "\nID: " + machineDisplayID + 
                     "\nEnergized: " + playerController.machineHasPower + 
                     "\nPower: " + playerController.machinePower + " MW" + 
@@ -396,18 +401,18 @@ public class InfoHUD : MonoBehaviour
                 }
                 else
                 {
-                    GUI.Label(gc.infoRect, "Dark Matter Collector" + "\nOffline");
+                    GUI.Label(guiCoordinates.infoRect, "Dark Matter Collector" + "\nOffline");
                 }
             }
             else if (obj.GetComponent<Smelter>() != null)
             {
-                GUI.Label(gc.messageRect, "Press F to collect.\nPress E to interact.");
+                GUI.Label(guiCoordinates.messageRect, "\nPress F to collect.\nPress E to interact.");
                 if (playerController.machineInSight != null)
                 {
-                    GUI.DrawTexture(gc.infoRectBG, td.dictionary["Interface Background"]);
+                    GUI.DrawTexture(guiCoordinates.infoRectBG, textureDictionary.dictionary["Interface Background"]);
                     if (obj.GetComponent<Smelter>().connectionFailed == false)
                     {
-                        GUI.Label(gc.infoRect, "Smelter" + 
+                        GUI.Label(guiCoordinates.infoRect, "Smelter" + 
                         "\nID: " + machineDisplayID + 
                         "\nEnergized: " + playerController.machineHasPower + 
                         "\nPower: " + playerController.machinePower + " MW" + 
@@ -422,19 +427,19 @@ public class InfoHUD : MonoBehaviour
                     }
                     else
                     {
-                        GUI.Label(gc.infoRect, "Smelter" + "\nOffline");
+                        GUI.Label(guiCoordinates.infoRect, "Smelter" + "\nOffline");
                     }
                 }
             }
             else if (obj.GetComponent<AlloySmelter>() != null)
             {
-                GUI.Label(gc.messageRect, "Press F to collect.\nPress E to interact.");
+                GUI.Label(guiCoordinates.messageRect, "\nPress F to collect.\nPress E to interact.");
                 if (playerController.machineInSight != null)
                 {
-                    GUI.DrawTexture(gc.infoRectBG, td.dictionary["Interface Background"]);
+                    GUI.DrawTexture(guiCoordinates.infoRectBG, textureDictionary.dictionary["Interface Background"]);
                     if (obj.GetComponent<AlloySmelter>().connectionFailed == false)
                     {
-                        GUI.Label(gc.infoRect, "Alloy Smelter" + 
+                        GUI.Label(guiCoordinates.infoRect, "Alloy Smelter" + 
                         "\nID: " + machineDisplayID + 
                         "\nEnergized: " + playerController.machineHasPower + 
                         "\nPower: " + playerController.machinePower + " MW" + 
@@ -452,19 +457,19 @@ public class InfoHUD : MonoBehaviour
                     }
                     else
                     {
-                        GUI.Label(gc.infoRect, "Alloy Smelter" + "\nOffline");
+                        GUI.Label(guiCoordinates.infoRect, "Alloy Smelter" + "\nOffline");
                     }
                 }
             }
             else if (obj.GetComponent<Press>() != null)
             {
-                GUI.Label(gc.messageRect, "Press F to collect.\nPress E to interact.");
+                GUI.Label(guiCoordinates.messageRect, "\nPress F to collect.\nPress E to interact.");
                 if (playerController.machineInSight != null)
                 {
-                    GUI.DrawTexture(gc.infoRectBG, td.dictionary["Interface Background"]);
+                    GUI.DrawTexture(guiCoordinates.infoRectBG, textureDictionary.dictionary["Interface Background"]);
                     if (obj.GetComponent<Press>().connectionFailed == false)
                     {
-                        GUI.Label(gc.infoRect, "Press" + 
+                        GUI.Label(guiCoordinates.infoRect, "Press" + 
                         "\nID: " + machineDisplayID + 
                         "\nEnergized: " + playerController.machineHasPower + 
                         "\nPower: " + playerController.machinePower + " MW" + 
@@ -479,19 +484,19 @@ public class InfoHUD : MonoBehaviour
                     }
                     else
                     {
-                        GUI.Label(gc.infoRect, "Press" + "\nOffline");
+                        GUI.Label(guiCoordinates.infoRect, "Press" + "\nOffline");
                     }
                 }
             }
             else if (obj.GetComponent<Extruder>() != null)
             {
-                GUI.Label(gc.messageRect, "Press F to collect.\nPress E to interact.");
+                GUI.Label(guiCoordinates.messageRect, "\nPress F to collect.\nPress E to interact.");
                 if (playerController.machineInSight != null)
                 {
-                    GUI.DrawTexture(gc.infoRectBG, td.dictionary["Interface Background"]);
+                    GUI.DrawTexture(guiCoordinates.infoRectBG, textureDictionary.dictionary["Interface Background"]);
                     if (obj.GetComponent<Extruder>().connectionFailed == false)
                     {
-                        GUI.Label(gc.infoRect, "Extruder" + 
+                        GUI.Label(guiCoordinates.infoRect, "Extruder" + 
                         "\nID: " + machineDisplayID + 
                         "\nEnergized: " + playerController.machineHasPower + 
                         "\nPower: " + playerController.machinePower + " MW" + 
@@ -506,19 +511,19 @@ public class InfoHUD : MonoBehaviour
                     }
                     else
                     {
-                        GUI.Label(gc.infoRect, "Extruder" + "\nOffline");
+                        GUI.Label(guiCoordinates.infoRect, "Extruder" + "\nOffline");
                     }
                 }
             }
             else if (obj.GetComponent<Retriever>() != null)
             {
-                GUI.Label(gc.messageRect, "Press F to collect.\nPress E to interact.");
+                GUI.Label(guiCoordinates.messageRect, "\nPress F to collect.\nPress E to interact.");
                 if (playerController.machineInSight != null)
                 {
-                    GUI.DrawTexture(gc.infoRectBG, td.dictionary["Interface Background"]);
+                    GUI.DrawTexture(guiCoordinates.infoRectBG, textureDictionary.dictionary["Interface Background"]);
                     if (obj.GetComponent<Retriever>().connectionFailed == false)
                     {
-                        GUI.Label(gc.infoRect, "Retriever" + 
+                        GUI.Label(guiCoordinates.infoRect, "Retriever" + 
                         "\nID: " + machineDisplayID + 
                         "\nEnergized: " + playerController.machineHasPower + 
                         "\nPower: " + playerController.machinePower + " MW" +
@@ -531,19 +536,19 @@ public class InfoHUD : MonoBehaviour
                     }
                     else
                     {
-                        GUI.Label(gc.infoRect, "Retriever" + "\nOffline");
+                        GUI.Label(guiCoordinates.infoRect, "Retriever" + "\nOffline");
                     }
                 }
             }
             else if (obj.GetComponent<AutoCrafter>() != null)
             {
-                GUI.Label(gc.messageRect, "Press F to collect.\nPress E to interact.");
+                GUI.Label(guiCoordinates.messageRect, "\nPress F to collect.\nPress E to interact.");
                 if (playerController.machineInSight != null)
                 {
-                    GUI.DrawTexture(gc.infoRectBG, td.dictionary["Interface Background"]);
+                    GUI.DrawTexture(guiCoordinates.infoRectBG, textureDictionary.dictionary["Interface Background"]);
                     if (obj.GetComponent<AutoCrafter>().connectionFailed == false)
                     {
-                        GUI.Label(gc.infoRect, "Auto Crafter" + 
+                        GUI.Label(guiCoordinates.infoRect, "Auto Crafter" + 
                         "\nID: " + machineDisplayID + 
                         "\nEnergized: " + playerController.machineHasPower + 
                         "\nPower: " + playerController.machinePower + " MW" + 
@@ -556,19 +561,19 @@ public class InfoHUD : MonoBehaviour
                     }
                     else
                     {
-                        GUI.Label(gc.infoRect, "Auto Crafter" + "\nOffline");
+                        GUI.Label(guiCoordinates.infoRect, "Auto Crafter" + "\nOffline");
                     }
                 }
             }
             else if (obj.GetComponent<GearCutter>() != null)
             {
-                GUI.Label(gc.messageRect, "Press F to collect.\nPress E to interact.");
+                GUI.Label(guiCoordinates.messageRect, "\nPress F to collect.\nPress E to interact.");
                 if (playerController.machineInSight != null)
                 {
-                    GUI.DrawTexture(gc.infoRectBG, td.dictionary["Interface Background"]);
+                    GUI.DrawTexture(guiCoordinates.infoRectBG, textureDictionary.dictionary["Interface Background"]);
                     if (obj.GetComponent<GearCutter>().connectionFailed == false)
                     {
-                        GUI.Label(gc.infoRect, "Gear Cutter" + 
+                        GUI.Label(guiCoordinates.infoRect, "Gear Cutter" + 
                         "\nID: " + machineDisplayID + 
                         "\nEnergized: " + playerController.machineHasPower + 
                         "\nPower: " + playerController.machinePower + " MW" + 
@@ -583,18 +588,18 @@ public class InfoHUD : MonoBehaviour
                     }
                     else
                     {
-                        GUI.Label(gc.infoRect, "Gear Cutter" + "\nOffline");
+                        GUI.Label(guiCoordinates.infoRect, "Gear Cutter" + "\nOffline");
                     }
                 }
             }
             else if (obj.GetComponent<Turret>() != null)
             {
-                GUI.Label(gc.messageRect, "Press F to collect.\nPress E to interact.");
+                GUI.Label(guiCoordinates.messageRect, "\nPress F to collect.\nPress E to interact.");
                 if (playerController.machineInSight != null)
                 {
-                    GUI.DrawTexture(gc.infoRectBG, td.dictionary["Interface Background"]);
+                    GUI.DrawTexture(guiCoordinates.infoRectBG, textureDictionary.dictionary["Interface Background"]);
                     int rpm = (int)(60 / (0.2f + (3 - (playerController.machineSpeed * 0.1f))));
-                    GUI.Label(gc.infoRect, "Turret" + 
+                    GUI.Label(guiCoordinates.infoRect, "Turret" + 
                     "\nID: " + machineDisplayID + 
                     "\nEnergized: " + playerController.machineHasPower + 
                     "\nPower: " + playerController.machinePower + " MW" +
@@ -605,13 +610,13 @@ public class InfoHUD : MonoBehaviour
             }
             else if (obj.GetComponent<HeatExchanger>() != null)
             {
-                GUI.Label(gc.messageRect, "Press F to collect.\nPress E to interact.");
+                GUI.Label(guiCoordinates.messageRect, "\nPress F to collect.\nPress E to interact.");
                 if (playerController.machineInSight != null)
                 {
-                    GUI.DrawTexture(gc.infoRectBG, td.dictionary["Interface Background"]);
+                    GUI.DrawTexture(guiCoordinates.infoRectBG, textureDictionary.dictionary["Interface Background"]);
                     if (obj.GetComponent<HeatExchanger>().connectionFailed == false)
                     {
-                        GUI.Label(gc.infoRect, "Heat Exchanger" + 
+                        GUI.Label(guiCoordinates.infoRect, "Heat Exchanger" + 
                         "\nID: " + machineDisplayID + 
                         "\nCooling: " + obj.GetComponent<HeatExchanger>().providingCooling + 
                         "\nOutput: " + playerController.machineSpeed + " KBTU" + 
@@ -622,7 +627,7 @@ public class InfoHUD : MonoBehaviour
                     }
                     else
                     {
-                        GUI.Label(gc.infoRect, "Heat Exchanger" + "\nOffline");
+                        GUI.Label(guiCoordinates.infoRect, "Heat Exchanger" + "\nOffline");
                     }
                 }
             }
@@ -630,27 +635,27 @@ public class InfoHUD : MonoBehaviour
             {
                 if (obj.name.Equals("ironHolder(Clone)"))
                 {
-                    GUI.Label(gc.messageRect, "Iron Structure");
-                    GUI.DrawTexture(gc.buildInfoRectBG, td.dictionary["Interface Background"]);
-                    GUI.Label(gc.buildInfoRect, "Press F to remove blocks.\nPress B to add blocks.\nPress Q to stop building.");
+                    GUI.Label(guiCoordinates.messageRect, "Iron Structure");
+                    GUI.DrawTexture(guiCoordinates.buildInfoRectBG, textureDictionary.dictionary["Interface Background"]);
+                    GUI.Label(guiCoordinates.buildInfoRect, "Press F to remove blocks.\nPress B to add blocks.\nPress Q to stop building.");
                 }
                 if (obj.name.Equals("glassHolder(Clone)"))
                 {
-                    GUI.Label(gc.messageRect, "Glass Structure");
-                    GUI.DrawTexture(gc.buildInfoRectBG, td.dictionary["Interface Background"]);
-                    GUI.Label(gc.buildInfoRect, "Press F to remove blocks.\nPress B to add blocks.\nPress Q to stop building.");
+                    GUI.Label(guiCoordinates.messageRect, "Glass Structure");
+                    GUI.DrawTexture(guiCoordinates.buildInfoRectBG, textureDictionary.dictionary["Interface Background"]);
+                    GUI.Label(guiCoordinates.buildInfoRect, "Press F to remove blocks.\nPress B to add blocks.\nPress Q to stop building.");
                 }
                 if (obj.name.Equals("steelHolder(Clone)"))
                 {
-                    GUI.Label(gc.messageRect, "Steel Structure");
-                    GUI.DrawTexture(gc.buildInfoRectBG, td.dictionary["Interface Background"]);
-                    GUI.Label(gc.buildInfoRect, "Press F to remove blocks.\nPress B to add blocks.\nPress Q to stop building.");
+                    GUI.Label(guiCoordinates.messageRect, "Steel Structure");
+                    GUI.DrawTexture(guiCoordinates.buildInfoRectBG, textureDictionary.dictionary["Interface Background"]);
+                    GUI.Label(guiCoordinates.buildInfoRect, "Press F to remove blocks.\nPress B to add blocks.\nPress Q to stop building.");
                 }
                 if (obj.name.Equals("brickHolder(Clone)"))
                 {
-                    GUI.Label(gc.messageRect, "Brick Structure");
-                    GUI.DrawTexture(gc.buildInfoRectBG, td.dictionary["Interface Background"]);
-                    GUI.Label(gc.buildInfoRect, "Press F to remove blocks.\nPress B to add blocks.\nPress Q to stop building.");
+                    GUI.Label(guiCoordinates.messageRect, "Brick Structure");
+                    GUI.DrawTexture(guiCoordinates.buildInfoRectBG, textureDictionary.dictionary["Interface Background"]);
+                    GUI.Label(guiCoordinates.buildInfoRect, "Press F to remove blocks.\nPress B to add blocks.\nPress Q to stop building.");
                 }
             }
         }

@@ -330,9 +330,9 @@ public class DarkMatterConduit : MonoBehaviour
                                     darkMatterAmount -= speed;
                                     if (storageComputerConduitItem != null)
                                     {
-                                        if (storageComputerConduitItem.td != null)
+                                        if (storageComputerConduitItem.textureDictionary != null)
                                         {
-                                            storageComputerConduitItem.billboard.GetComponent<Renderer>().material.mainTexture = storageComputerConduitItem.td["Dark Matter"];
+                                            storageComputerConduitItem.billboard.GetComponent<Renderer>().material.mainTexture = storageComputerConduitItem.textureDictionary["Dark Matter"];
                                         }
                                         storageComputerConduitItem.target = manager.gameObject;
                                     }

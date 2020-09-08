@@ -974,9 +974,9 @@ public class UniversalConduit : MonoBehaviour
                                         amount -= speed;
                                         if (storageComputerConduitItem != null)
                                         {
-                                            if (storageComputerConduitItem.td != null)
+                                            if (storageComputerConduitItem.textureDictionary != null)
                                             {
-                                                storageComputerConduitItem.billboard.GetComponent<Renderer>().material.mainTexture = storageComputerConduitItem.td[type];
+                                                storageComputerConduitItem.billboard.GetComponent<Renderer>().material.mainTexture = storageComputerConduitItem.textureDictionary[type];
                                             }
                                             storageComputerConduitItem.target = manager.gameObject;
                                         }
@@ -998,9 +998,9 @@ public class UniversalConduit : MonoBehaviour
                                         amount -= speed;
                                         if (storageComputerConduitItem != null)
                                         {
-                                            if (storageComputerConduitItem.td != null)
+                                            if (storageComputerConduitItem.textureDictionary != null)
                                             {
-                                                storageComputerConduitItem.billboard.GetComponent<Renderer>().material.mainTexture = storageComputerConduitItem.td[type];
+                                                storageComputerConduitItem.billboard.GetComponent<Renderer>().material.mainTexture = storageComputerConduitItem.textureDictionary[type];
                                             }
                                             storageComputerConduitItem.target = manager.gameObject;
                                         }

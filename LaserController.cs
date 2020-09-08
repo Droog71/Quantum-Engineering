@@ -2,13 +2,13 @@
 
 public class LaserController
 {
-    private GameManager game;
+    private GameManager gameManager;
     private PlayerController playerController;
 
-    public LaserController(PlayerController playerController, GameManager game)
+    public LaserController(PlayerController playerController, GameManager gameManager)
     {
         this.playerController = playerController;
-        this.game = game;
+        this.gameManager = gameManager;
     }
 
     // Returns true if a message can be sent to the player's tablet
@@ -57,7 +57,7 @@ public class LaserController
                 {
                     if (chanceOfDestruction > 25)
                     {
-                        game.meshManager.SeparateBlocks(hit.point, "glass",false);
+                        gameManager.meshManager.SeparateBlocks(hit.point, "glass",false);
                         if (CanSendDestructionMessage())
                         {
                             if (playerController.destructionMessageActive == false)
@@ -77,7 +77,7 @@ public class LaserController
                 {
                     if (chanceOfDestruction > 50)
                     {
-                        game.meshManager.SeparateBlocks(hit.point, "brick",false);
+                        gameManager.meshManager.SeparateBlocks(hit.point, "brick",false);
                         if (CanSendDestructionMessage())
                         {
                             if (playerController.destructionMessageActive == false)
@@ -98,7 +98,7 @@ public class LaserController
                 {
                     if (chanceOfDestruction > 75)
                     {
-                        game.meshManager.SeparateBlocks(hit.point, "iron",false);
+                        gameManager.meshManager.SeparateBlocks(hit.point, "iron",false);
                         if (CanSendDestructionMessage())
                         {
                             if (playerController.destructionMessageActive == false)
@@ -118,7 +118,7 @@ public class LaserController
                 {
                     if (chanceOfDestruction > 99)
                     {
-                        game.meshManager.SeparateBlocks(hit.point, "steel",false);
+                        gameManager.meshManager.SeparateBlocks(hit.point, "steel",false);
                         if (CanSendDestructionMessage())
                         {
                             if (playerController.destructionMessageActive == false)

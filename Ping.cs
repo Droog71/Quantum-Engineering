@@ -3,7 +3,7 @@ using UnityEngine.SceneManagement;
 
 public class Ping : MonoBehaviour
 {
-    float timer;
+    private float timer;
     public string type;
     public GameObject billboard;
     public GameObject attachedLight;

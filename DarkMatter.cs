@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class DarkMatter: MonoBehaviour
 {
-    float size;
+    private float size;
     public GameObject collector;
 
     // Called once per frame by unity engine

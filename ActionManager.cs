@@ -2,153 +2,153 @@
 
 public class ActionManager
 {
-    private PlayerController pc;
+    private PlayerController playerController;
     private CombinedMeshManager meshManager;
 
-    public ActionManager(PlayerController pc)
+    public ActionManager(PlayerController playerController)
     {
-        this.pc = pc;
-        meshManager = pc.gameManager.meshManager;
+        this.playerController = playerController;
+        meshManager = playerController.gameManager.meshManager;
     }
 
     // Toggles the crosshair.
     public void ToggleCrosshair()
     {
-        if (pc.crosshairEnabled == true)
+        if (playerController.crosshairEnabled == true)
         {
-            pc.crosshairEnabled = false;
+            playerController.crosshairEnabled = false;
         }
         else
         {
-            pc.crosshairEnabled = true;
+            playerController.crosshairEnabled = true;
         }
-        pc.PlayButtonSound();
+        playerController.PlayButtonSound();
     }
 
     // Toggles the head lamp.
     public void ToggleHeadLamp()
     {
-        if (pc.headlamp.GetComponent<Light>() != null)
+        if (playerController.headlamp.GetComponent<Light>() != null)
         {
-            if (pc.headlamp.GetComponent<Light>().enabled == true)
+            if (playerController.headlamp.GetComponent<Light>().enabled == true)
             {
-                pc.headlamp.GetComponent<Light>().enabled = false;
+                playerController.headlamp.GetComponent<Light>().enabled = false;
             }
             else
             {
-                pc.headlamp.GetComponent<Light>().enabled = true;
+                playerController.headlamp.GetComponent<Light>().enabled = true;
             }
         }
-        pc.PlayButtonSound();
+        playerController.PlayButtonSound();
     }
 
     // Toggles the laser cannon.
     public void ToggleLaserCannon()
     {
-        if (pc.building == true || pc.destroying == true)
+        if (playerController.building == true || playerController.destroying == true)
         {
-            if (pc.gameManager.working == false)
+            if (playerController.gameManager.working == false)
             {
-                pc.stoppingBuildCoRoutine = true;
+                playerController.stoppingBuildCoRoutine = true;
                 meshManager.CombineBlocks();
-                pc.separatedBlocks = false;
-                pc.destroyTimer = 0;
-                pc.buildTimer = 0;
-                pc.building = false;
-                pc.destroying = false;
+                playerController.separatedBlocks = false;
+                playerController.destroyTimer = 0;
+                playerController.buildTimer = 0;
+                playerController.building = false;
+                playerController.destroying = false;
             }
             else
             {
-                pc.requestedBuildingStop = true;
+                playerController.requestedBuildingStop = true;
             }
         }
-        if (!pc.laserCannon.activeSelf)
+        if (!playerController.laserCannon.activeSelf)
         {
-            pc.paintGun.SetActive(false);
-            pc.paintGunActive = false;
-            pc.paintColorSelected = false;
-            pc.scanner.SetActive(false);
-            pc.scannerActive = false;
-            pc.laserCannon.SetActive(true);
-            pc.laserCannonActive = true;
+            playerController.paintGun.SetActive(false);
+            playerController.paintGunActive = false;
+            playerController.paintColorSelected = false;
+            playerController.scanner.SetActive(false);
+            playerController.scannerActive = false;
+            playerController.laserCannon.SetActive(true);
+            playerController.laserCannonActive = true;
         }
         else
         {
-            pc.laserCannon.SetActive(false);
-            pc.laserCannonActive = false;
+            playerController.laserCannon.SetActive(false);
+            playerController.laserCannonActive = false;
         }
     }
 
     // Toggles the scanner.
     public void ToggleScanner()
     {
-        if (pc.building == true || pc.destroying == true)
+        if (playerController.building == true || playerController.destroying == true)
         {
-            if (pc.gameManager.working == false)
+            if (playerController.gameManager.working == false)
             {
-                pc.stoppingBuildCoRoutine = true;
+                playerController.stoppingBuildCoRoutine = true;
                 meshManager.CombineBlocks();
-                pc.separatedBlocks = false;
-                pc.destroyTimer = 0;
-                pc.buildTimer = 0;
-                pc.building = false;
-                pc.destroying = false;
+                playerController.separatedBlocks = false;
+                playerController.destroyTimer = 0;
+                playerController.buildTimer = 0;
+                playerController.building = false;
+                playerController.destroying = false;
             }
             else
             {
-                pc.requestedBuildingStop = true;
+                playerController.requestedBuildingStop = true;
             }
         }
-        if (!pc.scanner.activeSelf)
+        if (!playerController.scanner.activeSelf)
         {
-            pc.paintGun.SetActive(false);
-            pc.paintGunActive = false;
-            pc.paintColorSelected = false;
-            pc.laserCannon.SetActive(false);
-            pc.laserCannonActive = false;
-            pc.scanner.SetActive(true);
-            pc.scannerActive = true;
+            playerController.paintGun.SetActive(false);
+            playerController.paintGunActive = false;
+            playerController.paintColorSelected = false;
+            playerController.laserCannon.SetActive(false);
+            playerController.laserCannonActive = false;
+            playerController.scanner.SetActive(true);
+            playerController.scannerActive = true;
         }
         else
         {
-            pc.scanner.SetActive(false);
-            pc.scannerActive = false;
+            playerController.scanner.SetActive(false);
+            playerController.scannerActive = false;
         }
     }
 
     // Toggles the paint gun.
     public void TogglePaintGun()
     {
-        if (pc.paintGunActive == false)
+        if (playerController.paintGunActive == false)
         {
-            pc.paintGunActive = true;
-            pc.paintGun.SetActive(true);
-            pc.laserCannon.SetActive(false);
-            pc.laserCannonActive = false;
-            pc.scanner.SetActive(false);
-            pc.scannerActive = false;
+            playerController.paintGunActive = true;
+            playerController.paintGun.SetActive(true);
+            playerController.laserCannon.SetActive(false);
+            playerController.laserCannonActive = false;
+            playerController.scanner.SetActive(false);
+            playerController.scannerActive = false;
         }
         else
         {
-            pc.paintGun.SetActive(false);
-            pc.paintGunActive = false;
-            pc.paintColorSelected = false;
+            playerController.paintGun.SetActive(false);
+            playerController.paintGunActive = false;
+            playerController.paintColorSelected = false;
         }
-        if (pc.building == true || pc.destroying == true)
+        if (playerController.building == true || playerController.destroying == true)
         {
-            if (pc.gameManager.working == false)
+            if (playerController.gameManager.working == false)
             {
-                pc.stoppingBuildCoRoutine = true;
+                playerController.stoppingBuildCoRoutine = true;
                 meshManager.CombineBlocks();
-                pc.separatedBlocks = false;
-                pc.destroyTimer = 0;
-                pc.buildTimer = 0;
-                pc.building = false;
-                pc.destroying = false;
+                playerController.separatedBlocks = false;
+                playerController.destroyTimer = 0;
+                playerController.buildTimer = 0;
+                playerController.building = false;
+                playerController.destroying = false;
             }
             else
             {
-                pc.requestedBuildingStop = true;
+                playerController.requestedBuildingStop = true;
             }
         }
     }
@@ -156,172 +156,172 @@ public class ActionManager
     // Toggles the inventory GUI.
     public void ToggleInventory()
     {
-        if (!pc.GuiOpen())
+        if (!playerController.GuiOpen())
         {
-            if (pc.building == true || pc.destroying == true)
+            if (playerController.building == true || playerController.destroying == true)
             {
-                if (pc.gameManager.working == false)
+                if (playerController.gameManager.working == false)
                 {
-                    pc.stoppingBuildCoRoutine = true;
+                    playerController.stoppingBuildCoRoutine = true;
                     meshManager.CombineBlocks();
-                    pc.separatedBlocks = false;
-                    pc.destroyTimer = 0;
-                    pc.buildTimer = 0;
-                    pc.building = false;
-                    pc.destroying = false;
+                    playerController.separatedBlocks = false;
+                    playerController.destroyTimer = 0;
+                    playerController.buildTimer = 0;
+                    playerController.building = false;
+                    playerController.destroying = false;
                 }
                 else
                 {
-                    pc.requestedBuildingStop = true;
+                    playerController.requestedBuildingStop = true;
                 }
             }
             Cursor.visible = true;
             Cursor.lockState = CursorLockMode.None;
-            pc.machineGUIopen = false;
-            pc.inventoryOpen = true;
+            playerController.machineGUIopen = false;
+            playerController.inventoryOpen = true;
         }
         else
         {
             Cursor.visible = false;
             Cursor.lockState = CursorLockMode.Locked;
-            pc.inventoryOpen = false;
-            pc.marketGUIopen = false;
-            pc.craftingGUIopen = false;
-            pc.storageGUIopen = false;
-            pc.machineGUIopen = false;
+            playerController.inventoryOpen = false;
+            playerController.marketGUIopen = false;
+            playerController.craftingGUIopen = false;
+            playerController.storageGUIopen = false;
+            playerController.machineGUIopen = false;
         }
     }
 
     // Toggles the crafting GUI.
     public void ToggleCraftingGUI()
     {
-        if (!pc.GuiOpen())
+        if (!playerController.GuiOpen())
         {
-            if (pc.building == true || pc.destroying == true)
+            if (playerController.building == true || playerController.destroying == true)
             {
-                if (pc.gameManager.working == false)
+                if (playerController.gameManager.working == false)
                 {
-                    pc.stoppingBuildCoRoutine = true;
+                    playerController.stoppingBuildCoRoutine = true;
                     meshManager.CombineBlocks();
-                    pc.separatedBlocks = false;
-                    pc.destroyTimer = 0;
-                    pc.buildTimer = 0;
-                    pc.building = false;
-                    pc.destroying = false;
+                    playerController.separatedBlocks = false;
+                    playerController.destroyTimer = 0;
+                    playerController.buildTimer = 0;
+                    playerController.building = false;
+                    playerController.destroying = false;
                 }
                 else
                 {
-                    pc.requestedBuildingStop = true;
+                    playerController.requestedBuildingStop = true;
                 }
             }
             Cursor.visible = true;
             Cursor.lockState = CursorLockMode.None;
-            pc.machineGUIopen = false;
-            pc.inventoryOpen = true;
-            pc.craftingGUIopen = true;
+            playerController.machineGUIopen = false;
+            playerController.inventoryOpen = true;
+            playerController.craftingGUIopen = true;
         }
         else
         {
             Cursor.visible = false;
             Cursor.lockState = CursorLockMode.Locked;
-            pc.inventoryOpen = false;
-            pc.marketGUIopen = false;
-            pc.craftingGUIopen = false;
-            pc.storageGUIopen = false;
-            pc.machineGUIopen = false;
+            playerController.inventoryOpen = false;
+            playerController.marketGUIopen = false;
+            playerController.craftingGUIopen = false;
+            playerController.storageGUIopen = false;
+            playerController.machineGUIopen = false;
         }
     }
 
     // Toggles the crafting GUI.
     public void ToggleMarketGUI()
     {
-        if (!pc.GuiOpen())
+        if (!playerController.GuiOpen())
         {
-            if (pc.building == true || pc.destroying == true)
+            if (playerController.building == true || playerController.destroying == true)
             {
-                if (pc.gameManager.working == false)
+                if (playerController.gameManager.working == false)
                 {
-                    pc.stoppingBuildCoRoutine = true;
+                    playerController.stoppingBuildCoRoutine = true;
                     meshManager.CombineBlocks();
-                    pc.separatedBlocks = false;
-                    pc.destroyTimer = 0;
-                    pc.buildTimer = 0;
-                    pc.building = false;
-                    pc.destroying = false;
+                    playerController.separatedBlocks = false;
+                    playerController.destroyTimer = 0;
+                    playerController.buildTimer = 0;
+                    playerController.building = false;
+                    playerController.destroying = false;
                 }
                 else
                 {
-                    pc.requestedBuildingStop = true;
+                    playerController.requestedBuildingStop = true;
                 }
             }
             Cursor.visible = true;
             Cursor.lockState = CursorLockMode.None;
-            pc.machineGUIopen = false;
-            pc.craftingGUIopen = false;
-            pc.marketGUIopen = true;
-            float distance = Vector3.Distance(pc.gameObject.transform.position, GameObject.Find("Rocket").transform.position);
-            pc.inventoryOpen = distance <= 40;
+            playerController.machineGUIopen = false;
+            playerController.craftingGUIopen = false;
+            playerController.marketGUIopen = true;
+            float distance = Vector3.Distance(playerController.gameObject.transform.position, GameObject.Find("Rocket").transform.position);
+            playerController.inventoryOpen = distance <= 40;
         }
         else
         {
             Cursor.visible = false;
             Cursor.lockState = CursorLockMode.Locked;
-            pc.inventoryOpen = false;
-            pc.marketGUIopen = false;
-            pc.craftingGUIopen = false;
-            pc.storageGUIopen = false;
-            pc.machineGUIopen = false;
+            playerController.inventoryOpen = false;
+            playerController.marketGUIopen = false;
+            playerController.craftingGUIopen = false;
+            playerController.storageGUIopen = false;
+            playerController.machineGUIopen = false;
         }
     }
 
     // Toggles the tablet GUI.
     public void ToggleTablet()
     {
-        if (!pc.GuiOpen())
+        if (!playerController.GuiOpen())
         {
-            if (pc.building == true || pc.destroying == true)
+            if (playerController.building == true || playerController.destroying == true)
             {
-                if (pc.gameManager.working == false)
+                if (playerController.gameManager.working == false)
                 {
-                    pc.stoppingBuildCoRoutine = true;
+                    playerController.stoppingBuildCoRoutine = true;
                     meshManager.CombineBlocks();
-                    pc.separatedBlocks = false;
-                    pc.destroyTimer = 0;
-                    pc.buildTimer = 0;
-                    pc.building = false;
-                    pc.destroying = false;
+                    playerController.separatedBlocks = false;
+                    playerController.destroyTimer = 0;
+                    playerController.buildTimer = 0;
+                    playerController.building = false;
+                    playerController.destroying = false;
                 }
                 else
                 {
-                    pc.requestedBuildingStop = true;
+                    playerController.requestedBuildingStop = true;
                 }
             }
             Cursor.visible = true;
             Cursor.lockState = CursorLockMode.None;
-            pc.tabletOpen = true;
+            playerController.tabletOpen = true;
         }
         else
         {
             Cursor.visible = false;
             Cursor.lockState = CursorLockMode.Locked;
-            pc.tabletOpen = false;
+            playerController.tabletOpen = false;
         }
     }
 
     // Moves the player forward.
     public void WalkForward()
     {
-        if (!Physics.Raycast(pc.mCam.gameObject.transform.position, pc.mCam.gameObject.transform.forward, out RaycastHit hit, 5))
+        if (!Physics.Raycast(playerController.mCam.gameObject.transform.position, playerController.mCam.gameObject.transform.forward, out RaycastHit hit, 5))
         {
-            Vector3 moveDir = Vector3.Normalize(new Vector3(pc.mCam.gameObject.transform.forward.x, 0, pc.mCam.gameObject.transform.forward.z));
-            pc.gameObject.transform.position += moveDir * pc.playerMoveSpeed * Time.deltaTime;
+            Vector3 moveDir = Vector3.Normalize(new Vector3(playerController.mCam.gameObject.transform.forward.x, 0, playerController.mCam.gameObject.transform.forward.z));
+            playerController.gameObject.transform.position += moveDir * playerController.playerMoveSpeed * Time.deltaTime;
         }
         else if (hit.collider.gameObject.GetComponent<AirLock>() != null)
         {
             if (hit.collider.gameObject.GetComponent<Collider>().isTrigger == true)
             {
-                Vector3 moveDir = Vector3.Normalize(new Vector3(pc.mCam.gameObject.transform.forward.x, 0, pc.mCam.gameObject.transform.forward.z));
-                pc.gameObject.transform.position += moveDir * pc.playerMoveSpeed * Time.deltaTime;
+                Vector3 moveDir = Vector3.Normalize(new Vector3(playerController.mCam.gameObject.transform.forward.x, 0, playerController.mCam.gameObject.transform.forward.z));
+                playerController.gameObject.transform.position += moveDir * playerController.playerMoveSpeed * Time.deltaTime;
             }
         }
     }
@@ -329,28 +329,28 @@ public class ActionManager
     // Moves the player backward.
     public void WalkBackward()
     {
-        if (!Physics.Raycast(pc.mCam.gameObject.transform.position, -pc.mCam.gameObject.transform.forward, out RaycastHit hit, 5))
+        if (!Physics.Raycast(playerController.mCam.gameObject.transform.position, -playerController.mCam.gameObject.transform.forward, out RaycastHit hit, 5))
         {
-            Vector3 moveDir = Vector3.Normalize(new Vector3(pc.mCam.gameObject.transform.forward.x, 0, pc.mCam.gameObject.transform.forward.z));
-            pc.gameObject.transform.position -= moveDir * pc.playerMoveSpeed * Time.deltaTime;
+            Vector3 moveDir = Vector3.Normalize(new Vector3(playerController.mCam.gameObject.transform.forward.x, 0, playerController.mCam.gameObject.transform.forward.z));
+            playerController.gameObject.transform.position -= moveDir * playerController.playerMoveSpeed * Time.deltaTime;
         }
     }
 
     // Moves the player left.
     public void StrafeLeft()
     {
-        if (!Physics.Raycast(pc.mCam.gameObject.transform.position, -pc.mCam.gameObject.transform.right, out RaycastHit hit, 5))
+        if (!Physics.Raycast(playerController.mCam.gameObject.transform.position, -playerController.mCam.gameObject.transform.right, out RaycastHit hit, 5))
         {
-            pc.gameObject.transform.position -= pc.mCam.gameObject.transform.right * pc.playerMoveSpeed * Time.deltaTime;
+            playerController.gameObject.transform.position -= playerController.mCam.gameObject.transform.right * playerController.playerMoveSpeed * Time.deltaTime;
         }
     }
 
     // Moves the player right.
     public void StrafeRight()
     {
-        if (!Physics.Raycast(pc.mCam.gameObject.transform.position, pc.mCam.gameObject.transform.right, out RaycastHit hit, 5))
+        if (!Physics.Raycast(playerController.mCam.gameObject.transform.position, playerController.mCam.gameObject.transform.right, out RaycastHit hit, 5))
         {
-            pc.gameObject.transform.position += pc.mCam.gameObject.transform.right * pc.playerMoveSpeed * Time.deltaTime;
+            playerController.gameObject.transform.position += playerController.mCam.gameObject.transform.right * playerController.playerMoveSpeed * Time.deltaTime;
         }
     }
 
@@ -366,108 +366,108 @@ public class ActionManager
     // Returns true when varied footstep sounds should loop back to the first sound.
     private bool InitMetalStepSounds()
     {
-        return pc.playerBody.GetComponent<AudioSource>().clip == pc.footStep1
-        || pc.playerBody.GetComponent<AudioSource>().clip == pc.footStep2
-        || pc.playerBody.GetComponent<AudioSource>().clip == pc.footStep3
-        || pc.playerBody.GetComponent<AudioSource>().clip == pc.footStep4
-        || pc.playerBody.GetComponent<AudioSource>().clip == pc.metalFootStep1;
+        return playerController.playerBody.GetComponent<AudioSource>().clip == playerController.footStep1
+        || playerController.playerBody.GetComponent<AudioSource>().clip == playerController.footStep2
+        || playerController.playerBody.GetComponent<AudioSource>().clip == playerController.footStep3
+        || playerController.playerBody.GetComponent<AudioSource>().clip == playerController.footStep4
+        || playerController.playerBody.GetComponent<AudioSource>().clip == playerController.metalFootStep1;
     }
 
     // Returns true when varied footstep sounds should loop back to the first sound.
     private bool InitGroundStepSounds()
     {
-        return pc.playerBody.GetComponent<AudioSource>().clip == pc.footStep1
-        || pc.playerBody.GetComponent<AudioSource>().clip == pc.metalFootStep1
-        || pc.playerBody.GetComponent<AudioSource>().clip == pc.metalFootStep2
-        || pc.playerBody.GetComponent<AudioSource>().clip == pc.metalFootStep3
-        || pc.playerBody.GetComponent<AudioSource>().clip == pc.metalFootStep4;
+        return playerController.playerBody.GetComponent<AudioSource>().clip == playerController.footStep1
+        || playerController.playerBody.GetComponent<AudioSource>().clip == playerController.metalFootStep1
+        || playerController.playerBody.GetComponent<AudioSource>().clip == playerController.metalFootStep2
+        || playerController.playerBody.GetComponent<AudioSource>().clip == playerController.metalFootStep3
+        || playerController.playerBody.GetComponent<AudioSource>().clip == playerController.metalFootStep4;
     }
 
     // Handles head bob, held item movement and footstep sound effects.
     public void DoGroundEffects(RaycastHit hit)
     {
         // HEAD BOB
-        pc.mCam.GetComponent<HeadBob>().active = true;
+        playerController.mCam.GetComponent<HeadBob>().active = true;
 
         // HELD OBJECT MOVEMENT
-        if (pc.gameObject.GetComponent<AudioSource>().isPlaying == true)
+        if (playerController.gameObject.GetComponent<AudioSource>().isPlaying == true)
         {
-            pc.gameObject.GetComponent<AudioSource>().Stop();
+            playerController.gameObject.GetComponent<AudioSource>().Stop();
         }
-        if (pc.scannerActive == true)
+        if (playerController.scannerActive == true)
         {
-            pc.scanner.GetComponent<HeldItemSway>().active = true;
-        }
-        else
-        {
-            pc.scanner.GetComponent<HeldItemSway>().active = false;
-        }
-        if (pc.laserCannonActive == true)
-        {
-            pc.laserCannon.GetComponent<HeldItemSway>().active = true;
+            playerController.scanner.GetComponent<HeldItemSway>().active = true;
         }
         else
         {
-            pc.laserCannon.GetComponent<HeldItemSway>().active = false;
+            playerController.scanner.GetComponent<HeldItemSway>().active = false;
         }
-        if (pc.paintGunActive == true)
+        if (playerController.laserCannonActive == true)
         {
-            pc.paintGun.GetComponent<HeldItemSway>().active = true;
+            playerController.laserCannon.GetComponent<HeldItemSway>().active = true;
         }
         else
         {
-            pc.paintGun.GetComponent<HeldItemSway>().active = false;
+            playerController.laserCannon.GetComponent<HeldItemSway>().active = false;
+        }
+        if (playerController.paintGunActive == true)
+        {
+            playerController.paintGun.GetComponent<HeldItemSway>().active = true;
+        }
+        else
+        {
+            playerController.paintGun.GetComponent<HeldItemSway>().active = false;
         }
 
         // FOOTSTEP SOUNDS
-        pc.footStepTimer += 1 * Time.deltaTime;
-        if (pc.footStepTimer >= pc.footStepSoundFrquency)
+        playerController.footStepTimer += 1 * Time.deltaTime;
+        if (playerController.footStepTimer >= playerController.footStepSoundFrquency)
         {
-            pc.footStepTimer = 0;
+            playerController.footStepTimer = 0;
             if (OnMetal(hit))
             {
                 if (InitMetalStepSounds())
                 {
-                    pc.playerBody.GetComponent<AudioSource>().clip = pc.metalFootStep2;
-                    pc.playerBody.GetComponent<AudioSource>().Play();
+                    playerController.playerBody.GetComponent<AudioSource>().clip = playerController.metalFootStep2;
+                    playerController.playerBody.GetComponent<AudioSource>().Play();
                 }
-                else if (pc.playerBody.GetComponent<AudioSource>().clip == pc.metalFootStep2)
+                else if (playerController.playerBody.GetComponent<AudioSource>().clip == playerController.metalFootStep2)
                 {
-                    pc.playerBody.GetComponent<AudioSource>().clip = pc.metalFootStep3;
-                    pc.playerBody.GetComponent<AudioSource>().Play();
+                    playerController.playerBody.GetComponent<AudioSource>().clip = playerController.metalFootStep3;
+                    playerController.playerBody.GetComponent<AudioSource>().Play();
                 }
-                else if (pc.playerBody.GetComponent<AudioSource>().clip == pc.metalFootStep3)
+                else if (playerController.playerBody.GetComponent<AudioSource>().clip == playerController.metalFootStep3)
                 {
-                    pc.playerBody.GetComponent<AudioSource>().clip = pc.metalFootStep4;
-                    pc.playerBody.GetComponent<AudioSource>().Play();
+                    playerController.playerBody.GetComponent<AudioSource>().clip = playerController.metalFootStep4;
+                    playerController.playerBody.GetComponent<AudioSource>().Play();
                 }
-                else if (pc.playerBody.GetComponent<AudioSource>().clip == pc.metalFootStep4)
+                else if (playerController.playerBody.GetComponent<AudioSource>().clip == playerController.metalFootStep4)
                 {
-                    pc.playerBody.GetComponent<AudioSource>().clip = pc.metalFootStep1;
-                    pc.playerBody.GetComponent<AudioSource>().Play();
+                    playerController.playerBody.GetComponent<AudioSource>().clip = playerController.metalFootStep1;
+                    playerController.playerBody.GetComponent<AudioSource>().Play();
                 }
             }
             else
             {
                 if (InitGroundStepSounds())
                 {
-                    pc.playerBody.GetComponent<AudioSource>().clip = pc.footStep2;
-                    pc.playerBody.GetComponent<AudioSource>().Play();
+                    playerController.playerBody.GetComponent<AudioSource>().clip = playerController.footStep2;
+                    playerController.playerBody.GetComponent<AudioSource>().Play();
                 }
-                else if (pc.playerBody.GetComponent<AudioSource>().clip == pc.footStep2)
+                else if (playerController.playerBody.GetComponent<AudioSource>().clip == playerController.footStep2)
                 {
-                    pc.playerBody.GetComponent<AudioSource>().clip = pc.footStep3;
-                    pc.playerBody.GetComponent<AudioSource>().Play();
+                    playerController.playerBody.GetComponent<AudioSource>().clip = playerController.footStep3;
+                    playerController.playerBody.GetComponent<AudioSource>().Play();
                 }
-                else if (pc.playerBody.GetComponent<AudioSource>().clip == pc.footStep3)
+                else if (playerController.playerBody.GetComponent<AudioSource>().clip == playerController.footStep3)
                 {
-                    pc.playerBody.GetComponent<AudioSource>().clip = pc.footStep4;
-                    pc.playerBody.GetComponent<AudioSource>().Play();
+                    playerController.playerBody.GetComponent<AudioSource>().clip = playerController.footStep4;
+                    playerController.playerBody.GetComponent<AudioSource>().Play();
                 }
-                else if (pc.playerBody.GetComponent<AudioSource>().clip == pc.footStep4)
+                else if (playerController.playerBody.GetComponent<AudioSource>().clip == playerController.footStep4)
                 {
-                    pc.playerBody.GetComponent<AudioSource>().clip = pc.footStep1;
-                    pc.playerBody.GetComponent<AudioSource>().Play();
+                    playerController.playerBody.GetComponent<AudioSource>().clip = playerController.footStep1;
+                    playerController.playerBody.GetComponent<AudioSource>().Play();
                 }
             }
         }
@@ -476,41 +476,41 @@ public class ActionManager
     // Stops head bob and held item movement.
     public void StopGroundEffects()
     {
-        pc.mCam.GetComponent<HeadBob>().active = false;
-        pc.scanner.GetComponent<HeldItemSway>().active = false;
-        pc.laserCannon.GetComponent<HeldItemSway>().active = false;
-        pc.paintGun.GetComponent<HeldItemSway>().active = false;
+        playerController.mCam.GetComponent<HeadBob>().active = false;
+        playerController.scanner.GetComponent<HeldItemSway>().active = false;
+        playerController.laserCannon.GetComponent<HeldItemSway>().active = false;
+        playerController.paintGun.GetComponent<HeldItemSway>().active = false;
     }
 
     // Resets the held item's position.
     public void ResetHeldItemSway()
     {
-        if (pc.scannerActive == true)
+        if (playerController.scannerActive == true)
         {
-            pc.scanner.GetComponent<HeldItemSway>().Reset();
+            playerController.scanner.GetComponent<HeldItemSway>().Reset();
         }
-        if (pc.laserCannonActive == true)
+        if (playerController.laserCannonActive == true)
         {
-            pc.laserCannon.GetComponent<HeldItemSway>().Reset();
+            playerController.laserCannon.GetComponent<HeldItemSway>().Reset();
         }
-        if (pc.paintGunActive == true)
+        if (playerController.paintGunActive == true)
         {
-            pc.paintGun.GetComponent<HeldItemSway>().Reset();
+            playerController.paintGun.GetComponent<HeldItemSway>().Reset();
         }
     }
 
     // Fires the laser cannon.
     public void FireLaserCannon()
     {
-        if (pc.firing == false)
+        if (playerController.firing == false)
         {
-            pc.firing = true;
-            pc.laserCannon.GetComponent<AudioSource>().Play();
-            pc.muzzleFlash.SetActive(true);
-            if (Physics.Raycast(pc.mCam.gameObject.transform.position, pc.mCam.gameObject.transform.forward, out RaycastHit hit, 1000))
+            playerController.firing = true;
+            playerController.laserCannon.GetComponent<AudioSource>().Play();
+            playerController.muzzleFlash.SetActive(true);
+            if (Physics.Raycast(playerController.mCam.gameObject.transform.position, playerController.mCam.gameObject.transform.forward, out RaycastHit hit, 1000))
             {
-                Object.Instantiate(pc.weaponHit, hit.point, pc.gameObject.transform.rotation);
-                pc.laserController.HitTarget(hit.collider.gameObject, hit);
+                Object.Instantiate(playerController.weaponHit, hit.point, playerController.gameObject.transform.rotation);
+                playerController.laserController.HitTarget(hit.collider.gameObject, hit);
             }
         }
     }
@@ -518,23 +518,23 @@ public class ActionManager
     // Sends out a ping with the scanner.
     public void ScannerPing()
     {
-        if (pc.scanning == false)
+        if (playerController.scanning == false)
         {
-            pc.scanning = true;
-            pc.scanner.GetComponent<AudioSource>().Play();
-            pc.scannerFlash.SetActive(true);
+            playerController.scanning = true;
+            playerController.scanner.GetComponent<AudioSource>().Play();
+            playerController.scannerFlash.SetActive(true);
             UniversalResource[] allResources = Object.FindObjectsOfType<UniversalResource>();
             foreach (UniversalResource resource in allResources)
             {
-                float distance = Vector3.Distance(pc.gameObject.transform.position, resource.gameObject.transform.position);
+                float distance = Vector3.Distance(playerController.gameObject.transform.position, resource.gameObject.transform.position);
                 if (distance < 2000)
                 {
                     float x = resource.gameObject.transform.position.x;
                     float y = resource.gameObject.transform.position.y + 15;
                     float z = resource.gameObject.transform.position.z;
                     Vector3 pos = new Vector3(x, y, z);
-                    Quaternion rot = pc.gameObject.transform.rotation;
-                    GameObject newPing = Object.Instantiate(pc.ping, pos, rot);
+                    Quaternion rot = playerController.gameObject.transform.rotation;
+                    GameObject newPing = Object.Instantiate(playerController.ping, pos, rot);
                     if (resource.type.Equals("Iron Ore"))
                     {
                         newPing.GetComponent<Ping>().type = "iron";
@@ -564,15 +564,15 @@ public class ActionManager
             DarkMatter[] allDarkMatter = Object.FindObjectsOfType<DarkMatter>();
             foreach (DarkMatter dm in allDarkMatter)
             {
-                float distance = Vector3.Distance(pc.gameObject.transform.position, dm.gameObject.transform.position);
+                float distance = Vector3.Distance(playerController.gameObject.transform.position, dm.gameObject.transform.position);
                 if (distance < 2000)
                 {
                     float x = dm.gameObject.transform.position.x;
                     float y = dm.gameObject.transform.position.y + 15;
                     float z = dm.gameObject.transform.position.z;
                     Vector3 pos = new Vector3(x, y, z);
-                    Quaternion rot = pc.gameObject.transform.rotation;
-                    GameObject newPing = Object.Instantiate(pc.ping, pos, rot);
+                    Quaternion rot = playerController.gameObject.transform.rotation;
+                    GameObject newPing = Object.Instantiate(playerController.ping, pos, rot);
                     newPing.GetComponent<Ping>().type = "darkMatter";
                 }
             }
@@ -582,78 +582,78 @@ public class ActionManager
     // Applies jetpack thrust.
     public void JetPackThrust()
     {
-        if (pc.gameObject.GetComponent<AudioSource>().isPlaying == false)
+        if (playerController.gameObject.GetComponent<AudioSource>().isPlaying == false)
         {
-            pc.gameObject.GetComponent<AudioSource>().Play();
+            playerController.gameObject.GetComponent<AudioSource>().Play();
         }
-        if (pc.gameObject.transform.position.y < 500 && !Physics.Raycast(pc.gameObject.transform.position, pc.gameObject.transform.up, out RaycastHit upHit, 5))
+        if (playerController.gameObject.transform.position.y < 500 && !Physics.Raycast(playerController.gameObject.transform.position, playerController.gameObject.transform.up, out RaycastHit upHit, 5))
         {
-            pc.gameObject.transform.position += Vector3.up * 25 * Time.deltaTime;
+            playerController.gameObject.transform.position += Vector3.up * 25 * Time.deltaTime;
         }
-        pc.mCam.GetComponent<HeadBob>().active = false;
-        pc.scanner.GetComponent<HeldItemSway>().active = false;
-        pc.laserCannon.GetComponent<HeldItemSway>().active = false;
-        pc.paintGun.GetComponent<HeldItemSway>().active = false;
+        playerController.mCam.GetComponent<HeadBob>().active = false;
+        playerController.scanner.GetComponent<HeldItemSway>().active = false;
+        playerController.laserCannon.GetComponent<HeldItemSway>().active = false;
+        playerController.paintGun.GetComponent<HeldItemSway>().active = false;
     }
 
     // Increases the number of blocks to be built along the build axis.
     public void IncreaseBuildAmount()
     {
-        pc.buildIncrementTimer += 1 * Time.deltaTime;
-        if (pc.buildIncrementTimer >= 0.1f)
+        playerController.buildIncrementTimer += 1 * Time.deltaTime;
+        if (playerController.buildIncrementTimer >= 0.1f)
         {
-            pc.buildMultiplier += 1;
-            pc.destroyTimer = 0;
-            pc.buildTimer = 0;
-            pc.buildIncrementTimer = 0;
-            pc.PlayButtonSound();
+            playerController.buildMultiplier += 1;
+            playerController.destroyTimer = 0;
+            playerController.buildTimer = 0;
+            playerController.buildIncrementTimer = 0;
+            playerController.PlayButtonSound();
         }
     }
 
     // Reduces the number of blocks to be built along the build axis.
     public void DecreaseBuildAmount()
     {
-        pc.buildIncrementTimer += 1 * Time.deltaTime;
-        if (pc.buildIncrementTimer >= 0.1f)
+        playerController.buildIncrementTimer += 1 * Time.deltaTime;
+        if (playerController.buildIncrementTimer >= 0.1f)
         {
-            pc.buildMultiplier -= 1;
-            pc.destroyTimer = 0;
-            pc.buildTimer = 0;
-            pc.buildIncrementTimer = 0;
-            pc.PlayButtonSound();
+            playerController.buildMultiplier -= 1;
+            playerController.destroyTimer = 0;
+            playerController.buildTimer = 0;
+            playerController.buildIncrementTimer = 0;
+            playerController.PlayButtonSound();
         }
     }
 
     // Starts build mode, for placing blocks.
     public void StartBuildMode()
     {
-        if (!pc.GuiOpen())
+        if (!playerController.GuiOpen())
         {
             bool foundItems = false;
-            foreach (InventorySlot slot in pc.playerInventory.inventory)
+            foreach (InventorySlot slot in playerController.playerInventory.inventory)
             {
                 if (foundItems == false && slot.amountInSlot > 0)
                 {
-                    foundItems |= slot.typeInSlot.Equals(pc.buildType);
+                    foundItems |= slot.typeInSlot.Equals(playerController.buildType);
                 }
             }
             if (foundItems == true)
             {
-                pc.building = true;
+                playerController.building = true;
                 Cursor.visible = false;
                 Cursor.lockState = CursorLockMode.Locked;
-                pc.inventoryOpen = false;
-                pc.craftingGUIopen = false;
-                pc.storageGUIopen = false;
-                if (pc.scannerActive == true)
+                playerController.inventoryOpen = false;
+                playerController.craftingGUIopen = false;
+                playerController.storageGUIopen = false;
+                if (playerController.scannerActive == true)
                 {
-                    pc.scanner.SetActive(false);
-                    pc.scannerActive = false;
+                    playerController.scanner.SetActive(false);
+                    playerController.scannerActive = false;
                 }
-                if (pc.laserCannonActive == true)
+                if (playerController.laserCannonActive == true)
                 {
-                    pc.laserCannon.SetActive(false);
-                    pc.laserCannonActive = false;
+                    playerController.laserCannon.SetActive(false);
+                    playerController.laserCannonActive = false;
                 }
             }
         }
@@ -662,24 +662,24 @@ public class ActionManager
     // Stops building mode.
     public void StopBuilding()
     {
-        if (pc.building == true)
+        if (playerController.building == true)
         {
-            if (pc.gameManager.working == false)
+            if (playerController.gameManager.working == false)
             {
-                pc.stoppingBuildCoRoutine = true;
+                playerController.stoppingBuildCoRoutine = true;
                 meshManager.CombineBlocks();
-                pc.separatedBlocks = false;
-                pc.destroyTimer = 0;
-                pc.buildTimer = 0;
-                pc.building = false;
-                pc.destroying = false;
+                playerController.separatedBlocks = false;
+                playerController.destroyTimer = 0;
+                playerController.buildTimer = 0;
+                playerController.building = false;
+                playerController.destroying = false;
             }
             else
             {
-                pc.requestedBuildingStop = true;
+                playerController.requestedBuildingStop = true;
             }
         }
-        if (pc.paintGunActive == true)
+        if (playerController.paintGunActive == true)
         {
             TogglePaintGun();
         }
@@ -688,71 +688,71 @@ public class ActionManager
     // Closes machine GUI.
     public void CloseMachineGUI()
     {
-        if (pc.building == true || pc.destroying == true)
+        if (playerController.building == true || playerController.destroying == true)
         {
-            if (pc.gameManager.working == false)
+            if (playerController.gameManager.working == false)
             {
-                pc.stoppingBuildCoRoutine = true;
+                playerController.stoppingBuildCoRoutine = true;
                 meshManager.CombineBlocks();
-                pc.separatedBlocks = false;
-                pc.destroyTimer = 0;
-                pc.buildTimer = 0;
-                pc.building = false;
-                pc.destroying = false;
+                playerController.separatedBlocks = false;
+                playerController.destroyTimer = 0;
+                playerController.buildTimer = 0;
+                playerController.building = false;
+                playerController.destroying = false;
             }
             else
             {
-                pc.requestedBuildingStop = true;
+                playerController.requestedBuildingStop = true;
             }
         }
         Cursor.visible = true;
         Cursor.lockState = CursorLockMode.None;
-        pc.gameObject.GetComponent<MSCameraController>().enabled = false;
-        pc.machineGUIopen = false;
+        playerController.gameObject.GetComponent<MSCameraController>().enabled = false;
+        playerController.machineGUIopen = false;
     }
 
     // Closes tablet GUI.
     public void CloseTablet()
     {
-        if (pc.building == true || pc.destroying == true)
+        if (playerController.building == true || playerController.destroying == true)
         {
-            if (pc.gameManager.working == false)
+            if (playerController.gameManager.working == false)
             {
-                pc.stoppingBuildCoRoutine = true;
+                playerController.stoppingBuildCoRoutine = true;
                 meshManager.CombineBlocks();
-                pc.separatedBlocks = false;
-                pc.destroyTimer = 0;
-                pc.buildTimer = 0;
-                pc.building = false;
-                pc.destroying = false;
+                playerController.separatedBlocks = false;
+                playerController.destroyTimer = 0;
+                playerController.buildTimer = 0;
+                playerController.building = false;
+                playerController.destroying = false;
             }
             else
             {
-                pc.requestedBuildingStop = true;
+                playerController.requestedBuildingStop = true;
             }
         }
         Cursor.visible = true;
         Cursor.lockState = CursorLockMode.None;
-        pc.gameObject.GetComponent<MSCameraController>().enabled = false;
-        pc.tabletOpen = false;
+        playerController.gameObject.GetComponent<MSCameraController>().enabled = false;
+        playerController.tabletOpen = false;
     }
 
     // Closes all GUI windows.
     public void CloseMenus()
     {
-        pc.ApplySettings();
+        playerController.ApplySettings();
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
-        pc.gameObject.GetComponent<MSCameraController>().enabled = true;
+        playerController.gameObject.GetComponent<MSCameraController>().enabled = true;
         if (cGUI.showingInputGUI == true)
         {
             cGUI.ToggleGUI();
         }
-        pc.escapeMenuOpen = false;
-        pc.optionsGUIopen = false;
-        pc.helpMenuOpen = false;
-        pc.videoMenuOpen = false;
-        pc.schematicMenuOpen = false;
+        playerController.escapeMenuOpen = false;
+        playerController.optionsGUIopen = false;
+        playerController.helpMenuOpen = false;
+        playerController.videoMenuOpen = false;
+        playerController.schematicMenuOpen = false;
     }
 }
 

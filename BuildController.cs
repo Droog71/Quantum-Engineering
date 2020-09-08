@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using System;
 
 public class BuildController : MonoBehaviour
 {
@@ -98,27 +97,6 @@ public class BuildController : MonoBehaviour
 
                     if (hit.transform.gameObject.tag == "Built")
                     {
-                        //BLOCK ROTATION
-                        if (cInput.GetKeyDown("Rotate Block"))
-                        {
-                            playerController.buildObject.transform.Rotate(transform.up * 90);
-                            playerController.destroyTimer = 0;
-                            playerController.buildTimer = 0;
-                            playerController.PlayButtonSound();
-                        }
-
-                        //BUILD AXIS
-                        if (cInput.GetKeyDown("Build Axis"))
-                        {
-                            ChangeBuildAxis();
-                            playerController.PlayButtonSound();
-                        }
-                        if (cInput.GetKeyDown("Auto Axis"))
-                        {
-                            autoAxis = !autoAxis;
-                            playerController.PlayButtonSound();
-                        }
-
                         SetupBuildAxis(hit);
                     }
                     else
@@ -227,32 +205,39 @@ public class BuildController : MonoBehaviour
             if (znDif > xnDif && znDif > ynDif)
                 playerController.cubeloc = "back";
         }
+
+        playerController.destroyTimer = 0;
+        playerController.buildTimer = 0;
     }
 
     // Changes the axis along which blocks will be placed.
-    private void ChangeBuildAxis()
+    public void ChangeBuildAxis()
     {
-        switch (playerController.cubeloc)
+        if (playerController.cubeloc == "up")
         {
-            case "up":
-                playerController.cubeloc = "down";
-                break;
-            case "down":
-                playerController.cubeloc = "left";
-                break;
-            case "left":
-                playerController.cubeloc = "right";
-                break;
-            case "right":
-                playerController.cubeloc = "front";
-                break;
-            case "front":
-                playerController.cubeloc = "back";
-                break;
-            case "back":
-                playerController.cubeloc = "up";
-                break;
+            playerController.cubeloc = "down";
         }
+        else if (playerController.cubeloc == "down")
+        {
+            playerController.cubeloc = "left";
+        }
+        else if (playerController.cubeloc == "left")
+        {
+            playerController.cubeloc = "right";
+        }
+        else if (playerController.cubeloc == "right")
+        {
+            playerController.cubeloc = "front";
+        }
+        else if (playerController.cubeloc == "front")
+        {
+            playerController.cubeloc = "back";
+        }
+        else if (playerController.cubeloc == "back")
+        {
+            playerController.cubeloc = "up";
+        }
+
         playerController.destroyTimer = 0;
         playerController.buildTimer = 0;
     }
@@ -264,26 +249,29 @@ public class BuildController : MonoBehaviour
         Quaternion placementRotation;
         Vector3 dirVector;
 
-        switch (playerController.cubeloc)
+        if (playerController.cubeloc == "up")
         {
-            case "up":
-                placementPoint = new Vector3(hit.transform.position.x, hit.transform.position.y + 5, hit.transform.position.z);
-                break;
-            case "down":
-                placementPoint = new Vector3(hit.transform.position.x, hit.transform.position.y - 5, hit.transform.position.z);
-                break;
-            case "left":
-                placementPoint = new Vector3(hit.transform.position.x + 5, hit.transform.position.y, hit.transform.position.z);
-                break;
-            case "right":
-                placementPoint = new Vector3(hit.transform.position.x - 5, hit.transform.position.y, hit.transform.position.z);
-                break;
-            case "front":
-                placementPoint = new Vector3(hit.transform.position.x, hit.transform.position.y, hit.transform.position.z + 5);
-                break;
-            case "back":
-                placementPoint = new Vector3(hit.transform.position.x, hit.transform.position.y, hit.transform.position.z - 5);
-                break;
+            placementPoint = new Vector3(hit.transform.position.x, hit.transform.position.y + 5, hit.transform.position.z);
+        }
+        else if (playerController.cubeloc == "down")
+        {
+            placementPoint = new Vector3(hit.transform.position.x, hit.transform.position.y - 5, hit.transform.position.z);
+        }
+        else if (playerController.cubeloc == "left")
+        {
+            placementPoint = new Vector3(hit.transform.position.x + 5, hit.transform.position.y, hit.transform.position.z);
+        }
+        else if (playerController.cubeloc == "right")
+        {
+            placementPoint = new Vector3(hit.transform.position.x - 5, hit.transform.position.y, hit.transform.position.z);
+        }
+        else if (playerController.cubeloc == "front")
+        {
+            placementPoint = new Vector3(hit.transform.position.x, hit.transform.position.y, hit.transform.position.z + 5);
+        }
+        else if (playerController.cubeloc == "back")
+        {
+            placementPoint = new Vector3(hit.transform.position.x, hit.transform.position.y, hit.transform.position.z - 5);
         }
 
         placementRotation = playerController.buildObject.transform.rotation;
@@ -298,12 +286,6 @@ public class BuildController : MonoBehaviour
     private void SetupFreePlacement(RaycastHit hit)
     {
         Vector3 placementPoint = new Vector3(hit.point.x, (hit.point.y + 2.4f), hit.point.z);
-        if (cInput.GetKeyDown("Rotate Block"))
-        {
-            playerController.buildObject.transform.Rotate(transform.up * 90);
-            playerController.destroyTimer = 0;
-            playerController.buildTimer = 0;
-        }
         Quaternion placementRotation = playerController.buildObject.transform.rotation;
         playerController.buildObject.transform.position = placementPoint;
         playerController.buildObject.transform.rotation = placementRotation;

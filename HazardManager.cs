@@ -3,95 +3,95 @@ using UnityEngine;
 
 public class HazardManager
 {
-    private GameManager manager;
+    private GameManager gameManager;
 
-    public HazardManager(GameManager manager)
+    public HazardManager(GameManager gameManager)
     {
-        this.manager = manager;
+        this.gameManager = gameManager;
     }
 
     public void UpdateHazards()
     {
-        if (manager.hazardsEnabled == true)
+        if (gameManager.hazardsEnabled == true)
         {
-            if (manager.player.timeToDeliver == false && manager.rocketScript.gameTime < 2000)
+            if (gameManager.player.timeToDeliver == false && gameManager.rocketScript.gameTime < 2000)
             {
                 // Pirate attacks
-                if (manager.rocketScript.day >= 10 && manager.GetComponent<StateManager>().worldLoaded == true)
+                if (gameManager.rocketScript.day >= 10 && gameManager.GetComponent<StateManager>().worldLoaded == true)
                 {
-                    manager.pirateAttackTimer += 1 * Time.deltaTime;
-                    if (manager.loadedPirateTimer == true)
+                    gameManager.pirateAttackTimer += 1 * Time.deltaTime;
+                    if (gameManager.loadedPirateTimer == true)
                     {
-                        FileBasedPrefs.SetFloat(manager.GetComponent<StateManager>().WorldName + "pirateAttackTimer", manager.pirateAttackTimer);
+                        FileBasedPrefs.SetFloat(gameManager.GetComponent<StateManager>().WorldName + "pirateAttackTimer", gameManager.pirateAttackTimer);
                     }
-                    if (manager.pirateAttackTimer >= 530 & manager.pirateAttackTimer < 540)
+                    if (gameManager.pirateAttackTimer >= 530 & gameManager.pirateAttackTimer < 540)
                     {
-                        if (manager.player != null)
+                        if (gameManager.player != null)
                         {
-                            manager.player.pirateAttackWarningActive = true;
+                            gameManager.player.pirateAttackWarningActive = true;
                         }
                     }
-                    else if (manager.pirateAttackTimer >= 540 && manager.pirateAttackTimer < 600)
+                    else if (gameManager.pirateAttackTimer >= 540 && gameManager.pirateAttackTimer < 600)
                     {
-                        if (manager.player != null)
+                        if (gameManager.player != null)
                         {
-                            manager.player.pirateAttackWarningActive = false;
+                            gameManager.player.pirateAttackWarningActive = false;
                         }
-                        manager.pirateFrequency = 40 - manager.rocketScript.day;
-                        if (manager.pirateFrequency < 2)
+                        gameManager.pirateFrequency = 40 - gameManager.rocketScript.day;
+                        if (gameManager.pirateFrequency < 2)
                         {
-                            manager.pirateFrequency = 2;
+                            gameManager.pirateFrequency = 2;
                         }
-                        manager.pirateTimer += 1 * Time.deltaTime;
-                        if (manager.pirateTimer >= manager.pirateFrequency && manager.GetComponent<StateManager>().worldLoaded == true)
+                        gameManager.pirateTimer += 1 * Time.deltaTime;
+                        if (gameManager.pirateTimer >= gameManager.pirateFrequency && gameManager.GetComponent<StateManager>().worldLoaded == true)
                         {
                             float x = Random.Range(-4500, 4500);
                             float z = Random.Range(-4500, 4500);
                             int RandomSpawn = Random.Range(1, 5);
                             if (RandomSpawn == 1)
                             {
-                                Object.Instantiate(manager.pirateObject, new Vector3(x, 400, 10000), manager.transform.rotation);
+                                Object.Instantiate(gameManager.pirateObject, new Vector3(x, 400, 10000), gameManager.transform.rotation);
                             }
                             if (RandomSpawn == 2)
                             {
-                                GameObject pirate = Object.Instantiate(manager.pirateObject, new Vector3(x, 400, -10000), manager.transform.rotation);
+                                GameObject pirate = Object.Instantiate(gameManager.pirateObject, new Vector3(x, 400, -10000), gameManager.transform.rotation);
                             }
                             if (RandomSpawn == 3)
                             {
-                                GameObject pirate = Object.Instantiate(manager.pirateObject, new Vector3(10000, 400, z), manager.transform.rotation);
+                                GameObject pirate = Object.Instantiate(gameManager.pirateObject, new Vector3(10000, 400, z), gameManager.transform.rotation);
                             }
                             if (RandomSpawn == 4)
                             {
-                                GameObject pirate = Object.Instantiate(manager.pirateObject, new Vector3(-10000, 400, z), manager.transform.rotation);
+                                GameObject pirate = Object.Instantiate(gameManager.pirateObject, new Vector3(-10000, 400, z), gameManager.transform.rotation);
                             }
-                            manager.pirateTimer = 0;
+                            gameManager.pirateTimer = 0;
                         }
                     }
-                    else if (manager.pirateAttackTimer >= 900)
+                    else if (gameManager.pirateAttackTimer >= 900)
                     {
-                        manager.pirateAttackTimer = 0;
-                        manager.player.destructionMessageActive = false;
+                        gameManager.pirateAttackTimer = 0;
+                        gameManager.player.destructionMessageActive = false;
                     }
                 }
 
                 // Meteor showers
-                if (manager.GetComponent<StateManager>().worldLoaded)
+                if (gameManager.GetComponent<StateManager>().worldLoaded)
                 {
-                    manager.meteorShowerTimer += 1 * Time.deltaTime;
+                    gameManager.meteorShowerTimer += 1 * Time.deltaTime;
                 }
 
-                if (manager.loadedMeteorTimer == true)
+                if (gameManager.loadedMeteorTimer == true)
                 {
-                    FileBasedPrefs.SetFloat(manager.GetComponent<StateManager>().WorldName + "meteorShowerTimer", manager.meteorShowerTimer);
+                    FileBasedPrefs.SetFloat(gameManager.GetComponent<StateManager>().WorldName + "meteorShowerTimer", gameManager.meteorShowerTimer);
                 }
-                if (manager.meteorShowerTimer >= 530 && manager.meteorShowerTimer < 540)
+                if (gameManager.meteorShowerTimer >= 530 && gameManager.meteorShowerTimer < 540)
                 {
-                    if (manager.player != null)
+                    if (gameManager.player != null)
                     {
-                        manager.player.meteorShowerWarningActive = true;
+                        gameManager.player.meteorShowerWarningActive = true;
                     }
                 }
-                else if (manager.meteorShowerTimer >= 540 && manager.meteorShowerTimer < 600)
+                else if (gameManager.meteorShowerTimer >= 540 && gameManager.meteorShowerTimer < 600)
                 {
                     bool locationFound = false;
                     GameObject[] allObjects = GameObject.FindGameObjectsWithTag("Built");
@@ -99,44 +99,44 @@ public class HazardManager
                     {
                         if (locationFound == false)
                         {
-                            if (!manager.meteorShowerLocationList.Contains(go.transform.position))
+                            if (!gameManager.meteorShowerLocationList.Contains(go.transform.position))
                             {
-                                manager.meteorShowerLocation = go.transform.position;
-                                manager.meteorShowerLocationList.Add(manager.meteorShowerLocation);
+                                gameManager.meteorShowerLocation = go.transform.position;
+                                gameManager.meteorShowerLocationList.Add(gameManager.meteorShowerLocation);
                                 locationFound = true;
                             }
                         }
                     }
-                    if (locationFound == false && manager.meteorShowerLocationList.Count > 0)
+                    if (locationFound == false && gameManager.meteorShowerLocationList.Count > 0)
                     {
-                        manager.meteorShowerLocationList.Clear();
+                        gameManager.meteorShowerLocationList.Clear();
                     }
-                    manager.meteorTimer += 1 * Time.deltaTime;
-                    if (manager.meteorTimer > 0.5f && manager.GetComponent<StateManager>().worldLoaded == true)
+                    gameManager.meteorTimer += 1 * Time.deltaTime;
+                    if (gameManager.meteorTimer > 0.5f && gameManager.GetComponent<StateManager>().worldLoaded == true)
                     {
-                        float x = Random.Range(manager.meteorShowerLocation.x - 500, manager.meteorShowerLocation.x + 500);
-                        float z = Random.Range(manager.meteorShowerLocation.z - 500, manager.meteorShowerLocation.z + 500);
-                        Object.Instantiate(manager.meteorObject, new Vector3(x, 500, z), manager.transform.rotation);
-                        manager.meteorTimer = 0;
+                        float x = Random.Range(gameManager.meteorShowerLocation.x - 500, gameManager.meteorShowerLocation.x + 500);
+                        float z = Random.Range(gameManager.meteorShowerLocation.z - 500, gameManager.meteorShowerLocation.z + 500);
+                        Object.Instantiate(gameManager.meteorObject, new Vector3(x, 500, z), gameManager.transform.rotation);
+                        gameManager.meteorTimer = 0;
                     }
-                    if (manager.player != null)
+                    if (gameManager.player != null)
                     {
-                        manager.player.meteorShowerWarningActive = false;
+                        gameManager.player.meteorShowerWarningActive = false;
                     }
                 }
-                else if (manager.meteorShowerTimer >= 900)
+                else if (gameManager.meteorShowerTimer >= 900)
                 {
-                    manager.meteorShowerTimer = 0;
-                    manager.player.destructionMessageActive = false;
+                    gameManager.meteorShowerTimer = 0;
+                    gameManager.player.destructionMessageActive = false;
                 }
             }
             else
             {
-                manager.pirateAttackTimer = 0;
-                manager.meteorShowerTimer = 120;
-                if (manager.player != null)
+                gameManager.pirateAttackTimer = 0;
+                gameManager.meteorShowerTimer = 120;
+                if (gameManager.player != null)
                 {
-                    manager.player.destructionMessageActive = false;
+                    gameManager.player.destructionMessageActive = false;
                 }
             }
         }
@@ -149,25 +149,25 @@ public class HazardManager
     // Removes all hazards from the world
     private void StopHazards()
     {
-        manager.pirateTimer = 0;
-        manager.meteorTimer = 0;
-        manager.pirateAttackTimer = 0;
-        manager.meteorShowerTimer = 120;
-        if (manager.loadedMeteorTimer == true)
+        gameManager.pirateTimer = 0;
+        gameManager.meteorTimer = 0;
+        gameManager.pirateAttackTimer = 0;
+        gameManager.meteorShowerTimer = 120;
+        if (gameManager.loadedMeteorTimer == true)
         {
-            FileBasedPrefs.SetFloat(manager.GetComponent<StateManager>().WorldName + "meteorShowerTimer", manager.meteorShowerTimer);
+            FileBasedPrefs.SetFloat(gameManager.GetComponent<StateManager>().WorldName + "meteorShowerTimer", gameManager.meteorShowerTimer);
         }
-        if (manager.loadedPirateTimer == true)
+        if (gameManager.loadedPirateTimer == true)
         {
-            FileBasedPrefs.SetFloat(manager.GetComponent<StateManager>().WorldName + "pirateAttackTimer", manager.pirateAttackTimer);
+            FileBasedPrefs.SetFloat(gameManager.GetComponent<StateManager>().WorldName + "pirateAttackTimer", gameManager.pirateAttackTimer);
         }
-        if (manager.player != null)
+        if (gameManager.player != null)
         {
-            manager.player.meteorShowerWarningActive = false;
-            manager.player.pirateAttackWarningActive = false;
-            manager.player.destructionMessageActive = false;
+            gameManager.player.meteorShowerWarningActive = false;
+            gameManager.player.pirateAttackWarningActive = false;
+            gameManager.player.destructionMessageActive = false;
         }
-        manager.hazardRemovalCoroutine = manager.StartCoroutine(HazardRemovalCoroutine());
+        gameManager.hazardRemovalCoroutine = gameManager.StartCoroutine(HazardRemovalCoroutine());
     }
 
     // Removes all hazards from the world

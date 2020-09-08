@@ -1,14 +1,21 @@
 ﻿using UnityEngine;
-using System.Collections;
-using System.Collections.Generic;
 
 public class GuiCoordinates : MonoBehaviour
 {
     //MESSAGES
     public Rect messageRect;
+    public Rect lowMessageRect;
+    public Rect midMessageRect;
     public Rect highMessageRect;
+    public Rect secondLineHighMessageRect;
     public Rect longHighMessageRect;
-    public Rect savingBackgroundRect;
+    public Rect lowMessageBackgroundRect;
+    public Rect messageBackgroundRect;
+    public Rect midMessageBackgroundRect;
+    public Rect highMessageBackgroundRect;
+    public Rect longHighMessageBackgroundRect;
+    public Rect secondLineHighMessageBackgroundRect;
+    public Rect twoLineHighMessageBackgroundRect;
 
     //CROSSHAIR
     public Rect crosshairRect;
@@ -225,10 +232,21 @@ public class GuiCoordinates : MonoBehaviour
         int ScreenWidth = Screen.width;
 
         //MESSAGES
-        messageRect = new Rect((ScreenWidth * 0.48f), (ScreenHeight * 0.49f), (ScreenWidth * 0.5f), (ScreenHeight * 0.5f));
+        lowMessageBackgroundRect = new Rect((ScreenWidth * 0.42f), (ScreenHeight * 0.63f), (ScreenWidth * 0.18f), (ScreenHeight * 0.05f));
+        messageBackgroundRect = new Rect((ScreenWidth / 2) - 100, ScreenHeight - 120, 200, 100);
+        midMessageBackgroundRect = new Rect((ScreenWidth * 0.42f), (ScreenHeight * 0.55f), (ScreenWidth * 0.18f), (ScreenHeight * 0.05f));
+        highMessageBackgroundRect = new Rect((ScreenWidth * 0.42f), (ScreenHeight * 0.28f), (ScreenWidth * 0.18f), (ScreenHeight * 0.05f));
+        longHighMessageBackgroundRect = new Rect((ScreenWidth * 0.42f), (ScreenHeight * 0.28f), (ScreenWidth * 0.23f), (ScreenHeight * 0.05f));
+
+        messageRect = new Rect((ScreenWidth / 2) - 60, ScreenHeight - 90, 200, 100);
+        lowMessageRect = new Rect((ScreenWidth * 0.47f), (ScreenHeight * 0.644f), (ScreenWidth * 0.5f), (ScreenHeight * 0.5f));
+        midMessageRect = new Rect((ScreenWidth * 0.455f), (ScreenHeight * 0.562f), (ScreenWidth * 0.5f), (ScreenHeight * 0.5f));
         highMessageRect = new Rect((ScreenWidth * 0.48f), (ScreenHeight * 0.30f), (ScreenWidth * 0.5f), (ScreenHeight * 0.5f));
-        longHighMessageRect = new Rect((ScreenWidth * 0.44f), (ScreenHeight * 0.30f), (ScreenWidth * 0.55f), (ScreenHeight * 0.5f));
-        savingBackgroundRect = new Rect((ScreenWidth * 0.445f), (ScreenHeight * 0.555f), (ScreenWidth * 0.14f), (ScreenHeight * 0.05f));
+        longHighMessageRect = new Rect((ScreenWidth * 0.45f), (ScreenHeight * 0.292f), (ScreenWidth * 0.55f), (ScreenHeight * 0.5f));
+
+        secondLineHighMessageBackgroundRect = new Rect((ScreenWidth * 0.42f), (ScreenHeight * 0.36f), (ScreenWidth * 0.18f), (ScreenHeight * 0.05f));
+        secondLineHighMessageRect = new Rect((ScreenWidth * 0.452f), (ScreenHeight * 0.374f), (ScreenWidth * 0.18f), (ScreenHeight * 0.05f));
+        twoLineHighMessageBackgroundRect = new Rect((ScreenWidth * 0.44f), (ScreenHeight * 0.27f), (ScreenWidth * 0.18f), (ScreenHeight * 0.10f));
 
         //CROSSHAIR
         crosshairRect = new Rect((ScreenWidth * 0.48f), (ScreenHeight * 0.47f), (ScreenWidth * 0.04f), (ScreenHeight * 0.06f));

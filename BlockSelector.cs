@@ -1,401 +1,401 @@
 ﻿public class BlockSelector
 {
-    private PlayerController pc;
+    private PlayerController playerController;
 
-    public BlockSelector(PlayerController pc)
+    public BlockSelector(PlayerController playerController)
     {
-        this.pc = pc;
+        this.playerController = playerController;
     }
 
     // Changes the currently selected building block.
     public void NextBlock()
     {
-        if (pc.buildType.Equals("Glass Block"))
+        if (playerController.buildType.Equals("Glass Block"))
         {
-            pc.buildType = "Brick";
-            pc.previousBuildType = "Glass Block";
-            pc.nextBuildType = "Iron Block";
+            playerController.buildType = "Brick";
+            playerController.previousBuildType = "Glass Block";
+            playerController.nextBuildType = "Iron Block";
         }
-        else if (pc.buildType.Equals("Brick"))
+        else if (playerController.buildType.Equals("Brick"))
         {
-            pc.buildType = "Iron Block";
-            pc.previousBuildType = "Brick";
-            pc.nextBuildType = "Iron Ramp";
+            playerController.buildType = "Iron Block";
+            playerController.previousBuildType = "Brick";
+            playerController.nextBuildType = "Iron Ramp";
         }
-        else if (pc.buildType.Equals("Iron Block"))
+        else if (playerController.buildType.Equals("Iron Block"))
         {
-            pc.buildType = "Iron Ramp";
-            pc.previousBuildType = "Iron Block";
-            pc.nextBuildType = "Steel Block";
+            playerController.buildType = "Iron Ramp";
+            playerController.previousBuildType = "Iron Block";
+            playerController.nextBuildType = "Steel Block";
         }
-        else if (pc.buildType.Equals("Iron Ramp"))
+        else if (playerController.buildType.Equals("Iron Ramp"))
         {
-            pc.buildType = "Steel Block";
-            pc.previousBuildType = "Iron Ramp";
-            pc.nextBuildType = "Steel Ramp";
+            playerController.buildType = "Steel Block";
+            playerController.previousBuildType = "Iron Ramp";
+            playerController.nextBuildType = "Steel Ramp";
         }
-        else if (pc.buildType.Equals("Steel Block"))
+        else if (playerController.buildType.Equals("Steel Block"))
         {
-            pc.buildType = "Steel Ramp";
-            pc.previousBuildType = "Steel Block";
-            pc.nextBuildType = "Quantum Hatchway";
+            playerController.buildType = "Steel Ramp";
+            playerController.previousBuildType = "Steel Block";
+            playerController.nextBuildType = "Quantum Hatchway";
         }
-        else if (pc.buildType.Equals("Steel Ramp"))
+        else if (playerController.buildType.Equals("Steel Ramp"))
         {
-            pc.buildType = "Quantum Hatchway";
-            pc.previousBuildType = "Steel Ramp";
-            pc.nextBuildType = "Storage Container";
+            playerController.buildType = "Quantum Hatchway";
+            playerController.previousBuildType = "Steel Ramp";
+            playerController.nextBuildType = "Storage Container";
         }
-        else if (pc.buildType.Equals("Quantum Hatchway"))
+        else if (playerController.buildType.Equals("Quantum Hatchway"))
         {
-            pc.buildType = "Storage Container";
-            pc.previousBuildType = "Quantum Hatchway";
-            pc.nextBuildType = "Storage Computer";
+            playerController.buildType = "Storage Container";
+            playerController.previousBuildType = "Quantum Hatchway";
+            playerController.nextBuildType = "Storage Computer";
         }
-        else if (pc.buildType.Equals("Storage Container"))
+        else if (playerController.buildType.Equals("Storage Container"))
         {
-            pc.buildType = "Storage Computer";
-            pc.previousBuildType = "Storage Container";
-            pc.nextBuildType = "Electric Light";
+            playerController.buildType = "Storage Computer";
+            playerController.previousBuildType = "Storage Container";
+            playerController.nextBuildType = "Electric Light";
         }
-        else if (pc.buildType.Equals("Storage Computer"))
+        else if (playerController.buildType.Equals("Storage Computer"))
         {
-            pc.buildType = "Electric Light";
-            pc.previousBuildType = "Storage Computer";
-            pc.nextBuildType = "Auger";
+            playerController.buildType = "Electric Light";
+            playerController.previousBuildType = "Storage Computer";
+            playerController.nextBuildType = "Auger";
         }
-        else if (pc.buildType.Equals("Electric Light"))
+        else if (playerController.buildType.Equals("Electric Light"))
         {
-            pc.buildType = "Auger";
-            pc.previousBuildType = "Electric Light";
-            pc.nextBuildType = "Extruder";
+            playerController.buildType = "Auger";
+            playerController.previousBuildType = "Electric Light";
+            playerController.nextBuildType = "Extruder";
         }
-        else if (pc.buildType.Equals("Auger"))
+        else if (playerController.buildType.Equals("Auger"))
         {
-            pc.buildType = "Extruder";
-            pc.previousBuildType = "Auger";
-            pc.nextBuildType = "Press";
+            playerController.buildType = "Extruder";
+            playerController.previousBuildType = "Auger";
+            playerController.nextBuildType = "Press";
         }
-        else if (pc.buildType.Equals("Extruder"))
+        else if (playerController.buildType.Equals("Extruder"))
         {
-            pc.buildType = "Press";
-            pc.previousBuildType = "Extruder";
-            pc.nextBuildType = "Smelter";
+            playerController.buildType = "Press";
+            playerController.previousBuildType = "Extruder";
+            playerController.nextBuildType = "Smelter";
         }
-        else if (pc.buildType.Equals("Press"))
+        else if (playerController.buildType.Equals("Press"))
         {
-            pc.buildType = "Smelter";
-            pc.previousBuildType = "Press";
-            pc.nextBuildType = "Universal Conduit";
+            playerController.buildType = "Smelter";
+            playerController.previousBuildType = "Press";
+            playerController.nextBuildType = "Universal Conduit";
         }
-        else if (pc.buildType.Equals("Smelter"))
+        else if (playerController.buildType.Equals("Smelter"))
         {
-            pc.buildType = "Universal Conduit";
-            pc.previousBuildType = "Smelter";
-            pc.nextBuildType = "Retriever";
+            playerController.buildType = "Universal Conduit";
+            playerController.previousBuildType = "Smelter";
+            playerController.nextBuildType = "Retriever";
         }
-        else if (pc.buildType.Equals("Universal Conduit"))
+        else if (playerController.buildType.Equals("Universal Conduit"))
         {
-            pc.buildType = "Retriever";
-            pc.previousBuildType = "Universal Conduit";
-            pc.nextBuildType = "Rail Cart Hub";
+            playerController.buildType = "Retriever";
+            playerController.previousBuildType = "Universal Conduit";
+            playerController.nextBuildType = "Rail Cart Hub";
         }
-        else if (pc.buildType.Equals("Retriever"))
+        else if (playerController.buildType.Equals("Retriever"))
         {
-            pc.buildType = "Rail Cart Hub";
-            pc.previousBuildType = "Retriever";
-            pc.nextBuildType = "Rail Cart";
+            playerController.buildType = "Rail Cart Hub";
+            playerController.previousBuildType = "Retriever";
+            playerController.nextBuildType = "Rail Cart";
         }
-        else if (pc.buildType.Equals("Rail Cart Hub"))
+        else if (playerController.buildType.Equals("Rail Cart Hub"))
         {
-            pc.buildType = "Rail Cart";
-            pc.previousBuildType = "Rail Cart Hub";
-            pc.nextBuildType = "Universal Extractor";
+            playerController.buildType = "Rail Cart";
+            playerController.previousBuildType = "Rail Cart Hub";
+            playerController.nextBuildType = "Universal Extractor";
         }
-        else if (pc.buildType.Equals("Rail Cart"))
+        else if (playerController.buildType.Equals("Rail Cart"))
         {
-            pc.buildType = "Universal Extractor";
-            pc.previousBuildType = "Rail Cart";
-            pc.nextBuildType = "Solar Panel";
+            playerController.buildType = "Universal Extractor";
+            playerController.previousBuildType = "Rail Cart";
+            playerController.nextBuildType = "Solar Panel";
         }
-        else if (pc.buildType.Equals("Universal Extractor"))
+        else if (playerController.buildType.Equals("Universal Extractor"))
         {
-            pc.buildType = "Solar Panel";
-            pc.previousBuildType = "Universal Extractor";
-            pc.nextBuildType = "Generator";
+            playerController.buildType = "Solar Panel";
+            playerController.previousBuildType = "Universal Extractor";
+            playerController.nextBuildType = "Generator";
         }
-        else if (pc.buildType.Equals("Solar Panel"))
+        else if (playerController.buildType.Equals("Solar Panel"))
         {
-            pc.buildType = "Generator";
-            pc.previousBuildType = "Solar Panel";
-            pc.nextBuildType = "Nuclear Reactor";
+            playerController.buildType = "Generator";
+            playerController.previousBuildType = "Solar Panel";
+            playerController.nextBuildType = "Nuclear Reactor";
         }
-        else if (pc.buildType.Equals("Generator"))
+        else if (playerController.buildType.Equals("Generator"))
         {
-            pc.buildType = "Nuclear Reactor";
-            pc.previousBuildType = "Generator";
-            pc.nextBuildType = "Reactor Turbine";
+            playerController.buildType = "Nuclear Reactor";
+            playerController.previousBuildType = "Generator";
+            playerController.nextBuildType = "Reactor Turbine";
         }
-        else if (pc.buildType.Equals("Nuclear Reactor"))
+        else if (playerController.buildType.Equals("Nuclear Reactor"))
         {
-            pc.buildType = "Reactor Turbine";
-            pc.previousBuildType = "Nuclear Reactor";
-            pc.nextBuildType = "Power Conduit";
+            playerController.buildType = "Reactor Turbine";
+            playerController.previousBuildType = "Nuclear Reactor";
+            playerController.nextBuildType = "Power Conduit";
         }
-        else if (pc.buildType.Equals("Reactor Turbine"))
+        else if (playerController.buildType.Equals("Reactor Turbine"))
         {
-            pc.buildType = "Power Conduit";
-            pc.previousBuildType = "Reactor Turbine";
-            pc.nextBuildType = "Heat Exchanger";
+            playerController.buildType = "Power Conduit";
+            playerController.previousBuildType = "Reactor Turbine";
+            playerController.nextBuildType = "Heat Exchanger";
         }
-        else if (pc.buildType.Equals("Power Conduit"))
+        else if (playerController.buildType.Equals("Power Conduit"))
         {
-            pc.buildType = "Heat Exchanger";
-            pc.previousBuildType = "Power Conduit";
-            pc.nextBuildType = "Alloy Smelter";
+            playerController.buildType = "Heat Exchanger";
+            playerController.previousBuildType = "Power Conduit";
+            playerController.nextBuildType = "Alloy Smelter";
         }
-        else if (pc.buildType.Equals("Heat Exchanger"))
+        else if (playerController.buildType.Equals("Heat Exchanger"))
         {
-            pc.buildType = "Alloy Smelter";
-            pc.previousBuildType = "Heat Exchanger";
-            pc.nextBuildType = "Gear Cutter";
+            playerController.buildType = "Alloy Smelter";
+            playerController.previousBuildType = "Heat Exchanger";
+            playerController.nextBuildType = "Gear Cutter";
         }
-        else if (pc.buildType.Equals("Alloy Smelter"))
+        else if (playerController.buildType.Equals("Alloy Smelter"))
         {
-            pc.buildType = "Gear Cutter";
-            pc.previousBuildType = "Alloy Smelter";
-            pc.nextBuildType = "Auto Crafter";
+            playerController.buildType = "Gear Cutter";
+            playerController.previousBuildType = "Alloy Smelter";
+            playerController.nextBuildType = "Auto Crafter";
         }
-        else if (pc.buildType.Equals("Gear Cutter"))
+        else if (playerController.buildType.Equals("Gear Cutter"))
         {
-            pc.buildType = "Auto Crafter";
-            pc.previousBuildType = "Gear Cutter";
-            pc.nextBuildType = "Dark Matter Conduit";
+            playerController.buildType = "Auto Crafter";
+            playerController.previousBuildType = "Gear Cutter";
+            playerController.nextBuildType = "Dark Matter Conduit";
         }
-        else if (pc.buildType.Equals("Auto Crafter"))
+        else if (playerController.buildType.Equals("Auto Crafter"))
         {
-            pc.buildType = "Dark Matter Conduit";
-            pc.previousBuildType = "Auto Crafter";
-            pc.nextBuildType = "Dark Matter Collector";
+            playerController.buildType = "Dark Matter Conduit";
+            playerController.previousBuildType = "Auto Crafter";
+            playerController.nextBuildType = "Dark Matter Collector";
         }
-        else if (pc.buildType.Equals("Dark Matter Conduit"))
+        else if (playerController.buildType.Equals("Dark Matter Conduit"))
         {
-            pc.buildType = "Dark Matter Collector";
-            pc.previousBuildType = "Dark Matter Conduit";
-            pc.nextBuildType = "Turret";
+            playerController.buildType = "Dark Matter Collector";
+            playerController.previousBuildType = "Dark Matter Conduit";
+            playerController.nextBuildType = "Turret";
         }
-        else if (pc.buildType.Equals("Dark Matter Collector"))
+        else if (playerController.buildType.Equals("Dark Matter Collector"))
         {
-            pc.buildType = "Turret";
-            pc.previousBuildType = "Dark Matter Collector";
-            pc.nextBuildType = "Glass Block";
+            playerController.buildType = "Turret";
+            playerController.previousBuildType = "Dark Matter Collector";
+            playerController.nextBuildType = "Glass Block";
         }
-        else if (pc.buildType.Equals("Turret"))
+        else if (playerController.buildType.Equals("Turret"))
         {
-            pc.buildType = "Glass Block";
-            pc.previousBuildType = "Turret";
-            pc.nextBuildType = "Iron Block";
+            playerController.buildType = "Glass Block";
+            playerController.previousBuildType = "Turret";
+            playerController.nextBuildType = "Iron Block";
         }
-        pc.displayingBuildItem = true;
-        pc.buildItemDisplayTimer = 0;
-        pc.destroyTimer = 0;
-        pc.buildTimer = 0;
-        pc.PlayButtonSound();
+        playerController.displayingBuildItem = true;
+        playerController.buildItemDisplayTimer = 0;
+        playerController.destroyTimer = 0;
+        playerController.buildTimer = 0;
+        playerController.PlayButtonSound();
     }
 
     // Changes the currently selected building block.
     public void PreviousBlock()
     {
-        if (pc.buildType.Equals("Turret"))
+        if (playerController.buildType.Equals("Turret"))
         {
-            pc.buildType = "Dark Matter Collector";
-            pc.previousBuildType = "Dark Matter Conduit";
-            pc.nextBuildType = "Turret";
+            playerController.buildType = "Dark Matter Collector";
+            playerController.previousBuildType = "Dark Matter Conduit";
+            playerController.nextBuildType = "Turret";
         }
-        else if (pc.buildType.Equals("Dark Matter Collector"))
+        else if (playerController.buildType.Equals("Dark Matter Collector"))
         {
-            pc.buildType = "Dark Matter Conduit";
-            pc.previousBuildType = "Auto Crafter";
-            pc.nextBuildType = "Dark Matter Collector";
+            playerController.buildType = "Dark Matter Conduit";
+            playerController.previousBuildType = "Auto Crafter";
+            playerController.nextBuildType = "Dark Matter Collector";
         }
-        else if (pc.buildType.Equals("Dark Matter Conduit"))
+        else if (playerController.buildType.Equals("Dark Matter Conduit"))
         {
-            pc.buildType = "Auto Crafter";
-            pc.previousBuildType = "Gear Cutter";
-            pc.nextBuildType = "Dark Matter Conduit";
+            playerController.buildType = "Auto Crafter";
+            playerController.previousBuildType = "Gear Cutter";
+            playerController.nextBuildType = "Dark Matter Conduit";
         }
-        else if (pc.buildType.Equals("Auto Crafter"))
+        else if (playerController.buildType.Equals("Auto Crafter"))
         {
-            pc.buildType = "Gear Cutter";
-            pc.previousBuildType = "Alloy Smelter";
-            pc.nextBuildType = "Auto Crafter";
+            playerController.buildType = "Gear Cutter";
+            playerController.previousBuildType = "Alloy Smelter";
+            playerController.nextBuildType = "Auto Crafter";
         }
-        else if (pc.buildType.Equals("Gear Cutter"))
+        else if (playerController.buildType.Equals("Gear Cutter"))
         {
-            pc.buildType = "Alloy Smelter";
-            pc.previousBuildType = "Heat Exchanger";
-            pc.nextBuildType = "Gear Cutter";
+            playerController.buildType = "Alloy Smelter";
+            playerController.previousBuildType = "Heat Exchanger";
+            playerController.nextBuildType = "Gear Cutter";
         }
-        else if (pc.buildType.Equals("Alloy Smelter"))
+        else if (playerController.buildType.Equals("Alloy Smelter"))
         {
-            pc.buildType = "Heat Exchanger";
-            pc.previousBuildType = "Power Conduit";
-            pc.nextBuildType = "Alloy Smelter";
+            playerController.buildType = "Heat Exchanger";
+            playerController.previousBuildType = "Power Conduit";
+            playerController.nextBuildType = "Alloy Smelter";
         }
-        else if (pc.buildType.Equals("Heat Exchanger"))
+        else if (playerController.buildType.Equals("Heat Exchanger"))
         {
-            pc.buildType = "Power Conduit";
-            pc.previousBuildType = "Reactor Turbine";
-            pc.nextBuildType = "Heat Exchanger";
+            playerController.buildType = "Power Conduit";
+            playerController.previousBuildType = "Reactor Turbine";
+            playerController.nextBuildType = "Heat Exchanger";
         }
-        else if (pc.buildType.Equals("Power Conduit"))
+        else if (playerController.buildType.Equals("Power Conduit"))
         {
-            pc.buildType = "Reactor Turbine";
-            pc.previousBuildType = "Nuclear Reactor";
-            pc.nextBuildType = "Power Conduit";
+            playerController.buildType = "Reactor Turbine";
+            playerController.previousBuildType = "Nuclear Reactor";
+            playerController.nextBuildType = "Power Conduit";
         }
-        else if (pc.buildType.Equals("Reactor Turbine"))
+        else if (playerController.buildType.Equals("Reactor Turbine"))
         {
-            pc.buildType = "Nuclear Reactor";
-            pc.previousBuildType = "Generator";
-            pc.nextBuildType = "Reactor Turbine";
+            playerController.buildType = "Nuclear Reactor";
+            playerController.previousBuildType = "Generator";
+            playerController.nextBuildType = "Reactor Turbine";
         }
-        else if (pc.buildType.Equals("Nuclear Reactor"))
+        else if (playerController.buildType.Equals("Nuclear Reactor"))
         {
-            pc.buildType = "Generator";
-            pc.previousBuildType = "Solar Panel";
-            pc.nextBuildType = "Nuclear Reactor";
+            playerController.buildType = "Generator";
+            playerController.previousBuildType = "Solar Panel";
+            playerController.nextBuildType = "Nuclear Reactor";
         }
-        else if (pc.buildType.Equals("Generator"))
+        else if (playerController.buildType.Equals("Generator"))
         {
-            pc.buildType = "Solar Panel";
-            pc.previousBuildType = "Universal Extractor";
-            pc.nextBuildType = "Generator";
+            playerController.buildType = "Solar Panel";
+            playerController.previousBuildType = "Universal Extractor";
+            playerController.nextBuildType = "Generator";
         }
-        else if (pc.buildType.Equals("Solar Panel"))
+        else if (playerController.buildType.Equals("Solar Panel"))
         {
-            pc.buildType = "Universal Extractor";
-            pc.previousBuildType = "Rail Cart";
-            pc.nextBuildType = "Solar Panel";
+            playerController.buildType = "Universal Extractor";
+            playerController.previousBuildType = "Rail Cart";
+            playerController.nextBuildType = "Solar Panel";
         }
-        else if (pc.buildType.Equals("Universal Extractor"))
+        else if (playerController.buildType.Equals("Universal Extractor"))
         {
-            pc.buildType = "Rail Cart";
-            pc.previousBuildType = "Rail Cart Hub";
-            pc.nextBuildType = "Universal Extractor";
+            playerController.buildType = "Rail Cart";
+            playerController.previousBuildType = "Rail Cart Hub";
+            playerController.nextBuildType = "Universal Extractor";
         }
-        else if (pc.buildType.Equals("Rail Cart"))
+        else if (playerController.buildType.Equals("Rail Cart"))
         {
-            pc.buildType = "Rail Cart Hub";
-            pc.previousBuildType = "Retriever";
-            pc.nextBuildType = "Rail Cart";
+            playerController.buildType = "Rail Cart Hub";
+            playerController.previousBuildType = "Retriever";
+            playerController.nextBuildType = "Rail Cart";
         }
-        else if (pc.buildType.Equals("Rail Cart Hub"))
+        else if (playerController.buildType.Equals("Rail Cart Hub"))
         {
-            pc.buildType = "Retriever";
-            pc.previousBuildType = "Universal Conduit";
-            pc.nextBuildType = "Rail Cart Hub";
+            playerController.buildType = "Retriever";
+            playerController.previousBuildType = "Universal Conduit";
+            playerController.nextBuildType = "Rail Cart Hub";
         }
-        else if (pc.buildType.Equals("Retriever"))
+        else if (playerController.buildType.Equals("Retriever"))
         {
-            pc.buildType = "Universal Conduit";
-            pc.previousBuildType = "Smelter";
-            pc.nextBuildType = "Retriever";
+            playerController.buildType = "Universal Conduit";
+            playerController.previousBuildType = "Smelter";
+            playerController.nextBuildType = "Retriever";
         }
-        else if (pc.buildType.Equals("Universal Conduit"))
+        else if (playerController.buildType.Equals("Universal Conduit"))
         {
-            pc.buildType = "Smelter";
-            pc.previousBuildType = "Press";
-            pc.nextBuildType = "Universal Conduit";
+            playerController.buildType = "Smelter";
+            playerController.previousBuildType = "Press";
+            playerController.nextBuildType = "Universal Conduit";
         }
-        else if (pc.buildType.Equals("Smelter"))
+        else if (playerController.buildType.Equals("Smelter"))
         {
-            pc.buildType = "Press";
-            pc.previousBuildType = "Extruder";
-            pc.nextBuildType = "Smelter";
+            playerController.buildType = "Press";
+            playerController.previousBuildType = "Extruder";
+            playerController.nextBuildType = "Smelter";
         }
-        else if (pc.buildType.Equals("Press"))
+        else if (playerController.buildType.Equals("Press"))
         {
-            pc.buildType = "Extruder";
-            pc.previousBuildType = "Auger";
-            pc.nextBuildType = "Press";
+            playerController.buildType = "Extruder";
+            playerController.previousBuildType = "Auger";
+            playerController.nextBuildType = "Press";
         }
-        else if (pc.buildType.Equals("Extruder"))
+        else if (playerController.buildType.Equals("Extruder"))
         {
-            pc.buildType = "Auger";
-            pc.previousBuildType = "Electric Light";
-            pc.nextBuildType = "Extruder";
+            playerController.buildType = "Auger";
+            playerController.previousBuildType = "Electric Light";
+            playerController.nextBuildType = "Extruder";
         }
-        else if (pc.buildType.Equals("Auger"))
+        else if (playerController.buildType.Equals("Auger"))
         {
-            pc.buildType = "Electric Light";
-            pc.previousBuildType = "Storage Computer";
-            pc.nextBuildType = "Auger";
+            playerController.buildType = "Electric Light";
+            playerController.previousBuildType = "Storage Computer";
+            playerController.nextBuildType = "Auger";
         }
-        else if (pc.buildType.Equals("Electric Light"))
+        else if (playerController.buildType.Equals("Electric Light"))
         {
-            pc.buildType = "Storage Computer";
-            pc.previousBuildType = "Storage Container";
-            pc.nextBuildType = "Electric Light";
+            playerController.buildType = "Storage Computer";
+            playerController.previousBuildType = "Storage Container";
+            playerController.nextBuildType = "Electric Light";
         }
-        else if (pc.buildType.Equals("Storage Computer"))
+        else if (playerController.buildType.Equals("Storage Computer"))
         {
-            pc.buildType = "Storage Container";
-            pc.previousBuildType = "Quantum Hatchway";
-            pc.nextBuildType = "Storage Computer";
+            playerController.buildType = "Storage Container";
+            playerController.previousBuildType = "Quantum Hatchway";
+            playerController.nextBuildType = "Storage Computer";
         }
-        else if (pc.buildType.Equals("Storage Container"))
+        else if (playerController.buildType.Equals("Storage Container"))
         {
-            pc.buildType = "Quantum Hatchway";
-            pc.previousBuildType = "Steel Ramp";
-            pc.nextBuildType = "Storage Container";
+            playerController.buildType = "Quantum Hatchway";
+            playerController.previousBuildType = "Steel Ramp";
+            playerController.nextBuildType = "Storage Container";
         }
-        else if (pc.buildType.Equals("Quantum Hatchway"))
+        else if (playerController.buildType.Equals("Quantum Hatchway"))
         {
-            pc.buildType = "Steel Ramp";
-            pc.previousBuildType = "Steel Block";
-            pc.nextBuildType = "Quantum Hatchway";
+            playerController.buildType = "Steel Ramp";
+            playerController.previousBuildType = "Steel Block";
+            playerController.nextBuildType = "Quantum Hatchway";
         }
-        else if (pc.buildType.Equals("Steel Ramp"))
+        else if (playerController.buildType.Equals("Steel Ramp"))
         {
-            pc.buildType = "Steel Block";
-            pc.previousBuildType = "Iron Ramp";
-            pc.nextBuildType = "Steel Ramp";
+            playerController.buildType = "Steel Block";
+            playerController.previousBuildType = "Iron Ramp";
+            playerController.nextBuildType = "Steel Ramp";
         }
-        else if (pc.buildType.Equals("Steel Block"))
+        else if (playerController.buildType.Equals("Steel Block"))
         {
-            pc.buildType = "Iron Ramp";
-            pc.previousBuildType = "Iron Block";
-            pc.nextBuildType = "Steel Block";
+            playerController.buildType = "Iron Ramp";
+            playerController.previousBuildType = "Iron Block";
+            playerController.nextBuildType = "Steel Block";
         }
-        else if (pc.buildType.Equals("Iron Ramp"))
+        else if (playerController.buildType.Equals("Iron Ramp"))
         {
-            pc.buildType = "Iron Block";
-            pc.previousBuildType = "Brick";
-            pc.nextBuildType = "Iron Ramp";
+            playerController.buildType = "Iron Block";
+            playerController.previousBuildType = "Brick";
+            playerController.nextBuildType = "Iron Ramp";
         }
-        else if (pc.buildType.Equals("Iron Block"))
+        else if (playerController.buildType.Equals("Iron Block"))
         {
-            pc.buildType = "Brick";
-            pc.previousBuildType = "Glass Block";
-            pc.nextBuildType = "Iron Block";
+            playerController.buildType = "Brick";
+            playerController.previousBuildType = "Glass Block";
+            playerController.nextBuildType = "Iron Block";
         }
-        else if (pc.buildType.Equals("Brick"))
+        else if (playerController.buildType.Equals("Brick"))
         {
-            pc.buildType = "Glass Block";
-            pc.previousBuildType = "Turret";
-            pc.nextBuildType = "Iron Block";
+            playerController.buildType = "Glass Block";
+            playerController.previousBuildType = "Turret";
+            playerController.nextBuildType = "Iron Block";
         }
-        else if (pc.buildType.Equals("Glass Block"))
+        else if (playerController.buildType.Equals("Glass Block"))
         {
-            pc.buildType = "Turret";
-            pc.previousBuildType = "Dark Matter Collector";
-            pc.nextBuildType = "Glass Block";
+            playerController.buildType = "Turret";
+            playerController.previousBuildType = "Dark Matter Collector";
+            playerController.nextBuildType = "Glass Block";
         }
-        pc.displayingBuildItem = true;
-        pc.buildItemDisplayTimer = 0;
-        pc.destroyTimer = 0;
-        pc.buildTimer = 0;
-        pc.PlayButtonSound();
+        playerController.displayingBuildItem = true;
+        playerController.buildItemDisplayTimer = 0;
+        playerController.destroyTimer = 0;
+        playerController.buildTimer = 0;
+        playerController.PlayButtonSound();
     }
 }

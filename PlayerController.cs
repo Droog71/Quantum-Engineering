@@ -45,6 +45,7 @@ public class PlayerController : MonoBehaviour
     public bool exiting;
     public bool requestedSave;
     public bool invalidAugerPlacement;
+    public bool autoAxisMessage;
     public bool invalidRailCartPlacement;
     public bool helpMenuOpen;
     public bool requestedBuildingStop;
@@ -110,6 +111,7 @@ public class PlayerController : MonoBehaviour
     public float buildTimer;
     public float buildIncrementTimer;
     public float invalidAugerPlacementTimer;
+    public float autoAxisMessageTimer;
     public float invalidRailCartPlacementTimer;
     public float paintRed;
     public float paintGreen;

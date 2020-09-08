@@ -4,33 +4,33 @@ using UnityEngine;
 
 public class CombinedMeshManager
 {
-    private GameManager manager;
+    private GameManager gameManager;
 
-    public CombinedMeshManager(GameManager manager)
+    public CombinedMeshManager(GameManager gameManager)
     {
-        this.manager = manager;
+        this.gameManager = gameManager;
     }
 
     // Separates combined meshes into blocks
     public void SeparateBlocks(Vector3 target, string type, bool building)
     {
-        if (manager.working == false && manager.GetComponent<StateManager>().saving == false)
+        if (gameManager.working == false && gameManager.GetComponent<StateManager>().saving == false)
         {
             if (building == true)
             {
                 CombineBlocks();
             }
-            manager.separateCoroutine = manager.StartCoroutine(BlockSeparationCoroutine(target, type));
+            gameManager.separateCoroutine = gameManager.StartCoroutine(BlockSeparationCoroutine(target, type));
         }
-        Transform[] allBlocks = manager.builtObjects.GetComponentsInChildren<Transform>(true);
-        manager.totalBlockCount = allBlocks.Length;
-        if (manager.totalBlockCount >= 12000 && manager.blockLimitReached == false)
+        Transform[] allBlocks = gameManager.builtObjects.GetComponentsInChildren<Transform>(true);
+        gameManager.totalBlockCount = allBlocks.Length;
+        if (gameManager.totalBlockCount >= 12000 && gameManager.blockLimitReached == false)
         {
-            manager.blockLimitReached = true;
+            gameManager.blockLimitReached = true;
         }
-        else if (manager.totalBlockCount < 12000 && manager.blockLimitReached == true)
+        else if (gameManager.totalBlockCount < 12000 && gameManager.blockLimitReached == true)
         {
-            manager.blockLimitReached = false;
+            gameManager.blockLimitReached = false;
         }
     }
 
@@ -49,9 +49,9 @@ public class CombinedMeshManager
             int totalSteel = 0;
 
             int ironSeprationInterval = 0;
-            foreach (GameObject obj in manager.ironBlocks)
+            foreach (GameObject obj in gameManager.ironBlocks)
             {
-                Transform[] blocks = manager.ironBlocks[ironCount].GetComponentsInChildren<Transform>(true);
+                Transform[] blocks = gameManager.ironBlocks[ironCount].GetComponentsInChildren<Transform>(true);
                 foreach (Transform i in blocks)
                 {
                     if (i != null)
@@ -60,13 +60,13 @@ public class CombinedMeshManager
                         if (distance < 40 && type.Equals("all"))
                         {
                             i.gameObject.SetActive(true);
-                            i.parent = manager.builtObjects.transform;
+                            i.parent = gameManager.builtObjects.transform;
                             totalIron++;
                         }
                         if (distance < 20 && type.Equals("iron"))
                         {
                             i.gameObject.SetActive(true);
-                            i.parent = manager.builtObjects.transform; ;
+                            i.parent = gameManager.builtObjects.transform; ;
                             totalIron++;
                         }
                         if (distance < 10 && type.Equals("iron"))
@@ -86,9 +86,9 @@ public class CombinedMeshManager
             }
 
             int glassSeprationInterval = 0;
-            foreach (GameObject obj in manager.glass)
+            foreach (GameObject obj in gameManager.glass)
             {
-                Transform[] glassBlocks = manager.glass[glassCount].GetComponentsInChildren<Transform>(true);
+                Transform[] glassBlocks = gameManager.glass[glassCount].GetComponentsInChildren<Transform>(true);
                 foreach (Transform g in glassBlocks)
                 {
                     if (g != null)
@@ -97,13 +97,13 @@ public class CombinedMeshManager
                         if (distance < 40 && type.Equals("all"))
                         {
                             g.gameObject.SetActive(true);
-                            g.parent = manager.builtObjects.transform;
+                            g.parent = gameManager.builtObjects.transform;
                             totalGlass++;
                         }
                         if (distance < 20 && type.Equals("glass"))
                         {
                             g.gameObject.SetActive(true);
-                            g.parent = manager.builtObjects.transform; ;
+                            g.parent = gameManager.builtObjects.transform; ;
                             totalGlass++;
                         }
                         if (distance < 10 && type.Equals("glass"))
@@ -123,9 +123,9 @@ public class CombinedMeshManager
             }
 
             int steelSeprationInterval = 0;
-            foreach (GameObject obj in manager.steel)
+            foreach (GameObject obj in gameManager.steel)
             {
-                Transform[] steelBlocks = manager.steel[steelCount].GetComponentsInChildren<Transform>(true);
+                Transform[] steelBlocks = gameManager.steel[steelCount].GetComponentsInChildren<Transform>(true);
                 foreach (Transform s in steelBlocks)
                 {
                     if (s != null)
@@ -134,13 +134,13 @@ public class CombinedMeshManager
                         if (distance < 40 && type.Equals("all"))
                         {
                             s.gameObject.SetActive(true);
-                            s.parent = manager.builtObjects.transform;
+                            s.parent = gameManager.builtObjects.transform;
                             totalSteel++;
                         }
                         if (distance < 20 && type.Equals("steel"))
                         {
                             s.gameObject.SetActive(true);
-                            s.parent = manager.builtObjects.transform;
+                            s.parent = gameManager.builtObjects.transform;
                             totalSteel++;
                         }
                         if (distance < 10 && type.Equals("steel"))
@@ -160,9 +160,9 @@ public class CombinedMeshManager
             }
 
             int brickSeprationInterval = 0;
-            foreach (GameObject obj in manager.bricks)
+            foreach (GameObject obj in gameManager.bricks)
             {
-                Transform[] brickBlocks = manager.bricks[brickCount].GetComponentsInChildren<Transform>(true);
+                Transform[] brickBlocks = gameManager.bricks[brickCount].GetComponentsInChildren<Transform>(true);
                 foreach (Transform b in brickBlocks)
                 {
                     if (b != null)
@@ -171,13 +171,13 @@ public class CombinedMeshManager
                         if (distance < 40 && type.Equals("all"))
                         {
                             b.gameObject.SetActive(true);
-                            b.parent = manager.builtObjects.transform;
+                            b.parent = gameManager.builtObjects.transform;
                             totalBrick++;
                         }
                         if (distance < 20 && type.Equals("brick"))
                         {
                             b.gameObject.SetActive(true);
-                            b.parent = manager.builtObjects.transform; ;
+                            b.parent = gameManager.builtObjects.transform; ;
                             totalBrick++;
                         }
                         if (distance < 10 && type.Equals("brick"))
@@ -202,92 +202,92 @@ public class CombinedMeshManager
             brickCount = 0;
             if (totalIron > 0)
             {
-                foreach (GameObject obj in manager.ironBlocks)
+                foreach (GameObject obj in gameManager.ironBlocks)
                 {
-                    manager.ironBlocksDummy[ironCount] = Object.Instantiate(manager.ironHolder, manager.transform.position, manager.transform.rotation);
-                    manager.ironBlocksDummy[ironCount].transform.parent = manager.builtObjects.transform;
-                    manager.ironBlocksDummy[ironCount].AddComponent<HolderDummy>();
-                    if (manager.ironBlocksDummy[ironCount].GetComponent<MeshFilter>() == null)
+                    gameManager.ironBlocksDummy[ironCount] = Object.Instantiate(gameManager.ironHolder, gameManager.transform.position, gameManager.transform.rotation);
+                    gameManager.ironBlocksDummy[ironCount].transform.parent = gameManager.builtObjects.transform;
+                    gameManager.ironBlocksDummy[ironCount].AddComponent<HolderDummy>();
+                    if (gameManager.ironBlocksDummy[ironCount].GetComponent<MeshFilter>() == null)
                     {
-                        manager.ironBlocksDummy[ironCount].AddComponent<MeshFilter>();
+                        gameManager.ironBlocksDummy[ironCount].AddComponent<MeshFilter>();
                     }
-                    if (manager.ironBlocks[ironCount].GetComponent<MeshFilter>() != null)
+                    if (gameManager.ironBlocks[ironCount].GetComponent<MeshFilter>() != null)
                     {
-                        manager.ironBlocksDummy[ironCount].GetComponent<MeshFilter>().mesh = manager.ironBlocks[ironCount].GetComponent<MeshFilter>().mesh;
+                        gameManager.ironBlocksDummy[ironCount].GetComponent<MeshFilter>().mesh = gameManager.ironBlocks[ironCount].GetComponent<MeshFilter>().mesh;
                     }
-                    Object.Destroy(manager.ironBlocks[ironCount].GetComponent<MeshFilter>());
+                    Object.Destroy(gameManager.ironBlocks[ironCount].GetComponent<MeshFilter>());
                     ironCount++;
                 }
-                manager.ironMeshRequired = true;
-                manager.waitingForDestroy = true;
+                gameManager.ironMeshRequired = true;
+                gameManager.waitingForDestroy = true;
             }
             if (totalGlass > 0)
             {
-                foreach (GameObject obj in manager.glass)
+                foreach (GameObject obj in gameManager.glass)
                 {
-                    manager.glassDummy[glassCount] = Object.Instantiate(manager.glassHolder, manager.transform.position, manager.transform.rotation);
-                    manager.glassDummy[glassCount].transform.parent = manager.builtObjects.transform;
-                    manager.glassDummy[glassCount].AddComponent<HolderDummy>();
-                    if (manager.glassDummy[glassCount].GetComponent<MeshFilter>() == null)
+                    gameManager.glassDummy[glassCount] = Object.Instantiate(gameManager.glassHolder, gameManager.transform.position, gameManager.transform.rotation);
+                    gameManager.glassDummy[glassCount].transform.parent = gameManager.builtObjects.transform;
+                    gameManager.glassDummy[glassCount].AddComponent<HolderDummy>();
+                    if (gameManager.glassDummy[glassCount].GetComponent<MeshFilter>() == null)
                     {
-                        manager.glassDummy[glassCount].AddComponent<MeshFilter>();
+                        gameManager.glassDummy[glassCount].AddComponent<MeshFilter>();
                     }
-                    if (manager.glass[glassCount].GetComponent<MeshFilter>() != null)
+                    if (gameManager.glass[glassCount].GetComponent<MeshFilter>() != null)
                     {
-                        manager.glassDummy[glassCount].GetComponent<MeshFilter>().mesh = manager.glass[glassCount].GetComponent<MeshFilter>().mesh;
+                        gameManager.glassDummy[glassCount].GetComponent<MeshFilter>().mesh = gameManager.glass[glassCount].GetComponent<MeshFilter>().mesh;
                     }
-                    Object.Destroy(manager.glass[glassCount].GetComponent<MeshFilter>());
+                    Object.Destroy(gameManager.glass[glassCount].GetComponent<MeshFilter>());
                     glassCount++;
                 }
-                manager.glassMeshRequired = true;
-                manager.waitingForDestroy = true;
+                gameManager.glassMeshRequired = true;
+                gameManager.waitingForDestroy = true;
             }
             if (totalSteel > 0)
             {
-                foreach (GameObject obj in manager.steel)
+                foreach (GameObject obj in gameManager.steel)
                 {
-                    manager.steelDummy[steelCount] = Object.Instantiate(manager.steelHolder, manager.transform.position, manager.transform.rotation);
-                    manager.steelDummy[steelCount].transform.parent = manager.builtObjects.transform;
-                    manager.steelDummy[steelCount].AddComponent<HolderDummy>();
-                    if (manager.steelDummy[steelCount].GetComponent<MeshFilter>() == null)
+                    gameManager.steelDummy[steelCount] = Object.Instantiate(gameManager.steelHolder, gameManager.transform.position, gameManager.transform.rotation);
+                    gameManager.steelDummy[steelCount].transform.parent = gameManager.builtObjects.transform;
+                    gameManager.steelDummy[steelCount].AddComponent<HolderDummy>();
+                    if (gameManager.steelDummy[steelCount].GetComponent<MeshFilter>() == null)
                     {
-                        manager.steelDummy[steelCount].AddComponent<MeshFilter>();
+                        gameManager.steelDummy[steelCount].AddComponent<MeshFilter>();
                     }
-                    if (manager.steel[steelCount].GetComponent<MeshFilter>() != null)
+                    if (gameManager.steel[steelCount].GetComponent<MeshFilter>() != null)
                     {
-                        manager.steelDummy[steelCount].GetComponent<MeshFilter>().mesh = manager.steel[steelCount].GetComponent<MeshFilter>().mesh;
+                        gameManager.steelDummy[steelCount].GetComponent<MeshFilter>().mesh = gameManager.steel[steelCount].GetComponent<MeshFilter>().mesh;
                     }
-                    Object.Destroy(manager.steel[steelCount].GetComponent<MeshFilter>());
+                    Object.Destroy(gameManager.steel[steelCount].GetComponent<MeshFilter>());
                     steelCount++;
                 }
-                manager.steelMeshRequired = true;
-                manager.waitingForDestroy = true;
+                gameManager.steelMeshRequired = true;
+                gameManager.waitingForDestroy = true;
             }
             if (totalBrick > 0)
             {
-                foreach (GameObject obj in manager.bricks)
+                foreach (GameObject obj in gameManager.bricks)
                 {
-                    manager.bricksDummy[brickCount] = Object.Instantiate(manager.brickHolder, manager.transform.position, manager.transform.rotation);
-                    manager.bricksDummy[brickCount].transform.parent = manager.builtObjects.transform;
-                    manager.bricksDummy[brickCount].AddComponent<HolderDummy>();
-                    if (manager.bricksDummy[brickCount].GetComponent<MeshFilter>() == null)
+                    gameManager.bricksDummy[brickCount] = Object.Instantiate(gameManager.brickHolder, gameManager.transform.position, gameManager.transform.rotation);
+                    gameManager.bricksDummy[brickCount].transform.parent = gameManager.builtObjects.transform;
+                    gameManager.bricksDummy[brickCount].AddComponent<HolderDummy>();
+                    if (gameManager.bricksDummy[brickCount].GetComponent<MeshFilter>() == null)
                     {
-                        manager.bricksDummy[brickCount].AddComponent<MeshFilter>();
+                        gameManager.bricksDummy[brickCount].AddComponent<MeshFilter>();
                     }
-                    if (manager.bricks[brickCount].GetComponent<MeshFilter>() != null)
+                    if (gameManager.bricks[brickCount].GetComponent<MeshFilter>() != null)
                     {
-                        manager.bricksDummy[brickCount].GetComponent<MeshFilter>().mesh = manager.bricks[brickCount].GetComponent<MeshFilter>().mesh;
+                        gameManager.bricksDummy[brickCount].GetComponent<MeshFilter>().mesh = gameManager.bricks[brickCount].GetComponent<MeshFilter>().mesh;
                     }
-                    Object.Destroy(manager.bricks[brickCount].GetComponent<MeshFilter>());
+                    Object.Destroy(gameManager.bricks[brickCount].GetComponent<MeshFilter>());
                     brickCount++;
                 }
-                manager.brickMeshRequired = true;
-                manager.waitingForDestroy = true;
+                gameManager.brickMeshRequired = true;
+                gameManager.waitingForDestroy = true;
             }
 
-            if (manager.waitingForDestroy == false)
+            if (gameManager.waitingForDestroy == false)
             {
-                manager.working = false;
+                gameManager.working = false;
             }
         }
     }
@@ -295,9 +295,9 @@ public class CombinedMeshManager
     // Creates combined meshes from placed building blocks
     public void CombineBlocks()
     {
-        if (manager.working == false && manager.GetComponent<StateManager>().saving == false)
+        if (gameManager.working == false && gameManager.GetComponent<StateManager>().saving == false)
         {
-            manager.working = true;
+            gameManager.working = true;
             int ironCount = 0;
             int steelCount = 0;
             int glassCount = 0;
@@ -310,15 +310,15 @@ public class CombinedMeshManager
             IronBlock[] allIronBlocks = Object.FindObjectsOfType<IronBlock>();
             foreach (IronBlock block in allIronBlocks)
             {
-                Transform[] blocks = manager.ironBlocks[ironCount].GetComponentsInChildren<Transform>(true);
+                Transform[] blocks = gameManager.ironBlocks[ironCount].GetComponentsInChildren<Transform>(true);
                 if (blocks.Length >= 300)
                 {
                     ironCount++;
                 }
                 if (block.GetComponent<PhysicsHandler>().falling == false && block.GetComponent<PhysicsHandler>().fallingStack == false && block.GetComponent<PhysicsHandler>().needsSupportCheck == false)
                 {
-                    block.transform.parent = manager.ironBlocks[ironCount].transform;
-                    if (manager.initIron == false)
+                    block.transform.parent = gameManager.ironBlocks[ironCount].transform;
+                    if (gameManager.initIron == false)
                     {
                         GameObject go = GameObject.CreatePrimitive(PrimitiveType.Cube);
                         go.transform.position = block.transform.position;
@@ -335,15 +335,15 @@ public class CombinedMeshManager
             {
                 if (block.GetComponent<Glass>() != null)
                 {
-                    Transform[] blocks = manager.glass[glassCount].GetComponentsInChildren<Transform>(true);
+                    Transform[] blocks = gameManager.glass[glassCount].GetComponentsInChildren<Transform>(true);
                     if (blocks.Length >= 300)
                     {
                         glassCount++;
                     }
                     if (block.GetComponent<PhysicsHandler>().falling == false && block.GetComponent<PhysicsHandler>().fallingStack == false && block.GetComponent<PhysicsHandler>().needsSupportCheck == false)
                     {
-                        block.transform.parent = manager.glass[glassCount].transform;
-                        if (manager.initGlass == false)
+                        block.transform.parent = gameManager.glass[glassCount].transform;
+                        if (gameManager.initGlass == false)
                         {
                             //UnityEngine.Debug.Log("CREATING GLASS BLOCK DUMMIES");
                             GameObject go = GameObject.CreatePrimitive(PrimitiveType.Cube);
@@ -362,15 +362,15 @@ public class CombinedMeshManager
             {
                 if (block.GetComponent<Steel>() != null)
                 {
-                    Transform[] blocks = manager.steel[steelCount].GetComponentsInChildren<Transform>(true);
+                    Transform[] blocks = gameManager.steel[steelCount].GetComponentsInChildren<Transform>(true);
                     if (blocks.Length >= 300)
                     {
                         steelCount++;
                     }
                     if (block.GetComponent<PhysicsHandler>().falling == false && block.GetComponent<PhysicsHandler>().fallingStack == false && block.GetComponent<PhysicsHandler>().needsSupportCheck == false)
                     {
-                        block.transform.parent = manager.steel[steelCount].transform;
-                        if (manager.initSteel == false)
+                        block.transform.parent = gameManager.steel[steelCount].transform;
+                        if (gameManager.initSteel == false)
                         {
                             //UnityEngine.Debug.Log("CREATING STEEL BLOCK DUMMIES");
                             GameObject go = GameObject.CreatePrimitive(PrimitiveType.Cube);
@@ -389,15 +389,15 @@ public class CombinedMeshManager
             {
                 if (block.GetComponent<Brick>() != null)
                 {
-                    Transform[] blocks = manager.bricks[brickCount].GetComponentsInChildren<Transform>(true);
+                    Transform[] blocks = gameManager.bricks[brickCount].GetComponentsInChildren<Transform>(true);
                     if (blocks.Length >= 300)
                     {
                         brickCount++;
                     }
                     if (block.GetComponent<PhysicsHandler>().falling == false && block.GetComponent<PhysicsHandler>().fallingStack == false && block.GetComponent<PhysicsHandler>().needsSupportCheck == false)
                     {
-                        block.transform.parent = manager.bricks[brickCount].transform;
-                        if (manager.initBrick == false)
+                        block.transform.parent = gameManager.bricks[brickCount].transform;
+                        if (gameManager.initBrick == false)
                         {
                             GameObject go = GameObject.CreatePrimitive(PrimitiveType.Cube);
                             go.transform.position = block.transform.position;
@@ -413,119 +413,119 @@ public class CombinedMeshManager
             if (ironBlockCount > 0)
             {
                 ironCount = 0;
-                foreach (GameObject obj in manager.ironBlocks)
+                foreach (GameObject obj in gameManager.ironBlocks)
                 {
-                    manager.ironBlocksDummy[ironCount] = Object.Instantiate(manager.ironHolder, manager.transform.position, manager.transform.rotation);
-                    manager.ironBlocksDummy[ironCount].transform.parent = manager.builtObjects.transform;
-                    manager.ironBlocksDummy[ironCount].AddComponent<HolderDummy>();
-                    if (manager.ironBlocksDummy[ironCount].GetComponent<MeshFilter>() == null)
+                    gameManager.ironBlocksDummy[ironCount] = Object.Instantiate(gameManager.ironHolder, gameManager.transform.position, gameManager.transform.rotation);
+                    gameManager.ironBlocksDummy[ironCount].transform.parent = gameManager.builtObjects.transform;
+                    gameManager.ironBlocksDummy[ironCount].AddComponent<HolderDummy>();
+                    if (gameManager.ironBlocksDummy[ironCount].GetComponent<MeshFilter>() == null)
                     {
-                        manager.ironBlocksDummy[ironCount].AddComponent<MeshFilter>();
+                        gameManager.ironBlocksDummy[ironCount].AddComponent<MeshFilter>();
                     }
-                    if (manager.ironBlocks[ironCount].GetComponent<MeshFilter>() != null)
+                    if (gameManager.ironBlocks[ironCount].GetComponent<MeshFilter>() != null)
                     {
-                        manager.ironBlocksDummy[ironCount].GetComponent<MeshFilter>().mesh = manager.ironBlocks[ironCount].GetComponent<MeshFilter>().mesh;
+                        gameManager.ironBlocksDummy[ironCount].GetComponent<MeshFilter>().mesh = gameManager.ironBlocks[ironCount].GetComponent<MeshFilter>().mesh;
                     }
-                    Object.Destroy(manager.ironBlocks[ironCount].GetComponent<MeshFilter>());
+                    Object.Destroy(gameManager.ironBlocks[ironCount].GetComponent<MeshFilter>());
                     ironCount++;
                 }
-                manager.ironMeshRequired = true;
-                manager.waitingForDestroy = true;
+                gameManager.ironMeshRequired = true;
+                gameManager.waitingForDestroy = true;
             }
 
             if (steelBlockCount > 0)
             {
                 steelCount = 0;
-                foreach (GameObject obj in manager.steel)
+                foreach (GameObject obj in gameManager.steel)
                 {
-                    manager.steelDummy[steelCount] = Object.Instantiate(manager.steelHolder, manager.transform.position, manager.transform.rotation);
-                    manager.steelDummy[steelCount].transform.parent = manager.builtObjects.transform;
-                    manager.steelDummy[steelCount].AddComponent<HolderDummy>();
-                    if (manager.steelDummy[steelCount].GetComponent<MeshFilter>() == null)
+                    gameManager.steelDummy[steelCount] = Object.Instantiate(gameManager.steelHolder, gameManager.transform.position, gameManager.transform.rotation);
+                    gameManager.steelDummy[steelCount].transform.parent = gameManager.builtObjects.transform;
+                    gameManager.steelDummy[steelCount].AddComponent<HolderDummy>();
+                    if (gameManager.steelDummy[steelCount].GetComponent<MeshFilter>() == null)
                     {
-                        manager.steelDummy[steelCount].AddComponent<MeshFilter>();
+                        gameManager.steelDummy[steelCount].AddComponent<MeshFilter>();
                     }
-                    if (manager.steel[steelCount].GetComponent<MeshFilter>() != null)
+                    if (gameManager.steel[steelCount].GetComponent<MeshFilter>() != null)
                     {
-                        manager.steelDummy[steelCount].GetComponent<MeshFilter>().mesh = manager.steel[steelCount].GetComponent<MeshFilter>().mesh;
+                        gameManager.steelDummy[steelCount].GetComponent<MeshFilter>().mesh = gameManager.steel[steelCount].GetComponent<MeshFilter>().mesh;
                     }
-                    Object.Destroy(manager.steel[steelCount].GetComponent<MeshFilter>());
+                    Object.Destroy(gameManager.steel[steelCount].GetComponent<MeshFilter>());
                     steelCount++;
                 }
-                manager.steelMeshRequired = true;
-                manager.waitingForDestroy = true;
+                gameManager.steelMeshRequired = true;
+                gameManager.waitingForDestroy = true;
             }
 
             if (glassBlockCount > 0)
             {
                 glassCount = 0;
-                foreach (GameObject obj in manager.glass)
+                foreach (GameObject obj in gameManager.glass)
                 {
-                    manager.glassDummy[glassCount] = Object.Instantiate(manager.glassHolder, manager.transform.position, manager.transform.rotation);
-                    manager.glassDummy[glassCount].transform.parent = manager.builtObjects.transform;
-                    manager.glassDummy[glassCount].AddComponent<HolderDummy>();
-                    if (manager.glassDummy[glassCount].GetComponent<MeshFilter>() == null)
+                    gameManager.glassDummy[glassCount] = Object.Instantiate(gameManager.glassHolder, gameManager.transform.position, gameManager.transform.rotation);
+                    gameManager.glassDummy[glassCount].transform.parent = gameManager.builtObjects.transform;
+                    gameManager.glassDummy[glassCount].AddComponent<HolderDummy>();
+                    if (gameManager.glassDummy[glassCount].GetComponent<MeshFilter>() == null)
                     {
-                        manager.glassDummy[glassCount].AddComponent<MeshFilter>();
+                        gameManager.glassDummy[glassCount].AddComponent<MeshFilter>();
                     }
-                    if (manager.glass[glassCount].GetComponent<MeshFilter>() != null)
+                    if (gameManager.glass[glassCount].GetComponent<MeshFilter>() != null)
                     {
-                        manager.glassDummy[glassCount].GetComponent<MeshFilter>().mesh = manager.glass[glassCount].GetComponent<MeshFilter>().mesh;
+                        gameManager.glassDummy[glassCount].GetComponent<MeshFilter>().mesh = gameManager.glass[glassCount].GetComponent<MeshFilter>().mesh;
                     }
-                    Object.Destroy(manager.glass[glassCount].GetComponent<MeshFilter>());
+                    Object.Destroy(gameManager.glass[glassCount].GetComponent<MeshFilter>());
                     glassCount++;
                 }
-                manager.glassMeshRequired = true;
-                manager.waitingForDestroy = true;
+                gameManager.glassMeshRequired = true;
+                gameManager.waitingForDestroy = true;
             }
 
             if (brickBlockCount > 0)
             {
                 brickCount = 0;
-                foreach (GameObject obj in manager.bricks)
+                foreach (GameObject obj in gameManager.bricks)
                 {
-                    manager.bricksDummy[brickCount] = Object.Instantiate(manager.brickHolder, manager.transform.position, manager.transform.rotation);
-                    manager.bricksDummy[brickCount].transform.parent = manager.builtObjects.transform;
-                    manager.bricksDummy[brickCount].AddComponent<HolderDummy>();
-                    if (manager.bricksDummy[brickCount].GetComponent<MeshFilter>() == null)
+                    gameManager.bricksDummy[brickCount] = Object.Instantiate(gameManager.brickHolder, gameManager.transform.position, gameManager.transform.rotation);
+                    gameManager.bricksDummy[brickCount].transform.parent = gameManager.builtObjects.transform;
+                    gameManager.bricksDummy[brickCount].AddComponent<HolderDummy>();
+                    if (gameManager.bricksDummy[brickCount].GetComponent<MeshFilter>() == null)
                     {
-                        manager.bricksDummy[brickCount].AddComponent<MeshFilter>();
+                        gameManager.bricksDummy[brickCount].AddComponent<MeshFilter>();
                     }
-                    if (manager.bricks[brickCount].GetComponent<MeshFilter>() != null)
+                    if (gameManager.bricks[brickCount].GetComponent<MeshFilter>() != null)
                     {
-                        manager.bricksDummy[brickCount].GetComponent<MeshFilter>().mesh = manager.bricks[brickCount].GetComponent<MeshFilter>().mesh;
+                        gameManager.bricksDummy[brickCount].GetComponent<MeshFilter>().mesh = gameManager.bricks[brickCount].GetComponent<MeshFilter>().mesh;
                     }
-                    Object.Destroy(manager.bricks[brickCount].GetComponent<MeshFilter>());
+                    Object.Destroy(gameManager.bricks[brickCount].GetComponent<MeshFilter>());
                     brickCount++;
                 }
-                manager.brickMeshRequired = true;
-                manager.waitingForDestroy = true;
+                gameManager.brickMeshRequired = true;
+                gameManager.waitingForDestroy = true;
             }
 
-            manager.blocksCombined = true;
-            if (manager.waitingForDestroy == false)
+            gameManager.blocksCombined = true;
+            if (gameManager.waitingForDestroy == false)
             {
-                manager.working = false;
+                gameManager.working = false;
             }
         }
     }
 
     public void CombineMeshes()
     {
-        manager.combineCoroutine = manager.StartCoroutine(CombineMeshCoroutine());
+        gameManager.combineCoroutine = gameManager.StartCoroutine(CombineMeshCoroutine());
     }
 
     private IEnumerator CombineMeshCoroutine()
     {
-        if (manager.ironMeshRequired == true)
+        if (gameManager.ironMeshRequired == true)
         {
             int ironCount = 0;
             int ironCombineInterval = 0;
             //Debug.Log("Started mesh combine for iron at: " + System.DateTime.Now);
-            foreach (GameObject obj in manager.ironBlocks)
+            foreach (GameObject obj in gameManager.ironBlocks)
             {
                 //Combine all meshes outside of building range.
-                MeshFilter[] meshFilters = manager.ironBlocks[ironCount].GetComponentsInChildren<MeshFilter>(true);
+                MeshFilter[] meshFilters = gameManager.ironBlocks[ironCount].GetComponentsInChildren<MeshFilter>(true);
                 List<MeshFilter> mfList = new List<MeshFilter>();
                 foreach (MeshFilter mf in meshFilters)
                 {
@@ -553,17 +553,17 @@ public class CombinedMeshManager
                     meshFilters[i].gameObject.SetActive(false);
                     i++;
                 }
-                if (manager.ironBlocks[ironCount].GetComponent<MeshFilter>() == null)
+                if (gameManager.ironBlocks[ironCount].GetComponent<MeshFilter>() == null)
                 {
-                    manager.ironBlocks[ironCount].AddComponent<MeshFilter>();
+                    gameManager.ironBlocks[ironCount].AddComponent<MeshFilter>();
                 }
-                manager.ironBlocks[ironCount].GetComponent<MeshFilter>().mesh = new Mesh();
-                manager.ironBlocks[ironCount].GetComponent<MeshFilter>().mesh.CombineMeshes(combine);
-                manager.ironBlocks[ironCount].GetComponent<MeshCollider>().sharedMesh = manager.ironBlocks[ironCount].GetComponent<MeshFilter>().mesh;
-                manager.ironBlocks[ironCount].GetComponent<MeshCollider>().enabled = true;
+                gameManager.ironBlocks[ironCount].GetComponent<MeshFilter>().mesh = new Mesh();
+                gameManager.ironBlocks[ironCount].GetComponent<MeshFilter>().mesh.CombineMeshes(combine);
+                gameManager.ironBlocks[ironCount].GetComponent<MeshCollider>().sharedMesh = gameManager.ironBlocks[ironCount].GetComponent<MeshFilter>().mesh;
+                gameManager.ironBlocks[ironCount].GetComponent<MeshCollider>().enabled = true;
                 if (meshFilters.Length > 0)
                 {
-                    manager.ironBlocks[ironCount].SetActive(true);
+                    gameManager.ironBlocks[ironCount].SetActive(true);
                 }
                 ironCount++;
                 ironCombineInterval++;
@@ -573,25 +573,25 @@ public class CombinedMeshManager
                     ironCombineInterval = 0;
                 }
             }
-            manager.ironMeshRequired = false;
-            if (manager.initIron == false)
+            gameManager.ironMeshRequired = false;
+            if (gameManager.initIron == false)
             {
-                manager.initIron = true;
-                manager.clearIronDummies = true;
-                FileBasedPrefs.SetBool(manager.GetComponent<StateManager>().WorldName + "manager.initIron", true);
+                gameManager.initIron = true;
+                gameManager.clearIronDummies = true;
+                FileBasedPrefs.SetBool(gameManager.GetComponent<StateManager>().WorldName + "gameManager.initIron", true);
             }
             //Debug.Log("Finished mesh combine for iron at: " + System.DateTime.Now);
         }
 
-        if (manager.glassMeshRequired == true)
+        if (gameManager.glassMeshRequired == true)
         {
             int glassCount = 0;
             int glassCombineInterval = 0;
             //Debug.Log("Started mesh combine for glass at: " + System.DateTime.Now);
-            foreach (GameObject obj in manager.glass)
+            foreach (GameObject obj in gameManager.glass)
             {
                 //Combine all meshes outside of building range.
-                MeshFilter[] glassMeshFilters = manager.glass[glassCount].GetComponentsInChildren<MeshFilter>(true);
+                MeshFilter[] glassMeshFilters = gameManager.glass[glassCount].GetComponentsInChildren<MeshFilter>(true);
                 List<MeshFilter> mfList = new List<MeshFilter>();
                 foreach (MeshFilter mf in glassMeshFilters)
                 {
@@ -619,17 +619,17 @@ public class CombinedMeshManager
                     glassMeshFilters[g].gameObject.SetActive(false);
                     g++;
                 }
-                if (manager.glass[glassCount].GetComponent<MeshFilter>() == null)
+                if (gameManager.glass[glassCount].GetComponent<MeshFilter>() == null)
                 {
-                    manager.glass[glassCount].AddComponent<MeshFilter>();
+                    gameManager.glass[glassCount].AddComponent<MeshFilter>();
                 }
-                manager.glass[glassCount].GetComponent<MeshFilter>().mesh = new Mesh();
-                manager.glass[glassCount].GetComponent<MeshFilter>().mesh.CombineMeshes(glassCombine);
-                manager.glass[glassCount].GetComponent<MeshCollider>().sharedMesh = manager.glass[glassCount].GetComponent<MeshFilter>().mesh;
-                manager.glass[glassCount].GetComponent<MeshCollider>().enabled = true;
+                gameManager.glass[glassCount].GetComponent<MeshFilter>().mesh = new Mesh();
+                gameManager.glass[glassCount].GetComponent<MeshFilter>().mesh.CombineMeshes(glassCombine);
+                gameManager.glass[glassCount].GetComponent<MeshCollider>().sharedMesh = gameManager.glass[glassCount].GetComponent<MeshFilter>().mesh;
+                gameManager.glass[glassCount].GetComponent<MeshCollider>().enabled = true;
                 if (glassMeshFilters.Length > 0)
                 {
-                    manager.glass[glassCount].SetActive(true);
+                    gameManager.glass[glassCount].SetActive(true);
                 }
                 glassCount++;
                 glassCombineInterval++;
@@ -639,25 +639,25 @@ public class CombinedMeshManager
                     glassCombineInterval = 0;
                 }
             }
-            manager.glassMeshRequired = false;
-            if (manager.initGlass == false)
+            gameManager.glassMeshRequired = false;
+            if (gameManager.initGlass == false)
             {
-                manager.initGlass = true;
-                manager.clearGlassDummies = true;
-                FileBasedPrefs.SetBool(manager.GetComponent<StateManager>().WorldName + "initGlass", true);
+                gameManager.initGlass = true;
+                gameManager.clearGlassDummies = true;
+                FileBasedPrefs.SetBool(gameManager.GetComponent<StateManager>().WorldName + "initGlass", true);
             }
             //Debug.Log("Finished mesh combine for glass at: " + System.DateTime.Now);
         }
 
-        if (manager.steelMeshRequired == true)
+        if (gameManager.steelMeshRequired == true)
         {
             int steelCount = 0;
             int steelCombineInterval = 0;
             //Debug.Log("Started mesh combine for steel at: " + System.DateTime.Now);
-            foreach (GameObject obj in manager.steel)
+            foreach (GameObject obj in gameManager.steel)
             {
                 //Combine all meshes outside of building range.
-                MeshFilter[] steelMeshFilters = manager.steel[steelCount].GetComponentsInChildren<MeshFilter>(true);
+                MeshFilter[] steelMeshFilters = gameManager.steel[steelCount].GetComponentsInChildren<MeshFilter>(true);
                 List<MeshFilter> mfList = new List<MeshFilter>();
                 foreach (MeshFilter mf in steelMeshFilters)
                 {
@@ -685,17 +685,17 @@ public class CombinedMeshManager
                     steelMeshFilters[s].gameObject.SetActive(false);
                     s++;
                 }
-                if (manager.steel[steelCount].GetComponent<MeshFilter>() == null)
+                if (gameManager.steel[steelCount].GetComponent<MeshFilter>() == null)
                 {
-                    manager.steel[steelCount].AddComponent<MeshFilter>();
+                    gameManager.steel[steelCount].AddComponent<MeshFilter>();
                 }
-                manager.steel[steelCount].GetComponent<MeshFilter>().mesh = new Mesh();
-                manager.steel[steelCount].GetComponent<MeshFilter>().mesh.CombineMeshes(steelCombine);
-                manager.steel[steelCount].GetComponent<MeshCollider>().sharedMesh = manager.steel[steelCount].GetComponent<MeshFilter>().mesh;
-                manager.steel[steelCount].GetComponent<MeshCollider>().enabled = true;
+                gameManager.steel[steelCount].GetComponent<MeshFilter>().mesh = new Mesh();
+                gameManager.steel[steelCount].GetComponent<MeshFilter>().mesh.CombineMeshes(steelCombine);
+                gameManager.steel[steelCount].GetComponent<MeshCollider>().sharedMesh = gameManager.steel[steelCount].GetComponent<MeshFilter>().mesh;
+                gameManager.steel[steelCount].GetComponent<MeshCollider>().enabled = true;
                 if (steelMeshFilters.Length > 0)
                 {
-                    manager.steel[steelCount].SetActive(true);
+                    gameManager.steel[steelCount].SetActive(true);
                 }
                 steelCount++;
                 steelCombineInterval++;
@@ -705,25 +705,25 @@ public class CombinedMeshManager
                     steelCombineInterval = 0;
                 }
             }
-            manager.steelMeshRequired = false;
-            if (manager.initSteel == false)
+            gameManager.steelMeshRequired = false;
+            if (gameManager.initSteel == false)
             {
-                manager.initSteel = true;
-                manager.clearSteelDummies = true;
-                FileBasedPrefs.SetBool(manager.GetComponent<StateManager>().WorldName + "initSteel", true);
+                gameManager.initSteel = true;
+                gameManager.clearSteelDummies = true;
+                FileBasedPrefs.SetBool(gameManager.GetComponent<StateManager>().WorldName + "initSteel", true);
             }
             //Debug.Log("Finished mesh combine for steel at: " + System.DateTime.Now);
         }
 
-        if (manager.brickMeshRequired == true)
+        if (gameManager.brickMeshRequired == true)
         {
             int brickCount = 0;
             int brickCombineInterval = 0;
             //Debug.Log("Started mesh combine for bricks at: " + System.DateTime.Now);
-            foreach (GameObject obj in manager.bricks)
+            foreach (GameObject obj in gameManager.bricks)
             {
                 //Combine all meshes outside of building range.
-                MeshFilter[] brickMeshFilters = manager.bricks[brickCount].GetComponentsInChildren<MeshFilter>(true);
+                MeshFilter[] brickMeshFilters = gameManager.bricks[brickCount].GetComponentsInChildren<MeshFilter>(true);
                 List<MeshFilter> mfList = new List<MeshFilter>();
                 foreach (MeshFilter mf in brickMeshFilters)
                 {
@@ -751,17 +751,17 @@ public class CombinedMeshManager
                     brickMeshFilters[b].gameObject.SetActive(false);
                     b++;
                 }
-                if (manager.bricks[brickCount].GetComponent<MeshFilter>() == null)
+                if (gameManager.bricks[brickCount].GetComponent<MeshFilter>() == null)
                 {
-                    manager.bricks[brickCount].AddComponent<MeshFilter>();
+                    gameManager.bricks[brickCount].AddComponent<MeshFilter>();
                 }
-                manager.bricks[brickCount].GetComponent<MeshFilter>().mesh = new Mesh();
-                manager.bricks[brickCount].GetComponent<MeshFilter>().mesh.CombineMeshes(brickCombine);
-                manager.bricks[brickCount].GetComponent<MeshCollider>().sharedMesh = manager.bricks[brickCount].GetComponent<MeshFilter>().mesh;
-                manager.bricks[brickCount].GetComponent<MeshCollider>().enabled = true;
+                gameManager.bricks[brickCount].GetComponent<MeshFilter>().mesh = new Mesh();
+                gameManager.bricks[brickCount].GetComponent<MeshFilter>().mesh.CombineMeshes(brickCombine);
+                gameManager.bricks[brickCount].GetComponent<MeshCollider>().sharedMesh = gameManager.bricks[brickCount].GetComponent<MeshFilter>().mesh;
+                gameManager.bricks[brickCount].GetComponent<MeshCollider>().enabled = true;
                 if (brickMeshFilters.Length > 0)
                 {
-                    manager.bricks[brickCount].SetActive(true);
+                    gameManager.bricks[brickCount].SetActive(true);
                 }
                 brickCount++;
                 brickCombineInterval++;
@@ -771,12 +771,12 @@ public class CombinedMeshManager
                     brickCombineInterval = 0;
                 }
             }
-            manager.brickMeshRequired = false;
-            if (manager.initBrick == false)
+            gameManager.brickMeshRequired = false;
+            if (gameManager.initBrick == false)
             {
-                manager.initBrick = true;
-                manager.clearBrickDummies = true;
-                FileBasedPrefs.SetBool(manager.GetComponent<StateManager>().WorldName + "initBrick", true);
+                gameManager.initBrick = true;
+                gameManager.clearBrickDummies = true;
+                FileBasedPrefs.SetBool(gameManager.GetComponent<StateManager>().WorldName + "initBrick", true);
             }
         }
 
@@ -792,7 +792,7 @@ public class CombinedMeshManager
                 dummyDestroyInterval = 0;
             }
         }
-        manager.working = false;
+        gameManager.working = false;
     }
 }
 

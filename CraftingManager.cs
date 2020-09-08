@@ -195,9 +195,9 @@ public class CraftingManager : MonoBehaviour
                         if (conduitItem != null)
                         {
                             conduitItem.target = manager.gameObject;
-                            if (conduitItem.td != null)
+                            if (conduitItem.textureDictionary != null)
                             {
-                                conduitItem.billboard.GetComponent<Renderer>().material.mainTexture = conduitItem.td[recipe.output];
+                                conduitItem.billboard.GetComponent<Renderer>().material.mainTexture = conduitItem.textureDictionary[recipe.output];
                             }
                             conduitItem.active = true;
                         }

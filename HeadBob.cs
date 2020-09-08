@@ -1,12 +1,10 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class HeadBob : MonoBehaviour
 {
-    float timer;
+    private float timer;
     public bool active;
-    Quaternion originalRotation;
+    private Quaternion originalRotation;
     public GameObject player;
 
     // Called by unity engine on start up to initialize variables

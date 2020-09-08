@@ -1,19 +1,18 @@
 ﻿using UnityEngine;
-using System.Collections.Generic;
 
 public class MachineGUI : MonoBehaviour
 {
     private PlayerController playerController;
-    private GuiCoordinates gc;
-    private TextureDictionary td;
+    private GuiCoordinates guiCoordinates;
+    private TextureDictionary textureDictionary;
     private bool hubStopWindowOpen;
 
     // Called by unity engine on start up to initialize variables
     public void Start()
     {
         playerController = GetComponent<PlayerController>();
-        gc = GetComponent<GuiCoordinates>();
-        td = GetComponent<TextureDictionary>();
+        guiCoordinates = GetComponent<GuiCoordinates>();
+        textureDictionary = GetComponent<TextureDictionary>();
     }
 
     // Called by unity engine for rendering and handling GUI events
@@ -42,10 +41,10 @@ public class MachineGUI : MonoBehaviour
                     PowerConduit powerConduit = obj.GetComponent<PowerConduit>();
                     if (powerConduit.connectionFailed == false)
                     {
-                        GUI.DrawTexture(gc.FourButtonSpeedControlBGRect, td.dictionary["Interface Background"]);
-                        GUI.Label(gc.outputLabelRect, "Range");
-                        powerConduit.range = (int)GUI.HorizontalSlider(gc.outputControlButton2Rect, powerConduit.range, 6, 120);
-                        if (GUI.Button(gc.outputControlButton3Rect, "Dual Output: " + powerConduit.dualOutput))
+                        GUI.DrawTexture(guiCoordinates.FourButtonSpeedControlBGRect, textureDictionary.dictionary["Interface Background"]);
+                        GUI.Label(guiCoordinates.outputLabelRect, "Range");
+                        powerConduit.range = (int)GUI.HorizontalSlider(guiCoordinates.outputControlButton2Rect, powerConduit.range, 6, 120);
+                        if (GUI.Button(guiCoordinates.outputControlButton3Rect, "Dual Output: " + powerConduit.dualOutput))
                         {
                             if (powerConduit.dualOutput == true)
                             {
@@ -57,7 +56,7 @@ public class MachineGUI : MonoBehaviour
                             }
                             playerController.PlayButtonSound();
                         }
-                        if (GUI.Button(gc.outputControlButton4Rect, "Close"))
+                        if (GUI.Button(guiCoordinates.outputControlButton4Rect, "Close"))
                         {
                             playerController.machineGUIopen = false;
                             playerController.PlayButtonSound();
@@ -65,9 +64,9 @@ public class MachineGUI : MonoBehaviour
                     }
                     else
                     {
-                        GUI.DrawTexture(gc.speedControlBGRect, td.dictionary["Interface Background"]);
-                        GUI.Label(gc.outputLabelRect, "Offline");
-                        if (GUI.Button(gc.outputControlButton2Rect, "Reboot"))
+                        GUI.DrawTexture(guiCoordinates.speedControlBGRect, textureDictionary.dictionary["Interface Background"]);
+                        GUI.Label(guiCoordinates.outputLabelRect, "Offline");
+                        if (GUI.Button(guiCoordinates.outputControlButton2Rect, "Reboot"))
                         {
                             powerConduit.connectionAttempts = 0;
                             powerConduit.connectionFailed = false;
@@ -83,10 +82,10 @@ public class MachineGUI : MonoBehaviour
                     {
                         if (hubStopWindowOpen == false)
                         {
-                            GUI.DrawTexture(gc.FiveButtonSpeedControlBGRect, td.dictionary["Interface Background"]);
-                            GUI.Label(gc.railCartHubCircuitLabelRect, "Circuit");
+                            GUI.DrawTexture(guiCoordinates.FiveButtonSpeedControlBGRect, textureDictionary.dictionary["Interface Background"]);
+                            GUI.Label(guiCoordinates.railCartHubCircuitLabelRect, "Circuit");
                             int circuit = hub.circuit;
-                            string circuitString = GUI.TextField(gc.railCartHubCircuitRect, circuit.ToString(), 3);
+                            string circuitString = GUI.TextField(guiCoordinates.railCartHubCircuitRect, circuit.ToString(), 3);
                             try
                             {
                                 hub.circuit = int.Parse(circuitString);
@@ -95,14 +94,14 @@ public class MachineGUI : MonoBehaviour
                             {
                                 //NOOP
                             }
-                            GUI.Label(gc.outputLabelRect, "Range");
-                            hub.range = (int)GUI.HorizontalSlider(gc.outputControlButton2Rect, hub.range, 6, 120);
-                            if (GUI.Button(gc.outputControlButton3Rect, "Stop Settings"))
+                            GUI.Label(guiCoordinates.outputLabelRect, "Range");
+                            hub.range = (int)GUI.HorizontalSlider(guiCoordinates.outputControlButton2Rect, hub.range, 6, 120);
+                            if (GUI.Button(guiCoordinates.outputControlButton3Rect, "Stop Settings"))
                             {
                                 hubStopWindowOpen = true;
                                 playerController.PlayButtonSound();
                             }
-                            if (GUI.Button(gc.outputControlButton4Rect, "Close"))
+                            if (GUI.Button(guiCoordinates.outputControlButton4Rect, "Close"))
                             {
                                 playerController.machineGUIopen = false;
                                 hubStopWindowOpen = false;
@@ -111,9 +110,9 @@ public class MachineGUI : MonoBehaviour
                         }
                         else
                         {
-                            GUI.DrawTexture(gc.FiveButtonSpeedControlBGRect, td.dictionary["Interface Background"]);
-                            GUI.Label(gc.longOutputLabelRect, "Stop Time");
-                            if (GUI.Button(gc.outputControlButton0Rect, "Stop: " + hub.stop))
+                            GUI.DrawTexture(guiCoordinates.FiveButtonSpeedControlBGRect, textureDictionary.dictionary["Interface Background"]);
+                            GUI.Label(guiCoordinates.longOutputLabelRect, "Stop Time");
+                            if (GUI.Button(guiCoordinates.outputControlButton0Rect, "Stop: " + hub.stop))
                             {
                                 if (hub.stop == true)
                                 {
@@ -125,13 +124,13 @@ public class MachineGUI : MonoBehaviour
                                 }
                                 playerController.PlayButtonSound();
                             }
-                            hub.stopTime = (int)GUI.HorizontalSlider(gc.outputControlButton2Rect, hub.stopTime, 0, 600);
-                            if (GUI.Button(gc.outputControlButton3Rect, "Range Settings"))
+                            hub.stopTime = (int)GUI.HorizontalSlider(guiCoordinates.outputControlButton2Rect, hub.stopTime, 0, 600);
+                            if (GUI.Button(guiCoordinates.outputControlButton3Rect, "Range Settings"))
                             {
                                 hubStopWindowOpen = false;
                                 playerController.PlayButtonSound();
                             }
-                            if (GUI.Button(gc.outputControlButton4Rect, "Close"))
+                            if (GUI.Button(guiCoordinates.outputControlButton4Rect, "Close"))
                             {
                                 playerController.machineGUIopen = false;
                                 hubStopWindowOpen = false;
@@ -141,9 +140,9 @@ public class MachineGUI : MonoBehaviour
                     }
                     else
                     {
-                        GUI.DrawTexture(gc.speedControlBGRect, td.dictionary["Interface Background"]);
-                        GUI.Label(gc.outputLabelRect, "Offline");
-                        if (GUI.Button(gc.outputControlButton2Rect, "Reboot"))
+                        GUI.DrawTexture(guiCoordinates.speedControlBGRect, textureDictionary.dictionary["Interface Background"]);
+                        GUI.Label(guiCoordinates.outputLabelRect, "Offline");
+                        if (GUI.Button(guiCoordinates.outputControlButton2Rect, "Reboot"))
                         {
                             hub.connectionAttempts = 0;
                             hub.connectionFailed = false;
@@ -157,17 +156,17 @@ public class MachineGUI : MonoBehaviour
                     Retriever retriever = obj.GetComponent<Retriever>();
                     if (retriever.connectionFailed == false)
                     {
-                        GUI.DrawTexture(gc.FourButtonSpeedControlBGRect, td.dictionary["Interface Background"]);
+                        GUI.DrawTexture(guiCoordinates.FourButtonSpeedControlBGRect, textureDictionary.dictionary["Interface Background"]);
                         if (retriever.power > 0)
                         {
-                            GUI.Label(gc.outputLabelRect, "Output");
-                            retriever.speed = (int)GUI.HorizontalSlider(gc.outputControlButton2Rect, retriever.speed, 0, retriever.power);
+                            GUI.Label(guiCoordinates.outputLabelRect, "Output");
+                            retriever.speed = (int)GUI.HorizontalSlider(guiCoordinates.outputControlButton2Rect, retriever.speed, 0, retriever.power);
                         }
                         else
                         {
-                            GUI.Label(gc.outputLabelRect, "No Power");
+                            GUI.Label(guiCoordinates.outputLabelRect, "No Power");
                         }
-                        if (GUI.Button(gc.outputControlButton3Rect, "Choose Items"))
+                        if (GUI.Button(guiCoordinates.outputControlButton3Rect, "Choose Items"))
                         {
                             if (obj.GetComponent<InventoryManager>().initialized == true)
                             {
@@ -177,7 +176,7 @@ public class MachineGUI : MonoBehaviour
                                 playerController.PlayButtonSound();
                             }
                         }
-                        if (GUI.Button(gc.outputControlButton4Rect, "Close"))
+                        if (GUI.Button(guiCoordinates.outputControlButton4Rect, "Close"))
                         {
                             playerController.machineGUIopen = false;
                             playerController.PlayButtonSound();
@@ -185,9 +184,9 @@ public class MachineGUI : MonoBehaviour
                     }
                     else
                     {
-                        GUI.DrawTexture(gc.speedControlBGRect, td.dictionary["Interface Background"]);
-                        GUI.Label(gc.outputLabelRect, "Offline");
-                        if (GUI.Button(gc.outputControlButton2Rect, "Reboot"))
+                        GUI.DrawTexture(guiCoordinates.speedControlBGRect, textureDictionary.dictionary["Interface Background"]);
+                        GUI.Label(guiCoordinates.outputLabelRect, "Offline");
+                        if (GUI.Button(guiCoordinates.outputControlButton2Rect, "Reboot"))
                         {
                             retriever.connectionAttempts = 0;
                             retriever.connectionFailed = false;
@@ -201,17 +200,17 @@ public class MachineGUI : MonoBehaviour
                     AutoCrafter autoCrafter = obj.GetComponent<AutoCrafter>();
                     if (autoCrafter.connectionFailed == false)
                     {
-                        GUI.DrawTexture(gc.FourButtonSpeedControlBGRect, td.dictionary["Interface Background"]);
+                        GUI.DrawTexture(guiCoordinates.FourButtonSpeedControlBGRect, textureDictionary.dictionary["Interface Background"]);
                         if (autoCrafter.power > 0)
                         {
-                            GUI.Label(gc.outputLabelRect, "Output");
-                            autoCrafter.speed = (int)GUI.HorizontalSlider(gc.outputControlButton2Rect, autoCrafter.speed, 0, autoCrafter.power);
+                            GUI.Label(guiCoordinates.outputLabelRect, "Output");
+                            autoCrafter.speed = (int)GUI.HorizontalSlider(guiCoordinates.outputControlButton2Rect, autoCrafter.speed, 0, autoCrafter.power);
                         }
                         else
                         {
-                            GUI.Label(gc.outputLabelRect, "No Power");
+                            GUI.Label(guiCoordinates.outputLabelRect, "No Power");
                         }
-                        if (GUI.Button(gc.outputControlButton3Rect, "Choose Item"))
+                        if (GUI.Button(guiCoordinates.outputControlButton3Rect, "Choose Item"))
                         {
                             if (obj.GetComponent<InventoryManager>().initialized == true)
                             {
@@ -221,7 +220,7 @@ public class MachineGUI : MonoBehaviour
                                 playerController.PlayButtonSound();
                             }
                         }
-                        if (GUI.Button(gc.outputControlButton4Rect, "Close"))
+                        if (GUI.Button(guiCoordinates.outputControlButton4Rect, "Close"))
                         {
                             playerController.machineGUIopen = false;
                             playerController.PlayButtonSound();
@@ -229,9 +228,9 @@ public class MachineGUI : MonoBehaviour
                     }
                     else
                     {
-                        GUI.DrawTexture(gc.speedControlBGRect, td.dictionary["Interface Background"]);
-                        GUI.Label(gc.outputLabelRect, "Offline");
-                        if (GUI.Button(gc.outputControlButton2Rect, "Reboot"))
+                        GUI.DrawTexture(guiCoordinates.speedControlBGRect, textureDictionary.dictionary["Interface Background"]);
+                        GUI.Label(guiCoordinates.outputLabelRect, "Offline");
+                        if (GUI.Button(guiCoordinates.outputControlButton2Rect, "Reboot"))
                         {
                             autoCrafter.connectionAttempts = 0;
                             autoCrafter.connectionFailed = false;
@@ -242,17 +241,17 @@ public class MachineGUI : MonoBehaviour
 
                 if (obj.GetComponent<UniversalConduit>() != null)
                 {
-                    GUI.DrawTexture(gc.speedControlBGRect, td.dictionary["Interface Background"]);
+                    GUI.DrawTexture(guiCoordinates.speedControlBGRect, textureDictionary.dictionary["Interface Background"]);
                     UniversalConduit conduit = obj.GetComponent<UniversalConduit>();
                     if (conduit.connectionFailed == false)
                     {
-                        GUI.Label(gc.outputLabelRect, "Range");
-                        conduit.range = (int)GUI.HorizontalSlider(gc.outputControlButton2Rect, conduit.range, 6, 120);
+                        GUI.Label(guiCoordinates.outputLabelRect, "Range");
+                        conduit.range = (int)GUI.HorizontalSlider(guiCoordinates.outputControlButton2Rect, conduit.range, 6, 120);
                     }
                     else
                     {
-                        GUI.Label(gc.outputLabelRect, "Offline");
-                        if (GUI.Button(gc.outputControlButton2Rect, "Reboot"))
+                        GUI.Label(guiCoordinates.outputLabelRect, "Offline");
+                        if (GUI.Button(guiCoordinates.outputControlButton2Rect, "Reboot"))
                         {
                             conduit.connectionAttempts = 0;
                             conduit.connectionFailed = false;
@@ -263,17 +262,17 @@ public class MachineGUI : MonoBehaviour
 
                 if (obj.GetComponent<DarkMatterConduit>() != null)
                 {
-                    GUI.DrawTexture(gc.speedControlBGRect, td.dictionary["Interface Background"]);
+                    GUI.DrawTexture(guiCoordinates.speedControlBGRect, textureDictionary.dictionary["Interface Background"]);
                     DarkMatterConduit conduit = obj.GetComponent<DarkMatterConduit>();
                     if (conduit.connectionFailed == false)
                     {
-                        GUI.Label(gc.outputLabelRect, "Range");
-                        conduit.range = (int)GUI.HorizontalSlider(gc.outputControlButton2Rect, conduit.range, 6, 120);
+                        GUI.Label(guiCoordinates.outputLabelRect, "Range");
+                        conduit.range = (int)GUI.HorizontalSlider(guiCoordinates.outputControlButton2Rect, conduit.range, 6, 120);
                     }
                     else
                     {
-                        GUI.Label(gc.outputLabelRect, "Offline");
-                        if (GUI.Button(gc.outputControlButton2Rect, "Reboot"))
+                        GUI.Label(guiCoordinates.outputLabelRect, "Offline");
+                        if (GUI.Button(guiCoordinates.outputControlButton2Rect, "Reboot"))
                         {
                             conduit.connectionAttempts = 0;
                             conduit.connectionFailed = false;
@@ -284,7 +283,7 @@ public class MachineGUI : MonoBehaviour
 
                 if (obj.GetComponent<HeatExchanger>() != null)
                 {
-                    GUI.DrawTexture(gc.speedControlBGRect, td.dictionary["Interface Background"]);
+                    GUI.DrawTexture(guiCoordinates.speedControlBGRect, textureDictionary.dictionary["Interface Background"]);
                     HeatExchanger hx = obj.GetComponent<HeatExchanger>();
                     if (hx.inputObject != null)
                     {
@@ -294,13 +293,13 @@ public class MachineGUI : MonoBehaviour
                             {
                                 if (hx.connectionFailed == false)
                                 {
-                                    GUI.Label(gc.outputLabelRect, "Output");
-                                    hx.speed = (int)GUI.HorizontalSlider(gc.outputControlButton2Rect, hx.speed, 0, hx.inputObject.GetComponent<UniversalConduit>().speed);
+                                    GUI.Label(guiCoordinates.outputLabelRect, "Output");
+                                    hx.speed = (int)GUI.HorizontalSlider(guiCoordinates.outputControlButton2Rect, hx.speed, 0, hx.inputObject.GetComponent<UniversalConduit>().speed);
                                 }
                                 else
                                 {
-                                    GUI.Label(gc.outputLabelRect, "Offline");
-                                    if (GUI.Button(gc.outputControlButton2Rect, "Reboot"))
+                                    GUI.Label(guiCoordinates.outputLabelRect, "Offline");
+                                    if (GUI.Button(guiCoordinates.outputControlButton2Rect, "Reboot"))
                                     {
                                         hx.connectionAttempts = 0;
                                         hx.connectionFailed = false;
@@ -310,28 +309,28 @@ public class MachineGUI : MonoBehaviour
                             }
                             else
                             {
-                                GUI.Label(gc.outputLabelRect, "No Input");
+                                GUI.Label(guiCoordinates.outputLabelRect, "No Input");
                             }
                         }
                         else
                         {
-                            GUI.Label(gc.outputLabelRect, "No Input");
+                            GUI.Label(guiCoordinates.outputLabelRect, "No Input");
                         }
                     }
                     else
                     {
-                        GUI.Label(gc.outputLabelRect, "No Input");
+                        GUI.Label(guiCoordinates.outputLabelRect, "No Input");
                     }
                 }
 
                 if (obj.GetComponent<PowerSource>() != null)
                 {
-                    GUI.DrawTexture(gc.speedControlBGRect, td.dictionary["Interface Background"]);
+                    GUI.DrawTexture(guiCoordinates.speedControlBGRect, textureDictionary.dictionary["Interface Background"]);
                     PowerSource powerSource = obj.GetComponent<PowerSource>();
                     if (powerSource.connectionFailed == true)
                     {
-                        GUI.Label(gc.outputLabelRect, "Offline");
-                        if (GUI.Button(gc.outputControlButton2Rect, "Reboot"))
+                        GUI.Label(guiCoordinates.outputLabelRect, "Offline");
+                        if (GUI.Button(guiCoordinates.outputControlButton2Rect, "Reboot"))
                         {
                             powerSource.connectionAttempts = 0;
                             powerSource.connectionFailed = false;
@@ -340,46 +339,46 @@ public class MachineGUI : MonoBehaviour
                     }
                     else
                     {
-                        GUI.Label(gc.outputLabelRect, "Online");
+                        GUI.Label(guiCoordinates.outputLabelRect, "Online");
                     }
                 }
 
                 if (obj.GetComponent<Auger>() != null)
                 {
-                    GUI.DrawTexture(gc.speedControlBGRect, td.dictionary["Interface Background"]);
+                    GUI.DrawTexture(guiCoordinates.speedControlBGRect, textureDictionary.dictionary["Interface Background"]);
                     Auger auger = obj.GetComponent<Auger>();
                     if (auger.power > 0)
                     {
-                        GUI.Label(gc.outputLabelRect, "Output");
-                        auger.speed = (int)GUI.HorizontalSlider(gc.outputControlButton2Rect, auger.speed, 0, auger.power);
+                        GUI.Label(guiCoordinates.outputLabelRect, "Output");
+                        auger.speed = (int)GUI.HorizontalSlider(guiCoordinates.outputControlButton2Rect, auger.speed, 0, auger.power);
                     }
                     else
                     {
-                        GUI.Label(gc.outputLabelRect, "No Power");
+                        GUI.Label(guiCoordinates.outputLabelRect, "No Power");
                     }
                 }
 
                 if (obj.GetComponent<UniversalExtractor>() != null)
                 {
-                    GUI.DrawTexture(gc.speedControlBGRect, td.dictionary["Interface Background"]);
+                    GUI.DrawTexture(guiCoordinates.speedControlBGRect, textureDictionary.dictionary["Interface Background"]);
                     UniversalExtractor extractor = obj.GetComponent<UniversalExtractor>();
                     if (extractor.connectionFailed == false)
                     {
                         if (extractor.power > 0)
                         {
-                            GUI.Label(gc.outputLabelRect, "Output");
-                            extractor.speed = (int)GUI.HorizontalSlider(gc.outputControlButton2Rect, extractor.speed, 0, extractor.power);
+                            GUI.Label(guiCoordinates.outputLabelRect, "Output");
+                            extractor.speed = (int)GUI.HorizontalSlider(guiCoordinates.outputControlButton2Rect, extractor.speed, 0, extractor.power);
                         }
                         else
                         {
-                            GUI.DrawTexture(gc.speedControlBGRect, td.dictionary["Interface Background"]);
-                            GUI.Label(gc.outputLabelRect, "No Power");
+                            GUI.DrawTexture(guiCoordinates.speedControlBGRect, textureDictionary.dictionary["Interface Background"]);
+                            GUI.Label(guiCoordinates.outputLabelRect, "No Power");
                         }
                     }
                     else
                     {
-                        GUI.Label(gc.outputLabelRect, "Offline");
-                        if (GUI.Button(gc.outputControlButton2Rect, "Reboot"))
+                        GUI.Label(guiCoordinates.outputLabelRect, "Offline");
+                        if (GUI.Button(guiCoordinates.outputControlButton2Rect, "Reboot"))
                         {
                             extractor.connectionAttempts = 0;
                             extractor.connectionFailed = false;
@@ -389,24 +388,24 @@ public class MachineGUI : MonoBehaviour
                 }
                 if (obj.GetComponent<DarkMatterCollector>() != null)
                 {
-                    GUI.DrawTexture(gc.speedControlBGRect, td.dictionary["Interface Background"]);
+                    GUI.DrawTexture(guiCoordinates.speedControlBGRect, textureDictionary.dictionary["Interface Background"]);
                     DarkMatterCollector collector = obj.GetComponent<DarkMatterCollector>();
                     if (collector.connectionFailed == false)
                     {
                         if (collector.power > 0)
                         {
-                            GUI.Label(gc.outputLabelRect, "Output");
-                            collector.speed = (int)GUI.HorizontalSlider(gc.outputControlButton2Rect, collector.speed, 0, collector.power);
+                            GUI.Label(guiCoordinates.outputLabelRect, "Output");
+                            collector.speed = (int)GUI.HorizontalSlider(guiCoordinates.outputControlButton2Rect, collector.speed, 0, collector.power);
                         }
                         else
                         {
-                            GUI.Label(gc.outputLabelRect, "No Power");
+                            GUI.Label(guiCoordinates.outputLabelRect, "No Power");
                         }
                     }
                     else
                     {
-                        GUI.Label(gc.outputLabelRect, "Offline");
-                        if (GUI.Button(gc.outputControlButton2Rect, "Reboot"))
+                        GUI.Label(guiCoordinates.outputLabelRect, "Offline");
+                        if (GUI.Button(guiCoordinates.outputControlButton2Rect, "Reboot"))
                         {
                             collector.connectionAttempts = 0;
                             collector.connectionFailed = false;
@@ -417,25 +416,25 @@ public class MachineGUI : MonoBehaviour
 
                 if (obj.GetComponent<Smelter>() != null)
                 {
-                    GUI.DrawTexture(gc.speedControlBGRect, td.dictionary["Interface Background"]);
+                    GUI.DrawTexture(guiCoordinates.speedControlBGRect, textureDictionary.dictionary["Interface Background"]);
                     Smelter smelter = obj.GetComponent<Smelter>();
                     if (smelter.connectionFailed == false)
                     {
 
                         if (smelter.power > 0)
                         {
-                            GUI.Label(gc.outputLabelRect, "Output");
-                            smelter.speed = (int)GUI.HorizontalSlider(gc.outputControlButton2Rect, smelter.speed, 0, smelter.power);
+                            GUI.Label(guiCoordinates.outputLabelRect, "Output");
+                            smelter.speed = (int)GUI.HorizontalSlider(guiCoordinates.outputControlButton2Rect, smelter.speed, 0, smelter.power);
                         }
                         else
                         {
-                            GUI.Label(gc.outputLabelRect, "No Power");
+                            GUI.Label(guiCoordinates.outputLabelRect, "No Power");
                         }
                     }
                     else
                     {
-                        GUI.Label(gc.outputLabelRect, "Offline");
-                        if (GUI.Button(gc.outputControlButton2Rect, "Reboot"))
+                        GUI.Label(guiCoordinates.outputLabelRect, "Offline");
+                        if (GUI.Button(guiCoordinates.outputControlButton2Rect, "Reboot"))
                         {
                             smelter.connectionAttempts = 0;
                             smelter.connectionFailed = false;
@@ -446,24 +445,24 @@ public class MachineGUI : MonoBehaviour
 
                 if (obj.GetComponent<AlloySmelter>() != null)
                 {
-                    GUI.DrawTexture(gc.speedControlBGRect, td.dictionary["Interface Background"]);
+                    GUI.DrawTexture(guiCoordinates.speedControlBGRect, textureDictionary.dictionary["Interface Background"]);
                     AlloySmelter alloySmelter = obj.GetComponent<AlloySmelter>();
                     if (alloySmelter.connectionFailed == false)
                     {
                         if (alloySmelter.power > 0)
                         {
-                            GUI.Label(gc.outputLabelRect, "Output");
-                            alloySmelter.speed = (int)GUI.HorizontalSlider(gc.outputControlButton2Rect, alloySmelter.speed, 0, alloySmelter.power);
+                            GUI.Label(guiCoordinates.outputLabelRect, "Output");
+                            alloySmelter.speed = (int)GUI.HorizontalSlider(guiCoordinates.outputControlButton2Rect, alloySmelter.speed, 0, alloySmelter.power);
                         }
                         else
                         {
-                            GUI.Label(gc.outputLabelRect, "No Power");
+                            GUI.Label(guiCoordinates.outputLabelRect, "No Power");
                         }
                     }
                     else
                     {
-                        GUI.Label(gc.outputLabelRect, "Offline");
-                        if (GUI.Button(gc.outputControlButton2Rect, "Reboot"))
+                        GUI.Label(guiCoordinates.outputLabelRect, "Offline");
+                        if (GUI.Button(guiCoordinates.outputControlButton2Rect, "Reboot"))
                         {
                             alloySmelter.connectionAttempts = 0;
                             alloySmelter.connectionFailed = false;
@@ -474,24 +473,24 @@ public class MachineGUI : MonoBehaviour
 
                 if (obj.GetComponent<Press>() != null)
                 {
-                    GUI.DrawTexture(gc.speedControlBGRect, td.dictionary["Interface Background"]);
+                    GUI.DrawTexture(guiCoordinates.speedControlBGRect, textureDictionary.dictionary["Interface Background"]);
                     Press press = obj.GetComponent<Press>();
                     if (press.connectionFailed == false)
                     {
                         if (press.power > 0)
                         {
-                            GUI.Label(gc.outputLabelRect, "Output");
-                            press.speed = (int)GUI.HorizontalSlider(gc.outputControlButton2Rect, press.speed, 0, press.power);
+                            GUI.Label(guiCoordinates.outputLabelRect, "Output");
+                            press.speed = (int)GUI.HorizontalSlider(guiCoordinates.outputControlButton2Rect, press.speed, 0, press.power);
                         }
                         else
                         {
-                            GUI.Label(gc.outputLabelRect, "No Power");
+                            GUI.Label(guiCoordinates.outputLabelRect, "No Power");
                         }
                     }
                     else
                     {
-                        GUI.Label(gc.outputLabelRect, "Offline");
-                        if (GUI.Button(gc.outputControlButton2Rect, "Reboot"))
+                        GUI.Label(guiCoordinates.outputLabelRect, "Offline");
+                        if (GUI.Button(guiCoordinates.outputControlButton2Rect, "Reboot"))
                         {
                             press.connectionAttempts = 0;
                             press.connectionFailed = false;
@@ -502,24 +501,24 @@ public class MachineGUI : MonoBehaviour
 
                 if (obj.GetComponent<Extruder>() != null)
                 {
-                    GUI.DrawTexture(gc.speedControlBGRect, td.dictionary["Interface Background"]);
+                    GUI.DrawTexture(guiCoordinates.speedControlBGRect, textureDictionary.dictionary["Interface Background"]);
                     Extruder extruder = obj.GetComponent<Extruder>();
                     if (extruder.connectionFailed == false)
                     {
                         if (extruder.power > 0)
                         {
-                            GUI.Label(gc.outputLabelRect, "Output");
-                            extruder.speed = (int)GUI.HorizontalSlider(gc.outputControlButton2Rect, extruder.speed, 0, extruder.power);
+                            GUI.Label(guiCoordinates.outputLabelRect, "Output");
+                            extruder.speed = (int)GUI.HorizontalSlider(guiCoordinates.outputControlButton2Rect, extruder.speed, 0, extruder.power);
                         }
                         else
                         {
-                            GUI.Label(gc.outputLabelRect, "No Power");
+                            GUI.Label(guiCoordinates.outputLabelRect, "No Power");
                         }
                     }
                     else
                     {
-                        GUI.Label(gc.outputLabelRect, "Offline");
-                        if (GUI.Button(gc.outputControlButton2Rect, "Reboot"))
+                        GUI.Label(guiCoordinates.outputLabelRect, "Offline");
+                        if (GUI.Button(guiCoordinates.outputControlButton2Rect, "Reboot"))
                         {
                             extruder.connectionAttempts = 0;
                             extruder.connectionFailed = false;
@@ -530,46 +529,46 @@ public class MachineGUI : MonoBehaviour
 
                 if (obj.GetComponent<Turret>() != null)
                 {
-                    GUI.DrawTexture(gc.speedControlBGRect, td.dictionary["Interface Background"]);
+                    GUI.DrawTexture(guiCoordinates.speedControlBGRect, textureDictionary.dictionary["Interface Background"]);
                     Turret turret = obj.GetComponent<Turret>();
                     if (turret.power > 0)
                     {
-                        GUI.Label(gc.outputLabelRect, "Output");
+                        GUI.Label(guiCoordinates.outputLabelRect, "Output");
                         if (turret.power < 30)
                         {
-                            turret.speed = (int)GUI.HorizontalSlider(gc.outputControlButton2Rect, turret.speed, 0, turret.power);
+                            turret.speed = (int)GUI.HorizontalSlider(guiCoordinates.outputControlButton2Rect, turret.speed, 0, turret.power);
                         }
                         else
                         {
-                            turret.speed = (int)GUI.HorizontalSlider(gc.outputControlButton2Rect, turret.speed, 0, 30);
+                            turret.speed = (int)GUI.HorizontalSlider(guiCoordinates.outputControlButton2Rect, turret.speed, 0, 30);
                         }
                     }
                     else
                     {
-                        GUI.Label(gc.outputLabelRect, "No Power");
+                        GUI.Label(guiCoordinates.outputLabelRect, "No Power");
                     }
                 }
 
                 if (obj.GetComponent<GearCutter>() != null)
                 {
-                    GUI.DrawTexture(gc.speedControlBGRect, td.dictionary["Interface Background"]);
+                    GUI.DrawTexture(guiCoordinates.speedControlBGRect, textureDictionary.dictionary["Interface Background"]);
                     GearCutter gearCutter = obj.GetComponent<GearCutter>();
                     if (gearCutter.connectionFailed == false)
                     {
                         if (gearCutter.power > 0)
                         {
-                            GUI.Label(gc.outputLabelRect, "Output");
-                            gearCutter.speed = (int)GUI.HorizontalSlider(gc.outputControlButton2Rect, gearCutter.speed, 0, gearCutter.power);
+                            GUI.Label(guiCoordinates.outputLabelRect, "Output");
+                            gearCutter.speed = (int)GUI.HorizontalSlider(guiCoordinates.outputControlButton2Rect, gearCutter.speed, 0, gearCutter.power);
                         }
                         else
                         {
-                            GUI.Label(gc.outputLabelRect, "No Power");
+                            GUI.Label(guiCoordinates.outputLabelRect, "No Power");
                         }
                     }
                     else
                     {
-                        GUI.Label(gc.outputLabelRect, "Offline");
-                        if (GUI.Button(gc.outputControlButton2Rect, "Reboot"))
+                        GUI.Label(guiCoordinates.outputLabelRect, "Offline");
+                        if (GUI.Button(guiCoordinates.outputControlButton2Rect, "Reboot"))
                         {
                             gearCutter.connectionAttempts = 0;
                             gearCutter.connectionFailed = false;

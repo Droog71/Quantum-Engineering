@@ -553,9 +553,9 @@ public class Retriever : MonoBehaviour
                                 {
                                     storageComputerConduitItem.startPosition = storageComputerInventoryManager.gameObject.transform.position;
                                     storageComputerConduitItem.target = inputObject;
-                                    if (storageComputerConduitItem.td != null)
+                                    if (storageComputerConduitItem.textureDictionary != null)
                                     {
-                                        storageComputerConduitItem.billboard.GetComponent<Renderer>().material.mainTexture = storageComputerConduitItem.td[type[multipleItemIteration]];
+                                        storageComputerConduitItem.billboard.GetComponent<Renderer>().material.mainTexture = storageComputerConduitItem.textureDictionary[type[multipleItemIteration]];
                                     }
                                     storageComputerConduitItem.active = true;
                                 }
