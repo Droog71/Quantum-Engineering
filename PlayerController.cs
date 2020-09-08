@@ -223,21 +223,25 @@ public class PlayerController : MonoBehaviour
             GetComponent<MSCameraController>().CameraSettings.firstPerson.invertYInput = PlayerPrefsX.GetPersistentBool("mouseInverted");
         }
 
-        //LOAD VOLUME SETTING
+        // Loading volume settings.
         AudioListener.volume = PlayerPrefs.GetFloat("volume");
         GetComponent<MSCameraController>().cameras[0].volume = AudioListener.volume;
 
-        //AUDIO SOURCE FOR PLACING BLOCKS
+        // Audio source for placing blocks.
         builderSound = builder.GetComponent<AudioSource>();
 
-        //AUDIO SOURCE FOR GUI RELATED SOUNDS
+        // Audio source for GUI related sounds.
         guiSound = guiObject.GetComponent<AudioSource>();
 
-        //SCANNER LIGHT COLOR DIFFERS DEPENDING ON THE SCENE
+        // Fog and Scanner color for atmospheric worlds.
         if (SceneManager.GetActiveScene().name.Equals("QE_World_Atmo"))
         {
             scannerFlash.GetComponent<Light>().color = Color.white;
             scannerFlash.GetComponent<Light>().intensity = 1;
+
+            float fogDensity = PlayerPrefs.GetFloat("fogDensity");
+            RenderSettings.fogDensity = fogDensity > 0 ? fogDensity : 0.00025f;
+            RenderSettings.fog = PlayerPrefsX.GetPersistentBool("fogEnabled");
         }
 
         inputManager = new InputManager(this);
@@ -258,9 +262,9 @@ public class PlayerController : MonoBehaviour
                     mCam.fieldOfView = PlayerPrefs.GetFloat("FOV");
                 }
 
-                if (FileBasedPrefs.GetFloat("DrawDistance") != 0)
+                if (FileBasedPrefs.GetFloat("drawDistance") != 0)
                 {
-                    mCam.farClipPlane = PlayerPrefs.GetFloat("DrawDistance");
+                    mCam.farClipPlane = PlayerPrefs.GetFloat("drawDistance");
                 }
             }
         }
@@ -428,8 +432,10 @@ public class PlayerController : MonoBehaviour
         PlayerPrefs.SetFloat("xSensitivity", GetComponent<MSCameraController>().CameraSettings.firstPerson.sensibilityX);
         PlayerPrefs.SetFloat("ySensitivity", GetComponent<MSCameraController>().CameraSettings.firstPerson.sensibilityY);
         PlayerPrefs.SetFloat("FOV", mCam.fieldOfView);
-        PlayerPrefs.SetFloat("DrawDistance", mCam.farClipPlane);
+        PlayerPrefs.SetFloat("drawDistance", mCam.farClipPlane);
         PlayerPrefs.SetFloat("volume", GetComponent<MSCameraController>().cameras[0].volume);
+        PlayerPrefsX.SetPersistentBool("fogEnabled", RenderSettings.fog);
+        PlayerPrefs.SetFloat("fogDensity", RenderSettings.fogDensity);
         PlayerPrefs.Save();
     }
 

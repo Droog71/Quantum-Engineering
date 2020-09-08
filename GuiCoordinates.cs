@@ -17,9 +17,6 @@ public class GuiCoordinates : MonoBehaviour
     public Rect secondLineHighMessageBackgroundRect;
     public Rect twoLineHighMessageBackgroundRect;
 
-    //CROSSHAIR
-    public Rect crosshairRect;
-
     //INVENTORY
     public Rect inventoryMesageRect;
     public Rect storageInventoryMessageRect;
@@ -213,11 +210,14 @@ public class GuiCoordinates : MonoBehaviour
     public Rect optionsButton9Rect;
     public Rect optionsButton10Rect;
     public Rect optionsButton11Rect;
+    public Rect optionsButton12Rect;
+    public Rect optionsButton13Rect;
     public Rect sliderLabel1Rect;
     public Rect sliderLabel2Rect;
     public Rect sliderLabel3Rect;
     public Rect sliderLabel4Rect;
     public Rect sliderLabel5Rect;
+    public Rect sliderLabel6Rect;
     public Rect schematicCloseRect;
 
     //MARKET
@@ -230,15 +230,20 @@ public class GuiCoordinates : MonoBehaviour
         //ASPECT RATIO
         int ScreenHeight = Screen.height;
         int ScreenWidth = Screen.width;
+        if (ScreenWidth / ScreenHeight < 1.7f)
+        {
+            ScreenHeight = (int)(ScreenHeight * 0.75f);
+        }
 
         //MESSAGES
+        messageRect = new Rect((Screen.width / 2) - 60, Screen.height - 90, 200, 100);
+        messageBackgroundRect = new Rect((Screen.width / 2) - 100, Screen.height - 120, 200, 100);
+
         lowMessageBackgroundRect = new Rect((ScreenWidth * 0.42f), (ScreenHeight * 0.63f), (ScreenWidth * 0.18f), (ScreenHeight * 0.05f));
-        messageBackgroundRect = new Rect((ScreenWidth / 2) - 100, ScreenHeight - 120, 200, 100);
         midMessageBackgroundRect = new Rect((ScreenWidth * 0.42f), (ScreenHeight * 0.55f), (ScreenWidth * 0.18f), (ScreenHeight * 0.05f));
         highMessageBackgroundRect = new Rect((ScreenWidth * 0.42f), (ScreenHeight * 0.28f), (ScreenWidth * 0.18f), (ScreenHeight * 0.05f));
         longHighMessageBackgroundRect = new Rect((ScreenWidth * 0.42f), (ScreenHeight * 0.28f), (ScreenWidth * 0.23f), (ScreenHeight * 0.05f));
 
-        messageRect = new Rect((ScreenWidth / 2) - 60, ScreenHeight - 90, 200, 100);
         lowMessageRect = new Rect((ScreenWidth * 0.47f), (ScreenHeight * 0.644f), (ScreenWidth * 0.5f), (ScreenHeight * 0.5f));
         midMessageRect = new Rect((ScreenWidth * 0.455f), (ScreenHeight * 0.562f), (ScreenWidth * 0.5f), (ScreenHeight * 0.5f));
         highMessageRect = new Rect((ScreenWidth * 0.48f), (ScreenHeight * 0.30f), (ScreenWidth * 0.5f), (ScreenHeight * 0.5f));
@@ -247,9 +252,6 @@ public class GuiCoordinates : MonoBehaviour
         secondLineHighMessageBackgroundRect = new Rect((ScreenWidth * 0.42f), (ScreenHeight * 0.36f), (ScreenWidth * 0.18f), (ScreenHeight * 0.05f));
         secondLineHighMessageRect = new Rect((ScreenWidth * 0.452f), (ScreenHeight * 0.374f), (ScreenWidth * 0.18f), (ScreenHeight * 0.05f));
         twoLineHighMessageBackgroundRect = new Rect((ScreenWidth * 0.44f), (ScreenHeight * 0.27f), (ScreenWidth * 0.18f), (ScreenHeight * 0.10f));
-
-        //CROSSHAIR
-        crosshairRect = new Rect((ScreenWidth * 0.48f), (ScreenHeight * 0.47f), (ScreenWidth * 0.04f), (ScreenHeight * 0.06f));
 
         //INVENTORY
         inventoryMesageRect = new Rect((ScreenWidth * 0.76f), (ScreenHeight * 0.28f), (ScreenWidth * 0.2f), (ScreenHeight * 0.5f));
@@ -490,7 +492,7 @@ public class GuiCoordinates : MonoBehaviour
         buildItemCountRect = new Rect((ScreenWidth * 0.92f), (ScreenHeight * 0.241f), (ScreenWidth * 0.05f), (ScreenHeight * 0.2f));
 
         //OPTIONS MENU
-        optionsMenuBackgroundRect = new Rect((ScreenWidth * 0.4f), (ScreenHeight * 0.22f), (ScreenWidth * 0.2f), (ScreenHeight * 0.73f));
+        optionsMenuBackgroundRect = new Rect((ScreenWidth * 0.4f), (ScreenHeight * 0.22f), (ScreenWidth * 0.2f), (ScreenHeight * 0.86f));
         videoMenuBackgroundRect = new Rect((ScreenWidth * 0.4f), (ScreenHeight * 0.22f), (ScreenWidth * 0.2f), (ScreenHeight * 0.67f));
         schematicsMenuBackgroundRect = new Rect((ScreenWidth * 0.4f), (ScreenHeight * 0.22f), (ScreenWidth * 0.2f), (ScreenHeight * 0.55f));
         optionsButton1Rect = new Rect((ScreenWidth * 0.43f), (ScreenHeight * 0.26f), (ScreenWidth * 0.14f), (ScreenHeight * 0.05f));
@@ -504,12 +506,15 @@ public class GuiCoordinates : MonoBehaviour
         optionsButton9Rect = new Rect((ScreenWidth * 0.43f), (ScreenHeight * 0.74f), (ScreenWidth * 0.14f), (ScreenHeight * 0.05f));
         optionsButton10Rect = new Rect((ScreenWidth * 0.43f), (ScreenHeight * 0.80f), (ScreenWidth * 0.14f), (ScreenHeight * 0.05f));
         optionsButton11Rect = new Rect((ScreenWidth * 0.43f), (ScreenHeight * 0.86f), (ScreenWidth * 0.14f), (ScreenHeight * 0.05f));
+        optionsButton12Rect = new Rect((ScreenWidth * 0.43f), (ScreenHeight * 0.92f), (ScreenWidth * 0.14f), (ScreenHeight * 0.05f));
+        optionsButton13Rect = new Rect((ScreenWidth * 0.43f), (ScreenHeight * 0.98f), (ScreenWidth * 0.14f), (ScreenHeight * 0.05f));
 
         sliderLabel1Rect = new Rect((ScreenWidth * 0.43f), (ScreenHeight * 0.41f), (ScreenWidth * 0.14f), (ScreenHeight * 0.05f));
         sliderLabel2Rect = new Rect((ScreenWidth * 0.43f), (ScreenHeight * 0.47f), (ScreenWidth * 0.14f), (ScreenHeight * 0.05f));
         sliderLabel3Rect = new Rect((ScreenWidth * 0.43f), (ScreenHeight * 0.53f), (ScreenWidth * 0.14f), (ScreenHeight * 0.05f));
         sliderLabel4Rect = new Rect((ScreenWidth * 0.43f), (ScreenHeight * 0.59f), (ScreenWidth * 0.14f), (ScreenHeight * 0.05f));
         sliderLabel5Rect = new Rect((ScreenWidth * 0.43f), (ScreenHeight * 0.65f), (ScreenWidth * 0.14f), (ScreenHeight * 0.05f));
+        sliderLabel6Rect = new Rect((ScreenWidth * 0.43f), (ScreenHeight * 0.71f), (ScreenWidth * 0.14f), (ScreenHeight * 0.05f));
 
         //MACHINE INFO HUD
         infoRectBG = new Rect(0, (ScreenHeight * 0.60f), (ScreenWidth * 0.30f), (ScreenHeight * 0.40f));

@@ -99,6 +99,10 @@ public class PlayerGUI : MonoBehaviour
         //ASPECT RATIO
         int ScreenHeight = Screen.height;
         int ScreenWidth = Screen.width;
+        if (ScreenWidth / ScreenHeight < 1.7f)
+        {
+            ScreenHeight = (int)(ScreenHeight * 0.75f);
+        }
         if (ScreenHeight < 700)
         {
             GUI.skin.label.fontSize = 10;
@@ -451,84 +455,58 @@ public class PlayerGUI : MonoBehaviour
                     cGUI.ToggleGUI();
                     playerController.PlayButtonSound();
                 }
-                string invertYInput = "";
-                if (GetComponent<MSCameraController>().CameraSettings.firstPerson.invertYInput == true)
-                {
-                    invertYInput = "ON";
-                }
-                else
-                {
-                    invertYInput = "OFF";
-                }
+
+                MSACC_SettingsCameraFirstPerson csInverted = GetComponent<MSCameraController>().CameraSettings.firstPerson;
+                string invertYInput = csInverted.invertYInput == true ? "ON" : "OFF";
                 if (GUI.Button(guiCoordinates.optionsButton2Rect, "Invert Y Axis: " + invertYInput))
                 {
-                    if (GetComponent<MSCameraController>().CameraSettings.firstPerson.invertYInput)
-                    {
-                        GetComponent<MSCameraController>().CameraSettings.firstPerson.invertYInput = false;
-                    }
-                    else
-                    {
-                        GetComponent<MSCameraController>().CameraSettings.firstPerson.invertYInput = true;
-                    }
+                    csInverted.invertYInput = !csInverted.invertYInput;
                     playerController.PlayButtonSound();
                 }
+
                 GUI.Label(guiCoordinates.sliderLabel1Rect, "X sensitivity");
                 GUI.Label(guiCoordinates.sliderLabel2Rect, "Y sensitivity");
                 GUI.Label(guiCoordinates.sliderLabel3Rect, "Volume");
                 GUI.Label(guiCoordinates.sliderLabel4Rect, "FOV");
                 GUI.Label(guiCoordinates.sliderLabel5Rect, "Draw Distance");
-                MSACC_SettingsCameraFirstPerson cs = GetComponent<MSCameraController>().CameraSettings.firstPerson;
-                cs.sensibilityX = GUI.HorizontalSlider(guiCoordinates.optionsButton4Rect, cs.sensibilityX, 0, 10);
-                cs.sensibilityY = GUI.HorizontalSlider(guiCoordinates.optionsButton5Rect, cs.sensibilityY, 0, 10);
+                GUI.Label(guiCoordinates.sliderLabel6Rect, "Fog Density");
+
+                MSACC_SettingsCameraFirstPerson csSensitivity = GetComponent<MSCameraController>().CameraSettings.firstPerson;
+                csSensitivity.sensibilityX = GUI.HorizontalSlider(guiCoordinates.optionsButton4Rect, csSensitivity.sensibilityX, 0, 10);
+                csSensitivity.sensibilityY = GUI.HorizontalSlider(guiCoordinates.optionsButton5Rect, csSensitivity.sensibilityY, 0, 10);
+
                 AudioListener.volume = GUI.HorizontalSlider(guiCoordinates.optionsButton6Rect, AudioListener.volume, 0, 5);
                 GetComponent<MSCameraController>().cameras[0].volume = AudioListener.volume;
+
                 playerController.mCam.fieldOfView = GUI.HorizontalSlider(guiCoordinates.optionsButton7Rect, playerController.mCam.fieldOfView, 60, 80);
                 playerController.mCam.farClipPlane = GUI.HorizontalSlider(guiCoordinates.optionsButton8Rect, playerController.mCam.farClipPlane, 1000, 100000);
-                string blockPhysicsDisplay = "";
-                if (gameManager.blockPhysics == true)
+
+                RenderSettings.fogDensity = GUI.HorizontalSlider(guiCoordinates.optionsButton9Rect, RenderSettings.fogDensity, 0.00025f, 0.025f);
+
+                string fogDisplay = RenderSettings.fog == true ? "ON" : "OFF";
+                if (GUI.Button(guiCoordinates.optionsButton10Rect, "Fog: " + fogDisplay))
                 {
-                    blockPhysicsDisplay = "ON";
-                }
-                else
-                {
-                    blockPhysicsDisplay = "OFF";
-                }
-                if (GUI.Button(guiCoordinates.optionsButton9Rect, "Block Physics: "+ blockPhysicsDisplay))
-                {
-                    if (gameManager.blockPhysics == false)
-                    {
-                        gameManager.blockPhysics = true;
-                    }
-                    else
-                    {
-                        gameManager.blockPhysics = false;
-                    }
+                    RenderSettings.fog = !RenderSettings.fog;
                     PlayerPrefsX.SetPersistentBool("blockPhysics", gameManager.blockPhysics);
                     playerController.PlayButtonSound();
                 }
-                string hazardsEnabledDisplay = "";
-                if (gameManager.hazardsEnabled == true)
+
+                string blockPhysicsDisplay = gameManager.blockPhysics == true ? "ON" : "OFF";
+                if (GUI.Button(guiCoordinates.optionsButton11Rect, "Block Physics: "+ blockPhysicsDisplay))
                 {
-                    hazardsEnabledDisplay = "ON";
+                    gameManager.blockPhysics = !gameManager.blockPhysics;
+                    PlayerPrefsX.SetPersistentBool("blockPhysics", gameManager.blockPhysics);
+                    playerController.PlayButtonSound();
                 }
-                else
+
+                string hazardsEnabledDisplay = gameManager.hazardsEnabled == true ? "ON" : "OFF";
+                if (GUI.Button(guiCoordinates.optionsButton12Rect, "Hazards: " + hazardsEnabledDisplay))
                 {
-                    hazardsEnabledDisplay = "OFF";
-                }
-                if (GUI.Button(guiCoordinates.optionsButton10Rect, "Hazards: " + hazardsEnabledDisplay))
-                {
-                    if (gameManager.hazardsEnabled == false)
-                    {
-                        gameManager.hazardsEnabled = true;
-                    }
-                    else
-                    {
-                        gameManager.hazardsEnabled = false;
-                    }
+                    gameManager.hazardsEnabled = !gameManager.hazardsEnabled;
                     PlayerPrefsX.SetPersistentBool("hazardsEnabled", gameManager.hazardsEnabled);
                     playerController.PlayButtonSound();
                 }
-                if (GUI.Button(guiCoordinates.optionsButton11Rect, "BACK"))
+                if (GUI.Button(guiCoordinates.optionsButton13Rect, "BACK"))
                 {
                     playerController.ApplySettings();
                     playerController.optionsGUIopen = false;
@@ -701,7 +679,14 @@ public class PlayerGUI : MonoBehaviour
                 {
                     if (playerController.crosshairEnabled)
                     {
-                        GUI.DrawTexture(guiCoordinates.crosshairRect, textureDictionary.dictionary["Crosshair"]);
+                        GUIContent content = new GUIContent(Resources.Load("Crosshair") as Texture2D);
+                        GUIStyle style = GUI.skin.box;
+                        style.alignment = TextAnchor.MiddleCenter;
+                        Vector2 size = style.CalcSize(content);
+                        size.x = size.x / 4;
+                        size.y = size.y / 4;
+                        Rect crosshairRect = new Rect((Screen.width / 2) - (size.x / 2), (Screen.height / 2) - (size.y / 2), size.x, size.y);
+                        GUI.DrawTexture(crosshairRect, textureDictionary.dictionary["Crosshair"]);
                     }
                 }
             }

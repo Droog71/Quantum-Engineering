@@ -40,6 +40,10 @@ public class InfoHUD : MonoBehaviour
         //ASPECT RATIO
         int ScreenHeight = Screen.height;
         int ScreenWidth = Screen.width;
+        if (ScreenWidth / ScreenHeight < 1.7f)
+        {
+            ScreenHeight = (int)(ScreenHeight * 0.75f);
+        }
         if (ScreenHeight < 700)
         {
             GUI.skin.label.fontSize = 10;
@@ -144,7 +148,7 @@ public class InfoHUD : MonoBehaviour
                 GUIStyle style = GUI.skin.box;
                 style.alignment = TextAnchor.MiddleCenter;
                 Vector2 size = style.CalcSize(content);
-                Rect resourceInfoRect = new Rect((ScreenWidth / 2) - (size.x / 2), (ScreenHeight - 70) - (size.y / 2), size.x, size.y);
+                Rect resourceInfoRect = new Rect((Screen.width / 2) - (size.x / 2), (Screen.height - 70) - (size.y / 2), size.x, size.y);
                 GUI.Label(resourceInfoRect, resourceName);
                 GUI.skin.label.fontSize = f;
             }

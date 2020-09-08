@@ -149,6 +149,10 @@ public class MarketGUI : MonoBehaviour
         //ASPECT RATIO
         int ScreenHeight = Screen.height;
         int ScreenWidth = Screen.width;
+        if (ScreenWidth / ScreenHeight < 1.7f)
+        {
+            ScreenHeight = (int)(ScreenHeight * 0.75f);
+        }
         if (ScreenHeight < 700)
         {
             GUI.skin.label.fontSize = 10;
