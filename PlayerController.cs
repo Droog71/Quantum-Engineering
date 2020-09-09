@@ -210,18 +210,15 @@ public class PlayerController : MonoBehaviour
         //LOAD MOUSE SETTINGS
         Cursor.visible = true;
         Cursor.lockState = CursorLockMode.None;
-        if (FileBasedPrefs.initialized == true)
+        if (PlayerPrefs.GetFloat("xSensitivity") != 0)
         {
-            if (FileBasedPrefs.GetFloat("xSensitivity") != 0)
-            {
-                GetComponent<MSCameraController>().CameraSettings.firstPerson.sensibilityX = PlayerPrefs.GetFloat("xSensitivity");
-            }
-            if (FileBasedPrefs.GetFloat("ySensitivity") != 0)
-            {
-                GetComponent<MSCameraController>().CameraSettings.firstPerson.sensibilityY = PlayerPrefs.GetFloat("ySensitivity");
-            }
-            GetComponent<MSCameraController>().CameraSettings.firstPerson.invertYInput = PlayerPrefsX.GetPersistentBool("mouseInverted");
+            GetComponent<MSCameraController>().CameraSettings.firstPerson.sensibilityX = PlayerPrefs.GetFloat("xSensitivity");
         }
+        if (PlayerPrefs.GetFloat("ySensitivity") != 0)
+        {
+            GetComponent<MSCameraController>().CameraSettings.firstPerson.sensibilityY = PlayerPrefs.GetFloat("ySensitivity");
+        }
+        GetComponent<MSCameraController>().CameraSettings.firstPerson.invertYInput = PlayerPrefsX.GetPersistentBool("mouseInverted");
 
         // Loading volume settings.
         AudioListener.volume = PlayerPrefs.GetFloat("volume");
@@ -255,17 +252,15 @@ public class PlayerController : MonoBehaviour
         if (mCam == null)
         {
             mCam = Camera.main;
-            if (FileBasedPrefs.initialized == true)
-            {
-                if (FileBasedPrefs.GetFloat("FOV") != 0)
-                {
-                    mCam.fieldOfView = PlayerPrefs.GetFloat("FOV");
-                }
 
-                if (FileBasedPrefs.GetFloat("drawDistance") != 0)
-                {
-                    mCam.farClipPlane = PlayerPrefs.GetFloat("drawDistance");
-                }
+            if (PlayerPrefs.GetFloat("FOV") != 0)
+            {
+                mCam.fieldOfView = PlayerPrefs.GetFloat("FOV");
+            }
+
+            if (PlayerPrefs.GetFloat("drawDistance") != 0)
+            {
+                mCam.farClipPlane = PlayerPrefs.GetFloat("drawDistance");
             }
         }
         else
@@ -289,8 +284,7 @@ public class PlayerController : MonoBehaviour
                 {
                     OpenTabletOnFirstLoad();
                 }
-
-                if (movedPlayer == false && FileBasedPrefs.GetBool(stateManager.WorldName + "oldWorld") == true)
+                else if (movedPlayer == false)
                 {
                     MovePlayerToSavedLocation();
                 }

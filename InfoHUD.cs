@@ -38,11 +38,11 @@ public class InfoHUD : MonoBehaviour
         GUI.skin = GetComponent<PlayerGUI>().thisGUIskin;
 
         //ASPECT RATIO
-        int ScreenHeight = Screen.height;
-        int ScreenWidth = Screen.width;
+        float ScreenHeight = Screen.height;
+        float ScreenWidth = Screen.width;
         if (ScreenWidth / ScreenHeight < 1.7f)
         {
-            ScreenHeight = (int)(ScreenHeight * 0.75f);
+            ScreenHeight = (ScreenHeight * 0.75f);
         }
         if (ScreenHeight < 700)
         {

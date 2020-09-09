@@ -38,7 +38,7 @@ public class MainMenu : MonoBehaviour
         if (PlayerPrefsX.GetPersistentBool("changingWorld") == true)
         {
             PlayerPrefsX.SetPersistentBool("changingWorld", false);
-            FileBasedPrefs.SetWorldName(worldName);
+            FileBasedPrefs.SetWorldName(PlayerPrefs.GetString("worldName"));
             stateManager.WorldName = PlayerPrefs.GetString("worldName");
             worldSelected = true;
             ambient.enabled = false;
@@ -101,6 +101,14 @@ public class MainMenu : MonoBehaviour
         ambient.enabled = false;
     }
 
+    private Vector2 GetStringSize(string str)
+    {
+        GUIContent content = new GUIContent(str);
+        GUIStyle style = GUI.skin.box;
+        style.alignment = TextAnchor.MiddleCenter;
+        return style.CalcSize(content);
+    }
+
     // Called by unity engine for rendering and handling GUI events
     public void OnGUI()
     {
@@ -108,11 +116,11 @@ public class MainMenu : MonoBehaviour
         GUI.skin = thisGUIskin;
 
         //ASPECT RATIO
-        int ScreenHeight = Screen.height;
-        int ScreenWidth = Screen.width;
+        float ScreenHeight = Screen.height;
+        float ScreenWidth = Screen.width;
         if (ScreenWidth / ScreenHeight < 1.7f)
         {
-            ScreenHeight = (int)(ScreenHeight * 0.75f);
+            ScreenHeight = (ScreenHeight * 0.75f);
         }
         if (ScreenHeight < 700)
         {
@@ -125,13 +133,13 @@ public class MainMenu : MonoBehaviour
         Rect worldListRect = new Rect((ScreenWidth * 0.43f), (ScreenHeight * 0.47f), (ScreenWidth * 0.15f), (ScreenHeight * 0.55f));
         Rect worldListTitleRect = new Rect((ScreenWidth * 0.45f), (ScreenHeight * 0.46f), (ScreenWidth * 0.15f), (ScreenHeight * 0.55f));
 
-        Rect escapePromptLabelRect = new Rect((ScreenWidth * 0.46f), (ScreenHeight * 0.18f), (ScreenWidth * 0.20f), (ScreenHeight * 0.05f));
-
-        Rect deletePromptBackgroundRect = new Rect((ScreenWidth * 0.35f), (ScreenHeight * 0.14f),(ScreenWidth * 0.30f), (ScreenHeight * 0.20f));
+        Rect deletePromptBackgroundRect = new Rect(((ScreenWidth / 2) - 200), ScreenHeight * 0.14f, 400, ScreenHeight * 0.20f);
         Rect deletePromptLabelRect = new Rect((ScreenWidth * 0.435f), (ScreenHeight * 0.18f), (ScreenWidth * 0.20f), (ScreenHeight * 0.05f));
         Rect deletePromptButton1Rect = new Rect((ScreenWidth * 0.39f), (ScreenHeight * 0.22f), (ScreenWidth * 0.10f), (ScreenHeight * 0.05f));
         Rect deletePromptButton2Rect = new Rect((ScreenWidth * 0.51f), (ScreenHeight * 0.22f), (ScreenWidth * 0.10f), (ScreenHeight * 0.05f));
 
+        Rect startGameButtonRect = new Rect(ScreenWidth * 0.58f, ScreenHeight * 0.4f, ScreenWidth * 0.15f, ScreenHeight * 0.03f);
+        Rect textFieldRect = new Rect(ScreenWidth * 0.41f, ScreenHeight * 0.4f, ScreenWidth * 0.15f, ScreenHeight * 0.03f);
         Rect loadingMessageRect = new Rect((ScreenWidth * 0.48f), (ScreenHeight * 0.30f), (ScreenWidth * 0.5f), (ScreenHeight * 0.5f));
 
         Rect buttonRect1 = new Rect((ScreenWidth * 0.405f), (ScreenHeight * 0.50f), (ScreenWidth * 0.020f), (ScreenHeight * 0.025f));
@@ -171,7 +179,7 @@ public class MainMenu : MonoBehaviour
             {
                 GUI.DrawTexture(backgroundRect, title2Texture);
             }
-            if (GUI.Button(new Rect(ScreenWidth * 0.58f, ScreenHeight * 0.4f, ScreenWidth * 0.15f, ScreenHeight * 0.03f), "START GAME") || Event.current.keyCode.Equals(KeyCode.Return))
+            if (GUI.Button(startGameButtonRect, "START GAME") || Event.current.keyCode.Equals(KeyCode.Return))
             {
                 buttonSounds.Play();
                 SelectWorld();
@@ -222,7 +230,7 @@ public class MainMenu : MonoBehaviour
                 GUI.Label(world10Rect, "10. " + worlds[9]);
             }
 
-            worldName = GUI.TextField(new Rect(ScreenWidth * 0.41f, ScreenHeight * 0.4f, ScreenWidth * 0.15f, ScreenHeight * 0.03f), worldName, 16);
+            worldName = GUI.TextField(textFieldRect, worldName, 16);
 
             if (GUI.Button(buttonRect1, "1"))
             {
@@ -316,7 +324,9 @@ public class MainMenu : MonoBehaviour
             if (worldSelectPrompt == true)
             {
                 GUI.DrawTexture(deletePromptBackgroundRect, worlListBackground);
-                GUI.Label(escapePromptLabelRect, "Choose location");
+                Vector2 size = GetStringSize("Choose location.");
+                Rect messagePos = new Rect((Screen.width / 2) - (size.x  / 3), ScreenHeight * 0.18f, size.x, size.y);
+                GUI.Label(messagePos, "Choose location.");
                 if (GUI.Button(deletePromptButton1Rect, "Kepler-1625"))
                 {
                     buttonSounds.Play();
@@ -332,17 +342,22 @@ public class MainMenu : MonoBehaviour
             if (deletePrompt == true)
             {
                 GUI.DrawTexture(deletePromptBackgroundRect, worlListBackground);
-                GUI.Label(deletePromptLabelRect, "Delete selected world?");
+                Vector2 size = GetStringSize("Delete selected world?");
+                Rect messagePos = new Rect((Screen.width / 2) - (size.x  / 3), ScreenHeight * 0.18f, size.x, size.y);
+                GUI.Label(messagePos, "Delete selected world?");
                 if (GUI.Button(deletePromptButton1Rect, "Yes"))
                 {
                     buttonSounds.Play();
-                    string worldFile = "SaveData/" + worldName + ".sav";
-                    string filePath = Path.Combine(Application.persistentDataPath, worldFile);
-                    File.Delete(filePath);
+                    string savFile = "SaveData/" + worldName + ".sav";
+                    string bakFile = "SaveData/" + worldName + ".bak";
+                    string savPath = Path.Combine(Application.persistentDataPath, savFile);
+                    string bakPath = Path.Combine(Application.persistentDataPath, bakFile);
+                    File.Delete(savPath);
+                    File.Delete(bakPath);
                     worldList = worlds.ToList();
                     foreach (string w in worlds)
                     {
-                        if (w == "worldName")
+                        if (w == worldName)
                         {
                             worldList.Remove(w);
                         }
@@ -369,7 +384,9 @@ public class MainMenu : MonoBehaviour
             if (escapePrompt == true)
             {
                 GUI.DrawTexture(deletePromptBackgroundRect, worlListBackground);
-                GUI.Label(escapePromptLabelRect, "Exit the game?");
+                Vector2 size = GetStringSize("Exit the game?");
+                Rect messagePos = new Rect((Screen.width / 2) - (size.x  / 3), ScreenHeight * 0.18f, size.x, size.y);
+                GUI.Label(messagePos, "Exit the game?");
                 if (GUI.Button(deletePromptButton1Rect, "Yes"))
                 {
                     buttonSounds.Play();

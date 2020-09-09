@@ -220,6 +220,18 @@ public class GuiCoordinates
     public Rect sliderLabel6Rect;
     public Rect schematicCloseRect;
 
+    //HELP MENUS
+    public Rect helpButton1Rect;
+    public Rect helpButton2Rect;
+    public Rect helpButton3Rect;
+    public Rect helpButton4Rect;
+    public Rect helpButton5Rect;
+    public Rect helpButton6Rect;
+    public Rect helpButton7Rect;
+    public Rect helpButton8Rect;
+    public Rect helpButton9Rect;
+    public Rect helpButton10Rect;
+
     //MARKET
     public Rect marketMessageRect;
     public Rect marketMessageLabelRect;
@@ -228,12 +240,11 @@ public class GuiCoordinates
     public GuiCoordinates()
     {
         //ASPECT RATIO
-        int ScreenHeight = Screen.height;
-        int ScreenWidth = Screen.width;
-        float ratio = ScreenWidth / ScreenHeight;
-        if (ratio < 1.5f)
+        float ScreenHeight = Screen.height;
+        float ScreenWidth = Screen.width;
+        if (ScreenWidth / ScreenHeight < 1.7f)
         {
-            ScreenHeight = (int)(ScreenHeight * 0.75f);
+            ScreenHeight = (ScreenHeight * 0.75f);
         }
 
         //MESSAGES
@@ -493,29 +504,40 @@ public class GuiCoordinates
         buildItemCountRect = new Rect((ScreenWidth * 0.92f), (ScreenHeight * 0.241f), (ScreenWidth * 0.05f), (ScreenHeight * 0.2f));
 
         //OPTIONS MENU
-        optionsMenuBackgroundRect = new Rect((ScreenWidth * 0.4f), (ScreenHeight * 0.22f), (ScreenWidth * 0.2f), (ScreenHeight * 0.86f));
+        optionsMenuBackgroundRect = new Rect((ScreenWidth * 0.4f), (ScreenHeight * 0.04f), (ScreenWidth * 0.2f), (ScreenHeight * 0.86f));
+        optionsButton1Rect = new Rect((ScreenWidth * 0.43f), (ScreenHeight * 0.08f), (ScreenWidth * 0.14f), (ScreenHeight * 0.05f));
+        optionsButton2Rect = new Rect((ScreenWidth * 0.43f), (ScreenHeight * 0.14f), (ScreenWidth * 0.14f), (ScreenHeight * 0.05f));
+        optionsButton3Rect = new Rect((ScreenWidth * 0.43f), (ScreenHeight * 0.20f), (ScreenWidth * 0.14f), (ScreenHeight * 0.05f));
+        optionsButton4Rect = new Rect((ScreenWidth * 0.43f), (ScreenHeight * 0.26f), (ScreenWidth * 0.14f), (ScreenHeight * 0.05f));
+        optionsButton5Rect = new Rect((ScreenWidth * 0.43f), (ScreenHeight * 0.32f), (ScreenWidth * 0.14f), (ScreenHeight * 0.05f));
+        optionsButton6Rect = new Rect((ScreenWidth * 0.43f), (ScreenHeight * 0.38f), (ScreenWidth * 0.14f), (ScreenHeight * 0.05f));
+        optionsButton7Rect = new Rect((ScreenWidth * 0.43f), (ScreenHeight * 0.44f), (ScreenWidth * 0.14f), (ScreenHeight * 0.05f));
+        optionsButton8Rect = new Rect((ScreenWidth * 0.43f), (ScreenHeight * 0.50f), (ScreenWidth * 0.14f), (ScreenHeight * 0.05f));
+        optionsButton9Rect = new Rect((ScreenWidth * 0.43f), (ScreenHeight * 0.56f), (ScreenWidth * 0.14f), (ScreenHeight * 0.05f));
+        optionsButton10Rect = new Rect((ScreenWidth * 0.43f), (ScreenHeight * 0.62f), (ScreenWidth * 0.14f), (ScreenHeight * 0.05f));
+        optionsButton11Rect = new Rect((ScreenWidth * 0.43f), (ScreenHeight * 0.68f), (ScreenWidth * 0.14f), (ScreenHeight * 0.05f));
+        optionsButton12Rect = new Rect((ScreenWidth * 0.43f), (ScreenHeight * 0.74f), (ScreenWidth * 0.14f), (ScreenHeight * 0.05f));
+        optionsButton13Rect = new Rect((ScreenWidth * 0.43f), (ScreenHeight * 0.80f), (ScreenWidth * 0.14f), (ScreenHeight * 0.05f));
+
         videoMenuBackgroundRect = new Rect((ScreenWidth * 0.4f), (ScreenHeight * 0.22f), (ScreenWidth * 0.2f), (ScreenHeight * 0.67f));
         schematicsMenuBackgroundRect = new Rect((ScreenWidth * 0.4f), (ScreenHeight * 0.22f), (ScreenWidth * 0.2f), (ScreenHeight * 0.55f));
-        optionsButton1Rect = new Rect((ScreenWidth * 0.43f), (ScreenHeight * 0.26f), (ScreenWidth * 0.14f), (ScreenHeight * 0.05f));
-        optionsButton2Rect = new Rect((ScreenWidth * 0.43f), (ScreenHeight * 0.32f), (ScreenWidth * 0.14f), (ScreenHeight * 0.05f));
-        optionsButton3Rect = new Rect((ScreenWidth * 0.43f), (ScreenHeight * 0.38f), (ScreenWidth * 0.14f), (ScreenHeight * 0.05f));
-        optionsButton4Rect = new Rect((ScreenWidth * 0.43f), (ScreenHeight * 0.44f), (ScreenWidth * 0.14f), (ScreenHeight * 0.05f));
-        optionsButton5Rect = new Rect((ScreenWidth * 0.43f), (ScreenHeight * 0.50f), (ScreenWidth * 0.14f), (ScreenHeight * 0.05f));
-        optionsButton6Rect = new Rect((ScreenWidth * 0.43f), (ScreenHeight * 0.56f), (ScreenWidth * 0.14f), (ScreenHeight * 0.05f));
-        optionsButton7Rect = new Rect((ScreenWidth * 0.43f), (ScreenHeight * 0.62f), (ScreenWidth * 0.14f), (ScreenHeight * 0.05f));
-        optionsButton8Rect = new Rect((ScreenWidth * 0.43f), (ScreenHeight * 0.68f), (ScreenWidth * 0.14f), (ScreenHeight * 0.05f));
-        optionsButton9Rect = new Rect((ScreenWidth * 0.43f), (ScreenHeight * 0.74f), (ScreenWidth * 0.14f), (ScreenHeight * 0.05f));
-        optionsButton10Rect = new Rect((ScreenWidth * 0.43f), (ScreenHeight * 0.80f), (ScreenWidth * 0.14f), (ScreenHeight * 0.05f));
-        optionsButton11Rect = new Rect((ScreenWidth * 0.43f), (ScreenHeight * 0.86f), (ScreenWidth * 0.14f), (ScreenHeight * 0.05f));
-        optionsButton12Rect = new Rect((ScreenWidth * 0.43f), (ScreenHeight * 0.92f), (ScreenWidth * 0.14f), (ScreenHeight * 0.05f));
-        optionsButton13Rect = new Rect((ScreenWidth * 0.43f), (ScreenHeight * 0.98f), (ScreenWidth * 0.14f), (ScreenHeight * 0.05f));
+        helpButton1Rect = new Rect((ScreenWidth * 0.43f), (ScreenHeight * 0.26f), (ScreenWidth * 0.14f), (ScreenHeight * 0.05f));
+        helpButton2Rect = new Rect((ScreenWidth * 0.43f), (ScreenHeight * 0.32f), (ScreenWidth * 0.14f), (ScreenHeight * 0.05f));
+        helpButton3Rect = new Rect((ScreenWidth * 0.43f), (ScreenHeight * 0.38f), (ScreenWidth * 0.14f), (ScreenHeight * 0.05f));
+        helpButton4Rect = new Rect((ScreenWidth * 0.43f), (ScreenHeight * 0.44f), (ScreenWidth * 0.14f), (ScreenHeight * 0.05f));
+        helpButton5Rect = new Rect((ScreenWidth * 0.43f), (ScreenHeight * 0.50f), (ScreenWidth * 0.14f), (ScreenHeight * 0.05f));
+        helpButton6Rect = new Rect((ScreenWidth * 0.43f), (ScreenHeight * 0.56f), (ScreenWidth * 0.14f), (ScreenHeight * 0.05f));
+        helpButton7Rect = new Rect((ScreenWidth * 0.43f), (ScreenHeight * 0.62f), (ScreenWidth * 0.14f), (ScreenHeight * 0.05f));
+        helpButton8Rect = new Rect((ScreenWidth * 0.43f), (ScreenHeight * 0.68f), (ScreenWidth * 0.14f), (ScreenHeight * 0.05f));
+        helpButton9Rect = new Rect((ScreenWidth * 0.43f), (ScreenHeight * 0.74f), (ScreenWidth * 0.14f), (ScreenHeight * 0.05f));
+        helpButton10Rect = new Rect((ScreenWidth * 0.43f), (ScreenHeight * 0.80f), (ScreenWidth * 0.14f), (ScreenHeight * 0.05f));
 
-        sliderLabel1Rect = new Rect((ScreenWidth * 0.43f), (ScreenHeight * 0.41f), (ScreenWidth * 0.14f), (ScreenHeight * 0.05f));
-        sliderLabel2Rect = new Rect((ScreenWidth * 0.43f), (ScreenHeight * 0.47f), (ScreenWidth * 0.14f), (ScreenHeight * 0.05f));
-        sliderLabel3Rect = new Rect((ScreenWidth * 0.43f), (ScreenHeight * 0.53f), (ScreenWidth * 0.14f), (ScreenHeight * 0.05f));
-        sliderLabel4Rect = new Rect((ScreenWidth * 0.43f), (ScreenHeight * 0.59f), (ScreenWidth * 0.14f), (ScreenHeight * 0.05f));
-        sliderLabel5Rect = new Rect((ScreenWidth * 0.43f), (ScreenHeight * 0.65f), (ScreenWidth * 0.14f), (ScreenHeight * 0.05f));
-        sliderLabel6Rect = new Rect((ScreenWidth * 0.43f), (ScreenHeight * 0.71f), (ScreenWidth * 0.14f), (ScreenHeight * 0.05f));
+        sliderLabel1Rect = new Rect((ScreenWidth * 0.43f), (ScreenHeight * 0.21f), (ScreenWidth * 0.14f), (ScreenHeight * 0.05f));
+        sliderLabel2Rect = new Rect((ScreenWidth * 0.43f), (ScreenHeight * 0.27f), (ScreenWidth * 0.14f), (ScreenHeight * 0.05f));
+        sliderLabel3Rect = new Rect((ScreenWidth * 0.43f), (ScreenHeight * 0.33f), (ScreenWidth * 0.14f), (ScreenHeight * 0.05f));
+        sliderLabel4Rect = new Rect((ScreenWidth * 0.43f), (ScreenHeight * 0.39f), (ScreenWidth * 0.14f), (ScreenHeight * 0.05f));
+        sliderLabel5Rect = new Rect((ScreenWidth * 0.43f), (ScreenHeight * 0.45f), (ScreenWidth * 0.14f), (ScreenHeight * 0.05f));
+        sliderLabel6Rect = new Rect((ScreenWidth * 0.43f), (ScreenHeight * 0.51f), (ScreenWidth * 0.14f), (ScreenHeight * 0.05f));
 
         //MACHINE INFO HUD
         infoRectBG = new Rect(0, (ScreenHeight * 0.60f), (ScreenWidth * 0.30f), (ScreenHeight * 0.40f));

@@ -96,11 +96,11 @@ public class PlayerGUI : MonoBehaviour
         GUI.skin = thisGUIskin;
 
         //ASPECT RATIO
-        int ScreenHeight = Screen.height;
-        int ScreenWidth = Screen.width;
+        float ScreenHeight = Screen.height;
+        float ScreenWidth = Screen.width;
         if (ScreenWidth / ScreenHeight < 1.7f)
         {
-            ScreenHeight = (int)(ScreenHeight * 0.75f);
+            ScreenHeight = (ScreenHeight * 0.75f);
         }
         if (ScreenHeight < 700)
         {
@@ -249,70 +249,70 @@ public class PlayerGUI : MonoBehaviour
                     }
                     if (playerController.mCam.GetComponent<UnityEngine.Video.VideoPlayer>().isPlaying == false)
                     {
-                        if (GUI.Button(guiCoordinates.optionsButton1Rect, "Intro"))
+                        if (GUI.Button(guiCoordinates.helpButton1Rect, "Intro"))
                         {
                             Cursor.visible = false;
                             Cursor.lockState = CursorLockMode.Locked;
                             videoPlayer.GetComponent<VP>().PlayVideo("Guide.webm", false, 0.5f);
                             playerController.PlayButtonSound();
                         }
-                        if (GUI.Button(guiCoordinates.optionsButton2Rect, "Dark Matter"))
+                        if (GUI.Button(guiCoordinates.helpButton2Rect, "Dark Matter"))
                         {
                             Cursor.visible = false;
                             Cursor.lockState = CursorLockMode.Locked;
                             videoPlayer.GetComponent<VP>().PlayVideo("DarkMatter.webm", false, 0.5f);
                             playerController.PlayButtonSound();
                         }
-                        if (GUI.Button(guiCoordinates.optionsButton3Rect, "Universal Extractor"))
+                        if (GUI.Button(guiCoordinates.helpButton3Rect, "Universal Extractor"))
                         {
                             Cursor.visible = false;
                             Cursor.lockState = CursorLockMode.Locked;
                             videoPlayer.GetComponent<VP>().PlayVideo("Extractor.webm", false, 0.5f);
                             playerController.PlayButtonSound();
                         }
-                        if (GUI.Button(guiCoordinates.optionsButton4Rect, "Heat Exchanger"))
+                        if (GUI.Button(guiCoordinates.helpButton4Rect, "Heat Exchanger"))
                         {
                             Cursor.visible = false;
                             Cursor.lockState = CursorLockMode.Locked;
                             videoPlayer.GetComponent<VP>().PlayVideo("HeatExchanger.webm", false, 0.5f);
                             playerController.PlayButtonSound();
                         }
-                        if (GUI.Button(guiCoordinates.optionsButton5Rect, "Alloy Smelter"))
+                        if (GUI.Button(guiCoordinates.helpButton5Rect, "Alloy Smelter"))
                         {
                             Cursor.visible = false;
                             Cursor.lockState = CursorLockMode.Locked;
                             videoPlayer.GetComponent<VP>().PlayVideo("AlloySmelter.webm", false, 0.5f);
                             playerController.PlayButtonSound();
                         }
-                        if (GUI.Button(guiCoordinates.optionsButton6Rect, "Hazards"))
+                        if (GUI.Button(guiCoordinates.helpButton6Rect, "Hazards"))
                         {
                             Cursor.visible = false;
                             Cursor.lockState = CursorLockMode.Locked;
                             videoPlayer.GetComponent<VP>().PlayVideo("Hazards.webm", false, 0.5f);
                             playerController.PlayButtonSound();
                         }
-                        if (GUI.Button(guiCoordinates.optionsButton7Rect, "Rail Carts"))
+                        if (GUI.Button(guiCoordinates.helpButton7Rect, "Rail Carts"))
                         {
                             Cursor.visible = false;
                             Cursor.lockState = CursorLockMode.Locked;
                             videoPlayer.GetComponent<VP>().PlayVideo("RailCarts.webm", false, 0.5f);
                             playerController.PlayButtonSound();
                         }
-                        if (GUI.Button(guiCoordinates.optionsButton8Rect, "Storage Computers"))
+                        if (GUI.Button(guiCoordinates.helpButton8Rect, "Storage Computers"))
                         {
                             Cursor.visible = false;
                             Cursor.lockState = CursorLockMode.Locked;
                             videoPlayer.GetComponent<VP>().PlayVideo("StorageComputers.webm", false, 0.5f);
                             playerController.PlayButtonSound();
                         }
-                        if (GUI.Button(guiCoordinates.optionsButton9Rect, "Nuclear Reactors"))
+                        if (GUI.Button(guiCoordinates.helpButton9Rect, "Nuclear Reactors"))
                         {
                             Cursor.visible = false;
                             Cursor.lockState = CursorLockMode.Locked;
                             videoPlayer.GetComponent<VP>().PlayVideo("NuclearReactors.webm", false, 0.5f);
                             playerController.PlayButtonSound();
                         }
-                        if (GUI.Button(guiCoordinates.optionsButton10Rect, "BACK"))
+                        if (GUI.Button(guiCoordinates.helpButton10Rect, "BACK"))
                         {
                             playerController.videoMenuOpen = false;
                             playerController.PlayButtonSound();
@@ -337,7 +337,7 @@ public class PlayerGUI : MonoBehaviour
                     if (!SchematicActive())
                     {
                         GUI.DrawTexture(guiCoordinates.schematicsMenuBackgroundRect, textureDictionary.dictionary["Menu Background"]);
-                        if (GUI.Button(guiCoordinates.optionsButton1Rect, "Dark Matter"))
+                        if (GUI.Button(guiCoordinates.helpButton1Rect, "Dark Matter"))
                         {
                             if (schematic1 == false)
                             {
@@ -345,7 +345,7 @@ public class PlayerGUI : MonoBehaviour
                             }
                             playerController.PlayButtonSound();
                         }
-                        if (GUI.Button(guiCoordinates.optionsButton2Rect, "Plates"))
+                        if (GUI.Button(guiCoordinates.helpButton2Rect, "Plates"))
                         {
                             if (schematic2 == false)
                             {
@@ -353,7 +353,7 @@ public class PlayerGUI : MonoBehaviour
                             }
                             playerController.PlayButtonSound();
                         }
-                        if (GUI.Button(guiCoordinates.optionsButton3Rect, "Wires"))
+                        if (GUI.Button(guiCoordinates.helpButton3Rect, "Wires"))
                         {
                             if (schematic3 == false)
                             {
@@ -361,7 +361,7 @@ public class PlayerGUI : MonoBehaviour
                             }
                             playerController.PlayButtonSound();
                         }
-                        if (GUI.Button(guiCoordinates.optionsButton4Rect, "Gears"))
+                        if (GUI.Button(guiCoordinates.helpButton4Rect, "Gears"))
                         {
                             if (schematic4 == false)
                             {
@@ -370,7 +370,7 @@ public class PlayerGUI : MonoBehaviour
                             playerController.PlayButtonSound();
 
                         }
-                        if (GUI.Button(guiCoordinates.optionsButton5Rect, "Steel"))
+                        if (GUI.Button(guiCoordinates.helpButton5Rect, "Steel"))
                         {
                             if (schematic5 == false)
                             {
@@ -379,7 +379,7 @@ public class PlayerGUI : MonoBehaviour
                             playerController.PlayButtonSound();
 
                         }
-                        if (GUI.Button(guiCoordinates.optionsButton6Rect, "Bronze"))
+                        if (GUI.Button(guiCoordinates.helpButton6Rect, "Bronze"))
                         {
                             if (schematic6 == false)
                             {
@@ -388,7 +388,7 @@ public class PlayerGUI : MonoBehaviour
                             playerController.PlayButtonSound();
 
                         }
-                        if (GUI.Button(guiCoordinates.optionsButton7Rect, "Heat Exchangers"))
+                        if (GUI.Button(guiCoordinates.helpButton7Rect, "Heat Exchangers"))
                         {
                             if (schematic7 == false)
                             {
@@ -396,7 +396,7 @@ public class PlayerGUI : MonoBehaviour
                             }
                             playerController.PlayButtonSound();
                         }
-                        if (GUI.Button(guiCoordinates.optionsButton8Rect, "BACK"))
+                        if (GUI.Button(guiCoordinates.helpButton8Rect, "BACK"))
                         {
                             playerController.schematicMenuOpen = false;
                             playerController.PlayButtonSound();
