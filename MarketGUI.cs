@@ -15,8 +15,8 @@ public class MarketGUI : MonoBehaviour
     public void Start()
     {
         playerController = GetComponent<PlayerController>();
-        guiCoordinates = GetComponent<GuiCoordinates>();
         textureDictionary = GetComponent<TextureDictionary>();
+        guiCoordinates = new GuiCoordinates();
         priceDictionary = new Dictionary<string, int>
         {
             { "Iron Block", 10 },

@@ -32,9 +32,9 @@ public class AutoCrafter : MonoBehaviour
     public void Start()
     {
         craftingManager = GetComponent<CraftingManager>();
-        craftingDictionary = gameObject.AddComponent<CraftingDictionary>();
         powerReceiver = gameObject.AddComponent<PowerReceiver>();
         connectionLine = gameObject.AddComponent<LineRenderer>();
+        craftingDictionary = new CraftingDictionary();
         connectionLine.startWidth = 0.2f;
         connectionLine.endWidth = 0.2f;
         connectionLine.material = lineMat;

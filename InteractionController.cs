@@ -14,16 +14,17 @@ public class InteractionController : MonoBehaviour
     {
         playerController = GetComponent<PlayerController>();
         blockDictionary = new BlockDictionary(playerController);
-        machineInteraction = gameObject.AddComponent<MachineInteraction>();
-        storageInteraction = gameObject.AddComponent<StorageInteraction>();
-        blockInteraction = gameObject.AddComponent<BlockInteraction>();
+        machineInteraction = new MachineInteraction(playerController, this);
+        storageInteraction = new StorageInteraction(playerController, this);
+        blockInteraction = new BlockInteraction(playerController, this);
     }
 
     // Called once per frame by unity engine
     public void Update()
     {
-        //RAYCAST AND ASSOCIATED DATA FOR INTERACTING WITH MACHINES AND OTHER OBJECTS
-        if (Physics.Raycast(Camera.main.gameObject.transform.position, Camera.main.gameObject.transform.forward, out playerController.playerLookHit, 40))
+        // Raycast and associated data for interacting with machines and other objects.
+        Transform camPos = Camera.main.gameObject.transform;
+        if (Physics.Raycast(camPos.position, camPos.forward, out playerController.playerLookHit, 40))
         {
             if (playerController.inventoryOpen == false && playerController.escapeMenuOpen == false && playerController.tabletOpen == false)
             {

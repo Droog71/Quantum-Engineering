@@ -15,8 +15,8 @@ public class InfoHUD : MonoBehaviour
     public void Start()
     {
         playerController = GetComponent<PlayerController>();
-        guiCoordinates = GetComponent<GuiCoordinates>();
         textureDictionary = GetComponent<TextureDictionary>();
+        guiCoordinates = new GuiCoordinates();
     }
 
     // Returns true if the info hud should be drawn

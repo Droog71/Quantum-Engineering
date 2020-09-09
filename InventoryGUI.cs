@@ -18,9 +18,9 @@ public class InventoryGUI : MonoBehaviour
         playerController = GetComponent<PlayerController>();
         playerInventory = GetComponent<InventoryManager>();
         craftingManager = GetComponent<CraftingManager>();
-        craftingDictionary = gameObject.AddComponent<CraftingDictionary>();
-        guiCoordinates = GetComponent<GuiCoordinates>();
         textureDictionary = GetComponent<TextureDictionary>();
+        craftingDictionary = new CraftingDictionary();
+        guiCoordinates = new GuiCoordinates();
     }
 
     // Called by unity engine for rendering and handling GUI events

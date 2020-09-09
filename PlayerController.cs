@@ -735,15 +735,10 @@ public class PlayerController : MonoBehaviour
                         string destinationPath = Path.Combine(Application.persistentDataPath, "SaveData/" + fileName + ".bak");
                         File.Copy(FileBasedPrefs.GetSaveFilePath(), destinationPath, true);
 
-                        if (!Application.isEditor && GameObject.Find("Player").GetComponent<PlayerController>().exiting == true)
+                        if (GameObject.Find("Player").GetComponent<PlayerController>().exiting == true)
                         {
-                            Debug.Log("Shutting down...");
-                            System.Diagnostics.Process.GetCurrentProcess().Kill();
-                        }
-                        else
-                        {
-                            Debug.Log("Shutting down...");
-                            break;
+                            Debug.Log("Loading main menu...");
+                            SceneManager.LoadScene(0);
                         }
                     }
                 }

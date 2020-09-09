@@ -1,16 +1,14 @@
 ﻿using UnityEngine;
 
-public class StorageInteraction : MonoBehaviour
+public class StorageInteraction
 {
     private PlayerController playerController;
     private InteractionController interactionController;
-    private GameManager gameManager;
 
-    public void Start()
+    public StorageInteraction(PlayerController playerController, InteractionController interactionController)
     {
-        playerController = GetComponent<PlayerController>();
-        interactionController = GetComponent<InteractionController>();
-        gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
+        this.playerController = playerController;
+        this.interactionController = interactionController;
     }
 
     public void InteractWithStorageContainer()
@@ -24,7 +22,7 @@ public class StorageInteraction : MonoBehaviour
                     if (GameObject.Find("GameManager").GetComponent<GameManager>().working == false)
                     {
                         playerController.stoppingBuildCoRoutine = true;
-                        gameManager.meshManager.CombineBlocks();
+                        playerController.gameManager.meshManager.CombineBlocks();
                         playerController.separatedBlocks = false;
                         playerController.destroyTimer = 0;
                         playerController.buildTimer = 0;
@@ -85,7 +83,7 @@ public class StorageInteraction : MonoBehaviour
                 {
                     playerController.playerInventory.AddItem("Storage Container", 1);
                 }
-                Destroy(playerController.objectInSight);
+                Object.Destroy(playerController.objectInSight);
                 playerController.PlayCraftingSound();
             }
             else
@@ -110,7 +108,7 @@ public class StorageInteraction : MonoBehaviour
                     if (GameObject.Find("GameManager").GetComponent<GameManager>().working == false)
                     {
                         playerController.stoppingBuildCoRoutine = true;
-                        gameManager.meshManager.CombineBlocks();
+                        playerController.gameManager.meshManager.CombineBlocks();
                         playerController.separatedBlocks = false;
                         playerController.destroyTimer = 0;
                         playerController.buildTimer = 0;

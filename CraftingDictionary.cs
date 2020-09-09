@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 
 // This class provides the crafting recipe dictionary used by the crafting manager
-public class CraftingDictionary : MonoBehaviour
+public class CraftingDictionary
 {
     public Dictionary<string, CraftingRecipe> dictionary;
 
@@ -66,7 +66,7 @@ public class CraftingDictionary : MonoBehaviour
     private readonly int[] darkMatterCollectorAmounts = { 50, 50, 50, 50, 50, 100, 100, 100 };
     private readonly int[] darkMatterConduitAmounts = { 25, 25, 25, 25, 25, 50, 50, 50 };
 
-    void Start()
+    public CraftingDictionary()
     {
         dictionary = new Dictionary<string, CraftingRecipe>
         {

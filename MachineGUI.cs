@@ -11,8 +11,8 @@ public class MachineGUI : MonoBehaviour
     public void Start()
     {
         playerController = GetComponent<PlayerController>();
-        guiCoordinates = GetComponent<GuiCoordinates>();
         textureDictionary = GetComponent<TextureDictionary>();
+        guiCoordinates = new GuiCoordinates();
     }
 
     // Called by unity engine for rendering and handling GUI events

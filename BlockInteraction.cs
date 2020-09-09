@@ -1,15 +1,14 @@
 ﻿using UnityEngine;
 
-public class BlockInteraction : MonoBehaviour
+public class BlockInteraction
 {
     private PlayerController playerController;
     private InteractionController interactionController;
 
-    // Called by unity engine on start up to initialize variables
-    public void Start()
+    public BlockInteraction(PlayerController playerController, InteractionController interactionController)
     {
-        playerController = GetComponent<PlayerController>();
-        interactionController = GetComponent<InteractionController>();
+        this.playerController = playerController;
+        this.interactionController = interactionController;
     }
 
     // Called once per frame when the player is looking at an iron block.
@@ -78,7 +77,7 @@ public class BlockInteraction : MonoBehaviour
             GameManager manager = GameObject.Find("GameManager").GetComponent<GameManager>();
             if (manager.working == false)
             {
-                manager.meshManager.SeparateBlocks(transform.position, "all", true);
+                manager.meshManager.SeparateBlocks(playerController.transform.position, "all", true);
                 playerController.separatedBlocks = true;
             }
             else
@@ -88,7 +87,7 @@ public class BlockInteraction : MonoBehaviour
             if (playerController.building == false)
             {
                 playerController.destroying = true;
-                playerController.destroyStartPosition = transform.position;
+                playerController.destroyStartPosition = playerController.transform.position;
             }
         }
         if (playerController.paintGunActive == true && playerController.paintColorSelected == true)

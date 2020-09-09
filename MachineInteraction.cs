@@ -1,15 +1,14 @@
 ﻿using UnityEngine;
 
-public class MachineInteraction : MonoBehaviour
+public class MachineInteraction
 {
     private PlayerController playerController;
     private InteractionController interactionController;
 
-    // Called by unity engine on start up to initialize variables
-    public void Start()
+    public MachineInteraction(PlayerController playerController, InteractionController interactionController)
     {
-        playerController = GetComponent<PlayerController>();
-        interactionController = GetComponent<InteractionController>();
+        this.playerController = playerController;
+        this.interactionController = interactionController;
     }
 
     public void InteractWithElectricLight()
@@ -29,10 +28,10 @@ public class MachineInteraction : MonoBehaviour
         }
         if (cInput.GetKeyDown("Interact"))
         {
-            AirLock[] airLocks = FindObjectsOfType<AirLock>();
+            AirLock[] airLocks = Object.FindObjectsOfType<AirLock>();
             foreach (AirLock a in airLocks)
             {
-                if (Vector3.Distance(transform.position, a.transform.position) < 40)
+                if (Vector3.Distance(playerController.transform.position, a.transform.position) < 40)
                 {
                     a.ToggleOpen();
                 }

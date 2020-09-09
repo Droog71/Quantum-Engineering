@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class GuiCoordinates : MonoBehaviour
+public class GuiCoordinates
 {
     //MESSAGES
     public Rect messageRect;
@@ -225,12 +225,13 @@ public class GuiCoordinates : MonoBehaviour
     public Rect marketMessageLabelRect;
     public Rect marketMessageButtonRect;
 
-    void Start()
+    public GuiCoordinates()
     {
         //ASPECT RATIO
         int ScreenHeight = Screen.height;
         int ScreenWidth = Screen.width;
-        if (ScreenWidth / ScreenHeight < 1.7f)
+        float ratio = ScreenWidth / ScreenHeight;
+        if (ratio < 1.5f)
         {
             ScreenHeight = (int)(ScreenHeight * 0.75f);
         }

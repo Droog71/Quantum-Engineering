@@ -25,8 +25,8 @@ public class PlayerGUI : MonoBehaviour
         playerInventory = GetComponent<InventoryManager>();
         gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
         stateManager = GameObject.Find("GameManager").GetComponent<StateManager>();
-        guiCoordinates = GetComponent<GuiCoordinates>();
         textureDictionary = GetComponent<TextureDictionary>();
+        guiCoordinates = new GuiCoordinates();
     }
 
     // Returns true if the escape menu should be displayed.
@@ -39,7 +39,6 @@ public class PlayerGUI : MonoBehaviour
         && playerController.requestedSave == false
         && gameManager.dataSaveRequested == false
         && stateManager.saving == false;
-
     }
 
     private bool IsStandardBlock(string type)
