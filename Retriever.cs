@@ -193,9 +193,9 @@ public class Retriever : MonoBehaviour
             {
                 if (inputObject == null && IsStorageContainer(obj))
                 {
+                    float distance = Vector3.Distance(transform.position, obj.transform.position);
                     if (creationMethod.Equals("spawned") && obj.GetComponent<InventoryManager>().ID.Equals(inputID))
                     {
-                        float distance = Vector3.Distance(transform.position, obj.transform.position);
                         if (distance < 20 || obj.GetComponent<RailCart>() != null)
                         {
                             inputObject = obj;
@@ -215,27 +215,24 @@ public class Retriever : MonoBehaviour
                             inputLine.endWidth = 0.2f;
                             inputLine.material = lineMat;
                             inputLine.SetPosition(0, transform.position);
-                            inputLine.SetPosition(1, obj.transform.position + obj.transform.up);
+                            inputLine.SetPosition(1, obj.transform.position);
+                            inputLine.enabled = distance < 20;
                             creationMethod = "built";
                         }
                     }
-                    else if (creationMethod.Equals("built"))
+                    else if (creationMethod.Equals("built") && distance < 20)
                     {
-                        float distance = Vector3.Distance(transform.position, obj.transform.position);
-                        if (distance < 20)
-                        {
-                            inputObject = obj;
-                            inputID = obj.GetComponent<InventoryManager>().ID;
-                            spawnedConnection = Instantiate(connectionObject, obj.transform.position, obj.transform.rotation);
-                            spawnedConnection.transform.parent = inputObject.transform;
-                            spawnedConnection.SetActive(true);
-                            inputLine = spawnedConnection.AddComponent<LineRenderer>();
-                            inputLine.startWidth = 0.2f;
-                            inputLine.endWidth = 0.2f;
-                            inputLine.material = lineMat;
-                            inputLine.SetPosition(0, transform.position);
-                            inputLine.SetPosition(1, obj.transform.position + obj.transform.up);
-                        }
+                        inputObject = obj;
+                        inputID = obj.GetComponent<InventoryManager>().ID;
+                        spawnedConnection = Instantiate(connectionObject, obj.transform.position, obj.transform.rotation);
+                        spawnedConnection.transform.parent = inputObject.transform;
+                        spawnedConnection.SetActive(true);
+                        inputLine = spawnedConnection.AddComponent<LineRenderer>();
+                        inputLine.startWidth = 0.2f;
+                        inputLine.endWidth = 0.2f;
+                        inputLine.material = lineMat;
+                        inputLine.SetPosition(0, transform.position);
+                        inputLine.SetPosition(1, obj.transform.position);
                     }
                 }
                 if (obj.GetComponent<StorageComputer>() != null)

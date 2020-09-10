@@ -724,15 +724,20 @@ public class PlayerController : MonoBehaviour
                 {
                     if (GameObject.Find("GameManager").GetComponent<StateManager>().saving == false)
                     {
+                        Debug.Log("Game saved to " + FileBasedPrefs.GetSaveFilePath());
                         Debug.Log("Creating backup...");
                         string fileName = GameObject.Find("GameManager").GetComponent<StateManager>().WorldName;
                         string destinationPath = Path.Combine(Application.persistentDataPath, "SaveData/" + fileName + ".bak");
                         File.Copy(FileBasedPrefs.GetSaveFilePath(), destinationPath, true);
-
+                        Debug.Log("Backup saved to " + destinationPath);
                         if (GameObject.Find("Player").GetComponent<PlayerController>().exiting == true)
                         {
                             Debug.Log("Loading main menu...");
                             SceneManager.LoadScene(0);
+                        }
+                        else
+                        {
+                            break;
                         }
                     }
                 }
