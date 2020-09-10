@@ -15,7 +15,7 @@ public class StorageComputer : MonoBehaviour
     public GameObject connectionObject;
     public Material lineMat;
     public GameObject powerObject;
-    public GameObject conduitItem;
+    public ConduitItem conduitItem;
     public PowerReceiver powerReceiver;
 
     // Called by unity engine on start up to initialize variables
@@ -24,6 +24,7 @@ public class StorageComputer : MonoBehaviour
         powerReceiver = gameObject.AddComponent<PowerReceiver>();
         computerContainerList = new List<InventoryManager>();
         spawnedConnectionList = new List<GameObject>();
+        conduitItem = GetComponentInChildren<ConduitItem>(true);
     }
 
     // Called once per frame by unity engine

@@ -23,7 +23,7 @@ public class AlloySmelter : MonoBehaviour
     public GameObject inputObject2;
     public GameObject outputObject;
     public GameObject powerObject;
-    public GameObject conduitItem;
+    public ConduitItem conduitItem;
     public Material lineMat;
     public bool hasHeatExchanger;
     public bool powerON;
@@ -46,6 +46,7 @@ public class AlloySmelter : MonoBehaviour
         connectionLine.loop = true;
         connectionLine.enabled = false;
         builtObjects = GameObject.Find("Built_Objects");
+        conduitItem = GetComponentInChildren<ConduitItem>(true);
     }
 
     // Called once per frame by unity engine
@@ -112,7 +113,7 @@ public class AlloySmelter : MonoBehaviour
             }
             else
             {
-                conduitItem.GetComponent<ConduitItem>().active = false;
+                conduitItem.active = false;
             }
 
             OutputToConduit();
@@ -277,13 +278,13 @@ public class AlloySmelter : MonoBehaviour
                     }
                 }
             }
-            if (inputObject1.GetComponent<UniversalConduit>().conduitItem.GetComponent<ConduitItem>().active == false)
+            if (inputObject1.GetComponent<UniversalConduit>().conduitItem.active == false)
             {
-                conduitItem.GetComponent<ConduitItem>().active = false;
+                conduitItem.active = false;
             }
-            if (inputObject2.GetComponent<UniversalConduit>().conduitItem.GetComponent<ConduitItem>().active == false)
+            if (inputObject2.GetComponent<UniversalConduit>().conduitItem.active == false)
             {
-                conduitItem.GetComponent<ConduitItem>().active = false;
+                conduitItem.active = false;
             }
         }
     }
@@ -305,7 +306,7 @@ public class AlloySmelter : MonoBehaviour
                     {
                         if (powerON == true && connectionFailed == false && inputObject1 != null && inputObject2 != null && speed > 0)
                         {
-                            conduitItem.GetComponent<ConduitItem>().active = true;
+                            conduitItem.active = true;
                             if (GetComponent<AudioSource>().isPlaying == false)
                             {
                                 GetComponent<AudioSource>().Play();
@@ -321,24 +322,24 @@ public class AlloySmelter : MonoBehaviour
                         }
                         else
                         {
-                            conduitItem.GetComponent<ConduitItem>().active = false;
+                            conduitItem.active = false;
                             machineTimer = 0;
                         }
                     }
                     else
                     {
-                        conduitItem.GetComponent<ConduitItem>().active = false;
+                        conduitItem.active = false;
                     }
                 }
             }
             else
             {
-                conduitItem.GetComponent<ConduitItem>().active = false;
+                conduitItem.active = false;
             }
         }
         else
         {
-            conduitItem.GetComponent<ConduitItem>().active = false;
+            conduitItem.active = false;
             connectionLine.enabled = false;
             if (connectionFailed == true)
             {

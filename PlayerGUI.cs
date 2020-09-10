@@ -682,7 +682,7 @@ public class PlayerGUI : MonoBehaviour
                         GUIStyle style = GUI.skin.box;
                         style.alignment = TextAnchor.MiddleCenter;
                         Vector2 size = style.CalcSize(content);
-                        size.x = size.x / 4;
+                        size.x = size.x / 3.5f;
                         size.y = size.y / 4;
                         Rect crosshairRect = new Rect((Screen.width / 2) - (size.x / 2), (Screen.height / 2) - (size.y / 2), size.x, size.y);
                         GUI.DrawTexture(crosshairRect, textureDictionary.dictionary["Crosshair"]);

@@ -10,7 +10,7 @@ public class DarkMatterCollector : MonoBehaviour
     public int cooling;
     public GameObject outputObject;
     public GameObject powerObject;
-    public GameObject conduitItem;
+    public ConduitItem conduitItem;
     public Material lineMat;
     public string ID = "unassigned";
     public string creationMethod = "built";
@@ -31,6 +31,7 @@ public class DarkMatterCollector : MonoBehaviour
     {
         connectionLine = gameObject.AddComponent<LineRenderer>();
         powerReceiver = gameObject.AddComponent<PowerReceiver>();
+        conduitItem = GetComponentInChildren<ConduitItem>(true);
         connectionLine.startWidth = 0.2f;
         connectionLine.endWidth = 0.2f;
         connectionLine.material = lineMat;
@@ -81,7 +82,7 @@ public class DarkMatterCollector : MonoBehaviour
             {
                 if (powerON == true && connectionFailed == false && speed > 0)
                 {
-                    conduitItem.GetComponent<ConduitItem>().active = true;
+                    conduitItem.active = true;
                     GetComponent<Light>().enabled = true;
                     GetComponent<AudioSource>().enabled = true;
                     machineTimer += 1;
@@ -94,7 +95,7 @@ public class DarkMatterCollector : MonoBehaviour
                 else
                 {
                     machineTimer = 0;
-                    conduitItem.GetComponent<ConduitItem>().active = false;
+                    conduitItem.active = false;
                     GetComponent<Light>().enabled = false;
                     GetComponent<AudioSource>().enabled = false;
                 }

@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
-using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 
 public class UniversalConduit : MonoBehaviour
 {
@@ -13,7 +14,7 @@ public class UniversalConduit : MonoBehaviour
     public string creationMethod = "built";
     public GameObject inputObject;
     public GameObject outputObject;
-    public GameObject conduitItem;
+    public ConduitItem conduitItem;
     public Material lineMat;
     public bool inputMachineDisabled;
     public int address;
@@ -30,6 +31,7 @@ public class UniversalConduit : MonoBehaviour
     public void Start()
     {
         connectionLine = gameObject.AddComponent<LineRenderer>();
+        conduitItem = GetComponentInChildren<ConduitItem>(true);
         connectionLine.startWidth = 0.2f;
         connectionLine.endWidth = 0.2f;
         connectionLine.material = lineMat;
@@ -68,7 +70,10 @@ public class UniversalConduit : MonoBehaviour
                 if (connectionFailed == false)
                 {
                     GameObject[] allObjects = GameObject.FindGameObjectsWithTag("Built");
-                    foreach (GameObject obj in allObjects)
+                    List<GameObject> objList = allObjects.ToList();
+                    objList.Add(GameObject.Find("Rocket"));
+                    objList.Add(GameObject.Find("LanderCargo"));
+                    foreach (GameObject obj in objList)
                     {
                         if (IsValidObject(obj))
                         {
@@ -83,7 +88,7 @@ public class UniversalConduit : MonoBehaviour
             }
             else
             {
-                conduitItem.GetComponent<ConduitItem>().active = false;
+                conduitItem.active = false;
                 GetComponent<Light>().enabled = false;
                 GetComponent<AudioSource>().enabled = false;
             }
@@ -100,7 +105,7 @@ public class UniversalConduit : MonoBehaviour
                         creationMethod = "built";
                     }
                 }
-                conduitItem.GetComponent<ConduitItem>().active = false;
+                conduitItem.active = false;
                 GetComponent<Light>().enabled = false;
                 GetComponent<AudioSource>().enabled = false;
                 connectionLine.enabled = false;
@@ -136,6 +141,175 @@ public class UniversalConduit : MonoBehaviour
             return !obj.GetComponent<InventoryManager>().ID.Equals("player") && obj.GetComponent<Retriever>() == null && obj.GetComponent<AutoCrafter>() == null;
         }
         return false;
+    }
+
+    // Puts items into a storage container or other object with attached inventory manager.
+    private void OutputToInventory()
+    {
+        if (Vector3.Distance(transform.position, outputObject.transform.position) <= range)
+        {
+            if (type != "" && type != "nothing")
+            {
+                if (inputObject != null)
+                {
+                    if (inputMachineDisabled == false && inputObject.GetComponent<UniversalConduit>() == null)
+                    {
+                        conduitItem.active = true;
+                    }
+                    else if (inputObject.GetComponent<UniversalConduit>() != null)
+                    {
+                        conduitItem.active |= inputObject.GetComponent<UniversalConduit>().inputMachineDisabled == false;
+                    }
+                }
+                PlayerController playerController = GameObject.Find("Player").GetComponent<PlayerController>();
+                if (outputObject.GetComponent<Rocket>() == null || playerController.timeToDeliver == true)
+                {
+                    float lineHeight = outputObject.GetComponent<Rocket>() != null ? outputObject.transform.position.y + 40 : 0;
+                    connectionLine.SetPosition(1, outputObject.transform.position + outputObject.transform.up * lineHeight);
+                    connectionLine.enabled = true;
+                    GetComponent<Light>().enabled = true;
+                    GetComponent<AudioSource>().enabled = true;
+                    if (outputObject.GetComponent<RailCart>() != null)
+                    {
+                        outputID = outputObject.GetComponent<RailCart>().ID;
+                    }
+                    else
+                    {
+                        outputID = outputObject.GetComponent<InventoryManager>().ID;
+                    }
+                    if (amount >= speed)
+                    {
+                        if (type.Equals("Brick") && inputObject.GetComponent<Press>() != null)
+                        {
+                            outputObject.GetComponent<InventoryManager>().AddItem(type, speed * 10);
+                            if (outputObject.GetComponent<InventoryManager>().itemAdded == true)
+                            {
+                                amount -= speed;
+                            }
+                        }
+                        else
+                        {
+                            outputObject.GetComponent<InventoryManager>().AddItem(type, speed);
+                            if (outputObject.GetComponent<InventoryManager>().itemAdded == true)
+                            {
+                                amount -= speed;
+                            }
+                        }
+                    }
+                }
+            }
+            else
+            {
+                conduitItem.active = false;
+                GetComponent<Light>().enabled = false;
+                GetComponent<AudioSource>().enabled = false;
+            }
+        }
+        else
+        {
+            connectionLine.enabled = false;
+            conduitItem.active = false;
+            GetComponent<Light>().enabled = false;
+            GetComponent<AudioSource>().enabled = false;
+        }
+    }
+
+    private void OutputToStorageComputer()
+    {
+        outputID = outputObject.GetComponent<StorageComputer>().ID;
+        if (outputObject.GetComponent<StorageComputer>().initialized == true && type != "" && type != "nothing")
+        {
+            if (storageComputerConduitItem == null)
+            {
+                GameObject storageComputerItemObject = Instantiate(storageComputerConduitItemObject, outputObject.transform.position, outputObject.transform.rotation);
+                storageComputerItemObject.transform.parent = outputObject.transform;
+                storageComputerConduitItem = storageComputerItemObject.GetComponent<ConduitItem>();
+            }
+            else
+            {
+                if (inputMachineDisabled == true && inputObject.GetComponent<UniversalConduit>() == null)
+                {
+                    storageComputerConduitItem.active = false;
+                }
+                else if (inputObject.GetComponent<UniversalConduit>() != null)
+                {
+                    if (inputObject.GetComponent<UniversalConduit>().inputMachineDisabled == true)
+                    {
+                        storageComputerConduitItem.active = false;
+                    }
+                }
+            }
+            if (amount >= speed)
+            {
+                connectionLine.enabled = true;
+                connectionLine.SetPosition(1, outputObject.transform.position);
+                if (type.Equals("Brick") && inputObject.GetComponent<Press>() != null)
+                {
+                    bool itemAdded = false;
+                    foreach (InventoryManager manager in outputObject.GetComponent<StorageComputer>().computerContainers)
+                    {
+                        if (itemAdded == false)
+                        {
+                            manager.AddItem(type, speed * 10);
+                            if (manager.itemAdded == true)
+                            {
+                                itemAdded = true;
+                                amount -= speed;
+                                if (storageComputerConduitItem != null)
+                                {
+                                    if (storageComputerConduitItem.textureDictionary != null)
+                                    {
+                                        storageComputerConduitItem.billboard.GetComponent<Renderer>().material.mainTexture = storageComputerConduitItem.textureDictionary[type];
+                                    }
+                                    storageComputerConduitItem.target = manager.gameObject;
+                                }
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    bool itemAdded = false;
+                    foreach (InventoryManager manager in outputObject.GetComponent<StorageComputer>().computerContainers)
+                    {
+                        if (itemAdded == false)
+                        {
+                            manager.AddItem(type, speed);
+                            if (manager.itemAdded == true)
+                            {
+                                itemAdded = true;
+                                amount -= speed;
+                                if (storageComputerConduitItem != null)
+                                {
+                                    if (storageComputerConduitItem.textureDictionary != null)
+                                    {
+                                        storageComputerConduitItem.billboard.GetComponent<Renderer>().material.mainTexture = storageComputerConduitItem.textureDictionary[type];
+                                    }
+                                    storageComputerConduitItem.target = manager.gameObject;
+                                }
+                            }
+                        }
+                    }
+                }
+                if (storageComputerConduitItem != null)
+                {
+                    storageComputerConduitItem.active = true;
+                }
+                conduitItem.active = true;
+                GetComponent<Light>().enabled = true;
+                GetComponent<AudioSource>().enabled = true;
+            }
+        }
+        else
+        {
+            if (storageComputerConduitItem != null)
+            {
+                storageComputerConduitItem.active = false;
+            }
+            conduitItem.active = false;
+            GetComponent<Light>().enabled = false;
+            GetComponent<AudioSource>().enabled = false;
+        }
     }
 
     // Makes input and output connections
@@ -215,11 +389,12 @@ public class UniversalConduit : MonoBehaviour
                 if (creationMethod.Equals("spawned") && obj.GetComponent<InventoryManager>().ID.Equals(outputID))
                 {
                     float distance = Vector3.Distance(transform.position, obj.transform.position);
-                    if (distance < range || obj.GetComponent<RailCart>() != null)
+                    if (distance < range || obj.GetComponent<RailCart>() != null || obj.GetComponent<Rocket>() != null)
                     {
                         outputObject = obj;
+                        float lineHeight = obj.GetComponent<Rocket>() != null ? obj.transform.position.y + 40 : 0;
                         connectionLine.SetPosition(0, transform.position);
-                        connectionLine.SetPosition(1, obj.transform.position);
+                        connectionLine.SetPosition(1, obj.transform.position + obj.transform.up * lineHeight);
                         connectionLine.enabled = true;
                         creationMethod = "built";
                     }
@@ -230,8 +405,9 @@ public class UniversalConduit : MonoBehaviour
                     if (distance < range)
                     {
                         outputObject = obj;
+                        float lineHeight = obj.GetComponent<Rocket>() != null ? obj.transform.position.y + 40 : 0;
                         connectionLine.SetPosition(0, transform.position);
-                        connectionLine.SetPosition(1, obj.transform.position);
+                        connectionLine.SetPosition(1, obj.transform.position + obj.transform.up * lineHeight);
                         connectionLine.enabled = true;
                     }
                 }
@@ -476,9 +652,9 @@ public class UniversalConduit : MonoBehaviour
     {
         if (inputObject.GetComponent<AlloySmelter>() != null)
         {
-            if (inputObject.GetComponent<AlloySmelter>().conduitItem.GetComponent<ConduitItem>().active == false)
+            if (inputObject.GetComponent<AlloySmelter>().conduitItem.active == false)
             {
-                conduitItem.GetComponent<ConduitItem>().active = false;
+                conduitItem.active = false;
                 GetComponent<Light>().enabled = false;
                 GetComponent<AudioSource>().enabled = false;
                 inputMachineDisabled = true;
@@ -503,7 +679,7 @@ public class UniversalConduit : MonoBehaviour
             }
             else
             {
-                conduitItem.GetComponent<ConduitItem>().active = false;
+                conduitItem.active = false;
                 GetComponent<Light>().enabled = false;
                 GetComponent<AudioSource>().enabled = false;
                 inputMachineDisabled = true;
@@ -511,9 +687,9 @@ public class UniversalConduit : MonoBehaviour
         }
         if (inputObject.GetComponent<AutoCrafter>() != null)
         {
-            if (inputObject.GetComponent<AutoCrafter>().conduitItem.GetComponent<ConduitItem>().active == false)
+            if (inputObject.GetComponent<AutoCrafter>().conduitItem.active == false)
             {
-                conduitItem.GetComponent<ConduitItem>().active = false;
+                conduitItem.active = false;
                 GetComponent<Light>().enabled = false;
                 GetComponent<AudioSource>().enabled = false;
                 inputMachineDisabled = true;
@@ -525,9 +701,9 @@ public class UniversalConduit : MonoBehaviour
         }
         if (inputObject.GetComponent<Extruder>() != null)
         {
-            if (inputObject.GetComponent<Extruder>().conduitItem.GetComponent<ConduitItem>().active == false)
+            if (inputObject.GetComponent<Extruder>().conduitItem.active == false)
             {
-                conduitItem.GetComponent<ConduitItem>().active = false;
+                conduitItem.active = false;
                 GetComponent<Light>().enabled = false;
                 GetComponent<AudioSource>().enabled = false;
                 inputMachineDisabled = true;
@@ -539,9 +715,9 @@ public class UniversalConduit : MonoBehaviour
         }
         if (inputObject.GetComponent<GearCutter>() != null)
         {
-            if (inputObject.GetComponent<GearCutter>().conduitItem.GetComponent<ConduitItem>().active == false)
+            if (inputObject.GetComponent<GearCutter>().conduitItem.active == false)
             {
-                conduitItem.GetComponent<ConduitItem>().active = false;
+                conduitItem.active = false;
                 GetComponent<Light>().enabled = false;
                 GetComponent<AudioSource>().enabled = false;
                 inputMachineDisabled = true;
@@ -553,9 +729,9 @@ public class UniversalConduit : MonoBehaviour
         }
         if (inputObject.GetComponent<Press>() != null)
         {
-            if (inputObject.GetComponent<Press>().conduitItem.GetComponent<ConduitItem>().active == false)
+            if (inputObject.GetComponent<Press>().conduitItem.active == false)
             {
-                conduitItem.GetComponent<ConduitItem>().active = false;
+                conduitItem.active = false;
                 GetComponent<Light>().enabled = false;
                 GetComponent<AudioSource>().enabled = false;
                 inputMachineDisabled = true;
@@ -567,9 +743,9 @@ public class UniversalConduit : MonoBehaviour
         }
         if (inputObject.GetComponent<Retriever>() != null)
         {
-            if (inputObject.GetComponent<Retriever>().conduitItem.GetComponent<ConduitItem>().active == false)
+            if (inputObject.GetComponent<Retriever>().conduitItem.active == false)
             {
-                conduitItem.GetComponent<ConduitItem>().active = false;
+                conduitItem.active = false;
                 GetComponent<Light>().enabled = false;
                 GetComponent<AudioSource>().enabled = false;
                 inputMachineDisabled = true;
@@ -581,9 +757,9 @@ public class UniversalConduit : MonoBehaviour
         }
         if (inputObject.GetComponent<Smelter>() != null)
         {
-            if (inputObject.GetComponent<Smelter>().conduitItem.GetComponent<ConduitItem>().active == false)
+            if (inputObject.GetComponent<Smelter>().conduitItem.active == false)
             {
-                conduitItem.GetComponent<ConduitItem>().active = false;
+                conduitItem.active = false;
                 GetComponent<Light>().enabled = false;
                 GetComponent<AudioSource>().enabled = false;
                 inputMachineDisabled = true;
@@ -595,9 +771,9 @@ public class UniversalConduit : MonoBehaviour
         }
         if (inputObject.GetComponent<UniversalConduit>() != null)
         {
-            if (inputObject.GetComponent<UniversalConduit>().conduitItem.GetComponent<ConduitItem>().active == false)
+            if (inputObject.GetComponent<UniversalConduit>().conduitItem.active == false)
             {
-                conduitItem.GetComponent<ConduitItem>().active = false;
+                conduitItem.active = false;
                 GetComponent<Light>().enabled = false;
                 GetComponent<AudioSource>().enabled = false;
                 inputMachineDisabled = true;
@@ -625,7 +801,7 @@ public class UniversalConduit : MonoBehaviour
                 }
                 else
                 {
-                    conduitItem.GetComponent<ConduitItem>().active = false;
+                    conduitItem.active = false;
                     GetComponent<Light>().enabled = false;
                     GetComponent<AudioSource>().enabled = false;
                     inputMachineDisabled = true;
@@ -670,14 +846,14 @@ public class UniversalConduit : MonoBehaviour
                             outputObject.GetComponent<UniversalConduit>().amount += speed;
                         }
                         amount -= speed;
-                        conduitItem.GetComponent<ConduitItem>().active = true;
+                        conduitItem.active = true;
                         GetComponent<Light>().enabled = true;
                         GetComponent<AudioSource>().enabled = true;
                     }
                 }
                 else
                 {
-                    conduitItem.GetComponent<ConduitItem>().active = false;
+                    conduitItem.active = false;
                     GetComponent<Light>().enabled = false;
                     GetComponent<AudioSource>().enabled = false;
                 }
@@ -696,14 +872,14 @@ public class UniversalConduit : MonoBehaviour
                             outputObject.GetComponent<PowerSource>().fuelAmount += speed;
                         }
                         amount -= speed;
-                        conduitItem.GetComponent<ConduitItem>().active = true;
+                        conduitItem.active = true;
                         GetComponent<Light>().enabled = true;
                         GetComponent<AudioSource>().enabled = true;
                     }
                 }
                 else
                 {
-                    conduitItem.GetComponent<ConduitItem>().active = false;
+                    conduitItem.active = false;
                     GetComponent<Light>().enabled = false;
                     GetComponent<AudioSource>().enabled = false;
                 }
@@ -718,14 +894,14 @@ public class UniversalConduit : MonoBehaviour
                     {
                         outputObject.GetComponent<Smelter>().amount += speed;
                         amount -= speed;
-                        conduitItem.GetComponent<ConduitItem>().active = true;
+                        conduitItem.active = true;
                         GetComponent<Light>().enabled = true;
                         GetComponent<AudioSource>().enabled = true;
                     }
                 }
                 else
                 {
-                    conduitItem.GetComponent<ConduitItem>().active = false;
+                    conduitItem.active = false;
                     GetComponent<Light>().enabled = false;
                     GetComponent<AudioSource>().enabled = false;
                 }
@@ -740,14 +916,14 @@ public class UniversalConduit : MonoBehaviour
                     {
                         outputObject.GetComponent<HeatExchanger>().amount += speed;
                         amount -= speed;
-                        conduitItem.GetComponent<ConduitItem>().active = true;
+                        conduitItem.active = true;
                         GetComponent<Light>().enabled = true;
                         GetComponent<AudioSource>().enabled = true;
                     }
                 }
                 else
                 {
-                    conduitItem.GetComponent<ConduitItem>().active = false;
+                    conduitItem.active = false;
                     GetComponent<Light>().enabled = false;
                     GetComponent<AudioSource>().enabled = false;
                 }
@@ -764,13 +940,13 @@ public class UniversalConduit : MonoBehaviour
                         {
                             outputObject.GetComponent<AlloySmelter>().amount += speed;
                             amount -= speed;
-                            conduitItem.GetComponent<ConduitItem>().active = true;
+                            conduitItem.active = true;
                             GetComponent<Light>().enabled = true;
                             GetComponent<AudioSource>().enabled = true;
                         }
                         else
                         {
-                            conduitItem.GetComponent<ConduitItem>().active = false;
+                            conduitItem.active = false;
                             GetComponent<Light>().enabled = false;
                             GetComponent<AudioSource>().enabled = false;
                         }
@@ -785,13 +961,13 @@ public class UniversalConduit : MonoBehaviour
                         {
                             outputObject.GetComponent<AlloySmelter>().amount2 += speed;
                             amount -= speed;
-                            conduitItem.GetComponent<ConduitItem>().active = true;
+                            conduitItem.active = true;
                             GetComponent<Light>().enabled = true;
                             GetComponent<AudioSource>().enabled = true;
                         }
                         else
                         {
-                            conduitItem.GetComponent<ConduitItem>().active = false;
+                            conduitItem.active = false;
                             GetComponent<Light>().enabled = false;
                             GetComponent<AudioSource>().enabled = false;
                         }
@@ -808,14 +984,14 @@ public class UniversalConduit : MonoBehaviour
                     {
                         outputObject.GetComponent<Press>().amount += speed;
                         amount -= speed;
-                        conduitItem.GetComponent<ConduitItem>().active = true;
+                        conduitItem.active = true;
                         GetComponent<Light>().enabled = true;
                         GetComponent<AudioSource>().enabled = true;
                     }
                 }
                 else
                 {
-                    conduitItem.GetComponent<ConduitItem>().active = false;
+                    conduitItem.active = false;
                     GetComponent<Light>().enabled = false;
                     GetComponent<AudioSource>().enabled = false;
                 }
@@ -830,14 +1006,14 @@ public class UniversalConduit : MonoBehaviour
                     {
                         outputObject.GetComponent<Extruder>().amount += speed;
                         amount -= speed;
-                        conduitItem.GetComponent<ConduitItem>().active = true;
+                        conduitItem.active = true;
                         GetComponent<Light>().enabled = true;
                         GetComponent<AudioSource>().enabled = true;
                     }
                 }
                 else
                 {
-                    conduitItem.GetComponent<ConduitItem>().active = false;
+                    conduitItem.active = false;
                     GetComponent<Light>().enabled = false;
                     GetComponent<AudioSource>().enabled = false;
                 }
@@ -852,181 +1028,25 @@ public class UniversalConduit : MonoBehaviour
                     {
                         outputObject.GetComponent<GearCutter>().amount += speed;
                         amount -= speed;
-                        conduitItem.GetComponent<ConduitItem>().active = true;
+                        conduitItem.active = true;
                         GetComponent<Light>().enabled = true;
                         GetComponent<AudioSource>().enabled = true;
                     }
                 }
                 else
                 {
-                    conduitItem.GetComponent<ConduitItem>().active = false;
+                    conduitItem.active = false;
                     GetComponent<Light>().enabled = false;
                     GetComponent<AudioSource>().enabled = false;
                 }
             }
             if (outputObject.GetComponent<InventoryManager>() != null)
             {
-                if (Vector3.Distance(transform.position, outputObject.transform.position) <= range)
-                {
-                    if (type != "" && type != "nothing")
-                    {
-                        if (inputObject != null)
-                        {
-                            if (inputMachineDisabled == false && inputObject.GetComponent<UniversalConduit>() == null)
-                            {
-                                conduitItem.GetComponent<ConduitItem>().active = true;
-                            }
-                            else if (inputObject.GetComponent<UniversalConduit>() != null)
-                            {
-                                if (inputObject.GetComponent<UniversalConduit>().inputMachineDisabled == false)
-                                {
-                                    conduitItem.GetComponent<ConduitItem>().active = true;
-                                }
-                            }
-                        }
-                        connectionLine.enabled = true;
-                        connectionLine.SetPosition(1, outputObject.transform.position);
-                        GetComponent<Light>().enabled = true;
-                        GetComponent<AudioSource>().enabled = true;
-                        if (outputObject.GetComponent<RailCart>() != null)
-                        {
-                            outputID = outputObject.GetComponent<RailCart>().ID;
-                        }
-                        else
-                        {
-                            outputID = outputObject.GetComponent<InventoryManager>().ID;
-                        }
-                        if (amount >= speed)
-                        {
-                            if (type.Equals("Brick") && inputObject.GetComponent<Press>() != null)
-                            {
-                                outputObject.GetComponent<InventoryManager>().AddItem(type, speed * 10);
-                                if (outputObject.GetComponent<InventoryManager>().itemAdded == true)
-                                {
-                                    amount -= speed;
-                                }
-                            }
-                            else
-                            {
-                                outputObject.GetComponent<InventoryManager>().AddItem(type, speed);
-                                if (outputObject.GetComponent<InventoryManager>().itemAdded == true)
-                                {
-                                    amount -= speed;
-                                }
-                            }
-                        }
-                    }
-                    else
-                    {
-                        conduitItem.GetComponent<ConduitItem>().active = false;
-                        GetComponent<Light>().enabled = false;
-                        GetComponent<AudioSource>().enabled = false;
-                    }
-                }
-                else
-                {
-                    connectionLine.enabled = false;
-                    conduitItem.GetComponent<ConduitItem>().active = false;
-                    GetComponent<Light>().enabled = false;
-                    GetComponent<AudioSource>().enabled = false;
-                }
+                OutputToInventory();
             }
             if (outputObject.GetComponent<StorageComputer>() != null)
             {
-                outputID = outputObject.GetComponent<StorageComputer>().ID;
-                if (outputObject.GetComponent<StorageComputer>().initialized == true && type != "" && type != "nothing")
-                {
-                    if (storageComputerConduitItem == null)
-                    {
-                        GameObject storageComputerItemObject = Instantiate(storageComputerConduitItemObject, outputObject.transform.position, outputObject.transform.rotation);
-                        storageComputerItemObject.transform.parent = outputObject.transform;
-                        storageComputerConduitItem = storageComputerItemObject.GetComponent<ConduitItem>();
-                    }
-                    else
-                    {
-                        if (inputMachineDisabled == true && inputObject.GetComponent<UniversalConduit>() == null)
-                        {
-                            storageComputerConduitItem.active = false;
-                        }
-                        else if (inputObject.GetComponent<UniversalConduit>() != null)
-                        {
-                            if (inputObject.GetComponent<UniversalConduit>().inputMachineDisabled == true)
-                            {
-                                storageComputerConduitItem.active = false;
-                            }
-                        }
-                    }
-                    if (amount >= speed)
-                    {
-                        connectionLine.enabled = true;
-                        connectionLine.SetPosition(1, outputObject.transform.position);
-                        if (type.Equals("Brick") && inputObject.GetComponent<Press>() != null)
-                        {
-                            bool itemAdded = false;
-                            foreach (InventoryManager manager in outputObject.GetComponent<StorageComputer>().computerContainers)
-                            {
-                                if (itemAdded == false)
-                                {
-                                    manager.AddItem(type, speed * 10);
-                                    if (manager.itemAdded == true)
-                                    {
-                                        itemAdded = true;
-                                        amount -= speed;
-                                        if (storageComputerConduitItem != null)
-                                        {
-                                            if (storageComputerConduitItem.textureDictionary != null)
-                                            {
-                                                storageComputerConduitItem.billboard.GetComponent<Renderer>().material.mainTexture = storageComputerConduitItem.textureDictionary[type];
-                                            }
-                                            storageComputerConduitItem.target = manager.gameObject;
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                        else
-                        {
-                            bool itemAdded = false;
-                            foreach (InventoryManager manager in outputObject.GetComponent<StorageComputer>().computerContainers)
-                            {
-                                if (itemAdded == false)
-                                {
-                                    manager.AddItem(type, speed);
-                                    if (manager.itemAdded == true)
-                                    {
-                                        itemAdded = true;
-                                        amount -= speed;
-                                        if (storageComputerConduitItem != null)
-                                        {
-                                            if (storageComputerConduitItem.textureDictionary != null)
-                                            {
-                                                storageComputerConduitItem.billboard.GetComponent<Renderer>().material.mainTexture = storageComputerConduitItem.textureDictionary[type];
-                                            }
-                                            storageComputerConduitItem.target = manager.gameObject;
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                        if (storageComputerConduitItem != null)
-                        {
-                            storageComputerConduitItem.active = true;
-                        }
-                        conduitItem.GetComponent<ConduitItem>().active = true;
-                        GetComponent<Light>().enabled = true;
-                        GetComponent<AudioSource>().enabled = true;
-                    }
-                }
-                else
-                {
-                    if (storageComputerConduitItem != null)
-                    {
-                        storageComputerConduitItem.active = false;
-                    }
-                    conduitItem.GetComponent<ConduitItem>().active = false;
-                    GetComponent<Light>().enabled = false;
-                    GetComponent<AudioSource>().enabled = false;
-                }
+                OutputToStorageComputer();
             }
         }
         else

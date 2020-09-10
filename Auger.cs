@@ -10,7 +10,7 @@ public class Auger : MonoBehaviour
     public int cooling;
     public GameObject outputObject;
     public GameObject powerObject;
-    public GameObject conduitItem;
+    public ConduitItem conduitItem;
     public PowerReceiver powerReceiver;
     public Material lineMat;
     public string ID = "unassigned";
@@ -26,6 +26,7 @@ public class Auger : MonoBehaviour
     {
         powerReceiver = gameObject.AddComponent<PowerReceiver>();
         connectionLine = gameObject.AddComponent<LineRenderer>();
+        conduitItem = GetComponentInChildren<ConduitItem>(true);
         connectionLine.startWidth = 0.2f;
         connectionLine.endWidth = 0.2f;
         connectionLine.material = lineMat;
@@ -73,7 +74,7 @@ public class Auger : MonoBehaviour
 
             if (powerON == true && speed > 0)
             {
-                conduitItem.GetComponent<ConduitItem>().active = true;
+                conduitItem.active = true;
                 GetComponent<Light>().enabled = true;
                 GetComponent<AudioSource>().enabled = true;
                 machineTimer += 1;
@@ -86,7 +87,7 @@ public class Auger : MonoBehaviour
             else
             {
                 machineTimer = 0;
-                conduitItem.GetComponent<ConduitItem>().active = false;
+                conduitItem.active = false;
                 GetComponent<Light>().enabled = false;
                 GetComponent<AudioSource>().enabled = false;
             }

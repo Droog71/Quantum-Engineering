@@ -27,6 +27,7 @@ public class InfoHUD : MonoBehaviour
         && playerController.objectInSight != null
         && playerController.building == false
         && playerController.inventoryOpen == false
+        && playerController.marketGUIopen == false
         && playerController.escapeMenuOpen == false
         && playerController.tabletOpen == false;
     }

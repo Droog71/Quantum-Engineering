@@ -19,7 +19,7 @@ public class AutoCrafter : MonoBehaviour
     public GameObject storageComputerConduitItemObject;
     public GameObject inputObject;
     public GameObject powerObject;
-    public GameObject conduitItem;
+    public ConduitItem conduitItem;
     public Material lineMat;
     private float updateTick;
     private int machineTimer;
@@ -41,6 +41,7 @@ public class AutoCrafter : MonoBehaviour
         connectionLine.loop = true;
         connectionLine.enabled = false;
         builtObjects = GameObject.Find("Built_Objects");
+        conduitItem = GetComponentInChildren<ConduitItem>(true);
     }
 
     // Called once per frame by unity engine
@@ -218,7 +219,7 @@ public class AutoCrafter : MonoBehaviour
                     inputObject = obj;
                     inputID = obj.GetComponent<StorageComputer>().ID;
                     craftingManager.storageComputerInventoryManager = obj.GetComponent<StorageComputer>().computerContainers;
-                    craftingManager.conduitItem = inputObject.GetComponent<StorageComputer>().conduitItem.GetComponent<ConduitItem>();
+                    craftingManager.conduitItem = inputObject.GetComponent<StorageComputer>().conduitItem;
                     connectionLine.SetPosition(0, transform.position);
                     connectionLine.SetPosition(1, obj.transform.position);
                     connectionLine.enabled = true;
@@ -229,7 +230,7 @@ public class AutoCrafter : MonoBehaviour
                     inputObject = obj;
                     inputID = obj.GetComponent<StorageComputer>().ID;
                     craftingManager.storageComputerInventoryManager = obj.GetComponent<StorageComputer>().computerContainers;
-                    craftingManager.conduitItem = inputObject.GetComponent<StorageComputer>().conduitItem.GetComponent<ConduitItem>();
+                    craftingManager.conduitItem = inputObject.GetComponent<StorageComputer>().conduitItem;
                     connectionLine.SetPosition(0, transform.position);
                     connectionLine.SetPosition(1, obj.transform.position);
                     connectionLine.enabled = true;
@@ -341,7 +342,7 @@ public class AutoCrafter : MonoBehaviour
     // Called when all requirements are met for the machine to be running, activates effects
     private void Activate()
     {
-        conduitItem.GetComponent<ConduitItem>().active = true;
+        conduitItem.active = true;
         GetComponent<Light>().enabled = true;
         if (GetComponent<AudioSource>().isPlaying == false)
         {
@@ -359,7 +360,7 @@ public class AutoCrafter : MonoBehaviour
             craftingManager.conduitItem.active = false;
         }
         connectionLine.enabled &= !disconnect;
-        conduitItem.GetComponent<ConduitItem>().active = false;
+        conduitItem.active = false;
         GetComponent<Light>().enabled = false;
         GetComponent<AudioSource>().Stop();
     }

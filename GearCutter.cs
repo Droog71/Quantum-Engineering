@@ -18,7 +18,7 @@ public class GearCutter : MonoBehaviour
     public GameObject inputObject;
     public GameObject outputObject;
     public GameObject powerObject;
-    public GameObject conduitItem;
+    public ConduitItem conduitItem;
     public Material lineMat;
     public PowerReceiver powerReceiver;
     private LineRenderer connectionLine;
@@ -35,6 +35,7 @@ public class GearCutter : MonoBehaviour
     {
         connectionLine = gameObject.AddComponent<LineRenderer>();
         powerReceiver = gameObject.AddComponent<PowerReceiver>();
+        conduitItem = GetComponentInChildren<ConduitItem>(true);
         connectionLine.startWidth = 0.2f;
         connectionLine.endWidth = 0.2f;
         connectionLine.material = lineMat;
@@ -104,9 +105,9 @@ public class GearCutter : MonoBehaviour
                     }
 
                     // Disable effects when there is no input to this machine
-                    if (inputObject.GetComponent<UniversalConduit>().conduitItem.GetComponent<ConduitItem>().active == false)
+                    if (inputObject.GetComponent<UniversalConduit>().conduitItem.active == false)
                     {
-                        conduitItem.GetComponent<ConduitItem>().active = false;
+                        conduitItem.active = false;
                         GetComponent<Light>().enabled = false;
                         GetComponent<AudioSource>().enabled = false;
                         laserCutter.SetActive(false);
@@ -116,7 +117,7 @@ public class GearCutter : MonoBehaviour
             else
             {
                 // With no input object, this machine is inactive
-                conduitItem.GetComponent<ConduitItem>().active = false;
+                conduitItem.active = false;
                 GetComponent<Light>().enabled = false;
                 GetComponent<AudioSource>().enabled = false;
                 laserCutter.SetActive(false);
@@ -242,7 +243,7 @@ public class GearCutter : MonoBehaviour
                     {
                         if (powerON == true && connectionFailed == false && inputObject != null && speed > 0)
                         {
-                            conduitItem.GetComponent<ConduitItem>().active = true;
+                            conduitItem.active = true;
                             GetComponent<Light>().enabled = true;
                             GetComponent<AudioSource>().enabled = true;
                             laserCutter.SetActive(true);
@@ -256,7 +257,7 @@ public class GearCutter : MonoBehaviour
                         }
                         else
                         {
-                            conduitItem.GetComponent<ConduitItem>().active = false;
+                            conduitItem.active = false;
                             GetComponent<Light>().enabled = false;
                             GetComponent<AudioSource>().enabled = false;
                             laserCutter.SetActive(false);

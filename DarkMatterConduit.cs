@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
+using System.Linq;
 
 public class DarkMatterConduit : MonoBehaviour
 {
@@ -10,7 +12,7 @@ public class DarkMatterConduit : MonoBehaviour
     public string creationMethod = "built";
     public GameObject inputObject;
     public GameObject outputObject;
-    public GameObject conduitItem;
+    public ConduitItem conduitItem;
     public Material darkMatterMat;
     public Material lineMat;
     LineRenderer connectionLine;
@@ -27,6 +29,7 @@ public class DarkMatterConduit : MonoBehaviour
     public void Start()
     {
         connectionLine = gameObject.AddComponent<LineRenderer>();
+        conduitItem = GetComponentInChildren<ConduitItem>(true);
         connectionLine.startWidth = 0.2f;
         connectionLine.endWidth = 0.2f;
         connectionLine.material = lineMat;
@@ -118,7 +121,10 @@ public class DarkMatterConduit : MonoBehaviour
     private void FindConnections()
     {
         GameObject[] allObjects = GameObject.FindGameObjectsWithTag("Built");
-        foreach (GameObject obj in allObjects)
+        List<GameObject> objList = allObjects.ToList();
+        objList.Add(GameObject.Find("Rocket"));
+        objList.Add(GameObject.Find("LanderCargo"));
+        foreach (GameObject obj in objList)
         {
             if (IsValidObject(obj))
             {
@@ -134,14 +140,14 @@ public class DarkMatterConduit : MonoBehaviour
                                 if (obj.GetComponent<DarkMatterCollector>().ID.Equals(inputID))
                                 {
                                     inputObject = obj;
-                                    obj.GetComponent<DarkMatterCollector>().outputObject = this.gameObject;
+                                    obj.GetComponent<DarkMatterCollector>().outputObject = gameObject;
                                 }
                                 creationMethod = "built";
                             }
                             else if (creationMethod.Equals("built"))
                             {
                                 inputObject = obj;
-                                obj.GetComponent<DarkMatterCollector>().outputObject = this.gameObject;
+                                obj.GetComponent<DarkMatterCollector>().outputObject = gameObject;
                             }
                         }
                     }
@@ -155,11 +161,12 @@ public class DarkMatterConduit : MonoBehaviour
                             if (obj.GetComponent<InventoryManager>().ID.Equals(outputID))
                             {
                                 float distance = Vector3.Distance(transform.position, obj.transform.position);
-                                if (distance < range || obj.GetComponent<RailCart>() != null)
+                                if (distance < range || obj.GetComponent<RailCart>() != null || obj.GetComponent<Rocket>() != null)
                                 {
                                     outputObject = obj;
+                                    float lineHeight = obj.GetComponent<Rocket>() != null ? obj.transform.position.y + 40 : 0;
                                     connectionLine.SetPosition(0, transform.position);
-                                    connectionLine.SetPosition(1, obj.transform.position);
+                                    connectionLine.SetPosition(1, obj.transform.position + obj.transform.up * lineHeight);
                                     connectionLine.enabled = true;
                                     creationMethod = "built";
                                 }
@@ -171,8 +178,9 @@ public class DarkMatterConduit : MonoBehaviour
                             if (distance < range)
                             {
                                 outputObject = obj;
+                                float lineHeight = obj.GetComponent<Rocket>() != null ? obj.transform.position.y + 40 : 0;
                                 connectionLine.SetPosition(0, transform.position);
-                                connectionLine.SetPosition(1, obj.transform.position);
+                                connectionLine.SetPosition(1, obj.transform.position + obj.transform.up * lineHeight);
                                 connectionLine.enabled = true;
                             }
                         }
@@ -240,11 +248,12 @@ public class DarkMatterConduit : MonoBehaviour
         {
             if (inputObject.GetComponent<DarkMatterCollector>() != null)
             {
-                inputID = inputObject.GetComponent<DarkMatterCollector>().ID;
-                speed = inputObject.GetComponent<DarkMatterCollector>().speed;
-                if (inputObject.GetComponent<DarkMatterCollector>().powerON == true && inputObject.GetComponent<DarkMatterCollector>().foundDarkMatter == true && inputObject.GetComponent<DarkMatterCollector>().speed > 0)
+                DarkMatterCollector collector = inputObject.GetComponent<DarkMatterCollector>();
+                inputID = collector.ID;
+                speed = collector.speed;
+                if (collector.powerON == true && collector.foundDarkMatter == true && collector.speed > 0)
                 {
-                    if (inputObject.GetComponent<DarkMatterCollector>().darkMatterAmount >= speed && connectionFailed == false)
+                    if (collector.darkMatterAmount >= speed && connectionFailed == false)
                     {
                         inputObject.GetComponent<DarkMatterCollector>().darkMatterAmount -= speed;
                         darkMatterAmount += speed;
@@ -256,20 +265,20 @@ public class DarkMatterConduit : MonoBehaviour
                     {
                         storageComputerConduitItem.active = false;
                     }
-                    conduitItem.GetComponent<ConduitItem>().active = false;
+                    conduitItem.active = false;
                     GetComponent<Light>().enabled = false;
                     GetComponent<AudioSource>().enabled = false;
                 }
             }
             if (inputObject.GetComponent<DarkMatterConduit>() != null)
             {
-                if (inputObject.GetComponent<DarkMatterConduit>().conduitItem.GetComponent<ConduitItem>().active == false)
+                if (inputObject.GetComponent<DarkMatterConduit>().conduitItem.active == false)
                 {
                     if (storageComputerConduitItem != null)
                     {
                         storageComputerConduitItem.active = false;
                     }
-                    conduitItem.GetComponent<ConduitItem>().active = false;
+                    conduitItem.active = false;
                     GetComponent<Light>().enabled = false;
                     GetComponent<AudioSource>().enabled = false;
                 }
@@ -277,7 +286,7 @@ public class DarkMatterConduit : MonoBehaviour
         }
         else
         {
-            conduitItem.GetComponent<ConduitItem>().active = false;
+            conduitItem.active = false;
             GetComponent<Light>().enabled = false;
             GetComponent<AudioSource>().enabled = false;
         }
@@ -298,102 +307,18 @@ public class DarkMatterConduit : MonoBehaviour
                 {
                     outputObject.GetComponent<DarkMatterConduit>().darkMatterAmount += speed;
                     darkMatterAmount -= speed;
-                    conduitItem.GetComponent<ConduitItem>().active = true;
+                    conduitItem.active = true;
                     GetComponent<Light>().enabled = true;
                     GetComponent<AudioSource>().enabled = true;
                 }
             }
             else if (outputObject.GetComponent<StorageComputer>() != null)
             {
-                outputID = outputObject.GetComponent<StorageComputer>().ID;
-                if (outputObject.GetComponent<StorageComputer>().initialized == true)
-                {
-                    if (storageComputerConduitItem == null)
-                    {
-                        GameObject storageComputerItemObject = Instantiate(storageComputerConduitItemObject, outputObject.transform.position, outputObject.transform.rotation);
-                        storageComputerItemObject.transform.parent = outputObject.transform;
-                        storageComputerConduitItem = storageComputerItemObject.GetComponent<ConduitItem>();
-                    }
-                    if (darkMatterAmount >= speed && connectionFailed == false && speed > 0)
-                    {
-                        connectionLine.enabled = true;
-                        connectionLine.SetPosition(1, outputObject.transform.position);
-                        bool itemAdded = false;
-                        foreach (InventoryManager manager in outputObject.GetComponent<StorageComputer>().computerContainers)
-                        {
-                            if (itemAdded == false)
-                            {
-                                manager.AddItem("Dark Matter", speed);
-                                if (manager.itemAdded == true)
-                                {
-                                    itemAdded = true;
-                                    darkMatterAmount -= speed;
-                                    if (storageComputerConduitItem != null)
-                                    {
-                                        if (storageComputerConduitItem.textureDictionary != null)
-                                        {
-                                            storageComputerConduitItem.billboard.GetComponent<Renderer>().material.mainTexture = storageComputerConduitItem.textureDictionary["Dark Matter"];
-                                        }
-                                        storageComputerConduitItem.target = manager.gameObject;
-                                    }
-                                }
-                            }
-                        }
-                        if (storageComputerConduitItem != null)
-                        {
-                            storageComputerConduitItem.active = true;
-                        }
-                        conduitItem.GetComponent<ConduitItem>().active = true;
-                        GetComponent<Light>().enabled = true;
-                        GetComponent<AudioSource>().enabled = true;
-                        connectionLine.enabled = true;
-                    }
-                }
-                else
-                {
-                    if (storageComputerConduitItem != null)
-                    {
-                        storageComputerConduitItem.active = false;
-                    }
-                    conduitItem.GetComponent<ConduitItem>().active = false;
-                    GetComponent<Light>().enabled = false;
-                    GetComponent<AudioSource>().enabled = false;
-                }
+                OutputToStorageComputer();
             }
             else if (outputObject.GetComponent<InventoryManager>() != null)
             {
-                if (outputObject.GetComponent<RailCart>() != null)
-                {
-                    outputID = outputObject.GetComponent<RailCart>().ID;
-                }
-                else
-                {
-                    outputID = outputObject.GetComponent<InventoryManager>().ID;
-                }
-                if (Vector3.Distance(transform.position, outputObject.transform.position) <= range)
-                {
-                    if (darkMatterAmount >= speed && connectionFailed == false && speed > 0)
-                    {
-                        connectionLine.enabled = true;
-                        connectionLine.SetPosition(1, outputObject.transform.position);
-                        conduitItem.GetComponent<ConduitItem>().active = true;
-                        GetComponent<Light>().enabled = true;
-                        GetComponent<AudioSource>().enabled = true;
-                        connectionLine.enabled = true;
-                        outputObject.GetComponent<InventoryManager>().AddItem("Dark Matter", speed);
-                        if (outputObject.GetComponent<InventoryManager>().itemAdded == true)
-                        {
-                            darkMatterAmount -= speed;
-                        }
-                    }
-                }
-                else
-                {
-                    connectionLine.enabled = false;
-                    conduitItem.GetComponent<ConduitItem>().active = false;
-                    GetComponent<Light>().enabled = false;
-                    GetComponent<AudioSource>().enabled = false;
-                }
+                OutputToInventory();
             }
         }
         else
@@ -406,6 +331,104 @@ public class DarkMatterConduit : MonoBehaviour
                     creationMethod = "built";
                 }
             }
+        }
+    }
+
+    private void OutputToStorageComputer()
+    {
+        outputID = outputObject.GetComponent<StorageComputer>().ID;
+        if (outputObject.GetComponent<StorageComputer>().initialized == true)
+        {
+            if (storageComputerConduitItem == null)
+            {
+                GameObject storageComputerItemObject = Instantiate(storageComputerConduitItemObject, outputObject.transform.position, outputObject.transform.rotation);
+                storageComputerItemObject.transform.parent = outputObject.transform;
+                storageComputerConduitItem = storageComputerItemObject.GetComponent<ConduitItem>();
+            }
+            if (darkMatterAmount >= speed && connectionFailed == false && speed > 0)
+            {
+                connectionLine.enabled = true;
+                connectionLine.SetPosition(1, outputObject.transform.position);
+                bool itemAdded = false;
+                foreach (InventoryManager manager in outputObject.GetComponent<StorageComputer>().computerContainers)
+                {
+                    if (itemAdded == false)
+                    {
+                        manager.AddItem("Dark Matter", speed);
+                        if (manager.itemAdded == true)
+                        {
+                            itemAdded = true;
+                            darkMatterAmount -= speed;
+                            if (storageComputerConduitItem != null)
+                            {
+                                if (storageComputerConduitItem.textureDictionary != null)
+                                {
+                                    storageComputerConduitItem.billboard.GetComponent<Renderer>().material.mainTexture = storageComputerConduitItem.textureDictionary["Dark Matter"];
+                                }
+                                storageComputerConduitItem.target = manager.gameObject;
+                            }
+                        }
+                    }
+                }
+                if (storageComputerConduitItem != null)
+                {
+                    storageComputerConduitItem.active = true;
+                }
+                conduitItem.active = true;
+                GetComponent<Light>().enabled = true;
+                GetComponent<AudioSource>().enabled = true;
+                connectionLine.enabled = true;
+            }
+        }
+        else
+        {
+            if (storageComputerConduitItem != null)
+            {
+                storageComputerConduitItem.active = false;
+            }
+            conduitItem.active = false;
+            GetComponent<Light>().enabled = false;
+            GetComponent<AudioSource>().enabled = false;
+        }
+    }
+
+    private void OutputToInventory()
+    {
+        if (outputObject.GetComponent<RailCart>() != null)
+        {
+            outputID = outputObject.GetComponent<RailCart>().ID;
+        }
+        else
+        {
+            outputID = outputObject.GetComponent<InventoryManager>().ID;
+        }
+        if (Vector3.Distance(transform.position, outputObject.transform.position) <= range)
+        {
+            if (darkMatterAmount >= speed && connectionFailed == false && speed > 0)
+            {
+                PlayerController playerController = GameObject.Find("Player").GetComponent<PlayerController>();
+                if (outputObject.GetComponent<Rocket>() == null || playerController.timeToDeliver == true)
+                {
+                    float lineHeight = outputObject.GetComponent<Rocket>() != null ? outputObject.transform.position.y + 40 : 0;
+                    connectionLine.SetPosition(1, outputObject.transform.position + outputObject.transform.up * lineHeight);
+                    connectionLine.enabled = true;
+                    conduitItem.active = true;
+                    GetComponent<Light>().enabled = true;
+                    GetComponent<AudioSource>().enabled = true;
+                    outputObject.GetComponent<InventoryManager>().AddItem("Dark Matter", speed);
+                    if (outputObject.GetComponent<InventoryManager>().itemAdded == true)
+                    {
+                        darkMatterAmount -= speed;
+                    }
+                }
+            }
+        }
+        else
+        {
+            connectionLine.enabled = false;
+            conduitItem.active = false;
+            GetComponent<Light>().enabled = false;
+            GetComponent<AudioSource>().enabled = false;
         }
     }
 }

@@ -18,7 +18,7 @@ public class Extruder : MonoBehaviour
     public GameObject inputObject;
     public GameObject outputObject;
     public GameObject powerObject;
-    public GameObject conduitItem;
+    public ConduitItem conduitItem;
     public Material lineMat;
     public PowerReceiver powerReceiver;
     private LineRenderer connectionLine;
@@ -34,6 +34,7 @@ public class Extruder : MonoBehaviour
     {
         powerReceiver = gameObject.AddComponent<PowerReceiver>();
         connectionLine = gameObject.AddComponent<LineRenderer>();
+        conduitItem = GetComponentInChildren<ConduitItem>(true);
         connectionLine.startWidth = 0.2f;
         connectionLine.endWidth = 0.2f;
         connectionLine.material = lineMat;
@@ -102,16 +103,16 @@ public class Extruder : MonoBehaviour
                         SetOutputType();
                     }
 
-                    if (inputObject.GetComponent<UniversalConduit>().conduitItem.GetComponent<ConduitItem>().active == false)
+                    if (inputObject.GetComponent<UniversalConduit>().conduitItem.active == false)
                     {
-                        conduitItem.GetComponent<ConduitItem>().active = false;
+                        conduitItem.active = false;
                         GetComponent<Light>().enabled = false;
                     }
                 }
             }
             else
             {
-                conduitItem.GetComponent<ConduitItem>().active = false;
+                conduitItem.active = false;
                 GetComponent<Light>().enabled = false;
             }
 
@@ -224,7 +225,7 @@ public class Extruder : MonoBehaviour
                     {
                         if (powerON == true && connectionFailed == false && inputObject != null && speed > 0)
                         {
-                            conduitItem.GetComponent<ConduitItem>().active = true;
+                            conduitItem.active = true;
                             GetComponent<Light>().enabled = true;
                             machineTimer += 1;
                             if (machineTimer > 5 - (address * 0.01f))
@@ -236,7 +237,7 @@ public class Extruder : MonoBehaviour
                         }
                         else
                         {
-                            conduitItem.GetComponent<ConduitItem>().active = false;
+                            conduitItem.active = false;
                             GetComponent<Light>().enabled = false;
                             machineTimer = 0;
                         }

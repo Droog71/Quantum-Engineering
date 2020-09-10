@@ -5,7 +5,7 @@ public class StateManager : MonoBehaviour
     //BUILDING
     public bool saving;
     public bool dataSaved;
-    public bool worldLoaded = false;
+    public bool worldLoaded;
     public GameObject DarkMatterCollector;
     public GameObject DarkMatterConduit;
     public GameObject IronBlock;

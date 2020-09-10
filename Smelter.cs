@@ -19,7 +19,7 @@ public class Smelter : MonoBehaviour
     public GameObject inputObject;
     public GameObject outputObject;
     public GameObject powerObject;
-    public GameObject conduitItem;
+    public ConduitItem conduitItem;
     public Material lineMat;
     public PowerReceiver powerReceiver;
     private LineRenderer connectionLine;
@@ -35,6 +35,7 @@ public class Smelter : MonoBehaviour
     {
         powerReceiver = gameObject.AddComponent<PowerReceiver>();
         connectionLine = gameObject.AddComponent<LineRenderer>();
+        conduitItem = GetComponentInChildren<ConduitItem>(true);
         connectionLine.startWidth = 0.2f;
         connectionLine.endWidth = 0.2f;
         connectionLine.material = lineMat;
@@ -106,15 +107,15 @@ public class Smelter : MonoBehaviour
                         SetOutputType();
                     }
 
-                    if (inputObject.GetComponent<UniversalConduit>().conduitItem.GetComponent<ConduitItem>().active == false)
+                    if (inputObject.GetComponent<UniversalConduit>().conduitItem.active == false)
                     {
-                        conduitItem.GetComponent<ConduitItem>().active = false;
+                        conduitItem.active = false;
                     }
                 }
             }
             else
             {
-                conduitItem.GetComponent<ConduitItem>().active = false;
+                conduitItem.active = false;
             }
 
             HandleOutput();
@@ -214,7 +215,7 @@ public class Smelter : MonoBehaviour
                     {
                         if (powerON == true && connectionFailed == false && inputObject != null && speed > 0)
                         {
-                            conduitItem.GetComponent<ConduitItem>().active = true;
+                            conduitItem.active = true;
                             if (GetComponent<AudioSource>().isPlaying == false)
                             {
                                 GetComponent<AudioSource>().Play();
@@ -230,7 +231,7 @@ public class Smelter : MonoBehaviour
                         }
                         else
                         {
-                            conduitItem.GetComponent<ConduitItem>().active = false;
+                            conduitItem.active = false;
                             machineTimer = 0;
                         }
                     }
@@ -239,7 +240,7 @@ public class Smelter : MonoBehaviour
         }
         else
         {
-            conduitItem.GetComponent<ConduitItem>().active = false;
+            conduitItem.active = false;
             connectionLine.enabled = false;
             if (connectionFailed == true)
             {

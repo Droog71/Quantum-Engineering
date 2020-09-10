@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class Retriever : MonoBehaviour
@@ -18,7 +19,7 @@ public class Retriever : MonoBehaviour
     public GameObject inputObject;
     public GameObject outputObject;
     public GameObject powerObject;
-    public GameObject conduitItem;
+    public ConduitItem conduitItem;
     public Material lineMat;
     private LineRenderer connectionLine;
     private LineRenderer inputLine;
@@ -42,6 +43,7 @@ public class Retriever : MonoBehaviour
     {
         powerReceiver = gameObject.AddComponent<PowerReceiver>();
         connectionLine = gameObject.AddComponent<LineRenderer>();
+        conduitItem = GetComponentInChildren<ConduitItem>(true);
         connectionLine.startWidth = 0.2f;
         connectionLine.endWidth = 0.2f;
         connectionLine.material = lineMat;
@@ -107,7 +109,7 @@ public class Retriever : MonoBehaviour
             }
             else
             {
-                conduitItem.GetComponent<ConduitItem>().active = false;
+                conduitItem.active = false;
                 GetComponent<Light>().enabled = false;
             }
             if (connectionFailed == true)
@@ -171,7 +173,6 @@ public class Retriever : MonoBehaviour
             if (obj.GetComponent<InventoryManager>() != null)
             {
                 return obj != gameObject
-                && obj.GetComponent<Rocket>() == null
                 && obj.GetComponent<Retriever>() == null
                 && obj.GetComponent<AutoCrafter>() == null
                 && !obj.GetComponent<InventoryManager>().ID.Equals("player");
@@ -184,7 +185,9 @@ public class Retriever : MonoBehaviour
     private void MakeConnections()
     {
         GameObject[] allObjects = GameObject.FindGameObjectsWithTag("Built");
-        foreach (GameObject obj in allObjects)
+        List<GameObject> objList = allObjects.ToList();
+        objList.Add(GameObject.Find("LanderCargo"));
+        foreach (GameObject obj in objList)
         {
             if (IsValidObject(obj))
             {
@@ -212,7 +215,7 @@ public class Retriever : MonoBehaviour
                             inputLine.endWidth = 0.2f;
                             inputLine.material = lineMat;
                             inputLine.SetPosition(0, transform.position);
-                            inputLine.SetPosition(1, obj.transform.position);
+                            inputLine.SetPosition(1, obj.transform.position + obj.transform.up);
                             creationMethod = "built";
                         }
                     }
@@ -231,7 +234,7 @@ public class Retriever : MonoBehaviour
                             inputLine.endWidth = 0.2f;
                             inputLine.material = lineMat;
                             inputLine.SetPosition(0, transform.position);
-                            inputLine.SetPosition(1, obj.transform.position);
+                            inputLine.SetPosition(1, obj.transform.position + obj.transform.up);
                         }
                     }
                 }
@@ -315,7 +318,7 @@ public class Retriever : MonoBehaviour
         }
         else
         {
-            conduitItem.GetComponent<ConduitItem>().active = false;
+            conduitItem.active = false;
             GetComponent<Light>().enabled = false;
         }
     }
@@ -345,7 +348,7 @@ public class Retriever : MonoBehaviour
                     retrievingIce = false;
                     foreach (InventorySlot slot in GetComponent<InventoryManager>().inventory)
                     {
-                        if (slot.amountInSlot > 0 && !type.Contains(slot.typeInSlot) && !type.Equals("Dark Matter") && !type.Equals("") && !type.Equals("nothing") && retrievingIce == false)
+                        if (slot.amountInSlot > 0 && !type.Contains(slot.typeInSlot) && !type.Equals("") && !type.Equals("nothing") && retrievingIce == false)
                         {
                             if (slot.typeInSlot.Equals("Ice"))
                             {
@@ -365,7 +368,7 @@ public class Retriever : MonoBehaviour
                 }
                 foreach (InventorySlot slot in GetComponent<InventoryManager>().inventory)
                 {
-                    if (slot.amountInSlot > 0 && !type.Contains(slot.typeInSlot) && !type.Equals("Dark Matter") && !type.Equals("") && !type.Equals("nothing"))
+                    if (slot.amountInSlot > 0 && !type.Contains(slot.typeInSlot) && !type.Equals("") && !type.Equals("nothing"))
                     {
                         type.Clear();
                     }
@@ -414,7 +417,7 @@ public class Retriever : MonoBehaviour
                                         inputObject.GetComponent<InventoryManager>().inventory[slotToUse].typeInSlot = "nothing";
                                     }
                                 }
-                                conduitItem.GetComponent<ConduitItem>().active = true;
+                                conduitItem.active = true;
                                 GetComponent<Light>().enabled = true;
                             }
                         }
@@ -432,21 +435,21 @@ public class Retriever : MonoBehaviour
                     }
                     else
                     {
-                        conduitItem.GetComponent<ConduitItem>().active = false;
+                        conduitItem.active = false;
                         GetComponent<Light>().enabled = false;
                     }
                 }
                 else
                 {
                     inputLine.enabled = false;
-                    conduitItem.GetComponent<ConduitItem>().active = false;
+                    conduitItem.active = false;
                     GetComponent<Light>().enabled = false;
                 }
             }
         }
         else
         {
-            conduitItem.GetComponent<ConduitItem>().active = false;
+            conduitItem.active = false;
             GetComponent<Light>().enabled = false;
         }
     }
@@ -469,7 +472,7 @@ public class Retriever : MonoBehaviour
                     retrievingIce = false;
                     foreach (InventorySlot slot in GetComponent<InventoryManager>().inventory)
                     {
-                        if (slot.amountInSlot > 0 && !type.Contains(slot.typeInSlot) && !type.Equals("Dark Matter") && !type.Equals("") && !type.Equals("nothing") && retrievingIce == false)
+                        if (slot.amountInSlot > 0 && !type.Contains(slot.typeInSlot) && !type.Equals("") && !type.Equals("nothing") && retrievingIce == false)
                         {
                             if (slot.typeInSlot.Equals("Ice"))
                             {
@@ -489,7 +492,7 @@ public class Retriever : MonoBehaviour
                 }
                 foreach (InventorySlot slot in GetComponent<InventoryManager>().inventory)
                 {
-                    if (slot.amountInSlot > 0 && !type.Contains(slot.typeInSlot) && !type.Equals("Dark Matter") && !type.Equals("") && !type.Equals("nothing"))
+                    if (slot.amountInSlot > 0 && !type.Contains(slot.typeInSlot) && !type.Equals("") && !type.Equals("nothing"))
                     {
                         type.Clear();
                     }
@@ -559,7 +562,7 @@ public class Retriever : MonoBehaviour
                                     }
                                     storageComputerConduitItem.active = true;
                                 }
-                                conduitItem.GetComponent<ConduitItem>().active = true;
+                                conduitItem.active = true;
                                 GetComponent<Light>().enabled = true;
                             }
                         }
@@ -579,7 +582,7 @@ public class Retriever : MonoBehaviour
                         {
                             storageComputerConduitItem.active = false;
                         }
-                        conduitItem.GetComponent<ConduitItem>().active = false;
+                        conduitItem.active = false;
                         GetComponent<Light>().enabled = false;
                     }
                 }
@@ -589,7 +592,7 @@ public class Retriever : MonoBehaviour
                     {
                         storageComputerConduitItem.active = false;
                     }
-                    conduitItem.GetComponent<ConduitItem>().active = false;
+                    conduitItem.active = false;
                     GetComponent<Light>().enabled = false;
                 }
             }
@@ -600,7 +603,7 @@ public class Retriever : MonoBehaviour
             {
                 storageComputerConduitItem.active = false;
             }
-            conduitItem.GetComponent<ConduitItem>().active = false;
+            conduitItem.active = false;
             GetComponent<Light>().enabled = false;
         }
     }

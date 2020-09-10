@@ -13,7 +13,7 @@ public class UniversalExtractor : MonoBehaviour
     public GameObject outputObject;
     private GameObject inputObject;
     public GameObject powerObject;
-    public GameObject conduitItem;
+    public ConduitItem conduitItem;
     public Material lineMat;
     public string ID = "unassigned";
     public string creationMethod = "built";
@@ -34,6 +34,7 @@ public class UniversalExtractor : MonoBehaviour
     {
         powerReceiver = gameObject.AddComponent<PowerReceiver>();
         connectionLine = gameObject.AddComponent<LineRenderer>();
+        conduitItem = GetComponentInChildren<ConduitItem>(true);
         connectionLine.startWidth = 0.2f;
         connectionLine.endWidth = 0.2f;
         connectionLine.material = lineMat;
@@ -107,7 +108,7 @@ public class UniversalExtractor : MonoBehaviour
                 connectionAttempts = 0;
                 if (powerON == true && connectionFailed == false && speed > 0)
                 {
-                    conduitItem.GetComponent<ConduitItem>().active = true;
+                    conduitItem.active = true;
                     GetComponent<Light>().enabled = true;
                     GetComponent<AudioSource>().enabled = true;
                     machineTimer += 1;
@@ -119,7 +120,7 @@ public class UniversalExtractor : MonoBehaviour
                 }
                 else
                 {
-                    conduitItem.GetComponent<ConduitItem>().active = false;
+                    conduitItem.active = false;
                     GetComponent<Light>().enabled = false;
                     GetComponent<AudioSource>().enabled = false;
                 }
