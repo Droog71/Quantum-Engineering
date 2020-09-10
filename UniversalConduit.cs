@@ -146,7 +146,8 @@ public class UniversalConduit : MonoBehaviour
     // Puts items into a storage container or other object with attached inventory manager.
     private void OutputToInventory()
     {
-        if (Vector3.Distance(transform.position, outputObject.transform.position) <= range)
+        float distance = Vector3.Distance(transform.position, outputObject.transform.position);
+        if (distance < range)
         {
             if (type != "" && type != "nothing")
             {
@@ -161,6 +162,7 @@ public class UniversalConduit : MonoBehaviour
                         conduitItem.active |= inputObject.GetComponent<UniversalConduit>().inputMachineDisabled == false;
                     }
                 }
+
                 PlayerController playerController = GameObject.Find("Player").GetComponent<PlayerController>();
                 if (outputObject.GetComponent<Rocket>() == null || playerController.timeToDeliver == true)
                 {
@@ -384,32 +386,28 @@ public class UniversalConduit : MonoBehaviour
         }
         if (IsStorageContainer(obj))
         {
+            float distance = Vector3.Distance(transform.position, obj.transform.position);
             if (IsValidOutputObject(obj))
             {
                 if (creationMethod.Equals("spawned") && obj.GetComponent<InventoryManager>().ID.Equals(outputID))
                 {
-                    float distance = Vector3.Distance(transform.position, obj.transform.position);
                     if (distance < range || obj.GetComponent<RailCart>() != null || obj.GetComponent<Rocket>() != null)
                     {
                         outputObject = obj;
                         float lineHeight = obj.GetComponent<Rocket>() != null ? obj.transform.position.y + 40 : 0;
                         connectionLine.SetPosition(0, transform.position);
                         connectionLine.SetPosition(1, obj.transform.position + obj.transform.up * lineHeight);
-                        connectionLine.enabled = true;
+                        connectionLine.enabled = distance < range;
                         creationMethod = "built";
                     }
                 }
-                else if (creationMethod.Equals("built"))
+                else if (creationMethod.Equals("built") && distance < range)
                 {
-                    float distance = Vector3.Distance(transform.position, obj.transform.position);
-                    if (distance < range)
-                    {
-                        outputObject = obj;
-                        float lineHeight = obj.GetComponent<Rocket>() != null ? obj.transform.position.y + 40 : 0;
-                        connectionLine.SetPosition(0, transform.position);
-                        connectionLine.SetPosition(1, obj.transform.position + obj.transform.up * lineHeight);
-                        connectionLine.enabled = true;
-                    }
+                    outputObject = obj;
+                    float lineHeight = obj.GetComponent<Rocket>() != null ? obj.transform.position.y + 40 : 0;
+                    connectionLine.SetPosition(0, transform.position);
+                    connectionLine.SetPosition(1, obj.transform.position + obj.transform.up * lineHeight);
+                    connectionLine.enabled = true;
                 }
             }
         }

@@ -66,7 +66,7 @@ public class Retriever : MonoBehaviour
             {
                 speed = power;
             }
-            if (speed > 1 && retrievingIce == false)
+            if (speed > 1 && type.Count > 0 && retrievingIce == false)
             {
                 heat = speed - 1 - cooling;
             }

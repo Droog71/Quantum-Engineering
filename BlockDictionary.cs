@@ -8,7 +8,7 @@ public class BlockDictionary
     private PlayerController playerController;
     public Dictionary<string, GameObject> machineDictionary;
     public Dictionary<string, GameObject> blockDictionary;
-    public Type[] machineTypes;
+    public Type[] objectTypes;
 
     public BlockDictionary(PlayerController playerController)
     {
@@ -57,7 +57,7 @@ public class BlockDictionary
             { "Universal Extractor", playerController.universalExtractor }
         };
 
-        machineTypes = new Type[] 
+        objectTypes = new Type[] 
         { 
             typeof(AirLock), 
             typeof(AlloySmelter), 

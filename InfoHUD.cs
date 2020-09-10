@@ -23,6 +23,7 @@ public class InfoHUD : MonoBehaviour
     private bool ShouldDrawInfoHud()
     {
         return playerController.stateManager.worldLoaded == true
+        && playerController.objectInSight != playerController.gameObject
         && GetComponent<MainMenu>().finishedLoading == true
         && playerController.objectInSight != null
         && playerController.building == false
@@ -155,25 +156,59 @@ public class InfoHUD : MonoBehaviour
             }
             else if (obj.GetComponent<IronBlock>() != null)
             {
-                GUI.Label(guiCoordinates.messageRect, "Iron Block");
+                int f = GUI.skin.label.fontSize;
+                GUI.skin.label.fontSize = 16;
+                GUIContent content = new GUIContent("Iron Block");
+                GUIStyle style = GUI.skin.box;
+                style.alignment = TextAnchor.MiddleCenter;
+                Vector2 size = style.CalcSize(content);
+                Rect resourceInfoRect = new Rect((Screen.width / 2) - (size.x / 2), (Screen.height - 70) - (size.y / 2), size.x, size.y);
+                GUI.Label(resourceInfoRect, "Iron Block");
+                GUI.skin.label.fontSize = f;
                 GUI.DrawTexture(guiCoordinates.buildInfoRectBG, textureDictionary.dictionary["Interface Background"]);
                 GUI.Label(guiCoordinates.buildInfoRect, "Press F to remove blocks.\nPress B to add blocks.\nPress Q to stop building.");
             }
             else if (obj.GetComponent<Steel>() != null)
             {
-                GUI.Label(guiCoordinates.messageRect, "Steel Block");
+                int f = GUI.skin.label.fontSize;
+                GUI.skin.label.fontSize = 16;
+                GUIContent content = new GUIContent("Steel Block");
+                GUIStyle style = GUI.skin.box;
+                style.alignment = TextAnchor.MiddleCenter;
+                Vector2 size = style.CalcSize(content);
+                Rect resourceInfoRect = new Rect((Screen.width / 2) - (size.x / 2), (Screen.height - 70) - (size.y / 2), size.x, size.y);
+                GUI.Label(resourceInfoRect, "Steel Block");
+                GUI.skin.label.fontSize = f;
                 GUI.DrawTexture(guiCoordinates.buildInfoRectBG, textureDictionary.dictionary["Interface Background"]);
                 GUI.Label(guiCoordinates.buildInfoRect, "Press F to remove blocks.\nPress B to add blocks.\nPress Q to stop building.");
             }
             else if (obj.GetComponent<Glass>() != null)
             {
-                GUI.Label(guiCoordinates.messageRect, "Glass Block");
+                int f = GUI.skin.label.fontSize;
+                GUI.skin.label.fontSize = 16;
+                GUIContent content = new GUIContent("Glass Block");
+                GUIStyle style = GUI.skin.box;
+                style.alignment = TextAnchor.MiddleCenter;
+                Vector2 size = style.CalcSize(content);
+                Rect resourceInfoRect = new Rect((Screen.width / 2) - (size.x / 2), (Screen.height - 70) - (size.y / 2), size.x, size.y);
+                GUI.Label(resourceInfoRect, "Glass Block");
+                GUI.skin.label.fontSize = f;
+                GUI.Label(resourceInfoRect, "Glass Block");
                 GUI.DrawTexture(guiCoordinates.buildInfoRectBG, textureDictionary.dictionary["Interface Background"]);
                 GUI.Label(guiCoordinates.buildInfoRect, "Press F to remove blocks.\nPress B to add blocks.\nPress Q to stop building.");
             }
             else if (obj.GetComponent<Brick>() != null)
             {
-                GUI.Label(guiCoordinates.messageRect, "Brick Block");
+                int f = GUI.skin.label.fontSize;
+                GUI.skin.label.fontSize = 16;
+                GUIContent content = new GUIContent("Brick Block");
+                GUIStyle style = GUI.skin.box;
+                style.alignment = TextAnchor.MiddleCenter;
+                Vector2 size = style.CalcSize(content);
+                Rect resourceInfoRect = new Rect((Screen.width / 2) - (size.x / 2), (Screen.height - 70) - (size.y / 2), size.x, size.y);
+                GUI.Label(resourceInfoRect, "Brick Block");
+                GUI.skin.label.fontSize = f;
+                GUI.Label(resourceInfoRect, "Brick Block");
                 GUI.DrawTexture(guiCoordinates.buildInfoRectBG, textureDictionary.dictionary["Interface Background"]);
                 GUI.Label(guiCoordinates.buildInfoRect, "Press F to remove blocks.\nPress B to add blocks.\nPress Q to stop building.");
             }
@@ -640,25 +675,57 @@ public class InfoHUD : MonoBehaviour
             {
                 if (obj.name.Equals("ironHolder(Clone)"))
                 {
-                    GUI.Label(guiCoordinates.messageRect, "Iron Structure");
+                    int f = GUI.skin.label.fontSize;
+                    GUI.skin.label.fontSize = 16;
+                    GUIContent content = new GUIContent("Iron Structure");
+                    GUIStyle style = GUI.skin.box;
+                    style.alignment = TextAnchor.MiddleCenter;
+                    Vector2 size = style.CalcSize(content);
+                    Rect resourceInfoRect = new Rect((Screen.width / 2) - (size.x / 2), (Screen.height - 70) - (size.y / 2), size.x, size.y);
+                    GUI.Label(resourceInfoRect, "Iron Structure");
+                    GUI.skin.label.fontSize = f;
                     GUI.DrawTexture(guiCoordinates.buildInfoRectBG, textureDictionary.dictionary["Interface Background"]);
                     GUI.Label(guiCoordinates.buildInfoRect, "Press F to remove blocks.\nPress B to add blocks.\nPress Q to stop building.");
                 }
                 if (obj.name.Equals("glassHolder(Clone)"))
                 {
-                    GUI.Label(guiCoordinates.messageRect, "Glass Structure");
+                    int f = GUI.skin.label.fontSize;
+                    GUI.skin.label.fontSize = 16;
+                    GUIContent content = new GUIContent("Glass Structure");
+                    GUIStyle style = GUI.skin.box;
+                    style.alignment = TextAnchor.MiddleCenter;
+                    Vector2 size = style.CalcSize(content);
+                    Rect resourceInfoRect = new Rect((Screen.width / 2) - (size.x / 2), (Screen.height - 70) - (size.y / 2), size.x, size.y);
+                    GUI.Label(resourceInfoRect, "Glass Structure");
+                    GUI.skin.label.fontSize = f;
                     GUI.DrawTexture(guiCoordinates.buildInfoRectBG, textureDictionary.dictionary["Interface Background"]);
                     GUI.Label(guiCoordinates.buildInfoRect, "Press F to remove blocks.\nPress B to add blocks.\nPress Q to stop building.");
                 }
                 if (obj.name.Equals("steelHolder(Clone)"))
                 {
-                    GUI.Label(guiCoordinates.messageRect, "Steel Structure");
+                    int f = GUI.skin.label.fontSize;
+                    GUI.skin.label.fontSize = 16;
+                    GUIContent content = new GUIContent("Steel Structure");
+                    GUIStyle style = GUI.skin.box;
+                    style.alignment = TextAnchor.MiddleCenter;
+                    Vector2 size = style.CalcSize(content);
+                    Rect resourceInfoRect = new Rect((Screen.width / 2) - (size.x / 2), (Screen.height - 70) - (size.y / 2), size.x, size.y);
+                    GUI.Label(resourceInfoRect, "Steel Structure");
+                    GUI.skin.label.fontSize = f;
                     GUI.DrawTexture(guiCoordinates.buildInfoRectBG, textureDictionary.dictionary["Interface Background"]);
                     GUI.Label(guiCoordinates.buildInfoRect, "Press F to remove blocks.\nPress B to add blocks.\nPress Q to stop building.");
                 }
                 if (obj.name.Equals("brickHolder(Clone)"))
                 {
-                    GUI.Label(guiCoordinates.messageRect, "Brick Structure");
+                    int f = GUI.skin.label.fontSize;
+                    GUI.skin.label.fontSize = 16;
+                    GUIContent content = new GUIContent("Brick Structure");
+                    GUIStyle style = GUI.skin.box;
+                    style.alignment = TextAnchor.MiddleCenter;
+                    Vector2 size = style.CalcSize(content);
+                    Rect resourceInfoRect = new Rect((Screen.width / 2) - (size.x / 2), (Screen.height - 70) - (size.y / 2), size.x, size.y);
+                    GUI.Label(resourceInfoRect, "Brick Structure");
+                    GUI.skin.label.fontSize = f;
                     GUI.DrawTexture(guiCoordinates.buildInfoRectBG, textureDictionary.dictionary["Interface Background"]);
                     GUI.Label(guiCoordinates.buildInfoRect, "Press F to remove blocks.\nPress B to add blocks.\nPress Q to stop building.");
                 }

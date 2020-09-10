@@ -156,33 +156,26 @@ public class DarkMatterConduit : MonoBehaviour
                 {
                     if (IsValidOutputObject(obj))
                     {
-                        if (creationMethod.Equals("spawned"))
+                        float distance = Vector3.Distance(transform.position, obj.transform.position);
+                        if (creationMethod.Equals("spawned") && obj.GetComponent<InventoryManager>().ID.Equals(outputID))
                         {
-                            if (obj.GetComponent<InventoryManager>().ID.Equals(outputID))
-                            {
-                                float distance = Vector3.Distance(transform.position, obj.transform.position);
-                                if (distance < range || obj.GetComponent<RailCart>() != null || obj.GetComponent<Rocket>() != null)
-                                {
-                                    outputObject = obj;
-                                    float lineHeight = obj.GetComponent<Rocket>() != null ? obj.transform.position.y + 40 : 0;
-                                    connectionLine.SetPosition(0, transform.position);
-                                    connectionLine.SetPosition(1, obj.transform.position + obj.transform.up * lineHeight);
-                                    connectionLine.enabled = true;
-                                    creationMethod = "built";
-                                }
-                            }
-                        }
-                        else if (creationMethod.Equals("built"))
-                        {
-                            float distance = Vector3.Distance(transform.position, obj.transform.position);
-                            if (distance < range)
+                            if (distance < range || obj.GetComponent<RailCart>() != null || obj.GetComponent<Rocket>() != null)
                             {
                                 outputObject = obj;
                                 float lineHeight = obj.GetComponent<Rocket>() != null ? obj.transform.position.y + 40 : 0;
                                 connectionLine.SetPosition(0, transform.position);
                                 connectionLine.SetPosition(1, obj.transform.position + obj.transform.up * lineHeight);
-                                connectionLine.enabled = true;
+                                connectionLine.enabled = distance < range;
+                                creationMethod = "built";
                             }
+                        }
+                        else if (creationMethod.Equals("built") && distance < range)
+                        {
+                            outputObject = obj;
+                            float lineHeight = obj.GetComponent<Rocket>() != null ? obj.transform.position.y + 40 : 0;
+                            connectionLine.SetPosition(0, transform.position);
+                            connectionLine.SetPosition(1, obj.transform.position + obj.transform.up * lineHeight);
+                            connectionLine.enabled = true;
                         }
                     }
                 }

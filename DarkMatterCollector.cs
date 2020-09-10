@@ -82,7 +82,7 @@ public class DarkMatterCollector : MonoBehaviour
             {
                 if (powerON == true && connectionFailed == false && speed > 0)
                 {
-                    conduitItem.active = true;
+                    conduitItem.active = connectionLine.enabled;
                     GetComponent<Light>().enabled = true;
                     GetComponent<AudioSource>().enabled = true;
                     machineTimer += 1;
