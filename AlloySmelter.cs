@@ -208,6 +208,13 @@ public class AlloySmelter : MonoBehaviour
                         outputAmount += speed - heat;
                         amount -= speed - heat;
                         amount2 -= speed - heat;
+                        fireObject.SetActive(true);
+                        GetComponent<AudioSource>().enabled = true;
+                    }
+                    else
+                    {
+                        fireObject.SetActive(false);
+                        GetComponent<AudioSource>().enabled = false;
                     }
                 }
             }
@@ -221,6 +228,13 @@ public class AlloySmelter : MonoBehaviour
                         outputAmount += speed - heat;
                         amount -= speed - heat;
                         amount2 -= speed - heat;
+                        fireObject.SetActive(true);
+                        GetComponent<AudioSource>().enabled = true;
+                    }
+                    else
+                    {
+                        fireObject.SetActive(false);
+                        GetComponent<AudioSource>().enabled = false;
                     }
                 }
             }
@@ -234,6 +248,13 @@ public class AlloySmelter : MonoBehaviour
                         outputAmount += speed - heat;
                         amount -= speed - heat;
                         amount2 -= speed - heat;
+                        fireObject.SetActive(true);
+                        GetComponent<AudioSource>().enabled = true;
+                    }
+                    else
+                    {
+                        fireObject.SetActive(false);
+                        GetComponent<AudioSource>().enabled = false;
                     }
                 }
             }
@@ -247,6 +268,13 @@ public class AlloySmelter : MonoBehaviour
                         outputAmount += speed - heat;
                         amount -= speed - heat;
                         amount2 -= speed - heat;
+                        fireObject.SetActive(true);
+                        GetComponent<AudioSource>().enabled = true;
+                    }
+                    else
+                    {
+                        fireObject.SetActive(false);
+                        GetComponent<AudioSource>().enabled = false;
                     }
                 }
             }
