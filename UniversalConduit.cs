@@ -181,21 +181,10 @@ public class UniversalConduit : MonoBehaviour
                     }
                     if (amount >= speed)
                     {
-                        if (type.Equals("Brick") && inputObject.GetComponent<Press>() != null)
+                        outputObject.GetComponent<InventoryManager>().AddItem(type, speed);
+                        if (outputObject.GetComponent<InventoryManager>().itemAdded == true)
                         {
-                            outputObject.GetComponent<InventoryManager>().AddItem(type, speed * 10);
-                            if (outputObject.GetComponent<InventoryManager>().itemAdded == true)
-                            {
-                                amount -= speed;
-                            }
-                        }
-                        else
-                        {
-                            outputObject.GetComponent<InventoryManager>().AddItem(type, speed);
-                            if (outputObject.GetComponent<InventoryManager>().itemAdded == true)
-                            {
-                                amount -= speed;
-                            }
+                            amount -= speed;
                         }
                     }
                 }
