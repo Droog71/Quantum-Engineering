@@ -2,8 +2,6 @@
 
 public class Smelter : BasicMachine
 {
-    public GameObject fireObject;
-
     // Called by unity engine on start up to initialize variables
     public new void Start()
     {
@@ -22,20 +20,5 @@ public class Smelter : BasicMachine
     public new void Update()
     {
         base.Update();
-    }
-
-    // For mod blocks.
-    public override void UpdateTick()
-    {
-        Debug.Log("Update tick!");
-        if (GetComponent<Light>().enabled == true && GetComponent<AudioSource>().isPlaying == false)
-        {
-            GetComponent<AudioSource>().Play();
-            fireObject.SetActive(true);
-        }
-        else
-        {
-            fireObject.SetActive(false);
-        }
     }
 }

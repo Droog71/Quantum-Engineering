@@ -50,7 +50,6 @@ public class BasicMachine : MonoBehaviour
         updateTick += 1 * Time.deltaTime;
         if (updateTick > 0.5f + (address * 0.001f))
         {
-            UpdateTick();
             UpdatePowerReceiver();
             GetComponent<PhysicsHandler>().UpdatePhysics();
 
@@ -260,11 +259,5 @@ public class BasicMachine : MonoBehaviour
         power = powerReceiver.power;
         powerON = powerReceiver.powerON;
         powerObject = powerReceiver.powerObject;
-    }
-
-    // For mod blocks.
-    public virtual void UpdateTick()
-    {
-
     }
 }

@@ -1,9 +1,41 @@
 ﻿using UnityEngine;
+using UnityEngine.Networking;
+using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 
 public class TextureDictionary : MonoBehaviour
 {
     public Dictionary<string, Texture2D> dictionary;
+    private Coroutine modTextureCoroutine;
+
+    public static IEnumerator AddModTextures(Dictionary<string, Texture2D> dictionary)
+    {
+        string modPath = Path.Combine(Application.persistentDataPath, "Mods");
+        string[] modDirs = Directory.GetDirectories(modPath);
+        foreach (string path in modDirs)
+        {
+            string texturePath = path + "/Textures/";
+            DirectoryInfo d = new DirectoryInfo(texturePath);
+            foreach (FileInfo file in d.GetFiles("*.png"))
+            {
+                string filePath = texturePath + file.Name;
+                UriBuilder texUriBuildier = new UriBuilder(filePath) { Scheme = "file" };
+                using (UnityWebRequest uwr = UnityWebRequestTexture.GetTexture(texUriBuildier.ToString()))
+                {
+                    yield return uwr.SendWebRequest();
+                    if (!uwr.isNetworkError && !uwr.isHttpError)
+                    {
+                        Texture2D texture = DownloadHandlerTexture.GetContent(uwr);
+                        string textureName = file.Name.Remove(file.Name.Length - 4);
+                        dictionary.Add(textureName, texture);
+                        Debug.Log("Added mod texture " + textureName + " as " + texture);
+                    }
+                }
+            }
+        }
+    }
 
     void Start()
     {
@@ -87,5 +119,7 @@ public class TextureDictionary : MonoBehaviour
             { "Circuit Board", Resources.Load("CircuitBoard") as Texture2D },
             { "Electric Motor", Resources.Load("Motor") as Texture2D }
         };
+
+        modTextureCoroutine = StartCoroutine(AddModTextures(dictionary));
     }
 }
