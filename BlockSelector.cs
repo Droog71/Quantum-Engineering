@@ -1,7 +1,7 @@
 ﻿public class BlockSelector
 {
     private PlayerController playerController;
-    private readonly string[] objectNames;
+    public string[] objectNames;
     private int selection;
 
     public BlockSelector(PlayerController playerController)

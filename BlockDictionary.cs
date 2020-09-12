@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
 using System;
+using System.Linq;
 using System.Collections.Generic;
+using System.IO;
 
 //This class contains GameObject dictionaries for easily referencing different machines and other blocks
 public class BlockDictionary
@@ -8,6 +10,7 @@ public class BlockDictionary
     private PlayerController playerController;
     public Dictionary<string, GameObject> machineDictionary;
     public Dictionary<string, GameObject> blockDictionary;
+    public GameObject basicMachine;
     public Type[] objectTypes;
 
     public BlockDictionary(PlayerController playerController)
@@ -16,6 +19,60 @@ public class BlockDictionary
         Init();
     }
 
+    // Gets recipes for a specfic machine.
+    public BasicMachineRecipe[] GetMachineRecipes(string machineName)
+    {
+        string modPath = Path.Combine(Application.persistentDataPath, "Mods");
+        string[] modDirs = Directory.GetDirectories(modPath);
+        foreach (string path in modDirs)
+        {
+            string machinePath = path + "/Machines/";
+            DirectoryInfo d = new DirectoryInfo(machinePath);
+            foreach (FileInfo file in d.GetFiles("*.qe"))
+            {
+                string filePath = machinePath + file.Name;
+                string fileContents = File.ReadAllText(filePath);
+                string nameFromFile = fileContents.Split('}')[0];
+                if (nameFromFile == machineName)
+                {
+                    string[] machineContents = fileContents.Split('}')[1].Split(';');
+                    BasicMachineRecipe[] machineRecipes = new BasicMachineRecipe[machineContents.Length];
+                    for (int i = 0; i < machineContents.Length; i++)
+                    {
+                        string input = machineContents[i].Split(':')[0];
+                        string output = machineContents[i].Split(':')[1];
+                        machineRecipes[i] = new BasicMachineRecipe(input, output);
+                    }
+                    return machineRecipes;
+                }
+            }
+        }
+        return null;
+    }
+
+    // Adds machines from mods to the game.
+    public void AddModMachines(Dictionary<string, GameObject> dictionary)
+    {
+        string modPath = Path.Combine(Application.persistentDataPath, "Mods");
+        string[] modDirs = Directory.GetDirectories(modPath);
+        foreach (string path in modDirs)
+        {
+            string machinePath = path + "/Machines/";
+            DirectoryInfo d = new DirectoryInfo(machinePath);
+            foreach (FileInfo file in d.GetFiles("*.qe"))
+            {
+                string filePath = machinePath + file.Name;
+                string fileContents = File.ReadAllText(filePath);
+                string machineName = fileContents.Split('}')[0];
+                dictionary.Add(machineName, playerController.basicMachine);
+                List<string> objList = playerController.blockSelector.objectNames.ToList();
+                objList.Add(machineName);
+                playerController.blockSelector.objectNames = objList.ToArray();
+            }
+        }
+    }
+
+    // Initializes variables.
     private void Init()
     {
         blockDictionary = new Dictionary<string, GameObject>

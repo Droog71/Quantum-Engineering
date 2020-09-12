@@ -192,8 +192,11 @@ public class PlayerController : MonoBehaviour
     public GameObject guiObject;
     public GameObject currentStorageComputer;
     public GameObject buildObject;
+    public GameObject basicMachine;
 
     public Material constructionMat;
+
+    private bool addedModMachines;
 
     // Called by unity engine on start up to initialize variables
     public void Start()
@@ -248,6 +251,18 @@ public class PlayerController : MonoBehaviour
     // Called once per frame by unity engine
     public void Update()
     {
+        if (addedModMachines == false && blockSelector != null)
+        {
+            if (GetComponent<TextureDictionary>() != null && GetComponent<BuildController>().blockDictionary != null && basicMachine != null)
+            {
+                if (GetComponent<TextureDictionary>().addedModTextures == true)
+                {
+                    GetComponent<BuildController>().blockDictionary.AddModMachines(GetComponent<BuildController>().blockDictionary.machineDictionary);
+                    addedModMachines = true;
+                }
+            }
+        }
+
         // Get a refrence to the camera.
         if (mCam == null)
         {

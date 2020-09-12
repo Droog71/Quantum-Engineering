@@ -12,10 +12,12 @@ public class BasicMachine : MonoBehaviour
     public int connectionAttempts;
     public string inputType;
     public string outputType;
+    public string machineName;
     public string ID = "unassigned";
     public string creationMethod = "built";
     public string inputID;
     public string outputID;
+    public bool modMachine;
     public bool connectionFailed;
     public bool hasHeatExchanger;
     public bool powerON;

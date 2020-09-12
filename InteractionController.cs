@@ -14,6 +14,7 @@ public class InteractionController : MonoBehaviour
     {
         playerController = GetComponent<PlayerController>();
         blockDictionary = new BlockDictionary(playerController);
+        blockDictionary.basicMachine = playerController.basicMachine;
         machineInteraction = new MachineInteraction(playerController, this);
         storageInteraction = new StorageInteraction(playerController, this);
         blockInteraction = new BlockInteraction(playerController, this);
