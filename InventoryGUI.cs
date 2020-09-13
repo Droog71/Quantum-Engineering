@@ -105,7 +105,6 @@ public class InventoryGUI : MonoBehaviour
                             {
                                 if (storageComputerSearchText.Length < slot.typeInSlot.Length)
                                 {
-                                    //Debug.Log("Search term shorter than item type string: "+slot.typeInSlot.Substring(storageComputerSearchText.Length) + " VS " + storageComputerSearchText);
                                     if (slot.typeInSlot.Substring(0, storageComputerSearchText.Length).ToLower().Equals(storageComputerSearchText.ToLower()))
                                     {
                                         playerController.storageComputerInventory = containerCount;
@@ -114,7 +113,6 @@ public class InventoryGUI : MonoBehaviour
                                 }
                                 else if (storageComputerSearchText.Length > slot.typeInSlot.Length)
                                 {
-                                    //Debug.Log("Search term longer than item type string: " + slot.typeInSlot + " VS " + storageComputerSearchText.Substring(slot.typeInSlot.Length));
                                     if (slot.typeInSlot.ToLower().Equals(storageComputerSearchText.Substring(0, slot.typeInSlot.Length).ToLower()))
                                     {
                                         playerController.storageComputerInventory = containerCount;
@@ -123,7 +121,6 @@ public class InventoryGUI : MonoBehaviour
                                 }
                                 else if (storageComputerSearchText.Length == slot.typeInSlot.Length)
                                 {
-                                    //Debug.Log("Searching for exact match");
                                     if (slot.typeInSlot.ToLower().Equals(storageComputerSearchText.ToLower()))
                                     {
                                         playerController.storageComputerInventory = containerCount;
@@ -131,7 +128,6 @@ public class InventoryGUI : MonoBehaviour
                                     }
                                 }
                             }
-                            //Debug.Log("Current Inventory ID: " + playerController.storageComputerInventory);
                             containerCount++;
                         }
                     }

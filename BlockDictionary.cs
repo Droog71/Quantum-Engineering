@@ -18,7 +18,7 @@ public class BlockDictionary
         Init();
     }
 
-    // Gets recipes for a specfic machine.
+    // Gets description for a specfic machine.
     public string GetMachineDescription(string machineName)
     {
         string modPath = Path.Combine(Application.persistentDataPath, "Mods");
@@ -34,11 +34,13 @@ public class BlockDictionary
                 string fileName = file.Name.Remove(file.Name.Length - 3);
                 if (fileName == machineName)
                 {
-                    Debug.Log(" Getting machine description for " + machineName + " == " + fileContents.Split(']')[0].Substring(1));
+                    string modName = new DirectoryInfo(path).Name;
+                    Debug.Log(modName+" added description for [" + machineName + "]");
                     return fileContents.Split(']')[0].Substring(1);
                 }
             }
         }
+        Debug.Log("Failed to get description for [" + machineName + "]");
         return null;
     }
 
@@ -56,24 +58,24 @@ public class BlockDictionary
                 string filePath = machinePath + file.Name;
                 string fileContents = File.ReadAllText(filePath);
                 string fileName = file.Name.Remove(file.Name.Length - 3);
-                Debug.Log("Trying to get mod recipes for machine " + machineName + " from file " + fileName);
                 if (fileName == machineName)
                 {
                     string recipeContents = fileContents.Split(']')[1];
                     string[] machineContents = recipeContents.Split('}');
                     BasicMachineRecipe[] machineRecipes = new BasicMachineRecipe[machineContents.Length - 1];
-                    Debug.Log("Machine has" + machineRecipes.Length + " recipes.");
                     for (int i = 0; i < machineRecipes.Length; i++)
                     {
                         string input = machineContents[i].Split(':')[0];
                         string output = machineContents[i].Split(':')[1];
                         machineRecipes[i] = new BasicMachineRecipe(input, output);
-                        Debug.Log("Adding machine recipe: " + input + " -> " + output);
                     }
+                    string modName = new DirectoryInfo(path).Name;
+                    Debug.Log(modName+" added recipes for [" + machineName + "]");
                     return machineRecipes;
                 }
             }
         }
+        Debug.Log("Failed to get recipes for [" + machineName + "]");
         return null;
     }
 
@@ -97,6 +99,8 @@ public class BlockDictionary
                     List<string> objList = playerController.blockSelector.objectNames.ToList();
                     objList.Add(machineName);
                     playerController.blockSelector.objectNames = objList.ToArray();
+                    string modName = new DirectoryInfo(path).Name;
+                    Debug.Log(modName+" created a new machine: [" + machineName + "]");
                 }
             }
         }

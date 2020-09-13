@@ -16,8 +16,11 @@ public class ModMachine : BasicMachine
     public new void Update()
     {
         base.Update();
-        Debug.Log("Machine name: " + machineName);
-        material.mainTexture = GameObject.Find("Player").GetComponent<TextureDictionary>().dictionary[machineName];
+        TextureDictionary textureDictionary = GameObject.Find("Player").GetComponent<TextureDictionary>();
+        if (textureDictionary.dictionary.ContainsKey(machineName))
+        {
+            material.mainTexture = GameObject.Find("Player").GetComponent<TextureDictionary>().dictionary[machineName];
+        }
         GetComponent<Renderer>().material = material;
         if (recipes == null)
         {

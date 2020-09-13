@@ -375,17 +375,15 @@ public class SaveManager
                     if (go.GetComponent<ModMachine>() != null)
                     {
                         objectName = stateManager.WorldName + "ModMachine";
-                        ModMachine machine = go.GetComponent<ModMachine>();
-                        string worldID = machine.ID;
-                        int speed = machine.speed;
-                        float amount = machine.amount;
-                        string machineName = machine.machineName;
-                        string inputID = machine.inputID;
-                        string outputID = machine.outputID;
-                        string inputType = machine.inputType;
-                        string outputType = machine.outputType;
+                        string worldID = go.GetComponent<ModMachine>().ID;
+                        int speed = go.GetComponent<ModMachine>().speed;
+                        float amount = go.GetComponent<ModMachine>().amount;
+                        string machineName = go.GetComponent<ModMachine>().machineName;
+                        string inputID = go.GetComponent<ModMachine>().inputID;
+                        string outputID = go.GetComponent<ModMachine>().outputID;
+                        string inputType = go.GetComponent<ModMachine>().inputType;
+                        string outputType = go.GetComponent<ModMachine>().outputType;
                         FileBasedPrefs.SetString(worldID + "machineName", machineName);
-                        Debug.Log("Saving mod machine name to: " + worldID + "machineName == "+ machineName);
                         FileBasedPrefs.SetString(worldID + "inputID", inputID);
                         FileBasedPrefs.SetString(worldID + "outputID", outputID);
                         FileBasedPrefs.SetString(worldID + "inputType", inputType);

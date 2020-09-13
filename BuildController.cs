@@ -61,7 +61,6 @@ public class BuildController : MonoBehaviour
                 float distance = Vector3.Distance(transform.position, playerController.buildStartPosition);
                 if (distance > 15)
                 {
-                    //Debug.Log("new chunk loaded");
                     if (gameManager.working == false)
                     {
                         gameManager.meshManager.SeparateBlocks(transform.position, "all", true);
@@ -83,18 +82,9 @@ public class BuildController : MonoBehaviour
             {
                 if (Physics.Raycast(Camera.main.gameObject.transform.position, Camera.main.gameObject.transform.forward, out RaycastHit hit, 100))
                 {
-                    //LIMIT THE BUILD RANGE TO 40
                     float distance = Vector3.Distance(transform.position, playerController.buildObject.transform.position);
-
-                    if (distance > 40)
-                    {
-                        playerController.buildObject.GetComponent<MeshRenderer>().material.color = Color.red;
-                    }
-                    else
-                    {
-                        playerController.buildObject.GetComponent<MeshRenderer>().material.color = Color.white;
-                    }
-
+                    Material buildObjectMaterial = playerController.buildObject.GetComponent<MeshRenderer>().material;
+                    buildObjectMaterial.color = distance > 40 ? Color.red : Color.white;
                     if (hit.transform.gameObject.tag == "Built")
                     {
                         SetupBuildAxis(hit);

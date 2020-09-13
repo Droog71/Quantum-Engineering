@@ -33,6 +33,8 @@ public class TextureDictionary : MonoBehaviour
                         string textureName = file.Name.Remove(file.Name.Length - 4);
                         dictionary.Add(textureName, texture);
                         GameObject.Find("Player").GetComponent<TextureDictionary>().addedModTextures = true;
+                        string modName = new DirectoryInfo(path).Name;
+                        Debug.Log(modName+" loaded texture for [" + textureName + "]");
                     }
                 }
             }

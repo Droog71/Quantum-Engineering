@@ -43,14 +43,12 @@ public class InventoryManager : MonoBehaviour
                 {
                     maxStackSize = 1000;
                 }
-                //Debug.Log("Loaded inventory for : " + ID);
             }
         }
 
         updateTick += 1 * Time.deltaTime;
         if (updateTick > 0.5f + (address * 0.001f))
         {
-            //Debug.Log(ID + " Machine update tick: " + address * 0.1f);
             if (GetComponent<RailCart>() == null && GetComponent<Retriever>() == null && GetComponent<AutoCrafter>() == null && GetComponent<PlayerController>() == null && GetComponent<Rocket>() == null && ID != "Lander")
             {
                 GetComponent<PhysicsHandler>().UpdatePhysics();

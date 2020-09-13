@@ -345,7 +345,6 @@ public class CombinedMeshManager
                         block.transform.parent = gameManager.glass[glassCount].transform;
                         if (gameManager.initGlass == false)
                         {
-                            //UnityEngine.Debug.Log("CREATING GLASS BLOCK DUMMIES");
                             GameObject go = GameObject.CreatePrimitive(PrimitiveType.Cube);
                             go.transform.position = block.transform.position;
                             go.transform.localScale = new Vector3(5, 5, 5);
@@ -372,7 +371,6 @@ public class CombinedMeshManager
                         block.transform.parent = gameManager.steel[steelCount].transform;
                         if (gameManager.initSteel == false)
                         {
-                            //UnityEngine.Debug.Log("CREATING STEEL BLOCK DUMMIES");
                             GameObject go = GameObject.CreatePrimitive(PrimitiveType.Cube);
                             go.transform.position = block.transform.position;
                             go.transform.localScale = new Vector3(5, 5, 5);
@@ -521,10 +519,8 @@ public class CombinedMeshManager
         {
             int ironCount = 0;
             int ironCombineInterval = 0;
-            //Debug.Log("Started mesh combine for iron at: " + System.DateTime.Now);
             foreach (GameObject obj in gameManager.ironBlocks)
             {
-                //Combine all meshes outside of building range.
                 MeshFilter[] meshFilters = gameManager.ironBlocks[ironCount].GetComponentsInChildren<MeshFilter>(true);
                 List<MeshFilter> mfList = new List<MeshFilter>();
                 foreach (MeshFilter mf in meshFilters)
@@ -580,17 +576,14 @@ public class CombinedMeshManager
                 gameManager.clearIronDummies = true;
                 FileBasedPrefs.SetBool(gameManager.GetComponent<StateManager>().WorldName + "gameManager.initIron", true);
             }
-            //Debug.Log("Finished mesh combine for iron at: " + System.DateTime.Now);
         }
 
         if (gameManager.glassMeshRequired == true)
         {
             int glassCount = 0;
             int glassCombineInterval = 0;
-            //Debug.Log("Started mesh combine for glass at: " + System.DateTime.Now);
             foreach (GameObject obj in gameManager.glass)
             {
-                //Combine all meshes outside of building range.
                 MeshFilter[] glassMeshFilters = gameManager.glass[glassCount].GetComponentsInChildren<MeshFilter>(true);
                 List<MeshFilter> mfList = new List<MeshFilter>();
                 foreach (MeshFilter mf in glassMeshFilters)
@@ -653,10 +646,8 @@ public class CombinedMeshManager
         {
             int steelCount = 0;
             int steelCombineInterval = 0;
-            //Debug.Log("Started mesh combine for steel at: " + System.DateTime.Now);
             foreach (GameObject obj in gameManager.steel)
             {
-                //Combine all meshes outside of building range.
                 MeshFilter[] steelMeshFilters = gameManager.steel[steelCount].GetComponentsInChildren<MeshFilter>(true);
                 List<MeshFilter> mfList = new List<MeshFilter>();
                 foreach (MeshFilter mf in steelMeshFilters)
@@ -719,10 +710,8 @@ public class CombinedMeshManager
         {
             int brickCount = 0;
             int brickCombineInterval = 0;
-            //Debug.Log("Started mesh combine for bricks at: " + System.DateTime.Now);
             foreach (GameObject obj in gameManager.bricks)
             {
-                //Combine all meshes outside of building range.
                 MeshFilter[] brickMeshFilters = gameManager.bricks[brickCount].GetComponentsInChildren<MeshFilter>(true);
                 List<MeshFilter> mfList = new List<MeshFilter>();
                 foreach (MeshFilter mf in brickMeshFilters)

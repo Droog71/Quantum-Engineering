@@ -431,7 +431,6 @@ public class StateManager : MonoBehaviour
                     {
                         GameObject SpawnedObject = Instantiate(modMachine, ObjectPosition, ObjectRotation);
                         SpawnedObject.GetComponent<ModMachine>().machineName = FileBasedPrefs.GetString(ObjectName + objectCount + "machineName");
-                        Debug.Log("Loading machine name from: " + ObjectName + objectCount + "machineName == "+ FileBasedPrefs.GetString(ObjectName + objectCount + "machineName"));
                         SpawnedObject.GetComponent<ModMachine>().inputID = FileBasedPrefs.GetString(ObjectName + objectCount + "inputID");
                         SpawnedObject.GetComponent<ModMachine>().outputID = FileBasedPrefs.GetString(ObjectName + objectCount + "outputID");
                         SpawnedObject.GetComponent<ModMachine>().inputType = FileBasedPrefs.GetString(ObjectName + objectCount + "inputType");

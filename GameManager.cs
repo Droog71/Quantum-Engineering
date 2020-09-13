@@ -332,7 +332,7 @@ public class GameManager : MonoBehaviour
     {
         if (working == false && GetComponent<StateManager>().saving == false)
         {
-            UnityEngine.Debug.Log("Requesting save operation...");
+            Debug.Log("Requesting save operation...");
             dataSaveRequested = true;
             blocksCombined = false;
         }

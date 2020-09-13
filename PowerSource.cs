@@ -74,7 +74,6 @@ public class PowerSource : MonoBehaviour
             }
             else
             {
-                //Debug.Log(ID + " output object is null.");
                 connectionLine.enabled = false;
                 if (connectionFailed == true)
                 {

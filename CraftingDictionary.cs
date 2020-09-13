@@ -136,10 +136,14 @@ public class CraftingDictionary
                 if (!dictionary.ContainsKey(output))
                 {
                     modDictionary.Add(output, modRecipe);
+                    string modName = new DirectoryInfo(path).Name;
+                    Debug.Log(modName+" added a new crafting recipe for [" + output + "]");
                 }
                 else
                 {
                     dictionary[output] = modRecipe;
+                    string modName = new DirectoryInfo(path).Name;
+                    Debug.Log(modName+" has overridden the crafting recipe for [" + output + "]");
                 }
             }
         }
