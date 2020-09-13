@@ -12,12 +12,10 @@ public class BasicMachine : MonoBehaviour
     public int connectionAttempts;
     public string inputType;
     public string outputType;
-    public string machineName;
     public string ID = "unassigned";
     public string creationMethod = "built";
     public string inputID;
     public string outputID;
-    public bool modMachine;
     public bool connectionFailed;
     public bool hasHeatExchanger;
     public bool powerON;
@@ -101,7 +99,7 @@ public class BasicMachine : MonoBehaviour
             {
                 if (inputObject.GetComponent<UniversalConduit>() != null)
                 {
-                    if (amount < 1)
+                    if (amount < 1 || outputType == "nothing")
                     {
                         outputType = GetOutputType();
                     }
@@ -193,11 +191,14 @@ public class BasicMachine : MonoBehaviour
         {
             inputType = inputObject.GetComponent<UniversalConduit>().type;
         }
-        foreach (BasicMachineRecipe recipe in recipes)
+        if (recipes != null)
         {
-            if (recipe.input == incoming)
+            foreach (BasicMachineRecipe recipe in recipes)
             {
-                return recipe.output;
+                if (recipe.input == incoming)
+                {
+                    return recipe.output;
+                }
             }
         }
         return "nothing";

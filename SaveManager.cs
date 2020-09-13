@@ -372,32 +372,28 @@ public class SaveManager
                         FileBasedPrefs.SetBool(worldID + "falling", go.GetComponent<PhysicsHandler>().falling);
                         FileBasedPrefs.SetBool(worldID + "fallingStack", go.GetComponent<PhysicsHandler>().fallingStack);
                     }
-                    if (go.GetComponent<BasicMachine>() != null)
+                    if (go.GetComponent<ModMachine>() != null)
                     {
-                        BasicMachine machine = go.GetComponent<BasicMachine>();
-                        if (machine.modMachine == true)
-                        {
-                            objectName = "ModMachine";
-                            bool modMachine = machine.modMachine;
-                            int speed = machine.speed;
-                            float amount = machine.amount;
-                            string machineName = machine.machineName;
-                            string worldID = stateManager.WorldName + machine.ID;
-                            string inputID = machine.inputID;
-                            string outputID = machine.outputID;
-                            string inputType = machine.inputType;
-                            string outputType = machine.outputType;
-                            FileBasedPrefs.SetBool(worldID + "modMachine", modMachine);
-                            FileBasedPrefs.SetString(worldID + "machineName", machineName);
-                            FileBasedPrefs.SetString(worldID + "inputID", inputID);
-                            FileBasedPrefs.SetString(worldID + "outputID", outputID);
-                            FileBasedPrefs.SetString(worldID + "inputType", inputType);
-                            FileBasedPrefs.SetString(worldID + "outputType", outputType);
-                            FileBasedPrefs.SetInt(worldID + "speed", speed);
-                            FileBasedPrefs.SetFloat(worldID + "amount", amount);
-                            FileBasedPrefs.SetBool(worldID + "falling", go.GetComponent<PhysicsHandler>().falling);
-                            FileBasedPrefs.SetBool(worldID + "fallingStack", go.GetComponent<PhysicsHandler>().fallingStack);
-                        }
+                        objectName = stateManager.WorldName + "ModMachine";
+                        ModMachine machine = go.GetComponent<ModMachine>();
+                        string worldID = machine.ID;
+                        int speed = machine.speed;
+                        float amount = machine.amount;
+                        string machineName = machine.machineName;
+                        string inputID = machine.inputID;
+                        string outputID = machine.outputID;
+                        string inputType = machine.inputType;
+                        string outputType = machine.outputType;
+                        FileBasedPrefs.SetString(worldID + "machineName", machineName);
+                        Debug.Log("Saving mod machine name to: " + worldID + "machineName == "+ machineName);
+                        FileBasedPrefs.SetString(worldID + "inputID", inputID);
+                        FileBasedPrefs.SetString(worldID + "outputID", outputID);
+                        FileBasedPrefs.SetString(worldID + "inputType", inputType);
+                        FileBasedPrefs.SetString(worldID + "outputType", outputType);
+                        FileBasedPrefs.SetInt(worldID + "speed", speed);
+                        FileBasedPrefs.SetFloat(worldID + "amount", amount);
+                        FileBasedPrefs.SetBool(worldID + "falling", go.GetComponent<PhysicsHandler>().falling);
+                        FileBasedPrefs.SetBool(worldID + "fallingStack", go.GetComponent<PhysicsHandler>().fallingStack);
                     }
 
                     FileBasedPrefs.SetString(stateManager.WorldName + objectCount + "Name", objectName);

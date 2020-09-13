@@ -1,4 +1,6 @@
 ﻿using UnityEngine;
+using System.Collections.Generic;
+using System.Linq;
 
 public class GearCutter : BasicMachine
 {
@@ -15,6 +17,19 @@ public class GearCutter : BasicMachine
             new BasicMachineRecipe("Steel Plate", "Steel Gear"),
             new BasicMachineRecipe("Aluminum Plate", "Aluminum Gear")
         };
+
+        PlayerController playerController = GameObject.Find("Player").GetComponent<PlayerController>();
+        BlockDictionary blockDictionary = new BlockDictionary(playerController);
+        BasicMachineRecipe[] modRecipes = blockDictionary.GetMachineRecipes("Gear Cutter");
+        if (modRecipes != null)
+        {
+            List<BasicMachineRecipe> recipeList = recipes.ToList();
+            foreach (BasicMachineRecipe recipe in modRecipes)
+            {
+                recipeList.Add(recipe);
+            }
+            recipes = recipeList.ToArray();
+        }
     }
 
     // Called once per frame by unity engine

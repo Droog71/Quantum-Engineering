@@ -301,6 +301,12 @@ public class MachineInteraction
                 playerController.machineInputAmount = conduitInput.GetComponent<GearCutter>().amount;
                 playerController.machineInputType = conduitInput.GetComponent<GearCutter>().outputType;
             }
+            if (conduitInput.GetComponent<ModMachine>() != null)
+            {
+                playerController.machineInputID = conduitInput.GetComponent<ModMachine>().ID;
+                playerController.machineInputAmount = conduitInput.GetComponent<ModMachine>().amount;
+                playerController.machineInputType = conduitInput.GetComponent<ModMachine>().outputType;
+            }
         }
         if (conduit.outputObject != null)
         {
@@ -334,6 +340,12 @@ public class MachineInteraction
                 playerController.machineOutputID = conduitOutput.GetComponent<Extruder>().ID;
                 playerController.machineOutputAmount = conduitOutput.GetComponent<Extruder>().amount;
                 playerController.machineOutputType = conduitOutput.GetComponent<Extruder>().inputType;
+            }
+            if (conduitOutput.GetComponent<ModMachine>() != null)
+            {
+                playerController.machineOutputID = conduitOutput.GetComponent<ModMachine>().ID;
+                playerController.machineOutputAmount = conduitOutput.GetComponent<ModMachine>().amount;
+                playerController.machineOutputType = conduitOutput.GetComponent<ModMachine>().inputType;
             }
             if (conduitOutput.GetComponent<HeatExchanger>() != null)
             {
@@ -631,6 +643,53 @@ public class MachineInteraction
         }
     }
 
+    public void InteractWithModMachine()
+    {
+        ModMachine modMachine = playerController.objectInSight.GetComponent<ModMachine>();
+        playerController.machineInSight = playerController.objectInSight;
+        playerController.machineAmount = modMachine.amount;
+        playerController.machineID = modMachine.ID;
+        playerController.machineHasPower = modMachine.powerON;
+        playerController.machineType = modMachine.inputType;
+        playerController.machinePower = modMachine.power;
+        playerController.machineSpeed = modMachine.speed;
+        playerController.machineHeat = modMachine.heat;
+        playerController.machineCooling = modMachine.cooling;
+        if (modMachine.inputObject != null)
+        {
+            if (modMachine.inputObject.GetComponent<UniversalConduit>() != null)
+            {
+                playerController.machineInputID = modMachine.inputObject.GetComponent<UniversalConduit>().ID;
+                playerController.machineInputAmount = modMachine.inputObject.GetComponent<UniversalConduit>().amount;
+                playerController.machineInputType = modMachine.inputObject.GetComponent<UniversalConduit>().type;
+            }
+        }
+        if (modMachine.outputObject != null)
+        {
+            if (modMachine.outputObject.GetComponent<UniversalConduit>() != null)
+            {
+                playerController.machineOutputID = modMachine.outputObject.GetComponent<UniversalConduit>().ID;
+                playerController.machineOutputAmount = modMachine.outputObject.GetComponent<UniversalConduit>().amount;
+                playerController.machineOutputType = modMachine.outputObject.GetComponent<UniversalConduit>().type;
+            }
+        }
+        if (cInput.GetKeyDown("Collect Object"))
+        {
+            interactionController.CollectObject(modMachine.machineName);
+        }
+        if (cInput.GetKeyDown("Interact"))
+        {
+            if (playerController.machineGUIopen == false)
+            {
+                playerController.machineGUIopen = true;
+            }
+            else
+            {
+                playerController.machineGUIopen = false;
+            }
+        }
+    }
+
     public void InteractWithRailCartHub()
     {
         RailCartHub railCartHub = playerController.objectInSight.GetComponent<RailCartHub>();
@@ -788,6 +847,10 @@ public class MachineInteraction
             if (heatExchanger.outputObject.GetComponent<Turret>() != null)
             {
                 playerController.machineOutputID = heatExchanger.outputObject.GetComponent<Turret>().ID;
+            }
+            if (heatExchanger.outputObject.GetComponent<ModMachine>() != null)
+            {
+                playerController.machineOutputID = heatExchanger.outputObject.GetComponent<ModMachine>().ID;
             }
         }
         if (cInput.GetKeyDown("Collect Object"))

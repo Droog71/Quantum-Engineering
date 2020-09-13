@@ -10,13 +10,36 @@ public class BlockDictionary
     private PlayerController playerController;
     public Dictionary<string, GameObject> machineDictionary;
     public Dictionary<string, GameObject> blockDictionary;
-    public GameObject basicMachine;
     public Type[] objectTypes;
 
     public BlockDictionary(PlayerController playerController)
     {
         this.playerController = playerController;
         Init();
+    }
+
+    // Gets recipes for a specfic machine.
+    public string GetMachineDescription(string machineName)
+    {
+        string modPath = Path.Combine(Application.persistentDataPath, "Mods");
+        string[] modDirs = Directory.GetDirectories(modPath);
+        foreach (string path in modDirs)
+        {
+            string machinePath = path + "/Machines/";
+            DirectoryInfo d = new DirectoryInfo(machinePath);
+            foreach (FileInfo file in d.GetFiles("*.qe"))
+            {
+                string filePath = machinePath + file.Name;
+                string fileContents = File.ReadAllText(filePath);
+                string fileName = file.Name.Remove(file.Name.Length - 3);
+                if (fileName == machineName)
+                {
+                    Debug.Log(" Getting machine description for " + machineName + " == " + fileContents.Split(']')[0].Substring(1));
+                    return fileContents.Split(']')[0].Substring(1);
+                }
+            }
+        }
+        return null;
     }
 
     // Gets recipes for a specfic machine.
@@ -32,16 +55,20 @@ public class BlockDictionary
             {
                 string filePath = machinePath + file.Name;
                 string fileContents = File.ReadAllText(filePath);
-                string nameFromFile = fileContents.Split('}')[0];
-                if (nameFromFile == machineName)
+                string fileName = file.Name.Remove(file.Name.Length - 3);
+                Debug.Log("Trying to get mod recipes for machine " + machineName + " from file " + fileName);
+                if (fileName == machineName)
                 {
-                    string[] machineContents = fileContents.Split('}')[1].Split(';');
-                    BasicMachineRecipe[] machineRecipes = new BasicMachineRecipe[machineContents.Length];
-                    for (int i = 0; i < machineContents.Length; i++)
+                    string recipeContents = fileContents.Split(']')[1];
+                    string[] machineContents = recipeContents.Split('}');
+                    BasicMachineRecipe[] machineRecipes = new BasicMachineRecipe[machineContents.Length - 1];
+                    Debug.Log("Machine has" + machineRecipes.Length + " recipes.");
+                    for (int i = 0; i < machineRecipes.Length; i++)
                     {
                         string input = machineContents[i].Split(':')[0];
                         string output = machineContents[i].Split(':')[1];
                         machineRecipes[i] = new BasicMachineRecipe(input, output);
+                        Debug.Log("Adding machine recipe: " + input + " -> " + output);
                     }
                     return machineRecipes;
                 }
@@ -63,11 +90,14 @@ public class BlockDictionary
             {
                 string filePath = machinePath + file.Name;
                 string fileContents = File.ReadAllText(filePath);
-                string machineName = fileContents.Split('}')[0];
-                dictionary.Add(machineName, playerController.basicMachine);
-                List<string> objList = playerController.blockSelector.objectNames.ToList();
-                objList.Add(machineName);
-                playerController.blockSelector.objectNames = objList.ToArray();
+                string machineName = file.Name.Remove(file.Name.Length - 3);
+                if (!dictionary.ContainsKey(machineName))
+                {
+                    dictionary.Add(machineName, playerController.modMachine);
+                    List<string> objList = playerController.blockSelector.objectNames.ToList();
+                    objList.Add(machineName);
+                    playerController.blockSelector.objectNames = objList.ToArray();
+                }
             }
         }
     }

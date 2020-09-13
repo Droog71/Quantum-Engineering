@@ -192,7 +192,7 @@ public class PlayerController : MonoBehaviour
     public GameObject guiObject;
     public GameObject currentStorageComputer;
     public GameObject buildObject;
-    public GameObject basicMachine;
+    public GameObject modMachine;
 
     public Material constructionMat;
 
@@ -251,16 +251,11 @@ public class PlayerController : MonoBehaviour
     // Called once per frame by unity engine
     public void Update()
     {
-        if (addedModMachines == false && blockSelector != null)
+        if (ReadyToLoadModMachines() == true)
         {
-            if (GetComponent<TextureDictionary>() != null && GetComponent<BuildController>().blockDictionary != null && basicMachine != null)
-            {
-                if (GetComponent<TextureDictionary>().addedModTextures == true)
-                {
-                    GetComponent<BuildController>().blockDictionary.AddModMachines(GetComponent<BuildController>().blockDictionary.machineDictionary);
-                    addedModMachines = true;
-                }
-            }
+            BlockDictionary blockDictionary = GetComponent<BuildController>().blockDictionary;
+            blockDictionary.AddModMachines(blockDictionary.machineDictionary);
+            addedModMachines = true;
         }
 
         // Get a refrence to the camera.
@@ -423,6 +418,35 @@ public class PlayerController : MonoBehaviour
                 EnforceWorldLimits();
             }
         }
+    }
+
+    private bool ReadyToLoadModMachines()
+    {
+        return addedModMachines == false
+        && modMachine != null
+        && blockSelector != null
+        && BlockDictionaryInitiazlied()
+        && LoadedModTextures();
+    }
+
+    // Returns true if block dictionary is non null.
+    private bool BlockDictionaryInitiazlied()
+    {
+        if (GetComponent<BuildController>() != null)
+        {
+            return GetComponent<BuildController>().blockDictionary != null;
+        }
+        return false;
+    }
+
+    // Returns true when all mod textures have finished loading.
+    private bool LoadedModTextures()
+    {
+        if (GetComponent<TextureDictionary>() != null)
+        {
+            return GetComponent<TextureDictionary>().addedModTextures;
+        }
+        return false;
     }
 
     // Saves the player's location and money.

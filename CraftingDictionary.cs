@@ -1,10 +1,12 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
+using System.IO;
 
 // This class provides the crafting recipe dictionary used by the crafting manager
 public class CraftingDictionary
 {
     public Dictionary<string, CraftingRecipe> dictionary;
+    public Dictionary<string, CraftingRecipe> modDictionary;
 
     private readonly string[] ironBlockIngredients = { "Iron Plate" };
     private readonly string[] steelBlockIngredients = { "Steel Plate" };
@@ -102,5 +104,44 @@ public class CraftingDictionary
             { "Dark Matter Collector", new CraftingRecipe(darkMatterCollectorIngredients, darkMatterCollectorAmounts, "Dark Matter Conduit", 1)  },
             { "Dark Matter Conduit", new CraftingRecipe(darkMatterConduitIngredients, darkMatterConduitAmounts, "Dark Matter Conduit", 1) }
         };
+
+        AddModRecipes();
+    }
+
+    // Gets mod recipes from file.
+    public void AddModRecipes()
+    {
+        modDictionary = new Dictionary<string, CraftingRecipe>();
+        string modPath = Path.Combine(Application.persistentDataPath, "Mods");
+        string[] modDirs = Directory.GetDirectories(modPath);
+        foreach (string path in modDirs)
+        {
+            string machinePath = path + "/Recipes/";
+            DirectoryInfo info = new DirectoryInfo(machinePath);
+            foreach (FileInfo file in info.GetFiles("*.qe"))
+            {
+                string filePath = machinePath + file.Name;
+                string fileContents = File.ReadAllText(filePath);
+                string output = file.Name.Remove(file.Name.Length - 3);
+                string[] machineContents = fileContents.Split('}');
+                string[] ingredients = machineContents[0].Split(',');
+                string[] amountsString = machineContents[1].Split(',');
+                int[] amounts = new int[amountsString.Length];
+                for (int i = 0; i < amountsString.Length; i++)
+                {
+                    amounts[i] = int.Parse(amountsString[i]);
+                }
+                int outputAmount = int.Parse(machineContents[2]);
+                CraftingRecipe modRecipe = new CraftingRecipe(ingredients, amounts, output, outputAmount);
+                if (!dictionary.ContainsKey(output))
+                {
+                    modDictionary.Add(output, modRecipe);
+                }
+                else
+                {
+                    dictionary[output] = modRecipe;
+                }
+            }
+        }
     }
 }

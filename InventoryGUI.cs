@@ -1,4 +1,9 @@
 ﻿using UnityEngine;
+using UnityEngine.Networking;
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.IO;
 
 public class InventoryGUI : MonoBehaviour
 {
@@ -11,6 +16,7 @@ public class InventoryGUI : MonoBehaviour
     private string storageComputerSearchText = "";
     private float missingItemTimer;
     private int craftingPage;
+    private int modCraftingIndex;
 
     // Called by unity engine on start up to initialize variables
     public void Start()
@@ -485,107 +491,254 @@ public class InventoryGUI : MonoBehaviour
                         if (guiCoordinates.button1Rect.Contains(Event.current.mousePosition))
                         {
                             GUI.DrawTexture(guiCoordinates.craftingInfoBackgroundRect, textureDictionary.dictionary["Interface Background"]);
-                            GUI.Label(guiCoordinates.craftingInfoRect, "Storage container for objects and items. Can be used to manually store items or connected to machines for automation. Universal conduits, dark matter conduits, retrievers and auto crafters can all connect to storage containers.\n\n[CRAFTING]\n6x Iron Plate");
+                            CraftingRecipe recipe = craftingDictionary.dictionary["Storage Container"];
+                            int length = recipe.ingredients.Length;
+                            string[] crafting = new string[length];
+                            for (int i = 0; i < length; i++)
+                            {
+                                crafting[i] = recipe.amounts[i] + "x " + recipe.ingredients[i];
+                            }
+                            GUI.Label(guiCoordinates.craftingInfoRect, "Storage container for objects and items. Can be used to manually store items or connected to machines for automation. Universal conduits, dark matter conduits, retrievers and auto crafters can all connect to storage containers." + "\n\n[CRAFTING]\n" + string.Join("\n", crafting));
                         }
                         if (guiCoordinates.button2Rect.Contains(Event.current.mousePosition))
                         {
                             GUI.DrawTexture(guiCoordinates.craftingInfoBackgroundRect, textureDictionary.dictionary["Interface Background"]);
-                            GUI.Label(guiCoordinates.craftingInfoRect, "Extracts regolith from the lunar surface which can be pressed into bricks or smelted to create glass. Glass blocks have a 100% chance of being destroyed by meteors and other hazards. Bricks have a 75% chance of being destroyed by meteors and other hazards. Augers must be placed directly on the lunar surface and require power from a solar panel, nuclear reactor or power conduit.\n\n[CRAFTING]\n10x Iron Ingot\n10x Copper Ingot");
+                            CraftingRecipe recipe = craftingDictionary.dictionary["Auger"];
+                            int length = recipe.ingredients.Length;
+                            string[] crafting = new string[length];
+                            for (int i = 0; i < length; i++)
+                            {
+                                crafting[i] = recipe.amounts[i] + "x " + recipe.ingredients[i];
+                            }
+                            GUI.Label(guiCoordinates.craftingInfoRect, "Extracts regolith from the lunar surface which can be pressed into bricks or smelted to create glass. Glass blocks have a 100% chance of being destroyed by meteors and other hazards. Bricks have a 75% chance of being destroyed by meteors and other hazards. Augers must be placed directly on the lunar surface and require power from a solar panel, nuclear reactor or power conduit." + "\n\n[CRAFTING]\n" + string.Join("\n", crafting));
                         }
                         if (guiCoordinates.button3Rect.Contains(Event.current.mousePosition))
                         {
                             GUI.DrawTexture(guiCoordinates.craftingInfoBackgroundRect, textureDictionary.dictionary["Interface Background"]);
-                            GUI.Label(guiCoordinates.craftingInfoRect, "Creates wire from copper and aluminum ingots. Creates pipes from iron and steel ingots. Ingots must be supplied to the extruder using universal conduits. Another universal conduit should be placed within 2 meters of the machine to accept the output. The extruder requires power from a solar panel, nuclear reactor or power conduit and has an adjustable output measured in items per cycle.\n\n[CRAFTING]\n10x Iron Ingot\n10x Copper Ingot");
+                            CraftingRecipe recipe = craftingDictionary.dictionary["Extruder"];
+                            int length = recipe.ingredients.Length;
+                            string[] crafting = new string[length];
+                            for (int i = 0; i < length; i++)
+                            {
+                                crafting[i] = recipe.amounts[i] + "x " + recipe.ingredients[i];
+                            }
+                            GUI.Label(guiCoordinates.craftingInfoRect, "Creates wire from copper and aluminum ingots. Creates pipes from iron and steel ingots. Ingots must be supplied to the extruder using universal conduits. Another universal conduit should be placed within 2 meters of the machine to accept the output. The extruder requires power from a solar panel, nuclear reactor or power conduit and has an adjustable output measured in items per cycle." + "\n\n[CRAFTING]\n" + string.Join("\n", crafting));
                         }
                         if (guiCoordinates.button4Rect.Contains(Event.current.mousePosition))
                         {
                             GUI.DrawTexture(guiCoordinates.craftingInfoBackgroundRect, textureDictionary.dictionary["Interface Background"]);
-                            GUI.Label(guiCoordinates.craftingInfoRect, "Presses iron, copper, aluminum or tin ingots into plates. Ingots must be supplied to the press using universal conduits. Another universal conduit should be placed within 2 meters of the machine to accept the output. Must be connected to a power source such as a solar panel, nuclear reactor or power conduit and has an adjustable output measured in items per cycle.\n\n[CRAFTING]\n10x Iron Ingot\n10x Iron Pipe\n10x Copper Wire");
+                            CraftingRecipe recipe = craftingDictionary.dictionary["Press"];
+                            int length = recipe.ingredients.Length;
+                            string[] crafting = new string[length];
+                            for (int i = 0; i < length; i++)
+                            {
+                                crafting[i] = recipe.amounts[i] + "x " + recipe.ingredients[i];
+                            }
+                            GUI.Label(guiCoordinates.craftingInfoRect, "Presses iron, copper, aluminum or tin ingots into plates. Ingots must be supplied to the press using universal conduits. Another universal conduit should be placed within 2 meters of the machine to accept the output. Must be connected to a power source such as a solar panel, nuclear reactor or power conduit and has an adjustable output measured in items per cycle." + "\n\n[CRAFTING]\n" + string.Join("\n", crafting));
                         }
                         if (guiCoordinates.button5Rect.Contains(Event.current.mousePosition))
                         {
                             GUI.DrawTexture(guiCoordinates.craftingInfoBackgroundRect, textureDictionary.dictionary["Interface Background"]);
-                            GUI.Label(guiCoordinates.craftingInfoRect, "Cuts plates into gears. Plates must be supplied to the gear cutter using universal conduits. Place another conduit within 2 meters of the machine for the output. The gear cutter must be connected to a power source such as a solar panel, nuclear reactor or power conduit. The gear cutter has an adjustable output measured in items per cycle.\n\n[CRAFTING]\n10x Aluminum Wire\n10x Copper Wire\n5x Iron Plate\n5x Tin Plate\n5x Iron Pipe");
+                            CraftingRecipe recipe = craftingDictionary.dictionary["Gear Cutter"];
+                            int length = recipe.ingredients.Length;
+                            string[] crafting = new string[length];
+                            for (int i = 0; i < length; i++)
+                            {
+                                crafting[i] = recipe.amounts[i] + "x " + recipe.ingredients[i];
+                            }
+                            GUI.Label(guiCoordinates.craftingInfoRect, "Cuts plates into gears. Plates must be supplied to the gear cutter using universal conduits. Place another conduit within 2 meters of the machine for the output. The gear cutter must be connected to a power source such as a solar panel, nuclear reactor or power conduit. The gear cutter has an adjustable output measured in items per cycle." + "\n\n[CRAFTING]\n" + string.Join("\n", crafting));
                         }
                         if (guiCoordinates.button6Rect.Contains(Event.current.mousePosition))
                         {
                             GUI.DrawTexture(guiCoordinates.craftingInfoBackgroundRect, textureDictionary.dictionary["Interface Background"]);
-                            GUI.Label(guiCoordinates.craftingInfoRect, "Extracts ore, coal and ice from deposits found on the lunar surface. Place within 2 meters of the desired resource and use a universal conduit to handle the harvested materials. When extracting ice, the extractor will not need a heat exchanger for cooling. This machine must be connected to a power source such as a solar panel, nuclear reactor or power conduit and has an adjustable output measured in items per cycle.\n\n[CRAFTING]\n10x Iron Plate\n10x Iron Pipe\n10x Copper Wire\n10x Dark Matter");
+                            CraftingRecipe recipe = craftingDictionary.dictionary["Universal Extractor"];
+                            int length = recipe.ingredients.Length;
+                            string[] crafting = new string[length];
+                            for (int i = 0; i < length; i++)
+                            {
+                                crafting[i] = recipe.amounts[i] + "x " + recipe.ingredients[i];
+                            }
+                            GUI.Label(guiCoordinates.craftingInfoRect, "Extracts ore, coal and ice from deposits found on the lunar surface. Place within 2 meters of the desired resource and use a universal conduit to handle the harvested materials. When extracting ice, the extractor will not need a heat exchanger for cooling. This machine must be connected to a power source such as a solar panel, nuclear reactor or power conduit and has an adjustable output measured in items per cycle." + "\n\n[CRAFTING]\n" + string.Join("\n", crafting));
                         }
                         if (guiCoordinates.button7Rect.Contains(Event.current.mousePosition))
                         {
                             GUI.DrawTexture(guiCoordinates.craftingInfoBackgroundRect, textureDictionary.dictionary["Interface Background"]);
+                            CraftingRecipe recipe = craftingDictionary.dictionary["Universal Conduit"];
+                            int length = recipe.ingredients.Length;
+                            string[] crafting = new string[length];
+                            for (int i = 0; i < length; i++)
+                            {
+                                crafting[i] = recipe.amounts[i] + "x " + recipe.ingredients[i];
+                            }
                             GUI.Label(guiCoordinates.craftingInfoRect, "Transfers items from a machine to another universal conduit, another machine or a storage container. Universal conduits have an adjustable input/output range and do not require power to operate.\n\n[CRAFTING]\n5x Iron Pipe\n5x Iron Plate\n5x Copper Wire\n5x Dark Matter");
                         }
                         if (guiCoordinates.button9Rect.Contains(Event.current.mousePosition))
                         {
                             GUI.DrawTexture(guiCoordinates.craftingInfoBackgroundRect, textureDictionary.dictionary["Interface Background"]);
-                            GUI.Label(guiCoordinates.craftingInfoRect, "Retrieves items from a storage container and transfers them to a universal conduit. Place an item of each desired type into the retrievers inventory to designate that item for retrieval. Place within 2 meters of a storage container and a universal conduit. This machine requires power and it's output is adjustable. If the retriever is moving ice, it will not require cooling. The retriever's output is measured in items per cycle.\n\n[CRAFTING]\n4x Iron Plate\n4x Copper Wire\n2x Iron Pipe\n2x Electric Motor\n2x Circuit Board");
+                            CraftingRecipe recipe = craftingDictionary.dictionary["Retriever"];
+                            int length = recipe.ingredients.Length;
+                            string[] crafting = new string[length];
+                            for (int i = 0; i < length; i++)
+                            {
+                                crafting[i] = recipe.amounts[i] + "x " + recipe.ingredients[i];
+                            }
+                            GUI.Label(guiCoordinates.craftingInfoRect, "Retrieves items from a storage container and transfers them to a universal conduit. Place an item of each desired type into the retrievers inventory to designate that item for retrieval. Place within 2 meters of a storage container and a universal conduit. This machine requires power and it's output is adjustable. If the retriever is moving ice, it will not require cooling. The retriever's output is measured in items per cycle." + "\n\n[CRAFTING]\n" + string.Join("\n", crafting));
                         }
                         if (guiCoordinates.button10Rect.Contains(Event.current.mousePosition))
                         {
                             GUI.DrawTexture(guiCoordinates.craftingInfoBackgroundRect, textureDictionary.dictionary["Interface Background"]);
-                            GUI.Label(guiCoordinates.craftingInfoRect, "Provides 1 MW of power to a single machine or power conduit. Must be placed within 4 meters of the machine. Multiple solar panels can be connected to a machine or power conduit to increase the amount of power provided. If a machine is provided with greater than 2 MW of power, the machine's output can be increased. This will generate heat, requiring a heat exchanger to compensate.\n\n[CRAFTING]\n4x Iron Pipe\n4x Iron Plate\n4x Copper Wire\n4x Copper Plate\n4x Glass Block");
+                            CraftingRecipe recipe = craftingDictionary.dictionary["Solar Panel"];
+                            int length = recipe.ingredients.Length;
+                            string[] crafting = new string[length];
+                            for (int i = 0; i < length; i++)
+                            {
+                                crafting[i] = recipe.amounts[i] + "x " + recipe.ingredients[i];
+                            }
+                            GUI.Label(guiCoordinates.craftingInfoRect, "Provides 2 MW of power to a single machine or power conduit. Must be placed within 4 meters of the machine. Multiple solar panels can be connected to a machine or power conduit to increase the amount of power provided. If a machine is provided with greater than 2 MW of power, the machine's output can be increased. This will generate heat, requiring a heat exchanger to compensate." + "\n\n[CRAFTING]\n" + string.Join("\n", crafting));
                         }
                         if (guiCoordinates.button11Rect.Contains(Event.current.mousePosition))
                         {
                             GUI.DrawTexture(guiCoordinates.craftingInfoBackgroundRect, textureDictionary.dictionary["Interface Background"]);
-                            GUI.Label(guiCoordinates.craftingInfoRect, "Provides 10 MW of power to a single machine or power conduit. Must be placed within 4 meters of the machine. Multiple generators can be connected to a machine or power conduit to increase the amount of power provided. If a machine is provided with greater than 2 MW of power, the machine's output can be increased. This will generate heat, requiring a heat exchanger to compensate. Generators must be connected to a universal conduit supplying coal for fuel.\n\n[CRAFTING]\n4x Iron Plate\n4x Copper Wire\n2x Iron Gear\n2x Iron Pipe\n1x Smelter\n1x Electric Motor");
+                            CraftingRecipe recipe = craftingDictionary.dictionary["Generator"];
+                            int length = recipe.ingredients.Length;
+                            string[] crafting = new string[length];
+                            for (int i = 0; i < length; i++)
+                            {
+                                crafting[i] = recipe.amounts[i] + "x " + recipe.ingredients[i];
+                            }
+                            GUI.Label(guiCoordinates.craftingInfoRect, "Provides 20 MW of power to a single machine or power conduit. Must be placed within 4 meters of the machine. Multiple generators can be connected to a machine or power conduit to increase the amount of power provided. If a machine is provided with greater than 2 MW of power, the machine's output can be increased. This will generate heat, requiring a heat exchanger to compensate. Generators must be connected to a universal conduit supplying coal for fuel." + "\n\n[CRAFTING]\n" + string.Join("\n", crafting));
                         }
                         if (guiCoordinates.button12Rect.Contains(Event.current.mousePosition))
                         {
                             GUI.DrawTexture(guiCoordinates.craftingInfoBackgroundRect, textureDictionary.dictionary["Interface Background"]);
+                            CraftingRecipe recipe = craftingDictionary.dictionary["Nuclear Reactor"];
+                            int length = recipe.ingredients.Length;
+                            string[] crafting = new string[length];
+                            for (int i = 0; i < length; i++)
+                            {
+                                crafting[i] = recipe.amounts[i] + "x " + recipe.ingredients[i];
+                            }
                             GUI.Label(guiCoordinates.craftingInfoRect, "Nuclear reactors are used to drive reactor turbines. Turbines must be directly attached to the reactor. The reactor will require a heat exchanger providing 5 KBTU cooling per turbine.\n\n[CRAFTING]\n10x Steel Pipe\n10x Steel Plate\n10x Copper Wire\n10x Copper Plate\n10x Glass Block\n10x Dark Matter");
                         }
                         if (guiCoordinates.button13Rect.Contains(Event.current.mousePosition))
                         {
                             GUI.DrawTexture(guiCoordinates.craftingInfoBackgroundRect, textureDictionary.dictionary["Interface Background"]);
-                            GUI.Label(guiCoordinates.craftingInfoRect, "Provides 100 MW of power to a single machine or power conduit. Reactor turbines must be directly attached to a properly functioning, adequately cooled nuclear reactor. Must be placed within 4 meters of the machine. Multiple reactor turbines can be connected to a machine or power conduit to increase the amount of power provided. If a machine is provided with greater than 2 MW of power, the machine's output can be increased. This will generate heat, requiring a heat exchanger to compensate.\n\n[CRAFTING]\n4x Steel Plate\n4x Copper Wire\n2x Steel Gear\n2x Steel Pipe\n1x Generator\n1x Glass Block");
+                            CraftingRecipe recipe = craftingDictionary.dictionary["Reactor Turbine"];
+                            int length = recipe.ingredients.Length;
+                            string[] crafting = new string[length];
+                            for (int i = 0; i < length; i++)
+                            {
+                                crafting[i] = recipe.amounts[i] + "x " + recipe.ingredients[i];
+                            }
+                            GUI.Label(guiCoordinates.craftingInfoRect, "Provides 200 MW of power to a single machine or power conduit. Reactor turbines must be directly attached to a properly functioning, adequately cooled nuclear reactor. Must be placed within 4 meters of the machine. Multiple reactor turbines can be connected to a machine or power conduit to increase the amount of power provided. If a machine is provided with greater than 2 MW of power, the machine's output can be increased. This will generate heat, requiring a heat exchanger to compensate." + "\n\n[CRAFTING]\n" + string.Join("\n", crafting));
                         }
                         if (guiCoordinates.button14Rect.Contains(Event.current.mousePosition))
                         {
                             GUI.DrawTexture(guiCoordinates.craftingInfoBackgroundRect, textureDictionary.dictionary["Interface Background"]);
-                            GUI.Label(guiCoordinates.craftingInfoRect, "Transfers power from a power source to a machine or to another power conduit. When used with two outputs, power will be distributed evenly. This machine has an adjustable range setting.\n\n[CRAFTING]\n4x Aluminum Plate\n4x Copper Wire\n4x Glass Block");
+                            CraftingRecipe recipe = craftingDictionary.dictionary["Power Conduit"];
+                            int length = recipe.ingredients.Length;
+                            string[] crafting = new string[length];
+                            for (int i = 0; i < length; i++)
+                            {
+                                crafting[i] = recipe.amounts[i] + "x " + recipe.ingredients[i];
+                            }
+                            GUI.Label(guiCoordinates.craftingInfoRect, "Transfers power from a power source to a machine or to another power conduit. When used with two outputs, power will be distributed evenly. This machine has an adjustable range setting." + "\n\n[CRAFTING]\n" + string.Join("\n", crafting));
                         }
                         if (guiCoordinates.button15Rect.Contains(Event.current.mousePosition))
                         {
                             GUI.DrawTexture(guiCoordinates.craftingInfoBackgroundRect, textureDictionary.dictionary["Interface Background"]);
-                            GUI.Label(guiCoordinates.craftingInfoRect, "Cools down a machine to allow overclocking. Requires a supply of ice from a universal conduit. Increasing the output of the heat exchanger increases the amount of ice required. This can be compensated for by overclocking the extractor that is supplying the ice. Machines cannot be connected to more than one heat exchanger. The heat exchanger's output is measured in KBTU and will consume 1 ice per 1 KBTU of cooling each cycle.\n\n[CRAFTING]\n10x Steel Plate\n10x Steel Pipe");
+                            CraftingRecipe recipe = craftingDictionary.dictionary["Heat Exchanger"];
+                            int length = recipe.ingredients.Length;
+                            string[] crafting = new string[length];
+                            for (int i = 0; i < length; i++)
+                            {
+                                crafting[i] = recipe.amounts[i] + "x " + recipe.ingredients[i];
+                            }
+                            GUI.Label(guiCoordinates.craftingInfoRect, "Cools down a machine to allow overclocking. Requires a supply of ice from a universal conduit. Increasing the output of the heat exchanger increases the amount of ice required. This can be compensated for by overclocking the extractor that is supplying the ice. Machines cannot be connected to more than one heat exchanger. The heat exchanger's output is measured in KBTU and will consume 1 ice per 1 KBTU of cooling each cycle." + "\n\n[CRAFTING]\n" + string.Join("\n", crafting));
                         }
                         if (guiCoordinates.button17Rect.Contains(Event.current.mousePosition))
                         {
                             GUI.DrawTexture(guiCoordinates.craftingInfoBackgroundRect, textureDictionary.dictionary["Interface Background"]);
-                            GUI.Label(guiCoordinates.craftingInfoRect, "Smelts ore into ingots. Can also be used to make glass when supplied with regolith. Ore must be supplied to the smelter using universal conduits. Place another conduit within 2 meters of the machine for the output. This machine must be connected to a power source such as a solar panel, nuclear reactor or power conduit. The output of a smelter is measured in items per cycle.\n\n[CRAFTING]\n10x Iron Plate\n10x Copper Wire\n5x Iron Pipe");
+                            CraftingRecipe recipe = craftingDictionary.dictionary["Smelter"];
+                            int length = recipe.ingredients.Length;
+                            string[] crafting = new string[length];
+                            for (int i = 0; i < length; i++)
+                            {
+                                crafting[i] = recipe.amounts[i] + "x " + recipe.ingredients[i];
+                            }
+                            GUI.Label(guiCoordinates.craftingInfoRect, "Smelts ore into ingots. Can also be used to make glass when supplied with regolith. Ore must be supplied to the smelter using universal conduits. Place another conduit within 2 meters of the machine for the output. This machine must be connected to a power source such as a solar panel, nuclear reactor or power conduit. The output of a smelter is measured in items per cycle." + "\n\n[CRAFTING]\n" + string.Join("\n", crafting));
                         }
                         if (guiCoordinates.button18Rect.Contains(Event.current.mousePosition))
                         {
                             GUI.DrawTexture(guiCoordinates.craftingInfoBackgroundRect, textureDictionary.dictionary["Interface Background"]);
-                            GUI.Label(guiCoordinates.craftingInfoRect, "Combines tin and copper ingots to make bronze ingots. Combines coal and iron ingots to make steel ingots. Requres 3 conduits. 1 for each input and 1 for the output. Requires a power source such as a solar panel, nuclear reactor or power conduit. The alloy smelter has an adjustable output measured in items per cycle.\n\n[CRAFTING]\n40x Copper Wire\n40x Aluminum Wire\n20x Iron Plate\n20x Tin Plate\n20x Iron Pipe\n20x Iron Gear");
+                            CraftingRecipe recipe = craftingDictionary.dictionary["Alloy Smelter"];
+                            int length = recipe.ingredients.Length;
+                            string[] crafting = new string[length];
+                            for (int i = 0; i < length; i++)
+                            {
+                                crafting[i] = recipe.amounts[i] + "x " + recipe.ingredients[i];
+                            }
+                            GUI.Label(guiCoordinates.craftingInfoRect, "Combines tin and copper ingots to make bronze ingots. Combines coal and iron ingots to make steel ingots. Requres 3 conduits. 1 for each input and 1 for the output. Requires a power source such as a solar panel, nuclear reactor or power conduit. The alloy smelter has an adjustable output measured in items per cycle." + "\n\n[CRAFTING]\n" + string.Join("\n", crafting));
                         }
                         if (guiCoordinates.button19Rect.Contains(Event.current.mousePosition))
                         {
                             GUI.DrawTexture(guiCoordinates.craftingInfoBackgroundRect, textureDictionary.dictionary["Interface Background"]);
-                            GUI.Label(guiCoordinates.craftingInfoRect, "Harvests dark matter which is then transferred to a dark matter conduit. Requires a power source such as a solar panel, nuclear reactor or power conduit. The dark matter collector has an adjustable output measured in items per cycle.\n\n[CRAFTING]\n100x Dark Matter\n100x Copper Wire\n100x Aluminum Wire\n50x Steel Plate\n50x Steel Pipe\n50x Steel Gear\n50x Tin Gear\n50x Bronze Gear");
+                            CraftingRecipe recipe = craftingDictionary.dictionary["Dark Matter Collector"];
+                            int length = recipe.ingredients.Length;
+                            string[] crafting = new string[length];
+                            for (int i = 0; i < length; i++)
+                            {
+                                crafting[i] = recipe.amounts[i] + "x " + recipe.ingredients[i];
+                            }
+                            GUI.Label(guiCoordinates.craftingInfoRect, "Harvests dark matter which is then transferred to a dark matter conduit. Requires a power source such as a solar panel, nuclear reactor or power conduit. The dark matter collector has an adjustable output measured in items per cycle." + "\n\n[CRAFTING]\n" + string.Join("\n", crafting));
                         }
                         if (guiCoordinates.button20Rect.Contains(Event.current.mousePosition))
                         {
                             GUI.DrawTexture(guiCoordinates.craftingInfoBackgroundRect, textureDictionary.dictionary["Interface Background"]);
-                            GUI.Label(guiCoordinates.craftingInfoRect, "Transfers dark matter from a collector to a storage container or another conduit. Dark matter conduits have an adjustable input/output range and do not require power to operate.\n\n[CRAFTING]\n50x Dark Matter\n50x Copper Wire\n50x Aluminum Wire\n25x Steel Plate\n25x Steel Pipe\n25x Steel Gear\n25x Tin Gear\n25x Bronze Gear");
+                            CraftingRecipe recipe = craftingDictionary.dictionary["Dark Matter Conduit"];
+                            int length = recipe.ingredients.Length;
+                            string[] crafting = new string[length];
+                            for (int i = 0; i < length; i++)
+                            {
+                                crafting[i] = recipe.amounts[i] + "x " + recipe.ingredients[i];
+                            }
+                            GUI.Label(guiCoordinates.craftingInfoRect, "Transfers dark matter from a collector to a storage container or another conduit. Dark matter conduits have an adjustable input/output range and do not require power to operate." + "\n\n[CRAFTING]\n" + string.Join("\n", crafting));
                         }
                         if (guiCoordinates.button21Rect.Contains(Event.current.mousePosition))
                         {
                             GUI.DrawTexture(guiCoordinates.craftingInfoBackgroundRect, textureDictionary.dictionary["Interface Background"]);
-                            GUI.Label(guiCoordinates.craftingInfoRect, "Automatically crafts objects using items from an attached storage container. Place within 2 meters of the storage container. Then, place an item of the desired type into the auto crafter's inventory. This will designate that item as the item to be crafted. Crafted items will be deposited into the attached storage container. This machine requires power and has an adjustable output measured in items per cycle.\n\n[CRAFTING]\n4x Bronze Gear\n4x Steel Plate\n4x Electric Motor\n4x Circuit Board\n4x Dark Matter");
+                            CraftingRecipe recipe = craftingDictionary.dictionary["Auto Crafter"];
+                            int length = recipe.ingredients.Length;
+                            string[] crafting = new string[length];
+                            for (int i = 0; i < length; i++)
+                            {
+                                crafting[i] = recipe.amounts[i] + "x " + recipe.ingredients[i];
+                            }
+                            GUI.Label(guiCoordinates.craftingInfoRect, "Automatically crafts objects using items from an attached storage container. Place within 2 meters of the storage container. Then, place an item of the desired type into the auto crafter's inventory. This will designate that item as the item to be crafted. Crafted items will be deposited into the attached storage container. This machine requires power and has an adjustable output measured in items per cycle." + "\n\n[CRAFTING]\n" + string.Join("\n", crafting));
                         }
                         if (guiCoordinates.button22Rect.Contains(Event.current.mousePosition))
                         {
                             GUI.DrawTexture(guiCoordinates.craftingInfoBackgroundRect, textureDictionary.dictionary["Interface Background"]);
-                            GUI.Label(guiCoordinates.craftingInfoRect, "Provides a waypoint for rail carts. Has an adjustable range at which the next hub will be located and rails deployed to it's location. Rail cart hubs can be configured to stop the rail cart so it can be loaded and unloaded.\n\n[CRAFTING]\n10x Iron Pipe\n6x Iron Plate\n1x Circuit Board");
+                            CraftingRecipe recipe = craftingDictionary.dictionary["Rail Cart Hub"];
+                            int length = recipe.ingredients.Length;
+                            string[] crafting = new string[length];
+                            for (int i = 0; i < length; i++)
+                            {
+                                crafting[i] = recipe.amounts[i] + "x " + recipe.ingredients[i];
+                            }
+                            GUI.Label(guiCoordinates.craftingInfoRect, "Provides a waypoint for rail carts. Has an adjustable range at which the next hub will be located and rails deployed to it's location. Rail cart hubs can be configured to stop the rail cart so it can be loaded and unloaded." + "\n\n[CRAFTING]\n" + string.Join("\n", crafting));
                         }
                         if (guiCoordinates.button23Rect.Contains(Event.current.mousePosition))
                         {
                             GUI.DrawTexture(guiCoordinates.craftingInfoBackgroundRect, textureDictionary.dictionary["Interface Background"]);
-                            GUI.Label(guiCoordinates.craftingInfoRect, "A mobile storage container that rides on rails from one rail cart hub to the next. Configure the hubs to stop the cart near a conduit or retriever so it can be loaded or unloaded. Must be placed on a rail cart hub.\n\n[CRAFTING]\n10x Copper Wire\n8x Aluminum Gear\n4x Tin Plate\n2x Electric Motor\n1x Solar Panel\n1x Storage Container");
+                            CraftingRecipe recipe = craftingDictionary.dictionary["Rail Cart"];
+                            int length = recipe.ingredients.Length;
+                            string[] crafting = new string[length];
+                            for (int i = 0; i < length; i++)
+                            {
+                                crafting[i] = recipe.amounts[i] + "x " + recipe.ingredients[i];
+                            }
+                            GUI.Label(guiCoordinates.craftingInfoRect, "A mobile storage container that rides on rails from one rail cart hub to the next. Configure the hubs to stop the cart near a conduit or retriever so it can be loaded or unloaded. Must be placed on a rail cart hub." + "\n\n[CRAFTING]\n" + string.Join("\n", crafting));
                         }
 
                         GUI.DrawTexture(guiCoordinates.craftingBackgroundRect, textureDictionary.dictionary["Interface Background"]);
@@ -686,52 +839,122 @@ public class InventoryGUI : MonoBehaviour
                         if (guiCoordinates.button1Rect.Contains(Event.current.mousePosition))
                         {
                             GUI.DrawTexture(guiCoordinates.craftingInfoBackgroundRect, textureDictionary.dictionary["Interface Background"]);
-                            GUI.Label(guiCoordinates.craftingInfoRect, "Iron block for building structures. Iron blocks have a 25% chance of being destroyed by meteors and other hazards. 1 plate creates 10 blocks. Hold left shift when clicking to craft 100.\n\n[CRAFTING]\n1x Iron Plate");
+                            CraftingRecipe recipe = craftingDictionary.dictionary["Iron Block"];
+                            int length = recipe.ingredients.Length;
+                            string[] crafting = new string[length];
+                            for (int i = 0; i < length; i++)
+                            {
+                                crafting[i] = recipe.amounts[i] + "x " + recipe.ingredients[i];
+                            }
+                            GUI.Label(guiCoordinates.craftingInfoRect, "Iron block for building structures. Iron blocks have a 25% chance of being destroyed by meteors and other hazards. 1 plate creates 10 blocks. Hold left shift when clicking to craft 100." + "\n\n[CRAFTING]\n" + string.Join("\n", crafting));
                         }
                         if (guiCoordinates.button2Rect.Contains(Event.current.mousePosition))
                         {
                             GUI.DrawTexture(guiCoordinates.craftingInfoBackgroundRect, textureDictionary.dictionary["Interface Background"]);
-                            GUI.Label(guiCoordinates.craftingInfoRect, "Iron ramp for building structures. Iron ramps have a 25% chance of being destroyed by meteors and other hazards. 1 plate creates 10 ramps. Hold left shift when clicking to craft 100.\n\n[CRAFTING]\n1x Iron Plate");
+                            CraftingRecipe recipe = craftingDictionary.dictionary["Iron Ramp"];
+                            int length = recipe.ingredients.Length;
+                            string[] crafting = new string[length];
+                            for (int i = 0; i < length; i++)
+                            {
+                                crafting[i] = recipe.amounts[i] + "x " + recipe.ingredients[i];
+                            }
+                            GUI.Label(guiCoordinates.craftingInfoRect, "Iron ramp for building structures. Iron ramps have a 25% chance of being destroyed by meteors and other hazards. 1 plate creates 10 ramps. Hold left shift when clicking to craft 100." + "\n\n[CRAFTING]\n" + string.Join("\n", crafting));
                         }
                         if (guiCoordinates.button3Rect.Contains(Event.current.mousePosition))
                         {
                             GUI.DrawTexture(guiCoordinates.craftingInfoBackgroundRect, textureDictionary.dictionary["Interface Background"]);
-                            GUI.Label(guiCoordinates.craftingInfoRect, "Steel block for building structures. Steel blocks have a 1% chance of being destroyed by meteors and other hazards. 1 plate creates 10 blocks. Hold left shift when clicking to craft 100.\n\n[CRAFTING]\n1x Steel Plate");
+                            CraftingRecipe recipe = craftingDictionary.dictionary["Steel Block"];
+                            int length = recipe.ingredients.Length;
+                            string[] crafting = new string[length];
+                            for (int i = 0; i < length; i++)
+                            {
+                                crafting[i] = recipe.amounts[i] + "x " + recipe.ingredients[i];
+                            }
+                            GUI.Label(guiCoordinates.craftingInfoRect, "Steel block for building structures. Steel blocks have a 1% chance of being destroyed by meteors and other hazards. 1 plate creates 10 blocks. Hold left shift when clicking to craft 100." + "\n\n[CRAFTING]\n" + string.Join("\n", crafting));
                         }
                         if (guiCoordinates.button4Rect.Contains(Event.current.mousePosition))
                         {
                             GUI.DrawTexture(guiCoordinates.craftingInfoBackgroundRect, textureDictionary.dictionary["Interface Background"]);
-                            GUI.Label(guiCoordinates.craftingInfoRect, "Steel ramp for building structures. Steel ramps have a 1% chance of being destroyed by meteors and other hazards. 1 plate creates 10 ramps. Hold left shift when clicking to craft 100.\n\n[CRAFTING]\n1x Steel Plate");
+                            CraftingRecipe recipe = craftingDictionary.dictionary["Steel Ramp"];
+                            int length = recipe.ingredients.Length;
+                            string[] crafting = new string[length];
+                            for (int i = 0; i < length; i++)
+                            {
+                                crafting[i] = recipe.amounts[i] + "x " + recipe.ingredients[i];
+                            }
+                            GUI.Label(guiCoordinates.craftingInfoRect, "Steel ramp for building structures. Steel ramps have a 1% chance of being destroyed by meteors and other hazards. 1 plate creates 10 ramps. Hold left shift when clicking to craft 100." + "\n\n[CRAFTING]\n" + string.Join("\n", crafting));
                         }
                         if (guiCoordinates.button5Rect.Contains(Event.current.mousePosition))
                         {
                             GUI.DrawTexture(guiCoordinates.craftingInfoBackgroundRect, textureDictionary.dictionary["Interface Background"]);
-                            GUI.Label(guiCoordinates.craftingInfoRect, "Hatchway used for entering structures.\n\n[CRAFTING]\n1x Tin Plate\n1x Dark Matter");
+                            CraftingRecipe recipe = craftingDictionary.dictionary["Quantum Hatchway"];
+                            int length = recipe.ingredients.Length;
+                            string[] crafting = new string[length];
+                            for (int i = 0; i < length; i++)
+                            {
+                                crafting[i] = recipe.amounts[i] + "x " + recipe.ingredients[i];
+                            }
+                            GUI.Label(guiCoordinates.craftingInfoRect, "Hatchway used for entering structures." + "\n\n[CRAFTING]\n" + string.Join("\n", crafting));
                         }
                         if (guiCoordinates.button6Rect.Contains(Event.current.mousePosition))
                         {
                             GUI.DrawTexture(guiCoordinates.craftingInfoBackgroundRect, textureDictionary.dictionary["Interface Background"]);
-                            GUI.Label(guiCoordinates.craftingInfoRect, "For interior lighting. Requires power from a solar panel, nuclear reactor or power conduit.\n\n[CRAFTING]\n2x Copper Wire\n1x Glass Block\n1x Tin Plate");
+                            CraftingRecipe recipe = craftingDictionary.dictionary["Electric Light"];
+                            int length = recipe.ingredients.Length;
+                            string[] crafting = new string[length];
+                            for (int i = 0; i < length; i++)
+                            {
+                                crafting[i] = recipe.amounts[i] + "x " + recipe.ingredients[i];
+                            }
+                            GUI.Label(guiCoordinates.craftingInfoRect, "For interior lighting. Requires power from a solar panel, nuclear reactor or power conduit." + "\n\n[CRAFTING]\n" + string.Join("\n", crafting));
                         }
                         if (guiCoordinates.button7Rect.Contains(Event.current.mousePosition))
                         {
                             GUI.DrawTexture(guiCoordinates.craftingInfoBackgroundRect, textureDictionary.dictionary["Interface Background"]);
-                            GUI.Label(guiCoordinates.craftingInfoRect, "A combination of conductive, semi-conductive and insulating materials combined to create a logic processing circuit.\n\n[CRAFTING]\n2x Copper Wire\n1x Glass Block\n1x Tin Plate\n1x Dark Matter");
+                            CraftingRecipe recipe = craftingDictionary.dictionary["Circuit Board"];
+                            int length = recipe.ingredients.Length;
+                            string[] crafting = new string[length];
+                            for (int i = 0; i < length; i++)
+                            {
+                                crafting[i] = recipe.amounts[i] + "x " + recipe.ingredients[i];
+                            }
+                            GUI.Label(guiCoordinates.craftingInfoRect, "A combination of conductive, semi-conductive and insulating materials combined to create a logic processing circuit." + "\n\n[CRAFTING]\n" + string.Join("\n", crafting));
                         }
                         if (guiCoordinates.button9Rect.Contains(Event.current.mousePosition))
                         {
                             GUI.DrawTexture(guiCoordinates.craftingInfoBackgroundRect, textureDictionary.dictionary["Interface Background"]);
-                            GUI.Label(guiCoordinates.craftingInfoRect, "A device that converts electrical energy to mechanical torque.\n\n[CRAFTING]\n10x Copper Wire\n2x Iron Plate\n1x Iron Pipe\n2x Iron Gear");
+                            CraftingRecipe recipe = craftingDictionary.dictionary["Electric Motor"];
+                            int length = recipe.ingredients.Length;
+                            string[] crafting = new string[length];
+                            for (int i = 0; i < length; i++)
+                            {
+                                crafting[i] = recipe.amounts[i] + "x " + recipe.ingredients[i];
+                            }
+                            GUI.Label(guiCoordinates.craftingInfoRect, "A device that converts electrical energy to mechanical torque." + "\n\n[CRAFTING]\n" + string.Join("\n", crafting));
                         }
                         if (guiCoordinates.button10Rect.Contains(Event.current.mousePosition))
                         {
                             GUI.DrawTexture(guiCoordinates.craftingInfoBackgroundRect, textureDictionary.dictionary["Interface Background"]);
-                            GUI.Label(guiCoordinates.craftingInfoRect, "Provides access to all stationary storage containers within 4 meters. Can be accessed manually or connected to retrievers, auto crafters and conduits. When a conduit is connectextureDictionary.dictionary to the computer, the computer will store items starting with the first container found to have space available. When a retriever is connected to the computer, the computer will search all of the managed containers for desired items.\n\n[CRAFTING]\n10x Copper Wire\n10x Tin Gear\n5x Retriever\n5x Universal Conduit\n5x Aluminum Plate\n1x Dark Matter Conduit\n1x Glass Block");
+                            CraftingRecipe recipe = craftingDictionary.dictionary["Storage Computer"];
+                            int length = recipe.ingredients.Length;
+                            string[] crafting = new string[length];
+                            for (int i = 0; i < length; i++)
+                            {
+                                crafting[i] = recipe.amounts[i] + "x " + recipe.ingredients[i];
+                            }
+                            GUI.Label(guiCoordinates.craftingInfoRect, "Provides access to all stationary storage containers within 4 meters. Can be accessed manually or connected to retrievers, auto crafters and conduits. When a conduit is connectextureDictionary.dictionary to the computer, the computer will store items starting with the first container found to have space available. When a retriever is connected to the computer, the computer will search all of the managed containers for desired items." + "\n\n[CRAFTING]\n" + string.Join("\n", crafting));
                         }
                         if (guiCoordinates.button11Rect.Contains(Event.current.mousePosition))
                         {
                             GUI.DrawTexture(guiCoordinates.craftingInfoBackgroundRect, textureDictionary.dictionary["Interface Background"]);
-                            GUI.Label(guiCoordinates.craftingInfoRect, "Protects your equipment from meteor showers and other hazards. Requires a power source such as a solar panel, nuclear reactor or power conduit. Turrets have an adjustable output measured in rounds per minute.\n\n[CRAFTING]\n10x Copper Wire\n10x Aluminum Wire\n5x Steel Plate\n5x Steel Pipe\n5x Steel Gear\n5x Bronze Plate\n4x Electric Motor\n4x Circuit Board");
+                            CraftingRecipe recipe = craftingDictionary.dictionary["Turret"];
+                            int length = recipe.ingredients.Length;
+                            string[] crafting = new string[length];
+                            for (int i = 0; i < length; i++)
+                            {
+                                crafting[i] = recipe.amounts[i] + "x " + recipe.ingredients[i];
+                            }
+                            GUI.Label(guiCoordinates.craftingInfoRect, "Protects your equipment from meteor showers and other hazards. Requires a power source such as a solar panel, nuclear reactor or power conduit. Turrets have an adjustable output measured in rounds per minute." + "\n\n[CRAFTING]\n" + string.Join("\n", crafting));
                         }
 
                         GUI.DrawTexture(guiCoordinates.craftingBackgroundRect, textureDictionary.dictionary["Interface Background"]);
@@ -775,7 +998,63 @@ public class InventoryGUI : MonoBehaviour
                         {
                             craftingManager.CraftItemAsPlayer(craftingDictionary.dictionary["Turret"]);
                         }
+                    }
+                    if (craftingPage == 2)
+                    {
+                        int index = 0;
+                        KeyValuePair<string, CraftingRecipe>[] recipes = new KeyValuePair<string, CraftingRecipe>[craftingDictionary.modDictionary.Count];
+                        foreach (KeyValuePair<string,CraftingRecipe> kvp in craftingDictionary.modDictionary)
+                        {
+                            recipes[index] = kvp;
+                            index++;
+                        }
 
+                        GUI.DrawTexture(guiCoordinates.craftingBackgroundRect, textureDictionary.dictionary["Interface Background"]);
+                        int f = GUI.skin.label.fontSize;
+                        GUI.skin.label.fontSize = 24;
+                        GUI.color = new Color(0.44f, 0.72f, 0.82f, 1);
+                        GUI.Label(guiCoordinates.craftingTitleRect, "CRAFTING");
+                        GUI.skin.label.fontSize = f;
+                        GUI.color = Color.white;
+
+                        if (GUI.Button(guiCoordinates.button3Rect, "<-"))
+                        {
+                            if (modCraftingIndex > 0)
+                            {
+                                modCraftingIndex--;
+                            }
+                            playerController.PlayButtonSound();
+                        }
+
+                        if (GUI.Button(guiCoordinates.button19Rect, "->"))
+                        {
+                            if (modCraftingIndex < recipes.Length - 1)
+                            {
+                                modCraftingIndex++;
+                            }
+                            playerController.PlayButtonSound();
+                        }
+
+                        if (GUI.Button(guiCoordinates.button11Rect, recipes[modCraftingIndex].Value.output))
+                        {
+                            craftingManager.CraftItemAsPlayer(craftingDictionary.modDictionary[recipes[modCraftingIndex].Value.output]);
+                        }
+
+                        if (guiCoordinates.button11Rect.Contains(Event.current.mousePosition))
+                        {
+                            GUI.DrawTexture(guiCoordinates.craftingInfoBackgroundRect, textureDictionary.dictionary["Interface Background"]);
+                            string desc = recipes[modCraftingIndex].Value.output;
+                            if (GetComponent<BuildController>().blockDictionary.machineDictionary.ContainsKey(recipes[modCraftingIndex].Value.output))
+                            {
+                                desc = GetComponent<BuildController>().blockDictionary.GetMachineDescription(recipes[modCraftingIndex].Value.output);
+                            }
+                            string[] crafting = new string[recipes[modCraftingIndex].Value.ingredients.Length];
+                            for (int i = 0; i < recipes[modCraftingIndex].Value.ingredients.Length; i++)
+                            {
+                                crafting[i] = recipes[modCraftingIndex].Value.amounts[i] + "x " + recipes[modCraftingIndex].Value.ingredients[i];
+                            }
+                            GUI.Label(guiCoordinates.craftingInfoRect, desc + "\n\n[CRAFTING]\n" + string.Join("\n", crafting));
+                        }
                     }
                     if (GUI.Button(guiCoordinates.craftingPreviousRect, "<-"))
                     {
@@ -788,6 +1067,10 @@ public class InventoryGUI : MonoBehaviour
                     if (GUI.Button(guiCoordinates.craftingNextRect, "->"))
                     {
                         if (craftingPage < 1)
+                        {
+                            craftingPage += 1;
+                        }
+                        else if (craftingPage < 2 && craftingDictionary.modDictionary.Count > 0)
                         {
                             craftingPage += 1;
                         }

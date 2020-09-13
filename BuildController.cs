@@ -16,7 +16,6 @@ public class BuildController : MonoBehaviour
         playerController = GetComponent<PlayerController>();
         gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
         blockDictionary = new BlockDictionary(playerController);
-        blockDictionary.basicMachine = playerController.basicMachine;
         builtObjects = GameObject.Find("Built_Objects");
     }
 
@@ -343,15 +342,10 @@ public class BuildController : MonoBehaviour
                             {
                                 obj.GetComponent<RailCart>().target = hit.collider.gameObject;
                             }
-                            if (t.GetComponent<BasicMachine>() != null)
+                            if (t.GetComponent<ModMachine>() != null)
                             {
-                                BasicMachine machine = t.GetComponent<BasicMachine>();
-                                if (machine.modMachine == true)
-                                {
-                                    t.GetComponent<Renderer>().sharedMaterial.mainTexture = playerController.GetComponent<TextureDictionary>().dictionary[type];
-                                    machine.machineName = type;
-                                    machine.recipes = blockDictionary.GetMachineRecipes(type);
-                                }
+                                ModMachine machine = t.GetComponent<ModMachine>();
+                                machine.machineName = type;
                             }
                             slot.amountInSlot -= 1;
                             playerController.builderSound.Play();

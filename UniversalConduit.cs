@@ -644,6 +644,33 @@ public class UniversalConduit : MonoBehaviour
                 }
             }
         }
+        if (obj.GetComponent<ModMachine>() != null)
+        {
+            float distance = Vector3.Distance(transform.position, obj.transform.position);
+            if (IsValidOutputObject(obj) && distance < range)
+            {
+                if (obj.GetComponent<ModMachine>().inputObject == null)
+                {
+                    if (creationMethod.Equals("spawned") && obj.GetComponent<ModMachine>().ID.Equals(outputID))
+                    {
+                        outputObject = obj;
+                        obj.GetComponent<ModMachine>().inputObject = gameObject;
+                        connectionLine.SetPosition(0, transform.position);
+                        connectionLine.SetPosition(1, obj.transform.position);
+                        connectionLine.enabled = true;
+                        creationMethod = "built";
+                    }
+                    else if (creationMethod.Equals("built"))
+                    {
+                        outputObject = obj;
+                        obj.GetComponent<ModMachine>().inputObject = gameObject;
+                        connectionLine.SetPosition(0, transform.position);
+                        connectionLine.SetPosition(1, obj.transform.position);
+                        connectionLine.enabled = true;
+                    }
+                }
+            }
+        }
     }
 
     private void HandleInput()
@@ -756,6 +783,20 @@ public class UniversalConduit : MonoBehaviour
         if (inputObject.GetComponent<Smelter>() != null)
         {
             if (inputObject.GetComponent<Smelter>().conduitItem.active == false)
+            {
+                conduitItem.active = false;
+                GetComponent<Light>().enabled = false;
+                GetComponent<AudioSource>().enabled = false;
+                inputMachineDisabled = true;
+            }
+            else
+            {
+                inputMachineDisabled = false;
+            }
+        }
+        if (inputObject.GetComponent<ModMachine>() != null)
+        {
+            if (inputObject.GetComponent<ModMachine>().conduitItem.active == false)
             {
                 conduitItem.active = false;
                 GetComponent<Light>().enabled = false;
@@ -1025,6 +1066,28 @@ public class UniversalConduit : MonoBehaviour
                     if (amount >= speed)
                     {
                         outputObject.GetComponent<GearCutter>().amount += speed;
+                        amount -= speed;
+                        conduitItem.active = true;
+                        GetComponent<Light>().enabled = true;
+                        GetComponent<AudioSource>().enabled = true;
+                    }
+                }
+                else
+                {
+                    conduitItem.active = false;
+                    GetComponent<Light>().enabled = false;
+                    GetComponent<AudioSource>().enabled = false;
+                }
+            }
+            if (outputObject.GetComponent<ModMachine>() != null)
+            {
+                if (type.Equals(outputObject.GetComponent<ModMachine>().inputType))
+                {
+                    outputObject.GetComponent<ModMachine>().inputID = ID;
+                    outputID = outputObject.GetComponent<ModMachine>().ID;
+                    if (amount >= speed)
+                    {
+                        outputObject.GetComponent<ModMachine>().amount += speed;
                         amount -= speed;
                         conduitItem.active = true;
                         GetComponent<Light>().enabled = true;

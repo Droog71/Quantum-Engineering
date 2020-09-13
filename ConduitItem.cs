@@ -110,6 +110,18 @@ public class ConduitItem : MonoBehaviour
                     }
                 }
 
+                if (machine.GetComponent<ModMachine>() != null)
+                {
+                    if (machine.GetComponent<ModMachine>().outputObject != null)
+                    {
+                        target = machine.GetComponent<ModMachine>().outputObject;
+                        if (textureDictionary.ContainsKey(machine.GetComponent<ModMachine>().outputType))
+                        {
+                            billboard.GetComponent<Renderer>().material.mainTexture = textureDictionary[machine.GetComponent<ModMachine>().outputType];
+                        }
+                    }
+                }
+
                 if (machine.GetComponent<Retriever>() != null)
                 {
                     if (machine.GetComponent<Retriever>().outputObject != null)

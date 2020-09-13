@@ -37,7 +37,7 @@ public class StateManager : MonoBehaviour
     public GameObject RailCartHub;
     public GameObject RailCart;
     public GameObject Brick;
-    public GameObject basicMachine;
+    public GameObject modMachine;
     public GameObject BuiltObjects;
     public string WorldName = "World";
     private float updateTick;
@@ -429,18 +429,16 @@ public class StateManager : MonoBehaviour
                     }
                     if (ObjectName == WorldName + "ModMachine")
                     {
-                        GameObject SpawnedObject = Instantiate(basicMachine, ObjectPosition, ObjectRotation);
-                        SpawnedObject.GetComponent<BasicMachine>().modMachine = true;
-                        SpawnedObject.GetComponent<BasicMachine>().machineName = FileBasedPrefs.GetString(ObjectName + objectCount + "machineName");
-                        BlockDictionary blockDictionary = new BlockDictionary(new PlayerController());
-                        SpawnedObject.GetComponent<BasicMachine>().recipes = blockDictionary.GetMachineRecipes(SpawnedObject.GetComponent<BasicMachine>().machineName);
-                        SpawnedObject.GetComponent<BasicMachine>().inputID = FileBasedPrefs.GetString(ObjectName + objectCount + "inputID");
-                        SpawnedObject.GetComponent<BasicMachine>().outputID = FileBasedPrefs.GetString(ObjectName + objectCount + "outputID");
-                        SpawnedObject.GetComponent<BasicMachine>().inputType = FileBasedPrefs.GetString(ObjectName + objectCount + "inputType");
-                        SpawnedObject.GetComponent<BasicMachine>().outputType = FileBasedPrefs.GetString(ObjectName + objectCount + "outputType");
-                        SpawnedObject.GetComponent<BasicMachine>().speed = FileBasedPrefs.GetInt(ObjectName + objectCount + "speed");
-                        SpawnedObject.GetComponent<BasicMachine>().amount = FileBasedPrefs.GetFloat(ObjectName + objectCount + "amount");
-                        SpawnedObject.GetComponent<BasicMachine>().creationMethod = "spawned";
+                        GameObject SpawnedObject = Instantiate(modMachine, ObjectPosition, ObjectRotation);
+                        SpawnedObject.GetComponent<ModMachine>().machineName = FileBasedPrefs.GetString(ObjectName + objectCount + "machineName");
+                        Debug.Log("Loading machine name from: " + ObjectName + objectCount + "machineName == "+ FileBasedPrefs.GetString(ObjectName + objectCount + "machineName"));
+                        SpawnedObject.GetComponent<ModMachine>().inputID = FileBasedPrefs.GetString(ObjectName + objectCount + "inputID");
+                        SpawnedObject.GetComponent<ModMachine>().outputID = FileBasedPrefs.GetString(ObjectName + objectCount + "outputID");
+                        SpawnedObject.GetComponent<ModMachine>().inputType = FileBasedPrefs.GetString(ObjectName + objectCount + "inputType");
+                        SpawnedObject.GetComponent<ModMachine>().outputType = FileBasedPrefs.GetString(ObjectName + objectCount + "outputType");
+                        SpawnedObject.GetComponent<ModMachine>().speed = FileBasedPrefs.GetInt(ObjectName + objectCount + "speed");
+                        SpawnedObject.GetComponent<ModMachine>().amount = FileBasedPrefs.GetFloat(ObjectName + objectCount + "amount");
+                        SpawnedObject.GetComponent<ModMachine>().creationMethod = "spawned";
                         SpawnedObject.GetComponent<PhysicsHandler>().creationMethod = "spawned";
                         SpawnedObject.GetComponent<PhysicsHandler>().falling = FileBasedPrefs.GetBool(ObjectName + objectCount + "falling");
                         SpawnedObject.GetComponent<PhysicsHandler>().fallingStack = FileBasedPrefs.GetBool(ObjectName + objectCount + "fallingStack");

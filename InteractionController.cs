@@ -4,7 +4,6 @@ using UnityEngine;
 public class InteractionController : MonoBehaviour
 {
     private PlayerController playerController;
-    private BlockDictionary blockDictionary;
     private MachineInteraction machineInteraction;
     private StorageInteraction storageInteraction;
     private BlockInteraction blockInteraction;
@@ -13,8 +12,6 @@ public class InteractionController : MonoBehaviour
     public void Start()
     {
         playerController = GetComponent<PlayerController>();
-        blockDictionary = new BlockDictionary(playerController);
-        blockDictionary.basicMachine = playerController.basicMachine;
         machineInteraction = new MachineInteraction(playerController, this);
         storageInteraction = new StorageInteraction(playerController, this);
         blockInteraction = new BlockInteraction(playerController, this);
@@ -119,6 +116,10 @@ public class InteractionController : MonoBehaviour
                     else if (playerController.objectInSight.GetComponent<AirLock>() != null)
                     {
                         machineInteraction.InteractWithAirLock();
+                    }
+                    else if (playerController.objectInSight.GetComponent<ModMachine>() != null)
+                    {
+                        machineInteraction.InteractWithModMachine();
                     }
                     else if (playerController.objectInSight.GetComponent<IronBlock>() != null)
                     {

@@ -1,4 +1,6 @@
 ﻿using UnityEngine;
+using System.Collections.Generic;
+using System.Linq;
 
 public class Extruder : BasicMachine
 {
@@ -13,6 +15,19 @@ public class Extruder : BasicMachine
             new BasicMachineRecipe("Iron Ingot", "Iron Pipe"),
             new BasicMachineRecipe("Steel Ingot", "Steel Pipe")
         };
+
+        PlayerController playerController = GameObject.Find("Player").GetComponent<PlayerController>();
+        BlockDictionary blockDictionary = new BlockDictionary(playerController);
+        BasicMachineRecipe[] modRecipes = blockDictionary.GetMachineRecipes("Extruder");
+        if (modRecipes != null)
+        {
+            List<BasicMachineRecipe> recipeList = recipes.ToList();
+            foreach (BasicMachineRecipe recipe in modRecipes)
+            {
+                recipeList.Add(recipe);
+            }
+            recipes = recipeList.ToArray();
+        }
     }
 
     // Called once per frame by unity engine

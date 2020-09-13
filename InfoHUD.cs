@@ -555,6 +555,33 @@ public class InfoHUD : MonoBehaviour
                     }
                 }
             }
+            else if (obj.GetComponent<ModMachine>() != null)
+            {
+                GUI.Label(guiCoordinates.messageRect, "\nPress F to collect.\nPress E to interact.");
+                if (playerController.machineInSight != null)
+                {
+                    GUI.DrawTexture(guiCoordinates.infoRectBG, textureDictionary.dictionary["Interface Background"]);
+                    if (obj.GetComponent<ModMachine>().connectionFailed == false)
+                    {
+                        GUI.Label(guiCoordinates.infoRect, obj.GetComponent<ModMachine>().machineName +
+                        "\nID: " + machineDisplayID +
+                        "\nEnergized: " + playerController.machineHasPower +
+                        "\nPower: " + playerController.machinePower + " MW" +
+                        "\nOutput: " + playerController.machineSpeed + " IPC" +
+                        "\nHeat: " + playerController.machineHeat + " KBTU" +
+                        "\nCooling: " + playerController.machineCooling + " KBTU" +
+                        "\nHolding: " + (int)playerController.machineAmount + " " + playerController.machineType +
+                        "\n" + "Input ID: " + machineDisplayInputID +
+                        "\n" + "Output ID: " + machineDisplayOutputID +
+                        "\n" + "Input Holding: " + (int)playerController.machineInputAmount + " " + playerController.machineInputType +
+                        "\n" + "Output Holding: " + (int)playerController.machineOutputAmount + " " + playerController.machineOutputType);
+                    }
+                    else
+                    {
+                        GUI.Label(guiCoordinates.infoRect, obj.GetComponent<ModMachine>().machineName + "\nOffline");
+                    }
+                }
+            }
             else if (obj.GetComponent<Retriever>() != null)
             {
                 GUI.Label(guiCoordinates.messageRect, "\nPress F to collect.\nPress E to interact.");

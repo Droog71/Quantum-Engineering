@@ -24,15 +24,12 @@ public class AddressManager
             {
                 if (go.transform.parent != stateManager.BuiltObjects.transform)
                 {
-                    if (go.GetComponent<BasicMachine>() != null)
+                    if (go.GetComponent<ModMachine>() != null)
                     {
-                        BasicMachine machine = go.GetComponent<BasicMachine>();
-                        if (machine.modMachine == true)
-                        {
-                            objectName  = stateManager.WorldName + "ModMachine";
-                            go.GetComponent<BasicMachine>().ID = objectName + idCount;
-                            go.GetComponent<BasicMachine>().address = idCount;
-                        }
+                        ModMachine machine = go.GetComponent<ModMachine>();
+                        objectName  = stateManager.WorldName + "ModMachine";
+                        go.GetComponent<ModMachine>().ID = objectName + idCount;
+                        go.GetComponent<ModMachine>().address = idCount;
                     }
                     if (go.GetComponent<Auger>() != null)
                     {
