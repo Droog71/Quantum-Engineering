@@ -92,9 +92,9 @@ public class StateManager : MonoBehaviour
     // Loads a saved world.
     private void LoadWorld()
     {
-        if (Loaded == false && FileBasedPrefs.GetInt(WorldName + "ConstructionTotal") != 0)
+        if (Loaded == false && FileBasedPrefs.GetInt(WorldName + "ObjectTotal") != 0)
         {
-            int totalobjectCount = FileBasedPrefs.GetInt(WorldName + "ConstructionTotal");
+            int totalobjectCount = FileBasedPrefs.GetInt(WorldName + "ObjectTotal");
             for (int objectCount = 0; objectCount <= totalobjectCount; objectCount++)
             {
                 ObjectPosition = PlayerPrefsX.GetVector3(WorldName + objectCount + "Position");

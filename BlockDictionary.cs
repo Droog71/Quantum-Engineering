@@ -35,7 +35,6 @@ public class BlockDictionary
                 if (fileName == machineName)
                 {
                     string modName = new DirectoryInfo(path).Name;
-                    Debug.Log(modName+" added description for [" + machineName + "]");
                     return fileContents.Split(']')[0].Substring(1);
                 }
             }

@@ -539,25 +539,29 @@ public class ActionManager
                     {
                         newPing.GetComponent<Ping>().type = "iron";
                     }
-                    if (resource.type.Equals("Tin Ore"))
+                    else if (resource.type.Equals("Tin Ore"))
                     {
                         newPing.GetComponent<Ping>().type = "tin";
                     }
-                    if (resource.type.Equals("Copper Ore"))
+                    else if (resource.type.Equals("Copper Ore"))
                     {
                         newPing.GetComponent<Ping>().type = "copper";
                     }
-                    if (resource.type.Equals("Aluminum Ore"))
+                    else if (resource.type.Equals("Aluminum Ore"))
                     {
                         newPing.GetComponent<Ping>().type = "aluminum";
                     }
-                    if (resource.type.Equals("Ice"))
+                    else if (resource.type.Equals("Ice"))
                     {
                         newPing.GetComponent<Ping>().type = "ice";
                     }
-                    if (resource.type.Equals("Coal"))
+                    else if (resource.type.Equals("Coal"))
                     {
                         newPing.GetComponent<Ping>().type = "coal";
+                    }
+                    else
+                    {
+                        newPing.GetComponent<Ping>().type = "unknown";
                     }
                 }
             }

@@ -566,7 +566,7 @@ public class InventoryGUI : MonoBehaviour
                             {
                                 crafting[i] = recipe.amounts[i] + "x " + recipe.ingredients[i];
                             }
-                            GUI.Label(guiCoordinates.craftingInfoRect, "Transfers items from a machine to another universal conduit, another machine or a storage container. Universal conduits have an adjustable input/output range and do not require power to operate.\n\n[CRAFTING]\n5x Iron Pipe\n5x Iron Plate\n5x Copper Wire\n5x Dark Matter");
+                            GUI.Label(guiCoordinates.craftingInfoRect, "Transfers items from a machine to another universal conduit, another machine or a storage container. Universal conduits have an adjustable input/output range and do not require power to operate." + "\n\n[CRAFTING]\n" + string.Join("\n", crafting));
                         }
                         if (guiCoordinates.button9Rect.Contains(Event.current.mousePosition))
                         {
@@ -614,7 +614,7 @@ public class InventoryGUI : MonoBehaviour
                             {
                                 crafting[i] = recipe.amounts[i] + "x " + recipe.ingredients[i];
                             }
-                            GUI.Label(guiCoordinates.craftingInfoRect, "Nuclear reactors are used to drive reactor turbines. Turbines must be directly attached to the reactor. The reactor will require a heat exchanger providing 5 KBTU cooling per turbine.\n\n[CRAFTING]\n10x Steel Pipe\n10x Steel Plate\n10x Copper Wire\n10x Copper Plate\n10x Glass Block\n10x Dark Matter");
+                            GUI.Label(guiCoordinates.craftingInfoRect, "Nuclear reactors are used to drive reactor turbines. Turbines must be directly attached to the reactor. The reactor will require a heat exchanger providing 5 KBTU cooling per turbine." + "\n\n[CRAFTING]\n" + string.Join("\n", crafting));
                         }
                         if (guiCoordinates.button13Rect.Contains(Event.current.mousePosition))
                         {

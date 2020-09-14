@@ -14,6 +14,7 @@ public class Ping : MonoBehaviour
     public Material darkMatterMat;
     public Material iceMat;
     public Material coalMat;
+    public Material unknownMat;
 
     // Called by unity engine on start up to initialize variables
     public void Start()
@@ -49,6 +50,10 @@ public class Ping : MonoBehaviour
         if(type.Equals("coal"))
         {
             billboard.GetComponent<MeshRenderer>().material = coalMat;
+        }
+        if(type.Equals("unknown"))
+        {
+            billboard.GetComponent<MeshRenderer>().material = unknownMat;
         }
     }
 
