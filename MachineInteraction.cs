@@ -58,7 +58,7 @@ public class MachineInteraction
         {
             if (powerSource.blocked == false)
             {
-                playerController.machinePower = 1;
+                playerController.machinePower = 2;
             }
             else
             {
@@ -71,7 +71,7 @@ public class MachineInteraction
             playerController.machineType = powerSource.fuelType;
             if (powerSource.outOfFuel == false)
             {
-                playerController.machinePower = 10;
+                playerController.machinePower = 20;
             }
             else
             {
@@ -82,7 +82,7 @@ public class MachineInteraction
         {
             if (powerSource.noReactor == false)
             {
-                playerController.machinePower = 100;
+                playerController.machinePower = 200;
             }
             else
             {

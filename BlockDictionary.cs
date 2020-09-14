@@ -74,7 +74,6 @@ public class BlockDictionary
                 }
             }
         }
-        Debug.Log("Failed to get recipes for [" + machineName + "]");
         return null;
     }
 
