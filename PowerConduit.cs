@@ -315,7 +315,7 @@ public class PowerConduit : MonoBehaviour
         outputID1 = outputObject1.GetComponent<PowerConduit>().ID;
         outputObject1.GetComponent<PowerConduit>().inputID = ID;
         outputObject1.GetComponent<PowerConduit>().inputObject = gameObject;
-        outputObject1.GetComponent<PowerConduit>().powerAmount = outputObject2 != null ? (int)(powerAmount * 0.75f) : powerAmount;
+        outputObject1.GetComponent<PowerConduit>().powerAmount = outputObject2 != null ? powerAmount / 2 : powerAmount;
         connectionLine.SetPosition(0, transform.position);
         connectionLine.SetPosition(1, obj.transform.position);
         connectionLine.enabled = true;
@@ -328,7 +328,7 @@ public class PowerConduit : MonoBehaviour
         outputID2 = outputObject2.GetComponent<PowerConduit>().ID;
         outputObject2.GetComponent<PowerConduit>().inputID = ID;
         outputObject2.GetComponent<PowerConduit>().inputObject = gameObject;
-        outputObject2.GetComponent<PowerConduit>().powerAmount = (int)(powerAmount * 0.75f);
+        outputObject2.GetComponent<PowerConduit>().powerAmount = powerAmount / 2;
         CreateOutput2ConnectionLine();
     }
 
@@ -365,7 +365,7 @@ public class PowerConduit : MonoBehaviour
     {
         outputObject1 = obj;
         outputObject1.GetComponent<PowerReceiver>().powerObject = gameObject;
-        outputObject1.GetComponent<PowerReceiver>().power = outputObject2 != null ? (int)(powerAmount * 0.75f) : powerAmount;
+        outputObject1.GetComponent<PowerReceiver>().power = outputObject2 != null ? powerAmount / 2 : powerAmount;
         connectionLine.SetPosition(0, transform.position);
         connectionLine.SetPosition(1, obj.transform.position);
         connectionLine.enabled = true;
@@ -390,7 +390,7 @@ public class PowerConduit : MonoBehaviour
     {
         outputObject2 = obj;
         outputObject2.GetComponent<PowerReceiver>().powerObject = gameObject;
-        outputObject2.GetComponent<PowerReceiver>().power = (int)(powerAmount * 0.75f);
+        outputObject2.GetComponent<PowerReceiver>().power = powerAmount / 2;
         CreateOutput2ConnectionLine();
     }
 
@@ -517,7 +517,7 @@ public class PowerConduit : MonoBehaviour
 
             if (outputObject2 != null)
             {
-                outputObject1.GetComponent<PowerReceiver>().power = (int)(powerAmount * 0.75f);
+                outputObject1.GetComponent<PowerReceiver>().power = powerAmount / 2;
             }
             else
             {
@@ -534,7 +534,7 @@ public class PowerConduit : MonoBehaviour
             outputObject1.GetComponent<PowerConduit>().inputObject = gameObject;
             if (outputObject2 != null)
             {
-                outputObject1.GetComponent<PowerConduit>().powerAmount = (int)(powerAmount * 0.75f);
+                outputObject1.GetComponent<PowerConduit>().powerAmount = powerAmount / 2;
             }
             else
             {
@@ -557,7 +557,7 @@ public class PowerConduit : MonoBehaviour
                 outputObject2.GetComponent<PowerReceiver>().powerON = false;
             }
             outputObject2.GetComponent<PowerReceiver>().powerObject = gameObject;
-            outputObject2.GetComponent<PowerReceiver>().power = (int)(powerAmount * 0.75f);
+            outputObject2.GetComponent<PowerReceiver>().power = powerAmount / 2;
             outputID2 = outputObject2.GetComponent<PowerReceiver>().ID;
         }
         if (outputObject2.GetComponent<PowerConduit>() != null)
@@ -565,7 +565,7 @@ public class PowerConduit : MonoBehaviour
             outputID2 = outputObject2.GetComponent<PowerConduit>().ID;
             outputObject2.GetComponent<PowerConduit>().inputID = ID;
             outputObject2.GetComponent<PowerConduit>().inputObject = gameObject;
-            outputObject2.GetComponent<PowerConduit>().powerAmount = (int)(powerAmount * 0.75f);
+            outputObject2.GetComponent<PowerConduit>().powerAmount = powerAmount / 2;
         }
     }
 }
