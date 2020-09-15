@@ -57,9 +57,9 @@ public class Turret : MonoBehaviour
             }
             if (game != null)
             {
-                if (speed > power && power != 0)
+                if (speed > power)
                 {
-                    speed = speed > 30 ? 30 : power;
+                    speed = power > 0 ? power : 1;
                 }
                 if (speed > 1)
                 {

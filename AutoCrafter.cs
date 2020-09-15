@@ -54,9 +54,9 @@ public class AutoCrafter : MonoBehaviour
             UpdatePowerReceiver();
 
             updateTick = 0;
-            if (speed > power && power != 0)
+            if (speed > power)
             {
-                speed = power;
+                speed = power > 0 ? power : 1;
             }
             if (speed > 1)
             {

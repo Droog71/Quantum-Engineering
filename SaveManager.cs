@@ -261,6 +261,7 @@ public class SaveManager
                         objectName = stateManager.WorldName + "NuclearReactor";
                         worldID = go.GetComponent<NuclearReactor>().ID;
                         objectID = int.Parse(worldID.Substring(objectName.Length));
+                        idList.Add(objectID);
                         FileBasedPrefs.SetBool(worldID + "falling", go.GetComponent<PhysicsHandler>().falling);
                         FileBasedPrefs.SetBool(worldID + "fallingStack", go.GetComponent<PhysicsHandler>().fallingStack);
                     }

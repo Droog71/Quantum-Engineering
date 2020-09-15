@@ -293,27 +293,20 @@ public class MachineGUI : MonoBehaviour
                     {
                         if (hx.inputObject.GetComponent<UniversalConduit>() != null)
                         {
-                            if (hx.inputObject.GetComponent<UniversalConduit>().speed > 0)
+                            if (hx.connectionFailed == false)
                             {
-                                if (hx.connectionFailed == false)
-                                {
-                                    GUI.Label(guiCoordinates.outputLabelRect, "Output");
-                                    hx.speed = (int)GUI.HorizontalSlider(guiCoordinates.outputControlButton2Rect, hx.speed, 0, hx.inputObject.GetComponent<UniversalConduit>().speed);
-                                }
-                                else
-                                {
-                                    GUI.Label(guiCoordinates.outputLabelRect, "Offline");
-                                    if (GUI.Button(guiCoordinates.outputControlButton2Rect, "Reboot"))
-                                    {
-                                        hx.connectionAttempts = 0;
-                                        hx.connectionFailed = false;
-                                        playerController.PlayButtonSound();
-                                    }
-                                }
+                                GUI.Label(guiCoordinates.outputLabelRect, "Output");
+                                hx.speed = (int)GUI.HorizontalSlider(guiCoordinates.outputControlButton2Rect, hx.speed, 0, hx.inputObject.GetComponent<UniversalConduit>().speed);
                             }
                             else
                             {
-                                GUI.Label(guiCoordinates.outputLabelRect, "No Input");
+                                GUI.Label(guiCoordinates.outputLabelRect, "Offline");
+                                if (GUI.Button(guiCoordinates.outputControlButton2Rect, "Reboot"))
+                                {
+                                    hx.connectionAttempts = 0;
+                                    hx.connectionFailed = false;
+                                    playerController.PlayButtonSound();
+                                }
                             }
                         }
                         else

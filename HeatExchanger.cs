@@ -81,13 +81,22 @@ public class HeatExchanger : MonoBehaviour
                     inputType = inputObject.GetComponent<UniversalConduit>().type;
                     if (inputObject.GetComponent<UniversalConduit>().type.Equals("Ice"))
                     {
-                        if (amount >= speed && speed > 0)
+                        if (speed > 0)
                         {
-                            providingCooling = true;
-                        }
-                        else
-                        {
-                            providingCooling = false;
+                            if (amount >= speed)
+                            {
+                                providingCooling = true;
+                            }
+                            else if (amount > 0)
+                            {
+                                speed = (int)amount;
+                                providingCooling = true;
+                            }
+                            else
+                            {
+                                speed = 1;
+                                providingCooling = false;
+                            }
                         }
                     }
                 }

@@ -532,12 +532,12 @@ public class GuiCoordinates
         helpButton9Rect = new Rect((ScreenWidth * 0.43f), (ScreenHeight * 0.74f), (ScreenWidth * 0.14f), (ScreenHeight * 0.05f));
         helpButton10Rect = new Rect((ScreenWidth * 0.43f), (ScreenHeight * 0.80f), (ScreenWidth * 0.14f), (ScreenHeight * 0.05f));
 
-        sliderLabel1Rect = new Rect((ScreenWidth * 0.43f), (ScreenHeight * 0.21f), (ScreenWidth * 0.14f), (ScreenHeight * 0.05f));
-        sliderLabel2Rect = new Rect((ScreenWidth * 0.43f), (ScreenHeight * 0.27f), (ScreenWidth * 0.14f), (ScreenHeight * 0.05f));
-        sliderLabel3Rect = new Rect((ScreenWidth * 0.43f), (ScreenHeight * 0.33f), (ScreenWidth * 0.14f), (ScreenHeight * 0.05f));
-        sliderLabel4Rect = new Rect((ScreenWidth * 0.43f), (ScreenHeight * 0.39f), (ScreenWidth * 0.14f), (ScreenHeight * 0.05f));
-        sliderLabel5Rect = new Rect((ScreenWidth * 0.43f), (ScreenHeight * 0.45f), (ScreenWidth * 0.14f), (ScreenHeight * 0.05f));
-        sliderLabel6Rect = new Rect((ScreenWidth * 0.43f), (ScreenHeight * 0.51f), (ScreenWidth * 0.14f), (ScreenHeight * 0.05f));
+        sliderLabel1Rect = new Rect((ScreenWidth * 0.43f), (ScreenHeight * 0.23f), (ScreenWidth * 0.14f), (ScreenHeight * 0.05f));
+        sliderLabel2Rect = new Rect((ScreenWidth * 0.43f), (ScreenHeight * 0.29f), (ScreenWidth * 0.14f), (ScreenHeight * 0.05f));
+        sliderLabel3Rect = new Rect((ScreenWidth * 0.43f), (ScreenHeight * 0.35f), (ScreenWidth * 0.14f), (ScreenHeight * 0.05f));
+        sliderLabel4Rect = new Rect((ScreenWidth * 0.43f), (ScreenHeight * 0.41f), (ScreenWidth * 0.14f), (ScreenHeight * 0.05f));
+        sliderLabel5Rect = new Rect((ScreenWidth * 0.43f), (ScreenHeight * 0.47f), (ScreenWidth * 0.14f), (ScreenHeight * 0.05f));
+        sliderLabel6Rect = new Rect((ScreenWidth * 0.43f), (ScreenHeight * 0.53f), (ScreenWidth * 0.14f), (ScreenHeight * 0.05f));
 
         //MACHINE INFO HUD
         infoRectBG = new Rect(0, (ScreenHeight * 0.60f), (ScreenWidth * 0.30f), (ScreenHeight * 0.40f));
