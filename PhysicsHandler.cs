@@ -421,6 +421,12 @@ public class PhysicsHandler : MonoBehaviour
         needsSupportCheck = false;
     }
 
+    // Returns true if the block is not at risk of falling
+    public bool IsSupported()
+    {
+        return falling == false && fallingStack == false && needsSupportCheck == false;
+    }
+
     // Called by unity engine once per physics update for every collider that is touching the trigger
     public void OnTriggerStay(Collider other)
     {

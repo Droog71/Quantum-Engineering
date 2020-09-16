@@ -649,6 +649,12 @@ public class ActionManager
                 playerController.inventoryOpen = false;
                 playerController.craftingGUIopen = false;
                 playerController.storageGUIopen = false;
+                if (playerController.paintGunActive == true)
+                {
+                    playerController.paintGun.SetActive(false);
+                    playerController.paintGunActive = false;
+                    playerController.paintColorSelected = false;
+                }
                 if (playerController.scannerActive == true)
                 {
                     playerController.scanner.SetActive(false);

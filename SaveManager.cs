@@ -517,6 +517,7 @@ public class SaveManager
                 }
                 if (T.gameObject.GetComponent<Glass>() != null)
                 {
+                    objectName = stateManager.WorldName + "Glass";
                     worldID = T.gameObject.GetComponent<Glass>().ID;
                     objectID = int.Parse(worldID.Substring(objectName.Length));
                     idList.Add(objectID);

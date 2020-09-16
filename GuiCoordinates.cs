@@ -237,6 +237,9 @@ public class GuiCoordinates
     public Rect marketMessageLabelRect;
     public Rect marketMessageButtonRect;
 
+    //PAINT COLOR
+    public Rect paintGunMenuBackgroundRect;
+
     public GuiCoordinates()
     {
         //ASPECT RATIO
@@ -551,5 +554,8 @@ public class GuiCoordinates
         marketMessageRect = new Rect(((ScreenWidth / 2) - 300), ((ScreenHeight / 2) - 200), 600, 400);
         marketMessageLabelRect = new Rect(((ScreenWidth / 2) - 175), ((ScreenHeight / 2) - 100), 400, 100);
         marketMessageButtonRect = new Rect(((ScreenWidth / 2) - (ScreenWidth * 0.07f)), ((ScreenHeight / 2) + 30), (ScreenWidth * 0.14f), (ScreenHeight * 0.05f));
+
+        //PAINT GUN COLOR SELECTION BACKGROUND
+         paintGunMenuBackgroundRect = new Rect((ScreenWidth * 0.4f), (ScreenHeight * 0.04f), (ScreenWidth * 0.2f), (ScreenHeight * 0.56f));
     }
 }

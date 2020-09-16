@@ -315,7 +315,7 @@ public class CombinedMeshManager
                 {
                     ironCount++;
                 }
-                if (block.GetComponent<PhysicsHandler>().falling == false && block.GetComponent<PhysicsHandler>().fallingStack == false && block.GetComponent<PhysicsHandler>().needsSupportCheck == false)
+                if (block.GetComponent<PhysicsHandler>().IsSupported())
                 {
                     block.transform.parent = gameManager.ironBlocks[ironCount].transform;
                     if (gameManager.initIron == false)
@@ -340,7 +340,7 @@ public class CombinedMeshManager
                     {
                         glassCount++;
                     }
-                    if (block.GetComponent<PhysicsHandler>().falling == false && block.GetComponent<PhysicsHandler>().fallingStack == false && block.GetComponent<PhysicsHandler>().needsSupportCheck == false)
+                    if (block.GetComponent<PhysicsHandler>().IsSupported())
                     {
                         block.transform.parent = gameManager.glass[glassCount].transform;
                         if (gameManager.initGlass == false)
@@ -366,7 +366,7 @@ public class CombinedMeshManager
                     {
                         steelCount++;
                     }
-                    if (block.GetComponent<PhysicsHandler>().falling == false && block.GetComponent<PhysicsHandler>().fallingStack == false && block.GetComponent<PhysicsHandler>().needsSupportCheck == false)
+                    if (block.GetComponent<PhysicsHandler>().IsSupported())
                     {
                         block.transform.parent = gameManager.steel[steelCount].transform;
                         if (gameManager.initSteel == false)
@@ -392,7 +392,7 @@ public class CombinedMeshManager
                     {
                         brickCount++;
                     }
-                    if (block.GetComponent<PhysicsHandler>().falling == false && block.GetComponent<PhysicsHandler>().fallingStack == false && block.GetComponent<PhysicsHandler>().needsSupportCheck == false)
+                    if (block.GetComponent<PhysicsHandler>().IsSupported())
                     {
                         block.transform.parent = gameManager.bricks[brickCount].transform;
                         if (gameManager.initBrick == false)
@@ -639,7 +639,6 @@ public class CombinedMeshManager
                 gameManager.clearGlassDummies = true;
                 FileBasedPrefs.SetBool(gameManager.GetComponent<StateManager>().WorldName + "initGlass", true);
             }
-            //Debug.Log("Finished mesh combine for glass at: " + System.DateTime.Now);
         }
 
         if (gameManager.steelMeshRequired == true)
@@ -703,7 +702,6 @@ public class CombinedMeshManager
                 gameManager.clearSteelDummies = true;
                 FileBasedPrefs.SetBool(gameManager.GetComponent<StateManager>().WorldName + "initSteel", true);
             }
-            //Debug.Log("Finished mesh combine for steel at: " + System.DateTime.Now);
         }
 
         if (gameManager.brickMeshRequired == true)

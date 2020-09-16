@@ -606,7 +606,10 @@ public class PlayerGUI : MonoBehaviour
             if (playerController.building == true && playerController.tabletOpen == false)
             {
                 GUI.DrawTexture(guiCoordinates.buildInfoRectBG, textureDictionary.dictionary["Interface Background"]);
+                int f = GUI.skin.label.fontSize;
+                GUI.skin.label.fontSize = 16;
                 GUI.Label(guiCoordinates.buildInfoRect, "Right click to place block.\nPress F to collect.\nPress R to rotate.\nPress Q to stop building.");
+                GUI.skin.label.fontSize = f;
                 GUI.DrawTexture(guiCoordinates.currentBuildItemTextureRect, textureDictionary.dictionary[playerController.buildType]);
                 int buildItemCount = 0;
                 foreach (InventorySlot slot in playerInventory.inventory)
@@ -631,7 +634,7 @@ public class PlayerGUI : MonoBehaviour
             {
                 if (playerController.paintColorSelected == false)
                 {
-                    GUI.DrawTexture(guiCoordinates.optionsMenuBackgroundRect, textureDictionary.dictionary["Menu Background"]);
+                    GUI.DrawTexture(guiCoordinates.paintGunMenuBackgroundRect, textureDictionary.dictionary["Menu Background"]);
                     GUI.Label(guiCoordinates.optionsButton1Rect, "        Paint  Gun");
                     GUI.Label(guiCoordinates.optionsButton2Rect, "       Select Color");
                     GUI.Label(guiCoordinates.sliderLabel1Rect, "Red");
