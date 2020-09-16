@@ -9,18 +9,18 @@ public class PluginLoader :MonoBehaviour
 {
     private Assembly assembly;
 
-    // Adds machines from mods to the game.
+    // Adds plugins from mods to the game.
     public void Start()
     {
         string modPath = Path.Combine(Application.persistentDataPath, "Mods");
         string[] modDirs = Directory.GetDirectories(modPath);
         foreach (string path in modDirs)
         {
-            string machinePath = path + "/Plugins/";
-            DirectoryInfo d = new DirectoryInfo(machinePath);
+            string pluginPath = path + "/Plugins/";
+            DirectoryInfo d = new DirectoryInfo(pluginPath);
             foreach (FileInfo file in d.GetFiles("*.dll"))
             {
-                string filePath = machinePath + file.Name;
+                string filePath = pluginPath + file.Name;
                 string pluginName = file.Name.Remove(file.Name.Length - 4);
                 LoadPlugin(pluginName, filePath);
                 Debug.Log("Loading mod plugin: " + pluginName);
@@ -78,8 +78,7 @@ public class PluginLoader :MonoBehaviour
         Type type = dll.GetType(pluginName);
         if (type != null)
         {
-            GameObject obj = new GameObject();
-            obj.name = pluginName;
+            GameObject obj = new GameObject { name = pluginName };
             obj.AddComponent(type);
         }
     }
