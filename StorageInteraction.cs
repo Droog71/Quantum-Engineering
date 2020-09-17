@@ -5,12 +5,15 @@ public class StorageInteraction
     private PlayerController playerController;
     private InteractionController interactionController;
 
+    //! This class handles the player's interactions with storage containers.
     public StorageInteraction(PlayerController playerController, InteractionController interactionController)
     {
         this.playerController = playerController;
         this.interactionController = interactionController;
     }
 
+
+    //! Called when the player is looking at a storage container.
     public void InteractWithStorageContainer()
     {
         if (cInput.GetKeyDown("Interact"))
@@ -94,6 +97,7 @@ public class StorageInteraction
         }
     }
 
+    //! Called when the player is looking at a storage computer.
     public void InteractWithStorageComputer()
     {
         playerController.machineInSight = playerController.objectInSight;

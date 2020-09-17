@@ -28,7 +28,7 @@ public class AutoCrafter : MonoBehaviour
     private CraftingDictionary craftingDictionary;
     private GameObject builtObjects;
 
-    // Called by unity engine on start up to initialize variables
+    //! Called by unity engine on start up to initialize variables.
     public void Start()
     {
         craftingManager = GetComponent<CraftingManager>();
@@ -44,7 +44,7 @@ public class AutoCrafter : MonoBehaviour
         conduitItem = GetComponentInChildren<ConduitItem>(true);
     }
 
-    // Called once per frame by unity engine
+    //! Called once per frame by unity engine.
     public void Update()
     {
         updateTick += 1 * Time.deltaTime;
@@ -140,7 +140,7 @@ public class AutoCrafter : MonoBehaviour
         }
     }
 
-    // Gets power values from power receiver
+    //! Gets power values from power receiver.
     private void UpdatePowerReceiver()
     {
         powerReceiver.ID = ID;
@@ -149,7 +149,7 @@ public class AutoCrafter : MonoBehaviour
         powerObject = powerReceiver.powerObject;
     }
 
-    // The object exists, is active and is not a standard building block
+    //! Returns true if the object exists, is active and is not a standard building block.
     bool IsValidObject(GameObject obj)
     {
         if (obj != null)
@@ -169,7 +169,7 @@ public class AutoCrafter : MonoBehaviour
         && obj.GetComponent<AutoCrafter>() == null;
     }
 
-    // Connects the auto crafter to a storage inventory
+    //! Connects the auto crafter to a storage inventory.
     private void ConnectToObject(GameObject obj)
     {
         if (inputObject == null && IsStorageContainer(obj))
@@ -239,7 +239,7 @@ public class AutoCrafter : MonoBehaviour
         }
     }
 
-    // Calls the appropriate item crafting method in the crafting manager
+    //! Calls the appropriate item crafting method in the crafting manager.
     private void CraftItems(bool usingStorageComputer)
     {
         if (usingStorageComputer)
@@ -258,7 +258,7 @@ public class AutoCrafter : MonoBehaviour
         }
     }
 
-    // Handles overall operation of the machine
+    //! Handles overall operation of the machine.
     private void DoWork()
     {
         float distance = Vector3.Distance(transform.position, inputObject.transform.position);
@@ -339,7 +339,7 @@ public class AutoCrafter : MonoBehaviour
         }
     }
 
-    // Called when all requirements are met for the machine to be running, activates effects
+    //! Called when all requirements are met for the machine to be running, activates effects.
     private void Activate()
     {
         conduitItem.active = true;
@@ -352,7 +352,7 @@ public class AutoCrafter : MonoBehaviour
         connectionLine.SetPosition(1, inputObject.transform.position);
     }
 
-    // Called when requirements are not met for the machine to be running, disables effects
+    //! Called when requirements are not met for the machine to be running, disables effects.
     private void ShutDown(bool disconnect)
     {
         if (craftingManager.conduitItem != null)

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 
-// This class provides the crafting recipe dictionary used by the crafting manager
+//! This class provides the crafting recipe dictionary used by the crafting manager
 public class CraftingDictionary
 {
     public Dictionary<string, CraftingRecipe> dictionary;
@@ -108,7 +108,7 @@ public class CraftingDictionary
         AddModRecipes();
     }
 
-    // Gets mod recipes from file.
+    //! Gets mod recipes from file.
     public void AddModRecipes()
     {
         modDictionary = new Dictionary<string, CraftingRecipe>();

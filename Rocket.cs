@@ -14,13 +14,13 @@ public class Rocket : MonoBehaviour
     private bool initialized;
     public bool rocketRequested;
 
-    // Called by unity engine on start up to initialize variables
+    //! Called by unity engine on start up to initialize variables.
     public void Start()
     {
         player = GameObject.Find("Player").GetComponent<PlayerController>();
     }
 
-    // Called once per frame by unity engine
+    //! Called once per frame by unity engine.
     public void Update()
     {
         if (GameObject.Find("GameManager").GetComponent<StateManager>().worldLoaded == true)
@@ -71,6 +71,7 @@ public class Rocket : MonoBehaviour
         }
     }
 
+    //! Initializes variables when the world is loaded.
     private void Init()
     {
         if (FileBasedPrefs.GetInt(GameObject.Find("GameManager").GetComponent<StateManager>().WorldName + "payloadRequired") != 0)
@@ -85,6 +86,7 @@ public class Rocket : MonoBehaviour
         initialized = true;
     }
 
+    //! Checks the cargo of the rocket for the required amount of dark matter.
     private void CheckCargo()
     {
         int amountInRocket = 0;
@@ -109,6 +111,7 @@ public class Rocket : MonoBehaviour
         }
     }
 
+    //! Called at the end of a day to increase the payload required for the next day.
     private void EndOfDay()
     {
         day += 1;
@@ -122,6 +125,7 @@ public class Rocket : MonoBehaviour
         player.timeToDeliver = true;
     }
 
+    //! Resets the rocket when it leaves the area, disabling all sounds and rendering and clearing the inventory.
     private void Reset()
     {
         ClearInventory();
@@ -135,6 +139,7 @@ public class Rocket : MonoBehaviour
         exhaust.SetActive(false);
     }
 
+    //! Moves the rocket in the positive Y direction.
     private void Ascend()
     {
         GetComponent<AudioSource>().enabled = true;
@@ -142,6 +147,7 @@ public class Rocket : MonoBehaviour
         transform.position += transform.up * 25 * Time.deltaTime;
     }
 
+    //! Moves the rocket in the negative Y direction.
     private void Descend()
     {
         if (visible == false)
@@ -162,6 +168,7 @@ public class Rocket : MonoBehaviour
         }
     }
 
+    //! Empty the rocket's inventory.
     private void ClearInventory()
     {
         foreach (InventorySlot s in GetComponent<InventoryManager>().inventory)
@@ -172,6 +179,7 @@ public class Rocket : MonoBehaviour
         GetComponent<InventoryManager>().SaveData();
     }
 
+    //! Disable all renderers attached to the rocket, so it is no longer visible.
     private void DisableRenderers()
     {
         if (visible == true)
@@ -188,6 +196,7 @@ public class Rocket : MonoBehaviour
         }
     }
 
+    //! Enabled all renderers attached to the rocket, making it visible.
     private void EnableRenderers()
     {
         Renderer[] renderers = GetComponentsInChildren<Renderer>(true);

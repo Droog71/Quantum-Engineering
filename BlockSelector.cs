@@ -4,6 +4,7 @@
     public string[] objectNames;
     private int selection;
 
+    //! This class handles the building block selection at the top right corner of the screen.
     public BlockSelector(PlayerController playerController)
     {
         this.playerController = playerController;
@@ -43,7 +44,7 @@
         };
     }
 
-    // Applies changes.
+    //! Applies changes.
     private void SetSelection()
     {
         playerController.buildType = objectNames[selection];
@@ -56,14 +57,14 @@
         playerController.PlayButtonSound();
     }
 
-    // Changes the currently selected building block.
+    //! Changes the currently selected building block.
     public void NextBlock()
     {
         selection = selection < objectNames.Length - 1 ? selection + 1 : 0;
         SetSelection();
     }
 
-    // Changes the currently selected building block.
+    //! Changes the currently selected building block.
     public void PreviousBlock()
     {
         selection = selection > 0 ? selection - 1 : objectNames.Length - 1;

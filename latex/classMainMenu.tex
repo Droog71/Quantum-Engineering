@@ -1,0 +1,255 @@
+\hypertarget{classMainMenu}{}\doxysection{Main\+Menu Class Reference}
+\label{classMainMenu}\index{MainMenu@{MainMenu}}
+Inheritance diagram for Main\+Menu\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{classMainMenu}
+\end{center}
+\end{figure}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{classMainMenu_ad629921d8cbec1c1bf97e6bc6ad65902}{Start}} ()
+\begin{DoxyCompactList}\small\item\em Called by unity engine on start up to initialize variables. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classMainMenu_a9ff8036bc9a90fbb6db98266af3f30fe}{On\+G\+UI}} ()
+\begin{DoxyCompactList}\small\item\em Called by unity engine for rendering and handling G\+UI events. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+G\+U\+I\+Skin \mbox{\hyperlink{classMainMenu_acf418b1c4932a2afaef9ab56370ef3fc}{this\+G\+U\+Iskin}}
+\item 
+Texture2D \mbox{\hyperlink{classMainMenu_a192cb8f660dee2a3e3f97c9fe8c6c34a}{title\+Texture}}
+\item 
+Texture2D \mbox{\hyperlink{classMainMenu_a3068c8e9b8533fdef311c24f744ed089}{title2\+Texture}}
+\item 
+Texture2D \mbox{\hyperlink{classMainMenu_abf73e61d38d297a7d3112ce0953fa813}{worl\+List\+Background}}
+\item 
+Game\+Object \mbox{\hyperlink{classMainMenu_a93f11721ff356d7b9f28f63be080e12c}{video\+Player}}
+\item 
+Game\+Object \mbox{\hyperlink{classMainMenu_aac44c916e8e69530fb6953db668d54d9}{menu\+Sound\+Object}}
+\item 
+Game\+Object \mbox{\hyperlink{classMainMenu_aeeedae96e698973ef1229cdc68fae5e4}{ambient\+Sound\+Object}}
+\item 
+bool \mbox{\hyperlink{classMainMenu_ab1f600efdfc8e468782eae69f6dda9c9}{world\+Selected}}
+\item 
+bool \mbox{\hyperlink{classMainMenu_a0d88ce0f639729150a130903d5c88af0}{finished\+Loading}}
+\end{DoxyCompactItemize}
+\doxysubsection*{Private Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{classMainMenu_ad16da568ce30cb9ed45f7fa861099cd0}{Select\+World}} ()
+\begin{DoxyCompactList}\small\item\em Confirms world selection and loads the world. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classMainMenu_a1502ccdb138468f54e19c3d730ca1983}{Change\+Scene}} ()
+\begin{DoxyCompactList}\small\item\em Called when Kepler-\/1625 is selected and the scene needs to be changed. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classMainMenu_ac2a74cb6e3c827e2a8db8c41141f0984}{Start\+Game}} ()
+\begin{DoxyCompactList}\small\item\em Called when Gliese 876 is selected and the scene does not need to be changed. \end{DoxyCompactList}\item 
+Vector2 \mbox{\hyperlink{classMainMenu_a7935202fcec07eb54d70ea6527e0117a}{Get\+String\+Size}} (string str)
+\begin{DoxyCompactList}\small\item\em Gets the size of in pixels of text so it can be positioned on the screen accordingly. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+string \mbox{\hyperlink{classMainMenu_a8f470937a717199000851c231c37cc5c}{world\+Name}} = \char`\"{}Enter World Name\char`\"{}
+\item 
+\mbox{\hyperlink{classStateManager}{State\+Manager}} \mbox{\hyperlink{classMainMenu_a0585fa2d5d56cb99e65deac896768874}{state\+Manager}}
+\item 
+List$<$ string $>$ \mbox{\hyperlink{classMainMenu_ad0dbda9b2a5e5eec34fb7493ce54b330}{world\+List}}
+\item 
+Audio\+Source \mbox{\hyperlink{classMainMenu_a7911567cf8a90e840acbe3bb307ad11c}{button\+Sounds}}
+\item 
+Audio\+Source \mbox{\hyperlink{classMainMenu_af683f22e59eaec9e6e8a174bb9be34d2}{ambient}}
+\item 
+float \mbox{\hyperlink{classMainMenu_abda3daacbe8f632c42b6afc1ad7cc790}{wait\+For\+Video\+Timer}}
+\item 
+bool \mbox{\hyperlink{classMainMenu_ab6f8fe2e3c6792361c3e5aedf70a8c87}{world\+Select\+Prompt}}
+\item 
+bool \mbox{\hyperlink{classMainMenu_ac5f3d7359bf35d5771fd6a372443b5c2}{playing\+Video}}
+\item 
+bool \mbox{\hyperlink{classMainMenu_ae99423c7ca0c24823826a66353dcc660}{delete\+Prompt}}
+\item 
+bool \mbox{\hyperlink{classMainMenu_ae6c0d532e9a82bc2f6aaaee8384b3f26}{escape\+Prompt}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{classMainMenu_a1502ccdb138468f54e19c3d730ca1983}\label{classMainMenu_a1502ccdb138468f54e19c3d730ca1983}} 
+\index{MainMenu@{MainMenu}!ChangeScene@{ChangeScene}}
+\index{ChangeScene@{ChangeScene}!MainMenu@{MainMenu}}
+\doxysubsubsection{\texorpdfstring{ChangeScene()}{ChangeScene()}}
+{\footnotesize\ttfamily void Main\+Menu.\+Change\+Scene (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [private]}}
+
+
+
+Called when Kepler-\/1625 is selected and the scene needs to be changed. 
+
+\mbox{\Hypertarget{classMainMenu_a7935202fcec07eb54d70ea6527e0117a}\label{classMainMenu_a7935202fcec07eb54d70ea6527e0117a}} 
+\index{MainMenu@{MainMenu}!GetStringSize@{GetStringSize}}
+\index{GetStringSize@{GetStringSize}!MainMenu@{MainMenu}}
+\doxysubsubsection{\texorpdfstring{GetStringSize()}{GetStringSize()}}
+{\footnotesize\ttfamily Vector2 Main\+Menu.\+Get\+String\+Size (\begin{DoxyParamCaption}\item[{string}]{str }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [private]}}
+
+
+
+Gets the size of in pixels of text so it can be positioned on the screen accordingly. 
+
+\mbox{\Hypertarget{classMainMenu_a9ff8036bc9a90fbb6db98266af3f30fe}\label{classMainMenu_a9ff8036bc9a90fbb6db98266af3f30fe}} 
+\index{MainMenu@{MainMenu}!OnGUI@{OnGUI}}
+\index{OnGUI@{OnGUI}!MainMenu@{MainMenu}}
+\doxysubsubsection{\texorpdfstring{OnGUI()}{OnGUI()}}
+{\footnotesize\ttfamily void Main\+Menu.\+On\+G\+UI (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Called by unity engine for rendering and handling G\+UI events. 
+
+\mbox{\Hypertarget{classMainMenu_ad16da568ce30cb9ed45f7fa861099cd0}\label{classMainMenu_ad16da568ce30cb9ed45f7fa861099cd0}} 
+\index{MainMenu@{MainMenu}!SelectWorld@{SelectWorld}}
+\index{SelectWorld@{SelectWorld}!MainMenu@{MainMenu}}
+\doxysubsubsection{\texorpdfstring{SelectWorld()}{SelectWorld()}}
+{\footnotesize\ttfamily void Main\+Menu.\+Select\+World (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [private]}}
+
+
+
+Confirms world selection and loads the world. 
+
+\mbox{\Hypertarget{classMainMenu_ad629921d8cbec1c1bf97e6bc6ad65902}\label{classMainMenu_ad629921d8cbec1c1bf97e6bc6ad65902}} 
+\index{MainMenu@{MainMenu}!Start@{Start}}
+\index{Start@{Start}!MainMenu@{MainMenu}}
+\doxysubsubsection{\texorpdfstring{Start()}{Start()}}
+{\footnotesize\ttfamily void Main\+Menu.\+Start (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Called by unity engine on start up to initialize variables. 
+
+\mbox{\Hypertarget{classMainMenu_ac2a74cb6e3c827e2a8db8c41141f0984}\label{classMainMenu_ac2a74cb6e3c827e2a8db8c41141f0984}} 
+\index{MainMenu@{MainMenu}!StartGame@{StartGame}}
+\index{StartGame@{StartGame}!MainMenu@{MainMenu}}
+\doxysubsubsection{\texorpdfstring{StartGame()}{StartGame()}}
+{\footnotesize\ttfamily void Main\+Menu.\+Start\+Game (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [private]}}
+
+
+
+Called when Gliese 876 is selected and the scene does not need to be changed. 
+
+
+
+\doxysubsection{Member Data Documentation}
+\mbox{\Hypertarget{classMainMenu_af683f22e59eaec9e6e8a174bb9be34d2}\label{classMainMenu_af683f22e59eaec9e6e8a174bb9be34d2}} 
+\index{MainMenu@{MainMenu}!ambient@{ambient}}
+\index{ambient@{ambient}!MainMenu@{MainMenu}}
+\doxysubsubsection{\texorpdfstring{ambient}{ambient}}
+{\footnotesize\ttfamily Audio\+Source Main\+Menu.\+ambient\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{classMainMenu_aeeedae96e698973ef1229cdc68fae5e4}\label{classMainMenu_aeeedae96e698973ef1229cdc68fae5e4}} 
+\index{MainMenu@{MainMenu}!ambientSoundObject@{ambientSoundObject}}
+\index{ambientSoundObject@{ambientSoundObject}!MainMenu@{MainMenu}}
+\doxysubsubsection{\texorpdfstring{ambientSoundObject}{ambientSoundObject}}
+{\footnotesize\ttfamily Game\+Object Main\+Menu.\+ambient\+Sound\+Object}
+
+\mbox{\Hypertarget{classMainMenu_a7911567cf8a90e840acbe3bb307ad11c}\label{classMainMenu_a7911567cf8a90e840acbe3bb307ad11c}} 
+\index{MainMenu@{MainMenu}!buttonSounds@{buttonSounds}}
+\index{buttonSounds@{buttonSounds}!MainMenu@{MainMenu}}
+\doxysubsubsection{\texorpdfstring{buttonSounds}{buttonSounds}}
+{\footnotesize\ttfamily Audio\+Source Main\+Menu.\+button\+Sounds\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{classMainMenu_ae99423c7ca0c24823826a66353dcc660}\label{classMainMenu_ae99423c7ca0c24823826a66353dcc660}} 
+\index{MainMenu@{MainMenu}!deletePrompt@{deletePrompt}}
+\index{deletePrompt@{deletePrompt}!MainMenu@{MainMenu}}
+\doxysubsubsection{\texorpdfstring{deletePrompt}{deletePrompt}}
+{\footnotesize\ttfamily bool Main\+Menu.\+delete\+Prompt\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{classMainMenu_ae6c0d532e9a82bc2f6aaaee8384b3f26}\label{classMainMenu_ae6c0d532e9a82bc2f6aaaee8384b3f26}} 
+\index{MainMenu@{MainMenu}!escapePrompt@{escapePrompt}}
+\index{escapePrompt@{escapePrompt}!MainMenu@{MainMenu}}
+\doxysubsubsection{\texorpdfstring{escapePrompt}{escapePrompt}}
+{\footnotesize\ttfamily bool Main\+Menu.\+escape\+Prompt\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{classMainMenu_a0d88ce0f639729150a130903d5c88af0}\label{classMainMenu_a0d88ce0f639729150a130903d5c88af0}} 
+\index{MainMenu@{MainMenu}!finishedLoading@{finishedLoading}}
+\index{finishedLoading@{finishedLoading}!MainMenu@{MainMenu}}
+\doxysubsubsection{\texorpdfstring{finishedLoading}{finishedLoading}}
+{\footnotesize\ttfamily bool Main\+Menu.\+finished\+Loading}
+
+\mbox{\Hypertarget{classMainMenu_aac44c916e8e69530fb6953db668d54d9}\label{classMainMenu_aac44c916e8e69530fb6953db668d54d9}} 
+\index{MainMenu@{MainMenu}!menuSoundObject@{menuSoundObject}}
+\index{menuSoundObject@{menuSoundObject}!MainMenu@{MainMenu}}
+\doxysubsubsection{\texorpdfstring{menuSoundObject}{menuSoundObject}}
+{\footnotesize\ttfamily Game\+Object Main\+Menu.\+menu\+Sound\+Object}
+
+\mbox{\Hypertarget{classMainMenu_ac5f3d7359bf35d5771fd6a372443b5c2}\label{classMainMenu_ac5f3d7359bf35d5771fd6a372443b5c2}} 
+\index{MainMenu@{MainMenu}!playingVideo@{playingVideo}}
+\index{playingVideo@{playingVideo}!MainMenu@{MainMenu}}
+\doxysubsubsection{\texorpdfstring{playingVideo}{playingVideo}}
+{\footnotesize\ttfamily bool Main\+Menu.\+playing\+Video\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{classMainMenu_a0585fa2d5d56cb99e65deac896768874}\label{classMainMenu_a0585fa2d5d56cb99e65deac896768874}} 
+\index{MainMenu@{MainMenu}!stateManager@{stateManager}}
+\index{stateManager@{stateManager}!MainMenu@{MainMenu}}
+\doxysubsubsection{\texorpdfstring{stateManager}{stateManager}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classStateManager}{State\+Manager}} Main\+Menu.\+state\+Manager\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{classMainMenu_acf418b1c4932a2afaef9ab56370ef3fc}\label{classMainMenu_acf418b1c4932a2afaef9ab56370ef3fc}} 
+\index{MainMenu@{MainMenu}!thisGUIskin@{thisGUIskin}}
+\index{thisGUIskin@{thisGUIskin}!MainMenu@{MainMenu}}
+\doxysubsubsection{\texorpdfstring{thisGUIskin}{thisGUIskin}}
+{\footnotesize\ttfamily G\+U\+I\+Skin Main\+Menu.\+this\+G\+U\+Iskin}
+
+\mbox{\Hypertarget{classMainMenu_a3068c8e9b8533fdef311c24f744ed089}\label{classMainMenu_a3068c8e9b8533fdef311c24f744ed089}} 
+\index{MainMenu@{MainMenu}!title2Texture@{title2Texture}}
+\index{title2Texture@{title2Texture}!MainMenu@{MainMenu}}
+\doxysubsubsection{\texorpdfstring{title2Texture}{title2Texture}}
+{\footnotesize\ttfamily Texture2D Main\+Menu.\+title2\+Texture}
+
+\mbox{\Hypertarget{classMainMenu_a192cb8f660dee2a3e3f97c9fe8c6c34a}\label{classMainMenu_a192cb8f660dee2a3e3f97c9fe8c6c34a}} 
+\index{MainMenu@{MainMenu}!titleTexture@{titleTexture}}
+\index{titleTexture@{titleTexture}!MainMenu@{MainMenu}}
+\doxysubsubsection{\texorpdfstring{titleTexture}{titleTexture}}
+{\footnotesize\ttfamily Texture2D Main\+Menu.\+title\+Texture}
+
+\mbox{\Hypertarget{classMainMenu_a93f11721ff356d7b9f28f63be080e12c}\label{classMainMenu_a93f11721ff356d7b9f28f63be080e12c}} 
+\index{MainMenu@{MainMenu}!videoPlayer@{videoPlayer}}
+\index{videoPlayer@{videoPlayer}!MainMenu@{MainMenu}}
+\doxysubsubsection{\texorpdfstring{videoPlayer}{videoPlayer}}
+{\footnotesize\ttfamily Game\+Object Main\+Menu.\+video\+Player}
+
+\mbox{\Hypertarget{classMainMenu_abda3daacbe8f632c42b6afc1ad7cc790}\label{classMainMenu_abda3daacbe8f632c42b6afc1ad7cc790}} 
+\index{MainMenu@{MainMenu}!waitForVideoTimer@{waitForVideoTimer}}
+\index{waitForVideoTimer@{waitForVideoTimer}!MainMenu@{MainMenu}}
+\doxysubsubsection{\texorpdfstring{waitForVideoTimer}{waitForVideoTimer}}
+{\footnotesize\ttfamily float Main\+Menu.\+wait\+For\+Video\+Timer\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{classMainMenu_ad0dbda9b2a5e5eec34fb7493ce54b330}\label{classMainMenu_ad0dbda9b2a5e5eec34fb7493ce54b330}} 
+\index{MainMenu@{MainMenu}!worldList@{worldList}}
+\index{worldList@{worldList}!MainMenu@{MainMenu}}
+\doxysubsubsection{\texorpdfstring{worldList}{worldList}}
+{\footnotesize\ttfamily List$<$string$>$ Main\+Menu.\+world\+List\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{classMainMenu_a8f470937a717199000851c231c37cc5c}\label{classMainMenu_a8f470937a717199000851c231c37cc5c}} 
+\index{MainMenu@{MainMenu}!worldName@{worldName}}
+\index{worldName@{worldName}!MainMenu@{MainMenu}}
+\doxysubsubsection{\texorpdfstring{worldName}{worldName}}
+{\footnotesize\ttfamily string Main\+Menu.\+world\+Name = \char`\"{}Enter World Name\char`\"{}\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{classMainMenu_ab1f600efdfc8e468782eae69f6dda9c9}\label{classMainMenu_ab1f600efdfc8e468782eae69f6dda9c9}} 
+\index{MainMenu@{MainMenu}!worldSelected@{worldSelected}}
+\index{worldSelected@{worldSelected}!MainMenu@{MainMenu}}
+\doxysubsubsection{\texorpdfstring{worldSelected}{worldSelected}}
+{\footnotesize\ttfamily bool Main\+Menu.\+world\+Selected}
+
+\mbox{\Hypertarget{classMainMenu_ab6f8fe2e3c6792361c3e5aedf70a8c87}\label{classMainMenu_ab6f8fe2e3c6792361c3e5aedf70a8c87}} 
+\index{MainMenu@{MainMenu}!worldSelectPrompt@{worldSelectPrompt}}
+\index{worldSelectPrompt@{worldSelectPrompt}!MainMenu@{MainMenu}}
+\doxysubsubsection{\texorpdfstring{worldSelectPrompt}{worldSelectPrompt}}
+{\footnotesize\ttfamily bool Main\+Menu.\+world\+Select\+Prompt\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{classMainMenu_abf73e61d38d297a7d3112ce0953fa813}\label{classMainMenu_abf73e61d38d297a7d3112ce0953fa813}} 
+\index{MainMenu@{MainMenu}!worlListBackground@{worlListBackground}}
+\index{worlListBackground@{worlListBackground}!MainMenu@{MainMenu}}
+\doxysubsubsection{\texorpdfstring{worlListBackground}{worlListBackground}}
+{\footnotesize\ttfamily Texture2D Main\+Menu.\+worl\+List\+Background}
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{MainMenu_8cs}{Main\+Menu.\+cs}}\end{DoxyCompactItemize}

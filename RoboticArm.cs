@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 
+//! This class handles automation of the retriever's robotic arm.
 public class RoboticArm : MonoBehaviour
 {
     public GameObject retriever;
@@ -10,13 +11,13 @@ public class RoboticArm : MonoBehaviour
     bool soundPlayed;
     float timer;
 
-    // Start is called before the first frame update
+    //! Start is called before the first frame update.
     void Start()
     {
         rotationPoint = rotationTransform.position;
     }
 
-    // Update is called once per frame
+    //! Update is called once per frame.
     void Update()
     {
         if (retriever.GetComponent<Retriever>().inputObject != null && retriever.GetComponent<Retriever>().outputObject != null)
@@ -35,7 +36,6 @@ public class RoboticArm : MonoBehaviour
             {
                 if (soundPlayed == false)
                 {
-                    //retriever.GetComponent<AudioSource>().Play();
                     soundPlayed = true;
                 }
                 item.GetComponent<Renderer>().enabled = true;

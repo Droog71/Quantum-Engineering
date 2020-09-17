@@ -5,13 +5,14 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 
+//! This class provides loading of textures by name from Resources or Application.persistentDataPath.
 public class TextureDictionary : MonoBehaviour
 {
     public Dictionary<string, Texture2D> dictionary;
     private Coroutine modTextureCoroutine;
     public bool addedModTextures;
 
-    // Loads textures from files for mods.
+    //! Loads textures from files for mods.
     public static IEnumerator AddModTextures(Dictionary<string, Texture2D> dictionary)
     {
         string modPath = Path.Combine(Application.persistentDataPath, "Mods");
@@ -41,7 +42,7 @@ public class TextureDictionary : MonoBehaviour
         }
     }
 
-    // Called by unity engine to initialize variables on startup.
+    //! Called by unity engine to initialize variables on startup.
     public void Start()
     {
         dictionary = new Dictionary<string, Texture2D>

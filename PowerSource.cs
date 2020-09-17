@@ -26,7 +26,8 @@ public class PowerSource : MonoBehaviour
     public Texture2D generatorOnTexture;
     private GameObject builtObjects;
 
-    void Start()
+    //! Called by unity engine on start up to initialize variables.
+    public void Start()
     {
         connectionLine = gameObject.AddComponent<LineRenderer>();
         connectionLine.startWidth = 0.2f;
@@ -37,7 +38,8 @@ public class PowerSource : MonoBehaviour
         builtObjects = GameObject.Find("Built_Objects");
     }
 
-    void Update()
+    //! Called once per frame by unity engine.
+    public void Update()
     {
         updateTick += 1 * Time.deltaTime;
         if (updateTick > 0.5f + (address * 0.001f))
@@ -86,7 +88,8 @@ public class PowerSource : MonoBehaviour
         }
     }
 
-    void OnDestroy()
+    //! Used to notify power receivers when the power source is destroyed.
+    public void OnDestroy()
     {
         if (outputObject != null && outputObject.GetComponent<PowerReceiver>() != null)
         {
@@ -102,7 +105,8 @@ public class PowerSource : MonoBehaviour
         }
     }
 
-    bool IsValidObject(GameObject obj)
+    //! Returns true if the object exists, is active and is not a standard building block.
+    private bool IsValidObject(GameObject obj)
     {
         if (obj != null)
         {
@@ -111,6 +115,7 @@ public class PowerSource : MonoBehaviour
         return false;
     }
 
+    //! Connects the power source to a power receiver.
     private void ConnectToOutput(GameObject obj)
     {
         float distance = Vector3.Distance(transform.position, obj.transform.position);
@@ -169,6 +174,7 @@ public class PowerSource : MonoBehaviour
         }
     }
 
+    //! Determines the type of power source and calls the appropriate power distribution method.
     private void DistributePower()
     {
         if (outputObject.GetComponent<PowerReceiver>() != null)
@@ -191,6 +197,7 @@ public class PowerSource : MonoBehaviour
         }
     }
 
+    //! Distributes power to power receivers as a solar panel.
     private void DistributeAsSolarPanel()
     {
         Vector3 sunPosition = new Vector3(7000, 15000, -10000);
@@ -223,6 +230,7 @@ public class PowerSource : MonoBehaviour
         }
     }
 
+    //! Distributes power to power receivers as a generator.
     private void DistributeAsGenerator()
     {
         if (fuelType.Equals("Coal") && fuelAmount >= 1)
@@ -269,6 +277,7 @@ public class PowerSource : MonoBehaviour
         }
     }
 
+    //! Distributes power to power receivers as reactor turbine.
     private void DistributeAsReactorTurbine()
     {
         bool reactorFound = false;
@@ -316,4 +325,3 @@ public class PowerSource : MonoBehaviour
         }
     }
 }
-

@@ -1,0 +1,235 @@
+\hypertarget{classPirate}{}\doxysection{Pirate Class Reference}
+\label{classPirate}\index{Pirate@{Pirate}}
+Inheritance diagram for Pirate\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{classPirate}
+\end{center}
+\end{figure}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{classPirate_a28bcb0322d2f4831da235524a3536f61}{Take\+Damage}} ()
+\begin{DoxyCompactList}\small\item\em Reduces integrity of the object and spawns damage effects. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classPirate_af15222669be472b7fb0da558742b4049}{Explode}} ()
+\begin{DoxyCompactList}\small\item\em Destroys the object and spawns explosion effects. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classPirate_af14372228799e9d160e8507829908519}{Start}} ()
+\begin{DoxyCompactList}\small\item\em Called by unity engine on start up to initialize variables. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classPirate_a9615a538ef4a7745cfa9814e33d41d6e}{Update}} ()
+\begin{DoxyCompactList}\small\item\em Called once per frame by unity engine. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+Material \mbox{\hyperlink{classPirate_a2f365a1657ac6be846c0511bb87cb8cb}{laser\+Mat}}
+\item 
+Game\+Object \mbox{\hyperlink{classPirate_ae714d45f119cb2277b22adc4edc89ccf}{cannon}}
+\item 
+Game\+Object \mbox{\hyperlink{classPirate_a2afe151e7fac80863a6aca1824d172f8}{explosion}}
+\item 
+Game\+Object \mbox{\hyperlink{classPirate_a8bf3a73be8c3d55cab16c127baf67a74}{target\+Explosion}}
+\item 
+Game\+Object \mbox{\hyperlink{classPirate_add4020e052b587fff432321cab7390af}{damage\+Explosion}}
+\item 
+bool \mbox{\hyperlink{classPirate_a4ebdee58a3f6e78c2b176cd559fd07b6}{destroying}}
+\item 
+Game\+Object \mbox{\hyperlink{classPirate_ad9a91f328e96fbce648d9df8f38d61a0}{model}}
+\item 
+float \mbox{\hyperlink{classPirate_a055b38e9db79f3281eed3aa8b5aa9518}{integrity}} = 100
+\end{DoxyCompactItemize}
+\doxysubsection*{Private Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+bool \mbox{\hyperlink{classPirate_ad3e438a96cdf7278ba52e0d76881dd65}{Can\+Send\+Destruction\+Message}} ()
+\begin{DoxyCompactList}\small\item\em Returns true if a message can be sent to the player\textquotesingle{}s tablet. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classGameManager}{Game\+Manager}} \mbox{\hyperlink{classPirate_a8c395539c7841abb85f93fc17525fd46}{game}}
+\item 
+\mbox{\hyperlink{classPlayerController}{Player\+Controller}} \mbox{\hyperlink{classPirate_a064052801b2fc8e3df2586c4a24ec144}{player\+Controller}}
+\item 
+Game\+Object \mbox{\hyperlink{classPirate_a18eb5b258dd4b31f8f0113a0814bf57d}{target}}
+\item 
+List$<$ Vector3 $>$ \mbox{\hyperlink{classPirate_a275b7c5d59d97f675e8a3c5e60fe666f}{target\+Location\+List}}
+\item 
+Vector3 \mbox{\hyperlink{classPirate_aa3d057039a07140b32d209ddde00f9a5}{target\+Location}}
+\item 
+float \mbox{\hyperlink{classPirate_a6ebc01c98272e0320165e29814eecc89}{fire\+Timer}}
+\item 
+Line\+Renderer \mbox{\hyperlink{classPirate_a7e468278594b0c8d0c7a783d68ca28df}{laser}}
+\item 
+Quaternion \mbox{\hyperlink{classPirate_a3b6a8b43d20b14a8ff6761fddf4e634e}{original\+Rotation}}
+\item 
+float \mbox{\hyperlink{classPirate_a18c8ef43ae0c10512061b5dfab9a019d}{life\+Span}} = 300
+\item 
+float \mbox{\hyperlink{classPirate_a505f281863003d731e264198ce789855}{destroy\+Timer}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{classPirate_ad3e438a96cdf7278ba52e0d76881dd65}\label{classPirate_ad3e438a96cdf7278ba52e0d76881dd65}} 
+\index{Pirate@{Pirate}!CanSendDestructionMessage@{CanSendDestructionMessage}}
+\index{CanSendDestructionMessage@{CanSendDestructionMessage}!Pirate@{Pirate}}
+\doxysubsubsection{\texorpdfstring{CanSendDestructionMessage()}{CanSendDestructionMessage()}}
+{\footnotesize\ttfamily bool Pirate.\+Can\+Send\+Destruction\+Message (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [private]}}
+
+
+
+Returns true if a message can be sent to the player\textquotesingle{}s tablet. 
+
+\mbox{\Hypertarget{classPirate_af15222669be472b7fb0da558742b4049}\label{classPirate_af15222669be472b7fb0da558742b4049}} 
+\index{Pirate@{Pirate}!Explode@{Explode}}
+\index{Explode@{Explode}!Pirate@{Pirate}}
+\doxysubsubsection{\texorpdfstring{Explode()}{Explode()}}
+{\footnotesize\ttfamily void Pirate.\+Explode (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Destroys the object and spawns explosion effects. 
+
+\mbox{\Hypertarget{classPirate_af14372228799e9d160e8507829908519}\label{classPirate_af14372228799e9d160e8507829908519}} 
+\index{Pirate@{Pirate}!Start@{Start}}
+\index{Start@{Start}!Pirate@{Pirate}}
+\doxysubsubsection{\texorpdfstring{Start()}{Start()}}
+{\footnotesize\ttfamily void Pirate.\+Start (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Called by unity engine on start up to initialize variables. 
+
+\mbox{\Hypertarget{classPirate_a28bcb0322d2f4831da235524a3536f61}\label{classPirate_a28bcb0322d2f4831da235524a3536f61}} 
+\index{Pirate@{Pirate}!TakeDamage@{TakeDamage}}
+\index{TakeDamage@{TakeDamage}!Pirate@{Pirate}}
+\doxysubsubsection{\texorpdfstring{TakeDamage()}{TakeDamage()}}
+{\footnotesize\ttfamily void Pirate.\+Take\+Damage (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Reduces integrity of the object and spawns damage effects. 
+
+\mbox{\Hypertarget{classPirate_a9615a538ef4a7745cfa9814e33d41d6e}\label{classPirate_a9615a538ef4a7745cfa9814e33d41d6e}} 
+\index{Pirate@{Pirate}!Update@{Update}}
+\index{Update@{Update}!Pirate@{Pirate}}
+\doxysubsubsection{\texorpdfstring{Update()}{Update()}}
+{\footnotesize\ttfamily void Pirate.\+Update (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Called once per frame by unity engine. 
+
+
+
+\doxysubsection{Member Data Documentation}
+\mbox{\Hypertarget{classPirate_ae714d45f119cb2277b22adc4edc89ccf}\label{classPirate_ae714d45f119cb2277b22adc4edc89ccf}} 
+\index{Pirate@{Pirate}!cannon@{cannon}}
+\index{cannon@{cannon}!Pirate@{Pirate}}
+\doxysubsubsection{\texorpdfstring{cannon}{cannon}}
+{\footnotesize\ttfamily Game\+Object Pirate.\+cannon}
+
+\mbox{\Hypertarget{classPirate_add4020e052b587fff432321cab7390af}\label{classPirate_add4020e052b587fff432321cab7390af}} 
+\index{Pirate@{Pirate}!damageExplosion@{damageExplosion}}
+\index{damageExplosion@{damageExplosion}!Pirate@{Pirate}}
+\doxysubsubsection{\texorpdfstring{damageExplosion}{damageExplosion}}
+{\footnotesize\ttfamily Game\+Object Pirate.\+damage\+Explosion}
+
+\mbox{\Hypertarget{classPirate_a4ebdee58a3f6e78c2b176cd559fd07b6}\label{classPirate_a4ebdee58a3f6e78c2b176cd559fd07b6}} 
+\index{Pirate@{Pirate}!destroying@{destroying}}
+\index{destroying@{destroying}!Pirate@{Pirate}}
+\doxysubsubsection{\texorpdfstring{destroying}{destroying}}
+{\footnotesize\ttfamily bool Pirate.\+destroying}
+
+\mbox{\Hypertarget{classPirate_a505f281863003d731e264198ce789855}\label{classPirate_a505f281863003d731e264198ce789855}} 
+\index{Pirate@{Pirate}!destroyTimer@{destroyTimer}}
+\index{destroyTimer@{destroyTimer}!Pirate@{Pirate}}
+\doxysubsubsection{\texorpdfstring{destroyTimer}{destroyTimer}}
+{\footnotesize\ttfamily float Pirate.\+destroy\+Timer\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{classPirate_a2afe151e7fac80863a6aca1824d172f8}\label{classPirate_a2afe151e7fac80863a6aca1824d172f8}} 
+\index{Pirate@{Pirate}!explosion@{explosion}}
+\index{explosion@{explosion}!Pirate@{Pirate}}
+\doxysubsubsection{\texorpdfstring{explosion}{explosion}}
+{\footnotesize\ttfamily Game\+Object Pirate.\+explosion}
+
+\mbox{\Hypertarget{classPirate_a6ebc01c98272e0320165e29814eecc89}\label{classPirate_a6ebc01c98272e0320165e29814eecc89}} 
+\index{Pirate@{Pirate}!fireTimer@{fireTimer}}
+\index{fireTimer@{fireTimer}!Pirate@{Pirate}}
+\doxysubsubsection{\texorpdfstring{fireTimer}{fireTimer}}
+{\footnotesize\ttfamily float Pirate.\+fire\+Timer\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{classPirate_a8c395539c7841abb85f93fc17525fd46}\label{classPirate_a8c395539c7841abb85f93fc17525fd46}} 
+\index{Pirate@{Pirate}!game@{game}}
+\index{game@{game}!Pirate@{Pirate}}
+\doxysubsubsection{\texorpdfstring{game}{game}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classGameManager}{Game\+Manager}} Pirate.\+game\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{classPirate_a055b38e9db79f3281eed3aa8b5aa9518}\label{classPirate_a055b38e9db79f3281eed3aa8b5aa9518}} 
+\index{Pirate@{Pirate}!integrity@{integrity}}
+\index{integrity@{integrity}!Pirate@{Pirate}}
+\doxysubsubsection{\texorpdfstring{integrity}{integrity}}
+{\footnotesize\ttfamily float Pirate.\+integrity = 100}
+
+\mbox{\Hypertarget{classPirate_a7e468278594b0c8d0c7a783d68ca28df}\label{classPirate_a7e468278594b0c8d0c7a783d68ca28df}} 
+\index{Pirate@{Pirate}!laser@{laser}}
+\index{laser@{laser}!Pirate@{Pirate}}
+\doxysubsubsection{\texorpdfstring{laser}{laser}}
+{\footnotesize\ttfamily Line\+Renderer Pirate.\+laser\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{classPirate_a2f365a1657ac6be846c0511bb87cb8cb}\label{classPirate_a2f365a1657ac6be846c0511bb87cb8cb}} 
+\index{Pirate@{Pirate}!laserMat@{laserMat}}
+\index{laserMat@{laserMat}!Pirate@{Pirate}}
+\doxysubsubsection{\texorpdfstring{laserMat}{laserMat}}
+{\footnotesize\ttfamily Material Pirate.\+laser\+Mat}
+
+\mbox{\Hypertarget{classPirate_a18c8ef43ae0c10512061b5dfab9a019d}\label{classPirate_a18c8ef43ae0c10512061b5dfab9a019d}} 
+\index{Pirate@{Pirate}!lifeSpan@{lifeSpan}}
+\index{lifeSpan@{lifeSpan}!Pirate@{Pirate}}
+\doxysubsubsection{\texorpdfstring{lifeSpan}{lifeSpan}}
+{\footnotesize\ttfamily float Pirate.\+life\+Span = 300\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{classPirate_ad9a91f328e96fbce648d9df8f38d61a0}\label{classPirate_ad9a91f328e96fbce648d9df8f38d61a0}} 
+\index{Pirate@{Pirate}!model@{model}}
+\index{model@{model}!Pirate@{Pirate}}
+\doxysubsubsection{\texorpdfstring{model}{model}}
+{\footnotesize\ttfamily Game\+Object Pirate.\+model}
+
+\mbox{\Hypertarget{classPirate_a3b6a8b43d20b14a8ff6761fddf4e634e}\label{classPirate_a3b6a8b43d20b14a8ff6761fddf4e634e}} 
+\index{Pirate@{Pirate}!originalRotation@{originalRotation}}
+\index{originalRotation@{originalRotation}!Pirate@{Pirate}}
+\doxysubsubsection{\texorpdfstring{originalRotation}{originalRotation}}
+{\footnotesize\ttfamily Quaternion Pirate.\+original\+Rotation\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{classPirate_a064052801b2fc8e3df2586c4a24ec144}\label{classPirate_a064052801b2fc8e3df2586c4a24ec144}} 
+\index{Pirate@{Pirate}!playerController@{playerController}}
+\index{playerController@{playerController}!Pirate@{Pirate}}
+\doxysubsubsection{\texorpdfstring{playerController}{playerController}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classPlayerController}{Player\+Controller}} Pirate.\+player\+Controller\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{classPirate_a18eb5b258dd4b31f8f0113a0814bf57d}\label{classPirate_a18eb5b258dd4b31f8f0113a0814bf57d}} 
+\index{Pirate@{Pirate}!target@{target}}
+\index{target@{target}!Pirate@{Pirate}}
+\doxysubsubsection{\texorpdfstring{target}{target}}
+{\footnotesize\ttfamily Game\+Object Pirate.\+target\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{classPirate_a8bf3a73be8c3d55cab16c127baf67a74}\label{classPirate_a8bf3a73be8c3d55cab16c127baf67a74}} 
+\index{Pirate@{Pirate}!targetExplosion@{targetExplosion}}
+\index{targetExplosion@{targetExplosion}!Pirate@{Pirate}}
+\doxysubsubsection{\texorpdfstring{targetExplosion}{targetExplosion}}
+{\footnotesize\ttfamily Game\+Object Pirate.\+target\+Explosion}
+
+\mbox{\Hypertarget{classPirate_aa3d057039a07140b32d209ddde00f9a5}\label{classPirate_aa3d057039a07140b32d209ddde00f9a5}} 
+\index{Pirate@{Pirate}!targetLocation@{targetLocation}}
+\index{targetLocation@{targetLocation}!Pirate@{Pirate}}
+\doxysubsubsection{\texorpdfstring{targetLocation}{targetLocation}}
+{\footnotesize\ttfamily Vector3 Pirate.\+target\+Location\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{classPirate_a275b7c5d59d97f675e8a3c5e60fe666f}\label{classPirate_a275b7c5d59d97f675e8a3c5e60fe666f}} 
+\index{Pirate@{Pirate}!targetLocationList@{targetLocationList}}
+\index{targetLocationList@{targetLocationList}!Pirate@{Pirate}}
+\doxysubsubsection{\texorpdfstring{targetLocationList}{targetLocationList}}
+{\footnotesize\ttfamily List$<$Vector3$>$ Pirate.\+target\+Location\+List\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{Pirate_8cs}{Pirate.\+cs}}\end{DoxyCompactItemize}

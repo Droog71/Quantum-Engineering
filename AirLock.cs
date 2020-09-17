@@ -10,7 +10,7 @@ public class AirLock : MonoBehaviour
     public GameObject closedObject;
     public GameObject effects;
 
-    // Called by unity engine on start up to initialize variables
+    //! Called by unity engine on start up to initialize variables.
     public void Start()
     {
         if (QualitySettings.GetQualityLevel() < 3)
@@ -19,7 +19,7 @@ public class AirLock : MonoBehaviour
         }
     }
 
-    // Called once per frame by unity engine
+    //! Called once per frame by unity engine.
     public void Update()
     {
         updateTick += 1 * Time.deltaTime;
@@ -30,7 +30,7 @@ public class AirLock : MonoBehaviour
         }
     }
 
-    // Toggle the open or closed state of the hatchway
+    //! Toggle the open or closed state of the hatchway.
     public void ToggleOpen()
     {
         if (open == false)

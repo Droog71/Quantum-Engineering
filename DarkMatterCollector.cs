@@ -26,7 +26,7 @@ public class DarkMatterCollector : MonoBehaviour
     public bool foundDarkMatter;
     private GameObject builtObjects;
 
-    // Called by unity engine on start up to initialize variables
+    //! Called by unity engine on start up to initialize variables.
     private void Start()
     {
         connectionLine = gameObject.AddComponent<LineRenderer>();
@@ -40,7 +40,7 @@ public class DarkMatterCollector : MonoBehaviour
         builtObjects = GameObject.Find("Built_Objects");
     }
 
-    // Called once per frame by unity engine
+    //! Called once per frame by unity engine.
     void Update()
     {
         updateTick += 1 * Time.deltaTime;
@@ -128,7 +128,7 @@ public class DarkMatterCollector : MonoBehaviour
         }
     }
 
-    // Used to remove the connection line renderer when the block is destroyed
+    //! Used to remove the connection line renderer when the block is destroyed.
     public void OnDestroy()
     {
         if (inputLine != null)
@@ -137,7 +137,7 @@ public class DarkMatterCollector : MonoBehaviour
         }
     }
 
-    // The object exists, is active and is not a standard building block
+    //! The object exists, is active and is not a standard building block.
     bool IsValidObject(GameObject obj)
     {
         if (obj != null)
@@ -147,7 +147,7 @@ public class DarkMatterCollector : MonoBehaviour
         return false;
     }
 
-    // Finds a dark matter source node to harvest
+    //! Finds a dark matter source node to harvest.
     private void FindDarkMatter()
     {
         DarkMatter[] allDarkMatter = FindObjectsOfType<DarkMatter>();
@@ -181,7 +181,7 @@ public class DarkMatterCollector : MonoBehaviour
         }
     }
 
-    // Gets power values from power receiver
+    //! Gets power values from power receiver.
     private void UpdatePowerReceiver()
     {
         powerReceiver.ID = ID;

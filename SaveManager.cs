@@ -6,11 +6,13 @@ public class SaveManager
 {
     private StateManager stateManager;
 
+    //! This class handles world saving.
     public SaveManager(StateManager stateManager)
     {
         this.stateManager = stateManager;
     }
 
+    //! Saves the world.
     public IEnumerator SaveDataCoroutine()
     {
         stateManager.dataSaved = false;
@@ -547,4 +549,3 @@ public class SaveManager
         stateManager.saving = false;
     }
 }
-

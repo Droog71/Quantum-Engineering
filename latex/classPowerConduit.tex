@@ -1,0 +1,455 @@
+\hypertarget{classPowerConduit}{}\doxysection{Power\+Conduit Class Reference}
+\label{classPowerConduit}\index{PowerConduit@{PowerConduit}}
+Inheritance diagram for Power\+Conduit\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{classPowerConduit}
+\end{center}
+\end{figure}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{classPowerConduit_a861afb77270ed8f27fd957f5930ad030}{Start}} ()
+\begin{DoxyCompactList}\small\item\em Called by unity engine on start up to initialize variables. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classPowerConduit_ab4b6b35bb342e626c5178ba9ed53e344}{Update}} ()
+\begin{DoxyCompactList}\small\item\em Called once per frame by unity engine. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classPowerConduit_a13a8f485e044a1972d0d96ee8b7ffcc6}{On\+Destroy}} ()
+\begin{DoxyCompactList}\small\item\em Used to de-\/energize output objects when the power conduit is destroyed. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+string \mbox{\hyperlink{classPowerConduit_a41e1554cbe31094321093f7090291bd4}{ID}} = \char`\"{}unassigned\char`\"{}
+\item 
+Material \mbox{\hyperlink{classPowerConduit_a2517797aaae9337929b24761dd10d3f2}{line\+Mat}}
+\item 
+string \mbox{\hyperlink{classPowerConduit_a1f5b2bd23b52eaa170d688bed4d5b0d0}{creation\+Method}} = \char`\"{}built\char`\"{}
+\item 
+Game\+Object \mbox{\hyperlink{classPowerConduit_a311c4989c8ac03da0afdf8af11b68a9c}{output\+Object1}}
+\item 
+Game\+Object \mbox{\hyperlink{classPowerConduit_a94455e0bcc3edea54dcd1f04880d9af4}{output\+Object2}}
+\item 
+Game\+Object \mbox{\hyperlink{classPowerConduit_a744f1a79093eed0af5111b78b0f5b3d3}{input\+Object}}
+\item 
+Game\+Object \mbox{\hyperlink{classPowerConduit_a6091f009e2a84ba36b61aac7a9be540e}{connection\+Object}}
+\item 
+string \mbox{\hyperlink{classPowerConduit_a0e6829b48ecacbb8f5171c6b57119bc0}{output\+I\+D1}} = \char`\"{}unassigned\char`\"{}
+\item 
+string \mbox{\hyperlink{classPowerConduit_a405fffcf0982ed64178415dda6441f38}{output\+I\+D2}} = \char`\"{}unassigned\char`\"{}
+\item 
+string \mbox{\hyperlink{classPowerConduit_a952d90b94576212784e6fc5b6b0c66d7}{input\+ID}}
+\item 
+int \mbox{\hyperlink{classPowerConduit_a8d8f6b9138c2ec2f5fc68c0eecc03cbf}{address}}
+\item 
+int \mbox{\hyperlink{classPowerConduit_aa7dc2da48af9c4b9d7e2fb3d72c530ed}{power\+Amount}}
+\item 
+bool \mbox{\hyperlink{classPowerConduit_a93311bcf5c18aac8998a6f10c21d27ab}{dual\+Output}}
+\item 
+int \mbox{\hyperlink{classPowerConduit_a2c7d0c8f99f2e2d133d6d301d2838805}{range}} = 6
+\item 
+int \mbox{\hyperlink{classPowerConduit_aac270d5f4367ba20de70d6cf0e6e3ea6}{connection\+Attempts}}
+\item 
+int \mbox{\hyperlink{classPowerConduit_ac66734305f15a754f5a476ee66ef1e12}{dual\+Connection\+Attempts}}
+\item 
+bool \mbox{\hyperlink{classPowerConduit_ac84ec618e3004a7246804f1cd7eb3f5c}{connection\+Failed}}
+\item 
+\mbox{\hyperlink{classPowerReceiver}{Power\+Receiver}} \mbox{\hyperlink{classPowerConduit_a7e9046569baebff6becd3fa715b5ab59}{power\+Receiver}}
+\end{DoxyCompactItemize}
+\doxysubsection*{Private Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{classPowerConduit_a4797e85664f7e5e5e17b84de721979a7}{Update\+Power\+Receiver}} ()
+\begin{DoxyCompactList}\small\item\em Gets power values from power receiver. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{classPowerConduit_a337df1992956a87639474ac67edef2e7}{Is\+Valid\+Object}} (Game\+Object obj)
+\begin{DoxyCompactList}\small\item\em The object exists, is active and is not a standard building block. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classPowerConduit_a035e3f054117b2acee2eb03681a88e30}{Create\+Output2\+Connection\+Line}} ()
+\begin{DoxyCompactList}\small\item\em Creates a line renderer to the second output object. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classPowerConduit_ac239c1dbb8fcd28165cca4403d8b971b}{Connect\+Output\+One\+To\+Conduit}} (Game\+Object obj)
+\begin{DoxyCompactList}\small\item\em Connects to a another power conduit. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classPowerConduit_a03fb9ebe93627085f7526c0c434bcfe5}{Connect\+Output\+Two\+To\+Conduit}} (Game\+Object obj)
+\begin{DoxyCompactList}\small\item\em Connects to a another power conduit. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classPowerConduit_a772761f5991ef8676f2298c958461d9b}{Initialize\+Output\+Conduit\+One}} (Game\+Object obj)
+\begin{DoxyCompactList}\small\item\em Designates conduit as an output with assigned ID. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classPowerConduit_a3c10cd318789e5a4aeb91c6019610844}{Initialize\+Output\+Conduit\+Two}} (Game\+Object obj)
+\begin{DoxyCompactList}\small\item\em Designates conduit as an output with assigned ID. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classPowerConduit_ad19f85af9626dc2dbb8dc6161515e7ad}{Attempt\+Conduit\+One\+Connection}} (Game\+Object obj)
+\begin{DoxyCompactList}\small\item\em Attempts to connect to a another power conduit. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classPowerConduit_a2e7331c55cc59378245ca3d966e9125b}{Attempt\+Conduit\+Two\+Connection}} (Game\+Object obj)
+\begin{DoxyCompactList}\small\item\em Attempts to connect to a another power conduit. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classPowerConduit_a8b6da1c6f5c1431c6236be7b3362c39b}{Initialize\+Machine\+One\+Connection}} (Game\+Object obj)
+\begin{DoxyCompactList}\small\item\em Designates machine as an output with assigned ID. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classPowerConduit_a7840029f17d7deeabcc3fb0a96ee0ab9}{Attempt\+Machine\+One\+Connection}} (Game\+Object obj)
+\begin{DoxyCompactList}\small\item\em Attempts to connect to a machine. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classPowerConduit_a2b4fbaac02ee0da756120e80133e90c1}{Initialize\+Machine\+Two\+Connection}} (Game\+Object obj)
+\begin{DoxyCompactList}\small\item\em Designates machine as an output with assigned ID. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classPowerConduit_ab18b82657ea92d1e4081d7f146f8e974}{Attempt\+Machine\+Two\+Connection}} (Game\+Object obj)
+\begin{DoxyCompactList}\small\item\em Attempts to connect to a machine. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classPowerConduit_a3197e2e036db11b72eaa5e03ee0a5375}{Update\+Output\+One}} ()
+\begin{DoxyCompactList}\small\item\em Makes connections from this conduit to another conduti or a machine. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classPowerConduit_a52fc1dee247306233b4af77e5791305c}{Update\+Output\+Two}} ()
+\begin{DoxyCompactList}\small\item\em Makes connections from this conduit to another conduit or a machine. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classPowerConduit_a7270a5e0a9ae8b91e30f2c0a145bc877}{Distribute\+Power\+To\+Connection\+One}} ()
+\begin{DoxyCompactList}\small\item\em Distributes power to output 1. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classPowerConduit_a87d126637e3fac135c73c182424c3aff}{Distribute\+Power\+To\+Connection\+Two}} ()
+\begin{DoxyCompactList}\small\item\em Distributes power to output 2. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+Game\+Object\mbox{[}$\,$\mbox{]} \mbox{\hyperlink{classPowerConduit_a46103e8845c17116cbd1866656ceccf8}{output\+Objects}}
+\item 
+Line\+Renderer \mbox{\hyperlink{classPowerConduit_a56731e4f44281210a251943a4052e35c}{connection\+Line}}
+\item 
+Game\+Object \mbox{\hyperlink{classPowerConduit_acdc854e2183b7a69f42448f0a3e08028}{connection\+Line2}}
+\item 
+float \mbox{\hyperlink{classPowerConduit_a754e45f5e3be8cb360ac30143a1acc17}{update\+Tick}}
+\item 
+Game\+Object \mbox{\hyperlink{classPowerConduit_a17493ead6b5c980161daad866021744b}{built\+Objects}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{classPowerConduit_ad19f85af9626dc2dbb8dc6161515e7ad}\label{classPowerConduit_ad19f85af9626dc2dbb8dc6161515e7ad}} 
+\index{PowerConduit@{PowerConduit}!AttemptConduitOneConnection@{AttemptConduitOneConnection}}
+\index{AttemptConduitOneConnection@{AttemptConduitOneConnection}!PowerConduit@{PowerConduit}}
+\doxysubsubsection{\texorpdfstring{AttemptConduitOneConnection()}{AttemptConduitOneConnection()}}
+{\footnotesize\ttfamily void Power\+Conduit.\+Attempt\+Conduit\+One\+Connection (\begin{DoxyParamCaption}\item[{Game\+Object}]{obj }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [private]}}
+
+
+
+Attempts to connect to a another power conduit. 
+
+\mbox{\Hypertarget{classPowerConduit_a2e7331c55cc59378245ca3d966e9125b}\label{classPowerConduit_a2e7331c55cc59378245ca3d966e9125b}} 
+\index{PowerConduit@{PowerConduit}!AttemptConduitTwoConnection@{AttemptConduitTwoConnection}}
+\index{AttemptConduitTwoConnection@{AttemptConduitTwoConnection}!PowerConduit@{PowerConduit}}
+\doxysubsubsection{\texorpdfstring{AttemptConduitTwoConnection()}{AttemptConduitTwoConnection()}}
+{\footnotesize\ttfamily void Power\+Conduit.\+Attempt\+Conduit\+Two\+Connection (\begin{DoxyParamCaption}\item[{Game\+Object}]{obj }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [private]}}
+
+
+
+Attempts to connect to a another power conduit. 
+
+\mbox{\Hypertarget{classPowerConduit_a7840029f17d7deeabcc3fb0a96ee0ab9}\label{classPowerConduit_a7840029f17d7deeabcc3fb0a96ee0ab9}} 
+\index{PowerConduit@{PowerConduit}!AttemptMachineOneConnection@{AttemptMachineOneConnection}}
+\index{AttemptMachineOneConnection@{AttemptMachineOneConnection}!PowerConduit@{PowerConduit}}
+\doxysubsubsection{\texorpdfstring{AttemptMachineOneConnection()}{AttemptMachineOneConnection()}}
+{\footnotesize\ttfamily void Power\+Conduit.\+Attempt\+Machine\+One\+Connection (\begin{DoxyParamCaption}\item[{Game\+Object}]{obj }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [private]}}
+
+
+
+Attempts to connect to a machine. 
+
+\mbox{\Hypertarget{classPowerConduit_ab18b82657ea92d1e4081d7f146f8e974}\label{classPowerConduit_ab18b82657ea92d1e4081d7f146f8e974}} 
+\index{PowerConduit@{PowerConduit}!AttemptMachineTwoConnection@{AttemptMachineTwoConnection}}
+\index{AttemptMachineTwoConnection@{AttemptMachineTwoConnection}!PowerConduit@{PowerConduit}}
+\doxysubsubsection{\texorpdfstring{AttemptMachineTwoConnection()}{AttemptMachineTwoConnection()}}
+{\footnotesize\ttfamily void Power\+Conduit.\+Attempt\+Machine\+Two\+Connection (\begin{DoxyParamCaption}\item[{Game\+Object}]{obj }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [private]}}
+
+
+
+Attempts to connect to a machine. 
+
+\mbox{\Hypertarget{classPowerConduit_ac239c1dbb8fcd28165cca4403d8b971b}\label{classPowerConduit_ac239c1dbb8fcd28165cca4403d8b971b}} 
+\index{PowerConduit@{PowerConduit}!ConnectOutputOneToConduit@{ConnectOutputOneToConduit}}
+\index{ConnectOutputOneToConduit@{ConnectOutputOneToConduit}!PowerConduit@{PowerConduit}}
+\doxysubsubsection{\texorpdfstring{ConnectOutputOneToConduit()}{ConnectOutputOneToConduit()}}
+{\footnotesize\ttfamily void Power\+Conduit.\+Connect\+Output\+One\+To\+Conduit (\begin{DoxyParamCaption}\item[{Game\+Object}]{obj }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [private]}}
+
+
+
+Connects to a another power conduit. 
+
+\mbox{\Hypertarget{classPowerConduit_a03fb9ebe93627085f7526c0c434bcfe5}\label{classPowerConduit_a03fb9ebe93627085f7526c0c434bcfe5}} 
+\index{PowerConduit@{PowerConduit}!ConnectOutputTwoToConduit@{ConnectOutputTwoToConduit}}
+\index{ConnectOutputTwoToConduit@{ConnectOutputTwoToConduit}!PowerConduit@{PowerConduit}}
+\doxysubsubsection{\texorpdfstring{ConnectOutputTwoToConduit()}{ConnectOutputTwoToConduit()}}
+{\footnotesize\ttfamily void Power\+Conduit.\+Connect\+Output\+Two\+To\+Conduit (\begin{DoxyParamCaption}\item[{Game\+Object}]{obj }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [private]}}
+
+
+
+Connects to a another power conduit. 
+
+\mbox{\Hypertarget{classPowerConduit_a035e3f054117b2acee2eb03681a88e30}\label{classPowerConduit_a035e3f054117b2acee2eb03681a88e30}} 
+\index{PowerConduit@{PowerConduit}!CreateOutput2ConnectionLine@{CreateOutput2ConnectionLine}}
+\index{CreateOutput2ConnectionLine@{CreateOutput2ConnectionLine}!PowerConduit@{PowerConduit}}
+\doxysubsubsection{\texorpdfstring{CreateOutput2ConnectionLine()}{CreateOutput2ConnectionLine()}}
+{\footnotesize\ttfamily void Power\+Conduit.\+Create\+Output2\+Connection\+Line (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [private]}}
+
+
+
+Creates a line renderer to the second output object. 
+
+\mbox{\Hypertarget{classPowerConduit_a7270a5e0a9ae8b91e30f2c0a145bc877}\label{classPowerConduit_a7270a5e0a9ae8b91e30f2c0a145bc877}} 
+\index{PowerConduit@{PowerConduit}!DistributePowerToConnectionOne@{DistributePowerToConnectionOne}}
+\index{DistributePowerToConnectionOne@{DistributePowerToConnectionOne}!PowerConduit@{PowerConduit}}
+\doxysubsubsection{\texorpdfstring{DistributePowerToConnectionOne()}{DistributePowerToConnectionOne()}}
+{\footnotesize\ttfamily void Power\+Conduit.\+Distribute\+Power\+To\+Connection\+One (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [private]}}
+
+
+
+Distributes power to output 1. 
+
+\mbox{\Hypertarget{classPowerConduit_a87d126637e3fac135c73c182424c3aff}\label{classPowerConduit_a87d126637e3fac135c73c182424c3aff}} 
+\index{PowerConduit@{PowerConduit}!DistributePowerToConnectionTwo@{DistributePowerToConnectionTwo}}
+\index{DistributePowerToConnectionTwo@{DistributePowerToConnectionTwo}!PowerConduit@{PowerConduit}}
+\doxysubsubsection{\texorpdfstring{DistributePowerToConnectionTwo()}{DistributePowerToConnectionTwo()}}
+{\footnotesize\ttfamily void Power\+Conduit.\+Distribute\+Power\+To\+Connection\+Two (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [private]}}
+
+
+
+Distributes power to output 2. 
+
+\mbox{\Hypertarget{classPowerConduit_a8b6da1c6f5c1431c6236be7b3362c39b}\label{classPowerConduit_a8b6da1c6f5c1431c6236be7b3362c39b}} 
+\index{PowerConduit@{PowerConduit}!InitializeMachineOneConnection@{InitializeMachineOneConnection}}
+\index{InitializeMachineOneConnection@{InitializeMachineOneConnection}!PowerConduit@{PowerConduit}}
+\doxysubsubsection{\texorpdfstring{InitializeMachineOneConnection()}{InitializeMachineOneConnection()}}
+{\footnotesize\ttfamily void Power\+Conduit.\+Initialize\+Machine\+One\+Connection (\begin{DoxyParamCaption}\item[{Game\+Object}]{obj }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [private]}}
+
+
+
+Designates machine as an output with assigned ID. 
+
+\mbox{\Hypertarget{classPowerConduit_a2b4fbaac02ee0da756120e80133e90c1}\label{classPowerConduit_a2b4fbaac02ee0da756120e80133e90c1}} 
+\index{PowerConduit@{PowerConduit}!InitializeMachineTwoConnection@{InitializeMachineTwoConnection}}
+\index{InitializeMachineTwoConnection@{InitializeMachineTwoConnection}!PowerConduit@{PowerConduit}}
+\doxysubsubsection{\texorpdfstring{InitializeMachineTwoConnection()}{InitializeMachineTwoConnection()}}
+{\footnotesize\ttfamily void Power\+Conduit.\+Initialize\+Machine\+Two\+Connection (\begin{DoxyParamCaption}\item[{Game\+Object}]{obj }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [private]}}
+
+
+
+Designates machine as an output with assigned ID. 
+
+\mbox{\Hypertarget{classPowerConduit_a772761f5991ef8676f2298c958461d9b}\label{classPowerConduit_a772761f5991ef8676f2298c958461d9b}} 
+\index{PowerConduit@{PowerConduit}!InitializeOutputConduitOne@{InitializeOutputConduitOne}}
+\index{InitializeOutputConduitOne@{InitializeOutputConduitOne}!PowerConduit@{PowerConduit}}
+\doxysubsubsection{\texorpdfstring{InitializeOutputConduitOne()}{InitializeOutputConduitOne()}}
+{\footnotesize\ttfamily void Power\+Conduit.\+Initialize\+Output\+Conduit\+One (\begin{DoxyParamCaption}\item[{Game\+Object}]{obj }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [private]}}
+
+
+
+Designates conduit as an output with assigned ID. 
+
+\mbox{\Hypertarget{classPowerConduit_a3c10cd318789e5a4aeb91c6019610844}\label{classPowerConduit_a3c10cd318789e5a4aeb91c6019610844}} 
+\index{PowerConduit@{PowerConduit}!InitializeOutputConduitTwo@{InitializeOutputConduitTwo}}
+\index{InitializeOutputConduitTwo@{InitializeOutputConduitTwo}!PowerConduit@{PowerConduit}}
+\doxysubsubsection{\texorpdfstring{InitializeOutputConduitTwo()}{InitializeOutputConduitTwo()}}
+{\footnotesize\ttfamily void Power\+Conduit.\+Initialize\+Output\+Conduit\+Two (\begin{DoxyParamCaption}\item[{Game\+Object}]{obj }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [private]}}
+
+
+
+Designates conduit as an output with assigned ID. 
+
+\mbox{\Hypertarget{classPowerConduit_a337df1992956a87639474ac67edef2e7}\label{classPowerConduit_a337df1992956a87639474ac67edef2e7}} 
+\index{PowerConduit@{PowerConduit}!IsValidObject@{IsValidObject}}
+\index{IsValidObject@{IsValidObject}!PowerConduit@{PowerConduit}}
+\doxysubsubsection{\texorpdfstring{IsValidObject()}{IsValidObject()}}
+{\footnotesize\ttfamily bool Power\+Conduit.\+Is\+Valid\+Object (\begin{DoxyParamCaption}\item[{Game\+Object}]{obj }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [private]}}
+
+
+
+The object exists, is active and is not a standard building block. 
+
+\mbox{\Hypertarget{classPowerConduit_a13a8f485e044a1972d0d96ee8b7ffcc6}\label{classPowerConduit_a13a8f485e044a1972d0d96ee8b7ffcc6}} 
+\index{PowerConduit@{PowerConduit}!OnDestroy@{OnDestroy}}
+\index{OnDestroy@{OnDestroy}!PowerConduit@{PowerConduit}}
+\doxysubsubsection{\texorpdfstring{OnDestroy()}{OnDestroy()}}
+{\footnotesize\ttfamily void Power\+Conduit.\+On\+Destroy (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Used to de-\/energize output objects when the power conduit is destroyed. 
+
+\mbox{\Hypertarget{classPowerConduit_a861afb77270ed8f27fd957f5930ad030}\label{classPowerConduit_a861afb77270ed8f27fd957f5930ad030}} 
+\index{PowerConduit@{PowerConduit}!Start@{Start}}
+\index{Start@{Start}!PowerConduit@{PowerConduit}}
+\doxysubsubsection{\texorpdfstring{Start()}{Start()}}
+{\footnotesize\ttfamily void Power\+Conduit.\+Start (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Called by unity engine on start up to initialize variables. 
+
+\mbox{\Hypertarget{classPowerConduit_ab4b6b35bb342e626c5178ba9ed53e344}\label{classPowerConduit_ab4b6b35bb342e626c5178ba9ed53e344}} 
+\index{PowerConduit@{PowerConduit}!Update@{Update}}
+\index{Update@{Update}!PowerConduit@{PowerConduit}}
+\doxysubsubsection{\texorpdfstring{Update()}{Update()}}
+{\footnotesize\ttfamily void Power\+Conduit.\+Update (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Called once per frame by unity engine. 
+
+\mbox{\Hypertarget{classPowerConduit_a3197e2e036db11b72eaa5e03ee0a5375}\label{classPowerConduit_a3197e2e036db11b72eaa5e03ee0a5375}} 
+\index{PowerConduit@{PowerConduit}!UpdateOutputOne@{UpdateOutputOne}}
+\index{UpdateOutputOne@{UpdateOutputOne}!PowerConduit@{PowerConduit}}
+\doxysubsubsection{\texorpdfstring{UpdateOutputOne()}{UpdateOutputOne()}}
+{\footnotesize\ttfamily void Power\+Conduit.\+Update\+Output\+One (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [private]}}
+
+
+
+Makes connections from this conduit to another conduti or a machine. 
+
+\mbox{\Hypertarget{classPowerConduit_a52fc1dee247306233b4af77e5791305c}\label{classPowerConduit_a52fc1dee247306233b4af77e5791305c}} 
+\index{PowerConduit@{PowerConduit}!UpdateOutputTwo@{UpdateOutputTwo}}
+\index{UpdateOutputTwo@{UpdateOutputTwo}!PowerConduit@{PowerConduit}}
+\doxysubsubsection{\texorpdfstring{UpdateOutputTwo()}{UpdateOutputTwo()}}
+{\footnotesize\ttfamily void Power\+Conduit.\+Update\+Output\+Two (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [private]}}
+
+
+
+Makes connections from this conduit to another conduit or a machine. 
+
+\mbox{\Hypertarget{classPowerConduit_a4797e85664f7e5e5e17b84de721979a7}\label{classPowerConduit_a4797e85664f7e5e5e17b84de721979a7}} 
+\index{PowerConduit@{PowerConduit}!UpdatePowerReceiver@{UpdatePowerReceiver}}
+\index{UpdatePowerReceiver@{UpdatePowerReceiver}!PowerConduit@{PowerConduit}}
+\doxysubsubsection{\texorpdfstring{UpdatePowerReceiver()}{UpdatePowerReceiver()}}
+{\footnotesize\ttfamily void Power\+Conduit.\+Update\+Power\+Receiver (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [private]}}
+
+
+
+Gets power values from power receiver. 
+
+
+
+\doxysubsection{Member Data Documentation}
+\mbox{\Hypertarget{classPowerConduit_a8d8f6b9138c2ec2f5fc68c0eecc03cbf}\label{classPowerConduit_a8d8f6b9138c2ec2f5fc68c0eecc03cbf}} 
+\index{PowerConduit@{PowerConduit}!address@{address}}
+\index{address@{address}!PowerConduit@{PowerConduit}}
+\doxysubsubsection{\texorpdfstring{address}{address}}
+{\footnotesize\ttfamily int Power\+Conduit.\+address}
+
+\mbox{\Hypertarget{classPowerConduit_a17493ead6b5c980161daad866021744b}\label{classPowerConduit_a17493ead6b5c980161daad866021744b}} 
+\index{PowerConduit@{PowerConduit}!builtObjects@{builtObjects}}
+\index{builtObjects@{builtObjects}!PowerConduit@{PowerConduit}}
+\doxysubsubsection{\texorpdfstring{builtObjects}{builtObjects}}
+{\footnotesize\ttfamily Game\+Object Power\+Conduit.\+built\+Objects\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{classPowerConduit_aac270d5f4367ba20de70d6cf0e6e3ea6}\label{classPowerConduit_aac270d5f4367ba20de70d6cf0e6e3ea6}} 
+\index{PowerConduit@{PowerConduit}!connectionAttempts@{connectionAttempts}}
+\index{connectionAttempts@{connectionAttempts}!PowerConduit@{PowerConduit}}
+\doxysubsubsection{\texorpdfstring{connectionAttempts}{connectionAttempts}}
+{\footnotesize\ttfamily int Power\+Conduit.\+connection\+Attempts}
+
+\mbox{\Hypertarget{classPowerConduit_ac84ec618e3004a7246804f1cd7eb3f5c}\label{classPowerConduit_ac84ec618e3004a7246804f1cd7eb3f5c}} 
+\index{PowerConduit@{PowerConduit}!connectionFailed@{connectionFailed}}
+\index{connectionFailed@{connectionFailed}!PowerConduit@{PowerConduit}}
+\doxysubsubsection{\texorpdfstring{connectionFailed}{connectionFailed}}
+{\footnotesize\ttfamily bool Power\+Conduit.\+connection\+Failed}
+
+\mbox{\Hypertarget{classPowerConduit_a56731e4f44281210a251943a4052e35c}\label{classPowerConduit_a56731e4f44281210a251943a4052e35c}} 
+\index{PowerConduit@{PowerConduit}!connectionLine@{connectionLine}}
+\index{connectionLine@{connectionLine}!PowerConduit@{PowerConduit}}
+\doxysubsubsection{\texorpdfstring{connectionLine}{connectionLine}}
+{\footnotesize\ttfamily Line\+Renderer Power\+Conduit.\+connection\+Line\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{classPowerConduit_acdc854e2183b7a69f42448f0a3e08028}\label{classPowerConduit_acdc854e2183b7a69f42448f0a3e08028}} 
+\index{PowerConduit@{PowerConduit}!connectionLine2@{connectionLine2}}
+\index{connectionLine2@{connectionLine2}!PowerConduit@{PowerConduit}}
+\doxysubsubsection{\texorpdfstring{connectionLine2}{connectionLine2}}
+{\footnotesize\ttfamily Game\+Object Power\+Conduit.\+connection\+Line2\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{classPowerConduit_a6091f009e2a84ba36b61aac7a9be540e}\label{classPowerConduit_a6091f009e2a84ba36b61aac7a9be540e}} 
+\index{PowerConduit@{PowerConduit}!connectionObject@{connectionObject}}
+\index{connectionObject@{connectionObject}!PowerConduit@{PowerConduit}}
+\doxysubsubsection{\texorpdfstring{connectionObject}{connectionObject}}
+{\footnotesize\ttfamily Game\+Object Power\+Conduit.\+connection\+Object}
+
+\mbox{\Hypertarget{classPowerConduit_a1f5b2bd23b52eaa170d688bed4d5b0d0}\label{classPowerConduit_a1f5b2bd23b52eaa170d688bed4d5b0d0}} 
+\index{PowerConduit@{PowerConduit}!creationMethod@{creationMethod}}
+\index{creationMethod@{creationMethod}!PowerConduit@{PowerConduit}}
+\doxysubsubsection{\texorpdfstring{creationMethod}{creationMethod}}
+{\footnotesize\ttfamily string Power\+Conduit.\+creation\+Method = \char`\"{}built\char`\"{}}
+
+\mbox{\Hypertarget{classPowerConduit_ac66734305f15a754f5a476ee66ef1e12}\label{classPowerConduit_ac66734305f15a754f5a476ee66ef1e12}} 
+\index{PowerConduit@{PowerConduit}!dualConnectionAttempts@{dualConnectionAttempts}}
+\index{dualConnectionAttempts@{dualConnectionAttempts}!PowerConduit@{PowerConduit}}
+\doxysubsubsection{\texorpdfstring{dualConnectionAttempts}{dualConnectionAttempts}}
+{\footnotesize\ttfamily int Power\+Conduit.\+dual\+Connection\+Attempts}
+
+\mbox{\Hypertarget{classPowerConduit_a93311bcf5c18aac8998a6f10c21d27ab}\label{classPowerConduit_a93311bcf5c18aac8998a6f10c21d27ab}} 
+\index{PowerConduit@{PowerConduit}!dualOutput@{dualOutput}}
+\index{dualOutput@{dualOutput}!PowerConduit@{PowerConduit}}
+\doxysubsubsection{\texorpdfstring{dualOutput}{dualOutput}}
+{\footnotesize\ttfamily bool Power\+Conduit.\+dual\+Output}
+
+\mbox{\Hypertarget{classPowerConduit_a41e1554cbe31094321093f7090291bd4}\label{classPowerConduit_a41e1554cbe31094321093f7090291bd4}} 
+\index{PowerConduit@{PowerConduit}!ID@{ID}}
+\index{ID@{ID}!PowerConduit@{PowerConduit}}
+\doxysubsubsection{\texorpdfstring{ID}{ID}}
+{\footnotesize\ttfamily string Power\+Conduit.\+ID = \char`\"{}unassigned\char`\"{}}
+
+\mbox{\Hypertarget{classPowerConduit_a952d90b94576212784e6fc5b6b0c66d7}\label{classPowerConduit_a952d90b94576212784e6fc5b6b0c66d7}} 
+\index{PowerConduit@{PowerConduit}!inputID@{inputID}}
+\index{inputID@{inputID}!PowerConduit@{PowerConduit}}
+\doxysubsubsection{\texorpdfstring{inputID}{inputID}}
+{\footnotesize\ttfamily string Power\+Conduit.\+input\+ID}
+
+\mbox{\Hypertarget{classPowerConduit_a744f1a79093eed0af5111b78b0f5b3d3}\label{classPowerConduit_a744f1a79093eed0af5111b78b0f5b3d3}} 
+\index{PowerConduit@{PowerConduit}!inputObject@{inputObject}}
+\index{inputObject@{inputObject}!PowerConduit@{PowerConduit}}
+\doxysubsubsection{\texorpdfstring{inputObject}{inputObject}}
+{\footnotesize\ttfamily Game\+Object Power\+Conduit.\+input\+Object}
+
+\mbox{\Hypertarget{classPowerConduit_a2517797aaae9337929b24761dd10d3f2}\label{classPowerConduit_a2517797aaae9337929b24761dd10d3f2}} 
+\index{PowerConduit@{PowerConduit}!lineMat@{lineMat}}
+\index{lineMat@{lineMat}!PowerConduit@{PowerConduit}}
+\doxysubsubsection{\texorpdfstring{lineMat}{lineMat}}
+{\footnotesize\ttfamily Material Power\+Conduit.\+line\+Mat}
+
+\mbox{\Hypertarget{classPowerConduit_a0e6829b48ecacbb8f5171c6b57119bc0}\label{classPowerConduit_a0e6829b48ecacbb8f5171c6b57119bc0}} 
+\index{PowerConduit@{PowerConduit}!outputID1@{outputID1}}
+\index{outputID1@{outputID1}!PowerConduit@{PowerConduit}}
+\doxysubsubsection{\texorpdfstring{outputID1}{outputID1}}
+{\footnotesize\ttfamily string Power\+Conduit.\+output\+I\+D1 = \char`\"{}unassigned\char`\"{}}
+
+\mbox{\Hypertarget{classPowerConduit_a405fffcf0982ed64178415dda6441f38}\label{classPowerConduit_a405fffcf0982ed64178415dda6441f38}} 
+\index{PowerConduit@{PowerConduit}!outputID2@{outputID2}}
+\index{outputID2@{outputID2}!PowerConduit@{PowerConduit}}
+\doxysubsubsection{\texorpdfstring{outputID2}{outputID2}}
+{\footnotesize\ttfamily string Power\+Conduit.\+output\+I\+D2 = \char`\"{}unassigned\char`\"{}}
+
+\mbox{\Hypertarget{classPowerConduit_a311c4989c8ac03da0afdf8af11b68a9c}\label{classPowerConduit_a311c4989c8ac03da0afdf8af11b68a9c}} 
+\index{PowerConduit@{PowerConduit}!outputObject1@{outputObject1}}
+\index{outputObject1@{outputObject1}!PowerConduit@{PowerConduit}}
+\doxysubsubsection{\texorpdfstring{outputObject1}{outputObject1}}
+{\footnotesize\ttfamily Game\+Object Power\+Conduit.\+output\+Object1}
+
+\mbox{\Hypertarget{classPowerConduit_a94455e0bcc3edea54dcd1f04880d9af4}\label{classPowerConduit_a94455e0bcc3edea54dcd1f04880d9af4}} 
+\index{PowerConduit@{PowerConduit}!outputObject2@{outputObject2}}
+\index{outputObject2@{outputObject2}!PowerConduit@{PowerConduit}}
+\doxysubsubsection{\texorpdfstring{outputObject2}{outputObject2}}
+{\footnotesize\ttfamily Game\+Object Power\+Conduit.\+output\+Object2}
+
+\mbox{\Hypertarget{classPowerConduit_a46103e8845c17116cbd1866656ceccf8}\label{classPowerConduit_a46103e8845c17116cbd1866656ceccf8}} 
+\index{PowerConduit@{PowerConduit}!outputObjects@{outputObjects}}
+\index{outputObjects@{outputObjects}!PowerConduit@{PowerConduit}}
+\doxysubsubsection{\texorpdfstring{outputObjects}{outputObjects}}
+{\footnotesize\ttfamily Game\+Object \mbox{[}$\,$\mbox{]} Power\+Conduit.\+output\+Objects\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{classPowerConduit_aa7dc2da48af9c4b9d7e2fb3d72c530ed}\label{classPowerConduit_aa7dc2da48af9c4b9d7e2fb3d72c530ed}} 
+\index{PowerConduit@{PowerConduit}!powerAmount@{powerAmount}}
+\index{powerAmount@{powerAmount}!PowerConduit@{PowerConduit}}
+\doxysubsubsection{\texorpdfstring{powerAmount}{powerAmount}}
+{\footnotesize\ttfamily int Power\+Conduit.\+power\+Amount}
+
+\mbox{\Hypertarget{classPowerConduit_a7e9046569baebff6becd3fa715b5ab59}\label{classPowerConduit_a7e9046569baebff6becd3fa715b5ab59}} 
+\index{PowerConduit@{PowerConduit}!powerReceiver@{powerReceiver}}
+\index{powerReceiver@{powerReceiver}!PowerConduit@{PowerConduit}}
+\doxysubsubsection{\texorpdfstring{powerReceiver}{powerReceiver}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classPowerReceiver}{Power\+Receiver}} Power\+Conduit.\+power\+Receiver}
+
+\mbox{\Hypertarget{classPowerConduit_a2c7d0c8f99f2e2d133d6d301d2838805}\label{classPowerConduit_a2c7d0c8f99f2e2d133d6d301d2838805}} 
+\index{PowerConduit@{PowerConduit}!range@{range}}
+\index{range@{range}!PowerConduit@{PowerConduit}}
+\doxysubsubsection{\texorpdfstring{range}{range}}
+{\footnotesize\ttfamily int Power\+Conduit.\+range = 6}
+
+\mbox{\Hypertarget{classPowerConduit_a754e45f5e3be8cb360ac30143a1acc17}\label{classPowerConduit_a754e45f5e3be8cb360ac30143a1acc17}} 
+\index{PowerConduit@{PowerConduit}!updateTick@{updateTick}}
+\index{updateTick@{updateTick}!PowerConduit@{PowerConduit}}
+\doxysubsubsection{\texorpdfstring{updateTick}{updateTick}}
+{\footnotesize\ttfamily float Power\+Conduit.\+update\+Tick\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{PowerConduit_8cs}{Power\+Conduit.\+cs}}\end{DoxyCompactItemize}

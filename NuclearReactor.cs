@@ -11,7 +11,7 @@ public class NuclearReactor : MonoBehaviour
     public int turbineCount;
     public bool sufficientCooling;
 
-    // Called once per frame by unity engine
+    //! Called once per frame by unity engine.
     public void Update()
     {
         updateTick += 1 * Time.deltaTime;

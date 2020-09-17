@@ -35,7 +35,7 @@ public class AlloySmelter : MonoBehaviour
     private int machineTimer;
     private GameObject builtObjects;
 
-    // Called by unity engine on start up to initialize variables
+    //! Called by unity engine on start up to initialize variables.
     public void Start()
     {
         powerReceiver = gameObject.AddComponent<PowerReceiver>();
@@ -49,7 +49,7 @@ public class AlloySmelter : MonoBehaviour
         conduitItem = GetComponentInChildren<ConduitItem>(true);
     }
 
-    // Called once per frame by unity engine
+    //! Called once per frame by unity engine.
     public void Update()
     {
         updateTick += 1 * Time.deltaTime;
@@ -125,7 +125,7 @@ public class AlloySmelter : MonoBehaviour
         }
     }
 
-    // The object exists, is active and is not a standard building block
+    //! Returns true if the object exists, is active and is not a standard building block.
     bool IsValidObject(GameObject obj)
     {
         if (obj != null)
@@ -135,13 +135,13 @@ public class AlloySmelter : MonoBehaviour
         return false;
     }
 
-    // The object is a potential output connection
+    //! The object is a potential output connection.
     bool IsValidOutputObject(GameObject obj)
     {
         return outputObject == null && inputObject1 != null && inputObject2 != null && obj != inputObject1 && obj != inputObject2 && obj != gameObject;
     }
 
-    // Finds a universal conduit to use as an output
+    //! Finds a universal conduit to use as an output.
     private void GetOutputConduit()
     {
         GameObject[] allObjects = GameObject.FindGameObjectsWithTag("Built");
@@ -182,7 +182,7 @@ public class AlloySmelter : MonoBehaviour
         }
     }
 
-    // Consumes input items and produces an item for output
+    //! Consumes input items and produces an item for output.
     private void SmeltAlloy()
     {
         if (inputObject1.GetComponent<UniversalConduit>() != null && inputObject2.GetComponent<UniversalConduit>() != null)
@@ -289,7 +289,7 @@ public class AlloySmelter : MonoBehaviour
         }
     }
 
-    // Items are moved to output conduit, sounds and special effects are created
+    //! Items are moved to output conduit, sounds and special effects are created.
     private void OutputToConduit()
     {
         if (outputObject != null)
@@ -351,7 +351,7 @@ public class AlloySmelter : MonoBehaviour
         }
     }
 
-    // Gets power values from power receiver
+    //! Gets power values from power receiver.
     private void UpdatePowerReceiver()
     {
         powerReceiver.ID = ID;

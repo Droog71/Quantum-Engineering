@@ -26,7 +26,7 @@ public class PowerConduit : MonoBehaviour
     private GameObject builtObjects;
     public PowerReceiver powerReceiver;
 
-    // Called by unity engine on start up to initialize variables
+    //! Called by unity engine on start up to initialize variables.
     public void Start()
     {
         connectionLine = gameObject.AddComponent<LineRenderer>();
@@ -40,7 +40,7 @@ public class PowerConduit : MonoBehaviour
         outputObjects = new GameObject[] { outputObject1, outputObject2 };
     }
 
-    // Called once per frame by unity engine
+    //! Called once per frame by unity engine.
     public void Update()
     {
         updateTick += 1 * Time.deltaTime;
@@ -123,7 +123,7 @@ public class PowerConduit : MonoBehaviour
         }
     }
 
-    // Used to de-energize output objects when the power conduit is destroyed.
+    //! Used to de-energize output objects when the power conduit is destroyed.
     public void OnDestroy()
     {
         if (connectionLine2 != null)
@@ -156,7 +156,7 @@ public class PowerConduit : MonoBehaviour
         }
     }
 
-    // Gets power values from power receiver
+    //! Gets power values from power receiver.
     private void UpdatePowerReceiver()
     {
         powerReceiver.ID = ID;
@@ -170,7 +170,7 @@ public class PowerConduit : MonoBehaviour
         }
     }
 
-    // The object exists, is active and is not a standard building block
+    //! The object exists, is active and is not a standard building block.
     bool IsValidObject(GameObject obj)
     {
         if (obj != null)
@@ -180,7 +180,7 @@ public class PowerConduit : MonoBehaviour
         return false;
     }
 
-    // Creates a line renderer to the second output object
+    //! Creates a line renderer to the second output object
     private void CreateOutput2ConnectionLine()
     {
         connectionLine2 = Instantiate(connectionObject, outputObject2.transform.position, outputObject2.transform.rotation);
@@ -194,7 +194,7 @@ public class PowerConduit : MonoBehaviour
         connectionLine2.GetComponent<LineRenderer>().SetPosition(1, outputObject2.transform.position);
     }
 
-    // Connects to a another power conduit.
+    //! Connects to a another power conduit.
     private void ConnectOutputOneToConduit(GameObject obj)
     {
         if (obj != gameObject)
@@ -251,7 +251,7 @@ public class PowerConduit : MonoBehaviour
         }
     }
 
-    // Connects to a another power conduit.
+    //! Connects to a another power conduit.
     private void ConnectOutputTwoToConduit(GameObject obj)
     {
         if (obj != gameObject)
@@ -308,7 +308,7 @@ public class PowerConduit : MonoBehaviour
         }
     }
 
-    // Designates conduit as an output with assigned ID
+    //! Designates conduit as an output with assigned ID.
     private void InitializeOutputConduitOne(GameObject obj)
     {
         outputObject1 = obj;
@@ -321,7 +321,7 @@ public class PowerConduit : MonoBehaviour
         connectionLine.enabled = true;
     }
 
-    // Designates conduit as an output with assigned ID
+    //! Designates conduit as an output with assigned ID.
     private void InitializeOutputConduitTwo(GameObject obj)
     {
         outputObject2 = obj;
@@ -332,7 +332,7 @@ public class PowerConduit : MonoBehaviour
         CreateOutput2ConnectionLine();
     }
 
-    // Attempts to connect to a another power conduit.
+    //! Attempts to connect to a another power conduit.
     private void AttemptConduitOneConnection(GameObject obj)
     {
         if (creationMethod.Equals("spawned") && obj.GetComponent<PowerConduit>().ID.Equals(outputID1))
@@ -346,7 +346,7 @@ public class PowerConduit : MonoBehaviour
         }
     }
 
-    // Attempts to connect to a another power conduit.
+    //! Attempts to connect to a another power conduit.
     private void AttemptConduitTwoConnection(GameObject obj)
     {
         if (creationMethod.Equals("spawned") && obj.GetComponent<PowerConduit>().ID.Equals(outputID2))
@@ -360,7 +360,7 @@ public class PowerConduit : MonoBehaviour
         }
     }
 
-    // Designates machine as an output with assigned ID.
+    //! Designates machine as an output with assigned ID.
     private void InitializeMachineOneConnection(GameObject obj)
     {
         outputObject1 = obj;
@@ -371,7 +371,7 @@ public class PowerConduit : MonoBehaviour
         connectionLine.enabled = true;
     }
 
-    // Attempts to connect to a machine.
+    //! Attempts to connect to a machine.
     private void AttemptMachineOneConnection(GameObject obj)
     {
         if (creationMethod.Equals("spawned") && obj.GetComponent<PowerReceiver>().ID.Equals(outputID1))
@@ -385,7 +385,7 @@ public class PowerConduit : MonoBehaviour
         }
     }
 
-    // Designates machine as an output with assigned ID.
+    //! Designates machine as an output with assigned ID.
     private void InitializeMachineTwoConnection(GameObject obj)
     {
         outputObject2 = obj;
@@ -394,7 +394,7 @@ public class PowerConduit : MonoBehaviour
         CreateOutput2ConnectionLine();
     }
 
-    // Attempts to connect to a machine.
+    //! Attempts to connect to a machine.
     private void AttemptMachineTwoConnection(GameObject obj)
     {
         if (creationMethod.Equals("spawned") && obj.GetComponent<PowerReceiver>().ID.Equals(outputID2))
@@ -408,7 +408,7 @@ public class PowerConduit : MonoBehaviour
         }
     }
 
-    // Makes connections from this conduit to another conduti or a machine.
+    //! Makes connections from this conduit to another conduti or a machine.
     private void UpdateOutputOne()
     {
         connectionAttempts += 1;
@@ -456,7 +456,7 @@ public class PowerConduit : MonoBehaviour
         }
     }
 
-    // Makes connections from this conduit to another conduit or a machine.
+    //! Makes connections from this conduit to another conduit or a machine.
     private void UpdateOutputTwo()
     {
         dualConnectionAttempts += 1;
@@ -501,7 +501,7 @@ public class PowerConduit : MonoBehaviour
         }
     }
 
-    // Distributes power to output 1
+    //! Distributes power to output 1.
     private void DistributePowerToConnectionOne()
     {
         if (outputObject1.GetComponent<PowerReceiver>() != null)
@@ -543,7 +543,7 @@ public class PowerConduit : MonoBehaviour
         }
     }
 
-    // Distributes power to output 2
+    //! Distributes power to output 2.
     private void DistributePowerToConnectionTwo()
     {
         if (outputObject2.GetComponent<PowerReceiver>() != null)

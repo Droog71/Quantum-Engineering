@@ -5,7 +5,7 @@ public class DarkMatter: MonoBehaviour
     private float size;
     public GameObject collector;
 
-    // Called once per frame by unity engine
+    //! Called once per frame by unity engine
     public void Update()
     {
         if (size < 10)

@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 
+//! This class handles animation of the robotic arm of the auto crafter machine.
 public class PrintingArm : MonoBehaviour
 {
     public GameObject autoCrafter;
@@ -12,14 +13,14 @@ public class PrintingArm : MonoBehaviour
     bool soundPlayed;
     float timer;
 
-    // Start is called before the first frame update
+    //! Start is called before the first frame update.
     void Start()
     {
         horizontalArmStartPosition = horizontalArm.transform.position;
         verticalArmStartPosition = verticalArm.transform.position;
     }
 
-    // Update is called once per frame
+    //! Update is called once per frame.
     void Update()
     {
         if (autoCrafter.GetComponent<AutoCrafter>().inputObject != null)
@@ -38,7 +39,6 @@ public class PrintingArm : MonoBehaviour
             {
                 if (soundPlayed == false)
                 {
-                    //retriever.GetComponent<AudioSource>().Play();
                     soundPlayed = true;
                 }
                 horizontalArm.transform.position += horizontalArm.transform.right * 1 * Time.deltaTime;
@@ -74,7 +74,7 @@ public class PrintingArm : MonoBehaviour
             {
                 if (soundPlayed == false)
                 {
-                    //retriever.GetComponent<AudioSource>().Play();
+                    //!retriever.GetComponent<AudioSource>().Play();
                     soundPlayed = true;
                 }
                 horizontalArm.transform.position -= horizontalArm.transform.right * 1 * Time.deltaTime;

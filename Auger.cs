@@ -21,7 +21,7 @@ public class Auger : MonoBehaviour
     private float updateTick;
     private int machineTimer;
 
-    // Called by unity engine on start up to initialize variables
+    //! Called by unity engine on start up to initialize variables.
     public void Start()
     {
         powerReceiver = gameObject.AddComponent<PowerReceiver>();
@@ -34,7 +34,7 @@ public class Auger : MonoBehaviour
         connectionLine.enabled = false;
     }
 
-    // Called once per frame by unity engine
+    //! Called once per frame by unity engine.
     public void Update()
     {
         updateTick += 1 * Time.deltaTime;
@@ -94,7 +94,7 @@ public class Auger : MonoBehaviour
         }
     }
 
-    // Gets power values from power receiver
+    //! Gets power values from power receiver.
     private void UpdatePowerReceiver()
     {
         powerReceiver.ID = ID;

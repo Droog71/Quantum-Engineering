@@ -1,0 +1,156 @@
+\hypertarget{classMarketGUI}{}\doxysection{Market\+G\+UI Class Reference}
+\label{classMarketGUI}\index{MarketGUI@{MarketGUI}}
+Inheritance diagram for Market\+G\+UI\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{classMarketGUI}
+\end{center}
+\end{figure}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{classMarketGUI_a27bf79ef18ea27b05368fb29cc7cbd64}{Start}} ()
+\begin{DoxyCompactList}\small\item\em Called by unity engine on start up to initialize variables. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classMarketGUI_ade1dbb5ed6a24cd1cccd27694141a796}{Update}} ()
+\begin{DoxyCompactList}\small\item\em Called once per frame by unity engine. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classMarketGUI_aa882d9c04169dc636be052cf6db504b1}{On\+G\+UI}} ()
+\begin{DoxyCompactList}\small\item\em Called by unity engine for rendering and handling G\+UI events. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Private Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{classMarketGUI_a26eac2fdeaaddc0f3e2914b3d4704d33}{Save\+Prices}} ()
+\begin{DoxyCompactList}\small\item\em Saves world specific item prices. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classMarketGUI_a8f214a31aec15a380563815438da4c01}{Buy\+Item}} (string item)
+\begin{DoxyCompactList}\small\item\em Buy an item from the market. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classMarketGUI_ab276c63806cabb12d697e088530f1c34}{Sell\+Item}} (string item)
+\begin{DoxyCompactList}\small\item\em Sell an item to the market. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classPlayerController}{Player\+Controller}} \mbox{\hyperlink{classMarketGUI_a382ac556d1ce889314f2e78c4f250787}{player\+Controller}}
+\item 
+\mbox{\hyperlink{classGuiCoordinates}{Gui\+Coordinates}} \mbox{\hyperlink{classMarketGUI_a3faa5d02349365e5259a430d562b15aa}{gui\+Coordinates}}
+\item 
+\mbox{\hyperlink{classTextureDictionary}{Texture\+Dictionary}} \mbox{\hyperlink{classMarketGUI_a61c1e052f7fa6e740cc220dd12a5db49}{texture\+Dictionary}}
+\item 
+int \mbox{\hyperlink{classMarketGUI_a1bd5fcde095f1df2e689a74ca35f8143}{market\+Page}}
+\item 
+Dictionary$<$ string, int $>$ \mbox{\hyperlink{classMarketGUI_a4323b3fdf47f0bc02b7d16e9a00afb1e}{price\+Dictionary}}
+\item 
+bool \mbox{\hyperlink{classMarketGUI_a87fbb0b39785e414a489b8859c241384}{selling}}
+\item 
+bool \mbox{\hyperlink{classMarketGUI_abd114bf3f0dab1a60fb7c5b198d82d01}{loaded\+Values}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{classMarketGUI_a8f214a31aec15a380563815438da4c01}\label{classMarketGUI_a8f214a31aec15a380563815438da4c01}} 
+\index{MarketGUI@{MarketGUI}!BuyItem@{BuyItem}}
+\index{BuyItem@{BuyItem}!MarketGUI@{MarketGUI}}
+\doxysubsubsection{\texorpdfstring{BuyItem()}{BuyItem()}}
+{\footnotesize\ttfamily void Market\+G\+U\+I.\+Buy\+Item (\begin{DoxyParamCaption}\item[{string}]{item }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [private]}}
+
+
+
+Buy an item from the market. 
+
+\mbox{\Hypertarget{classMarketGUI_aa882d9c04169dc636be052cf6db504b1}\label{classMarketGUI_aa882d9c04169dc636be052cf6db504b1}} 
+\index{MarketGUI@{MarketGUI}!OnGUI@{OnGUI}}
+\index{OnGUI@{OnGUI}!MarketGUI@{MarketGUI}}
+\doxysubsubsection{\texorpdfstring{OnGUI()}{OnGUI()}}
+{\footnotesize\ttfamily void Market\+G\+U\+I.\+On\+G\+UI (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Called by unity engine for rendering and handling G\+UI events. 
+
+\mbox{\Hypertarget{classMarketGUI_a26eac2fdeaaddc0f3e2914b3d4704d33}\label{classMarketGUI_a26eac2fdeaaddc0f3e2914b3d4704d33}} 
+\index{MarketGUI@{MarketGUI}!SavePrices@{SavePrices}}
+\index{SavePrices@{SavePrices}!MarketGUI@{MarketGUI}}
+\doxysubsubsection{\texorpdfstring{SavePrices()}{SavePrices()}}
+{\footnotesize\ttfamily void Market\+G\+U\+I.\+Save\+Prices (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [private]}}
+
+
+
+Saves world specific item prices. 
+
+\mbox{\Hypertarget{classMarketGUI_ab276c63806cabb12d697e088530f1c34}\label{classMarketGUI_ab276c63806cabb12d697e088530f1c34}} 
+\index{MarketGUI@{MarketGUI}!SellItem@{SellItem}}
+\index{SellItem@{SellItem}!MarketGUI@{MarketGUI}}
+\doxysubsubsection{\texorpdfstring{SellItem()}{SellItem()}}
+{\footnotesize\ttfamily void Market\+G\+U\+I.\+Sell\+Item (\begin{DoxyParamCaption}\item[{string}]{item }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [private]}}
+
+
+
+Sell an item to the market. 
+
+\mbox{\Hypertarget{classMarketGUI_a27bf79ef18ea27b05368fb29cc7cbd64}\label{classMarketGUI_a27bf79ef18ea27b05368fb29cc7cbd64}} 
+\index{MarketGUI@{MarketGUI}!Start@{Start}}
+\index{Start@{Start}!MarketGUI@{MarketGUI}}
+\doxysubsubsection{\texorpdfstring{Start()}{Start()}}
+{\footnotesize\ttfamily void Market\+G\+U\+I.\+Start (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Called by unity engine on start up to initialize variables. 
+
+\mbox{\Hypertarget{classMarketGUI_ade1dbb5ed6a24cd1cccd27694141a796}\label{classMarketGUI_ade1dbb5ed6a24cd1cccd27694141a796}} 
+\index{MarketGUI@{MarketGUI}!Update@{Update}}
+\index{Update@{Update}!MarketGUI@{MarketGUI}}
+\doxysubsubsection{\texorpdfstring{Update()}{Update()}}
+{\footnotesize\ttfamily void Market\+G\+U\+I.\+Update (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Called once per frame by unity engine. 
+
+
+
+\doxysubsection{Member Data Documentation}
+\mbox{\Hypertarget{classMarketGUI_a3faa5d02349365e5259a430d562b15aa}\label{classMarketGUI_a3faa5d02349365e5259a430d562b15aa}} 
+\index{MarketGUI@{MarketGUI}!guiCoordinates@{guiCoordinates}}
+\index{guiCoordinates@{guiCoordinates}!MarketGUI@{MarketGUI}}
+\doxysubsubsection{\texorpdfstring{guiCoordinates}{guiCoordinates}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classGuiCoordinates}{Gui\+Coordinates}} Market\+G\+U\+I.\+gui\+Coordinates\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{classMarketGUI_abd114bf3f0dab1a60fb7c5b198d82d01}\label{classMarketGUI_abd114bf3f0dab1a60fb7c5b198d82d01}} 
+\index{MarketGUI@{MarketGUI}!loadedValues@{loadedValues}}
+\index{loadedValues@{loadedValues}!MarketGUI@{MarketGUI}}
+\doxysubsubsection{\texorpdfstring{loadedValues}{loadedValues}}
+{\footnotesize\ttfamily bool Market\+G\+U\+I.\+loaded\+Values\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{classMarketGUI_a1bd5fcde095f1df2e689a74ca35f8143}\label{classMarketGUI_a1bd5fcde095f1df2e689a74ca35f8143}} 
+\index{MarketGUI@{MarketGUI}!marketPage@{marketPage}}
+\index{marketPage@{marketPage}!MarketGUI@{MarketGUI}}
+\doxysubsubsection{\texorpdfstring{marketPage}{marketPage}}
+{\footnotesize\ttfamily int Market\+G\+U\+I.\+market\+Page\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{classMarketGUI_a382ac556d1ce889314f2e78c4f250787}\label{classMarketGUI_a382ac556d1ce889314f2e78c4f250787}} 
+\index{MarketGUI@{MarketGUI}!playerController@{playerController}}
+\index{playerController@{playerController}!MarketGUI@{MarketGUI}}
+\doxysubsubsection{\texorpdfstring{playerController}{playerController}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classPlayerController}{Player\+Controller}} Market\+G\+U\+I.\+player\+Controller\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{classMarketGUI_a4323b3fdf47f0bc02b7d16e9a00afb1e}\label{classMarketGUI_a4323b3fdf47f0bc02b7d16e9a00afb1e}} 
+\index{MarketGUI@{MarketGUI}!priceDictionary@{priceDictionary}}
+\index{priceDictionary@{priceDictionary}!MarketGUI@{MarketGUI}}
+\doxysubsubsection{\texorpdfstring{priceDictionary}{priceDictionary}}
+{\footnotesize\ttfamily Dictionary$<$string, int$>$ Market\+G\+U\+I.\+price\+Dictionary\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{classMarketGUI_a87fbb0b39785e414a489b8859c241384}\label{classMarketGUI_a87fbb0b39785e414a489b8859c241384}} 
+\index{MarketGUI@{MarketGUI}!selling@{selling}}
+\index{selling@{selling}!MarketGUI@{MarketGUI}}
+\doxysubsubsection{\texorpdfstring{selling}{selling}}
+{\footnotesize\ttfamily bool Market\+G\+U\+I.\+selling\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{classMarketGUI_a61c1e052f7fa6e740cc220dd12a5db49}\label{classMarketGUI_a61c1e052f7fa6e740cc220dd12a5db49}} 
+\index{MarketGUI@{MarketGUI}!textureDictionary@{textureDictionary}}
+\index{textureDictionary@{textureDictionary}!MarketGUI@{MarketGUI}}
+\doxysubsubsection{\texorpdfstring{textureDictionary}{textureDictionary}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classTextureDictionary}{Texture\+Dictionary}} Market\+G\+U\+I.\+texture\+Dictionary\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{MarketGUI_8cs}{Market\+G\+U\+I.\+cs}}\end{DoxyCompactItemize}

@@ -1,0 +1,96 @@
+\hypertarget{classPluginLoader}{}\doxysection{Plugin\+Loader Class Reference}
+\label{classPluginLoader}\index{PluginLoader@{PluginLoader}}
+Inheritance diagram for Plugin\+Loader\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{classPluginLoader}
+\end{center}
+\end{figure}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{classPluginLoader_a0df7b21890324f2f051c8d02a2e839fe}{Start}} ()
+\begin{DoxyCompactList}\small\item\em Adds plugins from mods to the game. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Private Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{classPluginLoader_a66d52d354f48d99794d9a9f7aa08b581}{Load\+Plugin}} (string plugin\+Name, string url)
+\begin{DoxyCompactList}\small\item\em Starts the assembly loading coroutine. \end{DoxyCompactList}\item 
+I\+Enumerator \mbox{\hyperlink{classPluginLoader_a3f6589a3102a6bd26bad8942e6d65359}{Load\+Assembly}} (string plugin\+Name, string url)
+\begin{DoxyCompactList}\small\item\em Uses Get\+Assembly to load classes from the dll and add them to a dictionary. \end{DoxyCompactList}\item 
+Assembly \mbox{\hyperlink{classPluginLoader_a177ffdab951504f9ee77cdfa802a136a}{Get\+Assembly}} (Unity\+Web\+Request uwr)
+\begin{DoxyCompactList}\small\item\em Loads assembly from file. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classPluginLoader_a1a6b89e7d968a14746eabdaadf731b5e}{Add\+Plugin}} (Assembly dll, string plugin\+Name)
+\begin{DoxyCompactList}\small\item\em Gets type by name from dll. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+Assembly \mbox{\hyperlink{classPluginLoader_a198ebc896addc6f9248719cc760bbb5b}{assembly}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{classPluginLoader_a1a6b89e7d968a14746eabdaadf731b5e}\label{classPluginLoader_a1a6b89e7d968a14746eabdaadf731b5e}} 
+\index{PluginLoader@{PluginLoader}!AddPlugin@{AddPlugin}}
+\index{AddPlugin@{AddPlugin}!PluginLoader@{PluginLoader}}
+\doxysubsubsection{\texorpdfstring{AddPlugin()}{AddPlugin()}}
+{\footnotesize\ttfamily void Plugin\+Loader.\+Add\+Plugin (\begin{DoxyParamCaption}\item[{Assembly}]{dll,  }\item[{string}]{plugin\+Name }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [private]}}
+
+
+
+Gets type by name from dll. 
+
+\mbox{\Hypertarget{classPluginLoader_a177ffdab951504f9ee77cdfa802a136a}\label{classPluginLoader_a177ffdab951504f9ee77cdfa802a136a}} 
+\index{PluginLoader@{PluginLoader}!GetAssembly@{GetAssembly}}
+\index{GetAssembly@{GetAssembly}!PluginLoader@{PluginLoader}}
+\doxysubsubsection{\texorpdfstring{GetAssembly()}{GetAssembly()}}
+{\footnotesize\ttfamily Assembly Plugin\+Loader.\+Get\+Assembly (\begin{DoxyParamCaption}\item[{Unity\+Web\+Request}]{uwr }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [private]}}
+
+
+
+Loads assembly from file. 
+
+\mbox{\Hypertarget{classPluginLoader_a3f6589a3102a6bd26bad8942e6d65359}\label{classPluginLoader_a3f6589a3102a6bd26bad8942e6d65359}} 
+\index{PluginLoader@{PluginLoader}!LoadAssembly@{LoadAssembly}}
+\index{LoadAssembly@{LoadAssembly}!PluginLoader@{PluginLoader}}
+\doxysubsubsection{\texorpdfstring{LoadAssembly()}{LoadAssembly()}}
+{\footnotesize\ttfamily I\+Enumerator Plugin\+Loader.\+Load\+Assembly (\begin{DoxyParamCaption}\item[{string}]{plugin\+Name,  }\item[{string}]{url }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [private]}}
+
+
+
+Uses Get\+Assembly to load classes from the dll and add them to a dictionary. 
+
+\mbox{\Hypertarget{classPluginLoader_a66d52d354f48d99794d9a9f7aa08b581}\label{classPluginLoader_a66d52d354f48d99794d9a9f7aa08b581}} 
+\index{PluginLoader@{PluginLoader}!LoadPlugin@{LoadPlugin}}
+\index{LoadPlugin@{LoadPlugin}!PluginLoader@{PluginLoader}}
+\doxysubsubsection{\texorpdfstring{LoadPlugin()}{LoadPlugin()}}
+{\footnotesize\ttfamily void Plugin\+Loader.\+Load\+Plugin (\begin{DoxyParamCaption}\item[{string}]{plugin\+Name,  }\item[{string}]{url }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [private]}}
+
+
+
+Starts the assembly loading coroutine. 
+
+\mbox{\Hypertarget{classPluginLoader_a0df7b21890324f2f051c8d02a2e839fe}\label{classPluginLoader_a0df7b21890324f2f051c8d02a2e839fe}} 
+\index{PluginLoader@{PluginLoader}!Start@{Start}}
+\index{Start@{Start}!PluginLoader@{PluginLoader}}
+\doxysubsubsection{\texorpdfstring{Start()}{Start()}}
+{\footnotesize\ttfamily void Plugin\+Loader.\+Start (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Adds plugins from mods to the game. 
+
+
+
+\doxysubsection{Member Data Documentation}
+\mbox{\Hypertarget{classPluginLoader_a198ebc896addc6f9248719cc760bbb5b}\label{classPluginLoader_a198ebc896addc6f9248719cc760bbb5b}} 
+\index{PluginLoader@{PluginLoader}!assembly@{assembly}}
+\index{assembly@{assembly}!PluginLoader@{PluginLoader}}
+\doxysubsubsection{\texorpdfstring{assembly}{assembly}}
+{\footnotesize\ttfamily Assembly Plugin\+Loader.\+assembly\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{PluginLoader_8cs}{Plugin\+Loader.\+cs}}\end{DoxyCompactItemize}

@@ -25,7 +25,7 @@ public class DarkMatterConduit : MonoBehaviour
     public ConduitItem storageComputerConduitItem;
     private GameObject builtObjects;
 
-    // Called by unity engine on start up to initialize variables
+    //! Called by unity engine on start up to initialize variables.
     public void Start()
     {
         connectionLine = gameObject.AddComponent<LineRenderer>();
@@ -38,7 +38,7 @@ public class DarkMatterConduit : MonoBehaviour
         builtObjects = GameObject.Find("Built_Objects");
     }
 
-    // Called once per frame by unity engine
+    //! Called once per frame by unity engine.
     public void Update()
     {
         updateTick += 1 * Time.deltaTime;
@@ -82,7 +82,7 @@ public class DarkMatterConduit : MonoBehaviour
         }
     }
 
-    // Used to remove conduit item from storage computer if connected to one
+    //! Used to remove conduit item from storage computer if connected to one.
     void OnDestroy()
     {
         if (storageComputerConduitItem != null)
@@ -91,7 +91,7 @@ public class DarkMatterConduit : MonoBehaviour
         }
     }
 
-    // The object exists, is active and is not a standard building block
+    //! The object exists, is active and is not a standard building block.
     bool IsValidObject(GameObject obj)
     {
         if (obj != null)
@@ -101,13 +101,13 @@ public class DarkMatterConduit : MonoBehaviour
         return false;
     }
 
-    // The object is a potential output connection
+    //! The object is a potential output connection.
     bool IsValidOutputObject(GameObject obj)
     {
         return outputObject == null && inputObject != null && obj != inputObject && obj != gameObject;
     }
 
-    // Returns true if the object is a storage container
+    //! Returns true if the object is a storage container.
     private bool IsStorageContainer(GameObject obj)
     {
         if (obj.GetComponent<InventoryManager>() != null)
@@ -117,7 +117,7 @@ public class DarkMatterConduit : MonoBehaviour
         return false;
     }
 
-    // Makes connections to collectors and other conduits
+    //! Makes connections to collectors and other conduits.
     private void FindConnections()
     {
         GameObject[] allObjects = GameObject.FindGameObjectsWithTag("Built");
@@ -234,7 +234,7 @@ public class DarkMatterConduit : MonoBehaviour
         }
     }
 
-    // Gets values from input object and calls HandleOutput
+    //! Gets values from input object and calls HandleOutput.
     private void HandleIO()
     {
         if (inputObject != null)
@@ -286,7 +286,7 @@ public class DarkMatterConduit : MonoBehaviour
         HandleOutput();
     }
 
-    // Moves dark matter to the output object
+    //! Moves dark matter to the output object.
     private void HandleOutput()
     {
         if (outputObject != null)
@@ -327,6 +327,7 @@ public class DarkMatterConduit : MonoBehaviour
         }
     }
 
+    //! Moves dark matter from the conduit to a storage computer.
     private void OutputToStorageComputer()
     {
         outputID = outputObject.GetComponent<StorageComputer>().ID;
@@ -385,6 +386,7 @@ public class DarkMatterConduit : MonoBehaviour
         }
     }
 
+    //! Moves dark matter to a storage container.
     private void OutputToInventory()
     {
         if (outputObject.GetComponent<RailCart>() != null)

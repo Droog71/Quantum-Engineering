@@ -1,10 +1,11 @@
 ﻿using UnityEngine;
 
+//! This class handles animation of the gear cutter's laser.
 public class LaserCutter : MonoBehaviour
 {
     public GameObject gearCutter;
 
-    // Update is called once per frame
+    //! Update is called once per frame.
     public void Update()
     {
         if (gearCutter.GetComponent<Light>().enabled == true)

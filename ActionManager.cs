@@ -5,13 +5,14 @@ public class ActionManager
     private PlayerController playerController;
     private CombinedMeshManager meshManager;
 
+    //! This class contains all functions called by the input manager.
     public ActionManager(PlayerController playerController)
     {
         this.playerController = playerController;
         meshManager = playerController.gameManager.meshManager;
     }
 
-    // Toggles the crosshair.
+    //! Toggles the crosshair.
     public void ToggleCrosshair()
     {
         if (playerController.crosshairEnabled == true)
@@ -25,7 +26,7 @@ public class ActionManager
         playerController.PlayButtonSound();
     }
 
-    // Toggles the head lamp.
+    //! Toggles the head lamp.
     public void ToggleHeadLamp()
     {
         if (playerController.headlamp.GetComponent<Light>() != null)
@@ -42,7 +43,7 @@ public class ActionManager
         playerController.PlayButtonSound();
     }
 
-    // Toggles the laser cannon.
+    //! Toggles the laser cannon.
     public void ToggleLaserCannon()
     {
         if (playerController.building == true || playerController.destroying == true)
@@ -79,7 +80,7 @@ public class ActionManager
         }
     }
 
-    // Toggles the scanner.
+    //! Toggles the scanner.
     public void ToggleScanner()
     {
         if (playerController.building == true || playerController.destroying == true)
@@ -116,7 +117,7 @@ public class ActionManager
         }
     }
 
-    // Toggles the paint gun.
+    //! Toggles the paint gun.
     public void TogglePaintGun()
     {
         if (playerController.paintGunActive == false)
@@ -153,7 +154,7 @@ public class ActionManager
         }
     }
 
-    // Toggles the inventory GUI.
+    //! Toggles the inventory GUI.
     public void ToggleInventory()
     {
         if (!playerController.GuiOpen())
@@ -192,7 +193,7 @@ public class ActionManager
         }
     }
 
-    // Toggles the crafting GUI.
+    //! Toggles the crafting GUI.
     public void ToggleCraftingGUI()
     {
         if (!playerController.GuiOpen())
@@ -232,7 +233,7 @@ public class ActionManager
         }
     }
 
-    // Toggles the crafting GUI.
+    //! Toggles the crafting GUI.
     public void ToggleMarketGUI()
     {
         if (!playerController.GuiOpen())
@@ -274,7 +275,7 @@ public class ActionManager
         }
     }
 
-    // Toggles the tablet GUI.
+    //! Toggles the tablet GUI.
     public void ToggleTablet()
     {
         if (!playerController.GuiOpen())
@@ -308,7 +309,7 @@ public class ActionManager
         }
     }
 
-    // Moves the player forward.
+    //! Moves the player forward.
     public void WalkForward()
     {
         if (!Physics.Raycast(playerController.mCam.gameObject.transform.position, playerController.mCam.gameObject.transform.forward, out RaycastHit hit, 5))
@@ -326,7 +327,7 @@ public class ActionManager
         }
     }
 
-    // Moves the player backward.
+    //! Moves the player backward.
     public void WalkBackward()
     {
         if (!Physics.Raycast(playerController.mCam.gameObject.transform.position, -playerController.mCam.gameObject.transform.forward, out RaycastHit hit, 5))
@@ -336,7 +337,7 @@ public class ActionManager
         }
     }
 
-    // Moves the player left.
+    //! Moves the player left.
     public void StrafeLeft()
     {
         if (!Physics.Raycast(playerController.mCam.gameObject.transform.position, -playerController.mCam.gameObject.transform.right, out RaycastHit hit, 5))
@@ -345,7 +346,7 @@ public class ActionManager
         }
     }
 
-    // Moves the player right.
+    //! Moves the player right.
     public void StrafeRight()
     {
         if (!Physics.Raycast(playerController.mCam.gameObject.transform.position, playerController.mCam.gameObject.transform.right, out RaycastHit hit, 5))
@@ -354,7 +355,7 @@ public class ActionManager
         }
     }
 
-    // Returns true when the player is walking on metal.
+    //! Returns true when the player is walking on metal.
     private bool OnMetal(RaycastHit hit)
     {
         return hit.collider.gameObject.GetComponent<IronBlock>() != null
@@ -363,7 +364,7 @@ public class ActionManager
         || hit.collider.gameObject.name.Equals("steelHolder(Clone)");
     }
 
-    // Returns true when varied footstep sounds should loop back to the first sound.
+    //! Returns true when varied footstep sounds should loop back to the first sound.
     private bool InitMetalStepSounds()
     {
         return playerController.playerBody.GetComponent<AudioSource>().clip == playerController.footStep1
@@ -373,7 +374,7 @@ public class ActionManager
         || playerController.playerBody.GetComponent<AudioSource>().clip == playerController.metalFootStep1;
     }
 
-    // Returns true when varied footstep sounds should loop back to the first sound.
+    //! Returns true when varied footstep sounds should loop back to the first sound.
     private bool InitGroundStepSounds()
     {
         return playerController.playerBody.GetComponent<AudioSource>().clip == playerController.footStep1
@@ -383,13 +384,13 @@ public class ActionManager
         || playerController.playerBody.GetComponent<AudioSource>().clip == playerController.metalFootStep4;
     }
 
-    // Handles head bob, held item movement and footstep sound effects.
+    //! Handles head bob, held item movement and footstep sound effects.
     public void DoGroundEffects(RaycastHit hit)
     {
-        // HEAD BOB
+        //HEAD BOB
         playerController.mCam.GetComponent<HeadBob>().active = true;
 
-        // HELD OBJECT MOVEMENT
+        //HELD OBJECT MOVEMENT
         if (playerController.gameObject.GetComponent<AudioSource>().isPlaying == true)
         {
             playerController.gameObject.GetComponent<AudioSource>().Stop();
@@ -419,7 +420,7 @@ public class ActionManager
             playerController.paintGun.GetComponent<HeldItemSway>().active = false;
         }
 
-        // FOOTSTEP SOUNDS
+        //FOOTSTEP SOUNDS
         playerController.footStepTimer += 1 * Time.deltaTime;
         if (playerController.footStepTimer >= playerController.footStepSoundFrquency)
         {
@@ -473,7 +474,7 @@ public class ActionManager
         }
     }
 
-    // Stops head bob and held item movement.
+    //! Stops head bob and held item movement.
     public void StopGroundEffects()
     {
         playerController.mCam.GetComponent<HeadBob>().active = false;
@@ -482,7 +483,7 @@ public class ActionManager
         playerController.paintGun.GetComponent<HeldItemSway>().active = false;
     }
 
-    // Resets the held item's position.
+    //! Resets the held item's position.
     public void ResetHeldItemSway()
     {
         if (playerController.scannerActive == true)
@@ -499,7 +500,7 @@ public class ActionManager
         }
     }
 
-    // Fires the laser cannon.
+    //! Fires the laser cannon.
     public void FireLaserCannon()
     {
         if (playerController.firing == false)
@@ -515,7 +516,7 @@ public class ActionManager
         }
     }
 
-    // Sends out a ping with the scanner.
+    //! Sends out a ping with the scanner.
     public void ScannerPing()
     {
         if (playerController.scanning == false)
@@ -583,7 +584,7 @@ public class ActionManager
         }
     }
 
-    // Applies jetpack thrust.
+    //! Applies jetpack thrust.
     public void JetPackThrust()
     {
         if (playerController.gameObject.GetComponent<AudioSource>().isPlaying == false)
@@ -600,7 +601,7 @@ public class ActionManager
         playerController.paintGun.GetComponent<HeldItemSway>().active = false;
     }
 
-    // Increases the number of blocks to be built along the build axis.
+    //! Increases the number of blocks to be built along the build axis.
     public void IncreaseBuildAmount()
     {
         playerController.buildIncrementTimer += 1 * Time.deltaTime;
@@ -614,7 +615,7 @@ public class ActionManager
         }
     }
 
-    // Reduces the number of blocks to be built along the build axis.
+    //! Reduces the number of blocks to be built along the build axis.
     public void DecreaseBuildAmount()
     {
         playerController.buildIncrementTimer += 1 * Time.deltaTime;
@@ -628,7 +629,7 @@ public class ActionManager
         }
     }
 
-    // Starts build mode, for placing blocks.
+    //! Starts build mode, for placing blocks.
     public void StartBuildMode()
     {
         if (!playerController.GuiOpen())
@@ -669,7 +670,7 @@ public class ActionManager
         }
     }
 
-    // Stops building mode.
+    //! Stops building mode.
     public void StopBuilding()
     {
         if (playerController.building == true)
@@ -695,7 +696,7 @@ public class ActionManager
         }
     }
 
-    // Closes machine GUI.
+    //! Closes machine GUI.
     public void CloseMachineGUI()
     {
         if (playerController.building == true || playerController.destroying == true)
@@ -721,7 +722,7 @@ public class ActionManager
         playerController.machineGUIopen = false;
     }
 
-    // Closes tablet GUI.
+    //! Closes tablet GUI.
     public void CloseTablet()
     {
         if (playerController.building == true || playerController.destroying == true)
@@ -747,7 +748,7 @@ public class ActionManager
         playerController.tabletOpen = false;
     }
 
-    // Closes all GUI windows.
+    //! Closes all GUI windows.
     public void CloseMenus()
     {
         playerController.ApplySettings();
@@ -765,4 +766,3 @@ public class ActionManager
         playerController.schematicMenuOpen = false;
     }
 }
-

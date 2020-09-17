@@ -1,0 +1,323 @@
+\hypertarget{classPowerSource}{}\doxysection{Power\+Source Class Reference}
+\label{classPowerSource}\index{PowerSource@{PowerSource}}
+Inheritance diagram for Power\+Source\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{classPowerSource}
+\end{center}
+\end{figure}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{classPowerSource_afdd72281b3e1f9089eba1fdef2b81e0b}{Start}} ()
+\begin{DoxyCompactList}\small\item\em Called by unity engine on start up to initialize variables. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classPowerSource_a3b4f741ad504ec26df60a34d43967480}{Update}} ()
+\begin{DoxyCompactList}\small\item\em Called once per frame by unity engine. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classPowerSource_ac55da6580f7bf30c4f332aa3be912b1b}{On\+Destroy}} ()
+\begin{DoxyCompactList}\small\item\em Used to notify power receivers when the power source is destroyed. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+string \mbox{\hyperlink{classPowerSource_a46b23633e76c44d1aabc8f6cb486ba7f}{ID}} = \char`\"{}unassigned\char`\"{}
+\item 
+Material \mbox{\hyperlink{classPowerSource_a0308613e454f1945b19a7a5dc05b5972}{line\+Mat}}
+\item 
+string \mbox{\hyperlink{classPowerSource_a63317041d0218c03ebb33bd44a3f362d}{creation\+Method}}
+\item 
+Game\+Object \mbox{\hyperlink{classPowerSource_a6cc48a1ad018854c18f66f37774acc33}{input\+Object}}
+\item 
+Game\+Object \mbox{\hyperlink{classPowerSource_ae2c3a7e0f5d593392b1eabdf0868a569}{output\+Object}}
+\item 
+string \mbox{\hyperlink{classPowerSource_a48acca6731298b3377e1a5601d884131}{input\+ID}}
+\item 
+string \mbox{\hyperlink{classPowerSource_aed7cc55a89ae2e1917d5e1d73544d6dc}{output\+ID}}
+\item 
+int \mbox{\hyperlink{classPowerSource_a359c35096a76dcd4ac71ecd646344baf}{address}}
+\item 
+int \mbox{\hyperlink{classPowerSource_a61d12b2ea8586e82feab5a4411081ac7}{power\+Amount}}
+\item 
+string \mbox{\hyperlink{classPowerSource_acddf0a76d3388fad10f00030806b1cde}{type}}
+\item 
+string \mbox{\hyperlink{classPowerSource_ad80913957e22ca0cc2ba75eac201cb69}{fuel\+Type}}
+\item 
+int \mbox{\hyperlink{classPowerSource_a124644d65731cadca7ec12841659e0a0}{fuel\+Amount}}
+\item 
+int \mbox{\hyperlink{classPowerSource_a54fbf7cb95b501572d71fbe2f7ce70fc}{connection\+Attempts}}
+\item 
+bool \mbox{\hyperlink{classPowerSource_aa9c159bde257dac188e29a10db2b52f6}{connection\+Failed}}
+\item 
+bool \mbox{\hyperlink{classPowerSource_a5cb5486a1a49d1853202445c3502670e}{blocked}}
+\item 
+bool \mbox{\hyperlink{classPowerSource_a80199f7e54b6a87d15ed3e6a4c946416}{out\+Of\+Fuel}}
+\item 
+bool \mbox{\hyperlink{classPowerSource_a9637dfb11e16631eb275ed8dbf21fc95}{no\+Reactor}}
+\item 
+Texture2D \mbox{\hyperlink{classPowerSource_aed59cf19c3e33fd1de2252e119f3ff92}{generator\+Off\+Texture}}
+\item 
+Texture2D \mbox{\hyperlink{classPowerSource_a24d4687dd3722db67c3610122fa4dc7b}{generator\+On\+Texture}}
+\end{DoxyCompactItemize}
+\doxysubsection*{Private Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+bool \mbox{\hyperlink{classPowerSource_a469546c078ba395d7ea0d2bea7dc4559}{Is\+Valid\+Object}} (Game\+Object obj)
+\begin{DoxyCompactList}\small\item\em Returns true if the object exists, is active and is not a standard building block. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classPowerSource_af060697646fdd89c8931bcf8656e7095}{Connect\+To\+Output}} (Game\+Object obj)
+\begin{DoxyCompactList}\small\item\em Connects the power source to a power receiver. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classPowerSource_a4cfceda8717118e16353b8ef236f6536}{Distribute\+Power}} ()
+\begin{DoxyCompactList}\small\item\em Determines the type of power source and calls the appropriate power distribution method. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classPowerSource_ad9a04fc1d685d3cb612a9a69fabc0763}{Distribute\+As\+Solar\+Panel}} ()
+\begin{DoxyCompactList}\small\item\em Distributes power to power receivers as a solar panel. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classPowerSource_ac037a5c6875cb666066eb0c50fb75cbf}{Distribute\+As\+Generator}} ()
+\begin{DoxyCompactList}\small\item\em Distributes power to power receivers as a generator. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classPowerSource_a3ee6842a1efde0414dcf16b454a6ed89}{Distribute\+As\+Reactor\+Turbine}} ()
+\begin{DoxyCompactList}\small\item\em Distributes power to power receivers as reactor turbine. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+Line\+Renderer \mbox{\hyperlink{classPowerSource_a8e89d6d8a51cb3296b996017fffe439b}{connection\+Line}}
+\item 
+float \mbox{\hyperlink{classPowerSource_a8d185722b06bc2dff0d1fcc86ebf60ea}{update\+Tick}}
+\item 
+int \mbox{\hyperlink{classPowerSource_a23f6aa647cc37ed1d7110a2dbc610b80}{fuel\+Consumption\+Timer}}
+\item 
+Game\+Object \mbox{\hyperlink{classPowerSource_a65a8f33aee525605e79b0cb273779c90}{built\+Objects}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{classPowerSource_af060697646fdd89c8931bcf8656e7095}\label{classPowerSource_af060697646fdd89c8931bcf8656e7095}} 
+\index{PowerSource@{PowerSource}!ConnectToOutput@{ConnectToOutput}}
+\index{ConnectToOutput@{ConnectToOutput}!PowerSource@{PowerSource}}
+\doxysubsubsection{\texorpdfstring{ConnectToOutput()}{ConnectToOutput()}}
+{\footnotesize\ttfamily void Power\+Source.\+Connect\+To\+Output (\begin{DoxyParamCaption}\item[{Game\+Object}]{obj }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [private]}}
+
+
+
+Connects the power source to a power receiver. 
+
+\mbox{\Hypertarget{classPowerSource_ac037a5c6875cb666066eb0c50fb75cbf}\label{classPowerSource_ac037a5c6875cb666066eb0c50fb75cbf}} 
+\index{PowerSource@{PowerSource}!DistributeAsGenerator@{DistributeAsGenerator}}
+\index{DistributeAsGenerator@{DistributeAsGenerator}!PowerSource@{PowerSource}}
+\doxysubsubsection{\texorpdfstring{DistributeAsGenerator()}{DistributeAsGenerator()}}
+{\footnotesize\ttfamily void Power\+Source.\+Distribute\+As\+Generator (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [private]}}
+
+
+
+Distributes power to power receivers as a generator. 
+
+\mbox{\Hypertarget{classPowerSource_a3ee6842a1efde0414dcf16b454a6ed89}\label{classPowerSource_a3ee6842a1efde0414dcf16b454a6ed89}} 
+\index{PowerSource@{PowerSource}!DistributeAsReactorTurbine@{DistributeAsReactorTurbine}}
+\index{DistributeAsReactorTurbine@{DistributeAsReactorTurbine}!PowerSource@{PowerSource}}
+\doxysubsubsection{\texorpdfstring{DistributeAsReactorTurbine()}{DistributeAsReactorTurbine()}}
+{\footnotesize\ttfamily void Power\+Source.\+Distribute\+As\+Reactor\+Turbine (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [private]}}
+
+
+
+Distributes power to power receivers as reactor turbine. 
+
+\mbox{\Hypertarget{classPowerSource_ad9a04fc1d685d3cb612a9a69fabc0763}\label{classPowerSource_ad9a04fc1d685d3cb612a9a69fabc0763}} 
+\index{PowerSource@{PowerSource}!DistributeAsSolarPanel@{DistributeAsSolarPanel}}
+\index{DistributeAsSolarPanel@{DistributeAsSolarPanel}!PowerSource@{PowerSource}}
+\doxysubsubsection{\texorpdfstring{DistributeAsSolarPanel()}{DistributeAsSolarPanel()}}
+{\footnotesize\ttfamily void Power\+Source.\+Distribute\+As\+Solar\+Panel (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [private]}}
+
+
+
+Distributes power to power receivers as a solar panel. 
+
+\mbox{\Hypertarget{classPowerSource_a4cfceda8717118e16353b8ef236f6536}\label{classPowerSource_a4cfceda8717118e16353b8ef236f6536}} 
+\index{PowerSource@{PowerSource}!DistributePower@{DistributePower}}
+\index{DistributePower@{DistributePower}!PowerSource@{PowerSource}}
+\doxysubsubsection{\texorpdfstring{DistributePower()}{DistributePower()}}
+{\footnotesize\ttfamily void Power\+Source.\+Distribute\+Power (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [private]}}
+
+
+
+Determines the type of power source and calls the appropriate power distribution method. 
+
+\mbox{\Hypertarget{classPowerSource_a469546c078ba395d7ea0d2bea7dc4559}\label{classPowerSource_a469546c078ba395d7ea0d2bea7dc4559}} 
+\index{PowerSource@{PowerSource}!IsValidObject@{IsValidObject}}
+\index{IsValidObject@{IsValidObject}!PowerSource@{PowerSource}}
+\doxysubsubsection{\texorpdfstring{IsValidObject()}{IsValidObject()}}
+{\footnotesize\ttfamily bool Power\+Source.\+Is\+Valid\+Object (\begin{DoxyParamCaption}\item[{Game\+Object}]{obj }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [private]}}
+
+
+
+Returns true if the object exists, is active and is not a standard building block. 
+
+\mbox{\Hypertarget{classPowerSource_ac55da6580f7bf30c4f332aa3be912b1b}\label{classPowerSource_ac55da6580f7bf30c4f332aa3be912b1b}} 
+\index{PowerSource@{PowerSource}!OnDestroy@{OnDestroy}}
+\index{OnDestroy@{OnDestroy}!PowerSource@{PowerSource}}
+\doxysubsubsection{\texorpdfstring{OnDestroy()}{OnDestroy()}}
+{\footnotesize\ttfamily void Power\+Source.\+On\+Destroy (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Used to notify power receivers when the power source is destroyed. 
+
+\mbox{\Hypertarget{classPowerSource_afdd72281b3e1f9089eba1fdef2b81e0b}\label{classPowerSource_afdd72281b3e1f9089eba1fdef2b81e0b}} 
+\index{PowerSource@{PowerSource}!Start@{Start}}
+\index{Start@{Start}!PowerSource@{PowerSource}}
+\doxysubsubsection{\texorpdfstring{Start()}{Start()}}
+{\footnotesize\ttfamily void Power\+Source.\+Start (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Called by unity engine on start up to initialize variables. 
+
+\mbox{\Hypertarget{classPowerSource_a3b4f741ad504ec26df60a34d43967480}\label{classPowerSource_a3b4f741ad504ec26df60a34d43967480}} 
+\index{PowerSource@{PowerSource}!Update@{Update}}
+\index{Update@{Update}!PowerSource@{PowerSource}}
+\doxysubsubsection{\texorpdfstring{Update()}{Update()}}
+{\footnotesize\ttfamily void Power\+Source.\+Update (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Called once per frame by unity engine. 
+
+
+
+\doxysubsection{Member Data Documentation}
+\mbox{\Hypertarget{classPowerSource_a359c35096a76dcd4ac71ecd646344baf}\label{classPowerSource_a359c35096a76dcd4ac71ecd646344baf}} 
+\index{PowerSource@{PowerSource}!address@{address}}
+\index{address@{address}!PowerSource@{PowerSource}}
+\doxysubsubsection{\texorpdfstring{address}{address}}
+{\footnotesize\ttfamily int Power\+Source.\+address}
+
+\mbox{\Hypertarget{classPowerSource_a5cb5486a1a49d1853202445c3502670e}\label{classPowerSource_a5cb5486a1a49d1853202445c3502670e}} 
+\index{PowerSource@{PowerSource}!blocked@{blocked}}
+\index{blocked@{blocked}!PowerSource@{PowerSource}}
+\doxysubsubsection{\texorpdfstring{blocked}{blocked}}
+{\footnotesize\ttfamily bool Power\+Source.\+blocked}
+
+\mbox{\Hypertarget{classPowerSource_a65a8f33aee525605e79b0cb273779c90}\label{classPowerSource_a65a8f33aee525605e79b0cb273779c90}} 
+\index{PowerSource@{PowerSource}!builtObjects@{builtObjects}}
+\index{builtObjects@{builtObjects}!PowerSource@{PowerSource}}
+\doxysubsubsection{\texorpdfstring{builtObjects}{builtObjects}}
+{\footnotesize\ttfamily Game\+Object Power\+Source.\+built\+Objects\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{classPowerSource_a54fbf7cb95b501572d71fbe2f7ce70fc}\label{classPowerSource_a54fbf7cb95b501572d71fbe2f7ce70fc}} 
+\index{PowerSource@{PowerSource}!connectionAttempts@{connectionAttempts}}
+\index{connectionAttempts@{connectionAttempts}!PowerSource@{PowerSource}}
+\doxysubsubsection{\texorpdfstring{connectionAttempts}{connectionAttempts}}
+{\footnotesize\ttfamily int Power\+Source.\+connection\+Attempts}
+
+\mbox{\Hypertarget{classPowerSource_aa9c159bde257dac188e29a10db2b52f6}\label{classPowerSource_aa9c159bde257dac188e29a10db2b52f6}} 
+\index{PowerSource@{PowerSource}!connectionFailed@{connectionFailed}}
+\index{connectionFailed@{connectionFailed}!PowerSource@{PowerSource}}
+\doxysubsubsection{\texorpdfstring{connectionFailed}{connectionFailed}}
+{\footnotesize\ttfamily bool Power\+Source.\+connection\+Failed}
+
+\mbox{\Hypertarget{classPowerSource_a8e89d6d8a51cb3296b996017fffe439b}\label{classPowerSource_a8e89d6d8a51cb3296b996017fffe439b}} 
+\index{PowerSource@{PowerSource}!connectionLine@{connectionLine}}
+\index{connectionLine@{connectionLine}!PowerSource@{PowerSource}}
+\doxysubsubsection{\texorpdfstring{connectionLine}{connectionLine}}
+{\footnotesize\ttfamily Line\+Renderer Power\+Source.\+connection\+Line\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{classPowerSource_a63317041d0218c03ebb33bd44a3f362d}\label{classPowerSource_a63317041d0218c03ebb33bd44a3f362d}} 
+\index{PowerSource@{PowerSource}!creationMethod@{creationMethod}}
+\index{creationMethod@{creationMethod}!PowerSource@{PowerSource}}
+\doxysubsubsection{\texorpdfstring{creationMethod}{creationMethod}}
+{\footnotesize\ttfamily string Power\+Source.\+creation\+Method}
+
+\mbox{\Hypertarget{classPowerSource_a124644d65731cadca7ec12841659e0a0}\label{classPowerSource_a124644d65731cadca7ec12841659e0a0}} 
+\index{PowerSource@{PowerSource}!fuelAmount@{fuelAmount}}
+\index{fuelAmount@{fuelAmount}!PowerSource@{PowerSource}}
+\doxysubsubsection{\texorpdfstring{fuelAmount}{fuelAmount}}
+{\footnotesize\ttfamily int Power\+Source.\+fuel\+Amount}
+
+\mbox{\Hypertarget{classPowerSource_a23f6aa647cc37ed1d7110a2dbc610b80}\label{classPowerSource_a23f6aa647cc37ed1d7110a2dbc610b80}} 
+\index{PowerSource@{PowerSource}!fuelConsumptionTimer@{fuelConsumptionTimer}}
+\index{fuelConsumptionTimer@{fuelConsumptionTimer}!PowerSource@{PowerSource}}
+\doxysubsubsection{\texorpdfstring{fuelConsumptionTimer}{fuelConsumptionTimer}}
+{\footnotesize\ttfamily int Power\+Source.\+fuel\+Consumption\+Timer\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{classPowerSource_ad80913957e22ca0cc2ba75eac201cb69}\label{classPowerSource_ad80913957e22ca0cc2ba75eac201cb69}} 
+\index{PowerSource@{PowerSource}!fuelType@{fuelType}}
+\index{fuelType@{fuelType}!PowerSource@{PowerSource}}
+\doxysubsubsection{\texorpdfstring{fuelType}{fuelType}}
+{\footnotesize\ttfamily string Power\+Source.\+fuel\+Type}
+
+\mbox{\Hypertarget{classPowerSource_aed59cf19c3e33fd1de2252e119f3ff92}\label{classPowerSource_aed59cf19c3e33fd1de2252e119f3ff92}} 
+\index{PowerSource@{PowerSource}!generatorOffTexture@{generatorOffTexture}}
+\index{generatorOffTexture@{generatorOffTexture}!PowerSource@{PowerSource}}
+\doxysubsubsection{\texorpdfstring{generatorOffTexture}{generatorOffTexture}}
+{\footnotesize\ttfamily Texture2D Power\+Source.\+generator\+Off\+Texture}
+
+\mbox{\Hypertarget{classPowerSource_a24d4687dd3722db67c3610122fa4dc7b}\label{classPowerSource_a24d4687dd3722db67c3610122fa4dc7b}} 
+\index{PowerSource@{PowerSource}!generatorOnTexture@{generatorOnTexture}}
+\index{generatorOnTexture@{generatorOnTexture}!PowerSource@{PowerSource}}
+\doxysubsubsection{\texorpdfstring{generatorOnTexture}{generatorOnTexture}}
+{\footnotesize\ttfamily Texture2D Power\+Source.\+generator\+On\+Texture}
+
+\mbox{\Hypertarget{classPowerSource_a46b23633e76c44d1aabc8f6cb486ba7f}\label{classPowerSource_a46b23633e76c44d1aabc8f6cb486ba7f}} 
+\index{PowerSource@{PowerSource}!ID@{ID}}
+\index{ID@{ID}!PowerSource@{PowerSource}}
+\doxysubsubsection{\texorpdfstring{ID}{ID}}
+{\footnotesize\ttfamily string Power\+Source.\+ID = \char`\"{}unassigned\char`\"{}}
+
+\mbox{\Hypertarget{classPowerSource_a48acca6731298b3377e1a5601d884131}\label{classPowerSource_a48acca6731298b3377e1a5601d884131}} 
+\index{PowerSource@{PowerSource}!inputID@{inputID}}
+\index{inputID@{inputID}!PowerSource@{PowerSource}}
+\doxysubsubsection{\texorpdfstring{inputID}{inputID}}
+{\footnotesize\ttfamily string Power\+Source.\+input\+ID}
+
+\mbox{\Hypertarget{classPowerSource_a6cc48a1ad018854c18f66f37774acc33}\label{classPowerSource_a6cc48a1ad018854c18f66f37774acc33}} 
+\index{PowerSource@{PowerSource}!inputObject@{inputObject}}
+\index{inputObject@{inputObject}!PowerSource@{PowerSource}}
+\doxysubsubsection{\texorpdfstring{inputObject}{inputObject}}
+{\footnotesize\ttfamily Game\+Object Power\+Source.\+input\+Object}
+
+\mbox{\Hypertarget{classPowerSource_a0308613e454f1945b19a7a5dc05b5972}\label{classPowerSource_a0308613e454f1945b19a7a5dc05b5972}} 
+\index{PowerSource@{PowerSource}!lineMat@{lineMat}}
+\index{lineMat@{lineMat}!PowerSource@{PowerSource}}
+\doxysubsubsection{\texorpdfstring{lineMat}{lineMat}}
+{\footnotesize\ttfamily Material Power\+Source.\+line\+Mat}
+
+\mbox{\Hypertarget{classPowerSource_a9637dfb11e16631eb275ed8dbf21fc95}\label{classPowerSource_a9637dfb11e16631eb275ed8dbf21fc95}} 
+\index{PowerSource@{PowerSource}!noReactor@{noReactor}}
+\index{noReactor@{noReactor}!PowerSource@{PowerSource}}
+\doxysubsubsection{\texorpdfstring{noReactor}{noReactor}}
+{\footnotesize\ttfamily bool Power\+Source.\+no\+Reactor}
+
+\mbox{\Hypertarget{classPowerSource_a80199f7e54b6a87d15ed3e6a4c946416}\label{classPowerSource_a80199f7e54b6a87d15ed3e6a4c946416}} 
+\index{PowerSource@{PowerSource}!outOfFuel@{outOfFuel}}
+\index{outOfFuel@{outOfFuel}!PowerSource@{PowerSource}}
+\doxysubsubsection{\texorpdfstring{outOfFuel}{outOfFuel}}
+{\footnotesize\ttfamily bool Power\+Source.\+out\+Of\+Fuel}
+
+\mbox{\Hypertarget{classPowerSource_aed7cc55a89ae2e1917d5e1d73544d6dc}\label{classPowerSource_aed7cc55a89ae2e1917d5e1d73544d6dc}} 
+\index{PowerSource@{PowerSource}!outputID@{outputID}}
+\index{outputID@{outputID}!PowerSource@{PowerSource}}
+\doxysubsubsection{\texorpdfstring{outputID}{outputID}}
+{\footnotesize\ttfamily string Power\+Source.\+output\+ID}
+
+\mbox{\Hypertarget{classPowerSource_ae2c3a7e0f5d593392b1eabdf0868a569}\label{classPowerSource_ae2c3a7e0f5d593392b1eabdf0868a569}} 
+\index{PowerSource@{PowerSource}!outputObject@{outputObject}}
+\index{outputObject@{outputObject}!PowerSource@{PowerSource}}
+\doxysubsubsection{\texorpdfstring{outputObject}{outputObject}}
+{\footnotesize\ttfamily Game\+Object Power\+Source.\+output\+Object}
+
+\mbox{\Hypertarget{classPowerSource_a61d12b2ea8586e82feab5a4411081ac7}\label{classPowerSource_a61d12b2ea8586e82feab5a4411081ac7}} 
+\index{PowerSource@{PowerSource}!powerAmount@{powerAmount}}
+\index{powerAmount@{powerAmount}!PowerSource@{PowerSource}}
+\doxysubsubsection{\texorpdfstring{powerAmount}{powerAmount}}
+{\footnotesize\ttfamily int Power\+Source.\+power\+Amount}
+
+\mbox{\Hypertarget{classPowerSource_acddf0a76d3388fad10f00030806b1cde}\label{classPowerSource_acddf0a76d3388fad10f00030806b1cde}} 
+\index{PowerSource@{PowerSource}!type@{type}}
+\index{type@{type}!PowerSource@{PowerSource}}
+\doxysubsubsection{\texorpdfstring{type}{type}}
+{\footnotesize\ttfamily string Power\+Source.\+type}
+
+\mbox{\Hypertarget{classPowerSource_a8d185722b06bc2dff0d1fcc86ebf60ea}\label{classPowerSource_a8d185722b06bc2dff0d1fcc86ebf60ea}} 
+\index{PowerSource@{PowerSource}!updateTick@{updateTick}}
+\index{updateTick@{updateTick}!PowerSource@{PowerSource}}
+\doxysubsubsection{\texorpdfstring{updateTick}{updateTick}}
+{\footnotesize\ttfamily float Power\+Source.\+update\+Tick\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{PowerSource_8cs}{Power\+Source.\+cs}}\end{DoxyCompactItemize}

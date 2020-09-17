@@ -38,7 +38,7 @@ public class Retriever : MonoBehaviour
     public PowerReceiver powerReceiver;
     private GameObject builtObjects;
 
-    // Called by unity engine on start up to initialize variables
+    //! Called by unity engine on start up to initialize variables.
     void Start()
     {
         powerReceiver = gameObject.AddComponent<PowerReceiver>();
@@ -52,7 +52,7 @@ public class Retriever : MonoBehaviour
         builtObjects = GameObject.Find("Built_Objects");
     }
 
-    // Called once per frame by unity engine
+    //! Called once per frame by unity engine.
     public void Update()
     {
         updateTick += 1 * Time.deltaTime;
@@ -127,7 +127,7 @@ public class Retriever : MonoBehaviour
         }
     }
 
-    // Used to remove line renderers and conduit item sprites when the machine is destroyed.
+    //! Used to remove line renderers and conduit item sprites when the machine is destroyed.
     void OnDestroy()
     {
         if (spawnedConnection != null)
@@ -140,7 +140,7 @@ public class Retriever : MonoBehaviour
         }
     }
 
-    // Gets power values from power receiver
+    //! Gets power values from power receiver.
     private void UpdatePowerReceiver()
     {
         powerReceiver.ID = ID;
@@ -149,7 +149,7 @@ public class Retriever : MonoBehaviour
         powerObject = powerReceiver.powerObject;
     }
 
-    // The object exists, is active and is not a standard building block.
+    //! The object exists, is active and is not a standard building block.
     private bool IsValidObject(GameObject obj)
     {
         if (obj != null)
@@ -159,13 +159,13 @@ public class Retriever : MonoBehaviour
         return false;
     }
 
-    // The object is a potential output connection.
+    //! The object is a potential output connection.
     private bool IsValidOutputConduit(GameObject obj)
     {
         return outputObject == null && inputObject != null && obj.GetComponent<UniversalConduit>().inputObject == null;
     }
 
-    // Returns true if the object in question is a storage container.
+    //! Returns true if the object in question is a storage container.
     private bool IsStorageContainer(GameObject obj)
     {
         if (obj != null)
@@ -181,7 +181,7 @@ public class Retriever : MonoBehaviour
         return false;
     }
 
-    // Connects the retriever to an inventory manager for input and a conduit for output.
+    //! Connects the retriever to an inventory manager for input and a conduit for output.
     private void MakeConnections()
     {
         GameObject[] allObjects = GameObject.FindGameObjectsWithTag("Built");
@@ -299,7 +299,7 @@ public class Retriever : MonoBehaviour
         }
     }
 
-    // Retrieves items.
+    //! Retrieves items.
     private void RetrieveItems()
     {
         if (inputObject != null)
@@ -320,7 +320,7 @@ public class Retriever : MonoBehaviour
         }
     }
 
-    // Retrieves items from storage containers.
+    //! Retrieves items from storage containers.
     private void RetrieveFromStorageContainer()
     {
         if (inputObject.GetComponent<RailCart>() != null)
@@ -451,7 +451,7 @@ public class Retriever : MonoBehaviour
         }
     }
 
-    //Retrieves items from storage computers.
+    //!Retrieves items from storage computers.
     private void RetrieveFromStorageComputer()
     {
         inputID = inputObject.GetComponent<StorageComputer>().ID;

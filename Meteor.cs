@@ -11,20 +11,20 @@ public class Meteor : MonoBehaviour
     private float destroyTimer;
 
 
-    // Called by unity engine on start up to initialize variables
+    //! Called by unity engine on start up to initialize variables.
     public void Start()
     {
         game = GameObject.Find("GameManager").GetComponent<GameManager>();
         playerController = GameObject.Find("Player").GetComponent<PlayerController>();
     }
 
-    // Returns true if a message can be sent to the player's tablet
+    //! Returns true if a message can be sent to the player's tablet.
     private bool CanSendDestructionMessage()
     {
         return playerController.timeToDeliver == false && playerController.meteorShowerWarningActive == false && playerController.pirateAttackWarningActive == false;
     }
 
-    // Called once per frame by unity engine
+    //! Called once per frame by unity engine.
     public void Update()
     {
         if (destroying == false)
@@ -157,7 +157,7 @@ public class Meteor : MonoBehaviour
         }
     }
 
-    // Destroys the meteor and spawns explosion effects
+    //! Destroys the meteor and spawns explosion effects.
     public void Explode()
     {
         Instantiate(explosion, new Vector3(transform.position.x,transform.position.y+10,transform.position.z), transform.rotation);

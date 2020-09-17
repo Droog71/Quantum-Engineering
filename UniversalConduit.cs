@@ -27,7 +27,7 @@ public class UniversalConduit : MonoBehaviour
     private LineRenderer connectionLine;
     private float updateTick;
 
-    // Called by unity engine on start up to initialize variables
+    //! Called by unity engine on start up to initialize variables.
     public void Start()
     {
         connectionLine = gameObject.AddComponent<LineRenderer>();
@@ -40,7 +40,7 @@ public class UniversalConduit : MonoBehaviour
         builtObjects = GameObject.Find("Built_Objects");
     }
 
-    // Called once per frame by unity engine
+    //! Called once per frame by unity engine.
     public void Update()
     {
         updateTick += 1 * Time.deltaTime;
@@ -117,7 +117,7 @@ public class UniversalConduit : MonoBehaviour
         }
     }
 
-    // The object exists, is active and is not a standard building block
+    //! The object exists, is active and is not a standard building block.
     private bool IsValidObject(GameObject obj)
     {
         if (obj != null)
@@ -127,13 +127,13 @@ public class UniversalConduit : MonoBehaviour
         return false;
     }
 
-    // The object is a potential output connection
+    //! The object is a potential output connection.
     private bool IsValidOutputObject(GameObject obj)
     {
         return outputObject == null && inputObject != null && obj != inputObject && obj != gameObject;
     }
 
-    // Returns true if the object in question is a storage container
+    //! Returns true if the object in question is a storage container.
     private bool IsStorageContainer(GameObject obj)
     {
         if (obj.GetComponent<InventoryManager>() != null)
@@ -143,7 +143,7 @@ public class UniversalConduit : MonoBehaviour
         return false;
     }
 
-    // Puts items into a storage container or other object with attached inventory manager.
+    //! Puts items into a storage container or other object with attached inventory manager.
     private void OutputToInventory()
     {
         float distance = Vector3.Distance(transform.position, outputObject.transform.position);
@@ -216,6 +216,7 @@ public class UniversalConduit : MonoBehaviour
         }
     }
 
+    //! Moves items into a storage computer.
     private void OutputToStorageComputer()
     {
         outputID = outputObject.GetComponent<StorageComputer>().ID;
@@ -314,7 +315,7 @@ public class UniversalConduit : MonoBehaviour
         }
     }
 
-    // Makes input and output connections
+    //! Makes input and output connections.
     private void ConnectToObject(GameObject obj)
     {
         if (obj.GetComponent<Auger>() != null)
@@ -673,6 +674,7 @@ public class UniversalConduit : MonoBehaviour
         }
     }
 
+    //! Handles items received from input object.
     private void HandleInput()
     {
         if (inputObject.GetComponent<AlloySmelter>() != null)
@@ -849,6 +851,7 @@ public class UniversalConduit : MonoBehaviour
         }
     }
 
+    //! Moves items received to the output object.
     private void HandleOutput()
     {
         connectionLine.SetPosition(0, transform.position);
@@ -1117,7 +1120,7 @@ public class UniversalConduit : MonoBehaviour
         }
     }
 
-    // Used to remove conduit item from storage computer if connected to one
+    //! Used to remove conduit item from storage computer if connected to one.
     public void OnDestroy()
     {
         if (storageComputerConduitItem != null)

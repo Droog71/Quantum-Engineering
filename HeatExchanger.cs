@@ -21,7 +21,7 @@ public class HeatExchanger : MonoBehaviour
     public bool connectionFailed;
     private GameObject builtObjects;
 
-    // Called by unity engine on start up to initialize variables
+    //! Called by unity engine on start up to initialize variables.
     public void Start()
     {
         connectionLine = gameObject.AddComponent<LineRenderer>();
@@ -33,7 +33,7 @@ public class HeatExchanger : MonoBehaviour
         builtObjects = GameObject.Find("Built_Objects");
     }
 
-    // Called once per frame by unity engine
+    //! Called once per frame by unity engine.
     public void Update()
     {
         updateTick += 1 * Time.deltaTime;
@@ -126,7 +126,7 @@ public class HeatExchanger : MonoBehaviour
         }
     }
 
-    // The object exists, is active and is not a standard building block
+    //! The object exists, is active and is not a standard building block.
     private bool IsValidObject(GameObject obj)
     {
         if (obj != null)
@@ -136,7 +136,7 @@ public class HeatExchanger : MonoBehaviour
         return false;
     }
 
-    // Used to notify attached machines when the heat exchanger is destroyed
+    //! Used to notify attached machines when the heat exchanger is destroyed.
     public void OnDestroy()
     {
         if (outputObject != null)
@@ -204,7 +204,7 @@ public class HeatExchanger : MonoBehaviour
         }
     }
 
-    // Connects to the nearest compatible object
+    //! Connects to the nearest compatible object.
     private void ConnectToObject(GameObject obj)
     {
         if (obj.GetComponent<UniversalExtractor>() != null)
@@ -641,7 +641,7 @@ public class HeatExchanger : MonoBehaviour
         }
     }
 
-    // Sets the heat exchanger's output ID to the output object's ID
+    //! Sets the heat exchanger's output ID to the output object's ID.
     private void SetOutputID()
     {
         if (outputObject.GetComponent<NuclearReactor>() != null)
@@ -698,7 +698,7 @@ public class HeatExchanger : MonoBehaviour
         }
     }
 
-    // Overall operation of the heat exchanger
+    //! Overall operation of the heat exchanger.
     private void DoWork()
     {
         if (outputObject.GetComponent<UniversalExtractor>() != null)

@@ -30,7 +30,7 @@ public class BasicMachine : MonoBehaviour
     private GameObject builtObjects;
     private int machineTimer;
 
-    // Called by unity engine on start up to initialize variables
+    //! Called by unity engine on start up to initialize variables.
     public void Start()
     {
         powerReceiver = gameObject.AddComponent<PowerReceiver>();
@@ -44,7 +44,7 @@ public class BasicMachine : MonoBehaviour
         builtObjects = GameObject.Find("Built_Objects");
     }
 
-    // Called once per frame by unity engine
+    //! Called once per frame by unity engine.
     public void Update()
     {
         updateTick += 1 * Time.deltaTime;
@@ -126,7 +126,7 @@ public class BasicMachine : MonoBehaviour
         }
     }
 
-    // The object exists, is active and is not a standard building block
+    //! The object exists, is active and is not a standard building block.
     private bool IsValidObject(GameObject obj)
     {
         if (obj != null)
@@ -136,13 +136,13 @@ public class BasicMachine : MonoBehaviour
         return false;
     }
 
-    // The object is a potential output connection
+    //! The object is a potential output connection.
     private bool IsValidOutputObject(GameObject obj)
     {
         return outputObject == null && inputObject != null && obj != inputObject && obj != gameObject;
     }
 
-    // Finds and connects to a universal conduit for output
+    //! Finds and connects to a universal conduit for output.
     private void ConnectToOutput()
     {
         GameObject[] allObjects = GameObject.FindGameObjectsWithTag("Built");
@@ -183,7 +183,7 @@ public class BasicMachine : MonoBehaviour
         }
     }
 
-    // Sets the appropriate output item according to the input
+    //! Sets the appropriate output item according to the input.
     private string GetOutputType()
     {
         string incoming = inputObject.GetComponent<UniversalConduit>().type;
@@ -204,7 +204,7 @@ public class BasicMachine : MonoBehaviour
         return "nothing";
     }
 
-    // If everything is working, items are moved to the output conduit; sounds and other effects are enabled.
+    //! If everything is working, items are moved to the output conduit; sounds and other effects are enabled.
     private void HandleOutput()
     {
         if (outputObject != null)
@@ -241,9 +241,8 @@ public class BasicMachine : MonoBehaviour
                 }
             }
         }
-        else
+        else // Reset the output connection, allow new connections to be made.
         {
-            // Reset the output connection, allow new connections to be made
             connectionLine.enabled = false;
             if (connectionFailed == true)
             {
@@ -255,7 +254,7 @@ public class BasicMachine : MonoBehaviour
         }
     }
 
-    // Gets power values from power receiver
+    //! Gets power values from power receiver.
     private void UpdatePowerReceiver()
     {
         powerReceiver.ID = ID;

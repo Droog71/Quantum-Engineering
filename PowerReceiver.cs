@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 
+//! This class is attached to any machine that requires power to operate.
 public class PowerReceiver : MonoBehaviour
 {
     public string ID = "unassigned";

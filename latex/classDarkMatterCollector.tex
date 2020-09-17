@@ -1,0 +1,287 @@
+\hypertarget{classDarkMatterCollector}{}\doxysection{Dark\+Matter\+Collector Class Reference}
+\label{classDarkMatterCollector}\index{DarkMatterCollector@{DarkMatterCollector}}
+Inheritance diagram for Dark\+Matter\+Collector\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{classDarkMatterCollector}
+\end{center}
+\end{figure}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{classDarkMatterCollector_a2741ac4d49910f2224201fae99c0924c}{On\+Destroy}} ()
+\begin{DoxyCompactList}\small\item\em Used to remove the connection line renderer when the block is destroyed. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+float \mbox{\hyperlink{classDarkMatterCollector_a6920f98ce8deb246d77753a20c217323}{dark\+Matter\+Amount}}
+\item 
+int \mbox{\hyperlink{classDarkMatterCollector_a2ed76e2767cb3af4c9ffc915ad4596da}{speed}} = 1
+\item 
+int \mbox{\hyperlink{classDarkMatterCollector_a7e436294f83d8a2b138c07568975d95c}{power}}
+\item 
+int \mbox{\hyperlink{classDarkMatterCollector_a4654ae90abef4c75254c4466e1186d91}{heat}}
+\item 
+bool \mbox{\hyperlink{classDarkMatterCollector_a09589dd2612e7da6329a6827f0c1c5be}{has\+Heat\+Exchanger}}
+\item 
+int \mbox{\hyperlink{classDarkMatterCollector_ab6f7acb7db99f06ce2389ff2bef450f0}{cooling}}
+\item 
+Game\+Object \mbox{\hyperlink{classDarkMatterCollector_abc2750d7a854f4725c6f381c999e896b}{output\+Object}}
+\item 
+Game\+Object \mbox{\hyperlink{classDarkMatterCollector_a462c548d05d69e1f9217e26275c8bc71}{power\+Object}}
+\item 
+\mbox{\hyperlink{classConduitItem}{Conduit\+Item}} \mbox{\hyperlink{classDarkMatterCollector_a11a1bdcd3f16cd99fb3b228d3b3b7a74}{conduit\+Item}}
+\item 
+Material \mbox{\hyperlink{classDarkMatterCollector_abe2346c98329288d1d5210b8e4c8c1e4}{line\+Mat}}
+\item 
+string \mbox{\hyperlink{classDarkMatterCollector_a069c5bb9d421af37318bc359dae4d283}{ID}} = \char`\"{}unassigned\char`\"{}
+\item 
+string \mbox{\hyperlink{classDarkMatterCollector_a34e56f48a5282784fe2b7f71fb86b28f}{creation\+Method}} = \char`\"{}built\char`\"{}
+\item 
+\mbox{\hyperlink{classPowerReceiver}{Power\+Receiver}} \mbox{\hyperlink{classDarkMatterCollector_acde7fb6ec6a53dca3b6f01cb928b68c5}{power\+Receiver}}
+\item 
+int \mbox{\hyperlink{classDarkMatterCollector_a7698c3698ceb63eac1a8c409db125f6d}{address}}
+\item 
+bool \mbox{\hyperlink{classDarkMatterCollector_ad90b18fe83e900affe1e38e6dc0c89fe}{power\+ON}}
+\item 
+int \mbox{\hyperlink{classDarkMatterCollector_afe3b36416878e05f07c1c58c9fed9e2a}{connection\+Attempts}}
+\item 
+bool \mbox{\hyperlink{classDarkMatterCollector_a36c8aed8363345c650dc22abb1514d49}{connection\+Failed}}
+\item 
+bool \mbox{\hyperlink{classDarkMatterCollector_a93c42dd9a11b6bfefd74e8a140c6cfde}{found\+Dark\+Matter}}
+\end{DoxyCompactItemize}
+\doxysubsection*{Private Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{classDarkMatterCollector_abfef81540fd901c5e25032a888a951b3}{Start}} ()
+\begin{DoxyCompactList}\small\item\em Called by unity engine on start up to initialize variables. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classDarkMatterCollector_ac2f654c3c38eb3cd4877faed8c4c13fb}{Update}} ()
+\begin{DoxyCompactList}\small\item\em Called once per frame by unity engine. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{classDarkMatterCollector_aec712ff8d011d171e569586969356fa0}{Is\+Valid\+Object}} (Game\+Object obj)
+\begin{DoxyCompactList}\small\item\em The object exists, is active and is not a standard building block. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classDarkMatterCollector_ad33429a343d8e3635e9ef33d29ec7b95}{Find\+Dark\+Matter}} ()
+\begin{DoxyCompactList}\small\item\em Finds a dark matter source node to harvest. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classDarkMatterCollector_aff6cecf6fdc76b102c05db80638b28c6}{Update\+Power\+Receiver}} ()
+\begin{DoxyCompactList}\small\item\em Gets power values from power receiver. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+Line\+Renderer \mbox{\hyperlink{classDarkMatterCollector_a6574c45cd1c25af7e77c481eb4cd1086}{connection\+Line}}
+\item 
+Line\+Renderer \mbox{\hyperlink{classDarkMatterCollector_ab93d569fedaaeafdef0c965b5b2602b7}{input\+Line}}
+\item 
+float \mbox{\hyperlink{classDarkMatterCollector_a02f688efe6982699076f4107892a4f0b}{update\+Tick}}
+\item 
+int \mbox{\hyperlink{classDarkMatterCollector_a40cfb3b367dbfee142c22f6fdf1abe09}{machine\+Timer}}
+\item 
+Game\+Object \mbox{\hyperlink{classDarkMatterCollector_aa19513b4a55b80c371ba28e1cc3917c1}{built\+Objects}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{classDarkMatterCollector_ad33429a343d8e3635e9ef33d29ec7b95}\label{classDarkMatterCollector_ad33429a343d8e3635e9ef33d29ec7b95}} 
+\index{DarkMatterCollector@{DarkMatterCollector}!FindDarkMatter@{FindDarkMatter}}
+\index{FindDarkMatter@{FindDarkMatter}!DarkMatterCollector@{DarkMatterCollector}}
+\doxysubsubsection{\texorpdfstring{FindDarkMatter()}{FindDarkMatter()}}
+{\footnotesize\ttfamily void Dark\+Matter\+Collector.\+Find\+Dark\+Matter (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [private]}}
+
+
+
+Finds a dark matter source node to harvest. 
+
+\mbox{\Hypertarget{classDarkMatterCollector_aec712ff8d011d171e569586969356fa0}\label{classDarkMatterCollector_aec712ff8d011d171e569586969356fa0}} 
+\index{DarkMatterCollector@{DarkMatterCollector}!IsValidObject@{IsValidObject}}
+\index{IsValidObject@{IsValidObject}!DarkMatterCollector@{DarkMatterCollector}}
+\doxysubsubsection{\texorpdfstring{IsValidObject()}{IsValidObject()}}
+{\footnotesize\ttfamily bool Dark\+Matter\+Collector.\+Is\+Valid\+Object (\begin{DoxyParamCaption}\item[{Game\+Object}]{obj }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [private]}}
+
+
+
+The object exists, is active and is not a standard building block. 
+
+\mbox{\Hypertarget{classDarkMatterCollector_a2741ac4d49910f2224201fae99c0924c}\label{classDarkMatterCollector_a2741ac4d49910f2224201fae99c0924c}} 
+\index{DarkMatterCollector@{DarkMatterCollector}!OnDestroy@{OnDestroy}}
+\index{OnDestroy@{OnDestroy}!DarkMatterCollector@{DarkMatterCollector}}
+\doxysubsubsection{\texorpdfstring{OnDestroy()}{OnDestroy()}}
+{\footnotesize\ttfamily void Dark\+Matter\+Collector.\+On\+Destroy (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Used to remove the connection line renderer when the block is destroyed. 
+
+\mbox{\Hypertarget{classDarkMatterCollector_abfef81540fd901c5e25032a888a951b3}\label{classDarkMatterCollector_abfef81540fd901c5e25032a888a951b3}} 
+\index{DarkMatterCollector@{DarkMatterCollector}!Start@{Start}}
+\index{Start@{Start}!DarkMatterCollector@{DarkMatterCollector}}
+\doxysubsubsection{\texorpdfstring{Start()}{Start()}}
+{\footnotesize\ttfamily void Dark\+Matter\+Collector.\+Start (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [private]}}
+
+
+
+Called by unity engine on start up to initialize variables. 
+
+\mbox{\Hypertarget{classDarkMatterCollector_ac2f654c3c38eb3cd4877faed8c4c13fb}\label{classDarkMatterCollector_ac2f654c3c38eb3cd4877faed8c4c13fb}} 
+\index{DarkMatterCollector@{DarkMatterCollector}!Update@{Update}}
+\index{Update@{Update}!DarkMatterCollector@{DarkMatterCollector}}
+\doxysubsubsection{\texorpdfstring{Update()}{Update()}}
+{\footnotesize\ttfamily void Dark\+Matter\+Collector.\+Update (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [private]}}
+
+
+
+Called once per frame by unity engine. 
+
+\mbox{\Hypertarget{classDarkMatterCollector_aff6cecf6fdc76b102c05db80638b28c6}\label{classDarkMatterCollector_aff6cecf6fdc76b102c05db80638b28c6}} 
+\index{DarkMatterCollector@{DarkMatterCollector}!UpdatePowerReceiver@{UpdatePowerReceiver}}
+\index{UpdatePowerReceiver@{UpdatePowerReceiver}!DarkMatterCollector@{DarkMatterCollector}}
+\doxysubsubsection{\texorpdfstring{UpdatePowerReceiver()}{UpdatePowerReceiver()}}
+{\footnotesize\ttfamily void Dark\+Matter\+Collector.\+Update\+Power\+Receiver (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [private]}}
+
+
+
+Gets power values from power receiver. 
+
+
+
+\doxysubsection{Member Data Documentation}
+\mbox{\Hypertarget{classDarkMatterCollector_a7698c3698ceb63eac1a8c409db125f6d}\label{classDarkMatterCollector_a7698c3698ceb63eac1a8c409db125f6d}} 
+\index{DarkMatterCollector@{DarkMatterCollector}!address@{address}}
+\index{address@{address}!DarkMatterCollector@{DarkMatterCollector}}
+\doxysubsubsection{\texorpdfstring{address}{address}}
+{\footnotesize\ttfamily int Dark\+Matter\+Collector.\+address}
+
+\mbox{\Hypertarget{classDarkMatterCollector_aa19513b4a55b80c371ba28e1cc3917c1}\label{classDarkMatterCollector_aa19513b4a55b80c371ba28e1cc3917c1}} 
+\index{DarkMatterCollector@{DarkMatterCollector}!builtObjects@{builtObjects}}
+\index{builtObjects@{builtObjects}!DarkMatterCollector@{DarkMatterCollector}}
+\doxysubsubsection{\texorpdfstring{builtObjects}{builtObjects}}
+{\footnotesize\ttfamily Game\+Object Dark\+Matter\+Collector.\+built\+Objects\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{classDarkMatterCollector_a11a1bdcd3f16cd99fb3b228d3b3b7a74}\label{classDarkMatterCollector_a11a1bdcd3f16cd99fb3b228d3b3b7a74}} 
+\index{DarkMatterCollector@{DarkMatterCollector}!conduitItem@{conduitItem}}
+\index{conduitItem@{conduitItem}!DarkMatterCollector@{DarkMatterCollector}}
+\doxysubsubsection{\texorpdfstring{conduitItem}{conduitItem}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classConduitItem}{Conduit\+Item}} Dark\+Matter\+Collector.\+conduit\+Item}
+
+\mbox{\Hypertarget{classDarkMatterCollector_afe3b36416878e05f07c1c58c9fed9e2a}\label{classDarkMatterCollector_afe3b36416878e05f07c1c58c9fed9e2a}} 
+\index{DarkMatterCollector@{DarkMatterCollector}!connectionAttempts@{connectionAttempts}}
+\index{connectionAttempts@{connectionAttempts}!DarkMatterCollector@{DarkMatterCollector}}
+\doxysubsubsection{\texorpdfstring{connectionAttempts}{connectionAttempts}}
+{\footnotesize\ttfamily int Dark\+Matter\+Collector.\+connection\+Attempts}
+
+\mbox{\Hypertarget{classDarkMatterCollector_a36c8aed8363345c650dc22abb1514d49}\label{classDarkMatterCollector_a36c8aed8363345c650dc22abb1514d49}} 
+\index{DarkMatterCollector@{DarkMatterCollector}!connectionFailed@{connectionFailed}}
+\index{connectionFailed@{connectionFailed}!DarkMatterCollector@{DarkMatterCollector}}
+\doxysubsubsection{\texorpdfstring{connectionFailed}{connectionFailed}}
+{\footnotesize\ttfamily bool Dark\+Matter\+Collector.\+connection\+Failed}
+
+\mbox{\Hypertarget{classDarkMatterCollector_a6574c45cd1c25af7e77c481eb4cd1086}\label{classDarkMatterCollector_a6574c45cd1c25af7e77c481eb4cd1086}} 
+\index{DarkMatterCollector@{DarkMatterCollector}!connectionLine@{connectionLine}}
+\index{connectionLine@{connectionLine}!DarkMatterCollector@{DarkMatterCollector}}
+\doxysubsubsection{\texorpdfstring{connectionLine}{connectionLine}}
+{\footnotesize\ttfamily Line\+Renderer Dark\+Matter\+Collector.\+connection\+Line\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{classDarkMatterCollector_ab6f7acb7db99f06ce2389ff2bef450f0}\label{classDarkMatterCollector_ab6f7acb7db99f06ce2389ff2bef450f0}} 
+\index{DarkMatterCollector@{DarkMatterCollector}!cooling@{cooling}}
+\index{cooling@{cooling}!DarkMatterCollector@{DarkMatterCollector}}
+\doxysubsubsection{\texorpdfstring{cooling}{cooling}}
+{\footnotesize\ttfamily int Dark\+Matter\+Collector.\+cooling}
+
+\mbox{\Hypertarget{classDarkMatterCollector_a34e56f48a5282784fe2b7f71fb86b28f}\label{classDarkMatterCollector_a34e56f48a5282784fe2b7f71fb86b28f}} 
+\index{DarkMatterCollector@{DarkMatterCollector}!creationMethod@{creationMethod}}
+\index{creationMethod@{creationMethod}!DarkMatterCollector@{DarkMatterCollector}}
+\doxysubsubsection{\texorpdfstring{creationMethod}{creationMethod}}
+{\footnotesize\ttfamily string Dark\+Matter\+Collector.\+creation\+Method = \char`\"{}built\char`\"{}}
+
+\mbox{\Hypertarget{classDarkMatterCollector_a6920f98ce8deb246d77753a20c217323}\label{classDarkMatterCollector_a6920f98ce8deb246d77753a20c217323}} 
+\index{DarkMatterCollector@{DarkMatterCollector}!darkMatterAmount@{darkMatterAmount}}
+\index{darkMatterAmount@{darkMatterAmount}!DarkMatterCollector@{DarkMatterCollector}}
+\doxysubsubsection{\texorpdfstring{darkMatterAmount}{darkMatterAmount}}
+{\footnotesize\ttfamily float Dark\+Matter\+Collector.\+dark\+Matter\+Amount}
+
+\mbox{\Hypertarget{classDarkMatterCollector_a93c42dd9a11b6bfefd74e8a140c6cfde}\label{classDarkMatterCollector_a93c42dd9a11b6bfefd74e8a140c6cfde}} 
+\index{DarkMatterCollector@{DarkMatterCollector}!foundDarkMatter@{foundDarkMatter}}
+\index{foundDarkMatter@{foundDarkMatter}!DarkMatterCollector@{DarkMatterCollector}}
+\doxysubsubsection{\texorpdfstring{foundDarkMatter}{foundDarkMatter}}
+{\footnotesize\ttfamily bool Dark\+Matter\+Collector.\+found\+Dark\+Matter}
+
+\mbox{\Hypertarget{classDarkMatterCollector_a09589dd2612e7da6329a6827f0c1c5be}\label{classDarkMatterCollector_a09589dd2612e7da6329a6827f0c1c5be}} 
+\index{DarkMatterCollector@{DarkMatterCollector}!hasHeatExchanger@{hasHeatExchanger}}
+\index{hasHeatExchanger@{hasHeatExchanger}!DarkMatterCollector@{DarkMatterCollector}}
+\doxysubsubsection{\texorpdfstring{hasHeatExchanger}{hasHeatExchanger}}
+{\footnotesize\ttfamily bool Dark\+Matter\+Collector.\+has\+Heat\+Exchanger}
+
+\mbox{\Hypertarget{classDarkMatterCollector_a4654ae90abef4c75254c4466e1186d91}\label{classDarkMatterCollector_a4654ae90abef4c75254c4466e1186d91}} 
+\index{DarkMatterCollector@{DarkMatterCollector}!heat@{heat}}
+\index{heat@{heat}!DarkMatterCollector@{DarkMatterCollector}}
+\doxysubsubsection{\texorpdfstring{heat}{heat}}
+{\footnotesize\ttfamily int Dark\+Matter\+Collector.\+heat}
+
+\mbox{\Hypertarget{classDarkMatterCollector_a069c5bb9d421af37318bc359dae4d283}\label{classDarkMatterCollector_a069c5bb9d421af37318bc359dae4d283}} 
+\index{DarkMatterCollector@{DarkMatterCollector}!ID@{ID}}
+\index{ID@{ID}!DarkMatterCollector@{DarkMatterCollector}}
+\doxysubsubsection{\texorpdfstring{ID}{ID}}
+{\footnotesize\ttfamily string Dark\+Matter\+Collector.\+ID = \char`\"{}unassigned\char`\"{}}
+
+\mbox{\Hypertarget{classDarkMatterCollector_ab93d569fedaaeafdef0c965b5b2602b7}\label{classDarkMatterCollector_ab93d569fedaaeafdef0c965b5b2602b7}} 
+\index{DarkMatterCollector@{DarkMatterCollector}!inputLine@{inputLine}}
+\index{inputLine@{inputLine}!DarkMatterCollector@{DarkMatterCollector}}
+\doxysubsubsection{\texorpdfstring{inputLine}{inputLine}}
+{\footnotesize\ttfamily Line\+Renderer Dark\+Matter\+Collector.\+input\+Line\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{classDarkMatterCollector_abe2346c98329288d1d5210b8e4c8c1e4}\label{classDarkMatterCollector_abe2346c98329288d1d5210b8e4c8c1e4}} 
+\index{DarkMatterCollector@{DarkMatterCollector}!lineMat@{lineMat}}
+\index{lineMat@{lineMat}!DarkMatterCollector@{DarkMatterCollector}}
+\doxysubsubsection{\texorpdfstring{lineMat}{lineMat}}
+{\footnotesize\ttfamily Material Dark\+Matter\+Collector.\+line\+Mat}
+
+\mbox{\Hypertarget{classDarkMatterCollector_a40cfb3b367dbfee142c22f6fdf1abe09}\label{classDarkMatterCollector_a40cfb3b367dbfee142c22f6fdf1abe09}} 
+\index{DarkMatterCollector@{DarkMatterCollector}!machineTimer@{machineTimer}}
+\index{machineTimer@{machineTimer}!DarkMatterCollector@{DarkMatterCollector}}
+\doxysubsubsection{\texorpdfstring{machineTimer}{machineTimer}}
+{\footnotesize\ttfamily int Dark\+Matter\+Collector.\+machine\+Timer\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{classDarkMatterCollector_abc2750d7a854f4725c6f381c999e896b}\label{classDarkMatterCollector_abc2750d7a854f4725c6f381c999e896b}} 
+\index{DarkMatterCollector@{DarkMatterCollector}!outputObject@{outputObject}}
+\index{outputObject@{outputObject}!DarkMatterCollector@{DarkMatterCollector}}
+\doxysubsubsection{\texorpdfstring{outputObject}{outputObject}}
+{\footnotesize\ttfamily Game\+Object Dark\+Matter\+Collector.\+output\+Object}
+
+\mbox{\Hypertarget{classDarkMatterCollector_a7e436294f83d8a2b138c07568975d95c}\label{classDarkMatterCollector_a7e436294f83d8a2b138c07568975d95c}} 
+\index{DarkMatterCollector@{DarkMatterCollector}!power@{power}}
+\index{power@{power}!DarkMatterCollector@{DarkMatterCollector}}
+\doxysubsubsection{\texorpdfstring{power}{power}}
+{\footnotesize\ttfamily int Dark\+Matter\+Collector.\+power}
+
+\mbox{\Hypertarget{classDarkMatterCollector_a462c548d05d69e1f9217e26275c8bc71}\label{classDarkMatterCollector_a462c548d05d69e1f9217e26275c8bc71}} 
+\index{DarkMatterCollector@{DarkMatterCollector}!powerObject@{powerObject}}
+\index{powerObject@{powerObject}!DarkMatterCollector@{DarkMatterCollector}}
+\doxysubsubsection{\texorpdfstring{powerObject}{powerObject}}
+{\footnotesize\ttfamily Game\+Object Dark\+Matter\+Collector.\+power\+Object}
+
+\mbox{\Hypertarget{classDarkMatterCollector_ad90b18fe83e900affe1e38e6dc0c89fe}\label{classDarkMatterCollector_ad90b18fe83e900affe1e38e6dc0c89fe}} 
+\index{DarkMatterCollector@{DarkMatterCollector}!powerON@{powerON}}
+\index{powerON@{powerON}!DarkMatterCollector@{DarkMatterCollector}}
+\doxysubsubsection{\texorpdfstring{powerON}{powerON}}
+{\footnotesize\ttfamily bool Dark\+Matter\+Collector.\+power\+ON}
+
+\mbox{\Hypertarget{classDarkMatterCollector_acde7fb6ec6a53dca3b6f01cb928b68c5}\label{classDarkMatterCollector_acde7fb6ec6a53dca3b6f01cb928b68c5}} 
+\index{DarkMatterCollector@{DarkMatterCollector}!powerReceiver@{powerReceiver}}
+\index{powerReceiver@{powerReceiver}!DarkMatterCollector@{DarkMatterCollector}}
+\doxysubsubsection{\texorpdfstring{powerReceiver}{powerReceiver}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classPowerReceiver}{Power\+Receiver}} Dark\+Matter\+Collector.\+power\+Receiver}
+
+\mbox{\Hypertarget{classDarkMatterCollector_a2ed76e2767cb3af4c9ffc915ad4596da}\label{classDarkMatterCollector_a2ed76e2767cb3af4c9ffc915ad4596da}} 
+\index{DarkMatterCollector@{DarkMatterCollector}!speed@{speed}}
+\index{speed@{speed}!DarkMatterCollector@{DarkMatterCollector}}
+\doxysubsubsection{\texorpdfstring{speed}{speed}}
+{\footnotesize\ttfamily int Dark\+Matter\+Collector.\+speed = 1}
+
+\mbox{\Hypertarget{classDarkMatterCollector_a02f688efe6982699076f4107892a4f0b}\label{classDarkMatterCollector_a02f688efe6982699076f4107892a4f0b}} 
+\index{DarkMatterCollector@{DarkMatterCollector}!updateTick@{updateTick}}
+\index{updateTick@{updateTick}!DarkMatterCollector@{DarkMatterCollector}}
+\doxysubsubsection{\texorpdfstring{updateTick}{updateTick}}
+{\footnotesize\ttfamily float Dark\+Matter\+Collector.\+update\+Tick\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{DarkMatterCollector_8cs}{Dark\+Matter\+Collector.\+cs}}\end{DoxyCompactItemize}

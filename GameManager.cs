@@ -64,7 +64,7 @@ public class GameManager : MonoBehaviour
     public Coroutine hazardRemovalCoroutine;
     public List<Vector3> meteorShowerLocationList;
 
-    // Called by unity engine on start up to initialize variables
+    //! Called by unity engine on start up to initialize variables.
     public void Start()
     {
         ironBlocks = new GameObject[50];
@@ -112,13 +112,13 @@ public class GameManager : MonoBehaviour
             brickCount++;
         }
 
-        // Get a reference to the player
+        // Get a reference to the player.
         player = GameObject.Find("Player").GetComponent<PlayerController>();
 
-        // Get a reference to the rocket
+        // Get a reference to the rocket.
         rocketScript = rocketObject.GetComponent<Rocket>();
 
-        // Initiate meteor shower location list
+        // Initiate meteor shower location list.
         meteorShowerLocationList = new List<Vector3>();
 
         // Create the hazard manager.
@@ -128,7 +128,7 @@ public class GameManager : MonoBehaviour
         meshManager = new CombinedMeshManager(this);
     }
 
-    // Called once per frame by unity engine
+    //! Called once per frame by unity engine.
     public void Update()
     {
         if (FileBasedPrefs.initialized == true)
@@ -212,7 +212,7 @@ public class GameManager : MonoBehaviour
                 }
             }
 
-            // A save game request is pending
+            // A save game request is pending.
             if (dataSaveRequested == true)
             {
                 if (GetComponent<StateManager>().saving == false && GetComponent<StateManager>().assigningIDs == false)
@@ -223,7 +223,7 @@ public class GameManager : MonoBehaviour
                 }
             }
 
-            // Used to ensure components are removed before combining meshes
+            // Used to ensure components are removed before combining meshes.
             if (waitingForDestroy == true)
             {
                 waitTime += 1 * Time.deltaTime;
@@ -235,7 +235,7 @@ public class GameManager : MonoBehaviour
                 }
             }
 
-            // Clear out dummy objects used for smooth transitions while combining meshes
+            // Clear out dummy objects used for smooth transitions while combining meshes.
             if (clearBrickDummies == true)
             {
                 if (initBrickTimer < 3)
@@ -257,7 +257,7 @@ public class GameManager : MonoBehaviour
                 }
             }
 
-            // Clear out dummy objects used for smooth transitions while combining meshes
+            // Clear out dummy objects used for smooth transitions while combining meshes.
             if (clearGlassDummies == true)
             {
                 if (initGlassTimer < 3)
@@ -279,7 +279,7 @@ public class GameManager : MonoBehaviour
                 }
             }
 
-            // Clear out dummy objects used for smooth transitions while combining meshes
+            // Clear out dummy objects used for smooth transitions while combining meshes.
             if (clearIronDummies == true)
             {
                 if (initIronTimer < 3)
@@ -301,7 +301,7 @@ public class GameManager : MonoBehaviour
                 }
             }
 
-            // Clear out dummy objects used for smooth transitions while combining meshes
+            // Clear out dummy objects used for smooth transitions while combining meshes.
             if (clearSteelDummies == true)
             {
                 if (initSteelTimer < 3)
@@ -327,7 +327,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    // Saves the game on exit
+    //! Saves the game on exit.
     public void RequestSaveOperation()
     {
         if (working == false && GetComponent<StateManager>().saving == false)

@@ -1,0 +1,247 @@
+\hypertarget{classPlayerGUI}{}\doxysection{Player\+G\+UI Class Reference}
+\label{classPlayerGUI}\index{PlayerGUI@{PlayerGUI}}
+Inheritance diagram for Player\+G\+UI\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{classPlayerGUI}
+\end{center}
+\end{figure}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{classPlayerGUI_adbfa2d96d9a822ed0ab024a18e15af18}{Start}} ()
+\begin{DoxyCompactList}\small\item\em Called by unity engine on start up to initialize variables. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classPlayerGUI_a7a2bb7658b3574dcb6a5ee36e7e2a283}{On\+G\+UI}} ()
+\begin{DoxyCompactList}\small\item\em Called by unity engine for rendering and handling G\+UI events. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+G\+U\+I\+Skin \mbox{\hyperlink{classPlayerGUI_aa60f8a393b2bbd8c222b4f6f5bf35fc2}{this\+G\+U\+Iskin}}
+\item 
+Game\+Object \mbox{\hyperlink{classPlayerGUI_a777e50dfbc487c3dab0c7e68a30e55f2}{video\+Player}}
+\end{DoxyCompactItemize}
+\doxysubsection*{Private Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+bool \mbox{\hyperlink{classPlayerGUI_a7dd0bfe2aadc6796e4fa4820d670e575}{Menu\+Available}} ()
+\begin{DoxyCompactList}\small\item\em Returns true if the escape menu should be displayed. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{classPlayerGUI_ad1492d2c379f1b8c92033a17ee718b7f}{Is\+Standard\+Block}} (string type)
+\begin{DoxyCompactList}\small\item\em Returns true if the block is a building block, used with combined meshes. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{classPlayerGUI_ab9c946fbbd58808d38f57b4b69255bbd}{Saving\+Message\+Required}} ()
+\begin{DoxyCompactList}\small\item\em Returns true if the saving world message should be displayed. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{classPlayerGUI_a2e52c862f3ad0431ce0b3e2803b33c30}{Tablet\+Notification\+Required}} ()
+\begin{DoxyCompactList}\small\item\em Returns true if a tablet notification should be displayed. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classPlayerGUI_a55b23c12486b21cffc0f0915cfde1ab7}{Clear\+Schematic}} ()
+\begin{DoxyCompactList}\small\item\em Stops displaying schematics when the menu is closed. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{classPlayerGUI_af9408e42f6e551144e59d3d3081a32dc}{Schematic\+Active}} ()
+\begin{DoxyCompactList}\small\item\em Returns true if any schematic is being displayed. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classPlayerController}{Player\+Controller}} \mbox{\hyperlink{classPlayerGUI_aa471bf3e2d5e5208221e052072992c3e}{player\+Controller}}
+\item 
+\mbox{\hyperlink{classGameManager}{Game\+Manager}} \mbox{\hyperlink{classPlayerGUI_a1df99c36de23d30074b8bd84e947093e}{game\+Manager}}
+\item 
+\mbox{\hyperlink{classStateManager}{State\+Manager}} \mbox{\hyperlink{classPlayerGUI_a26b6512da71b0838f5fa20e046d156c8}{state\+Manager}}
+\item 
+\mbox{\hyperlink{classInventoryManager}{Inventory\+Manager}} \mbox{\hyperlink{classPlayerGUI_a3ec0540e3cbedd54a6539b39057b4b2e}{player\+Inventory}}
+\item 
+\mbox{\hyperlink{classTextureDictionary}{Texture\+Dictionary}} \mbox{\hyperlink{classPlayerGUI_a40995b022b0fb48da8a8eb7ff5eec2cb}{texture\+Dictionary}}
+\item 
+\mbox{\hyperlink{classGuiCoordinates}{Gui\+Coordinates}} \mbox{\hyperlink{classPlayerGUI_a56a4114efc58513fec5e7d9330efd9a9}{gui\+Coordinates}}
+\item 
+bool \mbox{\hyperlink{classPlayerGUI_a6e868d5d840a4023df6e4b0018f33155}{schematic1}}
+\item 
+bool \mbox{\hyperlink{classPlayerGUI_a796af41f6519e707e2c5e551043e5a13}{schematic2}}
+\item 
+bool \mbox{\hyperlink{classPlayerGUI_a9ffcfb3e62fb8a6a6bced5fe0846e316}{schematic3}}
+\item 
+bool \mbox{\hyperlink{classPlayerGUI_a64c20475a9e99b89e47dd23fae33a313}{schematic4}}
+\item 
+bool \mbox{\hyperlink{classPlayerGUI_a2c92b5ccb0d4c67817d28915d6cf8694}{schematic5}}
+\item 
+bool \mbox{\hyperlink{classPlayerGUI_a7f370e4043fbdc36b3784ff56282baf6}{schematic6}}
+\item 
+bool \mbox{\hyperlink{classPlayerGUI_a79796c60d4fbb7d03ed59899a49ab4b8}{schematic7}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{classPlayerGUI_a55b23c12486b21cffc0f0915cfde1ab7}\label{classPlayerGUI_a55b23c12486b21cffc0f0915cfde1ab7}} 
+\index{PlayerGUI@{PlayerGUI}!ClearSchematic@{ClearSchematic}}
+\index{ClearSchematic@{ClearSchematic}!PlayerGUI@{PlayerGUI}}
+\doxysubsubsection{\texorpdfstring{ClearSchematic()}{ClearSchematic()}}
+{\footnotesize\ttfamily void Player\+G\+U\+I.\+Clear\+Schematic (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [private]}}
+
+
+
+Stops displaying schematics when the menu is closed. 
+
+\mbox{\Hypertarget{classPlayerGUI_ad1492d2c379f1b8c92033a17ee718b7f}\label{classPlayerGUI_ad1492d2c379f1b8c92033a17ee718b7f}} 
+\index{PlayerGUI@{PlayerGUI}!IsStandardBlock@{IsStandardBlock}}
+\index{IsStandardBlock@{IsStandardBlock}!PlayerGUI@{PlayerGUI}}
+\doxysubsubsection{\texorpdfstring{IsStandardBlock()}{IsStandardBlock()}}
+{\footnotesize\ttfamily bool Player\+G\+U\+I.\+Is\+Standard\+Block (\begin{DoxyParamCaption}\item[{string}]{type }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [private]}}
+
+
+
+Returns true if the block is a building block, used with combined meshes. 
+
+\mbox{\Hypertarget{classPlayerGUI_a7dd0bfe2aadc6796e4fa4820d670e575}\label{classPlayerGUI_a7dd0bfe2aadc6796e4fa4820d670e575}} 
+\index{PlayerGUI@{PlayerGUI}!MenuAvailable@{MenuAvailable}}
+\index{MenuAvailable@{MenuAvailable}!PlayerGUI@{PlayerGUI}}
+\doxysubsubsection{\texorpdfstring{MenuAvailable()}{MenuAvailable()}}
+{\footnotesize\ttfamily bool Player\+G\+U\+I.\+Menu\+Available (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [private]}}
+
+
+
+Returns true if the escape menu should be displayed. 
+
+\mbox{\Hypertarget{classPlayerGUI_a7a2bb7658b3574dcb6a5ee36e7e2a283}\label{classPlayerGUI_a7a2bb7658b3574dcb6a5ee36e7e2a283}} 
+\index{PlayerGUI@{PlayerGUI}!OnGUI@{OnGUI}}
+\index{OnGUI@{OnGUI}!PlayerGUI@{PlayerGUI}}
+\doxysubsubsection{\texorpdfstring{OnGUI()}{OnGUI()}}
+{\footnotesize\ttfamily void Player\+G\+U\+I.\+On\+G\+UI (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Called by unity engine for rendering and handling G\+UI events. 
+
+\mbox{\Hypertarget{classPlayerGUI_ab9c946fbbd58808d38f57b4b69255bbd}\label{classPlayerGUI_ab9c946fbbd58808d38f57b4b69255bbd}} 
+\index{PlayerGUI@{PlayerGUI}!SavingMessageRequired@{SavingMessageRequired}}
+\index{SavingMessageRequired@{SavingMessageRequired}!PlayerGUI@{PlayerGUI}}
+\doxysubsubsection{\texorpdfstring{SavingMessageRequired()}{SavingMessageRequired()}}
+{\footnotesize\ttfamily bool Player\+G\+U\+I.\+Saving\+Message\+Required (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [private]}}
+
+
+
+Returns true if the saving world message should be displayed. 
+
+\mbox{\Hypertarget{classPlayerGUI_af9408e42f6e551144e59d3d3081a32dc}\label{classPlayerGUI_af9408e42f6e551144e59d3d3081a32dc}} 
+\index{PlayerGUI@{PlayerGUI}!SchematicActive@{SchematicActive}}
+\index{SchematicActive@{SchematicActive}!PlayerGUI@{PlayerGUI}}
+\doxysubsubsection{\texorpdfstring{SchematicActive()}{SchematicActive()}}
+{\footnotesize\ttfamily bool Player\+G\+U\+I.\+Schematic\+Active (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [private]}}
+
+
+
+Returns true if any schematic is being displayed. 
+
+\mbox{\Hypertarget{classPlayerGUI_adbfa2d96d9a822ed0ab024a18e15af18}\label{classPlayerGUI_adbfa2d96d9a822ed0ab024a18e15af18}} 
+\index{PlayerGUI@{PlayerGUI}!Start@{Start}}
+\index{Start@{Start}!PlayerGUI@{PlayerGUI}}
+\doxysubsubsection{\texorpdfstring{Start()}{Start()}}
+{\footnotesize\ttfamily void Player\+G\+U\+I.\+Start (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Called by unity engine on start up to initialize variables. 
+
+\mbox{\Hypertarget{classPlayerGUI_a2e52c862f3ad0431ce0b3e2803b33c30}\label{classPlayerGUI_a2e52c862f3ad0431ce0b3e2803b33c30}} 
+\index{PlayerGUI@{PlayerGUI}!TabletNotificationRequired@{TabletNotificationRequired}}
+\index{TabletNotificationRequired@{TabletNotificationRequired}!PlayerGUI@{PlayerGUI}}
+\doxysubsubsection{\texorpdfstring{TabletNotificationRequired()}{TabletNotificationRequired()}}
+{\footnotesize\ttfamily bool Player\+G\+U\+I.\+Tablet\+Notification\+Required (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [private]}}
+
+
+
+Returns true if a tablet notification should be displayed. 
+
+
+
+\doxysubsection{Member Data Documentation}
+\mbox{\Hypertarget{classPlayerGUI_a1df99c36de23d30074b8bd84e947093e}\label{classPlayerGUI_a1df99c36de23d30074b8bd84e947093e}} 
+\index{PlayerGUI@{PlayerGUI}!gameManager@{gameManager}}
+\index{gameManager@{gameManager}!PlayerGUI@{PlayerGUI}}
+\doxysubsubsection{\texorpdfstring{gameManager}{gameManager}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classGameManager}{Game\+Manager}} Player\+G\+U\+I.\+game\+Manager\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{classPlayerGUI_a56a4114efc58513fec5e7d9330efd9a9}\label{classPlayerGUI_a56a4114efc58513fec5e7d9330efd9a9}} 
+\index{PlayerGUI@{PlayerGUI}!guiCoordinates@{guiCoordinates}}
+\index{guiCoordinates@{guiCoordinates}!PlayerGUI@{PlayerGUI}}
+\doxysubsubsection{\texorpdfstring{guiCoordinates}{guiCoordinates}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classGuiCoordinates}{Gui\+Coordinates}} Player\+G\+U\+I.\+gui\+Coordinates\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{classPlayerGUI_aa471bf3e2d5e5208221e052072992c3e}\label{classPlayerGUI_aa471bf3e2d5e5208221e052072992c3e}} 
+\index{PlayerGUI@{PlayerGUI}!playerController@{playerController}}
+\index{playerController@{playerController}!PlayerGUI@{PlayerGUI}}
+\doxysubsubsection{\texorpdfstring{playerController}{playerController}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classPlayerController}{Player\+Controller}} Player\+G\+U\+I.\+player\+Controller\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{classPlayerGUI_a3ec0540e3cbedd54a6539b39057b4b2e}\label{classPlayerGUI_a3ec0540e3cbedd54a6539b39057b4b2e}} 
+\index{PlayerGUI@{PlayerGUI}!playerInventory@{playerInventory}}
+\index{playerInventory@{playerInventory}!PlayerGUI@{PlayerGUI}}
+\doxysubsubsection{\texorpdfstring{playerInventory}{playerInventory}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classInventoryManager}{Inventory\+Manager}} Player\+G\+U\+I.\+player\+Inventory\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{classPlayerGUI_a6e868d5d840a4023df6e4b0018f33155}\label{classPlayerGUI_a6e868d5d840a4023df6e4b0018f33155}} 
+\index{PlayerGUI@{PlayerGUI}!schematic1@{schematic1}}
+\index{schematic1@{schematic1}!PlayerGUI@{PlayerGUI}}
+\doxysubsubsection{\texorpdfstring{schematic1}{schematic1}}
+{\footnotesize\ttfamily bool Player\+G\+U\+I.\+schematic1\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{classPlayerGUI_a796af41f6519e707e2c5e551043e5a13}\label{classPlayerGUI_a796af41f6519e707e2c5e551043e5a13}} 
+\index{PlayerGUI@{PlayerGUI}!schematic2@{schematic2}}
+\index{schematic2@{schematic2}!PlayerGUI@{PlayerGUI}}
+\doxysubsubsection{\texorpdfstring{schematic2}{schematic2}}
+{\footnotesize\ttfamily bool Player\+G\+U\+I.\+schematic2\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{classPlayerGUI_a9ffcfb3e62fb8a6a6bced5fe0846e316}\label{classPlayerGUI_a9ffcfb3e62fb8a6a6bced5fe0846e316}} 
+\index{PlayerGUI@{PlayerGUI}!schematic3@{schematic3}}
+\index{schematic3@{schematic3}!PlayerGUI@{PlayerGUI}}
+\doxysubsubsection{\texorpdfstring{schematic3}{schematic3}}
+{\footnotesize\ttfamily bool Player\+G\+U\+I.\+schematic3\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{classPlayerGUI_a64c20475a9e99b89e47dd23fae33a313}\label{classPlayerGUI_a64c20475a9e99b89e47dd23fae33a313}} 
+\index{PlayerGUI@{PlayerGUI}!schematic4@{schematic4}}
+\index{schematic4@{schematic4}!PlayerGUI@{PlayerGUI}}
+\doxysubsubsection{\texorpdfstring{schematic4}{schematic4}}
+{\footnotesize\ttfamily bool Player\+G\+U\+I.\+schematic4\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{classPlayerGUI_a2c92b5ccb0d4c67817d28915d6cf8694}\label{classPlayerGUI_a2c92b5ccb0d4c67817d28915d6cf8694}} 
+\index{PlayerGUI@{PlayerGUI}!schematic5@{schematic5}}
+\index{schematic5@{schematic5}!PlayerGUI@{PlayerGUI}}
+\doxysubsubsection{\texorpdfstring{schematic5}{schematic5}}
+{\footnotesize\ttfamily bool Player\+G\+U\+I.\+schematic5\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{classPlayerGUI_a7f370e4043fbdc36b3784ff56282baf6}\label{classPlayerGUI_a7f370e4043fbdc36b3784ff56282baf6}} 
+\index{PlayerGUI@{PlayerGUI}!schematic6@{schematic6}}
+\index{schematic6@{schematic6}!PlayerGUI@{PlayerGUI}}
+\doxysubsubsection{\texorpdfstring{schematic6}{schematic6}}
+{\footnotesize\ttfamily bool Player\+G\+U\+I.\+schematic6\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{classPlayerGUI_a79796c60d4fbb7d03ed59899a49ab4b8}\label{classPlayerGUI_a79796c60d4fbb7d03ed59899a49ab4b8}} 
+\index{PlayerGUI@{PlayerGUI}!schematic7@{schematic7}}
+\index{schematic7@{schematic7}!PlayerGUI@{PlayerGUI}}
+\doxysubsubsection{\texorpdfstring{schematic7}{schematic7}}
+{\footnotesize\ttfamily bool Player\+G\+U\+I.\+schematic7\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{classPlayerGUI_a26b6512da71b0838f5fa20e046d156c8}\label{classPlayerGUI_a26b6512da71b0838f5fa20e046d156c8}} 
+\index{PlayerGUI@{PlayerGUI}!stateManager@{stateManager}}
+\index{stateManager@{stateManager}!PlayerGUI@{PlayerGUI}}
+\doxysubsubsection{\texorpdfstring{stateManager}{stateManager}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classStateManager}{State\+Manager}} Player\+G\+U\+I.\+state\+Manager\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{classPlayerGUI_a40995b022b0fb48da8a8eb7ff5eec2cb}\label{classPlayerGUI_a40995b022b0fb48da8a8eb7ff5eec2cb}} 
+\index{PlayerGUI@{PlayerGUI}!textureDictionary@{textureDictionary}}
+\index{textureDictionary@{textureDictionary}!PlayerGUI@{PlayerGUI}}
+\doxysubsubsection{\texorpdfstring{textureDictionary}{textureDictionary}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classTextureDictionary}{Texture\+Dictionary}} Player\+G\+U\+I.\+texture\+Dictionary\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{classPlayerGUI_aa60f8a393b2bbd8c222b4f6f5bf35fc2}\label{classPlayerGUI_aa60f8a393b2bbd8c222b4f6f5bf35fc2}} 
+\index{PlayerGUI@{PlayerGUI}!thisGUIskin@{thisGUIskin}}
+\index{thisGUIskin@{thisGUIskin}!PlayerGUI@{PlayerGUI}}
+\doxysubsubsection{\texorpdfstring{thisGUIskin}{thisGUIskin}}
+{\footnotesize\ttfamily G\+U\+I\+Skin Player\+G\+U\+I.\+this\+G\+U\+Iskin}
+
+\mbox{\Hypertarget{classPlayerGUI_a777e50dfbc487c3dab0c7e68a30e55f2}\label{classPlayerGUI_a777e50dfbc487c3dab0c7e68a30e55f2}} 
+\index{PlayerGUI@{PlayerGUI}!videoPlayer@{videoPlayer}}
+\index{videoPlayer@{videoPlayer}!PlayerGUI@{PlayerGUI}}
+\doxysubsubsection{\texorpdfstring{videoPlayer}{videoPlayer}}
+{\footnotesize\ttfamily Game\+Object Player\+G\+U\+I.\+video\+Player}
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{PlayerGUI_8cs}{Player\+G\+U\+I.\+cs}}\end{DoxyCompactItemize}

@@ -6,6 +6,7 @@ public class InputManager
     private BuildController buildController;
     private ActionManager actionManager;
 
+    //! This class handles all input from the player.
     public InputManager(PlayerController playerController)
     {
         this.playerController = playerController;
@@ -13,7 +14,7 @@ public class InputManager
         buildController = playerController.GetComponent<BuildController>();
     }
 
-    // Returns true if the player's current build type is a standard block.
+    //! Returns true if the player's current build type is a standard block.
     private bool PlacingStandardBlock()
     {
         return playerController.buildType.Equals("Glass Block")
@@ -24,16 +25,16 @@ public class InputManager
         || playerController.buildType.Equals("Iron Ramp");
     }
 
-    // Recieves all actions from cInput.
+    //! Recieves all actions from cInput.
     public void HandleInput()
     {
-        //CROSSHAIR
+        // CROSSHAIR
         if (cInput.GetKeyDown("Crosshair") && playerController.exiting == false)
         {
             actionManager.ToggleCrosshair();
         }
 
-        //SPRINTING
+        // SPRINTING
         if (cInput.GetKey("Sprint") && playerController.exiting == false)
         {
             playerController.playerMoveSpeed = 25;
@@ -58,7 +59,7 @@ public class InputManager
             actionManager.ResetHeldItemSway();
         }
 
-        //MOVEMENT INPUT
+        // MOVEMENT INPUT
         if (playerController.exiting == false)
         {
             if (cInput.GetKey("Walk Forward"))
@@ -101,7 +102,7 @@ public class InputManager
             actionManager.StopGroundEffects();
         }
 
-        //WEAPON SELECTION
+        // WEAPON SELECTION
         if (!playerController.GuiOpen())
         {
             if (cInput.GetKeyDown("Paint Gun"))
@@ -139,7 +140,7 @@ public class InputManager
             playerController.scannerActive = false;
         }
 
-        //FIRING THE LASER CANNON OR THE SCANNER
+        // FIRING THE LASER CANNON OR THE SCANNER
         if (cInput.GetKeyDown("Fire") && playerController.exiting == false)
         {
             if (!playerController.GuiOpen())
@@ -178,7 +179,7 @@ public class InputManager
             actionManager.ToggleHeadLamp();
         }
 
-        //JETPACK
+        // JETPACK
         if (cInput.GetKey("Jetpack") && playerController.exiting == false)
         {
             actionManager.JetPackThrust();
@@ -191,7 +192,7 @@ public class InputManager
             }
         }
 
-        //BUILD MULTIPLIER
+        // BUILD MULTIPLIER
         if (playerController.building == true && PlacingStandardBlock())
         {
             if (cInput.GetKey("Build Amount +") && playerController.buildMultiplier < 100)
@@ -204,7 +205,7 @@ public class InputManager
             }
         }
 
-        //SELECTING CURRENT BLOCK TO BUILD WITH
+        // SELECTING CURRENT BLOCK TO BUILD WITH
         if (!playerController.GuiOpen())
         {
             if (cInput.GetKeyDown("Next Item"))
@@ -228,7 +229,7 @@ public class InputManager
             }
         }
 
-        //BLOCK ROTATION
+        // BLOCK ROTATION
         if (cInput.GetKeyDown("Rotate Block"))
         {
             if (playerController.building == true)
@@ -240,7 +241,7 @@ public class InputManager
             }
         }
 
-        //BUILD AXIS
+        // BUILD AXIS
         if (cInput.GetKeyDown("Build Axis"))
         {
             playerController.PlayButtonSound();
@@ -254,43 +255,43 @@ public class InputManager
             playerController.autoAxisMessage = true;
         }
 
-        //IF THE PLAYER HAS SELECTED AN ITEM AND HAS THAT ITEM IN THE INVENTORY, BEGIN BUILDING ON KEY PRESS
+        // IF THE PLAYER HAS SELECTED AN ITEM AND HAS THAT ITEM IN THE INVENTORY, BEGIN BUILDING ON KEY PRESS
         if (cInput.GetKeyDown("Build"))
         {
             actionManager.StartBuildMode();
         }
 
-        //CANCEL BUILDING ON KEY PRESS
+        // CANCEL BUILDING ON KEY PRESS
         if (cInput.GetKeyDown("Stop Building"))
         {
             actionManager.StopBuilding();
         }
 
-        //ACTIVATE INVENTORY GUI ON KEY PRESS
+        // ACTIVATE INVENTORY GUI ON KEY PRESS
         if (cInput.GetKeyDown("Inventory"))
         {
             actionManager.ToggleInventory();
         }
 
-        //ACTIVATE CRAFTING GUI ON KEY PRESS
+        // ACTIVATE CRAFTING GUI ON KEY PRESS
         if (cInput.GetKeyDown("Crafting"))
         {
             actionManager.ToggleCraftingGUI();
         }
 
-        //ACTIVATE MARKET GUI ON KEY PRESS
+        // ACTIVATE MARKET GUI ON KEY PRESS
         if (cInput.GetKeyDown("Market"))
         {
             actionManager.ToggleMarketGUI();
         }
 
-        //ACTIVATE TABLET GUI ON KEY PRESS
+        // ACTIVATE TABLET GUI ON KEY PRESS
         if (cInput.GetKeyDown("Tablet"))
         {
             actionManager.ToggleTablet();
         }
 
-        //OPEN OPTIONS/EXIT MENU WHEN ESCAPE KEY IS PRESSED
+        // OPEN OPTIONS/EXIT MENU WHEN ESCAPE KEY IS PRESSED
         if (Input.GetKeyDown(KeyCode.Escape) && playerController.exiting == false)
         {
             if (playerController.inventoryOpen == true)
@@ -326,4 +327,3 @@ public class InputManager
         }
     }
 }
-

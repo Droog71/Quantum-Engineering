@@ -5,18 +5,20 @@ public class HazardManager
 {
     private GameManager gameManager;
 
+    //! This class handles all meteor showers and pirate attacks.
     public HazardManager(GameManager gameManager)
     {
         this.gameManager = gameManager;
     }
 
+    //! Called by the game manager to increment timers and carry out meteor showers and pirate attacks when needed.
     public void UpdateHazards()
     {
         if (gameManager.hazardsEnabled == true)
         {
             if (gameManager.player.timeToDeliver == false && gameManager.rocketScript.gameTime < 2000)
             {
-                // Pirate attacks
+                // Pirate attacks.
                 if (gameManager.rocketScript.day >= 10 && gameManager.GetComponent<StateManager>().worldLoaded == true)
                 {
                     gameManager.pirateAttackTimer += 1 * Time.deltaTime;
@@ -74,7 +76,7 @@ public class HazardManager
                     }
                 }
 
-                // Meteor showers
+                // Meteor showers.
                 if (gameManager.GetComponent<StateManager>().worldLoaded)
                 {
                     gameManager.meteorShowerTimer += 1 * Time.deltaTime;
@@ -146,7 +148,7 @@ public class HazardManager
         }
     }
 
-    // Removes all hazards from the world
+    //! Removes all hazards from the world.
     private void StopHazards()
     {
         gameManager.pirateTimer = 0;
@@ -170,7 +172,7 @@ public class HazardManager
         gameManager.hazardRemovalCoroutine = gameManager.StartCoroutine(HazardRemovalCoroutine());
     }
 
-    // Removes all hazards from the world
+    //! Removes all hazards from the world.
     private IEnumerator HazardRemovalCoroutine()
     {
         Meteor[] allMeteors = Object.FindObjectsOfType<Meteor>();
@@ -193,4 +195,3 @@ public class HazardManager
         }
     }
 }
-

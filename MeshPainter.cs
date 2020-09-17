@@ -7,7 +7,7 @@ public class MeshPainter : MonoBehaviour
     private float saveTimer;
     private Coroutine saveDataCoRoutine;
 
-    // Called by unity engine on start up to initialize variables
+    //! Called by unity engine on start up to initialize variables.
     public void Start()
     {
         string worldName = GameObject.Find("GameManager").GetComponent<StateManager>().WorldName;
@@ -73,7 +73,7 @@ public class MeshPainter : MonoBehaviour
         }
     }
 
-    // Called once per frame by unity engine
+    //! Called once per frame by unity engine.
     public void Update()
     {
         saveTimer += 1 * Time.deltaTime;
@@ -84,7 +84,7 @@ public class MeshPainter : MonoBehaviour
         }
     }
 
-    //Saves the color of painted objects
+    //! Saves the color of painted objects.
     private IEnumerator SaveDataCoRoutine()
     {
         string worldName = GameObject.Find("GameManager").GetComponent<StateManager>().WorldName;

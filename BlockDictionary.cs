@@ -4,7 +4,7 @@ using System.Linq;
 using System.Collections.Generic;
 using System.IO;
 
-//This class contains GameObject dictionaries for easily referencing different machines and other blocks
+//! This class contains GameObject dictionaries for easily referencing different machines and other blocks.
 public class BlockDictionary
 {
     private PlayerController playerController;
@@ -18,7 +18,7 @@ public class BlockDictionary
         Init();
     }
 
-    // Gets description for a specfic machine.
+    //! Gets description for a specfic machine.
     public string GetMachineDescription(string machineName)
     {
         string modPath = Path.Combine(Application.persistentDataPath, "Mods");
@@ -43,7 +43,7 @@ public class BlockDictionary
         return null;
     }
 
-    // Gets recipes for a specfic machine.
+    //! Gets recipes for a specfic machine.
     public BasicMachineRecipe[] GetMachineRecipes(string machineName)
     {
         string modPath = Path.Combine(Application.persistentDataPath, "Mods");
@@ -77,7 +77,7 @@ public class BlockDictionary
         return null;
     }
 
-    // Adds machines from mods to the game.
+    //! Adds machines from mods to the game.
     public void AddModMachines(Dictionary<string, GameObject> dictionary)
     {
         string modPath = Path.Combine(Application.persistentDataPath, "Mods");
@@ -104,7 +104,7 @@ public class BlockDictionary
         }
     }
 
-    // Initializes variables.
+    //! Initializes variables.
     private void Init()
     {
         blockDictionary = new Dictionary<string, GameObject>

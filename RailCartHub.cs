@@ -21,7 +21,7 @@ public class RailCartHub : MonoBehaviour
     public bool connectionFailed;
     public bool centralHub;
 
-    // Called by unity engine on start up to initialize variables
+    //! Called by unity engine on start up to initialize variables.
     public void Start()
     {
         connectionLine = gameObject.AddComponent<LineRenderer>();
@@ -32,7 +32,7 @@ public class RailCartHub : MonoBehaviour
         connectionLine.enabled = false;
     }
 
-    // Called once per frame by unity engine
+    //! Called once per frame by unity engine.
     public void Update()
     {
         updateTick += 1 * Time.deltaTime;
@@ -90,7 +90,7 @@ public class RailCartHub : MonoBehaviour
         }
     }
 
-    // Returns true if this hub is ready to connect to the next
+    //! Returns true if this hub is ready to connect to the next.
     private bool ReadyToConnect()
     {
         if (outputObject == null)
@@ -100,7 +100,7 @@ public class RailCartHub : MonoBehaviour
         return false;
     }
 
-    // Returns true if the hub in question is a potential connection
+    //! Returns true if the hub in question is a potential connection.
     private bool CanConnect(RailCartHub hub)
     {
         if (centralHub == true)
@@ -110,7 +110,7 @@ public class RailCartHub : MonoBehaviour
         return hub.gameObject != inputObject && hub.gameObject != gameObject && hub.inputObject == null;
     }
 
-    // Finds the first hub within range
+    //! Finds the first hub within range.
     private void FindConnection()
     {
         RailCartHub[] allHubs = FindObjectsOfType<RailCartHub>();

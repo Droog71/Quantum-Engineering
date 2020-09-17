@@ -3,6 +3,7 @@ using System.Collections;
 using System.IO;
 using UnityEngine.SceneManagement;
 
+//! This is the core class for the player which handles most of the player's interactions with the game.
 public class PlayerController : MonoBehaviour
 {
     private InputManager inputManager;
@@ -198,19 +199,19 @@ public class PlayerController : MonoBehaviour
 
     private bool addedModMachines;
 
-    // Called by unity engine on start up to initialize variables
+    // Called by unity engine on start up to initialize variables.
     public void Start()
     {
-        //REFERENCE TO THE GAME AND STATE MANAGER
+        //!REFERENCE TO THE GAME AND STATE MANAGER
         gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
         stateManager = GameObject.Find("GameManager").GetComponent<StateManager>();
 
 
-        //INITIALIZE COMPONENT CLASSES
+        // INITIALIZE COMPONENT CLASSES
         playerInventory = GetComponent<InventoryManager>();
         laserController = new LaserController(this, gameManager);
 
-        //LOAD MOUSE SETTINGS
+        // LOAD MOUSE SETTINGS
         Cursor.visible = true;
         Cursor.lockState = CursorLockMode.None;
         if (PlayerPrefs.GetFloat("xSensitivity") != 0)
@@ -248,7 +249,7 @@ public class PlayerController : MonoBehaviour
         blockSelector = new BlockSelector(this);
     }
 
-    // Called once per frame by unity engine
+    //! Called once per frame by unity engine.
     public void Update()
     {
         if (ReadyToLoadModMachines() == true)
@@ -324,7 +325,7 @@ public class PlayerController : MonoBehaviour
                     destructionMessageReceived = false;
                 }
 
-                //PIRATE ATTACK INCOMING
+                // PIRATE ATTACK INCOMING
                 if (pirateAttackWarningActive == true)
                 {
                     currentTabletMessage = "Warning! Warning! Warning! Warning! Warning!\n\nIncoming pirate attack!";
@@ -339,7 +340,7 @@ public class PlayerController : MonoBehaviour
                     pirateAttackWarningReceived = false;
                 }
 
-                //METEOR SHOWER INCOMING
+                // METEOR SHOWER INCOMING
                 if (meteorShowerWarningActive == true)
                 {
                     currentTabletMessage = "Warning! Warning! Warning! Warning! Warning!\n\nIncoming meteor shower!";
@@ -420,6 +421,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    //! Returns true when prerequisites are met for loading machines added by mods.
     private bool ReadyToLoadModMachines()
     {
         return addedModMachines == false
@@ -429,7 +431,7 @@ public class PlayerController : MonoBehaviour
         && LoadedModTextures();
     }
 
-    // Returns true if block dictionary is non null.
+    //! Returns true if block dictionary is non null.
     private bool BlockDictionaryInitiazlied()
     {
         if (GetComponent<BuildController>() != null)
@@ -439,7 +441,7 @@ public class PlayerController : MonoBehaviour
         return false;
     }
 
-    // Returns true when all mod textures have finished loading.
+    //! Returns true when all mod textures have finished loading.
     private bool LoadedModTextures()
     {
         if (GetComponent<TextureDictionary>() != null)
@@ -449,7 +451,7 @@ public class PlayerController : MonoBehaviour
         return false;
     }
 
-    // Saves the player's location and money.
+    //! Saves the player's location and money.
     public void SavePlayerData()
     {
         PlayerPrefsX.SetVector3(stateManager.WorldName + "playerPosition", transform.position);
@@ -458,7 +460,7 @@ public class PlayerController : MonoBehaviour
         FileBasedPrefs.SetBool(stateManager.WorldName + "oldWorld", true);
     }
 
-    // Applies global settings.
+    //! Applies global settings.
     public void ApplySettings()
     {
         PlayerPrefsX.SetPersistentBool("mouseInverted", GetComponent<MSCameraController>().CameraSettings.firstPerson.invertYInput);
@@ -472,7 +474,7 @@ public class PlayerController : MonoBehaviour
         PlayerPrefs.Save();
     }
 
-    // Plays a sound.
+    //! Plays a sound.
     public void PlayButtonSound()
     {
         guiSound.volume = 0.15f;
@@ -480,7 +482,7 @@ public class PlayerController : MonoBehaviour
         guiSound.Play();
     }
 
-    // Plays a sound.
+    //! Plays a sound.
     public void PlayCraftingSound()
     {
         guiSound.volume = 0.3f;
@@ -488,7 +490,7 @@ public class PlayerController : MonoBehaviour
         guiSound.Play();
     }
 
-    // Plays a sound.
+    //! Plays a sound.
     public void PlayMissingItemsSound()
     {
         guiSound.volume = 0.15f;
@@ -496,7 +498,7 @@ public class PlayerController : MonoBehaviour
         guiSound.Play();
     }
 
-    // Returns true if any GUI is open
+    //! Returns true if any GUI is open.
     public bool GuiOpen()
     {
         return cGUI.showingInputGUI == true
@@ -508,7 +510,7 @@ public class PlayerController : MonoBehaviour
         || (paintGunActive == true && paintColorSelected == false);
     }
 
-    // Returns true at the beginning of the first in-game day when the intro should be displayed on the tablet.
+    //! Returns true at the beginning of the first in-game day when the intro should be displayed on the tablet.
     private bool ShouldShowTabletIntro()
     {
         return currentTabletMessage.Equals("")
@@ -516,7 +518,7 @@ public class PlayerController : MonoBehaviour
         && (int)GameObject.Find("Rocket").GetComponent<Rocket>().gameTime < 200;
     }
 
-    // Displays the intro message on the tablet.
+    //! Displays the intro message on the tablet.
     private void ShowTabletIntro()
     {
         currentTabletMessage = "To all deployed members of:\nQuantum Engineering, \nDark Matter Research, \nMoon Base Establishment Division" +
@@ -526,7 +528,7 @@ public class PlayerController : MonoBehaviour
         "Agrat Eirelis:" + "\n" + "Chief Officer," + "\n" + "Quantum Engineering," + "\n" + "Dark Matter Research," + "\n" + "Moon Base Establishment Division";
     }
 
-    // Moves the player to their previous location when a game is loaded.
+    //! Moves the player to their previous location when a game is loaded.
     private void MovePlayerToSavedLocation()
     {
         transform.position = PlayerPrefsX.GetVector3(stateManager.WorldName + "playerPosition");
@@ -535,7 +537,7 @@ public class PlayerController : MonoBehaviour
         movedPlayer = true;
     }
 
-    // Opens the tablet to display a message the first time the world is loaded.
+    //! Opens the tablet to display a message the first time the world is loaded.
     private void OpenTabletOnFirstLoad() 
     {
         if (GetComponent<MainMenu>().finishedLoading == true)
@@ -551,7 +553,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    // Displays a message on the player's tablet when the rocket is landing to collect dark matter.
+    //! Displays a message on the player's tablet when the rocket is landing to collect dark matter.
     private void DisplayDeliveryWarning()
     {
         deliveryWarningTimer += 1 * Time.deltaTime;
@@ -576,6 +578,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    //! Stops the players building mode and sends a request to the game manager to recombine any edited combined meshes.
     private void HandleBuildingStopRequest()
     {
         if (gameManager.working == false)
@@ -595,7 +598,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    // Handles the sending of chunk load requests for modifying combined meshes.
+    //! Handles the sending of chunk load requests for modifying combined meshes.
     private void ModifyCombinedMeshes()
     {
         destroyTimer += 1 * Time.deltaTime;
@@ -635,7 +638,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    // Handles requests to load chunks of blocks from combined meshes near the player.
+    //! Handles requests to load chunks of blocks from combined meshes near the player.
     private void HandleChunkLoadRequest()
     {
         if (gameManager.working == false)
@@ -653,7 +656,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    // Handles requests to open the escape menu, stopping appropriate coroutines.
+    //! Handles requests to open the escape menu, stopping appropriate coroutines.
     private void HandleEscapeMenuRequest()
     {
         if (building == true || destroying == true)
@@ -683,7 +686,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    // Enforces world size limitations.
+    //! Enforces world size limitations.
     private void EnforceWorldLimits()
     {
         if (gameObject.transform.position.x > 4500)
@@ -712,7 +715,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    // Handles requests to exit the game
+    //! Handles requests to exit the game
     private void HandleSaveRequest()
     {
         requestedSaveTimer += 1 * Time.deltaTime;
@@ -729,7 +732,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    // Closes the storage GUI if the player has moved too far from the container.
+    //! Closes the storage GUI if the player has moved too far from the container.
     private void CheckStorageDistance()
     {
         if (remoteStorageActive == false)
@@ -750,7 +753,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    // Handles safely saving data and shutting down the game.
+    //! Handles saving world and exiting to the main menu.
     public static IEnumerator Save()
     {
         float f = 0;

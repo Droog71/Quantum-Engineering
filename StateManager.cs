@@ -1,8 +1,8 @@
 ﻿using UnityEngine;
 
+//! This class handles unique ID assignment and saving & loading of worlds.
 public class StateManager : MonoBehaviour
 {
-    //BUILDING
     public bool saving;
     public bool dataSaved;
     public bool worldLoaded;
@@ -55,13 +55,13 @@ public class StateManager : MonoBehaviour
     private Coroutine addressingCoroutine;
     private Coroutine saveCoroutine;
 
-    // Called by unity engine before the first update.
+    //! Called by unity engine before the first update.
     public void Start()
     {
         saveManager = new SaveManager(this);
     }
 
-    // Update is called once per frame
+    //! Update is called once per frame.
     public void Update()
     {
         MainMenu mainMenu = GameObject.Find("Player").GetComponent<MainMenu>();
@@ -89,7 +89,7 @@ public class StateManager : MonoBehaviour
         }
     }
 
-    // Loads a saved world.
+    //! Loads a saved world.
     private void LoadWorld()
     {
         if (Loaded == false && PlayerPrefsX.GetIntArray(WorldName + "idList").Length > 0)
@@ -453,20 +453,20 @@ public class StateManager : MonoBehaviour
         GameObject.Find("GameManager").GetComponent<GameManager>().meshManager.CombineBlocks();
     }
 
-    // Assigns ID to objects in the world.
+    //! Assigns ID to objects in the world.
     private void AssignIDs()
     {
         addressingCoroutine = StartCoroutine(addressManager.AddressingCoroutine());
     }
 
-    // Saves the game.
+    //! Saves the game.
     public void SaveData()
     {
         if (assigningIDs == false)
             saveCoroutine = StartCoroutine(saveManager.SaveDataCoroutine());
     }
 
-    // Returns true if the object in question is a storage container.
+    //! Returns true if the object in question is a storage container.
     public bool IsStorageContainer(GameObject go)
     {
         return go.GetComponent<InventoryManager>() != null

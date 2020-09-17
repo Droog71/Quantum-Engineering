@@ -27,7 +27,7 @@ public class Turret : MonoBehaviour
     private LineRenderer laser;
     public PowerReceiver powerReceiver;
 
-    // Called by unity engine on start up to initialize variables
+    //! Called by unity engine on start up to initialize variables.
     public void Start()
     {
         powerReceiver = gameObject.AddComponent<PowerReceiver>();
@@ -41,7 +41,7 @@ public class Turret : MonoBehaviour
         restingRotation = barrel.transform.rotation;
     }
 
-    // Called once per frame by unity engine
+    //! Called once per frame by unity engine.
     public void Update()
     {
         updateTick += 1 * Time.deltaTime;
@@ -121,7 +121,7 @@ public class Turret : MonoBehaviour
         }
     }
 
-    // Fires at all targets on the target list
+    //! Fires at all targets on the target list.
     private IEnumerator Fire()
     {
         firing = true;
@@ -222,7 +222,7 @@ public class Turret : MonoBehaviour
         }
     }
 
-    // Gets power values from power receiver
+    //! Gets power values from power receiver.
     private void UpdatePowerReceiver()
     {
         powerReceiver.ID = ID;

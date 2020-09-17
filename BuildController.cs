@@ -10,7 +10,7 @@ public class BuildController : MonoBehaviour
     public GameObject builtObjects;
     public bool autoAxis;
 
-    // Called by unity engine on start up to initialize variables
+    //! Called by unity engine on start up to initialize variables
     public void Start()
     {
         playerController = GetComponent<PlayerController>();
@@ -19,7 +19,7 @@ public class BuildController : MonoBehaviour
         builtObjects = GameObject.Find("Built_Objects");
     }
 
-    // Called once per frame by unity engine
+    //! Called once per frame by unity engine
     public void Update()
     {
         if (playerController.building == true)
@@ -132,7 +132,7 @@ public class BuildController : MonoBehaviour
         }
     }
 
-    // Creates the block placement cursor.
+    //! Creates the block placement cursor.
     private void CreateBuildObject()
     {
         playerController.buildObject = GameObject.CreatePrimitive(PrimitiveType.Cube);
@@ -153,7 +153,7 @@ public class BuildController : MonoBehaviour
         dirLine.enabled = true;
     }
 
-    // Automatically selects build axis based on raycast.
+    //! Automatically selects build axis based on raycast.
     private void AutoSelectBuildAxis(RaycastHit buildHit)
     {
         Vector3 hitPoint = buildHit.point;
@@ -200,7 +200,7 @@ public class BuildController : MonoBehaviour
         playerController.buildTimer = 0;
     }
 
-    // Changes the axis along which blocks will be placed.
+    //! Changes the axis along which blocks will be placed.
     public void ChangeBuildAxis()
     {
         if (playerController.cubeloc == "up")
@@ -232,7 +232,7 @@ public class BuildController : MonoBehaviour
         playerController.buildTimer = 0;
     }
 
-    // Implements the current build axis.
+    //! Implements the current build axis.
     private void SetupBuildAxis(RaycastHit hit)
     {
         Vector3 placementPoint = hit.transform.position;
@@ -272,7 +272,7 @@ public class BuildController : MonoBehaviour
         dirLine.SetPosition(1, dirVector);
     }
 
-    // Prepares cursor for free block placement, ie: not attached to another block.
+    //! Prepares cursor for free block placement, ie: not attached to another block.
     private void SetupFreePlacement(RaycastHit hit)
     {
         Vector3 placementPoint = new Vector3(hit.point.x, (hit.point.y + 2.4f), hit.point.z);
@@ -284,7 +284,7 @@ public class BuildController : MonoBehaviour
         dirLine.SetPosition(1, dirVector);
     }
 
-    // Places a machine in the world.
+    //! Places a machine in the world.
     private void BuildMachine(string type, RaycastHit hit)
     {
         bool foundItems = false;
@@ -369,7 +369,7 @@ public class BuildController : MonoBehaviour
         }
     }
 
-    // Places standard building blocks in the world.
+    //! Places standard building blocks in the world.
     private void BuildBlock(string type)
     {
         bool foundItems = false;
@@ -448,5 +448,3 @@ public class BuildController : MonoBehaviour
         }
     }
 }
-
-

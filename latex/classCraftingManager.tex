@@ -1,0 +1,128 @@
+\hypertarget{classCraftingManager}{}\doxysection{Crafting\+Manager Class Reference}
+\label{classCraftingManager}\index{CraftingManager@{CraftingManager}}
+Inheritance diagram for Crafting\+Manager\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{classCraftingManager}
+\end{center}
+\end{figure}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{classCraftingManager_a71613100eb3f3fc9ee9110597e25c609}{Start}} ()
+\begin{DoxyCompactList}\small\item\em Called by unity engine on start up to initialize variables. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classCraftingManager_a1b37f6ad8bbfb82c175da37ad8da91f2}{On\+Destroy}} ()
+\begin{DoxyCompactList}\small\item\em Used to disable the conduit item if this block is destroyed. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classCraftingManager_a245a58265b369191f6b8f382e33052ef}{Craft\+Item\+As\+Player}} (\mbox{\hyperlink{classCraftingRecipe}{Crafting\+Recipe}} recipe)
+\begin{DoxyCompactList}\small\item\em Called when the player crafts an item from the inventory G\+UI. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classCraftingManager_a087e27d1dfb974250eef27d78e0f2f78}{Craft\+Item\+Using\+Storage\+Container}} (\mbox{\hyperlink{classCraftingRecipe}{Crafting\+Recipe}} recipe)
+\begin{DoxyCompactList}\small\item\em Called by the auto crafter when it is connected to a storage container. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classCraftingManager_a251b6b0b6125f18fdf7c0dbcac13ea26}{Craft\+Item\+Using\+Storage\+Computer}} (\mbox{\hyperlink{classCraftingRecipe}{Crafting\+Recipe}} recipe)
+\begin{DoxyCompactList}\small\item\em Called by the auto crafter when it is connected to a storage computer. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classInventoryManager}{Inventory\+Manager}} \mbox{\hyperlink{classCraftingManager_aad3b4b15f02e92d735edf6e7a2b74c59}{inventory\+Manager}}
+\item 
+\mbox{\hyperlink{classInventoryManager}{Inventory\+Manager}}\mbox{[}$\,$\mbox{]} \mbox{\hyperlink{classCraftingManager_a6567abfdc60066a5f77b68373c452b17}{storage\+Computer\+Inventory\+Manager}}
+\item 
+\mbox{\hyperlink{classConduitItem}{Conduit\+Item}} \mbox{\hyperlink{classCraftingManager_a0544930c06f27b88ef108ad52540346a}{conduit\+Item}}
+\item 
+bool \mbox{\hyperlink{classCraftingManager_a363f831fb73f9ec1705a8666c83e97ec}{missing\+Item}}
+\end{DoxyCompactItemize}
+\doxysubsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classPlayerController}{Player\+Controller}} \mbox{\hyperlink{classCraftingManager_acdfaac73b2f9dba64dec63d7c64f9a96}{player\+Controller}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{classCraftingManager_a245a58265b369191f6b8f382e33052ef}\label{classCraftingManager_a245a58265b369191f6b8f382e33052ef}} 
+\index{CraftingManager@{CraftingManager}!CraftItemAsPlayer@{CraftItemAsPlayer}}
+\index{CraftItemAsPlayer@{CraftItemAsPlayer}!CraftingManager@{CraftingManager}}
+\doxysubsubsection{\texorpdfstring{CraftItemAsPlayer()}{CraftItemAsPlayer()}}
+{\footnotesize\ttfamily void Crafting\+Manager.\+Craft\+Item\+As\+Player (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classCraftingRecipe}{Crafting\+Recipe}}}]{recipe }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Called when the player crafts an item from the inventory G\+UI. 
+
+\mbox{\Hypertarget{classCraftingManager_a251b6b0b6125f18fdf7c0dbcac13ea26}\label{classCraftingManager_a251b6b0b6125f18fdf7c0dbcac13ea26}} 
+\index{CraftingManager@{CraftingManager}!CraftItemUsingStorageComputer@{CraftItemUsingStorageComputer}}
+\index{CraftItemUsingStorageComputer@{CraftItemUsingStorageComputer}!CraftingManager@{CraftingManager}}
+\doxysubsubsection{\texorpdfstring{CraftItemUsingStorageComputer()}{CraftItemUsingStorageComputer()}}
+{\footnotesize\ttfamily void Crafting\+Manager.\+Craft\+Item\+Using\+Storage\+Computer (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classCraftingRecipe}{Crafting\+Recipe}}}]{recipe }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Called by the auto crafter when it is connected to a storage computer. 
+
+\mbox{\Hypertarget{classCraftingManager_a087e27d1dfb974250eef27d78e0f2f78}\label{classCraftingManager_a087e27d1dfb974250eef27d78e0f2f78}} 
+\index{CraftingManager@{CraftingManager}!CraftItemUsingStorageContainer@{CraftItemUsingStorageContainer}}
+\index{CraftItemUsingStorageContainer@{CraftItemUsingStorageContainer}!CraftingManager@{CraftingManager}}
+\doxysubsubsection{\texorpdfstring{CraftItemUsingStorageContainer()}{CraftItemUsingStorageContainer()}}
+{\footnotesize\ttfamily void Crafting\+Manager.\+Craft\+Item\+Using\+Storage\+Container (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classCraftingRecipe}{Crafting\+Recipe}}}]{recipe }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Called by the auto crafter when it is connected to a storage container. 
+
+\mbox{\Hypertarget{classCraftingManager_a1b37f6ad8bbfb82c175da37ad8da91f2}\label{classCraftingManager_a1b37f6ad8bbfb82c175da37ad8da91f2}} 
+\index{CraftingManager@{CraftingManager}!OnDestroy@{OnDestroy}}
+\index{OnDestroy@{OnDestroy}!CraftingManager@{CraftingManager}}
+\doxysubsubsection{\texorpdfstring{OnDestroy()}{OnDestroy()}}
+{\footnotesize\ttfamily void Crafting\+Manager.\+On\+Destroy (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Used to disable the conduit item if this block is destroyed. 
+
+\mbox{\Hypertarget{classCraftingManager_a71613100eb3f3fc9ee9110597e25c609}\label{classCraftingManager_a71613100eb3f3fc9ee9110597e25c609}} 
+\index{CraftingManager@{CraftingManager}!Start@{Start}}
+\index{Start@{Start}!CraftingManager@{CraftingManager}}
+\doxysubsubsection{\texorpdfstring{Start()}{Start()}}
+{\footnotesize\ttfamily void Crafting\+Manager.\+Start (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Called by unity engine on start up to initialize variables. 
+
+
+
+\doxysubsection{Member Data Documentation}
+\mbox{\Hypertarget{classCraftingManager_a0544930c06f27b88ef108ad52540346a}\label{classCraftingManager_a0544930c06f27b88ef108ad52540346a}} 
+\index{CraftingManager@{CraftingManager}!conduitItem@{conduitItem}}
+\index{conduitItem@{conduitItem}!CraftingManager@{CraftingManager}}
+\doxysubsubsection{\texorpdfstring{conduitItem}{conduitItem}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classConduitItem}{Conduit\+Item}} Crafting\+Manager.\+conduit\+Item}
+
+\mbox{\Hypertarget{classCraftingManager_aad3b4b15f02e92d735edf6e7a2b74c59}\label{classCraftingManager_aad3b4b15f02e92d735edf6e7a2b74c59}} 
+\index{CraftingManager@{CraftingManager}!inventoryManager@{inventoryManager}}
+\index{inventoryManager@{inventoryManager}!CraftingManager@{CraftingManager}}
+\doxysubsubsection{\texorpdfstring{inventoryManager}{inventoryManager}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classInventoryManager}{Inventory\+Manager}} Crafting\+Manager.\+inventory\+Manager}
+
+\mbox{\Hypertarget{classCraftingManager_a363f831fb73f9ec1705a8666c83e97ec}\label{classCraftingManager_a363f831fb73f9ec1705a8666c83e97ec}} 
+\index{CraftingManager@{CraftingManager}!missingItem@{missingItem}}
+\index{missingItem@{missingItem}!CraftingManager@{CraftingManager}}
+\doxysubsubsection{\texorpdfstring{missingItem}{missingItem}}
+{\footnotesize\ttfamily bool Crafting\+Manager.\+missing\+Item}
+
+\mbox{\Hypertarget{classCraftingManager_acdfaac73b2f9dba64dec63d7c64f9a96}\label{classCraftingManager_acdfaac73b2f9dba64dec63d7c64f9a96}} 
+\index{CraftingManager@{CraftingManager}!playerController@{playerController}}
+\index{playerController@{playerController}!CraftingManager@{CraftingManager}}
+\doxysubsubsection{\texorpdfstring{playerController}{playerController}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classPlayerController}{Player\+Controller}} Crafting\+Manager.\+player\+Controller\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{classCraftingManager_a6567abfdc60066a5f77b68373c452b17}\label{classCraftingManager_a6567abfdc60066a5f77b68373c452b17}} 
+\index{CraftingManager@{CraftingManager}!storageComputerInventoryManager@{storageComputerInventoryManager}}
+\index{storageComputerInventoryManager@{storageComputerInventoryManager}!CraftingManager@{CraftingManager}}
+\doxysubsubsection{\texorpdfstring{storageComputerInventoryManager}{storageComputerInventoryManager}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classInventoryManager}{Inventory\+Manager}} \mbox{[}$\,$\mbox{]} Crafting\+Manager.\+storage\+Computer\+Inventory\+Manager}
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{CraftingManager_8cs}{Crafting\+Manager.\+cs}}\end{DoxyCompactItemize}

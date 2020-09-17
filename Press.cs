@@ -4,7 +4,7 @@ using System.Linq;
 
 public class Press : BasicMachine
 {
-    // Called by unity engine on start up to initialize variables
+    //! Called by unity engine on start up to initialize variables.
     public new void Start()
     {
         base.Start();
@@ -33,7 +33,7 @@ public class Press : BasicMachine
         }
     }
 
-    // Called once per frame by unity engine
+    //! Called once per frame by unity engine
     public new void Update()
     {
         base.Update();

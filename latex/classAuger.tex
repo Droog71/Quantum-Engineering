@@ -1,0 +1,211 @@
+\hypertarget{classAuger}{}\doxysection{Auger Class Reference}
+\label{classAuger}\index{Auger@{Auger}}
+Inheritance diagram for Auger\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{classAuger}
+\end{center}
+\end{figure}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{classAuger_a4dadd42de3a42c314d25ef9381313aa4}{Start}} ()
+\begin{DoxyCompactList}\small\item\em Called by unity engine on start up to initialize variables. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classAuger_aa971e5c77af49e1c595b6bf5ca4cefab}{Update}} ()
+\begin{DoxyCompactList}\small\item\em Called once per frame by unity engine. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+float \mbox{\hyperlink{classAuger_a70f9de79b6b3065746625f81f2e55047}{amount}}
+\item 
+int \mbox{\hyperlink{classAuger_a39d6feb22d3316ebe79626e3e9ba52ad}{speed}} = 1
+\item 
+int \mbox{\hyperlink{classAuger_a549520d86beee54ca49fb12f1258e56c}{power}}
+\item 
+bool \mbox{\hyperlink{classAuger_a535c2d3aaaebefe2090ea29653d57010}{has\+Heat\+Exchanger}}
+\item 
+int \mbox{\hyperlink{classAuger_a73731139375c890795b071e30c029e0d}{heat}}
+\item 
+int \mbox{\hyperlink{classAuger_a2a2fa699820db02659d0a26c7e8d1f1d}{cooling}}
+\item 
+Game\+Object \mbox{\hyperlink{classAuger_a7a2a32db4f72ae4ecdcedc7633bc92a9}{output\+Object}}
+\item 
+Game\+Object \mbox{\hyperlink{classAuger_a5b053b2f39d8efee5d09e32d1ac51bea}{power\+Object}}
+\item 
+\mbox{\hyperlink{classConduitItem}{Conduit\+Item}} \mbox{\hyperlink{classAuger_ab0e73879b9340d33e060160c9c0a26aa}{conduit\+Item}}
+\item 
+\mbox{\hyperlink{classPowerReceiver}{Power\+Receiver}} \mbox{\hyperlink{classAuger_a991e5cf0898e94a3c9e4c0b8ac0a05ab}{power\+Receiver}}
+\item 
+Material \mbox{\hyperlink{classAuger_a5f85d67cd0d3d23864a916b88364b918}{line\+Mat}}
+\item 
+string \mbox{\hyperlink{classAuger_a41f4f8a29436fa138e049bf5e62b5d30}{ID}} = \char`\"{}unassigned\char`\"{}
+\item 
+string \mbox{\hyperlink{classAuger_a356b7d8144b3b1c885007b1984bb52a0}{creation\+Method}}
+\item 
+int \mbox{\hyperlink{classAuger_aef37f5e12806d4c9212d98f2130b35c6}{address}}
+\item 
+bool \mbox{\hyperlink{classAuger_ad921a0e5f503fe20b93b7dcad0fb6377}{power\+ON}}
+\end{DoxyCompactItemize}
+\doxysubsection*{Private Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{classAuger_a8b8eaefc04c6775ed8a9a4abc48ef852}{Update\+Power\+Receiver}} ()
+\begin{DoxyCompactList}\small\item\em Gets power values from power receiver. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+Line\+Renderer \mbox{\hyperlink{classAuger_a4d4f35439c3e90dae531d35fb2332f85}{connection\+Line}}
+\item 
+float \mbox{\hyperlink{classAuger_a8cc4599f799b42723a2ec92421dcb3f3}{update\+Tick}}
+\item 
+int \mbox{\hyperlink{classAuger_a4422ac12eca224bfe0ac4efedcf57609}{machine\+Timer}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{classAuger_a4dadd42de3a42c314d25ef9381313aa4}\label{classAuger_a4dadd42de3a42c314d25ef9381313aa4}} 
+\index{Auger@{Auger}!Start@{Start}}
+\index{Start@{Start}!Auger@{Auger}}
+\doxysubsubsection{\texorpdfstring{Start()}{Start()}}
+{\footnotesize\ttfamily void Auger.\+Start (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Called by unity engine on start up to initialize variables. 
+
+\mbox{\Hypertarget{classAuger_aa971e5c77af49e1c595b6bf5ca4cefab}\label{classAuger_aa971e5c77af49e1c595b6bf5ca4cefab}} 
+\index{Auger@{Auger}!Update@{Update}}
+\index{Update@{Update}!Auger@{Auger}}
+\doxysubsubsection{\texorpdfstring{Update()}{Update()}}
+{\footnotesize\ttfamily void Auger.\+Update (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Called once per frame by unity engine. 
+
+\mbox{\Hypertarget{classAuger_a8b8eaefc04c6775ed8a9a4abc48ef852}\label{classAuger_a8b8eaefc04c6775ed8a9a4abc48ef852}} 
+\index{Auger@{Auger}!UpdatePowerReceiver@{UpdatePowerReceiver}}
+\index{UpdatePowerReceiver@{UpdatePowerReceiver}!Auger@{Auger}}
+\doxysubsubsection{\texorpdfstring{UpdatePowerReceiver()}{UpdatePowerReceiver()}}
+{\footnotesize\ttfamily void Auger.\+Update\+Power\+Receiver (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [private]}}
+
+
+
+Gets power values from power receiver. 
+
+
+
+\doxysubsection{Member Data Documentation}
+\mbox{\Hypertarget{classAuger_aef37f5e12806d4c9212d98f2130b35c6}\label{classAuger_aef37f5e12806d4c9212d98f2130b35c6}} 
+\index{Auger@{Auger}!address@{address}}
+\index{address@{address}!Auger@{Auger}}
+\doxysubsubsection{\texorpdfstring{address}{address}}
+{\footnotesize\ttfamily int Auger.\+address}
+
+\mbox{\Hypertarget{classAuger_a70f9de79b6b3065746625f81f2e55047}\label{classAuger_a70f9de79b6b3065746625f81f2e55047}} 
+\index{Auger@{Auger}!amount@{amount}}
+\index{amount@{amount}!Auger@{Auger}}
+\doxysubsubsection{\texorpdfstring{amount}{amount}}
+{\footnotesize\ttfamily float Auger.\+amount}
+
+\mbox{\Hypertarget{classAuger_ab0e73879b9340d33e060160c9c0a26aa}\label{classAuger_ab0e73879b9340d33e060160c9c0a26aa}} 
+\index{Auger@{Auger}!conduitItem@{conduitItem}}
+\index{conduitItem@{conduitItem}!Auger@{Auger}}
+\doxysubsubsection{\texorpdfstring{conduitItem}{conduitItem}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classConduitItem}{Conduit\+Item}} Auger.\+conduit\+Item}
+
+\mbox{\Hypertarget{classAuger_a4d4f35439c3e90dae531d35fb2332f85}\label{classAuger_a4d4f35439c3e90dae531d35fb2332f85}} 
+\index{Auger@{Auger}!connectionLine@{connectionLine}}
+\index{connectionLine@{connectionLine}!Auger@{Auger}}
+\doxysubsubsection{\texorpdfstring{connectionLine}{connectionLine}}
+{\footnotesize\ttfamily Line\+Renderer Auger.\+connection\+Line\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{classAuger_a2a2fa699820db02659d0a26c7e8d1f1d}\label{classAuger_a2a2fa699820db02659d0a26c7e8d1f1d}} 
+\index{Auger@{Auger}!cooling@{cooling}}
+\index{cooling@{cooling}!Auger@{Auger}}
+\doxysubsubsection{\texorpdfstring{cooling}{cooling}}
+{\footnotesize\ttfamily int Auger.\+cooling}
+
+\mbox{\Hypertarget{classAuger_a356b7d8144b3b1c885007b1984bb52a0}\label{classAuger_a356b7d8144b3b1c885007b1984bb52a0}} 
+\index{Auger@{Auger}!creationMethod@{creationMethod}}
+\index{creationMethod@{creationMethod}!Auger@{Auger}}
+\doxysubsubsection{\texorpdfstring{creationMethod}{creationMethod}}
+{\footnotesize\ttfamily string Auger.\+creation\+Method}
+
+\mbox{\Hypertarget{classAuger_a535c2d3aaaebefe2090ea29653d57010}\label{classAuger_a535c2d3aaaebefe2090ea29653d57010}} 
+\index{Auger@{Auger}!hasHeatExchanger@{hasHeatExchanger}}
+\index{hasHeatExchanger@{hasHeatExchanger}!Auger@{Auger}}
+\doxysubsubsection{\texorpdfstring{hasHeatExchanger}{hasHeatExchanger}}
+{\footnotesize\ttfamily bool Auger.\+has\+Heat\+Exchanger}
+
+\mbox{\Hypertarget{classAuger_a73731139375c890795b071e30c029e0d}\label{classAuger_a73731139375c890795b071e30c029e0d}} 
+\index{Auger@{Auger}!heat@{heat}}
+\index{heat@{heat}!Auger@{Auger}}
+\doxysubsubsection{\texorpdfstring{heat}{heat}}
+{\footnotesize\ttfamily int Auger.\+heat}
+
+\mbox{\Hypertarget{classAuger_a41f4f8a29436fa138e049bf5e62b5d30}\label{classAuger_a41f4f8a29436fa138e049bf5e62b5d30}} 
+\index{Auger@{Auger}!ID@{ID}}
+\index{ID@{ID}!Auger@{Auger}}
+\doxysubsubsection{\texorpdfstring{ID}{ID}}
+{\footnotesize\ttfamily string Auger.\+ID = \char`\"{}unassigned\char`\"{}}
+
+\mbox{\Hypertarget{classAuger_a5f85d67cd0d3d23864a916b88364b918}\label{classAuger_a5f85d67cd0d3d23864a916b88364b918}} 
+\index{Auger@{Auger}!lineMat@{lineMat}}
+\index{lineMat@{lineMat}!Auger@{Auger}}
+\doxysubsubsection{\texorpdfstring{lineMat}{lineMat}}
+{\footnotesize\ttfamily Material Auger.\+line\+Mat}
+
+\mbox{\Hypertarget{classAuger_a4422ac12eca224bfe0ac4efedcf57609}\label{classAuger_a4422ac12eca224bfe0ac4efedcf57609}} 
+\index{Auger@{Auger}!machineTimer@{machineTimer}}
+\index{machineTimer@{machineTimer}!Auger@{Auger}}
+\doxysubsubsection{\texorpdfstring{machineTimer}{machineTimer}}
+{\footnotesize\ttfamily int Auger.\+machine\+Timer\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{classAuger_a7a2a32db4f72ae4ecdcedc7633bc92a9}\label{classAuger_a7a2a32db4f72ae4ecdcedc7633bc92a9}} 
+\index{Auger@{Auger}!outputObject@{outputObject}}
+\index{outputObject@{outputObject}!Auger@{Auger}}
+\doxysubsubsection{\texorpdfstring{outputObject}{outputObject}}
+{\footnotesize\ttfamily Game\+Object Auger.\+output\+Object}
+
+\mbox{\Hypertarget{classAuger_a549520d86beee54ca49fb12f1258e56c}\label{classAuger_a549520d86beee54ca49fb12f1258e56c}} 
+\index{Auger@{Auger}!power@{power}}
+\index{power@{power}!Auger@{Auger}}
+\doxysubsubsection{\texorpdfstring{power}{power}}
+{\footnotesize\ttfamily int Auger.\+power}
+
+\mbox{\Hypertarget{classAuger_a5b053b2f39d8efee5d09e32d1ac51bea}\label{classAuger_a5b053b2f39d8efee5d09e32d1ac51bea}} 
+\index{Auger@{Auger}!powerObject@{powerObject}}
+\index{powerObject@{powerObject}!Auger@{Auger}}
+\doxysubsubsection{\texorpdfstring{powerObject}{powerObject}}
+{\footnotesize\ttfamily Game\+Object Auger.\+power\+Object}
+
+\mbox{\Hypertarget{classAuger_ad921a0e5f503fe20b93b7dcad0fb6377}\label{classAuger_ad921a0e5f503fe20b93b7dcad0fb6377}} 
+\index{Auger@{Auger}!powerON@{powerON}}
+\index{powerON@{powerON}!Auger@{Auger}}
+\doxysubsubsection{\texorpdfstring{powerON}{powerON}}
+{\footnotesize\ttfamily bool Auger.\+power\+ON}
+
+\mbox{\Hypertarget{classAuger_a991e5cf0898e94a3c9e4c0b8ac0a05ab}\label{classAuger_a991e5cf0898e94a3c9e4c0b8ac0a05ab}} 
+\index{Auger@{Auger}!powerReceiver@{powerReceiver}}
+\index{powerReceiver@{powerReceiver}!Auger@{Auger}}
+\doxysubsubsection{\texorpdfstring{powerReceiver}{powerReceiver}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classPowerReceiver}{Power\+Receiver}} Auger.\+power\+Receiver}
+
+\mbox{\Hypertarget{classAuger_a39d6feb22d3316ebe79626e3e9ba52ad}\label{classAuger_a39d6feb22d3316ebe79626e3e9ba52ad}} 
+\index{Auger@{Auger}!speed@{speed}}
+\index{speed@{speed}!Auger@{Auger}}
+\doxysubsubsection{\texorpdfstring{speed}{speed}}
+{\footnotesize\ttfamily int Auger.\+speed = 1}
+
+\mbox{\Hypertarget{classAuger_a8cc4599f799b42723a2ec92421dcb3f3}\label{classAuger_a8cc4599f799b42723a2ec92421dcb3f3}} 
+\index{Auger@{Auger}!updateTick@{updateTick}}
+\index{updateTick@{updateTick}!Auger@{Auger}}
+\doxysubsubsection{\texorpdfstring{updateTick}{updateTick}}
+{\footnotesize\ttfamily float Auger.\+update\+Tick\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{Auger_8cs}{Auger.\+cs}}\end{DoxyCompactItemize}

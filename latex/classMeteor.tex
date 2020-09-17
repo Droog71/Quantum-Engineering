@@ -1,0 +1,135 @@
+\hypertarget{classMeteor}{}\doxysection{Meteor Class Reference}
+\label{classMeteor}\index{Meteor@{Meteor}}
+Inheritance diagram for Meteor\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{classMeteor}
+\end{center}
+\end{figure}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{classMeteor_a16987f8293f6c5a93051255df696b2cd}{Start}} ()
+\begin{DoxyCompactList}\small\item\em Called by unity engine on start up to initialize variables. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classMeteor_af266a98f70e2e8a3c62c5de9b960cc3a}{Update}} ()
+\begin{DoxyCompactList}\small\item\em Called once per frame by unity engine. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classMeteor_ac48c503589a39d979646cdb1017708d4}{Explode}} ()
+\begin{DoxyCompactList}\small\item\em Destroys the meteor and spawns explosion effects. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+Game\+Object \mbox{\hyperlink{classMeteor_a70c0547431c2d1fc4dfe4c25b79acb45}{explosion}}
+\item 
+Game\+Object \mbox{\hyperlink{classMeteor_ac3091fdf92f370901f137692719d1fed}{fire}}
+\item 
+float \mbox{\hyperlink{classMeteor_a12cb70a391597dfc7788f07dc4a6761c}{altitude}}
+\item 
+bool \mbox{\hyperlink{classMeteor_a1c193af97ffa063123a559c4cc27fdd6}{destroying}}
+\end{DoxyCompactItemize}
+\doxysubsection*{Private Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+bool \mbox{\hyperlink{classMeteor_a3d977db6a7cad45897b2e681266edbb9}{Can\+Send\+Destruction\+Message}} ()
+\begin{DoxyCompactList}\small\item\em Returns true if a message can be sent to the player\textquotesingle{}s tablet. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classGameManager}{Game\+Manager}} \mbox{\hyperlink{classMeteor_ace230d94cbf3bd6ff2cdfd011d4cf916}{game}}
+\item 
+\mbox{\hyperlink{classPlayerController}{Player\+Controller}} \mbox{\hyperlink{classMeteor_a0bd4447f650d9669e16d805f564559c0}{player\+Controller}}
+\item 
+float \mbox{\hyperlink{classMeteor_aad285660d65f4af8202bbf29d2580bed}{destroy\+Timer}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{classMeteor_a3d977db6a7cad45897b2e681266edbb9}\label{classMeteor_a3d977db6a7cad45897b2e681266edbb9}} 
+\index{Meteor@{Meteor}!CanSendDestructionMessage@{CanSendDestructionMessage}}
+\index{CanSendDestructionMessage@{CanSendDestructionMessage}!Meteor@{Meteor}}
+\doxysubsubsection{\texorpdfstring{CanSendDestructionMessage()}{CanSendDestructionMessage()}}
+{\footnotesize\ttfamily bool Meteor.\+Can\+Send\+Destruction\+Message (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [private]}}
+
+
+
+Returns true if a message can be sent to the player\textquotesingle{}s tablet. 
+
+\mbox{\Hypertarget{classMeteor_ac48c503589a39d979646cdb1017708d4}\label{classMeteor_ac48c503589a39d979646cdb1017708d4}} 
+\index{Meteor@{Meteor}!Explode@{Explode}}
+\index{Explode@{Explode}!Meteor@{Meteor}}
+\doxysubsubsection{\texorpdfstring{Explode()}{Explode()}}
+{\footnotesize\ttfamily void Meteor.\+Explode (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Destroys the meteor and spawns explosion effects. 
+
+\mbox{\Hypertarget{classMeteor_a16987f8293f6c5a93051255df696b2cd}\label{classMeteor_a16987f8293f6c5a93051255df696b2cd}} 
+\index{Meteor@{Meteor}!Start@{Start}}
+\index{Start@{Start}!Meteor@{Meteor}}
+\doxysubsubsection{\texorpdfstring{Start()}{Start()}}
+{\footnotesize\ttfamily void Meteor.\+Start (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Called by unity engine on start up to initialize variables. 
+
+\mbox{\Hypertarget{classMeteor_af266a98f70e2e8a3c62c5de9b960cc3a}\label{classMeteor_af266a98f70e2e8a3c62c5de9b960cc3a}} 
+\index{Meteor@{Meteor}!Update@{Update}}
+\index{Update@{Update}!Meteor@{Meteor}}
+\doxysubsubsection{\texorpdfstring{Update()}{Update()}}
+{\footnotesize\ttfamily void Meteor.\+Update (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Called once per frame by unity engine. 
+
+
+
+\doxysubsection{Member Data Documentation}
+\mbox{\Hypertarget{classMeteor_a12cb70a391597dfc7788f07dc4a6761c}\label{classMeteor_a12cb70a391597dfc7788f07dc4a6761c}} 
+\index{Meteor@{Meteor}!altitude@{altitude}}
+\index{altitude@{altitude}!Meteor@{Meteor}}
+\doxysubsubsection{\texorpdfstring{altitude}{altitude}}
+{\footnotesize\ttfamily float Meteor.\+altitude}
+
+\mbox{\Hypertarget{classMeteor_a1c193af97ffa063123a559c4cc27fdd6}\label{classMeteor_a1c193af97ffa063123a559c4cc27fdd6}} 
+\index{Meteor@{Meteor}!destroying@{destroying}}
+\index{destroying@{destroying}!Meteor@{Meteor}}
+\doxysubsubsection{\texorpdfstring{destroying}{destroying}}
+{\footnotesize\ttfamily bool Meteor.\+destroying}
+
+\mbox{\Hypertarget{classMeteor_aad285660d65f4af8202bbf29d2580bed}\label{classMeteor_aad285660d65f4af8202bbf29d2580bed}} 
+\index{Meteor@{Meteor}!destroyTimer@{destroyTimer}}
+\index{destroyTimer@{destroyTimer}!Meteor@{Meteor}}
+\doxysubsubsection{\texorpdfstring{destroyTimer}{destroyTimer}}
+{\footnotesize\ttfamily float Meteor.\+destroy\+Timer\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{classMeteor_a70c0547431c2d1fc4dfe4c25b79acb45}\label{classMeteor_a70c0547431c2d1fc4dfe4c25b79acb45}} 
+\index{Meteor@{Meteor}!explosion@{explosion}}
+\index{explosion@{explosion}!Meteor@{Meteor}}
+\doxysubsubsection{\texorpdfstring{explosion}{explosion}}
+{\footnotesize\ttfamily Game\+Object Meteor.\+explosion}
+
+\mbox{\Hypertarget{classMeteor_ac3091fdf92f370901f137692719d1fed}\label{classMeteor_ac3091fdf92f370901f137692719d1fed}} 
+\index{Meteor@{Meteor}!fire@{fire}}
+\index{fire@{fire}!Meteor@{Meteor}}
+\doxysubsubsection{\texorpdfstring{fire}{fire}}
+{\footnotesize\ttfamily Game\+Object Meteor.\+fire}
+
+\mbox{\Hypertarget{classMeteor_ace230d94cbf3bd6ff2cdfd011d4cf916}\label{classMeteor_ace230d94cbf3bd6ff2cdfd011d4cf916}} 
+\index{Meteor@{Meteor}!game@{game}}
+\index{game@{game}!Meteor@{Meteor}}
+\doxysubsubsection{\texorpdfstring{game}{game}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classGameManager}{Game\+Manager}} Meteor.\+game\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{classMeteor_a0bd4447f650d9669e16d805f564559c0}\label{classMeteor_a0bd4447f650d9669e16d805f564559c0}} 
+\index{Meteor@{Meteor}!playerController@{playerController}}
+\index{playerController@{playerController}!Meteor@{Meteor}}
+\doxysubsubsection{\texorpdfstring{playerController}{playerController}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classPlayerController}{Player\+Controller}} Meteor.\+player\+Controller\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{Meteor_8cs}{Meteor.\+cs}}\end{DoxyCompactItemize}

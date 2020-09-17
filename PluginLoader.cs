@@ -9,7 +9,7 @@ public class PluginLoader :MonoBehaviour
 {
     private Assembly assembly;
 
-    // Adds plugins from mods to the game.
+    //! Adds plugins from mods to the game.
     public void Start()
     {
         string modPath = Path.Combine(Application.persistentDataPath, "Mods");
@@ -28,13 +28,13 @@ public class PluginLoader :MonoBehaviour
         }
     }
 
-    // Starts the assembly loading coroutine.
+    //! Starts the assembly loading coroutine.
     private void LoadPlugin(string pluginName, string url)
     {
         StartCoroutine(LoadAssembly(pluginName, url));
     }
 
-    // Uses GetAssembly to load classes from the dll and add them to a dictionary.
+    //! Uses GetAssembly to load classes from the dll and add them to a dictionary.
     private IEnumerator LoadAssembly(string pluginName, string url)
     {
         if(url == null)
@@ -56,7 +56,7 @@ public class PluginLoader :MonoBehaviour
         }
     }
 
-    // Loads assembly from file.
+    //! Loads assembly from file.
     private Assembly GetAssembly(UnityWebRequest uwr)
     {
         if (uwr != null)
@@ -72,7 +72,7 @@ public class PluginLoader :MonoBehaviour
         return null;
     }
 
-    // Gets type by name from dll.
+    //! Gets type by name from dll.
     private void AddPlugin(Assembly dll, string pluginName)
     {
         Type type = dll.GetType(pluginName);

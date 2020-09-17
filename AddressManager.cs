@@ -5,12 +5,13 @@ public class AddressManager
 {
     private StateManager stateManager;
 
+    //! This class assigns a unique ID to every block in the world.
     public AddressManager(StateManager stateManager)
     {
         this.stateManager = stateManager;
     }
 
-    // Assigns ID to all objects in the world.
+    //! Assigns ID to all objects in the world.
     public IEnumerator AddressingCoroutine()
     {
         stateManager.assigningIDs = true;

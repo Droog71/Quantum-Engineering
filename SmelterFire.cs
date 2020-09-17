@@ -4,7 +4,7 @@ public class SmelterFire : MonoBehaviour
 {
     public GameObject fireObject;
 
-    // Update is called once per frame
+    //! Update is called once per frame.
     public void Update()
     {
         if (GetComponent<Light>().enabled == true)

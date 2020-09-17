@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 
+//! This class is attached to all brick block prefabs.
 public class Brick : MonoBehaviour
 {
     public string ID = "unassigned";
@@ -7,7 +8,7 @@ public class Brick : MonoBehaviour
     public int address;
     private float updateTick;
 
-    // Called once per frame by unity engine.
+    //! Called once per frame by unity engine.
     public void Update()
     {
         updateTick += 1 * Time.deltaTime;

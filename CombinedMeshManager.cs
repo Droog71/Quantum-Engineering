@@ -6,12 +6,17 @@ public class CombinedMeshManager
 {
     private GameManager gameManager;
 
+    //! The Combined Mesh Manager handles all combined meshes for building blocks.
+    //! All standard building blocks are stored in combined meshes after being placed.
+    //! Parts of the combined mesh are converted to individual blocks when edited by the player.
+    //! Meteor strikes and weapons also cause small sections of the combined mesh to separate.
+    //! The combined mesh is refactored after changes occur.
     public CombinedMeshManager(GameManager gameManager)
     {
         this.gameManager = gameManager;
     }
 
-    // Separates combined meshes into blocks
+    //! Separates combined meshes into blocks
     public void SeparateBlocks(Vector3 target, string type, bool building)
     {
         if (gameManager.working == false && gameManager.GetComponent<StateManager>().saving == false)
@@ -34,7 +39,7 @@ public class CombinedMeshManager
         }
     }
 
-    // Separates combined meshes into blocks
+    //! Separates combined meshes into blocks
     private IEnumerator BlockSeparationCoroutine(Vector3 target, string type)
     {
         if (target != null)
@@ -292,7 +297,7 @@ public class CombinedMeshManager
         }
     }
 
-    // Creates combined meshes from placed building blocks
+    //! Creates combined meshes from placed building blocks.
     public void CombineBlocks()
     {
         if (gameManager.working == false && gameManager.GetComponent<StateManager>().saving == false)
@@ -508,11 +513,13 @@ public class CombinedMeshManager
         }
     }
 
+    //! Starts the combined mesh coroutine.
     public void CombineMeshes()
     {
         gameManager.combineCoroutine = gameManager.StartCoroutine(CombineMeshCoroutine());
     }
 
+    //! Creates combined meshes from blocks placed in the world.
     private IEnumerator CombineMeshCoroutine()
     {
         if (gameManager.ironMeshRequired == true)

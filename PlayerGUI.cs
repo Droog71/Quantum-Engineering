@@ -18,7 +18,7 @@ public class PlayerGUI : MonoBehaviour
     private bool schematic6;
     private bool schematic7;
 
-    // Called by unity engine on start up to initialize variables
+    //! Called by unity engine on start up to initialize variables.
     public void Start()
     {
         playerController = GetComponent<PlayerController>();
@@ -29,7 +29,7 @@ public class PlayerGUI : MonoBehaviour
         guiCoordinates = new GuiCoordinates();
     }
 
-    // Returns true if the escape menu should be displayed.
+    //! Returns true if the escape menu should be displayed.
     private bool MenuAvailable()
     {
         return playerController.helpMenuOpen == false
@@ -41,6 +41,7 @@ public class PlayerGUI : MonoBehaviour
         && stateManager.saving == false;
     }
 
+    //! Returns true if the block is a building block, used with combined meshes.
     private bool IsStandardBlock(string type)
     {
         return type == "Brick"
@@ -51,6 +52,7 @@ public class PlayerGUI : MonoBehaviour
         || type == "Steel Ramp";
     }
 
+    //! Returns true if the saving world message should be displayed.
     private bool SavingMessageRequired()
     {
         return playerController.exiting == true
@@ -59,6 +61,7 @@ public class PlayerGUI : MonoBehaviour
         || stateManager.saving == true;
     }
 
+    //! Returns true if a tablet notification should be displayed.
     private bool TabletNotificationRequired()
     {
         return playerController.meteorShowerWarningActive == true
@@ -67,6 +70,7 @@ public class PlayerGUI : MonoBehaviour
         || playerController.destructionMessageActive == true;
     }
 
+    //! Stops displaying schematics when the menu is closed.
     private void ClearSchematic()
     {
         schematic1 = false;
@@ -78,6 +82,7 @@ public class PlayerGUI : MonoBehaviour
         schematic7 = false;
     }
 
+    //! Returns true if any schematic is being displayed.
     private bool SchematicActive()
     {
         return schematic1 == true
@@ -89,13 +94,13 @@ public class PlayerGUI : MonoBehaviour
         || schematic7 == true;
     }
 
-    // Called by unity engine for rendering and handling GUI events
+    //! Called by unity engine for rendering and handling GUI events.
     public void OnGUI()
     {
-        //STYLE
+        // STYLE
         GUI.skin = thisGUIskin;
 
-        //ASPECT RATIO
+        // ASPECT RATIO
         float ScreenHeight = Screen.height;
         float ScreenWidth = Screen.width;
         if (ScreenWidth / ScreenHeight < 1.7f)
@@ -109,7 +114,7 @@ public class PlayerGUI : MonoBehaviour
 
         if (playerController.stateManager.worldLoaded == true && GetComponent<MainMenu>().finishedLoading == true)
         {
-            //BUILD ITEM HUD AT TOP RIGHT OF SCREEN
+            // BUILD ITEM HUD AT TOP RIGHT OF SCREEN
             if (playerController.displayingBuildItem == true)
             {
                 GUI.Label(guiCoordinates.topRightInfoRect, "\n\nBuild item set to " + playerController.buildType);
@@ -129,13 +134,13 @@ public class PlayerGUI : MonoBehaviour
                 GUI.Label(guiCoordinates.buildItemCountRect, "" + buildItemCount);
             }
 
-            //METEOR SHOWER WARNINGS
+            // METEOR SHOWER WARNINGS
             if (TabletNotificationRequired())
             {
                 GUI.Label(guiCoordinates.topLeftInfoRect, "Urgent message received! Check your tablet for more information.");
             }
 
-            //TABLET
+            // TABLET
             if (playerController.tabletOpen == true)
             {
                 int day = GameObject.Find("Rocket").GetComponent<Rocket>().day;
@@ -169,7 +174,7 @@ public class PlayerGUI : MonoBehaviour
                 }
             }
 
-            //OPTIONS/EXIT MENU
+            // OPTIONS/EXIT MENU
             if (playerController.escapeMenuOpen == true)
             {
                 if (MenuAvailable())
@@ -219,7 +224,7 @@ public class PlayerGUI : MonoBehaviour
                 }
             }
 
-            //HELP MENU
+            // HELP MENU
             if (playerController.helpMenuOpen == true)
             {
                 if (playerController.videoMenuOpen == false && playerController.schematicMenuOpen == false)
@@ -445,7 +450,7 @@ public class PlayerGUI : MonoBehaviour
                 }
             }
 
-            //OPTIONS MENU
+            // OPTIONS MENU
             if (playerController.optionsGUIopen == true && cGUI.showingInputGUI == false)
             {
                 GUI.DrawTexture(guiCoordinates.optionsMenuBackgroundRect, textureDictionary.dictionary["Menu Background"]);
@@ -602,7 +607,7 @@ public class PlayerGUI : MonoBehaviour
                 }
             }
 
-            //BUILDING INSTRUCTIONS
+            // BUILDING INSTRUCTIONS
             if (playerController.building == true && playerController.tabletOpen == false)
             {
                 GUI.DrawTexture(guiCoordinates.buildInfoRectBG, textureDictionary.dictionary["Interface Background"]);
@@ -629,7 +634,7 @@ public class PlayerGUI : MonoBehaviour
                 }
             }
 
-            //PAINT COLOR SELECTION WINDOW
+            // PAINT COLOR SELECTION WINDOW
             if (playerController.paintGunActive == true)
             {
                 if (playerController.paintColorSelected == false)
@@ -674,7 +679,7 @@ public class PlayerGUI : MonoBehaviour
                 }
             }
 
-            //CROSSHAIR
+            // CROSSHAIR
             if (!playerController.inventoryOpen && !playerController.machineGUIopen && !playerController.marketGUIopen)
             {
                 if (!playerController.escapeMenuOpen && !playerController.tabletOpen && !playerController.paintGunActive)

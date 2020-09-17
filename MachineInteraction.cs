@@ -5,12 +5,14 @@ public class MachineInteraction
     private PlayerController playerController;
     private InteractionController interactionController;
 
+    //! This class handles the player's interactions with machines.
     public MachineInteraction(PlayerController playerController, InteractionController interactionController)
     {
         this.playerController = playerController;
         this.interactionController = interactionController;
     }
 
+    //! Called when the player is looking at an electric light.
     public void InteractWithElectricLight()
     {
         if(cInput.GetKeyDown("Collect Object"))
@@ -19,6 +21,7 @@ public class MachineInteraction
         }
     }
 
+    //! Called when the player is looking at a quantum hatchway.
     public void InteractWithAirLock()
     {
         AirLock airLock = playerController.objectInSight.GetComponent<AirLock>();
@@ -47,6 +50,7 @@ public class MachineInteraction
         }
     }
 
+    //! Called when the player is looking at a power source.
     public void InteractWithPowerSource()
     {
         PowerSource powerSource = playerController.objectInSight.GetComponent<PowerSource>();
@@ -100,6 +104,7 @@ public class MachineInteraction
         }
     }
 
+    //! Called when the player is looking at a nuclear reactor.
     public void InteractWithNuclearReactor()
     {
         NuclearReactor reactor = playerController.objectInSight.GetComponent<NuclearReactor>();
@@ -112,6 +117,7 @@ public class MachineInteraction
         }
     }
 
+    //! Called when the player is looking at a power conduit.
     public void InteractWithPowerConduit()
     {
         PowerConduit powerConduit = playerController.objectInSight.GetComponent<PowerConduit>();
@@ -135,6 +141,7 @@ public class MachineInteraction
         }
     }
 
+    //! Called when the player is looking at a turret.
     public void InteractWithTurret()
     {
         Turret turret = playerController.objectInSight.GetComponent<Turret>();
@@ -155,6 +162,7 @@ public class MachineInteraction
         }
     }
 
+    //! Called when the player is looking at a universal extractor.
     public void InteractWithUniversalExtractor()
     {
         UniversalExtractor extractor = playerController.objectInSight.GetComponent<UniversalExtractor>();
@@ -177,6 +185,7 @@ public class MachineInteraction
         }
     }
 
+    //! Called when the player is looking at an auger.
     public void InteractWithAuger()
     {
         Auger auger = playerController.objectInSight.GetComponent<Auger>();
@@ -198,6 +207,7 @@ public class MachineInteraction
         }
     }
 
+    //! Called when the player is looking at a dark matter collector.
     public void InteractWithDarkMatterCollector()
     {
         DarkMatterCollector collector = playerController.objectInSight.GetComponent<DarkMatterCollector>();
@@ -226,6 +236,7 @@ public class MachineInteraction
         }
     }
 
+    //! Called when the player is looking at a universal conduit.
     public void InteractWithUniversalConduit()
     {
         UniversalConduit conduit = playerController.objectInSight.GetComponent<UniversalConduit>();
@@ -414,6 +425,7 @@ public class MachineInteraction
         }
     }
 
+    //! Called when the player is looking at a dark matter conduit.
     public void InteractWithDarkMatterConduit()
     {
         DarkMatterConduit dmConduit = playerController.objectInSight.GetComponent<DarkMatterConduit>();
@@ -491,6 +503,7 @@ public class MachineInteraction
         }
     }
 
+    //! Called when the player is looking at a smelter.
     public void InteractWithSmelter()
     {
         Smelter smelter = playerController.objectInSight.GetComponent<Smelter>();
@@ -538,6 +551,7 @@ public class MachineInteraction
         }
     }
 
+    //! Called when the player is looking at an alloy smelter.
     public void InteractWithAlloySmelter()
     {
         AlloySmelter alloySmelter = playerController.objectInSight.GetComponent<AlloySmelter>();
@@ -596,6 +610,7 @@ public class MachineInteraction
         }
     }
 
+    //! Called when the player is looking at an extruder.
     public void InteractWithExtruder()
     {
         Extruder extruder = playerController.objectInSight.GetComponent<Extruder>();
@@ -643,6 +658,7 @@ public class MachineInteraction
         }
     }
 
+    //! Called when the player is looking at any machine added through the modding API (excluding plugins).
     public void InteractWithModMachine()
     {
         ModMachine modMachine = playerController.objectInSight.GetComponent<ModMachine>();
@@ -690,6 +706,7 @@ public class MachineInteraction
         }
     }
 
+    //! Called when the player is looking at a rail cart hub.
     public void InteractWithRailCartHub()
     {
         RailCartHub railCartHub = playerController.objectInSight.GetComponent<RailCartHub>();
@@ -724,6 +741,7 @@ public class MachineInteraction
         }
     }
 
+    //! Called when the player is looking at a retriever.
     public void InteractWithRetriever()
     {
         Retriever retriever = playerController.objectInSight.GetComponent<Retriever>();
@@ -785,6 +803,7 @@ public class MachineInteraction
         }
     }
 
+    //! Called when the player is looking at a heat exchanger.
     public void InteractWithHeatExchanger()
     {
         HeatExchanger heatExchanger = playerController.objectInSight.GetComponent<HeatExchanger>();
@@ -870,6 +889,7 @@ public class MachineInteraction
         }
     }
 
+    //! Called when the player is looking at a gear cutter.
     public void InteractWithGearCutter()
     {
         GearCutter gearCutter = playerController.objectInSight.GetComponent<GearCutter>();
@@ -917,6 +937,7 @@ public class MachineInteraction
         }
     }
 
+    //! Called when the player is looking at a press.
     public void InteractWithPress()
     {
         Press press = playerController.objectInSight.GetComponent<Press>();
@@ -964,6 +985,7 @@ public class MachineInteraction
         }
     }
 
+    //! Called when the player is looking at an auto crafter.
     public void InteractWithAutoCrafter()
     {
         AutoCrafter autoCrafter = playerController.objectInSight.GetComponent<AutoCrafter>();

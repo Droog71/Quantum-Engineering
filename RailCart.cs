@@ -12,13 +12,13 @@ public class RailCart : MonoBehaviour
     private float stopTimer;
     private GameObject builtObjects;
 
-    // Called by unity engine on start up to initialize variables
+    //! Called by unity engine on start up to initialize variables.
     public void Start()
     {
         builtObjects = GameObject.Find("Built_Objects");
     }
 
-    // Called once per frame by unity engine
+    //! Called once per frame by unity engine.
     public void Update()
     {
         GetComponent<InventoryManager>().ID = ID;

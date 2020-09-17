@@ -5,13 +5,14 @@ public class BlockInteraction
     private PlayerController playerController;
     private InteractionController interactionController;
 
+    //! This class handles the player's interactions with standard building blocks.
     public BlockInteraction(PlayerController playerController, InteractionController interactionController)
     {
         this.playerController = playerController;
         this.interactionController = interactionController;
     }
 
-    // Called once per frame when the player is looking at an iron block.
+    //! Called once per frame when the player is looking at an iron block.
     public void InteractWithIronBlock()
     {
         if (cInput.GetKeyDown("Collect Object"))
@@ -31,7 +32,7 @@ public class BlockInteraction
         }
     }
 
-    // Called once per frame when the player is looking at a steel block.
+    //! Called once per frame when the player is looking at a steel block.
     public void InteractWithSteelBlock()
     {
         if (cInput.GetKeyDown("Collect Object"))
@@ -50,7 +51,7 @@ public class BlockInteraction
         }
     }
 
-    // Called once per frame when the player is looking at a glass block.
+    //! Called once per frame when the player is looking at a glass block.
     public void InteractWithGlass()
     {
         if (cInput.GetKeyDown("Collect Object"))
@@ -59,7 +60,7 @@ public class BlockInteraction
         }
     }
 
-    // Called once per frame when the player is looking at a brick block.
+    //! Called once per frame when the player is looking at a brick block.
     public void InteractWithBricks()
     {
         if (cInput.GetKeyDown("Collect Object"))
@@ -68,7 +69,7 @@ public class BlockInteraction
         }
     }
 
-    // Called once per frame when the player is looking at a combined mesh object.
+    //! Called once per frame when the player is looking at a combined mesh object.
     public void InteractWithCombinedMesh()
     {
         playerController.lookingAtCombinedMesh = true;

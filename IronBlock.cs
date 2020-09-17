@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 
+//! This class is attached to all iron block prefabs.
 public class IronBlock : MonoBehaviour
 {
     public string ID = "unassigned";
@@ -7,7 +8,7 @@ public class IronBlock : MonoBehaviour
     public int address;
     private float updateTick;
 
-    // Called once per frame by unity engine
+    //! Called once per frame by unity engine.
     public void Update()
     {
         updateTick += 1 * Time.deltaTime;

@@ -32,7 +32,7 @@ public class PhysicsHandler : MonoBehaviour
     public string creationMethod = "built";
     public bool needsSupportCheck;
 
-    // Called by unity engine on start up to initialize variables
+    //! Called by unity engine on start up to initialize variables.
     public void Start()
     {
         gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
@@ -53,7 +53,7 @@ public class PhysicsHandler : MonoBehaviour
         }
     }
 
-    // Updates the physics state of the object
+    //! Updates the physics state of the object.
     public void UpdatePhysics()
     {
         if (stateManager.worldLoaded == true)
@@ -222,7 +222,7 @@ public class PhysicsHandler : MonoBehaviour
         }
     }
 
-    // Checks whether or not a block is properly supported or should fall to the ground
+    //! Checks whether or not a block is properly supported or should fall to the ground.
     private void CheckForSupport()
     {
         supported = false;
@@ -421,13 +421,13 @@ public class PhysicsHandler : MonoBehaviour
         needsSupportCheck = false;
     }
 
-    // Returns true if the block is not at risk of falling
+    //! Returns true if the block is not at risk of falling.
     public bool IsSupported()
     {
         return falling == false && fallingStack == false && needsSupportCheck == false;
     }
 
-    // Called by unity engine once per physics update for every collider that is touching the trigger
+    //! Called by unity engine once per physics update for every collider that is touching the trigger.
     public void OnTriggerStay(Collider other)
     {
         if (other.gameObject.tag.Equals("Landscape"))
@@ -437,7 +437,7 @@ public class PhysicsHandler : MonoBehaviour
         }
     }
 
-    // Called by unity engine when two objects collide
+    //! Called by unity engine when two objects collide.
     public void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.GetComponent<PhysicsHandler>() != null)
@@ -455,11 +455,10 @@ public class PhysicsHandler : MonoBehaviour
         }
     }
 
-    // Destroyes the object and spawns explosion effects
+    //! Destroyes the object and spawns explosion effects.
     public void Explode()
     {
         Instantiate(explosion, transform.position, transform.rotation);
         Destroy(gameObject);
     }
 }
-

@@ -1,0 +1,347 @@
+\hypertarget{classPhysicsHandler}{}\doxysection{Physics\+Handler Class Reference}
+\label{classPhysicsHandler}\index{PhysicsHandler@{PhysicsHandler}}
+Inheritance diagram for Physics\+Handler\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{classPhysicsHandler}
+\end{center}
+\end{figure}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{classPhysicsHandler_af6d51a0ec2bbead03924c9cc6615b0e4}{Start}} ()
+\begin{DoxyCompactList}\small\item\em Called by unity engine on start up to initialize variables. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classPhysicsHandler_a74d6466c9247deb569309b552bcf936e}{Update\+Physics}} ()
+\begin{DoxyCompactList}\small\item\em Updates the physics state of the object. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{classPhysicsHandler_a263afe00a52d45905e386ddb18389f4f}{Is\+Supported}} ()
+\begin{DoxyCompactList}\small\item\em Returns true if the block is not at risk of falling. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classPhysicsHandler_a7d5cde1e3c1b31cab0d8a498ffe9beb1}{On\+Trigger\+Stay}} (Collider other)
+\begin{DoxyCompactList}\small\item\em Called by unity engine once per physics update for every collider that is touching the trigger. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classPhysicsHandler_a79e9892387f4acfc7e841b5664a17ed5}{On\+Trigger\+Enter}} (Collider other)
+\begin{DoxyCompactList}\small\item\em Called by unity engine when two objects collide. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classPhysicsHandler_ae4022620515e0a7fd44cec74c11f09c1}{Explode}} ()
+\begin{DoxyCompactList}\small\item\em Destroyes the object and spawns explosion effects. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+bool \mbox{\hyperlink{classPhysicsHandler_a7ef9d33287501d3b5e07ae565dbde267}{falling}}
+\item 
+Game\+Object \mbox{\hyperlink{classPhysicsHandler_acc14ea60f40ad8296551ea9c3096f706}{explosion}}
+\item 
+string \mbox{\hyperlink{classPhysicsHandler_a9c185e7dbbf58131f3b8743ed0541a0f}{type}}
+\item 
+bool \mbox{\hyperlink{classPhysicsHandler_aeb5e704caa59b13a1f92978481a43362}{falling\+Stack}}
+\item 
+bool \mbox{\hyperlink{classPhysicsHandler_a33208e5b32ab76a5f14e376e9fab6756}{buried}}
+\item 
+float \mbox{\hyperlink{classPhysicsHandler_af656059046cd4795d4af09a33b817a4a}{lifetime}}
+\item 
+string \mbox{\hyperlink{classPhysicsHandler_a72e252859774c8f2e8f195bd6c15e85e}{creation\+Method}} = \char`\"{}built\char`\"{}
+\item 
+bool \mbox{\hyperlink{classPhysicsHandler_a8be8f6ff89e77ed92b3b2616af75bb03}{needs\+Support\+Check}}
+\end{DoxyCompactItemize}
+\doxysubsection*{Private Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{classPhysicsHandler_aa3927f94c04139aceb2b368f3c2576a7}{Check\+For\+Support}} ()
+\begin{DoxyCompactList}\small\item\em Checks whether or not a block is properly supported or should fall to the ground. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+Rigidbody \mbox{\hyperlink{classPhysicsHandler_a1a71cedccb39ab62aacbabfd7b019cd1}{rb}}
+\item 
+Vector3 \mbox{\hyperlink{classPhysicsHandler_a6b8c792ccf299cf8770c611f50fd66bd}{drop\+Position}}
+\item 
+float \mbox{\hyperlink{classPhysicsHandler_a7b3fca8a0db97d89ebf155b1caa27982}{fall\+Distance}}
+\item 
+bool \mbox{\hyperlink{classPhysicsHandler_ad15388ca8157a1570684dc6bd0e0a1de}{separated\+Blocks}}
+\item 
+bool \mbox{\hyperlink{classPhysicsHandler_acead4d387de6e1af8a211bbbd0a797d3}{supported}}
+\item 
+bool \mbox{\hyperlink{classPhysicsHandler_a10f71830379b69fbc5a6576400599a63}{missing\+Block\+Zpositive}}
+\item 
+bool \mbox{\hyperlink{classPhysicsHandler_a9a02eed4cb2456e4b07ace234454e34a}{missing\+Block\+Znegative}}
+\item 
+bool \mbox{\hyperlink{classPhysicsHandler_adc16d552698a69385fd512b3010386f2}{missing\+Block\+Xpositive}}
+\item 
+bool \mbox{\hyperlink{classPhysicsHandler_a4825189ff1ffbb85cb7bb7fae143ede2}{missing\+Block\+Xnegative}}
+\item 
+int \mbox{\hyperlink{classPhysicsHandler_a3e440eace286f631f23f54cc6cb24878}{supported\+Zpositive}}
+\item 
+int \mbox{\hyperlink{classPhysicsHandler_a959020710f754586c77f1acfba29a3b2}{supported\+Znegative}}
+\item 
+int \mbox{\hyperlink{classPhysicsHandler_a0f437fa0dd2016c0962da42e4a7304dd}{supported\+Xpositive}}
+\item 
+int \mbox{\hyperlink{classPhysicsHandler_a043ecb4b6914ea22889d3a38a4822126}{supported\+Xnegative}}
+\item 
+int \mbox{\hyperlink{classPhysicsHandler_af48e325dee9e9bf85aea2a1f3320483f}{support\+Count}}
+\item 
+float \mbox{\hyperlink{classPhysicsHandler_a594f919951f1e8d1d007d752a4941044}{duplicate\+Clearing\+Timer}}
+\item 
+float \mbox{\hyperlink{classPhysicsHandler_abb0b64961a61a780f1a47a05e9867378}{missing\+Block\+Timer}}
+\item 
+float \mbox{\hyperlink{classPhysicsHandler_af2b0276878fa5b42cb3ef147cf97b3d5}{support\+Check\+Timer}}
+\item 
+float \mbox{\hyperlink{classPhysicsHandler_a30d0a464c1ece96cabaab968e787914f}{world\+Load\+Timer}}
+\item 
+bool \mbox{\hyperlink{classPhysicsHandler_af7645b23fbf4eaf99c32d1027d74ab90}{world\+Load\+Complete}}
+\item 
+\mbox{\hyperlink{classGameManager}{Game\+Manager}} \mbox{\hyperlink{classPhysicsHandler_ad28836a0451c56f9188cdd5218924f6c}{game\+Manager}}
+\item 
+\mbox{\hyperlink{classStateManager}{State\+Manager}} \mbox{\hyperlink{classPhysicsHandler_ad53e81b2a790cba085595e43937803e5}{state\+Manager}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{classPhysicsHandler_aa3927f94c04139aceb2b368f3c2576a7}\label{classPhysicsHandler_aa3927f94c04139aceb2b368f3c2576a7}} 
+\index{PhysicsHandler@{PhysicsHandler}!CheckForSupport@{CheckForSupport}}
+\index{CheckForSupport@{CheckForSupport}!PhysicsHandler@{PhysicsHandler}}
+\doxysubsubsection{\texorpdfstring{CheckForSupport()}{CheckForSupport()}}
+{\footnotesize\ttfamily void Physics\+Handler.\+Check\+For\+Support (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [private]}}
+
+
+
+Checks whether or not a block is properly supported or should fall to the ground. 
+
+\mbox{\Hypertarget{classPhysicsHandler_ae4022620515e0a7fd44cec74c11f09c1}\label{classPhysicsHandler_ae4022620515e0a7fd44cec74c11f09c1}} 
+\index{PhysicsHandler@{PhysicsHandler}!Explode@{Explode}}
+\index{Explode@{Explode}!PhysicsHandler@{PhysicsHandler}}
+\doxysubsubsection{\texorpdfstring{Explode()}{Explode()}}
+{\footnotesize\ttfamily void Physics\+Handler.\+Explode (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Destroyes the object and spawns explosion effects. 
+
+\mbox{\Hypertarget{classPhysicsHandler_a263afe00a52d45905e386ddb18389f4f}\label{classPhysicsHandler_a263afe00a52d45905e386ddb18389f4f}} 
+\index{PhysicsHandler@{PhysicsHandler}!IsSupported@{IsSupported}}
+\index{IsSupported@{IsSupported}!PhysicsHandler@{PhysicsHandler}}
+\doxysubsubsection{\texorpdfstring{IsSupported()}{IsSupported()}}
+{\footnotesize\ttfamily bool Physics\+Handler.\+Is\+Supported (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Returns true if the block is not at risk of falling. 
+
+\mbox{\Hypertarget{classPhysicsHandler_a79e9892387f4acfc7e841b5664a17ed5}\label{classPhysicsHandler_a79e9892387f4acfc7e841b5664a17ed5}} 
+\index{PhysicsHandler@{PhysicsHandler}!OnTriggerEnter@{OnTriggerEnter}}
+\index{OnTriggerEnter@{OnTriggerEnter}!PhysicsHandler@{PhysicsHandler}}
+\doxysubsubsection{\texorpdfstring{OnTriggerEnter()}{OnTriggerEnter()}}
+{\footnotesize\ttfamily void Physics\+Handler.\+On\+Trigger\+Enter (\begin{DoxyParamCaption}\item[{Collider}]{other }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Called by unity engine when two objects collide. 
+
+\mbox{\Hypertarget{classPhysicsHandler_a7d5cde1e3c1b31cab0d8a498ffe9beb1}\label{classPhysicsHandler_a7d5cde1e3c1b31cab0d8a498ffe9beb1}} 
+\index{PhysicsHandler@{PhysicsHandler}!OnTriggerStay@{OnTriggerStay}}
+\index{OnTriggerStay@{OnTriggerStay}!PhysicsHandler@{PhysicsHandler}}
+\doxysubsubsection{\texorpdfstring{OnTriggerStay()}{OnTriggerStay()}}
+{\footnotesize\ttfamily void Physics\+Handler.\+On\+Trigger\+Stay (\begin{DoxyParamCaption}\item[{Collider}]{other }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Called by unity engine once per physics update for every collider that is touching the trigger. 
+
+\mbox{\Hypertarget{classPhysicsHandler_af6d51a0ec2bbead03924c9cc6615b0e4}\label{classPhysicsHandler_af6d51a0ec2bbead03924c9cc6615b0e4}} 
+\index{PhysicsHandler@{PhysicsHandler}!Start@{Start}}
+\index{Start@{Start}!PhysicsHandler@{PhysicsHandler}}
+\doxysubsubsection{\texorpdfstring{Start()}{Start()}}
+{\footnotesize\ttfamily void Physics\+Handler.\+Start (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Called by unity engine on start up to initialize variables. 
+
+\mbox{\Hypertarget{classPhysicsHandler_a74d6466c9247deb569309b552bcf936e}\label{classPhysicsHandler_a74d6466c9247deb569309b552bcf936e}} 
+\index{PhysicsHandler@{PhysicsHandler}!UpdatePhysics@{UpdatePhysics}}
+\index{UpdatePhysics@{UpdatePhysics}!PhysicsHandler@{PhysicsHandler}}
+\doxysubsubsection{\texorpdfstring{UpdatePhysics()}{UpdatePhysics()}}
+{\footnotesize\ttfamily void Physics\+Handler.\+Update\+Physics (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Updates the physics state of the object. 
+
+
+
+\doxysubsection{Member Data Documentation}
+\mbox{\Hypertarget{classPhysicsHandler_a33208e5b32ab76a5f14e376e9fab6756}\label{classPhysicsHandler_a33208e5b32ab76a5f14e376e9fab6756}} 
+\index{PhysicsHandler@{PhysicsHandler}!buried@{buried}}
+\index{buried@{buried}!PhysicsHandler@{PhysicsHandler}}
+\doxysubsubsection{\texorpdfstring{buried}{buried}}
+{\footnotesize\ttfamily bool Physics\+Handler.\+buried}
+
+\mbox{\Hypertarget{classPhysicsHandler_a72e252859774c8f2e8f195bd6c15e85e}\label{classPhysicsHandler_a72e252859774c8f2e8f195bd6c15e85e}} 
+\index{PhysicsHandler@{PhysicsHandler}!creationMethod@{creationMethod}}
+\index{creationMethod@{creationMethod}!PhysicsHandler@{PhysicsHandler}}
+\doxysubsubsection{\texorpdfstring{creationMethod}{creationMethod}}
+{\footnotesize\ttfamily string Physics\+Handler.\+creation\+Method = \char`\"{}built\char`\"{}}
+
+\mbox{\Hypertarget{classPhysicsHandler_a6b8c792ccf299cf8770c611f50fd66bd}\label{classPhysicsHandler_a6b8c792ccf299cf8770c611f50fd66bd}} 
+\index{PhysicsHandler@{PhysicsHandler}!dropPosition@{dropPosition}}
+\index{dropPosition@{dropPosition}!PhysicsHandler@{PhysicsHandler}}
+\doxysubsubsection{\texorpdfstring{dropPosition}{dropPosition}}
+{\footnotesize\ttfamily Vector3 Physics\+Handler.\+drop\+Position\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{classPhysicsHandler_a594f919951f1e8d1d007d752a4941044}\label{classPhysicsHandler_a594f919951f1e8d1d007d752a4941044}} 
+\index{PhysicsHandler@{PhysicsHandler}!duplicateClearingTimer@{duplicateClearingTimer}}
+\index{duplicateClearingTimer@{duplicateClearingTimer}!PhysicsHandler@{PhysicsHandler}}
+\doxysubsubsection{\texorpdfstring{duplicateClearingTimer}{duplicateClearingTimer}}
+{\footnotesize\ttfamily float Physics\+Handler.\+duplicate\+Clearing\+Timer\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{classPhysicsHandler_acc14ea60f40ad8296551ea9c3096f706}\label{classPhysicsHandler_acc14ea60f40ad8296551ea9c3096f706}} 
+\index{PhysicsHandler@{PhysicsHandler}!explosion@{explosion}}
+\index{explosion@{explosion}!PhysicsHandler@{PhysicsHandler}}
+\doxysubsubsection{\texorpdfstring{explosion}{explosion}}
+{\footnotesize\ttfamily Game\+Object Physics\+Handler.\+explosion}
+
+\mbox{\Hypertarget{classPhysicsHandler_a7b3fca8a0db97d89ebf155b1caa27982}\label{classPhysicsHandler_a7b3fca8a0db97d89ebf155b1caa27982}} 
+\index{PhysicsHandler@{PhysicsHandler}!fallDistance@{fallDistance}}
+\index{fallDistance@{fallDistance}!PhysicsHandler@{PhysicsHandler}}
+\doxysubsubsection{\texorpdfstring{fallDistance}{fallDistance}}
+{\footnotesize\ttfamily float Physics\+Handler.\+fall\+Distance\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{classPhysicsHandler_a7ef9d33287501d3b5e07ae565dbde267}\label{classPhysicsHandler_a7ef9d33287501d3b5e07ae565dbde267}} 
+\index{PhysicsHandler@{PhysicsHandler}!falling@{falling}}
+\index{falling@{falling}!PhysicsHandler@{PhysicsHandler}}
+\doxysubsubsection{\texorpdfstring{falling}{falling}}
+{\footnotesize\ttfamily bool Physics\+Handler.\+falling}
+
+\mbox{\Hypertarget{classPhysicsHandler_aeb5e704caa59b13a1f92978481a43362}\label{classPhysicsHandler_aeb5e704caa59b13a1f92978481a43362}} 
+\index{PhysicsHandler@{PhysicsHandler}!fallingStack@{fallingStack}}
+\index{fallingStack@{fallingStack}!PhysicsHandler@{PhysicsHandler}}
+\doxysubsubsection{\texorpdfstring{fallingStack}{fallingStack}}
+{\footnotesize\ttfamily bool Physics\+Handler.\+falling\+Stack}
+
+\mbox{\Hypertarget{classPhysicsHandler_ad28836a0451c56f9188cdd5218924f6c}\label{classPhysicsHandler_ad28836a0451c56f9188cdd5218924f6c}} 
+\index{PhysicsHandler@{PhysicsHandler}!gameManager@{gameManager}}
+\index{gameManager@{gameManager}!PhysicsHandler@{PhysicsHandler}}
+\doxysubsubsection{\texorpdfstring{gameManager}{gameManager}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classGameManager}{Game\+Manager}} Physics\+Handler.\+game\+Manager\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{classPhysicsHandler_af656059046cd4795d4af09a33b817a4a}\label{classPhysicsHandler_af656059046cd4795d4af09a33b817a4a}} 
+\index{PhysicsHandler@{PhysicsHandler}!lifetime@{lifetime}}
+\index{lifetime@{lifetime}!PhysicsHandler@{PhysicsHandler}}
+\doxysubsubsection{\texorpdfstring{lifetime}{lifetime}}
+{\footnotesize\ttfamily float Physics\+Handler.\+lifetime}
+
+\mbox{\Hypertarget{classPhysicsHandler_abb0b64961a61a780f1a47a05e9867378}\label{classPhysicsHandler_abb0b64961a61a780f1a47a05e9867378}} 
+\index{PhysicsHandler@{PhysicsHandler}!missingBlockTimer@{missingBlockTimer}}
+\index{missingBlockTimer@{missingBlockTimer}!PhysicsHandler@{PhysicsHandler}}
+\doxysubsubsection{\texorpdfstring{missingBlockTimer}{missingBlockTimer}}
+{\footnotesize\ttfamily float Physics\+Handler.\+missing\+Block\+Timer\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{classPhysicsHandler_a4825189ff1ffbb85cb7bb7fae143ede2}\label{classPhysicsHandler_a4825189ff1ffbb85cb7bb7fae143ede2}} 
+\index{PhysicsHandler@{PhysicsHandler}!missingBlockXnegative@{missingBlockXnegative}}
+\index{missingBlockXnegative@{missingBlockXnegative}!PhysicsHandler@{PhysicsHandler}}
+\doxysubsubsection{\texorpdfstring{missingBlockXnegative}{missingBlockXnegative}}
+{\footnotesize\ttfamily bool Physics\+Handler.\+missing\+Block\+Xnegative\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{classPhysicsHandler_adc16d552698a69385fd512b3010386f2}\label{classPhysicsHandler_adc16d552698a69385fd512b3010386f2}} 
+\index{PhysicsHandler@{PhysicsHandler}!missingBlockXpositive@{missingBlockXpositive}}
+\index{missingBlockXpositive@{missingBlockXpositive}!PhysicsHandler@{PhysicsHandler}}
+\doxysubsubsection{\texorpdfstring{missingBlockXpositive}{missingBlockXpositive}}
+{\footnotesize\ttfamily bool Physics\+Handler.\+missing\+Block\+Xpositive\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{classPhysicsHandler_a9a02eed4cb2456e4b07ace234454e34a}\label{classPhysicsHandler_a9a02eed4cb2456e4b07ace234454e34a}} 
+\index{PhysicsHandler@{PhysicsHandler}!missingBlockZnegative@{missingBlockZnegative}}
+\index{missingBlockZnegative@{missingBlockZnegative}!PhysicsHandler@{PhysicsHandler}}
+\doxysubsubsection{\texorpdfstring{missingBlockZnegative}{missingBlockZnegative}}
+{\footnotesize\ttfamily bool Physics\+Handler.\+missing\+Block\+Znegative\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{classPhysicsHandler_a10f71830379b69fbc5a6576400599a63}\label{classPhysicsHandler_a10f71830379b69fbc5a6576400599a63}} 
+\index{PhysicsHandler@{PhysicsHandler}!missingBlockZpositive@{missingBlockZpositive}}
+\index{missingBlockZpositive@{missingBlockZpositive}!PhysicsHandler@{PhysicsHandler}}
+\doxysubsubsection{\texorpdfstring{missingBlockZpositive}{missingBlockZpositive}}
+{\footnotesize\ttfamily bool Physics\+Handler.\+missing\+Block\+Zpositive\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{classPhysicsHandler_a8be8f6ff89e77ed92b3b2616af75bb03}\label{classPhysicsHandler_a8be8f6ff89e77ed92b3b2616af75bb03}} 
+\index{PhysicsHandler@{PhysicsHandler}!needsSupportCheck@{needsSupportCheck}}
+\index{needsSupportCheck@{needsSupportCheck}!PhysicsHandler@{PhysicsHandler}}
+\doxysubsubsection{\texorpdfstring{needsSupportCheck}{needsSupportCheck}}
+{\footnotesize\ttfamily bool Physics\+Handler.\+needs\+Support\+Check}
+
+\mbox{\Hypertarget{classPhysicsHandler_a1a71cedccb39ab62aacbabfd7b019cd1}\label{classPhysicsHandler_a1a71cedccb39ab62aacbabfd7b019cd1}} 
+\index{PhysicsHandler@{PhysicsHandler}!rb@{rb}}
+\index{rb@{rb}!PhysicsHandler@{PhysicsHandler}}
+\doxysubsubsection{\texorpdfstring{rb}{rb}}
+{\footnotesize\ttfamily Rigidbody Physics\+Handler.\+rb\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{classPhysicsHandler_ad15388ca8157a1570684dc6bd0e0a1de}\label{classPhysicsHandler_ad15388ca8157a1570684dc6bd0e0a1de}} 
+\index{PhysicsHandler@{PhysicsHandler}!separatedBlocks@{separatedBlocks}}
+\index{separatedBlocks@{separatedBlocks}!PhysicsHandler@{PhysicsHandler}}
+\doxysubsubsection{\texorpdfstring{separatedBlocks}{separatedBlocks}}
+{\footnotesize\ttfamily bool Physics\+Handler.\+separated\+Blocks\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{classPhysicsHandler_ad53e81b2a790cba085595e43937803e5}\label{classPhysicsHandler_ad53e81b2a790cba085595e43937803e5}} 
+\index{PhysicsHandler@{PhysicsHandler}!stateManager@{stateManager}}
+\index{stateManager@{stateManager}!PhysicsHandler@{PhysicsHandler}}
+\doxysubsubsection{\texorpdfstring{stateManager}{stateManager}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classStateManager}{State\+Manager}} Physics\+Handler.\+state\+Manager\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{classPhysicsHandler_af2b0276878fa5b42cb3ef147cf97b3d5}\label{classPhysicsHandler_af2b0276878fa5b42cb3ef147cf97b3d5}} 
+\index{PhysicsHandler@{PhysicsHandler}!supportCheckTimer@{supportCheckTimer}}
+\index{supportCheckTimer@{supportCheckTimer}!PhysicsHandler@{PhysicsHandler}}
+\doxysubsubsection{\texorpdfstring{supportCheckTimer}{supportCheckTimer}}
+{\footnotesize\ttfamily float Physics\+Handler.\+support\+Check\+Timer\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{classPhysicsHandler_af48e325dee9e9bf85aea2a1f3320483f}\label{classPhysicsHandler_af48e325dee9e9bf85aea2a1f3320483f}} 
+\index{PhysicsHandler@{PhysicsHandler}!supportCount@{supportCount}}
+\index{supportCount@{supportCount}!PhysicsHandler@{PhysicsHandler}}
+\doxysubsubsection{\texorpdfstring{supportCount}{supportCount}}
+{\footnotesize\ttfamily int Physics\+Handler.\+support\+Count\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{classPhysicsHandler_acead4d387de6e1af8a211bbbd0a797d3}\label{classPhysicsHandler_acead4d387de6e1af8a211bbbd0a797d3}} 
+\index{PhysicsHandler@{PhysicsHandler}!supported@{supported}}
+\index{supported@{supported}!PhysicsHandler@{PhysicsHandler}}
+\doxysubsubsection{\texorpdfstring{supported}{supported}}
+{\footnotesize\ttfamily bool Physics\+Handler.\+supported\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{classPhysicsHandler_a043ecb4b6914ea22889d3a38a4822126}\label{classPhysicsHandler_a043ecb4b6914ea22889d3a38a4822126}} 
+\index{PhysicsHandler@{PhysicsHandler}!supportedXnegative@{supportedXnegative}}
+\index{supportedXnegative@{supportedXnegative}!PhysicsHandler@{PhysicsHandler}}
+\doxysubsubsection{\texorpdfstring{supportedXnegative}{supportedXnegative}}
+{\footnotesize\ttfamily int Physics\+Handler.\+supported\+Xnegative\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{classPhysicsHandler_a0f437fa0dd2016c0962da42e4a7304dd}\label{classPhysicsHandler_a0f437fa0dd2016c0962da42e4a7304dd}} 
+\index{PhysicsHandler@{PhysicsHandler}!supportedXpositive@{supportedXpositive}}
+\index{supportedXpositive@{supportedXpositive}!PhysicsHandler@{PhysicsHandler}}
+\doxysubsubsection{\texorpdfstring{supportedXpositive}{supportedXpositive}}
+{\footnotesize\ttfamily int Physics\+Handler.\+supported\+Xpositive\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{classPhysicsHandler_a959020710f754586c77f1acfba29a3b2}\label{classPhysicsHandler_a959020710f754586c77f1acfba29a3b2}} 
+\index{PhysicsHandler@{PhysicsHandler}!supportedZnegative@{supportedZnegative}}
+\index{supportedZnegative@{supportedZnegative}!PhysicsHandler@{PhysicsHandler}}
+\doxysubsubsection{\texorpdfstring{supportedZnegative}{supportedZnegative}}
+{\footnotesize\ttfamily int Physics\+Handler.\+supported\+Znegative\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{classPhysicsHandler_a3e440eace286f631f23f54cc6cb24878}\label{classPhysicsHandler_a3e440eace286f631f23f54cc6cb24878}} 
+\index{PhysicsHandler@{PhysicsHandler}!supportedZpositive@{supportedZpositive}}
+\index{supportedZpositive@{supportedZpositive}!PhysicsHandler@{PhysicsHandler}}
+\doxysubsubsection{\texorpdfstring{supportedZpositive}{supportedZpositive}}
+{\footnotesize\ttfamily int Physics\+Handler.\+supported\+Zpositive\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{classPhysicsHandler_a9c185e7dbbf58131f3b8743ed0541a0f}\label{classPhysicsHandler_a9c185e7dbbf58131f3b8743ed0541a0f}} 
+\index{PhysicsHandler@{PhysicsHandler}!type@{type}}
+\index{type@{type}!PhysicsHandler@{PhysicsHandler}}
+\doxysubsubsection{\texorpdfstring{type}{type}}
+{\footnotesize\ttfamily string Physics\+Handler.\+type}
+
+\mbox{\Hypertarget{classPhysicsHandler_af7645b23fbf4eaf99c32d1027d74ab90}\label{classPhysicsHandler_af7645b23fbf4eaf99c32d1027d74ab90}} 
+\index{PhysicsHandler@{PhysicsHandler}!worldLoadComplete@{worldLoadComplete}}
+\index{worldLoadComplete@{worldLoadComplete}!PhysicsHandler@{PhysicsHandler}}
+\doxysubsubsection{\texorpdfstring{worldLoadComplete}{worldLoadComplete}}
+{\footnotesize\ttfamily bool Physics\+Handler.\+world\+Load\+Complete\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{classPhysicsHandler_a30d0a464c1ece96cabaab968e787914f}\label{classPhysicsHandler_a30d0a464c1ece96cabaab968e787914f}} 
+\index{PhysicsHandler@{PhysicsHandler}!worldLoadTimer@{worldLoadTimer}}
+\index{worldLoadTimer@{worldLoadTimer}!PhysicsHandler@{PhysicsHandler}}
+\doxysubsubsection{\texorpdfstring{worldLoadTimer}{worldLoadTimer}}
+{\footnotesize\ttfamily float Physics\+Handler.\+world\+Load\+Timer\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{PhysicsHandler_8cs}{Physics\+Handler.\+cs}}\end{DoxyCompactItemize}

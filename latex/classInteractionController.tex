@@ -1,0 +1,144 @@
+\hypertarget{classInteractionController}{}\doxysection{Interaction\+Controller Class Reference}
+\label{classInteractionController}\index{InteractionController@{InteractionController}}
+Inheritance diagram for Interaction\+Controller\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{classInteractionController}
+\end{center}
+\end{figure}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{classInteractionController_aeca86e857631ee5daeb1c6d17734de85}{Start}} ()
+\begin{DoxyCompactList}\small\item\em Called by unity engine on start up to initialize variables. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classInteractionController_a75d9fb58b113532a2c32621914a5e6b5}{Update}} ()
+\begin{DoxyCompactList}\small\item\em Called once per frame by unity engine. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classInteractionController_a8e390ef8fc813a5f365e510c0e64e237}{Collect\+Object}} (string type)
+\begin{DoxyCompactList}\small\item\em Destroys an object in the world and adds it\textquotesingle{}s associated inventory item to the player\textquotesingle{}s inventory. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classInteractionController_a3bb1e7c9eaf8304442d94f4e30148153}{Open\+Machine\+G\+UI}} ()
+\begin{DoxyCompactList}\small\item\em Opens the machine G\+UI. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Private Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+Boolean \mbox{\hyperlink{classInteractionController_a9a7c501dc6764beff25240a3e36e5d75}{Is\+Resource}} (Game\+Object obj)
+\begin{DoxyCompactList}\small\item\em Returns true if the object in question is a resource node. \end{DoxyCompactList}\item 
+Boolean \mbox{\hyperlink{classInteractionController_a5923a4371c2a394c2d9825787da733a9}{Is\+Storage\+Container}} (Game\+Object obj)
+\begin{DoxyCompactList}\small\item\em Returns true if the object in question is a storage container. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classInteractionController_a0817fcab5a01259fb9a77609ba429e78}{End\+Interaction}} ()
+\begin{DoxyCompactList}\small\item\em Called when the player is no longer looking at any interactive objects. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classPlayerController}{Player\+Controller}} \mbox{\hyperlink{classInteractionController_a64d5b5713c4f64eeb0211d87f13a535d}{player\+Controller}}
+\item 
+\mbox{\hyperlink{classMachineInteraction}{Machine\+Interaction}} \mbox{\hyperlink{classInteractionController_adf535aa24280feb2a6f231a7327936b5}{machine\+Interaction}}
+\item 
+\mbox{\hyperlink{classStorageInteraction}{Storage\+Interaction}} \mbox{\hyperlink{classInteractionController_a95323630266730c5cb93b6e905a3826a}{storage\+Interaction}}
+\item 
+\mbox{\hyperlink{classBlockInteraction}{Block\+Interaction}} \mbox{\hyperlink{classInteractionController_a8c8db276cd611e530ea741d1576a588c}{block\+Interaction}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{classInteractionController_a8e390ef8fc813a5f365e510c0e64e237}\label{classInteractionController_a8e390ef8fc813a5f365e510c0e64e237}} 
+\index{InteractionController@{InteractionController}!CollectObject@{CollectObject}}
+\index{CollectObject@{CollectObject}!InteractionController@{InteractionController}}
+\doxysubsubsection{\texorpdfstring{CollectObject()}{CollectObject()}}
+{\footnotesize\ttfamily void Interaction\+Controller.\+Collect\+Object (\begin{DoxyParamCaption}\item[{string}]{type }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Destroys an object in the world and adds it\textquotesingle{}s associated inventory item to the player\textquotesingle{}s inventory. 
+
+\mbox{\Hypertarget{classInteractionController_a0817fcab5a01259fb9a77609ba429e78}\label{classInteractionController_a0817fcab5a01259fb9a77609ba429e78}} 
+\index{InteractionController@{InteractionController}!EndInteraction@{EndInteraction}}
+\index{EndInteraction@{EndInteraction}!InteractionController@{InteractionController}}
+\doxysubsubsection{\texorpdfstring{EndInteraction()}{EndInteraction()}}
+{\footnotesize\ttfamily void Interaction\+Controller.\+End\+Interaction (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [private]}}
+
+
+
+Called when the player is no longer looking at any interactive objects. 
+
+\mbox{\Hypertarget{classInteractionController_a9a7c501dc6764beff25240a3e36e5d75}\label{classInteractionController_a9a7c501dc6764beff25240a3e36e5d75}} 
+\index{InteractionController@{InteractionController}!IsResource@{IsResource}}
+\index{IsResource@{IsResource}!InteractionController@{InteractionController}}
+\doxysubsubsection{\texorpdfstring{IsResource()}{IsResource()}}
+{\footnotesize\ttfamily Boolean Interaction\+Controller.\+Is\+Resource (\begin{DoxyParamCaption}\item[{Game\+Object}]{obj }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [private]}}
+
+
+
+Returns true if the object in question is a resource node. 
+
+\mbox{\Hypertarget{classInteractionController_a5923a4371c2a394c2d9825787da733a9}\label{classInteractionController_a5923a4371c2a394c2d9825787da733a9}} 
+\index{InteractionController@{InteractionController}!IsStorageContainer@{IsStorageContainer}}
+\index{IsStorageContainer@{IsStorageContainer}!InteractionController@{InteractionController}}
+\doxysubsubsection{\texorpdfstring{IsStorageContainer()}{IsStorageContainer()}}
+{\footnotesize\ttfamily Boolean Interaction\+Controller.\+Is\+Storage\+Container (\begin{DoxyParamCaption}\item[{Game\+Object}]{obj }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [private]}}
+
+
+
+Returns true if the object in question is a storage container. 
+
+\mbox{\Hypertarget{classInteractionController_a3bb1e7c9eaf8304442d94f4e30148153}\label{classInteractionController_a3bb1e7c9eaf8304442d94f4e30148153}} 
+\index{InteractionController@{InteractionController}!OpenMachineGUI@{OpenMachineGUI}}
+\index{OpenMachineGUI@{OpenMachineGUI}!InteractionController@{InteractionController}}
+\doxysubsubsection{\texorpdfstring{OpenMachineGUI()}{OpenMachineGUI()}}
+{\footnotesize\ttfamily void Interaction\+Controller.\+Open\+Machine\+G\+UI (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Opens the machine G\+UI. 
+
+\mbox{\Hypertarget{classInteractionController_aeca86e857631ee5daeb1c6d17734de85}\label{classInteractionController_aeca86e857631ee5daeb1c6d17734de85}} 
+\index{InteractionController@{InteractionController}!Start@{Start}}
+\index{Start@{Start}!InteractionController@{InteractionController}}
+\doxysubsubsection{\texorpdfstring{Start()}{Start()}}
+{\footnotesize\ttfamily void Interaction\+Controller.\+Start (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Called by unity engine on start up to initialize variables. 
+
+\mbox{\Hypertarget{classInteractionController_a75d9fb58b113532a2c32621914a5e6b5}\label{classInteractionController_a75d9fb58b113532a2c32621914a5e6b5}} 
+\index{InteractionController@{InteractionController}!Update@{Update}}
+\index{Update@{Update}!InteractionController@{InteractionController}}
+\doxysubsubsection{\texorpdfstring{Update()}{Update()}}
+{\footnotesize\ttfamily void Interaction\+Controller.\+Update (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Called once per frame by unity engine. 
+
+
+
+\doxysubsection{Member Data Documentation}
+\mbox{\Hypertarget{classInteractionController_a8c8db276cd611e530ea741d1576a588c}\label{classInteractionController_a8c8db276cd611e530ea741d1576a588c}} 
+\index{InteractionController@{InteractionController}!blockInteraction@{blockInteraction}}
+\index{blockInteraction@{blockInteraction}!InteractionController@{InteractionController}}
+\doxysubsubsection{\texorpdfstring{blockInteraction}{blockInteraction}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classBlockInteraction}{Block\+Interaction}} Interaction\+Controller.\+block\+Interaction\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{classInteractionController_adf535aa24280feb2a6f231a7327936b5}\label{classInteractionController_adf535aa24280feb2a6f231a7327936b5}} 
+\index{InteractionController@{InteractionController}!machineInteraction@{machineInteraction}}
+\index{machineInteraction@{machineInteraction}!InteractionController@{InteractionController}}
+\doxysubsubsection{\texorpdfstring{machineInteraction}{machineInteraction}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classMachineInteraction}{Machine\+Interaction}} Interaction\+Controller.\+machine\+Interaction\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{classInteractionController_a64d5b5713c4f64eeb0211d87f13a535d}\label{classInteractionController_a64d5b5713c4f64eeb0211d87f13a535d}} 
+\index{InteractionController@{InteractionController}!playerController@{playerController}}
+\index{playerController@{playerController}!InteractionController@{InteractionController}}
+\doxysubsubsection{\texorpdfstring{playerController}{playerController}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classPlayerController}{Player\+Controller}} Interaction\+Controller.\+player\+Controller\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{classInteractionController_a95323630266730c5cb93b6e905a3826a}\label{classInteractionController_a95323630266730c5cb93b6e905a3826a}} 
+\index{InteractionController@{InteractionController}!storageInteraction@{storageInteraction}}
+\index{storageInteraction@{storageInteraction}!InteractionController@{InteractionController}}
+\doxysubsubsection{\texorpdfstring{storageInteraction}{storageInteraction}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classStorageInteraction}{Storage\+Interaction}} Interaction\+Controller.\+storage\+Interaction\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{InteractionController_8cs}{Interaction\+Controller.\+cs}}\end{DoxyCompactItemize}

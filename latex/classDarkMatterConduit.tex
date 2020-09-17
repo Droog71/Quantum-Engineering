@@ -1,0 +1,323 @@
+\hypertarget{classDarkMatterConduit}{}\doxysection{Dark\+Matter\+Conduit Class Reference}
+\label{classDarkMatterConduit}\index{DarkMatterConduit@{DarkMatterConduit}}
+Inheritance diagram for Dark\+Matter\+Conduit\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{classDarkMatterConduit}
+\end{center}
+\end{figure}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{classDarkMatterConduit_a3fac37126b3414ee13120c3e968d6664}{Start}} ()
+\begin{DoxyCompactList}\small\item\em Called by unity engine on start up to initialize variables. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classDarkMatterConduit_ae09a2109cdcf2f56723ac10fad31b5ef}{Update}} ()
+\begin{DoxyCompactList}\small\item\em Called once per frame by unity engine. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+float \mbox{\hyperlink{classDarkMatterConduit_a64b7f9e4b6495ce07415c4d8bde9c691}{dark\+Matter\+Amount}}
+\item 
+int \mbox{\hyperlink{classDarkMatterConduit_a382e796955415772b984ced430630275}{speed}} = 1
+\item 
+string \mbox{\hyperlink{classDarkMatterConduit_a27e7f29ba9d1739ad143ceb8126a1729}{ID}} = \char`\"{}unassigned\char`\"{}
+\item 
+string \mbox{\hyperlink{classDarkMatterConduit_a97e84a10ccf322363663603c6ba9930a}{input\+ID}}
+\item 
+string \mbox{\hyperlink{classDarkMatterConduit_a2675fcbbb71a3246ec4b3f4a7173afb2}{output\+ID}}
+\item 
+string \mbox{\hyperlink{classDarkMatterConduit_a048f1935c6bca1ae111984b2a542632c}{creation\+Method}} = \char`\"{}built\char`\"{}
+\item 
+Game\+Object \mbox{\hyperlink{classDarkMatterConduit_ad1f91a872ea8a4f61ed46bcbb3340eef}{input\+Object}}
+\item 
+Game\+Object \mbox{\hyperlink{classDarkMatterConduit_ab72071026ac9d26a283be57551bf1e27}{output\+Object}}
+\item 
+\mbox{\hyperlink{classConduitItem}{Conduit\+Item}} \mbox{\hyperlink{classDarkMatterConduit_adfa06007403638389e13ec28d978712a}{conduit\+Item}}
+\item 
+Material \mbox{\hyperlink{classDarkMatterConduit_a8710f8bf1aabfaa60db318f5e1d06470}{dark\+Matter\+Mat}}
+\item 
+Material \mbox{\hyperlink{classDarkMatterConduit_a32d7b362d58d2b24baba1df0d2cd2ac9}{line\+Mat}}
+\item 
+int \mbox{\hyperlink{classDarkMatterConduit_a523ce604200d5fc3d625d8e9c3b22440}{address}}
+\item 
+int \mbox{\hyperlink{classDarkMatterConduit_a4a39994d7af0044e9aa6ae92ef05453e}{range}} = 6
+\item 
+int \mbox{\hyperlink{classDarkMatterConduit_a15d97f5bc1de07ad29f3e2c8556bbb98}{connection\+Attempts}}
+\item 
+bool \mbox{\hyperlink{classDarkMatterConduit_a16301aae59c38dd5308de5ebb8e92096}{connection\+Failed}}
+\item 
+Game\+Object \mbox{\hyperlink{classDarkMatterConduit_a6f1200334425cb4fb9323afd425196b4}{storage\+Computer\+Conduit\+Item\+Object}}
+\item 
+\mbox{\hyperlink{classConduitItem}{Conduit\+Item}} \mbox{\hyperlink{classDarkMatterConduit_ac69a57041f408e07bed6c54203822770}{storage\+Computer\+Conduit\+Item}}
+\end{DoxyCompactItemize}
+\doxysubsection*{Private Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{classDarkMatterConduit_a4059851355aa35ee5cc1031b9f2c7ace}{On\+Destroy}} ()
+\begin{DoxyCompactList}\small\item\em Used to remove conduit item from storage computer if connected to one. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{classDarkMatterConduit_a63ae6e8c1a75679e19c6d73d49bd5b3f}{Is\+Valid\+Object}} (Game\+Object obj)
+\begin{DoxyCompactList}\small\item\em The object exists, is active and is not a standard building block. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{classDarkMatterConduit_a519192e9dd0606a609fc7a2296df50a2}{Is\+Valid\+Output\+Object}} (Game\+Object obj)
+\begin{DoxyCompactList}\small\item\em The object is a potential output connection. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{classDarkMatterConduit_afb03a15a69b0484deac2a21b5b127ec4}{Is\+Storage\+Container}} (Game\+Object obj)
+\begin{DoxyCompactList}\small\item\em Returns true if the object is a storage container. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classDarkMatterConduit_a3baa723ffb8db76bf98f8b752ef0a6d7}{Find\+Connections}} ()
+\begin{DoxyCompactList}\small\item\em Makes connections to collectors and other conduits. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classDarkMatterConduit_a86e72b5c8e0083b22189f1bd5c2d1130}{Handle\+IO}} ()
+\begin{DoxyCompactList}\small\item\em Gets values from input object and calls Handle\+Output. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classDarkMatterConduit_a4164eaf70d73c42e20dae38b4b7aa372}{Handle\+Output}} ()
+\begin{DoxyCompactList}\small\item\em Moves dark matter to the output object. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classDarkMatterConduit_a83dc6277d7a5f52cd037e398096e756a}{Output\+To\+Storage\+Computer}} ()
+\begin{DoxyCompactList}\small\item\em Moves dark matter from the conduit to a storage computer. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classDarkMatterConduit_abb345194c275ee0dc57fe37380a2ef92}{Output\+To\+Inventory}} ()
+\begin{DoxyCompactList}\small\item\em Moves dark matter to a storage container. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+Line\+Renderer \mbox{\hyperlink{classDarkMatterConduit_a54cc5d327a49339ae945e680861bbaa0}{connection\+Line}}
+\item 
+float \mbox{\hyperlink{classDarkMatterConduit_ac7560a2825b3ea2b1931969d1f29098e}{update\+Tick}}
+\item 
+Game\+Object \mbox{\hyperlink{classDarkMatterConduit_aef07031cfd28ad1a35d86c11f41ac70b}{built\+Objects}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{classDarkMatterConduit_a3baa723ffb8db76bf98f8b752ef0a6d7}\label{classDarkMatterConduit_a3baa723ffb8db76bf98f8b752ef0a6d7}} 
+\index{DarkMatterConduit@{DarkMatterConduit}!FindConnections@{FindConnections}}
+\index{FindConnections@{FindConnections}!DarkMatterConduit@{DarkMatterConduit}}
+\doxysubsubsection{\texorpdfstring{FindConnections()}{FindConnections()}}
+{\footnotesize\ttfamily void Dark\+Matter\+Conduit.\+Find\+Connections (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [private]}}
+
+
+
+Makes connections to collectors and other conduits. 
+
+\mbox{\Hypertarget{classDarkMatterConduit_a86e72b5c8e0083b22189f1bd5c2d1130}\label{classDarkMatterConduit_a86e72b5c8e0083b22189f1bd5c2d1130}} 
+\index{DarkMatterConduit@{DarkMatterConduit}!HandleIO@{HandleIO}}
+\index{HandleIO@{HandleIO}!DarkMatterConduit@{DarkMatterConduit}}
+\doxysubsubsection{\texorpdfstring{HandleIO()}{HandleIO()}}
+{\footnotesize\ttfamily void Dark\+Matter\+Conduit.\+Handle\+IO (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [private]}}
+
+
+
+Gets values from input object and calls Handle\+Output. 
+
+\mbox{\Hypertarget{classDarkMatterConduit_a4164eaf70d73c42e20dae38b4b7aa372}\label{classDarkMatterConduit_a4164eaf70d73c42e20dae38b4b7aa372}} 
+\index{DarkMatterConduit@{DarkMatterConduit}!HandleOutput@{HandleOutput}}
+\index{HandleOutput@{HandleOutput}!DarkMatterConduit@{DarkMatterConduit}}
+\doxysubsubsection{\texorpdfstring{HandleOutput()}{HandleOutput()}}
+{\footnotesize\ttfamily void Dark\+Matter\+Conduit.\+Handle\+Output (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [private]}}
+
+
+
+Moves dark matter to the output object. 
+
+\mbox{\Hypertarget{classDarkMatterConduit_afb03a15a69b0484deac2a21b5b127ec4}\label{classDarkMatterConduit_afb03a15a69b0484deac2a21b5b127ec4}} 
+\index{DarkMatterConduit@{DarkMatterConduit}!IsStorageContainer@{IsStorageContainer}}
+\index{IsStorageContainer@{IsStorageContainer}!DarkMatterConduit@{DarkMatterConduit}}
+\doxysubsubsection{\texorpdfstring{IsStorageContainer()}{IsStorageContainer()}}
+{\footnotesize\ttfamily bool Dark\+Matter\+Conduit.\+Is\+Storage\+Container (\begin{DoxyParamCaption}\item[{Game\+Object}]{obj }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [private]}}
+
+
+
+Returns true if the object is a storage container. 
+
+\mbox{\Hypertarget{classDarkMatterConduit_a63ae6e8c1a75679e19c6d73d49bd5b3f}\label{classDarkMatterConduit_a63ae6e8c1a75679e19c6d73d49bd5b3f}} 
+\index{DarkMatterConduit@{DarkMatterConduit}!IsValidObject@{IsValidObject}}
+\index{IsValidObject@{IsValidObject}!DarkMatterConduit@{DarkMatterConduit}}
+\doxysubsubsection{\texorpdfstring{IsValidObject()}{IsValidObject()}}
+{\footnotesize\ttfamily bool Dark\+Matter\+Conduit.\+Is\+Valid\+Object (\begin{DoxyParamCaption}\item[{Game\+Object}]{obj }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [private]}}
+
+
+
+The object exists, is active and is not a standard building block. 
+
+\mbox{\Hypertarget{classDarkMatterConduit_a519192e9dd0606a609fc7a2296df50a2}\label{classDarkMatterConduit_a519192e9dd0606a609fc7a2296df50a2}} 
+\index{DarkMatterConduit@{DarkMatterConduit}!IsValidOutputObject@{IsValidOutputObject}}
+\index{IsValidOutputObject@{IsValidOutputObject}!DarkMatterConduit@{DarkMatterConduit}}
+\doxysubsubsection{\texorpdfstring{IsValidOutputObject()}{IsValidOutputObject()}}
+{\footnotesize\ttfamily bool Dark\+Matter\+Conduit.\+Is\+Valid\+Output\+Object (\begin{DoxyParamCaption}\item[{Game\+Object}]{obj }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [private]}}
+
+
+
+The object is a potential output connection. 
+
+\mbox{\Hypertarget{classDarkMatterConduit_a4059851355aa35ee5cc1031b9f2c7ace}\label{classDarkMatterConduit_a4059851355aa35ee5cc1031b9f2c7ace}} 
+\index{DarkMatterConduit@{DarkMatterConduit}!OnDestroy@{OnDestroy}}
+\index{OnDestroy@{OnDestroy}!DarkMatterConduit@{DarkMatterConduit}}
+\doxysubsubsection{\texorpdfstring{OnDestroy()}{OnDestroy()}}
+{\footnotesize\ttfamily void Dark\+Matter\+Conduit.\+On\+Destroy (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [private]}}
+
+
+
+Used to remove conduit item from storage computer if connected to one. 
+
+\mbox{\Hypertarget{classDarkMatterConduit_abb345194c275ee0dc57fe37380a2ef92}\label{classDarkMatterConduit_abb345194c275ee0dc57fe37380a2ef92}} 
+\index{DarkMatterConduit@{DarkMatterConduit}!OutputToInventory@{OutputToInventory}}
+\index{OutputToInventory@{OutputToInventory}!DarkMatterConduit@{DarkMatterConduit}}
+\doxysubsubsection{\texorpdfstring{OutputToInventory()}{OutputToInventory()}}
+{\footnotesize\ttfamily void Dark\+Matter\+Conduit.\+Output\+To\+Inventory (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [private]}}
+
+
+
+Moves dark matter to a storage container. 
+
+\mbox{\Hypertarget{classDarkMatterConduit_a83dc6277d7a5f52cd037e398096e756a}\label{classDarkMatterConduit_a83dc6277d7a5f52cd037e398096e756a}} 
+\index{DarkMatterConduit@{DarkMatterConduit}!OutputToStorageComputer@{OutputToStorageComputer}}
+\index{OutputToStorageComputer@{OutputToStorageComputer}!DarkMatterConduit@{DarkMatterConduit}}
+\doxysubsubsection{\texorpdfstring{OutputToStorageComputer()}{OutputToStorageComputer()}}
+{\footnotesize\ttfamily void Dark\+Matter\+Conduit.\+Output\+To\+Storage\+Computer (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [private]}}
+
+
+
+Moves dark matter from the conduit to a storage computer. 
+
+\mbox{\Hypertarget{classDarkMatterConduit_a3fac37126b3414ee13120c3e968d6664}\label{classDarkMatterConduit_a3fac37126b3414ee13120c3e968d6664}} 
+\index{DarkMatterConduit@{DarkMatterConduit}!Start@{Start}}
+\index{Start@{Start}!DarkMatterConduit@{DarkMatterConduit}}
+\doxysubsubsection{\texorpdfstring{Start()}{Start()}}
+{\footnotesize\ttfamily void Dark\+Matter\+Conduit.\+Start (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Called by unity engine on start up to initialize variables. 
+
+\mbox{\Hypertarget{classDarkMatterConduit_ae09a2109cdcf2f56723ac10fad31b5ef}\label{classDarkMatterConduit_ae09a2109cdcf2f56723ac10fad31b5ef}} 
+\index{DarkMatterConduit@{DarkMatterConduit}!Update@{Update}}
+\index{Update@{Update}!DarkMatterConduit@{DarkMatterConduit}}
+\doxysubsubsection{\texorpdfstring{Update()}{Update()}}
+{\footnotesize\ttfamily void Dark\+Matter\+Conduit.\+Update (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Called once per frame by unity engine. 
+
+
+
+\doxysubsection{Member Data Documentation}
+\mbox{\Hypertarget{classDarkMatterConduit_a523ce604200d5fc3d625d8e9c3b22440}\label{classDarkMatterConduit_a523ce604200d5fc3d625d8e9c3b22440}} 
+\index{DarkMatterConduit@{DarkMatterConduit}!address@{address}}
+\index{address@{address}!DarkMatterConduit@{DarkMatterConduit}}
+\doxysubsubsection{\texorpdfstring{address}{address}}
+{\footnotesize\ttfamily int Dark\+Matter\+Conduit.\+address}
+
+\mbox{\Hypertarget{classDarkMatterConduit_aef07031cfd28ad1a35d86c11f41ac70b}\label{classDarkMatterConduit_aef07031cfd28ad1a35d86c11f41ac70b}} 
+\index{DarkMatterConduit@{DarkMatterConduit}!builtObjects@{builtObjects}}
+\index{builtObjects@{builtObjects}!DarkMatterConduit@{DarkMatterConduit}}
+\doxysubsubsection{\texorpdfstring{builtObjects}{builtObjects}}
+{\footnotesize\ttfamily Game\+Object Dark\+Matter\+Conduit.\+built\+Objects\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{classDarkMatterConduit_adfa06007403638389e13ec28d978712a}\label{classDarkMatterConduit_adfa06007403638389e13ec28d978712a}} 
+\index{DarkMatterConduit@{DarkMatterConduit}!conduitItem@{conduitItem}}
+\index{conduitItem@{conduitItem}!DarkMatterConduit@{DarkMatterConduit}}
+\doxysubsubsection{\texorpdfstring{conduitItem}{conduitItem}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classConduitItem}{Conduit\+Item}} Dark\+Matter\+Conduit.\+conduit\+Item}
+
+\mbox{\Hypertarget{classDarkMatterConduit_a15d97f5bc1de07ad29f3e2c8556bbb98}\label{classDarkMatterConduit_a15d97f5bc1de07ad29f3e2c8556bbb98}} 
+\index{DarkMatterConduit@{DarkMatterConduit}!connectionAttempts@{connectionAttempts}}
+\index{connectionAttempts@{connectionAttempts}!DarkMatterConduit@{DarkMatterConduit}}
+\doxysubsubsection{\texorpdfstring{connectionAttempts}{connectionAttempts}}
+{\footnotesize\ttfamily int Dark\+Matter\+Conduit.\+connection\+Attempts}
+
+\mbox{\Hypertarget{classDarkMatterConduit_a16301aae59c38dd5308de5ebb8e92096}\label{classDarkMatterConduit_a16301aae59c38dd5308de5ebb8e92096}} 
+\index{DarkMatterConduit@{DarkMatterConduit}!connectionFailed@{connectionFailed}}
+\index{connectionFailed@{connectionFailed}!DarkMatterConduit@{DarkMatterConduit}}
+\doxysubsubsection{\texorpdfstring{connectionFailed}{connectionFailed}}
+{\footnotesize\ttfamily bool Dark\+Matter\+Conduit.\+connection\+Failed}
+
+\mbox{\Hypertarget{classDarkMatterConduit_a54cc5d327a49339ae945e680861bbaa0}\label{classDarkMatterConduit_a54cc5d327a49339ae945e680861bbaa0}} 
+\index{DarkMatterConduit@{DarkMatterConduit}!connectionLine@{connectionLine}}
+\index{connectionLine@{connectionLine}!DarkMatterConduit@{DarkMatterConduit}}
+\doxysubsubsection{\texorpdfstring{connectionLine}{connectionLine}}
+{\footnotesize\ttfamily Line\+Renderer Dark\+Matter\+Conduit.\+connection\+Line\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{classDarkMatterConduit_a048f1935c6bca1ae111984b2a542632c}\label{classDarkMatterConduit_a048f1935c6bca1ae111984b2a542632c}} 
+\index{DarkMatterConduit@{DarkMatterConduit}!creationMethod@{creationMethod}}
+\index{creationMethod@{creationMethod}!DarkMatterConduit@{DarkMatterConduit}}
+\doxysubsubsection{\texorpdfstring{creationMethod}{creationMethod}}
+{\footnotesize\ttfamily string Dark\+Matter\+Conduit.\+creation\+Method = \char`\"{}built\char`\"{}}
+
+\mbox{\Hypertarget{classDarkMatterConduit_a64b7f9e4b6495ce07415c4d8bde9c691}\label{classDarkMatterConduit_a64b7f9e4b6495ce07415c4d8bde9c691}} 
+\index{DarkMatterConduit@{DarkMatterConduit}!darkMatterAmount@{darkMatterAmount}}
+\index{darkMatterAmount@{darkMatterAmount}!DarkMatterConduit@{DarkMatterConduit}}
+\doxysubsubsection{\texorpdfstring{darkMatterAmount}{darkMatterAmount}}
+{\footnotesize\ttfamily float Dark\+Matter\+Conduit.\+dark\+Matter\+Amount}
+
+\mbox{\Hypertarget{classDarkMatterConduit_a8710f8bf1aabfaa60db318f5e1d06470}\label{classDarkMatterConduit_a8710f8bf1aabfaa60db318f5e1d06470}} 
+\index{DarkMatterConduit@{DarkMatterConduit}!darkMatterMat@{darkMatterMat}}
+\index{darkMatterMat@{darkMatterMat}!DarkMatterConduit@{DarkMatterConduit}}
+\doxysubsubsection{\texorpdfstring{darkMatterMat}{darkMatterMat}}
+{\footnotesize\ttfamily Material Dark\+Matter\+Conduit.\+dark\+Matter\+Mat}
+
+\mbox{\Hypertarget{classDarkMatterConduit_a27e7f29ba9d1739ad143ceb8126a1729}\label{classDarkMatterConduit_a27e7f29ba9d1739ad143ceb8126a1729}} 
+\index{DarkMatterConduit@{DarkMatterConduit}!ID@{ID}}
+\index{ID@{ID}!DarkMatterConduit@{DarkMatterConduit}}
+\doxysubsubsection{\texorpdfstring{ID}{ID}}
+{\footnotesize\ttfamily string Dark\+Matter\+Conduit.\+ID = \char`\"{}unassigned\char`\"{}}
+
+\mbox{\Hypertarget{classDarkMatterConduit_a97e84a10ccf322363663603c6ba9930a}\label{classDarkMatterConduit_a97e84a10ccf322363663603c6ba9930a}} 
+\index{DarkMatterConduit@{DarkMatterConduit}!inputID@{inputID}}
+\index{inputID@{inputID}!DarkMatterConduit@{DarkMatterConduit}}
+\doxysubsubsection{\texorpdfstring{inputID}{inputID}}
+{\footnotesize\ttfamily string Dark\+Matter\+Conduit.\+input\+ID}
+
+\mbox{\Hypertarget{classDarkMatterConduit_ad1f91a872ea8a4f61ed46bcbb3340eef}\label{classDarkMatterConduit_ad1f91a872ea8a4f61ed46bcbb3340eef}} 
+\index{DarkMatterConduit@{DarkMatterConduit}!inputObject@{inputObject}}
+\index{inputObject@{inputObject}!DarkMatterConduit@{DarkMatterConduit}}
+\doxysubsubsection{\texorpdfstring{inputObject}{inputObject}}
+{\footnotesize\ttfamily Game\+Object Dark\+Matter\+Conduit.\+input\+Object}
+
+\mbox{\Hypertarget{classDarkMatterConduit_a32d7b362d58d2b24baba1df0d2cd2ac9}\label{classDarkMatterConduit_a32d7b362d58d2b24baba1df0d2cd2ac9}} 
+\index{DarkMatterConduit@{DarkMatterConduit}!lineMat@{lineMat}}
+\index{lineMat@{lineMat}!DarkMatterConduit@{DarkMatterConduit}}
+\doxysubsubsection{\texorpdfstring{lineMat}{lineMat}}
+{\footnotesize\ttfamily Material Dark\+Matter\+Conduit.\+line\+Mat}
+
+\mbox{\Hypertarget{classDarkMatterConduit_a2675fcbbb71a3246ec4b3f4a7173afb2}\label{classDarkMatterConduit_a2675fcbbb71a3246ec4b3f4a7173afb2}} 
+\index{DarkMatterConduit@{DarkMatterConduit}!outputID@{outputID}}
+\index{outputID@{outputID}!DarkMatterConduit@{DarkMatterConduit}}
+\doxysubsubsection{\texorpdfstring{outputID}{outputID}}
+{\footnotesize\ttfamily string Dark\+Matter\+Conduit.\+output\+ID}
+
+\mbox{\Hypertarget{classDarkMatterConduit_ab72071026ac9d26a283be57551bf1e27}\label{classDarkMatterConduit_ab72071026ac9d26a283be57551bf1e27}} 
+\index{DarkMatterConduit@{DarkMatterConduit}!outputObject@{outputObject}}
+\index{outputObject@{outputObject}!DarkMatterConduit@{DarkMatterConduit}}
+\doxysubsubsection{\texorpdfstring{outputObject}{outputObject}}
+{\footnotesize\ttfamily Game\+Object Dark\+Matter\+Conduit.\+output\+Object}
+
+\mbox{\Hypertarget{classDarkMatterConduit_a4a39994d7af0044e9aa6ae92ef05453e}\label{classDarkMatterConduit_a4a39994d7af0044e9aa6ae92ef05453e}} 
+\index{DarkMatterConduit@{DarkMatterConduit}!range@{range}}
+\index{range@{range}!DarkMatterConduit@{DarkMatterConduit}}
+\doxysubsubsection{\texorpdfstring{range}{range}}
+{\footnotesize\ttfamily int Dark\+Matter\+Conduit.\+range = 6}
+
+\mbox{\Hypertarget{classDarkMatterConduit_a382e796955415772b984ced430630275}\label{classDarkMatterConduit_a382e796955415772b984ced430630275}} 
+\index{DarkMatterConduit@{DarkMatterConduit}!speed@{speed}}
+\index{speed@{speed}!DarkMatterConduit@{DarkMatterConduit}}
+\doxysubsubsection{\texorpdfstring{speed}{speed}}
+{\footnotesize\ttfamily int Dark\+Matter\+Conduit.\+speed = 1}
+
+\mbox{\Hypertarget{classDarkMatterConduit_ac69a57041f408e07bed6c54203822770}\label{classDarkMatterConduit_ac69a57041f408e07bed6c54203822770}} 
+\index{DarkMatterConduit@{DarkMatterConduit}!storageComputerConduitItem@{storageComputerConduitItem}}
+\index{storageComputerConduitItem@{storageComputerConduitItem}!DarkMatterConduit@{DarkMatterConduit}}
+\doxysubsubsection{\texorpdfstring{storageComputerConduitItem}{storageComputerConduitItem}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classConduitItem}{Conduit\+Item}} Dark\+Matter\+Conduit.\+storage\+Computer\+Conduit\+Item}
+
+\mbox{\Hypertarget{classDarkMatterConduit_a6f1200334425cb4fb9323afd425196b4}\label{classDarkMatterConduit_a6f1200334425cb4fb9323afd425196b4}} 
+\index{DarkMatterConduit@{DarkMatterConduit}!storageComputerConduitItemObject@{storageComputerConduitItemObject}}
+\index{storageComputerConduitItemObject@{storageComputerConduitItemObject}!DarkMatterConduit@{DarkMatterConduit}}
+\doxysubsubsection{\texorpdfstring{storageComputerConduitItemObject}{storageComputerConduitItemObject}}
+{\footnotesize\ttfamily Game\+Object Dark\+Matter\+Conduit.\+storage\+Computer\+Conduit\+Item\+Object}
+
+\mbox{\Hypertarget{classDarkMatterConduit_ac7560a2825b3ea2b1931969d1f29098e}\label{classDarkMatterConduit_ac7560a2825b3ea2b1931969d1f29098e}} 
+\index{DarkMatterConduit@{DarkMatterConduit}!updateTick@{updateTick}}
+\index{updateTick@{updateTick}!DarkMatterConduit@{DarkMatterConduit}}
+\doxysubsubsection{\texorpdfstring{updateTick}{updateTick}}
+{\footnotesize\ttfamily float Dark\+Matter\+Conduit.\+update\+Tick\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{DarkMatterConduit_8cs}{Dark\+Matter\+Conduit.\+cs}}\end{DoxyCompactItemize}

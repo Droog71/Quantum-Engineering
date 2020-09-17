@@ -12,7 +12,7 @@ public class InventoryManager : MonoBehaviour
     public int maxStackSize = 1000;
     public bool itemAdded;
 
-    // Called once per frame by unity engine
+    //! Called once per frame by unity engine.
     public void Update()
     {
         if (ID != "unassigned" && initialized == false)
@@ -61,7 +61,7 @@ public class InventoryManager : MonoBehaviour
         }
     }
 
-    // Saves the inventory's contents to disk
+    //! Saves the inventory's contents to disk.
     public void SaveData()
     {
         if (initialized == true)
@@ -87,7 +87,7 @@ public class InventoryManager : MonoBehaviour
         }
     }
 
-    // Adds an item to the inventory
+    //! Adds an item to the inventory.
     public void AddItem(string type, int amount)
     {
         itemAdded = false;
@@ -108,6 +108,7 @@ public class InventoryManager : MonoBehaviour
         }
     }
 
+    // Adds an item to a specific inventory slot.
     public void AddItemToSlot(string type, int amount, int slot)
     {
         inventory[slot].typeInSlot = type;

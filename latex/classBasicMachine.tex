@@ -1,0 +1,343 @@
+\hypertarget{classBasicMachine}{}\doxysection{Basic\+Machine Class Reference}
+\label{classBasicMachine}\index{BasicMachine@{BasicMachine}}
+Inheritance diagram for Basic\+Machine\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=3.000000cm]{classBasicMachine}
+\end{center}
+\end{figure}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{classBasicMachine_a25a93e26866424d85546fa4e1edd1e85}{Start}} ()
+\begin{DoxyCompactList}\small\item\em Called by unity engine on start up to initialize variables. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classBasicMachine_a168950cd562f2daff9a1ee1c89c32d19}{Update}} ()
+\begin{DoxyCompactList}\small\item\em Called once per frame by unity engine. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+float \mbox{\hyperlink{classBasicMachine_a0db98b80b672970a128187b7a3d6638a}{amount}}
+\item 
+float \mbox{\hyperlink{classBasicMachine_a1e711ebe7436051e478e4b85afaa8e48}{update\+Tick}}
+\item 
+int \mbox{\hyperlink{classBasicMachine_a5d49d231188e2e538b7fb9195ecc536d}{address}}
+\item 
+int \mbox{\hyperlink{classBasicMachine_a9d05d4ee45070268ad303a498248d738}{speed}} = 1
+\item 
+int \mbox{\hyperlink{classBasicMachine_aadde212c3e88f320cbef35e8f44f4d72}{power}}
+\item 
+int \mbox{\hyperlink{classBasicMachine_a7a6972497251345441727bee2066969b}{heat}}
+\item 
+int \mbox{\hyperlink{classBasicMachine_a1967e6e57cd44df5afa407423249962a}{cooling}}
+\item 
+int \mbox{\hyperlink{classBasicMachine_ae6cab4f84ca8e62fb4eaa74f5d8ada96}{connection\+Attempts}}
+\item 
+string \mbox{\hyperlink{classBasicMachine_a69af26a87831e28e15ad788c5d652d82}{input\+Type}}
+\item 
+string \mbox{\hyperlink{classBasicMachine_a31cbbe97a7d92558427a691e7eaa83b9}{output\+Type}}
+\item 
+string \mbox{\hyperlink{classBasicMachine_a652716309dd09c9253c00f4bdcc63529}{ID}} = \char`\"{}unassigned\char`\"{}
+\item 
+string \mbox{\hyperlink{classBasicMachine_acaf9ab89d78c6be1f0d33d37996b5fc9}{creation\+Method}} = \char`\"{}built\char`\"{}
+\item 
+string \mbox{\hyperlink{classBasicMachine_a9e5d3d33a54b0e9e2eef833438848b85}{input\+ID}}
+\item 
+string \mbox{\hyperlink{classBasicMachine_a6f8d896adb966af9293bed66746eaea2}{output\+ID}}
+\item 
+bool \mbox{\hyperlink{classBasicMachine_ab54dba034c2e6033fbfd76c8ccaa3ad1}{connection\+Failed}}
+\item 
+bool \mbox{\hyperlink{classBasicMachine_a1a62011bc760f3e21ea32f7046f12d78}{has\+Heat\+Exchanger}}
+\item 
+bool \mbox{\hyperlink{classBasicMachine_a8291a76440e9bc0751e249f54de0aa78}{power\+ON}}
+\item 
+Game\+Object \mbox{\hyperlink{classBasicMachine_a0a95693575a1b9a56c62b8f475500d36}{input\+Object}}
+\item 
+Game\+Object \mbox{\hyperlink{classBasicMachine_a1328d0587bc8b24e2119292683571c47}{output\+Object}}
+\item 
+Game\+Object \mbox{\hyperlink{classBasicMachine_a7b0a61bc3bb8c9aaa6bb388136b696bf}{power\+Object}}
+\item 
+\mbox{\hyperlink{classConduitItem}{Conduit\+Item}} \mbox{\hyperlink{classBasicMachine_a7e68dc3c29babc1b93d7b22a3302ee40}{conduit\+Item}}
+\item 
+Material \mbox{\hyperlink{classBasicMachine_a50c14cc137dcad702a0390db0af6f9bd}{line\+Mat}}
+\item 
+\mbox{\hyperlink{classPowerReceiver}{Power\+Receiver}} \mbox{\hyperlink{classBasicMachine_aa36bc6d5e94f9a4192ac7e61834aff8d}{power\+Receiver}}
+\item 
+\mbox{\hyperlink{classBasicMachineRecipe}{Basic\+Machine\+Recipe}}\mbox{[}$\,$\mbox{]} \mbox{\hyperlink{classBasicMachine_ac0d681d5098458fe7a57535b66a61719}{recipes}}
+\end{DoxyCompactItemize}
+\doxysubsection*{Private Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+bool \mbox{\hyperlink{classBasicMachine_aeb01dd9dc750e59ed14a701f68079cbf}{Is\+Valid\+Object}} (Game\+Object obj)
+\begin{DoxyCompactList}\small\item\em The object exists, is active and is not a standard building block. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{classBasicMachine_a9da6df4cdeccd050c2be6eefddabd7a4}{Is\+Valid\+Output\+Object}} (Game\+Object obj)
+\begin{DoxyCompactList}\small\item\em The object is a potential output connection. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classBasicMachine_a34176b44a435d52977e34c7b538ae47d}{Connect\+To\+Output}} ()
+\begin{DoxyCompactList}\small\item\em Finds and connects to a universal conduit for output. \end{DoxyCompactList}\item 
+string \mbox{\hyperlink{classBasicMachine_ac46e730a98e723855f8ca782a34969c9}{Get\+Output\+Type}} ()
+\begin{DoxyCompactList}\small\item\em Sets the appropriate output item according to the input. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classBasicMachine_a4d5bec538f0da926a019e7893da7d898}{Handle\+Output}} ()
+\begin{DoxyCompactList}\small\item\em If everything is working, items are moved to the output conduit; sounds and other effects are enabled. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classBasicMachine_a4d248419518bc5b7be78b51be254db57}{Update\+Power\+Receiver}} ()
+\begin{DoxyCompactList}\small\item\em Gets power values from power receiver. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+Line\+Renderer \mbox{\hyperlink{classBasicMachine_adb4e97c4a09cf83e5c928718bae4195d}{connection\+Line}}
+\item 
+Game\+Object \mbox{\hyperlink{classBasicMachine_abd15f50f993bd9d827b1a369abcd7db6}{built\+Objects}}
+\item 
+int \mbox{\hyperlink{classBasicMachine_aaf561dbffc2613c3fe30ae0a23e7b8e8}{machine\+Timer}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{classBasicMachine_a34176b44a435d52977e34c7b538ae47d}\label{classBasicMachine_a34176b44a435d52977e34c7b538ae47d}} 
+\index{BasicMachine@{BasicMachine}!ConnectToOutput@{ConnectToOutput}}
+\index{ConnectToOutput@{ConnectToOutput}!BasicMachine@{BasicMachine}}
+\doxysubsubsection{\texorpdfstring{ConnectToOutput()}{ConnectToOutput()}}
+{\footnotesize\ttfamily void Basic\+Machine.\+Connect\+To\+Output (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [private]}}
+
+
+
+Finds and connects to a universal conduit for output. 
+
+\mbox{\Hypertarget{classBasicMachine_ac46e730a98e723855f8ca782a34969c9}\label{classBasicMachine_ac46e730a98e723855f8ca782a34969c9}} 
+\index{BasicMachine@{BasicMachine}!GetOutputType@{GetOutputType}}
+\index{GetOutputType@{GetOutputType}!BasicMachine@{BasicMachine}}
+\doxysubsubsection{\texorpdfstring{GetOutputType()}{GetOutputType()}}
+{\footnotesize\ttfamily string Basic\+Machine.\+Get\+Output\+Type (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [private]}}
+
+
+
+Sets the appropriate output item according to the input. 
+
+\mbox{\Hypertarget{classBasicMachine_a4d5bec538f0da926a019e7893da7d898}\label{classBasicMachine_a4d5bec538f0da926a019e7893da7d898}} 
+\index{BasicMachine@{BasicMachine}!HandleOutput@{HandleOutput}}
+\index{HandleOutput@{HandleOutput}!BasicMachine@{BasicMachine}}
+\doxysubsubsection{\texorpdfstring{HandleOutput()}{HandleOutput()}}
+{\footnotesize\ttfamily void Basic\+Machine.\+Handle\+Output (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [private]}}
+
+
+
+If everything is working, items are moved to the output conduit; sounds and other effects are enabled. 
+
+\mbox{\Hypertarget{classBasicMachine_aeb01dd9dc750e59ed14a701f68079cbf}\label{classBasicMachine_aeb01dd9dc750e59ed14a701f68079cbf}} 
+\index{BasicMachine@{BasicMachine}!IsValidObject@{IsValidObject}}
+\index{IsValidObject@{IsValidObject}!BasicMachine@{BasicMachine}}
+\doxysubsubsection{\texorpdfstring{IsValidObject()}{IsValidObject()}}
+{\footnotesize\ttfamily bool Basic\+Machine.\+Is\+Valid\+Object (\begin{DoxyParamCaption}\item[{Game\+Object}]{obj }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [private]}}
+
+
+
+The object exists, is active and is not a standard building block. 
+
+\mbox{\Hypertarget{classBasicMachine_a9da6df4cdeccd050c2be6eefddabd7a4}\label{classBasicMachine_a9da6df4cdeccd050c2be6eefddabd7a4}} 
+\index{BasicMachine@{BasicMachine}!IsValidOutputObject@{IsValidOutputObject}}
+\index{IsValidOutputObject@{IsValidOutputObject}!BasicMachine@{BasicMachine}}
+\doxysubsubsection{\texorpdfstring{IsValidOutputObject()}{IsValidOutputObject()}}
+{\footnotesize\ttfamily bool Basic\+Machine.\+Is\+Valid\+Output\+Object (\begin{DoxyParamCaption}\item[{Game\+Object}]{obj }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [private]}}
+
+
+
+The object is a potential output connection. 
+
+\mbox{\Hypertarget{classBasicMachine_a25a93e26866424d85546fa4e1edd1e85}\label{classBasicMachine_a25a93e26866424d85546fa4e1edd1e85}} 
+\index{BasicMachine@{BasicMachine}!Start@{Start}}
+\index{Start@{Start}!BasicMachine@{BasicMachine}}
+\doxysubsubsection{\texorpdfstring{Start()}{Start()}}
+{\footnotesize\ttfamily void Basic\+Machine.\+Start (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Called by unity engine on start up to initialize variables. 
+
+\mbox{\Hypertarget{classBasicMachine_a168950cd562f2daff9a1ee1c89c32d19}\label{classBasicMachine_a168950cd562f2daff9a1ee1c89c32d19}} 
+\index{BasicMachine@{BasicMachine}!Update@{Update}}
+\index{Update@{Update}!BasicMachine@{BasicMachine}}
+\doxysubsubsection{\texorpdfstring{Update()}{Update()}}
+{\footnotesize\ttfamily void Basic\+Machine.\+Update (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Called once per frame by unity engine. 
+
+\mbox{\Hypertarget{classBasicMachine_a4d248419518bc5b7be78b51be254db57}\label{classBasicMachine_a4d248419518bc5b7be78b51be254db57}} 
+\index{BasicMachine@{BasicMachine}!UpdatePowerReceiver@{UpdatePowerReceiver}}
+\index{UpdatePowerReceiver@{UpdatePowerReceiver}!BasicMachine@{BasicMachine}}
+\doxysubsubsection{\texorpdfstring{UpdatePowerReceiver()}{UpdatePowerReceiver()}}
+{\footnotesize\ttfamily void Basic\+Machine.\+Update\+Power\+Receiver (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [private]}}
+
+
+
+Gets power values from power receiver. 
+
+
+
+\doxysubsection{Member Data Documentation}
+\mbox{\Hypertarget{classBasicMachine_a5d49d231188e2e538b7fb9195ecc536d}\label{classBasicMachine_a5d49d231188e2e538b7fb9195ecc536d}} 
+\index{BasicMachine@{BasicMachine}!address@{address}}
+\index{address@{address}!BasicMachine@{BasicMachine}}
+\doxysubsubsection{\texorpdfstring{address}{address}}
+{\footnotesize\ttfamily int Basic\+Machine.\+address}
+
+\mbox{\Hypertarget{classBasicMachine_a0db98b80b672970a128187b7a3d6638a}\label{classBasicMachine_a0db98b80b672970a128187b7a3d6638a}} 
+\index{BasicMachine@{BasicMachine}!amount@{amount}}
+\index{amount@{amount}!BasicMachine@{BasicMachine}}
+\doxysubsubsection{\texorpdfstring{amount}{amount}}
+{\footnotesize\ttfamily float Basic\+Machine.\+amount}
+
+\mbox{\Hypertarget{classBasicMachine_abd15f50f993bd9d827b1a369abcd7db6}\label{classBasicMachine_abd15f50f993bd9d827b1a369abcd7db6}} 
+\index{BasicMachine@{BasicMachine}!builtObjects@{builtObjects}}
+\index{builtObjects@{builtObjects}!BasicMachine@{BasicMachine}}
+\doxysubsubsection{\texorpdfstring{builtObjects}{builtObjects}}
+{\footnotesize\ttfamily Game\+Object Basic\+Machine.\+built\+Objects\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{classBasicMachine_a7e68dc3c29babc1b93d7b22a3302ee40}\label{classBasicMachine_a7e68dc3c29babc1b93d7b22a3302ee40}} 
+\index{BasicMachine@{BasicMachine}!conduitItem@{conduitItem}}
+\index{conduitItem@{conduitItem}!BasicMachine@{BasicMachine}}
+\doxysubsubsection{\texorpdfstring{conduitItem}{conduitItem}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classConduitItem}{Conduit\+Item}} Basic\+Machine.\+conduit\+Item}
+
+\mbox{\Hypertarget{classBasicMachine_ae6cab4f84ca8e62fb4eaa74f5d8ada96}\label{classBasicMachine_ae6cab4f84ca8e62fb4eaa74f5d8ada96}} 
+\index{BasicMachine@{BasicMachine}!connectionAttempts@{connectionAttempts}}
+\index{connectionAttempts@{connectionAttempts}!BasicMachine@{BasicMachine}}
+\doxysubsubsection{\texorpdfstring{connectionAttempts}{connectionAttempts}}
+{\footnotesize\ttfamily int Basic\+Machine.\+connection\+Attempts}
+
+\mbox{\Hypertarget{classBasicMachine_ab54dba034c2e6033fbfd76c8ccaa3ad1}\label{classBasicMachine_ab54dba034c2e6033fbfd76c8ccaa3ad1}} 
+\index{BasicMachine@{BasicMachine}!connectionFailed@{connectionFailed}}
+\index{connectionFailed@{connectionFailed}!BasicMachine@{BasicMachine}}
+\doxysubsubsection{\texorpdfstring{connectionFailed}{connectionFailed}}
+{\footnotesize\ttfamily bool Basic\+Machine.\+connection\+Failed}
+
+\mbox{\Hypertarget{classBasicMachine_adb4e97c4a09cf83e5c928718bae4195d}\label{classBasicMachine_adb4e97c4a09cf83e5c928718bae4195d}} 
+\index{BasicMachine@{BasicMachine}!connectionLine@{connectionLine}}
+\index{connectionLine@{connectionLine}!BasicMachine@{BasicMachine}}
+\doxysubsubsection{\texorpdfstring{connectionLine}{connectionLine}}
+{\footnotesize\ttfamily Line\+Renderer Basic\+Machine.\+connection\+Line\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{classBasicMachine_a1967e6e57cd44df5afa407423249962a}\label{classBasicMachine_a1967e6e57cd44df5afa407423249962a}} 
+\index{BasicMachine@{BasicMachine}!cooling@{cooling}}
+\index{cooling@{cooling}!BasicMachine@{BasicMachine}}
+\doxysubsubsection{\texorpdfstring{cooling}{cooling}}
+{\footnotesize\ttfamily int Basic\+Machine.\+cooling}
+
+\mbox{\Hypertarget{classBasicMachine_acaf9ab89d78c6be1f0d33d37996b5fc9}\label{classBasicMachine_acaf9ab89d78c6be1f0d33d37996b5fc9}} 
+\index{BasicMachine@{BasicMachine}!creationMethod@{creationMethod}}
+\index{creationMethod@{creationMethod}!BasicMachine@{BasicMachine}}
+\doxysubsubsection{\texorpdfstring{creationMethod}{creationMethod}}
+{\footnotesize\ttfamily string Basic\+Machine.\+creation\+Method = \char`\"{}built\char`\"{}}
+
+\mbox{\Hypertarget{classBasicMachine_a1a62011bc760f3e21ea32f7046f12d78}\label{classBasicMachine_a1a62011bc760f3e21ea32f7046f12d78}} 
+\index{BasicMachine@{BasicMachine}!hasHeatExchanger@{hasHeatExchanger}}
+\index{hasHeatExchanger@{hasHeatExchanger}!BasicMachine@{BasicMachine}}
+\doxysubsubsection{\texorpdfstring{hasHeatExchanger}{hasHeatExchanger}}
+{\footnotesize\ttfamily bool Basic\+Machine.\+has\+Heat\+Exchanger}
+
+\mbox{\Hypertarget{classBasicMachine_a7a6972497251345441727bee2066969b}\label{classBasicMachine_a7a6972497251345441727bee2066969b}} 
+\index{BasicMachine@{BasicMachine}!heat@{heat}}
+\index{heat@{heat}!BasicMachine@{BasicMachine}}
+\doxysubsubsection{\texorpdfstring{heat}{heat}}
+{\footnotesize\ttfamily int Basic\+Machine.\+heat}
+
+\mbox{\Hypertarget{classBasicMachine_a652716309dd09c9253c00f4bdcc63529}\label{classBasicMachine_a652716309dd09c9253c00f4bdcc63529}} 
+\index{BasicMachine@{BasicMachine}!ID@{ID}}
+\index{ID@{ID}!BasicMachine@{BasicMachine}}
+\doxysubsubsection{\texorpdfstring{ID}{ID}}
+{\footnotesize\ttfamily string Basic\+Machine.\+ID = \char`\"{}unassigned\char`\"{}}
+
+\mbox{\Hypertarget{classBasicMachine_a9e5d3d33a54b0e9e2eef833438848b85}\label{classBasicMachine_a9e5d3d33a54b0e9e2eef833438848b85}} 
+\index{BasicMachine@{BasicMachine}!inputID@{inputID}}
+\index{inputID@{inputID}!BasicMachine@{BasicMachine}}
+\doxysubsubsection{\texorpdfstring{inputID}{inputID}}
+{\footnotesize\ttfamily string Basic\+Machine.\+input\+ID}
+
+\mbox{\Hypertarget{classBasicMachine_a0a95693575a1b9a56c62b8f475500d36}\label{classBasicMachine_a0a95693575a1b9a56c62b8f475500d36}} 
+\index{BasicMachine@{BasicMachine}!inputObject@{inputObject}}
+\index{inputObject@{inputObject}!BasicMachine@{BasicMachine}}
+\doxysubsubsection{\texorpdfstring{inputObject}{inputObject}}
+{\footnotesize\ttfamily Game\+Object Basic\+Machine.\+input\+Object}
+
+\mbox{\Hypertarget{classBasicMachine_a69af26a87831e28e15ad788c5d652d82}\label{classBasicMachine_a69af26a87831e28e15ad788c5d652d82}} 
+\index{BasicMachine@{BasicMachine}!inputType@{inputType}}
+\index{inputType@{inputType}!BasicMachine@{BasicMachine}}
+\doxysubsubsection{\texorpdfstring{inputType}{inputType}}
+{\footnotesize\ttfamily string Basic\+Machine.\+input\+Type}
+
+\mbox{\Hypertarget{classBasicMachine_a50c14cc137dcad702a0390db0af6f9bd}\label{classBasicMachine_a50c14cc137dcad702a0390db0af6f9bd}} 
+\index{BasicMachine@{BasicMachine}!lineMat@{lineMat}}
+\index{lineMat@{lineMat}!BasicMachine@{BasicMachine}}
+\doxysubsubsection{\texorpdfstring{lineMat}{lineMat}}
+{\footnotesize\ttfamily Material Basic\+Machine.\+line\+Mat}
+
+\mbox{\Hypertarget{classBasicMachine_aaf561dbffc2613c3fe30ae0a23e7b8e8}\label{classBasicMachine_aaf561dbffc2613c3fe30ae0a23e7b8e8}} 
+\index{BasicMachine@{BasicMachine}!machineTimer@{machineTimer}}
+\index{machineTimer@{machineTimer}!BasicMachine@{BasicMachine}}
+\doxysubsubsection{\texorpdfstring{machineTimer}{machineTimer}}
+{\footnotesize\ttfamily int Basic\+Machine.\+machine\+Timer\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{classBasicMachine_a6f8d896adb966af9293bed66746eaea2}\label{classBasicMachine_a6f8d896adb966af9293bed66746eaea2}} 
+\index{BasicMachine@{BasicMachine}!outputID@{outputID}}
+\index{outputID@{outputID}!BasicMachine@{BasicMachine}}
+\doxysubsubsection{\texorpdfstring{outputID}{outputID}}
+{\footnotesize\ttfamily string Basic\+Machine.\+output\+ID}
+
+\mbox{\Hypertarget{classBasicMachine_a1328d0587bc8b24e2119292683571c47}\label{classBasicMachine_a1328d0587bc8b24e2119292683571c47}} 
+\index{BasicMachine@{BasicMachine}!outputObject@{outputObject}}
+\index{outputObject@{outputObject}!BasicMachine@{BasicMachine}}
+\doxysubsubsection{\texorpdfstring{outputObject}{outputObject}}
+{\footnotesize\ttfamily Game\+Object Basic\+Machine.\+output\+Object}
+
+\mbox{\Hypertarget{classBasicMachine_a31cbbe97a7d92558427a691e7eaa83b9}\label{classBasicMachine_a31cbbe97a7d92558427a691e7eaa83b9}} 
+\index{BasicMachine@{BasicMachine}!outputType@{outputType}}
+\index{outputType@{outputType}!BasicMachine@{BasicMachine}}
+\doxysubsubsection{\texorpdfstring{outputType}{outputType}}
+{\footnotesize\ttfamily string Basic\+Machine.\+output\+Type}
+
+\mbox{\Hypertarget{classBasicMachine_aadde212c3e88f320cbef35e8f44f4d72}\label{classBasicMachine_aadde212c3e88f320cbef35e8f44f4d72}} 
+\index{BasicMachine@{BasicMachine}!power@{power}}
+\index{power@{power}!BasicMachine@{BasicMachine}}
+\doxysubsubsection{\texorpdfstring{power}{power}}
+{\footnotesize\ttfamily int Basic\+Machine.\+power}
+
+\mbox{\Hypertarget{classBasicMachine_a7b0a61bc3bb8c9aaa6bb388136b696bf}\label{classBasicMachine_a7b0a61bc3bb8c9aaa6bb388136b696bf}} 
+\index{BasicMachine@{BasicMachine}!powerObject@{powerObject}}
+\index{powerObject@{powerObject}!BasicMachine@{BasicMachine}}
+\doxysubsubsection{\texorpdfstring{powerObject}{powerObject}}
+{\footnotesize\ttfamily Game\+Object Basic\+Machine.\+power\+Object}
+
+\mbox{\Hypertarget{classBasicMachine_a8291a76440e9bc0751e249f54de0aa78}\label{classBasicMachine_a8291a76440e9bc0751e249f54de0aa78}} 
+\index{BasicMachine@{BasicMachine}!powerON@{powerON}}
+\index{powerON@{powerON}!BasicMachine@{BasicMachine}}
+\doxysubsubsection{\texorpdfstring{powerON}{powerON}}
+{\footnotesize\ttfamily bool Basic\+Machine.\+power\+ON}
+
+\mbox{\Hypertarget{classBasicMachine_aa36bc6d5e94f9a4192ac7e61834aff8d}\label{classBasicMachine_aa36bc6d5e94f9a4192ac7e61834aff8d}} 
+\index{BasicMachine@{BasicMachine}!powerReceiver@{powerReceiver}}
+\index{powerReceiver@{powerReceiver}!BasicMachine@{BasicMachine}}
+\doxysubsubsection{\texorpdfstring{powerReceiver}{powerReceiver}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classPowerReceiver}{Power\+Receiver}} Basic\+Machine.\+power\+Receiver}
+
+\mbox{\Hypertarget{classBasicMachine_ac0d681d5098458fe7a57535b66a61719}\label{classBasicMachine_ac0d681d5098458fe7a57535b66a61719}} 
+\index{BasicMachine@{BasicMachine}!recipes@{recipes}}
+\index{recipes@{recipes}!BasicMachine@{BasicMachine}}
+\doxysubsubsection{\texorpdfstring{recipes}{recipes}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classBasicMachineRecipe}{Basic\+Machine\+Recipe}} \mbox{[}$\,$\mbox{]} Basic\+Machine.\+recipes}
+
+\mbox{\Hypertarget{classBasicMachine_a9d05d4ee45070268ad303a498248d738}\label{classBasicMachine_a9d05d4ee45070268ad303a498248d738}} 
+\index{BasicMachine@{BasicMachine}!speed@{speed}}
+\index{speed@{speed}!BasicMachine@{BasicMachine}}
+\doxysubsubsection{\texorpdfstring{speed}{speed}}
+{\footnotesize\ttfamily int Basic\+Machine.\+speed = 1}
+
+\mbox{\Hypertarget{classBasicMachine_a1e711ebe7436051e478e4b85afaa8e48}\label{classBasicMachine_a1e711ebe7436051e478e4b85afaa8e48}} 
+\index{BasicMachine@{BasicMachine}!updateTick@{updateTick}}
+\index{updateTick@{updateTick}!BasicMachine@{BasicMachine}}
+\doxysubsubsection{\texorpdfstring{updateTick}{updateTick}}
+{\footnotesize\ttfamily float Basic\+Machine.\+update\+Tick}
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{BasicMachine_8cs}{Basic\+Machine.\+cs}}\end{DoxyCompactItemize}

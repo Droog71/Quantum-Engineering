@@ -26,7 +26,7 @@ public class MainMenu : MonoBehaviour
     private bool deletePrompt;
     private bool escapePrompt;
 
-    // Called by unity engine on start up to initialize variables
+    //! Called by unity engine on start up to initialize variables.
     public void Start()
     {
         stateManager = GameObject.Find("GameManager").GetComponent<StateManager>();
@@ -45,6 +45,7 @@ public class MainMenu : MonoBehaviour
         }
     }
 
+    //! Confirms world selection and loads the world.
     private void SelectWorld()
     {
         if (worldSelected == false && worldName != "Enter World Name")
@@ -83,6 +84,7 @@ public class MainMenu : MonoBehaviour
         }
     }
 
+    //! Called when Kepler-1625 is selected and the scene needs to be changed.
     private void ChangeScene()
     {
         PlayerPrefsX.SetPersistentStringArray("Worlds", worldList.ToArray());
@@ -92,6 +94,7 @@ public class MainMenu : MonoBehaviour
         SceneManager.LoadScene(1);
     }
 
+    //! Called when Gliese 876 is selected and the scene does not need to be changed.
     private void StartGame()
     {
         PlayerPrefsX.SetPersistentStringArray("Worlds", worldList.ToArray());
@@ -101,6 +104,7 @@ public class MainMenu : MonoBehaviour
         ambient.enabled = false;
     }
 
+    //! Gets the size of in pixels of text so it can be positioned on the screen accordingly.
     private Vector2 GetStringSize(string str)
     {
         GUIContent content = new GUIContent(str);
@@ -109,13 +113,13 @@ public class MainMenu : MonoBehaviour
         return style.CalcSize(content);
     }
 
-    // Called by unity engine for rendering and handling GUI events
+    //! Called by unity engine for rendering and handling GUI events.
     public void OnGUI()
     {
-        //STYLE
+        // STYLE
         GUI.skin = thisGUIskin;
 
-        //ASPECT RATIO
+        // ASPECT RATIO
         float ScreenHeight = Screen.height;
         float ScreenWidth = Screen.width;
         if (ScreenWidth / ScreenHeight < 1.7f)

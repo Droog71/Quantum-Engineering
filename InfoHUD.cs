@@ -11,7 +11,7 @@ public class InfoHUD : MonoBehaviour
     private string machineDisplayInputID = "unassigned";
     private string machineDisplayInputID2 = "unassigned";
 
-    // Called by unity engine on start up to initialize variables
+    //! Called by unity engine on start up to initialize variables.
     public void Start()
     {
         playerController = GetComponent<PlayerController>();
@@ -19,7 +19,7 @@ public class InfoHUD : MonoBehaviour
         guiCoordinates = new GuiCoordinates();
     }
 
-    // Returns true if the info hud should be drawn
+    //! Returns true if the info hud should be drawn.
     private bool ShouldDrawInfoHud()
     {
         return playerController.stateManager.worldLoaded == true
@@ -33,13 +33,13 @@ public class InfoHUD : MonoBehaviour
         && playerController.tabletOpen == false;
     }
 
-    // Called by unity engine for rendering and handling GUI events
+    //! Called by unity engine for rendering and handling GUI events.
     public void OnGUI()
     {
-        //STYLE
+        //! STYLE
         GUI.skin = GetComponent<PlayerGUI>().thisGUIskin;
 
-        //ASPECT RATIO
+        //! ASPECT RATIO
         float ScreenHeight = Screen.height;
         float ScreenWidth = Screen.width;
         if (ScreenWidth / ScreenHeight < 1.7f)

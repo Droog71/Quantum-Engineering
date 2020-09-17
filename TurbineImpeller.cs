@@ -1,10 +1,11 @@
 ﻿using UnityEngine;
 
+//! This class handles animations for reactor turbines.
 public class TurbineImpeller : MonoBehaviour
 {
     public GameObject turbine;
 
-    // Update is called once per frame
+    //! Update is called once per frame.
     void Update()
     {
         if (turbine.GetComponent<AudioSource>().isPlaying == true)

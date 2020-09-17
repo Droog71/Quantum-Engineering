@@ -1,0 +1,299 @@
+\hypertarget{classUniversalExtractor}{}\doxysection{Universal\+Extractor Class Reference}
+\label{classUniversalExtractor}\index{UniversalExtractor@{UniversalExtractor}}
+Inheritance diagram for Universal\+Extractor\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{classUniversalExtractor}
+\end{center}
+\end{figure}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{classUniversalExtractor_aeeccf3253ec193c653f38e8737d7caf0}{Start}} ()
+\begin{DoxyCompactList}\small\item\em Called by unity engine on start up to initialize variables. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classUniversalExtractor_aaa0d5faea915d23142fc116b8f0c0ac4}{On\+Destroy}} ()
+\begin{DoxyCompactList}\small\item\em Used to remove the connection line renderer when the block is destroyed. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classUniversalExtractor_a49d7f061c57d3e05cdbcc99db62b2172}{Update}} ()
+\begin{DoxyCompactList}\small\item\em Called once per frame by unity engine. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+float \mbox{\hyperlink{classUniversalExtractor_a96f1b178bde4fc01f25649207ad2eaf8}{amount}}
+\item 
+int \mbox{\hyperlink{classUniversalExtractor_a65b2d4c264acaf18191f95874f0601ff}{speed}} = 1
+\item 
+int \mbox{\hyperlink{classUniversalExtractor_a286871bdf8ffbfd6e80039a8679b4a03}{heat}}
+\item 
+int \mbox{\hyperlink{classUniversalExtractor_a3306532cbc44c9e5b8ab839a28d4294f}{cooling}}
+\item 
+bool \mbox{\hyperlink{classUniversalExtractor_a7253a8626454048b5c2e71fba78fcfe3}{has\+Heat\+Exchanger}}
+\item 
+int \mbox{\hyperlink{classUniversalExtractor_a59389f01f3e26a9b8c899c43d5e9a2e1}{power}}
+\item 
+string \mbox{\hyperlink{classUniversalExtractor_a0bbc93ab1d33795ef568691d89af4a3f}{type}}
+\item 
+Game\+Object \mbox{\hyperlink{classUniversalExtractor_ae2622dea7532091d9e984b9ac6e7ff6b}{output\+Object}}
+\item 
+Game\+Object \mbox{\hyperlink{classUniversalExtractor_a7c7946e98765ba05c9bf655b08ddfa71}{power\+Object}}
+\item 
+\mbox{\hyperlink{classConduitItem}{Conduit\+Item}} \mbox{\hyperlink{classUniversalExtractor_a2a32bdb7cc4e3afd3cf0ae5ca1a44d25}{conduit\+Item}}
+\item 
+Material \mbox{\hyperlink{classUniversalExtractor_ad78f4afcb0cc01860a4681a55ff712ca}{line\+Mat}}
+\item 
+string \mbox{\hyperlink{classUniversalExtractor_a46ab1405732c80b2100f1507fe64fbe2}{ID}} = \char`\"{}unassigned\char`\"{}
+\item 
+string \mbox{\hyperlink{classUniversalExtractor_aa9592ffc04a80c4f87666af7f0c1f8bb}{creation\+Method}} = \char`\"{}built\char`\"{}
+\item 
+int \mbox{\hyperlink{classUniversalExtractor_a80f3b810833ae21cd2cbe9a7403a0503}{address}}
+\item 
+bool \mbox{\hyperlink{classUniversalExtractor_a5dfb2e5222e5b2170a3b858e1c72d8eb}{power\+ON}}
+\item 
+int \mbox{\hyperlink{classUniversalExtractor_acfb8eb06333c27feb4fc65e95cc650f4}{connection\+Attempts}}
+\item 
+bool \mbox{\hyperlink{classUniversalExtractor_ae320d67c18733115e27aab6baa3845a8}{connection\+Failed}}
+\item 
+\mbox{\hyperlink{classPowerReceiver}{Power\+Receiver}} \mbox{\hyperlink{classUniversalExtractor_a7b49156902179f4a8a8b7f674d0f219e}{power\+Receiver}}
+\end{DoxyCompactItemize}
+\doxysubsection*{Private Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+bool \mbox{\hyperlink{classUniversalExtractor_ab76420bc2796434ff351c00ebab20a06}{Is\+Valid\+Resource}} (Game\+Object obj)
+\begin{DoxyCompactList}\small\item\em The object exists, is active and is a resource node. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classUniversalExtractor_a4532613bda3f467d477c41d26674bafc}{Update\+Power\+Receiver}} ()
+\begin{DoxyCompactList}\small\item\em Gets power values from power receiver. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+int \mbox{\hyperlink{classUniversalExtractor_a3278e8bba9af03fe9c42bf9389e477b3}{machine\+Timer}}
+\item 
+Game\+Object \mbox{\hyperlink{classUniversalExtractor_aaa66f3562cdcc8743fde0407c21fda64}{input\+Object}}
+\item 
+Line\+Renderer \mbox{\hyperlink{classUniversalExtractor_a9c7659ce7a79ff3069c4f0eeb0e2aa88}{connection\+Line}}
+\item 
+Line\+Renderer \mbox{\hyperlink{classUniversalExtractor_a9af93f658ccc11228089d198bcad2e1c}{input\+Line}}
+\item 
+float \mbox{\hyperlink{classUniversalExtractor_a05f084e1e07af238e212cd7909d55030}{update\+Tick}}
+\item 
+bool \mbox{\hyperlink{classUniversalExtractor_ad79ed4e61677c68a20712c4658f5d275}{extracting\+Ice}}
+\item 
+bool \mbox{\hyperlink{classUniversalExtractor_a08bf4a8b682d0da68f0a519bed6864b5}{has\+Resource}}
+\item 
+Game\+Object \mbox{\hyperlink{classUniversalExtractor_ad001dc2b2197238c0ef8d09c37a81dc9}{built\+Objects}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{classUniversalExtractor_ab76420bc2796434ff351c00ebab20a06}\label{classUniversalExtractor_ab76420bc2796434ff351c00ebab20a06}} 
+\index{UniversalExtractor@{UniversalExtractor}!IsValidResource@{IsValidResource}}
+\index{IsValidResource@{IsValidResource}!UniversalExtractor@{UniversalExtractor}}
+\doxysubsubsection{\texorpdfstring{IsValidResource()}{IsValidResource()}}
+{\footnotesize\ttfamily bool Universal\+Extractor.\+Is\+Valid\+Resource (\begin{DoxyParamCaption}\item[{Game\+Object}]{obj }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [private]}}
+
+
+
+The object exists, is active and is a resource node. 
+
+\mbox{\Hypertarget{classUniversalExtractor_aaa0d5faea915d23142fc116b8f0c0ac4}\label{classUniversalExtractor_aaa0d5faea915d23142fc116b8f0c0ac4}} 
+\index{UniversalExtractor@{UniversalExtractor}!OnDestroy@{OnDestroy}}
+\index{OnDestroy@{OnDestroy}!UniversalExtractor@{UniversalExtractor}}
+\doxysubsubsection{\texorpdfstring{OnDestroy()}{OnDestroy()}}
+{\footnotesize\ttfamily void Universal\+Extractor.\+On\+Destroy (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Used to remove the connection line renderer when the block is destroyed. 
+
+\mbox{\Hypertarget{classUniversalExtractor_aeeccf3253ec193c653f38e8737d7caf0}\label{classUniversalExtractor_aeeccf3253ec193c653f38e8737d7caf0}} 
+\index{UniversalExtractor@{UniversalExtractor}!Start@{Start}}
+\index{Start@{Start}!UniversalExtractor@{UniversalExtractor}}
+\doxysubsubsection{\texorpdfstring{Start()}{Start()}}
+{\footnotesize\ttfamily void Universal\+Extractor.\+Start (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Called by unity engine on start up to initialize variables. 
+
+\mbox{\Hypertarget{classUniversalExtractor_a49d7f061c57d3e05cdbcc99db62b2172}\label{classUniversalExtractor_a49d7f061c57d3e05cdbcc99db62b2172}} 
+\index{UniversalExtractor@{UniversalExtractor}!Update@{Update}}
+\index{Update@{Update}!UniversalExtractor@{UniversalExtractor}}
+\doxysubsubsection{\texorpdfstring{Update()}{Update()}}
+{\footnotesize\ttfamily void Universal\+Extractor.\+Update (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Called once per frame by unity engine. 
+
+\mbox{\Hypertarget{classUniversalExtractor_a4532613bda3f467d477c41d26674bafc}\label{classUniversalExtractor_a4532613bda3f467d477c41d26674bafc}} 
+\index{UniversalExtractor@{UniversalExtractor}!UpdatePowerReceiver@{UpdatePowerReceiver}}
+\index{UpdatePowerReceiver@{UpdatePowerReceiver}!UniversalExtractor@{UniversalExtractor}}
+\doxysubsubsection{\texorpdfstring{UpdatePowerReceiver()}{UpdatePowerReceiver()}}
+{\footnotesize\ttfamily void Universal\+Extractor.\+Update\+Power\+Receiver (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [private]}}
+
+
+
+Gets power values from power receiver. 
+
+
+
+\doxysubsection{Member Data Documentation}
+\mbox{\Hypertarget{classUniversalExtractor_a80f3b810833ae21cd2cbe9a7403a0503}\label{classUniversalExtractor_a80f3b810833ae21cd2cbe9a7403a0503}} 
+\index{UniversalExtractor@{UniversalExtractor}!address@{address}}
+\index{address@{address}!UniversalExtractor@{UniversalExtractor}}
+\doxysubsubsection{\texorpdfstring{address}{address}}
+{\footnotesize\ttfamily int Universal\+Extractor.\+address}
+
+\mbox{\Hypertarget{classUniversalExtractor_a96f1b178bde4fc01f25649207ad2eaf8}\label{classUniversalExtractor_a96f1b178bde4fc01f25649207ad2eaf8}} 
+\index{UniversalExtractor@{UniversalExtractor}!amount@{amount}}
+\index{amount@{amount}!UniversalExtractor@{UniversalExtractor}}
+\doxysubsubsection{\texorpdfstring{amount}{amount}}
+{\footnotesize\ttfamily float Universal\+Extractor.\+amount}
+
+\mbox{\Hypertarget{classUniversalExtractor_ad001dc2b2197238c0ef8d09c37a81dc9}\label{classUniversalExtractor_ad001dc2b2197238c0ef8d09c37a81dc9}} 
+\index{UniversalExtractor@{UniversalExtractor}!builtObjects@{builtObjects}}
+\index{builtObjects@{builtObjects}!UniversalExtractor@{UniversalExtractor}}
+\doxysubsubsection{\texorpdfstring{builtObjects}{builtObjects}}
+{\footnotesize\ttfamily Game\+Object Universal\+Extractor.\+built\+Objects\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{classUniversalExtractor_a2a32bdb7cc4e3afd3cf0ae5ca1a44d25}\label{classUniversalExtractor_a2a32bdb7cc4e3afd3cf0ae5ca1a44d25}} 
+\index{UniversalExtractor@{UniversalExtractor}!conduitItem@{conduitItem}}
+\index{conduitItem@{conduitItem}!UniversalExtractor@{UniversalExtractor}}
+\doxysubsubsection{\texorpdfstring{conduitItem}{conduitItem}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classConduitItem}{Conduit\+Item}} Universal\+Extractor.\+conduit\+Item}
+
+\mbox{\Hypertarget{classUniversalExtractor_acfb8eb06333c27feb4fc65e95cc650f4}\label{classUniversalExtractor_acfb8eb06333c27feb4fc65e95cc650f4}} 
+\index{UniversalExtractor@{UniversalExtractor}!connectionAttempts@{connectionAttempts}}
+\index{connectionAttempts@{connectionAttempts}!UniversalExtractor@{UniversalExtractor}}
+\doxysubsubsection{\texorpdfstring{connectionAttempts}{connectionAttempts}}
+{\footnotesize\ttfamily int Universal\+Extractor.\+connection\+Attempts}
+
+\mbox{\Hypertarget{classUniversalExtractor_ae320d67c18733115e27aab6baa3845a8}\label{classUniversalExtractor_ae320d67c18733115e27aab6baa3845a8}} 
+\index{UniversalExtractor@{UniversalExtractor}!connectionFailed@{connectionFailed}}
+\index{connectionFailed@{connectionFailed}!UniversalExtractor@{UniversalExtractor}}
+\doxysubsubsection{\texorpdfstring{connectionFailed}{connectionFailed}}
+{\footnotesize\ttfamily bool Universal\+Extractor.\+connection\+Failed}
+
+\mbox{\Hypertarget{classUniversalExtractor_a9c7659ce7a79ff3069c4f0eeb0e2aa88}\label{classUniversalExtractor_a9c7659ce7a79ff3069c4f0eeb0e2aa88}} 
+\index{UniversalExtractor@{UniversalExtractor}!connectionLine@{connectionLine}}
+\index{connectionLine@{connectionLine}!UniversalExtractor@{UniversalExtractor}}
+\doxysubsubsection{\texorpdfstring{connectionLine}{connectionLine}}
+{\footnotesize\ttfamily Line\+Renderer Universal\+Extractor.\+connection\+Line\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{classUniversalExtractor_a3306532cbc44c9e5b8ab839a28d4294f}\label{classUniversalExtractor_a3306532cbc44c9e5b8ab839a28d4294f}} 
+\index{UniversalExtractor@{UniversalExtractor}!cooling@{cooling}}
+\index{cooling@{cooling}!UniversalExtractor@{UniversalExtractor}}
+\doxysubsubsection{\texorpdfstring{cooling}{cooling}}
+{\footnotesize\ttfamily int Universal\+Extractor.\+cooling}
+
+\mbox{\Hypertarget{classUniversalExtractor_aa9592ffc04a80c4f87666af7f0c1f8bb}\label{classUniversalExtractor_aa9592ffc04a80c4f87666af7f0c1f8bb}} 
+\index{UniversalExtractor@{UniversalExtractor}!creationMethod@{creationMethod}}
+\index{creationMethod@{creationMethod}!UniversalExtractor@{UniversalExtractor}}
+\doxysubsubsection{\texorpdfstring{creationMethod}{creationMethod}}
+{\footnotesize\ttfamily string Universal\+Extractor.\+creation\+Method = \char`\"{}built\char`\"{}}
+
+\mbox{\Hypertarget{classUniversalExtractor_ad79ed4e61677c68a20712c4658f5d275}\label{classUniversalExtractor_ad79ed4e61677c68a20712c4658f5d275}} 
+\index{UniversalExtractor@{UniversalExtractor}!extractingIce@{extractingIce}}
+\index{extractingIce@{extractingIce}!UniversalExtractor@{UniversalExtractor}}
+\doxysubsubsection{\texorpdfstring{extractingIce}{extractingIce}}
+{\footnotesize\ttfamily bool Universal\+Extractor.\+extracting\+Ice\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{classUniversalExtractor_a7253a8626454048b5c2e71fba78fcfe3}\label{classUniversalExtractor_a7253a8626454048b5c2e71fba78fcfe3}} 
+\index{UniversalExtractor@{UniversalExtractor}!hasHeatExchanger@{hasHeatExchanger}}
+\index{hasHeatExchanger@{hasHeatExchanger}!UniversalExtractor@{UniversalExtractor}}
+\doxysubsubsection{\texorpdfstring{hasHeatExchanger}{hasHeatExchanger}}
+{\footnotesize\ttfamily bool Universal\+Extractor.\+has\+Heat\+Exchanger}
+
+\mbox{\Hypertarget{classUniversalExtractor_a08bf4a8b682d0da68f0a519bed6864b5}\label{classUniversalExtractor_a08bf4a8b682d0da68f0a519bed6864b5}} 
+\index{UniversalExtractor@{UniversalExtractor}!hasResource@{hasResource}}
+\index{hasResource@{hasResource}!UniversalExtractor@{UniversalExtractor}}
+\doxysubsubsection{\texorpdfstring{hasResource}{hasResource}}
+{\footnotesize\ttfamily bool Universal\+Extractor.\+has\+Resource\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{classUniversalExtractor_a286871bdf8ffbfd6e80039a8679b4a03}\label{classUniversalExtractor_a286871bdf8ffbfd6e80039a8679b4a03}} 
+\index{UniversalExtractor@{UniversalExtractor}!heat@{heat}}
+\index{heat@{heat}!UniversalExtractor@{UniversalExtractor}}
+\doxysubsubsection{\texorpdfstring{heat}{heat}}
+{\footnotesize\ttfamily int Universal\+Extractor.\+heat}
+
+\mbox{\Hypertarget{classUniversalExtractor_a46ab1405732c80b2100f1507fe64fbe2}\label{classUniversalExtractor_a46ab1405732c80b2100f1507fe64fbe2}} 
+\index{UniversalExtractor@{UniversalExtractor}!ID@{ID}}
+\index{ID@{ID}!UniversalExtractor@{UniversalExtractor}}
+\doxysubsubsection{\texorpdfstring{ID}{ID}}
+{\footnotesize\ttfamily string Universal\+Extractor.\+ID = \char`\"{}unassigned\char`\"{}}
+
+\mbox{\Hypertarget{classUniversalExtractor_a9af93f658ccc11228089d198bcad2e1c}\label{classUniversalExtractor_a9af93f658ccc11228089d198bcad2e1c}} 
+\index{UniversalExtractor@{UniversalExtractor}!inputLine@{inputLine}}
+\index{inputLine@{inputLine}!UniversalExtractor@{UniversalExtractor}}
+\doxysubsubsection{\texorpdfstring{inputLine}{inputLine}}
+{\footnotesize\ttfamily Line\+Renderer Universal\+Extractor.\+input\+Line\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{classUniversalExtractor_aaa66f3562cdcc8743fde0407c21fda64}\label{classUniversalExtractor_aaa66f3562cdcc8743fde0407c21fda64}} 
+\index{UniversalExtractor@{UniversalExtractor}!inputObject@{inputObject}}
+\index{inputObject@{inputObject}!UniversalExtractor@{UniversalExtractor}}
+\doxysubsubsection{\texorpdfstring{inputObject}{inputObject}}
+{\footnotesize\ttfamily Game\+Object Universal\+Extractor.\+input\+Object\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{classUniversalExtractor_ad78f4afcb0cc01860a4681a55ff712ca}\label{classUniversalExtractor_ad78f4afcb0cc01860a4681a55ff712ca}} 
+\index{UniversalExtractor@{UniversalExtractor}!lineMat@{lineMat}}
+\index{lineMat@{lineMat}!UniversalExtractor@{UniversalExtractor}}
+\doxysubsubsection{\texorpdfstring{lineMat}{lineMat}}
+{\footnotesize\ttfamily Material Universal\+Extractor.\+line\+Mat}
+
+\mbox{\Hypertarget{classUniversalExtractor_a3278e8bba9af03fe9c42bf9389e477b3}\label{classUniversalExtractor_a3278e8bba9af03fe9c42bf9389e477b3}} 
+\index{UniversalExtractor@{UniversalExtractor}!machineTimer@{machineTimer}}
+\index{machineTimer@{machineTimer}!UniversalExtractor@{UniversalExtractor}}
+\doxysubsubsection{\texorpdfstring{machineTimer}{machineTimer}}
+{\footnotesize\ttfamily int Universal\+Extractor.\+machine\+Timer\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{classUniversalExtractor_ae2622dea7532091d9e984b9ac6e7ff6b}\label{classUniversalExtractor_ae2622dea7532091d9e984b9ac6e7ff6b}} 
+\index{UniversalExtractor@{UniversalExtractor}!outputObject@{outputObject}}
+\index{outputObject@{outputObject}!UniversalExtractor@{UniversalExtractor}}
+\doxysubsubsection{\texorpdfstring{outputObject}{outputObject}}
+{\footnotesize\ttfamily Game\+Object Universal\+Extractor.\+output\+Object}
+
+\mbox{\Hypertarget{classUniversalExtractor_a59389f01f3e26a9b8c899c43d5e9a2e1}\label{classUniversalExtractor_a59389f01f3e26a9b8c899c43d5e9a2e1}} 
+\index{UniversalExtractor@{UniversalExtractor}!power@{power}}
+\index{power@{power}!UniversalExtractor@{UniversalExtractor}}
+\doxysubsubsection{\texorpdfstring{power}{power}}
+{\footnotesize\ttfamily int Universal\+Extractor.\+power}
+
+\mbox{\Hypertarget{classUniversalExtractor_a7c7946e98765ba05c9bf655b08ddfa71}\label{classUniversalExtractor_a7c7946e98765ba05c9bf655b08ddfa71}} 
+\index{UniversalExtractor@{UniversalExtractor}!powerObject@{powerObject}}
+\index{powerObject@{powerObject}!UniversalExtractor@{UniversalExtractor}}
+\doxysubsubsection{\texorpdfstring{powerObject}{powerObject}}
+{\footnotesize\ttfamily Game\+Object Universal\+Extractor.\+power\+Object}
+
+\mbox{\Hypertarget{classUniversalExtractor_a5dfb2e5222e5b2170a3b858e1c72d8eb}\label{classUniversalExtractor_a5dfb2e5222e5b2170a3b858e1c72d8eb}} 
+\index{UniversalExtractor@{UniversalExtractor}!powerON@{powerON}}
+\index{powerON@{powerON}!UniversalExtractor@{UniversalExtractor}}
+\doxysubsubsection{\texorpdfstring{powerON}{powerON}}
+{\footnotesize\ttfamily bool Universal\+Extractor.\+power\+ON}
+
+\mbox{\Hypertarget{classUniversalExtractor_a7b49156902179f4a8a8b7f674d0f219e}\label{classUniversalExtractor_a7b49156902179f4a8a8b7f674d0f219e}} 
+\index{UniversalExtractor@{UniversalExtractor}!powerReceiver@{powerReceiver}}
+\index{powerReceiver@{powerReceiver}!UniversalExtractor@{UniversalExtractor}}
+\doxysubsubsection{\texorpdfstring{powerReceiver}{powerReceiver}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classPowerReceiver}{Power\+Receiver}} Universal\+Extractor.\+power\+Receiver}
+
+\mbox{\Hypertarget{classUniversalExtractor_a65b2d4c264acaf18191f95874f0601ff}\label{classUniversalExtractor_a65b2d4c264acaf18191f95874f0601ff}} 
+\index{UniversalExtractor@{UniversalExtractor}!speed@{speed}}
+\index{speed@{speed}!UniversalExtractor@{UniversalExtractor}}
+\doxysubsubsection{\texorpdfstring{speed}{speed}}
+{\footnotesize\ttfamily int Universal\+Extractor.\+speed = 1}
+
+\mbox{\Hypertarget{classUniversalExtractor_a0bbc93ab1d33795ef568691d89af4a3f}\label{classUniversalExtractor_a0bbc93ab1d33795ef568691d89af4a3f}} 
+\index{UniversalExtractor@{UniversalExtractor}!type@{type}}
+\index{type@{type}!UniversalExtractor@{UniversalExtractor}}
+\doxysubsubsection{\texorpdfstring{type}{type}}
+{\footnotesize\ttfamily string Universal\+Extractor.\+type}
+
+\mbox{\Hypertarget{classUniversalExtractor_a05f084e1e07af238e212cd7909d55030}\label{classUniversalExtractor_a05f084e1e07af238e212cd7909d55030}} 
+\index{UniversalExtractor@{UniversalExtractor}!updateTick@{updateTick}}
+\index{updateTick@{updateTick}!UniversalExtractor@{UniversalExtractor}}
+\doxysubsubsection{\texorpdfstring{updateTick}{updateTick}}
+{\footnotesize\ttfamily float Universal\+Extractor.\+update\+Tick\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{UniversalExtractor_8cs}{Universal\+Extractor.\+cs}}\end{DoxyCompactItemize}

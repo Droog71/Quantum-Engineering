@@ -18,7 +18,7 @@ public class StorageComputer : MonoBehaviour
     public ConduitItem conduitItem;
     public PowerReceiver powerReceiver;
 
-    // Called by unity engine on start up to initialize variables
+    //! Called by unity engine on start up to initialize variables.
     public void Start()
     {
         powerReceiver = gameObject.AddComponent<PowerReceiver>();
@@ -27,7 +27,7 @@ public class StorageComputer : MonoBehaviour
         conduitItem = GetComponentInChildren<ConduitItem>(true);
     }
 
-    // Called once per frame by unity engine
+    //! Called once per frame by unity engine.
     public void Update()
     {
         updateTick += 1 * Time.deltaTime;
@@ -66,7 +66,7 @@ public class StorageComputer : MonoBehaviour
         }
     }
 
-    // Called when player interacts with the computer.
+    //! Called when player interacts with the computer.
     public void GetContainers()
     {
         computerContainerList.Clear();
@@ -103,7 +103,7 @@ public class StorageComputer : MonoBehaviour
         computerContainers = computerContainerList.ToArray();
     }
 
-    // Gets power values from power receiver
+    //! Gets power values from power receiver.
     private void UpdatePowerReceiver()
     {
         powerReceiver.ID = ID;
@@ -111,7 +111,7 @@ public class StorageComputer : MonoBehaviour
         powerObject = powerReceiver.powerObject;
     }
 
-    // Removes all connections and allows the computer to search for storage containers.
+    //! Removes all connections and allows the computer to search for storage containers.
     public void Reboot()
     {
         GameObject[] spawnedConnections = spawnedConnectionList.ToArray();
@@ -126,7 +126,7 @@ public class StorageComputer : MonoBehaviour
         bootTimer = 0;
     }
 
-    // Removes line renderers when the machine is destroyed.
+    //! Removes line renderers when the machine is destroyed.
     public void OnDestroy()
     {
         GameObject[] spawnedConnections = spawnedConnectionList.ToArray();

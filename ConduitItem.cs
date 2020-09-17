@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using System.Collections;
 using System.Collections.Generic;
 
 public class ConduitItem : MonoBehaviour
@@ -12,11 +11,13 @@ public class ConduitItem : MonoBehaviour
     public GameObject billboard2;
     public bool active;
 
+    //! Called by unity engine on start up to initialize variables.
     public void Start()
     {
         startPosition = transform.position;
     }
 
+    //! Called once per frame by unity engine.
     public void Update()
     {
         if (active == true && textureDictionary != null)

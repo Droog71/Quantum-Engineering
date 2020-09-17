@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 
+//! This class handles animation of the hammer and piston of a press.
 public class PressHammer : MonoBehaviour
 {
     public GameObject press;
@@ -8,14 +9,14 @@ public class PressHammer : MonoBehaviour
     bool movingUp;
     bool soundPlayed;
 
-    // Start is called before the first frame update
-    void Start()
+    //! Start is called before the first frame update.
+    public void Start()
     {
         originalYposition = transform.position.y;
     }
 
-    // Update is called once per frame
-    void Update()
+    //! Update is called once per frame.
+    public void Update()
     {
         if (press.GetComponent<Light>().enabled == true)
         {

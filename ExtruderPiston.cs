@@ -10,13 +10,13 @@ public class ExtruderPiston : MonoBehaviour
     private bool movingBack;
     private bool soundPlayed;
 
-    // Called by unity engine on start up to initialize variables
+    //! Called by unity engine on start up to initialize variables.
     public void Start()
     {
         originalPosition = transform.position;
     }
 
-    // Called once per frame by unity engine
+    //! Called once per frame by unity engine.
     public void Update()
     {
         if (extruder.GetComponent<Light>().enabled == true)

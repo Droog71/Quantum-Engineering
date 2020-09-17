@@ -29,7 +29,7 @@ public class UniversalExtractor : MonoBehaviour
     private GameObject builtObjects;
     public PowerReceiver powerReceiver;
 
-    // Called by unity engine on start up to initialize variables
+    //! Called by unity engine on start up to initialize variables.
     public void Start()
     {
         powerReceiver = gameObject.AddComponent<PowerReceiver>();
@@ -42,7 +42,7 @@ public class UniversalExtractor : MonoBehaviour
         builtObjects = GameObject.Find("Built_Objects");
     }
 
-    // Used to remove the connection line renderer when the block is destroyed
+    //! Used to remove the connection line renderer when the block is destroyed.
     public void OnDestroy()
     {
         if (inputLine != null)
@@ -51,13 +51,13 @@ public class UniversalExtractor : MonoBehaviour
         }
     }
 
-    // The object exists, is active and is a resource node
+    //! The object exists, is active and is a resource node.
     private bool IsValidResource(GameObject obj)
     {
         return obj != null && obj.transform.parent != builtObjects.transform && obj.activeInHierarchy && obj.GetComponent<UniversalResource>() != null;
     }
 
-    // Gets power values from power receiver
+    //! Gets power values from power receiver.
     private void UpdatePowerReceiver()
     {
         powerReceiver.ID = ID;
@@ -66,7 +66,7 @@ public class UniversalExtractor : MonoBehaviour
         powerObject = powerReceiver.powerObject;
     }
 
-    // Called once per frame by unity engine
+    //! Called once per frame by unity engine.
     public void Update()
     {
         updateTick += 1 * Time.deltaTime;

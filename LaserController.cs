@@ -5,19 +5,20 @@ public class LaserController
     private GameManager gameManager;
     private PlayerController playerController;
 
+    //! This class handles RaycastHits for the player's laser cannon.
     public LaserController(PlayerController playerController, GameManager gameManager)
     {
         this.playerController = playerController;
         this.gameManager = gameManager;
     }
 
-    // Returns true if a message can be sent to the player's tablet
+    //! Returns true if a message can be sent to the player's tablet.
     private bool CanSendDestructionMessage()
     {
         return playerController.timeToDeliver == false && playerController.meteorShowerWarningActive == false && playerController.pirateAttackWarningActive == false;
     }
 
-    // Called when the player's laser cannon shoots something
+    //! Called when the player's laser cannon shoots something.
     public void HitTarget(GameObject target,RaycastHit hit)
     {
         if (target.GetComponent<Meteor>() != null)

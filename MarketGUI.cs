@@ -11,7 +11,7 @@ public class MarketGUI : MonoBehaviour
     private bool selling;
     private bool loadedValues;
 
-    // Called by unity engine on start up to initialize variables
+    //! Called by unity engine on start up to initialize variables.
     public void Start()
     {
         playerController = GetComponent<PlayerController>();
@@ -55,7 +55,7 @@ public class MarketGUI : MonoBehaviour
         };
     }
 
-    // Called once per frame by unity engine
+    //! Called once per frame by unity engine.
     public void Update()
     {
         if (playerController.stateManager.worldLoaded == true && loadedValues == false)
@@ -77,7 +77,7 @@ public class MarketGUI : MonoBehaviour
         }
     }
 
-    // Saves world specific item prices.
+    //! Saves world specific item prices.
     private void SavePrices()
     {
         foreach (KeyValuePair<string, int> i in priceDictionary)
@@ -86,7 +86,7 @@ public class MarketGUI : MonoBehaviour
         }
     }
 
-    // Buy an item from the market.
+    //! Buy an item from the market.
     private void BuyItem(string item)
     {
         if (playerController.money >= priceDictionary[item])
@@ -107,7 +107,7 @@ public class MarketGUI : MonoBehaviour
         }
     }
 
-    // Sell an item to the market.
+    //! Sell an item to the market.
     private void SellItem(string item)
     {
         InventorySlot sellSlot = null;
@@ -140,13 +140,13 @@ public class MarketGUI : MonoBehaviour
         }
     }
 
-    // Called by unity engine for rendering and handling GUI events
+    //! Called by unity engine for rendering and handling GUI events
     public void OnGUI()
     {
-        //STYLE
+        // STYLE
         GUI.skin = GetComponent<PlayerGUI>().thisGUIskin;
 
-        //ASPECT RATIO
+        // ASPECT RATIO
         float ScreenHeight = Screen.height;
         float ScreenWidth = Screen.width;
         if (ScreenWidth / ScreenHeight < 1.7f)

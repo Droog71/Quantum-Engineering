@@ -1,0 +1,195 @@
+\hypertarget{classBuildController}{}\doxysection{Build\+Controller Class Reference}
+\label{classBuildController}\index{BuildController@{BuildController}}
+Inheritance diagram for Build\+Controller\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{classBuildController}
+\end{center}
+\end{figure}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{classBuildController_ae9cbe003f0f9c06757e80d6521cd9e03}{Start}} ()
+\begin{DoxyCompactList}\small\item\em Called by unity engine on start up to initialize variables. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classBuildController_a2275a773b2d7831af1d291ed1b61a02c}{Update}} ()
+\begin{DoxyCompactList}\small\item\em Called once per frame by unity engine. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classBuildController_abb33d60ccfec3c5173b4921be125584f}{Change\+Build\+Axis}} ()
+\begin{DoxyCompactList}\small\item\em Changes the axis along which blocks will be placed. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classBlockDictionary}{Block\+Dictionary}} \mbox{\hyperlink{classBuildController_a879857edf07302bf73245e78f461c540}{block\+Dictionary}}
+\item 
+Material \mbox{\hyperlink{classBuildController_a6148f06877656830c7ad8ccd3ad3192f}{line\+Mat}}
+\item 
+Game\+Object \mbox{\hyperlink{classBuildController_a9e30841a317e462c89f2cce68dd2bcc8}{built\+Objects}}
+\item 
+bool \mbox{\hyperlink{classBuildController_ab4f63aee71e413ba87472c668c471ba8}{auto\+Axis}}
+\end{DoxyCompactItemize}
+\doxysubsection*{Private Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{classBuildController_a1fb929a94478bc6d412ba2f57858b02a}{Create\+Build\+Object}} ()
+\begin{DoxyCompactList}\small\item\em Creates the block placement cursor. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classBuildController_a08486499c55491d26c309bff0e8e2a3d}{Auto\+Select\+Build\+Axis}} (Raycast\+Hit build\+Hit)
+\begin{DoxyCompactList}\small\item\em Automatically selects build axis based on raycast. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classBuildController_aef094a89dc91b60f201b7fefbc803ddb}{Setup\+Build\+Axis}} (Raycast\+Hit hit)
+\begin{DoxyCompactList}\small\item\em Implements the current build axis. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classBuildController_a3812b6dde9fe6495b29272da008ade0c}{Setup\+Free\+Placement}} (Raycast\+Hit hit)
+\begin{DoxyCompactList}\small\item\em Prepares cursor for free block placement, ie\+: not attached to another block. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classBuildController_abaabf4ddefd4fbbc3730c56c2058d8ae}{Build\+Machine}} (string type, Raycast\+Hit hit)
+\begin{DoxyCompactList}\small\item\em Places a machine in the world. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classBuildController_a6e4eebd60696df21390baa5091ac341a}{Build\+Block}} (string type)
+\begin{DoxyCompactList}\small\item\em Places standard building blocks in the world. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classPlayerController}{Player\+Controller}} \mbox{\hyperlink{classBuildController_aa57d70a2c475fd0731215e5b206ab2ed}{player\+Controller}}
+\item 
+\mbox{\hyperlink{classGameManager}{Game\+Manager}} \mbox{\hyperlink{classBuildController_ae917071cbbeea88d4f542447eb148ce1}{game\+Manager}}
+\item 
+Line\+Renderer \mbox{\hyperlink{classBuildController_ad60bce48865999a32889ec2a5a009301}{dir\+Line}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{classBuildController_a08486499c55491d26c309bff0e8e2a3d}\label{classBuildController_a08486499c55491d26c309bff0e8e2a3d}} 
+\index{BuildController@{BuildController}!AutoSelectBuildAxis@{AutoSelectBuildAxis}}
+\index{AutoSelectBuildAxis@{AutoSelectBuildAxis}!BuildController@{BuildController}}
+\doxysubsubsection{\texorpdfstring{AutoSelectBuildAxis()}{AutoSelectBuildAxis()}}
+{\footnotesize\ttfamily void Build\+Controller.\+Auto\+Select\+Build\+Axis (\begin{DoxyParamCaption}\item[{Raycast\+Hit}]{build\+Hit }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [private]}}
+
+
+
+Automatically selects build axis based on raycast. 
+
+\mbox{\Hypertarget{classBuildController_a6e4eebd60696df21390baa5091ac341a}\label{classBuildController_a6e4eebd60696df21390baa5091ac341a}} 
+\index{BuildController@{BuildController}!BuildBlock@{BuildBlock}}
+\index{BuildBlock@{BuildBlock}!BuildController@{BuildController}}
+\doxysubsubsection{\texorpdfstring{BuildBlock()}{BuildBlock()}}
+{\footnotesize\ttfamily void Build\+Controller.\+Build\+Block (\begin{DoxyParamCaption}\item[{string}]{type }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [private]}}
+
+
+
+Places standard building blocks in the world. 
+
+\mbox{\Hypertarget{classBuildController_abaabf4ddefd4fbbc3730c56c2058d8ae}\label{classBuildController_abaabf4ddefd4fbbc3730c56c2058d8ae}} 
+\index{BuildController@{BuildController}!BuildMachine@{BuildMachine}}
+\index{BuildMachine@{BuildMachine}!BuildController@{BuildController}}
+\doxysubsubsection{\texorpdfstring{BuildMachine()}{BuildMachine()}}
+{\footnotesize\ttfamily void Build\+Controller.\+Build\+Machine (\begin{DoxyParamCaption}\item[{string}]{type,  }\item[{Raycast\+Hit}]{hit }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [private]}}
+
+
+
+Places a machine in the world. 
+
+\mbox{\Hypertarget{classBuildController_abb33d60ccfec3c5173b4921be125584f}\label{classBuildController_abb33d60ccfec3c5173b4921be125584f}} 
+\index{BuildController@{BuildController}!ChangeBuildAxis@{ChangeBuildAxis}}
+\index{ChangeBuildAxis@{ChangeBuildAxis}!BuildController@{BuildController}}
+\doxysubsubsection{\texorpdfstring{ChangeBuildAxis()}{ChangeBuildAxis()}}
+{\footnotesize\ttfamily void Build\+Controller.\+Change\+Build\+Axis (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Changes the axis along which blocks will be placed. 
+
+\mbox{\Hypertarget{classBuildController_a1fb929a94478bc6d412ba2f57858b02a}\label{classBuildController_a1fb929a94478bc6d412ba2f57858b02a}} 
+\index{BuildController@{BuildController}!CreateBuildObject@{CreateBuildObject}}
+\index{CreateBuildObject@{CreateBuildObject}!BuildController@{BuildController}}
+\doxysubsubsection{\texorpdfstring{CreateBuildObject()}{CreateBuildObject()}}
+{\footnotesize\ttfamily void Build\+Controller.\+Create\+Build\+Object (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [private]}}
+
+
+
+Creates the block placement cursor. 
+
+\mbox{\Hypertarget{classBuildController_aef094a89dc91b60f201b7fefbc803ddb}\label{classBuildController_aef094a89dc91b60f201b7fefbc803ddb}} 
+\index{BuildController@{BuildController}!SetupBuildAxis@{SetupBuildAxis}}
+\index{SetupBuildAxis@{SetupBuildAxis}!BuildController@{BuildController}}
+\doxysubsubsection{\texorpdfstring{SetupBuildAxis()}{SetupBuildAxis()}}
+{\footnotesize\ttfamily void Build\+Controller.\+Setup\+Build\+Axis (\begin{DoxyParamCaption}\item[{Raycast\+Hit}]{hit }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [private]}}
+
+
+
+Implements the current build axis. 
+
+\mbox{\Hypertarget{classBuildController_a3812b6dde9fe6495b29272da008ade0c}\label{classBuildController_a3812b6dde9fe6495b29272da008ade0c}} 
+\index{BuildController@{BuildController}!SetupFreePlacement@{SetupFreePlacement}}
+\index{SetupFreePlacement@{SetupFreePlacement}!BuildController@{BuildController}}
+\doxysubsubsection{\texorpdfstring{SetupFreePlacement()}{SetupFreePlacement()}}
+{\footnotesize\ttfamily void Build\+Controller.\+Setup\+Free\+Placement (\begin{DoxyParamCaption}\item[{Raycast\+Hit}]{hit }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [private]}}
+
+
+
+Prepares cursor for free block placement, ie\+: not attached to another block. 
+
+\mbox{\Hypertarget{classBuildController_ae9cbe003f0f9c06757e80d6521cd9e03}\label{classBuildController_ae9cbe003f0f9c06757e80d6521cd9e03}} 
+\index{BuildController@{BuildController}!Start@{Start}}
+\index{Start@{Start}!BuildController@{BuildController}}
+\doxysubsubsection{\texorpdfstring{Start()}{Start()}}
+{\footnotesize\ttfamily void Build\+Controller.\+Start (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Called by unity engine on start up to initialize variables. 
+
+\mbox{\Hypertarget{classBuildController_a2275a773b2d7831af1d291ed1b61a02c}\label{classBuildController_a2275a773b2d7831af1d291ed1b61a02c}} 
+\index{BuildController@{BuildController}!Update@{Update}}
+\index{Update@{Update}!BuildController@{BuildController}}
+\doxysubsubsection{\texorpdfstring{Update()}{Update()}}
+{\footnotesize\ttfamily void Build\+Controller.\+Update (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Called once per frame by unity engine. 
+
+
+
+\doxysubsection{Member Data Documentation}
+\mbox{\Hypertarget{classBuildController_ab4f63aee71e413ba87472c668c471ba8}\label{classBuildController_ab4f63aee71e413ba87472c668c471ba8}} 
+\index{BuildController@{BuildController}!autoAxis@{autoAxis}}
+\index{autoAxis@{autoAxis}!BuildController@{BuildController}}
+\doxysubsubsection{\texorpdfstring{autoAxis}{autoAxis}}
+{\footnotesize\ttfamily bool Build\+Controller.\+auto\+Axis}
+
+\mbox{\Hypertarget{classBuildController_a879857edf07302bf73245e78f461c540}\label{classBuildController_a879857edf07302bf73245e78f461c540}} 
+\index{BuildController@{BuildController}!blockDictionary@{blockDictionary}}
+\index{blockDictionary@{blockDictionary}!BuildController@{BuildController}}
+\doxysubsubsection{\texorpdfstring{blockDictionary}{blockDictionary}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classBlockDictionary}{Block\+Dictionary}} Build\+Controller.\+block\+Dictionary}
+
+\mbox{\Hypertarget{classBuildController_a9e30841a317e462c89f2cce68dd2bcc8}\label{classBuildController_a9e30841a317e462c89f2cce68dd2bcc8}} 
+\index{BuildController@{BuildController}!builtObjects@{builtObjects}}
+\index{builtObjects@{builtObjects}!BuildController@{BuildController}}
+\doxysubsubsection{\texorpdfstring{builtObjects}{builtObjects}}
+{\footnotesize\ttfamily Game\+Object Build\+Controller.\+built\+Objects}
+
+\mbox{\Hypertarget{classBuildController_ad60bce48865999a32889ec2a5a009301}\label{classBuildController_ad60bce48865999a32889ec2a5a009301}} 
+\index{BuildController@{BuildController}!dirLine@{dirLine}}
+\index{dirLine@{dirLine}!BuildController@{BuildController}}
+\doxysubsubsection{\texorpdfstring{dirLine}{dirLine}}
+{\footnotesize\ttfamily Line\+Renderer Build\+Controller.\+dir\+Line\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{classBuildController_ae917071cbbeea88d4f542447eb148ce1}\label{classBuildController_ae917071cbbeea88d4f542447eb148ce1}} 
+\index{BuildController@{BuildController}!gameManager@{gameManager}}
+\index{gameManager@{gameManager}!BuildController@{BuildController}}
+\doxysubsubsection{\texorpdfstring{gameManager}{gameManager}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classGameManager}{Game\+Manager}} Build\+Controller.\+game\+Manager\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{classBuildController_a6148f06877656830c7ad8ccd3ad3192f}\label{classBuildController_a6148f06877656830c7ad8ccd3ad3192f}} 
+\index{BuildController@{BuildController}!lineMat@{lineMat}}
+\index{lineMat@{lineMat}!BuildController@{BuildController}}
+\doxysubsubsection{\texorpdfstring{lineMat}{lineMat}}
+{\footnotesize\ttfamily Material Build\+Controller.\+line\+Mat}
+
+\mbox{\Hypertarget{classBuildController_aa57d70a2c475fd0731215e5b206ab2ed}\label{classBuildController_aa57d70a2c475fd0731215e5b206ab2ed}} 
+\index{BuildController@{BuildController}!playerController@{playerController}}
+\index{playerController@{playerController}!BuildController@{BuildController}}
+\doxysubsubsection{\texorpdfstring{playerController}{playerController}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classPlayerController}{Player\+Controller}} Build\+Controller.\+player\+Controller\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{BuildController_8cs}{Build\+Controller.\+cs}}\end{DoxyCompactItemize}

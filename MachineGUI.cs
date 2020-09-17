@@ -7,7 +7,7 @@ public class MachineGUI : MonoBehaviour
     private TextureDictionary textureDictionary;
     private bool hubStopWindowOpen;
 
-    // Called by unity engine on start up to initialize variables
+    //! Called by unity engine on start up to initialize variables.
     public void Start()
     {
         playerController = GetComponent<PlayerController>();
@@ -15,13 +15,13 @@ public class MachineGUI : MonoBehaviour
         guiCoordinates = new GuiCoordinates();
     }
 
-    // Called by unity engine for rendering and handling GUI events
+    //! Called by unity engine for rendering and handling GUI events.
     public void OnGUI()
     {
-        //STYLE
+        // STYLE
         GUI.skin = GetComponent<PlayerGUI>().thisGUIskin;
 
-        //ASPECT RATIO
+        // ASPECT RATIO
         float ScreenHeight = Screen.height;
         float ScreenWidth = Screen.width;
         if (ScreenWidth / ScreenHeight < 1.7f)
@@ -35,7 +35,7 @@ public class MachineGUI : MonoBehaviour
 
         if (playerController.stateManager.worldLoaded == true && GetComponent<MainMenu>().finishedLoading == true)
         {
-            //MACHINE CONTROL GUI
+            // MACHINE CONTROL GUI
             if (playerController.inventoryOpen == false && playerController.machineGUIopen == true && playerController.objectInSight != null)
             {
                 GameObject obj = playerController.objectInSight;
@@ -96,7 +96,7 @@ public class MachineGUI : MonoBehaviour
                             }
                             catch
                             {
-                                //NOOP
+                                // NOOP
                             }
                             GUI.Label(guiCoordinates.outputLabelRect, "Range");
                             hub.range = (int)GUI.HorizontalSlider(guiCoordinates.outputControlButton2Rect, hub.range, 6, 120);

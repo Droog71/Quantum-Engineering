@@ -1,0 +1,263 @@
+\hypertarget{classTurret}{}\doxysection{Turret Class Reference}
+\label{classTurret}\index{Turret@{Turret}}
+Inheritance diagram for Turret\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{classTurret}
+\end{center}
+\end{figure}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{classTurret_ad52176f06cef871ab568d51292bd0eb9}{Start}} ()
+\begin{DoxyCompactList}\small\item\em Called by unity engine on start up to initialize variables. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classTurret_a01d17573c79b3c92107a9a449bdc5cec}{Update}} ()
+\begin{DoxyCompactList}\small\item\em Called once per frame by unity engine. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+int \mbox{\hyperlink{classTurret_a675e64e52dee7aac9d9918e5fdd4642a}{speed}} = 1
+\item 
+int \mbox{\hyperlink{classTurret_a29bcfe66e6a1f2c43ff23ac95e40e388}{power}}
+\item 
+int \mbox{\hyperlink{classTurret_a70f5764379bf5ec449e89b73e8ba5b88}{heat}}
+\item 
+bool \mbox{\hyperlink{classTurret_afbd186cef31fd47226a1c88f4331a965}{has\+Heat\+Exchanger}}
+\item 
+int \mbox{\hyperlink{classTurret_afcc439026c011272405344b673b65ae1}{cooling}}
+\item 
+string \mbox{\hyperlink{classTurret_a7e06537b4e9500e35e0984c0bcefa073}{ID}} = \char`\"{}unassigned\char`\"{}
+\item 
+string \mbox{\hyperlink{classTurret_a4f3870bd88d0b05718b0185c86295d01}{creation\+Method}} = \char`\"{}built\char`\"{}
+\item 
+int \mbox{\hyperlink{classTurret_abf319bd3ac6a7060cc1b260f842681b0}{address}}
+\item 
+bool \mbox{\hyperlink{classTurret_a7aaff450636aecd95944e7194ce34043}{power\+ON}}
+\item 
+Material \mbox{\hyperlink{classTurret_ad33c674bbb904aa1ca3eced9a68727eb}{laser\+Mat}}
+\item 
+Game\+Object \mbox{\hyperlink{classTurret_aec3649f520f81166dd51e0eab5b83d22}{barrel}}
+\item 
+Game\+Object \mbox{\hyperlink{classTurret_a83622253c3691e137c4aa1ee93422c09}{muzzle}}
+\item 
+Game\+Object \mbox{\hyperlink{classTurret_a73e2cbc6f163e7e4c7037a15c3c45750}{power\+Object}}
+\item 
+\mbox{\hyperlink{classPowerReceiver}{Power\+Receiver}} \mbox{\hyperlink{classTurret_a4407e45dcbe635137e5ab30c5222b591}{power\+Receiver}}
+\end{DoxyCompactItemize}
+\doxysubsection*{Private Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+I\+Enumerator \mbox{\hyperlink{classTurret_a00a5b4f78b1f6f9ce435e5b6b39557c8}{Fire}} ()
+\begin{DoxyCompactList}\small\item\em Fires at all targets on the target list. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classTurret_a269b8d948e4ee0f209e7cab91cf82881}{Update\+Power\+Receiver}} ()
+\begin{DoxyCompactList}\small\item\em Gets power values from power receiver. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+float \mbox{\hyperlink{classTurret_aa16df970fe8a45c116793018737c75e4}{update\+Tick}}
+\item 
+Quaternion \mbox{\hyperlink{classTurret_a4e48c20e4eb2dd2da6922110cc20d013}{resting\+Rotation}}
+\item 
+Game\+Object\mbox{[}$\,$\mbox{]} \mbox{\hyperlink{classTurret_a211b9534e1d49c0b5298cf7cabfa3c32}{targets}}
+\item 
+bool \mbox{\hyperlink{classTurret_ab500a6d3d5b48fad80880e1b51325fa8}{found\+Target}}
+\item 
+bool \mbox{\hyperlink{classTurret_af78f75ba7e31518eb419968fb8caf4f1}{has\+Target}}
+\item 
+Coroutine \mbox{\hyperlink{classTurret_a8dd6b132c840078a4c3cdd1ec9e7c232}{fire\+Coroutine}}
+\item 
+bool \mbox{\hyperlink{classTurret_ab431f4dbfbeea4a2ccbca8be31bc7921}{firing}}
+\item 
+\mbox{\hyperlink{classGameManager}{Game\+Manager}} \mbox{\hyperlink{classTurret_a241238d43841df1f9e593ec300fb5c4d}{game}}
+\item 
+Line\+Renderer \mbox{\hyperlink{classTurret_a2ab1ec6ebc09d511c4d057daf758a762}{laser}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{classTurret_a00a5b4f78b1f6f9ce435e5b6b39557c8}\label{classTurret_a00a5b4f78b1f6f9ce435e5b6b39557c8}} 
+\index{Turret@{Turret}!Fire@{Fire}}
+\index{Fire@{Fire}!Turret@{Turret}}
+\doxysubsubsection{\texorpdfstring{Fire()}{Fire()}}
+{\footnotesize\ttfamily I\+Enumerator Turret.\+Fire (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [private]}}
+
+
+
+Fires at all targets on the target list. 
+
+\mbox{\Hypertarget{classTurret_ad52176f06cef871ab568d51292bd0eb9}\label{classTurret_ad52176f06cef871ab568d51292bd0eb9}} 
+\index{Turret@{Turret}!Start@{Start}}
+\index{Start@{Start}!Turret@{Turret}}
+\doxysubsubsection{\texorpdfstring{Start()}{Start()}}
+{\footnotesize\ttfamily void Turret.\+Start (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Called by unity engine on start up to initialize variables. 
+
+\mbox{\Hypertarget{classTurret_a01d17573c79b3c92107a9a449bdc5cec}\label{classTurret_a01d17573c79b3c92107a9a449bdc5cec}} 
+\index{Turret@{Turret}!Update@{Update}}
+\index{Update@{Update}!Turret@{Turret}}
+\doxysubsubsection{\texorpdfstring{Update()}{Update()}}
+{\footnotesize\ttfamily void Turret.\+Update (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Called once per frame by unity engine. 
+
+\mbox{\Hypertarget{classTurret_a269b8d948e4ee0f209e7cab91cf82881}\label{classTurret_a269b8d948e4ee0f209e7cab91cf82881}} 
+\index{Turret@{Turret}!UpdatePowerReceiver@{UpdatePowerReceiver}}
+\index{UpdatePowerReceiver@{UpdatePowerReceiver}!Turret@{Turret}}
+\doxysubsubsection{\texorpdfstring{UpdatePowerReceiver()}{UpdatePowerReceiver()}}
+{\footnotesize\ttfamily void Turret.\+Update\+Power\+Receiver (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [private]}}
+
+
+
+Gets power values from power receiver. 
+
+
+
+\doxysubsection{Member Data Documentation}
+\mbox{\Hypertarget{classTurret_abf319bd3ac6a7060cc1b260f842681b0}\label{classTurret_abf319bd3ac6a7060cc1b260f842681b0}} 
+\index{Turret@{Turret}!address@{address}}
+\index{address@{address}!Turret@{Turret}}
+\doxysubsubsection{\texorpdfstring{address}{address}}
+{\footnotesize\ttfamily int Turret.\+address}
+
+\mbox{\Hypertarget{classTurret_aec3649f520f81166dd51e0eab5b83d22}\label{classTurret_aec3649f520f81166dd51e0eab5b83d22}} 
+\index{Turret@{Turret}!barrel@{barrel}}
+\index{barrel@{barrel}!Turret@{Turret}}
+\doxysubsubsection{\texorpdfstring{barrel}{barrel}}
+{\footnotesize\ttfamily Game\+Object Turret.\+barrel}
+
+\mbox{\Hypertarget{classTurret_afcc439026c011272405344b673b65ae1}\label{classTurret_afcc439026c011272405344b673b65ae1}} 
+\index{Turret@{Turret}!cooling@{cooling}}
+\index{cooling@{cooling}!Turret@{Turret}}
+\doxysubsubsection{\texorpdfstring{cooling}{cooling}}
+{\footnotesize\ttfamily int Turret.\+cooling}
+
+\mbox{\Hypertarget{classTurret_a4f3870bd88d0b05718b0185c86295d01}\label{classTurret_a4f3870bd88d0b05718b0185c86295d01}} 
+\index{Turret@{Turret}!creationMethod@{creationMethod}}
+\index{creationMethod@{creationMethod}!Turret@{Turret}}
+\doxysubsubsection{\texorpdfstring{creationMethod}{creationMethod}}
+{\footnotesize\ttfamily string Turret.\+creation\+Method = \char`\"{}built\char`\"{}}
+
+\mbox{\Hypertarget{classTurret_a8dd6b132c840078a4c3cdd1ec9e7c232}\label{classTurret_a8dd6b132c840078a4c3cdd1ec9e7c232}} 
+\index{Turret@{Turret}!fireCoroutine@{fireCoroutine}}
+\index{fireCoroutine@{fireCoroutine}!Turret@{Turret}}
+\doxysubsubsection{\texorpdfstring{fireCoroutine}{fireCoroutine}}
+{\footnotesize\ttfamily Coroutine Turret.\+fire\+Coroutine\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{classTurret_ab431f4dbfbeea4a2ccbca8be31bc7921}\label{classTurret_ab431f4dbfbeea4a2ccbca8be31bc7921}} 
+\index{Turret@{Turret}!firing@{firing}}
+\index{firing@{firing}!Turret@{Turret}}
+\doxysubsubsection{\texorpdfstring{firing}{firing}}
+{\footnotesize\ttfamily bool Turret.\+firing\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{classTurret_ab500a6d3d5b48fad80880e1b51325fa8}\label{classTurret_ab500a6d3d5b48fad80880e1b51325fa8}} 
+\index{Turret@{Turret}!foundTarget@{foundTarget}}
+\index{foundTarget@{foundTarget}!Turret@{Turret}}
+\doxysubsubsection{\texorpdfstring{foundTarget}{foundTarget}}
+{\footnotesize\ttfamily bool Turret.\+found\+Target\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{classTurret_a241238d43841df1f9e593ec300fb5c4d}\label{classTurret_a241238d43841df1f9e593ec300fb5c4d}} 
+\index{Turret@{Turret}!game@{game}}
+\index{game@{game}!Turret@{Turret}}
+\doxysubsubsection{\texorpdfstring{game}{game}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classGameManager}{Game\+Manager}} Turret.\+game\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{classTurret_afbd186cef31fd47226a1c88f4331a965}\label{classTurret_afbd186cef31fd47226a1c88f4331a965}} 
+\index{Turret@{Turret}!hasHeatExchanger@{hasHeatExchanger}}
+\index{hasHeatExchanger@{hasHeatExchanger}!Turret@{Turret}}
+\doxysubsubsection{\texorpdfstring{hasHeatExchanger}{hasHeatExchanger}}
+{\footnotesize\ttfamily bool Turret.\+has\+Heat\+Exchanger}
+
+\mbox{\Hypertarget{classTurret_af78f75ba7e31518eb419968fb8caf4f1}\label{classTurret_af78f75ba7e31518eb419968fb8caf4f1}} 
+\index{Turret@{Turret}!hasTarget@{hasTarget}}
+\index{hasTarget@{hasTarget}!Turret@{Turret}}
+\doxysubsubsection{\texorpdfstring{hasTarget}{hasTarget}}
+{\footnotesize\ttfamily bool Turret.\+has\+Target\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{classTurret_a70f5764379bf5ec449e89b73e8ba5b88}\label{classTurret_a70f5764379bf5ec449e89b73e8ba5b88}} 
+\index{Turret@{Turret}!heat@{heat}}
+\index{heat@{heat}!Turret@{Turret}}
+\doxysubsubsection{\texorpdfstring{heat}{heat}}
+{\footnotesize\ttfamily int Turret.\+heat}
+
+\mbox{\Hypertarget{classTurret_a7e06537b4e9500e35e0984c0bcefa073}\label{classTurret_a7e06537b4e9500e35e0984c0bcefa073}} 
+\index{Turret@{Turret}!ID@{ID}}
+\index{ID@{ID}!Turret@{Turret}}
+\doxysubsubsection{\texorpdfstring{ID}{ID}}
+{\footnotesize\ttfamily string Turret.\+ID = \char`\"{}unassigned\char`\"{}}
+
+\mbox{\Hypertarget{classTurret_a2ab1ec6ebc09d511c4d057daf758a762}\label{classTurret_a2ab1ec6ebc09d511c4d057daf758a762}} 
+\index{Turret@{Turret}!laser@{laser}}
+\index{laser@{laser}!Turret@{Turret}}
+\doxysubsubsection{\texorpdfstring{laser}{laser}}
+{\footnotesize\ttfamily Line\+Renderer Turret.\+laser\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{classTurret_ad33c674bbb904aa1ca3eced9a68727eb}\label{classTurret_ad33c674bbb904aa1ca3eced9a68727eb}} 
+\index{Turret@{Turret}!laserMat@{laserMat}}
+\index{laserMat@{laserMat}!Turret@{Turret}}
+\doxysubsubsection{\texorpdfstring{laserMat}{laserMat}}
+{\footnotesize\ttfamily Material Turret.\+laser\+Mat}
+
+\mbox{\Hypertarget{classTurret_a83622253c3691e137c4aa1ee93422c09}\label{classTurret_a83622253c3691e137c4aa1ee93422c09}} 
+\index{Turret@{Turret}!muzzle@{muzzle}}
+\index{muzzle@{muzzle}!Turret@{Turret}}
+\doxysubsubsection{\texorpdfstring{muzzle}{muzzle}}
+{\footnotesize\ttfamily Game\+Object Turret.\+muzzle}
+
+\mbox{\Hypertarget{classTurret_a29bcfe66e6a1f2c43ff23ac95e40e388}\label{classTurret_a29bcfe66e6a1f2c43ff23ac95e40e388}} 
+\index{Turret@{Turret}!power@{power}}
+\index{power@{power}!Turret@{Turret}}
+\doxysubsubsection{\texorpdfstring{power}{power}}
+{\footnotesize\ttfamily int Turret.\+power}
+
+\mbox{\Hypertarget{classTurret_a73e2cbc6f163e7e4c7037a15c3c45750}\label{classTurret_a73e2cbc6f163e7e4c7037a15c3c45750}} 
+\index{Turret@{Turret}!powerObject@{powerObject}}
+\index{powerObject@{powerObject}!Turret@{Turret}}
+\doxysubsubsection{\texorpdfstring{powerObject}{powerObject}}
+{\footnotesize\ttfamily Game\+Object Turret.\+power\+Object}
+
+\mbox{\Hypertarget{classTurret_a7aaff450636aecd95944e7194ce34043}\label{classTurret_a7aaff450636aecd95944e7194ce34043}} 
+\index{Turret@{Turret}!powerON@{powerON}}
+\index{powerON@{powerON}!Turret@{Turret}}
+\doxysubsubsection{\texorpdfstring{powerON}{powerON}}
+{\footnotesize\ttfamily bool Turret.\+power\+ON}
+
+\mbox{\Hypertarget{classTurret_a4407e45dcbe635137e5ab30c5222b591}\label{classTurret_a4407e45dcbe635137e5ab30c5222b591}} 
+\index{Turret@{Turret}!powerReceiver@{powerReceiver}}
+\index{powerReceiver@{powerReceiver}!Turret@{Turret}}
+\doxysubsubsection{\texorpdfstring{powerReceiver}{powerReceiver}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classPowerReceiver}{Power\+Receiver}} Turret.\+power\+Receiver}
+
+\mbox{\Hypertarget{classTurret_a4e48c20e4eb2dd2da6922110cc20d013}\label{classTurret_a4e48c20e4eb2dd2da6922110cc20d013}} 
+\index{Turret@{Turret}!restingRotation@{restingRotation}}
+\index{restingRotation@{restingRotation}!Turret@{Turret}}
+\doxysubsubsection{\texorpdfstring{restingRotation}{restingRotation}}
+{\footnotesize\ttfamily Quaternion Turret.\+resting\+Rotation\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{classTurret_a675e64e52dee7aac9d9918e5fdd4642a}\label{classTurret_a675e64e52dee7aac9d9918e5fdd4642a}} 
+\index{Turret@{Turret}!speed@{speed}}
+\index{speed@{speed}!Turret@{Turret}}
+\doxysubsubsection{\texorpdfstring{speed}{speed}}
+{\footnotesize\ttfamily int Turret.\+speed = 1}
+
+\mbox{\Hypertarget{classTurret_a211b9534e1d49c0b5298cf7cabfa3c32}\label{classTurret_a211b9534e1d49c0b5298cf7cabfa3c32}} 
+\index{Turret@{Turret}!targets@{targets}}
+\index{targets@{targets}!Turret@{Turret}}
+\doxysubsubsection{\texorpdfstring{targets}{targets}}
+{\footnotesize\ttfamily Game\+Object \mbox{[}$\,$\mbox{]} Turret.\+targets\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{classTurret_aa16df970fe8a45c116793018737c75e4}\label{classTurret_aa16df970fe8a45c116793018737c75e4}} 
+\index{Turret@{Turret}!updateTick@{updateTick}}
+\index{updateTick@{updateTick}!Turret@{Turret}}
+\doxysubsubsection{\texorpdfstring{updateTick}{updateTick}}
+{\footnotesize\ttfamily float Turret.\+update\+Tick\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{Turret_8cs}{Turret.\+cs}}\end{DoxyCompactItemize}

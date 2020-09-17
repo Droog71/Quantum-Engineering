@@ -18,7 +18,7 @@ public class InventoryGUI : MonoBehaviour
     private int craftingPage;
     private int modCraftingIndex;
 
-    // Called by unity engine on start up to initialize variables
+    //! Called by unity engine on start up to initialize variables.
     public void Start()
     {
         playerController = GetComponent<PlayerController>();
@@ -29,13 +29,13 @@ public class InventoryGUI : MonoBehaviour
         guiCoordinates = new GuiCoordinates();
     }
 
-    // Called by unity engine for rendering and handling GUI events
+    //! Called by unity engine for rendering and handling GUI events.
     public void OnGUI()
     {
-        //STYLE
+        // STYLE
         GUI.skin = GetComponent<PlayerGUI>().thisGUIskin;
 
-        //ASPECT RATIO
+        // ASPECT RATIO
         float ScreenHeight = Screen.height;
         float ScreenWidth = Screen.width;
         if (ScreenWidth / ScreenHeight < 1.7f)
@@ -68,7 +68,7 @@ public class InventoryGUI : MonoBehaviour
                     inventorySlotNumber++;
                 }
 
-                //STORAGE CONTAINER ITEM DRAWING
+                // STORAGE CONTAINER ITEM DRAWING
                 if (playerController.storageGUIopen == true)
                 {
                     GUI.DrawTexture(guiCoordinates.inventoryInfoRectBG, textureDictionary.dictionary["Interface Background"]);
@@ -90,7 +90,7 @@ public class InventoryGUI : MonoBehaviour
                     }                
                 }
 
-                //STORAGE COMPUTER INVENTORY SWITCHING
+                // STORAGE COMPUTER INVENTORY SWITCHING
                 if (playerController.storageGUIopen == true && playerController.remoteStorageActive == true)
                 {
                     StorageComputer computer = playerController.currentStorageComputer.GetComponent<StorageComputer>();
@@ -161,18 +161,18 @@ public class InventoryGUI : MonoBehaviour
                     }
                 }
 
-                //////////DRAG AND DROP//////////
-                Vector2 mousePos = Event.current.mousePosition; //MOUSE POSITION
+                // // // // // DRAG AND DROP // // // // //
+                Vector2 mousePos = Event.current.mousePosition; // MOUSE POSITION
 
-                if (playerController.storageGUIopen == true) //PLAYER IS ACCESSING A STORAGE CONTAINER
+                if (playerController.storageGUIopen == true) // PLAYER IS ACCESSING A STORAGE CONTAINER
                 {
-                    //PLAYER IS DRAGGING AN ITEM
+                    // PLAYER IS DRAGGING AN ITEM
                     if (playerController.draggingItem == true)
                     {
                         GUI.DrawTexture(new Rect(Event.current.mousePosition.x - ScreenWidth * 0.0145f, Event.current.mousePosition.y - ScreenHeight * 0.03f, (ScreenWidth * 0.029f), (ScreenHeight * 0.06f)), textureDictionary.dictionary[playerController.itemToDrag]);
                         if (Input.GetKeyUp(KeyCode.Mouse0))
                         {
-                            //DROPPING ITEMS INTO THE PLAYER'S INVENTORY
+                            // DROPPING ITEMS INTO THE PLAYER'S INVENTORY
                             playerController.draggingItem = false;
                             int inventoryDropSlot = 0;
                             foreach (Rect rect in guiCoordinates.inventorySlotRects)
@@ -202,7 +202,7 @@ public class InventoryGUI : MonoBehaviour
                                 inventoryDropSlot++;
                             }
 
-                            //DROPPING ITEMS INTO THE STORAGE CONTAINER
+                            // DROPPING ITEMS INTO THE STORAGE CONTAINER
                             int storageInventoryDropSlot = 0;
                             foreach (Rect rect in guiCoordinates.storageInventorySlotRects)
                             {
@@ -233,7 +233,7 @@ public class InventoryGUI : MonoBehaviour
                         }
                     }
 
-                    //DRAGGING ITEMS FROM THE PLAYER'S INVENTORY
+                    // DRAGGING ITEMS FROM THE PLAYER'S INVENTORY
                     int inventoryDragSlot = 0;
                     foreach (Rect rect in guiCoordinates.inventorySlotRects)
                     {
@@ -284,7 +284,7 @@ public class InventoryGUI : MonoBehaviour
                         inventoryDragSlot++;
                     }
 
-                    //DRAGGING ITEMS FROM THE STORAGE CONTAINER
+                    // DRAGGING ITEMS FROM THE STORAGE CONTAINER
                     int storageInventoryDragSlot = 0;
                     foreach (Rect rect in guiCoordinates.storageInventorySlotRects)
                     {
@@ -344,10 +344,10 @@ public class InventoryGUI : MonoBehaviour
                 }
                 else
                 {
-                    //NO STORAGE CONTAINER IS OPEN. THE PLAYER IS DRAGGING AND DROPPING ITEMS WITHIN THEIR OWN INVENTORY
+                    // NO STORAGE CONTAINER IS OPEN. THE PLAYER IS DRAGGING AND DROPPING ITEMS WITHIN THEIR OWN INVENTORY
                     if (playerController.draggingItem == true)
                     {
-                        //DROPPING ITEMS INTO THE PLAYER'S INVENTORY
+                        // DROPPING ITEMS INTO THE PLAYER'S INVENTORY
                         GUI.DrawTexture(new Rect(Event.current.mousePosition.x - ScreenWidth * 0.0145f, Event.current.mousePosition.y - ScreenHeight * 0.03f, (ScreenWidth * 0.025f), (ScreenHeight * 0.05f)), textureDictionary.dictionary[playerController.itemToDrag]);
                         if (Input.GetKeyUp(KeyCode.Mouse0))
                         {
@@ -382,7 +382,7 @@ public class InventoryGUI : MonoBehaviour
                         }
                     }
 
-                    //DRAGGING ITEMS FROM THE PLAYER'S INVENTORY
+                    // DRAGGING ITEMS FROM THE PLAYER'S INVENTORY
                     int inventoryDragSlot = 0;
                     foreach (Rect rect in guiCoordinates.inventorySlotRects)
                     {
@@ -418,7 +418,7 @@ public class InventoryGUI : MonoBehaviour
                     }
                 }
 
-                //MESSAGE TELLING THE PLAYER THEY ARE MISSING THE ITEMS REQUIRED TO CRAFT AN OBJECT
+                // MESSAGE TELLING THE PLAYER THEY ARE MISSING THE ITEMS REQUIRED TO CRAFT AN OBJECT
                 if (craftingManager.missingItem == true)
                 {
                     if (missingItemTimer < 3)
@@ -433,7 +433,7 @@ public class InventoryGUI : MonoBehaviour
                     }
                 }
 
-                //MESSAGE TELLING THE PLAYER THEIR INVENTORY IS FULL
+                //! MESSAGE TELLING THE PLAYER THEIR INVENTORY IS FULL
                 if (playerController.outOfSpace == true)
                 {
                     if (playerController.outOfSpaceTimer < 3)
@@ -450,7 +450,7 @@ public class InventoryGUI : MonoBehaviour
 
                 if (playerController.marketGUIopen == false)
                 {
-                    //BUTTON WHICH OPENS THE CRAFTING GUI
+                    // BUTTON WHICH OPENS THE CRAFTING GUI
                     if (playerController.storageGUIopen == false)
                     {
                         if (GUI.Button(guiCoordinates.craftingButtonRect, "CRAFTING"))
@@ -467,7 +467,7 @@ public class InventoryGUI : MonoBehaviour
                         }
                     }
 
-                    //BUTTON THAT CLOSES THE INVENTORY GUI
+                    // BUTTON THAT CLOSES THE INVENTORY GUI
                     if (GUI.Button(guiCoordinates.closeButtonRect, "CLOSE"))
                     {
                         Cursor.visible = false;
@@ -479,7 +479,7 @@ public class InventoryGUI : MonoBehaviour
                     }
                 }
 
-                //CRAFTING GUI
+                // CRAFTING GUI
                 if (playerController.craftingGUIopen == true)
                 {
                     if (craftingPage == 0)
