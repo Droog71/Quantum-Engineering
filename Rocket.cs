@@ -23,7 +23,7 @@ public class Rocket : MonoBehaviour
     //! Called once per frame by unity engine.
     public void Update()
     {
-        if (GameObject.Find("GameManager").GetComponent<StateManager>().worldLoaded == true)
+        if (!player.stateManager.Busy())
         {
             if (initialized == false)
             {

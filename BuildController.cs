@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
 
 public class BuildController : MonoBehaviour
 {
@@ -9,6 +10,7 @@ public class BuildController : MonoBehaviour
     public Material lineMat;
     public GameObject builtObjects;
     public bool autoAxis;
+    private Coroutine buildBlockCoroutine;
 
     //! Called by unity engine on start up to initialize variables
     public void Start()
@@ -22,44 +24,30 @@ public class BuildController : MonoBehaviour
     //! Called once per frame by unity engine
     public void Update()
     {
-        if (playerController.building == true)
+        if (!playerController.stateManager.Busy())
         {
-            playerController.buildTimer += 1 * Time.deltaTime;
-            if (playerController.buildTimer >= 30)
+            if (playerController.building == true)
             {
-                if (GameObject.Find("GameManager").GetComponent<GameManager>().working == false)
+                playerController.buildTimer += 1 * Time.deltaTime;
+                if (playerController.buildTimer >= 30)
                 {
-                    playerController.stoppingBuildCoRoutine = true;
-                    gameManager.meshManager.CombineBlocks();
-                    playerController.separatedBlocks = false;
-                    playerController.destroyTimer = 0;
-                    playerController.buildTimer = 0;
-                    playerController.building = false;
-                    playerController.destroying = false;
+                    if (GameObject.Find("GameManager").GetComponent<GameManager>().working == false)
+                    {
+                        playerController.stoppingBuildCoRoutine = true;
+                        gameManager.meshManager.CombineBlocks();
+                        playerController.separatedBlocks = false;
+                        playerController.destroyTimer = 0;
+                        playerController.buildTimer = 0;
+                        playerController.building = false;
+                        playerController.destroying = false;
+                    }
+                    else
+                    {
+                        playerController.requestedBuildingStop = true;
+                    }
                 }
-                else
-                {
-                    playerController.requestedBuildingStop = true;
-                }
-            }
 
-            if (playerController.separatedBlocks == false)
-            {
-                if (gameManager.working == false)
-                {
-                    gameManager.meshManager.SeparateBlocks(transform.position, "all", true);
-                    playerController.separatedBlocks = true;
-                }
-                else
-                {
-                    playerController.requestedChunkLoad = true;
-                }
-                playerController.buildStartPosition = transform.position;
-            }
-            else
-            {
-                float distance = Vector3.Distance(transform.position, playerController.buildStartPosition);
-                if (distance > 15)
+                if (playerController.separatedBlocks == false)
                 {
                     if (gameManager.working == false)
                     {
@@ -72,63 +60,80 @@ public class BuildController : MonoBehaviour
                     }
                     playerController.buildStartPosition = transform.position;
                 }
-            }
-
-            if (playerController.buildObject == null)
-            {
-                CreateBuildObject();
-            }
-            else
-            {
-                if (Physics.Raycast(Camera.main.gameObject.transform.position, Camera.main.gameObject.transform.forward, out RaycastHit hit, 100))
+                else
                 {
-                    float distance = Vector3.Distance(transform.position, playerController.buildObject.transform.position);
-                    Material buildObjectMaterial = playerController.buildObject.GetComponent<MeshRenderer>().material;
-                    buildObjectMaterial.color = distance > 40 ? Color.red : Color.white;
-                    if (hit.transform.gameObject.tag == "Built")
+                    float distance = Vector3.Distance(transform.position, playerController.buildStartPosition);
+                    if (distance > 15)
                     {
-                        SetupBuildAxis(hit);
-                    }
-                    else
-                    {
-                        SetupFreePlacement(hit);
-                    }
-                }
-                if (Physics.Raycast(Camera.main.gameObject.transform.position, Camera.main.gameObject.transform.forward, out RaycastHit buildHit, 40))
-                {
-                    if (buildHit.collider.gameObject.tag != "CombinedMesh")
-                    {
-                        playerController.buildObject.GetComponent<MeshRenderer>().material.color = Color.white;
-                        if (autoAxis == true)
-                        {
-                            AutoSelectBuildAxis(buildHit);
-                        }
-                        if (cInput.GetKeyDown("Place Object"))
-                        {
-                            if (blockDictionary.machineDictionary.ContainsKey(playerController.buildType))
-                            {
-                                BuildMachine(playerController.buildType, hit);
-                            }
-                            else
-                            {
-                                BuildBlock(playerController.buildType);
-                            }
-                        }
-                    }
-                    else
-                    {
-                        playerController.buildObject.GetComponent<MeshRenderer>().material.color = Color.red;
                         if (gameManager.working == false)
                         {
-                            gameManager.meshManager.SeparateBlocks(buildHit.point, "all", true);
+                            gameManager.meshManager.SeparateBlocks(transform.position, "all", true);
+                            playerController.separatedBlocks = true;
+                        }
+                        else
+                        {
+                            playerController.requestedChunkLoad = true;
+                        }
+                        playerController.buildStartPosition = transform.position;
+                    }
+                }
+
+                if (playerController.buildObject == null)
+                {
+                    CreateBuildObject();
+                }
+                else
+                {
+                    if (Physics.Raycast(Camera.main.gameObject.transform.position, Camera.main.gameObject.transform.forward, out RaycastHit hit, 100))
+                    {
+                        float distance = Vector3.Distance(transform.position, playerController.buildObject.transform.position);
+                        Material buildObjectMaterial = playerController.buildObject.GetComponent<MeshRenderer>().material;
+                        buildObjectMaterial.color = distance > 40 ? Color.red : Color.white;
+                        if (hit.transform.gameObject.tag == "Built")
+                        {
+                            SetupBuildAxis(hit);
+                        }
+                        else
+                        {
+                            SetupFreePlacement(hit);
+                        }
+                    }
+                    if (Physics.Raycast(Camera.main.gameObject.transform.position, Camera.main.gameObject.transform.forward, out RaycastHit buildHit, 40))
+                    {
+                        if (buildHit.collider.gameObject.tag != "CombinedMesh")
+                        {
+                            playerController.buildObject.GetComponent<MeshRenderer>().material.color = Color.white;
+                            if (autoAxis == true)
+                            {
+                                AutoSelectBuildAxis(buildHit);
+                            }
+                            if (cInput.GetKeyDown("Place Object"))
+                            {
+                                if (blockDictionary.machineDictionary.ContainsKey(playerController.buildType))
+                                {
+                                    BuildMachine(playerController.buildType, hit);
+                                }
+                                else
+                                {
+                                    BuildBlock(playerController.buildType);
+                                }
+                            }
+                        }
+                        else
+                        {
+                            playerController.buildObject.GetComponent<MeshRenderer>().material.color = Color.red;
+                            if (gameManager.working == false)
+                            {
+                                gameManager.meshManager.SeparateBlocks(buildHit.point, "all", true);
+                            }
                         }
                     }
                 }
             }
-        }
-        else if (playerController.buildObject != null)
-        {
-            Destroy(playerController.buildObject);
+            else if (playerController.buildObject != null)
+            {
+                Destroy(playerController.buildObject);
+            }
         }
     }
 
@@ -235,41 +240,44 @@ public class BuildController : MonoBehaviour
     //! Implements the current build axis.
     private void SetupBuildAxis(RaycastHit hit)
     {
-        Vector3 placementPoint = hit.transform.position;
-        Quaternion placementRotation;
-        Vector3 dirVector;
+        if (gameManager.working == false)
+        {
+            Vector3 placementPoint = hit.transform.position;
+            Quaternion placementRotation;
+            Vector3 dirVector;
 
-        if (playerController.cubeloc == "up")
-        {
-            placementPoint = new Vector3(hit.transform.position.x, hit.transform.position.y + 5, hit.transform.position.z);
-        }
-        else if (playerController.cubeloc == "down")
-        {
-            placementPoint = new Vector3(hit.transform.position.x, hit.transform.position.y - 5, hit.transform.position.z);
-        }
-        else if (playerController.cubeloc == "left")
-        {
-            placementPoint = new Vector3(hit.transform.position.x + 5, hit.transform.position.y, hit.transform.position.z);
-        }
-        else if (playerController.cubeloc == "right")
-        {
-            placementPoint = new Vector3(hit.transform.position.x - 5, hit.transform.position.y, hit.transform.position.z);
-        }
-        else if (playerController.cubeloc == "front")
-        {
-            placementPoint = new Vector3(hit.transform.position.x, hit.transform.position.y, hit.transform.position.z + 5);
-        }
-        else if (playerController.cubeloc == "back")
-        {
-            placementPoint = new Vector3(hit.transform.position.x, hit.transform.position.y, hit.transform.position.z - 5);
-        }
+            if (playerController.cubeloc == "up")
+            {
+                placementPoint = new Vector3(hit.transform.position.x, hit.transform.position.y + 5, hit.transform.position.z);
+            }
+            else if (playerController.cubeloc == "down")
+            {
+                placementPoint = new Vector3(hit.transform.position.x, hit.transform.position.y - 5, hit.transform.position.z);
+            }
+            else if (playerController.cubeloc == "left")
+            {
+                placementPoint = new Vector3(hit.transform.position.x + 5, hit.transform.position.y, hit.transform.position.z);
+            }
+            else if (playerController.cubeloc == "right")
+            {
+                placementPoint = new Vector3(hit.transform.position.x - 5, hit.transform.position.y, hit.transform.position.z);
+            }
+            else if (playerController.cubeloc == "front")
+            {
+                placementPoint = new Vector3(hit.transform.position.x, hit.transform.position.y, hit.transform.position.z + 5);
+            }
+            else if (playerController.cubeloc == "back")
+            {
+                placementPoint = new Vector3(hit.transform.position.x, hit.transform.position.y, hit.transform.position.z - 5);
+            }
 
-        placementRotation = playerController.buildObject.transform.rotation;
-        playerController.buildObject.transform.position = placementPoint;
-        playerController.buildObject.transform.rotation = placementRotation;
-        dirLine.SetPosition(0, playerController.buildObject.transform.position);
-        dirVector = playerController.buildObject.transform.position + playerController.buildObject.transform.forward * 4;
-        dirLine.SetPosition(1, dirVector);
+            placementRotation = playerController.buildObject.transform.rotation;
+            playerController.buildObject.transform.position = placementPoint;
+            playerController.buildObject.transform.rotation = placementRotation;
+            dirLine.SetPosition(0, playerController.buildObject.transform.position);
+            dirVector = playerController.buildObject.transform.position + playerController.buildObject.transform.forward * 4;
+            dirLine.SetPosition(1, dirVector);
+        }
     }
 
     //! Prepares cursor for free block placement, ie: not attached to another block.
@@ -369,8 +377,13 @@ public class BuildController : MonoBehaviour
         }
     }
 
-    //! Places standard building blocks in the world.
     private void BuildBlock(string type)
+    {
+        buildBlockCoroutine = StartCoroutine(BuildBlockCoroutine(type));
+    }
+
+    //! Places standard building blocks in the world.
+    private IEnumerator BuildBlockCoroutine(string type)
     {
         bool foundItems = false;
         foreach (InventorySlot slot in playerController.playerInventory.inventory)
@@ -379,48 +392,47 @@ public class BuildController : MonoBehaviour
             {
                 if (slot.amountInSlot >= playerController.buildMultiplier)
                 {
-                    if (slot.typeInSlot.Equals(type) && GameObject.Find("GameManager").GetComponent<GameManager>().blockLimitReached == false)
+                    if (slot.typeInSlot.Equals(type))
                     {
                         foundItems = true;
                         int h = 0;
+                        Vector3 origin = playerController.buildObject.transform.position;
+                        Quaternion rotation = playerController.buildObject.transform.rotation;
                         Vector3 multiBuildPlacement = playerController.buildObject.transform.position;
                         for (int i = 0; i < playerController.buildMultiplier; i++)
                         {
                             if (playerController.cubeloc == "up")
                             {
-                                multiBuildPlacement = new Vector3(playerController.buildObject.transform.position.x, playerController.buildObject.transform.position.y + h, playerController.buildObject.transform.position.z);
+                                multiBuildPlacement = new Vector3(origin.x, origin.y + h, origin.z);
                             }
                             if (playerController.cubeloc == "down")
                             {
-                                multiBuildPlacement = new Vector3(playerController.buildObject.transform.position.x, playerController.buildObject.transform.position.y - h, playerController.buildObject.transform.position.z);
+                                multiBuildPlacement = new Vector3(origin.x, origin.y - h, origin.z);
                             }
                             if (playerController.cubeloc == "left")
                             {
-                                multiBuildPlacement = new Vector3(playerController.buildObject.transform.position.x + h, playerController.buildObject.transform.position.y, playerController.buildObject.transform.position.z);
+                                multiBuildPlacement = new Vector3(origin.x + h, origin.y, origin.z);
                             }
                             if (playerController.cubeloc == "right")
                             {
-                                multiBuildPlacement = new Vector3(playerController.buildObject.transform.position.x - h, playerController.buildObject.transform.position.y, playerController.buildObject.transform.position.z);
+                                multiBuildPlacement = new Vector3(origin.x - h, origin.y, origin.z);
                             }
                             if (playerController.cubeloc == "front")
                             {
-                                multiBuildPlacement = new Vector3(playerController.buildObject.transform.position.x, playerController.buildObject.transform.position.y, playerController.buildObject.transform.position.z + h);
+                                multiBuildPlacement = new Vector3(origin.x, origin.y, origin.z + h);
                             }
                             if (playerController.cubeloc == "back")
                             {
-                                multiBuildPlacement = new Vector3(playerController.buildObject.transform.position.x, playerController.buildObject.transform.position.y, playerController.buildObject.transform.position.z - h);
+                                multiBuildPlacement = new Vector3(origin.x, origin.y, origin.z - h);
                             }
                             h += 5;
-                            Instantiate(blockDictionary.blockDictionary[type], multiBuildPlacement, playerController.buildObject.transform.rotation);
+                            Instantiate(blockDictionary.blockDictionary[type], multiBuildPlacement, rotation);
                             slot.amountInSlot -= 1;
                             playerController.builderSound.Play();
                             playerController.destroyTimer = 0;
                             playerController.buildTimer = 0;
+                            yield return null;
                         }
-                    }
-                    else if (GameObject.Find("GameManager").GetComponent<GameManager>().blockLimitReached == true)
-                    {
-                        playerController.blockLimitMessage = true;
                     }
                     if (slot.amountInSlot == 0)
                     {

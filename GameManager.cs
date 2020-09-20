@@ -23,7 +23,6 @@ public class GameManager : MonoBehaviour
     public GameObject rocketObject;
     public GameObject builtObjects;
     public int totalBlockCount;
-    public bool blockLimitReached;
     public bool blockPhysics;
     public bool hazardsEnabled = true;
     public float meteorTimer;
@@ -31,24 +30,12 @@ public class GameManager : MonoBehaviour
     public bool dataSaveRequested;
     public bool blocksCombined;
     public bool working;
-    public bool waitingForDestroy;
-    private float waitTime;
-    public bool initGlass;
-    public bool initBrick;
-    public bool initIron;
-    public bool initSteel;
-    private float initBrickTimer;
-    private float initGlassTimer;
-    private float initIronTimer;
-    private float initSteelTimer;
+    public bool replacingMeshFilters;
+    private float mfDelay;
     public bool clearBrickDummies;
     public bool clearGlassDummies;
     public bool clearIronDummies;
     public bool clearSteelDummies;
-    public bool ironMeshRequired;
-    public bool steelMeshRequired;
-    public bool glassMeshRequired;
-    public bool brickMeshRequired;
     public float pirateAttackTimer;
     public float meteorShowerTimer;
     public float pirateFrequency;
@@ -60,7 +47,8 @@ public class GameManager : MonoBehaviour
     private bool loadedHazardsEnabled;
     public Rocket rocketScript;
     public Coroutine separateCoroutine;
-    public Coroutine combineCoroutine;
+    public Coroutine meshCombineCoroutine;
+    public Coroutine blockCombineCoroutine;
     public Coroutine hazardRemovalCoroutine;
     public List<Vector3> meteorShowerLocationList;
 
@@ -224,102 +212,14 @@ public class GameManager : MonoBehaviour
             }
 
             // Used to ensure components are removed before combining meshes.
-            if (waitingForDestroy == true)
+            if (replacingMeshFilters == true)
             {
-                waitTime += 1 * Time.deltaTime;
-                if (waitTime > 1)
+                mfDelay += 1 * Time.deltaTime;
+                if (mfDelay > 1)
                 {
                     meshManager.CombineMeshes();
-                    waitTime = 0;
-                    waitingForDestroy = false;
-                }
-            }
-
-            // Clear out dummy objects used for smooth transitions while combining meshes.
-            if (clearBrickDummies == true)
-            {
-                if (initBrickTimer < 3)
-                {
-                    initBrickTimer += 1 * Time.deltaTime;
-                }
-                else
-                {
-                    BlockDummy[] dummies = FindObjectsOfType<BlockDummy>();
-                    foreach (BlockDummy dummy in dummies)
-                    {
-                        if (dummy.type.Equals("brick"))
-                        {
-                            Destroy(dummy.gameObject);
-                        }
-                    }
-                    initBrickTimer = 0;
-                    clearBrickDummies = false;
-                }
-            }
-
-            // Clear out dummy objects used for smooth transitions while combining meshes.
-            if (clearGlassDummies == true)
-            {
-                if (initGlassTimer < 3)
-                {
-                    initGlassTimer += 1 * Time.deltaTime;
-                }
-                else
-                {
-                    BlockDummy[] dummies = FindObjectsOfType<BlockDummy>();
-                    foreach (BlockDummy dummy in dummies)
-                    {
-                        if (dummy.type.Equals("glass"))
-                        {
-                            Destroy(dummy.gameObject);
-                        }
-                    }
-                    initGlassTimer = 0;
-                    clearGlassDummies = false;
-                }
-            }
-
-            // Clear out dummy objects used for smooth transitions while combining meshes.
-            if (clearIronDummies == true)
-            {
-                if (initIronTimer < 3)
-                {
-                    initIronTimer += 1 * Time.deltaTime;
-                }
-                else
-                {
-                    BlockDummy[] dummies = FindObjectsOfType<BlockDummy>();
-                    foreach (BlockDummy dummy in dummies)
-                    {
-                        if (dummy.type.Equals("iron"))
-                        {
-                            Destroy(dummy.gameObject);
-                        }
-                    }
-                    initIronTimer = 0;
-                    clearIronDummies = false;
-                }
-            }
-
-            // Clear out dummy objects used for smooth transitions while combining meshes.
-            if (clearSteelDummies == true)
-            {
-                if (initSteelTimer < 3)
-                {
-                    initSteelTimer += 1 * Time.deltaTime;
-                }
-                else
-                {
-                    BlockDummy[] dummies = FindObjectsOfType<BlockDummy>();
-                    foreach (BlockDummy dummy in dummies)
-                    {
-                        if (dummy.type.Equals("steel"))
-                        {
-                            Destroy(dummy.gameObject);
-                        }
-                    }
-                    initSteelTimer = 0;
-                    clearSteelDummies = false;
+                    mfDelay = 0;
+                    replacingMeshFilters = false;
                 }
             }
 

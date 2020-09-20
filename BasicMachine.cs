@@ -28,11 +28,14 @@ public class BasicMachine : MonoBehaviour
     public BasicMachineRecipe[] recipes;
     private LineRenderer connectionLine;
     private GameObject builtObjects;
+    public StateManager stateManager;
     private int machineTimer;
+    private int warmup;
 
     //! Called by unity engine on start up to initialize variables.
     public void Start()
     {
+        stateManager = FindObjectOfType<StateManager>();
         powerReceiver = gameObject.AddComponent<PowerReceiver>();
         connectionLine = gameObject.AddComponent<LineRenderer>();
         conduitItem = GetComponentInChildren<ConduitItem>(true);
@@ -50,11 +53,21 @@ public class BasicMachine : MonoBehaviour
         updateTick += 1 * Time.deltaTime;
         if (updateTick > 0.5f + (address * 0.001f))
         {
+            if (stateManager.Busy())
+            {
+                 updateTick = 0;
+                return;
+            }
+
             UpdatePowerReceiver();
             GetComponent<PhysicsHandler>().UpdatePhysics();
 
             updateTick = 0;
-            if (speed > power)
+            if (warmup < 10)
+            {
+                warmup++;
+            }
+            else if (speed > power)
             {
                 speed = power > 0 ? power : 1;
             }

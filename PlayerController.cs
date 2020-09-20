@@ -414,9 +414,11 @@ public class PlayerController : MonoBehaviour
                     CheckStorageDistance();
                 }
 
-                // Input manager.
-                inputManager.HandleInput();
-                EnforceWorldLimits();
+                if (stateManager.saving == false)
+                {
+                    inputManager.HandleInput();
+                    EnforceWorldLimits();
+                }
             }
         }
     }
@@ -454,6 +456,8 @@ public class PlayerController : MonoBehaviour
     //! Saves the player's location and money.
     public void SavePlayerData()
     {
+        playerInventory.SaveData();
+        GameObject.Find("LanderCargo").GetComponent<InventoryManager>().SaveData();
         PlayerPrefsX.SetVector3(stateManager.WorldName + "playerPosition", transform.position);
         PlayerPrefsX.SetQuaternion(stateManager.WorldName + "playerRotation", transform.rotation);
         FileBasedPrefs.SetInt(stateManager.WorldName + "money", money);

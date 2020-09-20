@@ -5,6 +5,8 @@ using System.Collections.Generic;
 public class SaveManager
 {
     private StateManager stateManager;
+    public int currentObject;
+    public int totalObjects;
 
     //! This class handles world saving.
     public SaveManager(StateManager stateManager)
@@ -17,14 +19,23 @@ public class SaveManager
     {
         stateManager.dataSaved = false;
         stateManager.saving = true;
-
+        currentObject = 0;
         int saveInterval = 0;
         int objectID = 0;
         string worldID = "";
         string objectName = "";
         List<int> idList = new List<int>();
-        GameObject[] allObjects = GameObject.FindGameObjectsWithTag("Built");
-        foreach (GameObject go in allObjects)
+
+        GameObject[] machines = GameObject.FindGameObjectsWithTag("Built");
+        Transform[] blocks = stateManager.BuiltObjects.GetComponentsInChildren<Transform>(true);
+        MeshPainter[] meshPainters = Object.FindObjectsOfType<MeshPainter>();
+
+        if (totalObjects == 0)
+        {
+            totalObjects = machines.Length + blocks.Length + meshPainters.Length;
+        }
+
+        foreach (GameObject go in machines)
         {
             if (go != null)
             {
@@ -450,8 +461,9 @@ public class SaveManager
                     PlayerPrefsX.SetVector3(stateManager.WorldName + objectID + "Position", objectPosition);
                     PlayerPrefsX.SetQuaternion(stateManager.WorldName + objectID + "Rotation", objectRotation);
 
+                    currentObject++;
                     saveInterval++;
-                    if (saveInterval >= 10)
+                    if (saveInterval >= totalObjects * 0.05f)
                     {
                         yield return null;
                         saveInterval = 0;
@@ -460,8 +472,7 @@ public class SaveManager
             }
         }
 
-        Transform[] allTransforms = stateManager.BuiltObjects.GetComponentsInChildren<Transform>(true);
-        foreach (Transform T in allTransforms)
+        foreach (Transform T in blocks)
         {
             if (T != null)
             {
@@ -530,12 +541,25 @@ public class SaveManager
                     FileBasedPrefs.SetBool(worldID + "fallingStack", T.gameObject.GetComponent<PhysicsHandler>().fallingStack);
                 }
 
+                currentObject++;
                 saveInterval++;
-                if (saveInterval >= 10)
+                if (saveInterval >= totalObjects * 0.05f)
                 {
                     yield return null;
                     saveInterval = 0;
                 }
+            }
+        }
+
+        foreach (MeshPainter painter in meshPainters)
+        {
+            painter.SaveData();
+            currentObject++;
+            saveInterval++;
+            if (saveInterval >= totalObjects * 0.05f)
+            {
+                yield return null;
+                saveInterval = 0;
             }
         }
 
@@ -547,5 +571,7 @@ public class SaveManager
         FileBasedPrefs.ManuallySave();
         stateManager.dataSaved = true;
         stateManager.saving = false;
+        currentObject = 0;
+        totalObjects = 0;
     }
 }

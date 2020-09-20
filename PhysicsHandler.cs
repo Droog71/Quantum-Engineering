@@ -56,7 +56,7 @@ public class PhysicsHandler : MonoBehaviour
     //! Updates the physics state of the object.
     public void UpdatePhysics()
     {
-        if (stateManager.worldLoaded == true)
+        if (!stateManager.Busy())
         {
             if (!creationMethod.Equals("spawned"))
             {

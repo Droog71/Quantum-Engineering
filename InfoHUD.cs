@@ -22,7 +22,7 @@ public class InfoHUD : MonoBehaviour
     //! Returns true if the info hud should be drawn.
     private bool ShouldDrawInfoHud()
     {
-        return playerController.stateManager.worldLoaded == true
+        return !playerController.stateManager.Busy()
         && playerController.objectInSight != playerController.gameObject
         && GetComponent<MainMenu>().finishedLoading == true
         && playerController.objectInSight != null

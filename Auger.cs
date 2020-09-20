@@ -18,8 +18,10 @@ public class Auger : MonoBehaviour
     public int address;
     public bool powerON;
     private LineRenderer connectionLine;
+    private StateManager stateManager;
     private float updateTick;
     private int machineTimer;
+    private int warmup;
 
     //! Called by unity engine on start up to initialize variables.
     public void Start()
@@ -27,6 +29,7 @@ public class Auger : MonoBehaviour
         powerReceiver = gameObject.AddComponent<PowerReceiver>();
         connectionLine = gameObject.AddComponent<LineRenderer>();
         conduitItem = GetComponentInChildren<ConduitItem>(true);
+        stateManager = FindObjectOfType<StateManager>();
         connectionLine.startWidth = 0.2f;
         connectionLine.endWidth = 0.2f;
         connectionLine.material = lineMat;
@@ -40,11 +43,21 @@ public class Auger : MonoBehaviour
         updateTick += 1 * Time.deltaTime;
         if (updateTick > 0.5f + (address * 0.001f))
         {
+            if (stateManager.Busy())
+            {
+                 updateTick = 0;
+                return;
+            }
+
             GetComponent<PhysicsHandler>().UpdatePhysics();
             UpdatePowerReceiver();
 
             updateTick = 0;
-            if (speed > power)
+            if (warmup < 10)
+            {
+                warmup++;
+            }
+            else if (speed > power)
             {
                 speed = power > 0 ? power : 1;
             }

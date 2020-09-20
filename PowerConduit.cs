@@ -25,10 +25,12 @@ public class PowerConduit : MonoBehaviour
     public bool connectionFailed;
     private GameObject builtObjects;
     public PowerReceiver powerReceiver;
+    private StateManager stateManager;
 
     //! Called by unity engine on start up to initialize variables.
     public void Start()
     {
+        stateManager = FindObjectOfType<StateManager>();
         connectionLine = gameObject.AddComponent<LineRenderer>();
         powerReceiver = gameObject.AddComponent<PowerReceiver>();
         connectionLine.startWidth = 0.2f;
@@ -46,6 +48,12 @@ public class PowerConduit : MonoBehaviour
         updateTick += 1 * Time.deltaTime;
         if (updateTick > 0.5f + (address * 0.001f))
         {
+            if (stateManager.Busy())
+            {
+                 updateTick = 0;
+                return;
+            }
+
             updateTick = 0;
 
             GetComponent<PhysicsHandler>().UpdatePhysics();

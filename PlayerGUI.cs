@@ -218,8 +218,17 @@ public class PlayerGUI : MonoBehaviour
                 {
                     if (SavingMessageRequired())
                     {
-                        GUI.DrawTexture(guiCoordinates.lowMessageBackgroundRect, textureDictionary.dictionary["Interface Background"]);
-                        GUI.Label(guiCoordinates.lowMessageRect, "Saving world...");
+                        int current = stateManager.saveManager.currentObject;
+                        int total = stateManager.saveManager.totalObjects;
+                        GUI.DrawTexture(guiCoordinates.saveMessageBackgroundRect, textureDictionary.dictionary["Interface Background"]);
+                        if (total > 0)
+                        {
+                            GUI.Label(guiCoordinates.saveMessageRect, "Saving world... "+current+"/"+total);
+                        }
+                        else
+                        {
+                            GUI.Label(guiCoordinates.saveMessageRect, "Saving world... " + "preparing");
+                        }
                     }
                 }
             }

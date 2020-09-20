@@ -10,12 +10,18 @@ public class NuclearReactor : MonoBehaviour
     public int address;
     public int turbineCount;
     public bool sufficientCooling;
+    private StateManager stateMananger;
+
+    public void Start()
+    {
+        stateMananger = FindObjectOfType<StateManager>();
+    }
 
     //! Called once per frame by unity engine.
     public void Update()
     {
         updateTick += 1 * Time.deltaTime;
-        if (updateTick > 0.5f + (address * 0.001f))
+        if (updateTick > 0.5f + (address * 0.001f) && stateMananger.worldLoaded == true)
         {
             GetComponent<PhysicsHandler>().UpdatePhysics();
             updateTick = 0;

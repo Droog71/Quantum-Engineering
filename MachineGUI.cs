@@ -33,7 +33,7 @@ public class MachineGUI : MonoBehaviour
             GUI.skin.label.fontSize = 10;
         }
 
-        if (playerController.stateManager.worldLoaded == true && GetComponent<MainMenu>().finishedLoading == true)
+        if (!playerController.stateManager.Busy() && GetComponent<MainMenu>().finishedLoading == true)
         {
             // MACHINE CONTROL GUI
             if (playerController.inventoryOpen == false && playerController.machineGUIopen == true && playerController.objectInSight != null)

@@ -33,13 +33,16 @@ public class AlloySmelter : MonoBehaviour
     private LineRenderer connectionLine;
     private float updateTick;
     private int machineTimer;
+    private int warmup;
     private GameObject builtObjects;
+    private StateManager stateManager;
 
     //! Called by unity engine on start up to initialize variables.
     public void Start()
     {
         powerReceiver = gameObject.AddComponent<PowerReceiver>();
         connectionLine = gameObject.AddComponent<LineRenderer>();
+        stateManager = FindObjectOfType<StateManager>();
         connectionLine.startWidth = 0.2f;
         connectionLine.endWidth = 0.2f;
         connectionLine.material = lineMat;
@@ -52,15 +55,26 @@ public class AlloySmelter : MonoBehaviour
     //! Called once per frame by unity engine.
     public void Update()
     {
+
         updateTick += 1 * Time.deltaTime;
         if (updateTick > 0.5f + (address * 0.001f))
         {
+            if (stateManager.Busy())
+            {
+                 updateTick = 0;
+                return;
+            }
+
             GetComponent<PhysicsHandler>().UpdatePhysics();
             UpdatePowerReceiver();
 
             updateTick = 0;
 
-            if (speed > power)
+            if (warmup < 10)
+            {
+                warmup++;
+            }
+            else if (speed > power)
             {
                 speed = power > 0 ? power : 1;
             }

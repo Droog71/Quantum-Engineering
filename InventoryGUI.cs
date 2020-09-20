@@ -47,7 +47,7 @@ public class InventoryGUI : MonoBehaviour
             GUI.skin.label.fontSize = 10;
         }
 
-        if (playerController.stateManager.worldLoaded == true && GetComponent<MainMenu>().finishedLoading == true)
+        if (!playerController.stateManager.Busy() && GetComponent<MainMenu>().finishedLoading == true)
         {
             if (playerController.inventoryOpen == true)
             {

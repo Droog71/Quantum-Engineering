@@ -4,6 +4,7 @@ using System.Collections;
 public class AddressManager
 {
     private StateManager stateManager;
+    private int totalObjects;
 
     //! This class assigns a unique ID to every block in the world.
     public AddressManager(StateManager stateManager)
@@ -18,8 +19,8 @@ public class AddressManager
         int idCount = 0;
         int addressingInterval = 0;
         string objectName  = "";
-        GameObject[] allObjects = GameObject.FindGameObjectsWithTag("Built");
-        foreach (GameObject go in allObjects)
+        GameObject[] machines = GameObject.FindGameObjectsWithTag("Built");
+        foreach (GameObject go in machines)
         {
             if (go != null)
             {
@@ -195,8 +196,8 @@ public class AddressManager
             }
         }
 
-        Transform[] allTransforms = stateManager.BuiltObjects.GetComponentsInChildren<Transform>(true);
-        foreach (Transform T in allTransforms)
+        Transform[] blocks = stateManager.BuiltObjects.GetComponentsInChildren<Transform>(true);
+        foreach (Transform T in blocks)
         {
             if (T != null)
             {

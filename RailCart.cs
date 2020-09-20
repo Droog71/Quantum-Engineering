@@ -6,6 +6,7 @@ public class RailCart : MonoBehaviour
     public string creationMethod = "built";
     public GameObject target;
     private Vector3 targetPosition;
+    private StateManager stateManager;
     public int address;
     public string targetID;
     private bool loadedTarget;
@@ -16,45 +17,54 @@ public class RailCart : MonoBehaviour
     public void Start()
     {
         builtObjects = GameObject.Find("Built_Objects");
+        stateManager = FindObjectOfType<StateManager>();
     }
 
     //! Called once per frame by unity engine.
     public void Update()
     {
-        GetComponent<InventoryManager>().ID = ID;
-        if (creationMethod.Equals("spawned"))
+        if (!stateManager.Busy())
         {
-            if (target == null && loadedTarget == false && !targetID.Equals(""))
+            GetComponent<InventoryManager>().ID = ID;
+            if (creationMethod.Equals("spawned"))
             {
-                RailCartHub[] allHubs = FindObjectsOfType<RailCartHub>();
-                foreach (RailCartHub hub in allHubs)
+                if (target == null && loadedTarget == false && !targetID.Equals(""))
                 {
-                    if (hub.ID.Equals(targetID))
+                    RailCartHub[] allHubs = FindObjectsOfType<RailCartHub>();
+                    foreach (RailCartHub hub in allHubs)
                     {
-                        target = hub.gameObject;
-                        loadedTarget = true;
+                        if (hub.ID.Equals(targetID))
+                        {
+                            target = hub.gameObject;
+                            loadedTarget = true;
+                        }
                     }
                 }
             }
-        }
-        if (target != null)
-        {
-            targetPosition = target.transform.position;
-            transform.LookAt(targetPosition);
-            if (Vector3.Distance(transform.position, targetPosition) < 1)
+            if (target != null)
             {
-                if (target.GetComponent<RailCartHub>() != null)
+                targetPosition = target.transform.position;
+                transform.LookAt(targetPosition);
+                if (Vector3.Distance(transform.position, targetPosition) < 1)
                 {
-                    targetID = target.GetComponent<RailCartHub>().ID;
-                    if (target.GetComponent<RailCartHub>().stop == true)
+                    if (target.GetComponent<RailCartHub>() != null)
                     {
-                        if (GetComponent<AudioSource>().enabled == true)
+                        targetID = target.GetComponent<RailCartHub>().ID;
+                        if (target.GetComponent<RailCartHub>().stop == true)
                         {
-                            GetComponent<AudioSource>().enabled = false;
-                        }
-                        if (stopTimer <= target.GetComponent<RailCartHub>().stopTime)
-                        {
-                            stopTimer += 1 * Time.deltaTime;
+                            if (GetComponent<AudioSource>().enabled == true)
+                            {
+                                GetComponent<AudioSource>().enabled = false;
+                            }
+                            if (stopTimer <= target.GetComponent<RailCartHub>().stopTime)
+                            {
+                                stopTimer += 1 * Time.deltaTime;
+                            }
+                            else if (target.GetComponent<RailCartHub>().outputObject != null)
+                            {
+                                stopTimer = 0;
+                                target = target.GetComponent<RailCartHub>().outputObject;
+                            }
                         }
                         else if (target.GetComponent<RailCartHub>().outputObject != null)
                         {
@@ -62,35 +72,30 @@ public class RailCart : MonoBehaviour
                             target = target.GetComponent<RailCartHub>().outputObject;
                         }
                     }
-                    else if (target.GetComponent<RailCartHub>().outputObject != null)
-                    {
-                        stopTimer = 0;
-                        target = target.GetComponent<RailCartHub>().outputObject;
-                    }
-                }
-            }
-            else
-            {
-                if (Physics.Raycast(transform.position,transform.forward,out RaycastHit crashHit, 5))
-                {
-                    if (crashHit.collider != null)
-                    {
-                        if (crashHit.collider.gameObject != null)
-                        {
-                            if (crashHit.collider.gameObject.GetComponent<RailCartHub>() != null || crashHit.collider.gameObject.tag.Equals("Landscape"))
-                            {
-                                transform.position += 8 * transform.forward * Time.deltaTime;
-                            }
-                        }
-                    }
                 }
                 else
                 {
-                    transform.position += 8 * transform.forward * Time.deltaTime;
-                }
-                if (GetComponent<AudioSource>().enabled == false)
-                {
-                    GetComponent<AudioSource>().enabled = true;
+                    if (Physics.Raycast(transform.position, transform.forward, out RaycastHit crashHit, 5))
+                    {
+                        if (crashHit.collider != null)
+                        {
+                            if (crashHit.collider.gameObject != null)
+                            {
+                                if (crashHit.collider.gameObject.GetComponent<RailCartHub>() != null || crashHit.collider.gameObject.tag.Equals("Landscape"))
+                                {
+                                    transform.position += 8 * transform.forward * Time.deltaTime;
+                                }
+                            }
+                        }
+                    }
+                    else
+                    {
+                        transform.position += 8 * transform.forward * Time.deltaTime;
+                    }
+                    if (GetComponent<AudioSource>().enabled == false)
+                    {
+                        GetComponent<AudioSource>().enabled = true;
+                    }
                 }
             }
         }

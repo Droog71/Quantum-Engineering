@@ -9,10 +9,12 @@ public class ElectricLight : MonoBehaviour
     public bool powerON;
     public GameObject powerObject;
     public PowerReceiver powerReceiver;
+    private StateManager stateManager;
 
     //! Called by unity engine on start up to initialize variables.
     public void Start()
     {
+        stateManager = FindObjectOfType<StateManager>();
         powerReceiver = gameObject.AddComponent<PowerReceiver>();
     }
 
@@ -22,6 +24,12 @@ public class ElectricLight : MonoBehaviour
         updateTick += 1 * Time.deltaTime;
         if (updateTick > 1 + (address * 0.001f))
         {
+            if (stateManager.Busy())
+            {
+                 updateTick = 0;
+                return;
+            }
+
             GetComponent<PhysicsHandler>().UpdatePhysics();
             UpdatePowerReceiver();
 

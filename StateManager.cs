@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System.Collections;
 
 //! This class handles unique ID assignment and saving & loading of worlds.
 public class StateManager : MonoBehaviour
@@ -6,6 +7,8 @@ public class StateManager : MonoBehaviour
     public bool saving;
     public bool dataSaved;
     public bool worldLoaded;
+    public int progress;
+    public int[] idList;
     public GameObject DarkMatterCollector;
     public GameObject DarkMatterConduit;
     public GameObject IronBlock;
@@ -39,21 +42,22 @@ public class StateManager : MonoBehaviour
     public GameObject Brick;
     public GameObject modMachine;
     public GameObject BuiltObjects;
+    public bool assigningIDs;
     public string WorldName = "World";
-    private float updateTick;
-    private string ObjectName = "";
     public string PartName = "";
+    public SaveManager saveManager;
     public Vector3 PartPosition = new Vector3(0.0f, 0.0f, 0.0f);
     public Quaternion PartRotation = Quaternion.Euler(new Vector3(0.0f, 0.0f, 0.0f));
-    public bool Loaded = false;
-    public bool assigningIDs;
     private Vector3 EmptyVector = new Vector3(0.0f, 0.0f, 0.0f);
     private Vector3 ObjectPosition;
     private Quaternion ObjectRotation;
     private AddressManager addressManager;
-    private SaveManager saveManager;
     private Coroutine addressingCoroutine;
+    private Coroutine loadCoroutine;
     private Coroutine saveCoroutine;
+    private float updateTick;
+    private string ObjectName = "";
+    private bool loading;
 
     //! Called by unity engine before the first update.
     public void Start()
@@ -65,10 +69,10 @@ public class StateManager : MonoBehaviour
     public void Update()
     {
         MainMenu mainMenu = GameObject.Find("Player").GetComponent<MainMenu>();
-        if (mainMenu.worldSelected == true && worldLoaded == false)
+        if (mainMenu.worldSelected == true && loading == false)
         {
-            LoadWorld();
-            worldLoaded = true;
+            loadCoroutine = StartCoroutine(LoadWorld());
+            loading = true;
         }
         if (worldLoaded == true)
         {
@@ -80,7 +84,7 @@ public class StateManager : MonoBehaviour
             updateTick += 1 * Time.deltaTime;
             if (updateTick > 1)
             {
-                if (saving == false)
+                if (assigningIDs == false && saving == false)
                 {
                     AssignIDs();
                 }
@@ -90,13 +94,19 @@ public class StateManager : MonoBehaviour
     }
 
     //! Loads a saved world.
-    private void LoadWorld()
+    private IEnumerator LoadWorld()
     {
-        if (Loaded == false && PlayerPrefsX.GetIntArray(WorldName + "idList").Length > 0)
+        if (worldLoaded == false && PlayerPrefsX.GetIntArray(WorldName + "idList").Length > 0)
         {
-            int[] idList = PlayerPrefsX.GetIntArray(WorldName + "idList");
+            int loadInterval = 0;
+            progress = 0;
+            idList = PlayerPrefsX.GetIntArray(WorldName + "idList");
             foreach (int objectID in idList)
             {
+                while (GetComponent<GameManager>().working == true)
+                {
+                    yield return null;
+                }
                 ObjectPosition = PlayerPrefsX.GetVector3(WorldName + objectID + "Position");
                 ObjectRotation = PlayerPrefsX.GetQuaternion(WorldName + objectID + "Rotation");
                 ObjectName = FileBasedPrefs.GetString(WorldName + objectID + "Name");
@@ -443,14 +453,18 @@ public class StateManager : MonoBehaviour
                         SpawnedObject.GetComponent<PhysicsHandler>().fallingStack = FileBasedPrefs.GetBool(ObjectName + objectID + "fallingStack");
                     }
                 }
+                progress++;
+                loadInterval++;
+                if (loadInterval >= idList.Length * 0.025f)
+                {
+                    loadInterval = 0;
+                    GetComponent<GameManager>().meshManager.CombineBlocks();
+                    yield return null;
+                }
             }
         }
-        Loaded = true;
-        GetComponent<GameManager>().initGlass = FileBasedPrefs.GetBool(WorldName + "initGlass");
-        GetComponent<GameManager>().initBrick = FileBasedPrefs.GetBool(WorldName + "initBrick");
-        GetComponent<GameManager>().initIron = FileBasedPrefs.GetBool(WorldName + "initIron");
-        GetComponent<GameManager>().initSteel = FileBasedPrefs.GetBool(WorldName + "initSteel");
-        GameObject.Find("GameManager").GetComponent<GameManager>().meshManager.CombineBlocks();
+        GetComponent<GameManager>().meshManager.CombineBlocks();
+        worldLoaded = true;
     }
 
     //! Assigns ID to objects in the world.
@@ -474,5 +488,10 @@ public class StateManager : MonoBehaviour
         && go.GetComponent<PlayerController>() == null
         && go.GetComponent<Retriever>() == null
         && go.GetComponent<AutoCrafter>() == null;
+    }
+
+    public bool Busy()
+    {
+        return worldLoaded == false || saving == true;
     }
 }

@@ -25,6 +25,7 @@ public class PowerSource : MonoBehaviour
     public Texture2D generatorOffTexture;
     public Texture2D generatorOnTexture;
     private GameObject builtObjects;
+    private StateManager stateManager;
 
     //! Called by unity engine on start up to initialize variables.
     public void Start()
@@ -36,6 +37,7 @@ public class PowerSource : MonoBehaviour
         connectionLine.loop = true;
         connectionLine.enabled = false;
         builtObjects = GameObject.Find("Built_Objects");
+        stateManager = FindObjectOfType<StateManager>();
     }
 
     //! Called once per frame by unity engine.
@@ -44,6 +46,12 @@ public class PowerSource : MonoBehaviour
         updateTick += 1 * Time.deltaTime;
         if (updateTick > 0.5f + (address * 0.001f))
         {
+            if (stateManager.Busy())
+            {
+                 updateTick = 0;
+                return;
+            }
+
             GetComponent<PhysicsHandler>().UpdatePhysics();
             updateTick = 0;
 

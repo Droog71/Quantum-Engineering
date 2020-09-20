@@ -23,6 +23,7 @@ public class UniversalConduit : MonoBehaviour
     public bool connectionFailed;
     public GameObject storageComputerConduitItemObject;
     public ConduitItem storageComputerConduitItem;
+    private StateManager stateManager;
     private GameObject builtObjects;
     private LineRenderer connectionLine;
     private float updateTick;
@@ -32,6 +33,7 @@ public class UniversalConduit : MonoBehaviour
     {
         connectionLine = gameObject.AddComponent<LineRenderer>();
         conduitItem = GetComponentInChildren<ConduitItem>(true);
+        stateManager = FindObjectOfType<StateManager>();
         connectionLine.startWidth = 0.2f;
         connectionLine.endWidth = 0.2f;
         connectionLine.material = lineMat;
@@ -46,6 +48,12 @@ public class UniversalConduit : MonoBehaviour
         updateTick += 1 * Time.deltaTime;
         if (updateTick > 0.5f + (address * 0.001f))
         {
+            if (stateManager.Busy())
+            {
+                 updateTick = 0;
+                return;
+            }
+
             GetComponent<PhysicsHandler>().UpdatePhysics();
             updateTick = 0;
             if (inputObject == null || outputObject == null)

@@ -11,6 +11,7 @@ public class StorageComputer : MonoBehaviour
     public bool initialized;
     public int address;
     private float updateTick;
+    private StateManager stateManager;
     private List<GameObject> spawnedConnectionList;
     public GameObject connectionObject;
     public Material lineMat;
@@ -21,6 +22,7 @@ public class StorageComputer : MonoBehaviour
     //! Called by unity engine on start up to initialize variables.
     public void Start()
     {
+        stateManager = FindObjectOfType<StateManager>();
         powerReceiver = gameObject.AddComponent<PowerReceiver>();
         computerContainerList = new List<InventoryManager>();
         spawnedConnectionList = new List<GameObject>();
@@ -33,6 +35,12 @@ public class StorageComputer : MonoBehaviour
         updateTick += 1 * Time.deltaTime;
         if (updateTick > 0.5f + (address * 0.001f))
         {
+            if (stateManager.Busy())
+            {
+                 updateTick = 0;
+                return;
+            }
+
             GetComponent<PhysicsHandler>().UpdatePhysics();
             UpdatePowerReceiver();
 

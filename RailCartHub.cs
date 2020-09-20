@@ -9,7 +9,8 @@ public class RailCartHub : MonoBehaviour
     public string creationMethod = "built";
     public GameObject inputObject;
     public GameObject outputObject;
-    LineRenderer connectionLine;
+    private StateManager stateManager;
+    private LineRenderer connectionLine;
     private float updateTick;
     public Material lineMat;
     public int address;
@@ -25,6 +26,7 @@ public class RailCartHub : MonoBehaviour
     public void Start()
     {
         connectionLine = gameObject.AddComponent<LineRenderer>();
+        stateManager = FindObjectOfType<StateManager>();
         connectionLine.startWidth = 0.2f;
         connectionLine.endWidth = 0.2f;
         connectionLine.material = lineMat;
@@ -38,6 +40,12 @@ public class RailCartHub : MonoBehaviour
         updateTick += 1 * Time.deltaTime;
         if (updateTick > 0.5f + (address * 0.001f))
         {
+            if (stateManager.Busy())
+            {
+                 updateTick = 0;
+                return;
+            }
+
             GetComponent<PhysicsHandler>().UpdatePhysics();
             updateTick = 0;
             if (inputObject == null || outputObject == null)

@@ -15,7 +15,7 @@ public class DarkMatterConduit : MonoBehaviour
     public ConduitItem conduitItem;
     public Material darkMatterMat;
     public Material lineMat;
-    LineRenderer connectionLine;
+    private LineRenderer connectionLine;
     private float updateTick;
     public int address;
     public int range = 6;
@@ -24,6 +24,7 @@ public class DarkMatterConduit : MonoBehaviour
     public GameObject storageComputerConduitItemObject;
     public ConduitItem storageComputerConduitItem;
     private GameObject builtObjects;
+    private StateManager stateManager;
 
     //! Called by unity engine on start up to initialize variables.
     public void Start()
@@ -36,6 +37,7 @@ public class DarkMatterConduit : MonoBehaviour
         connectionLine.loop = true;
         connectionLine.enabled = false;
         builtObjects = GameObject.Find("Built_Objects");
+        stateManager = FindObjectOfType<StateManager>();
     }
 
     //! Called once per frame by unity engine.
@@ -45,6 +47,12 @@ public class DarkMatterConduit : MonoBehaviour
 
         if (updateTick > 0.5f + (address * 0.001f))
         {
+            if (stateManager.Busy())
+            {
+                 updateTick = 0;
+                return;
+            }
+
             GetComponent<PhysicsHandler>().UpdatePhysics();
             updateTick = 0;
             if (inputObject == null || outputObject == null)

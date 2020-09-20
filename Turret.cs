@@ -23,7 +23,9 @@ public class Turret : MonoBehaviour
     private bool hasTarget;
     private Coroutine fireCoroutine;
     private bool firing;
+    private int warmup;
     private GameManager game;
+    private StateManager stateManager;
     private LineRenderer laser;
     public PowerReceiver powerReceiver;
 
@@ -32,6 +34,7 @@ public class Turret : MonoBehaviour
     {
         powerReceiver = gameObject.AddComponent<PowerReceiver>();
         laser = gameObject.AddComponent<LineRenderer>();
+        stateManager = FindObjectOfType<StateManager>();
         laser.startWidth = 0.2f;
         laser.endWidth = 0.2f;
         laser.material = laserMat;
@@ -47,6 +50,12 @@ public class Turret : MonoBehaviour
         updateTick += 1 * Time.deltaTime;
         if (updateTick > 0.5f + (address * 0.001f))
         {
+            if (stateManager.Busy())
+            {
+                 updateTick = 0;
+                return;
+            }
+
             GetComponent<PhysicsHandler>().UpdatePhysics();
             UpdatePowerReceiver();
 
@@ -57,7 +66,11 @@ public class Turret : MonoBehaviour
             }
             if (game != null)
             {
-                if (speed > power)
+                if (warmup < 10)
+                {
+                    warmup++;
+                }
+                else if (speed > power)
                 {
                     speed = power > 0 ? power : 1;
                 }

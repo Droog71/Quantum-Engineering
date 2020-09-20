@@ -25,6 +25,7 @@ public class DarkMatterCollector : MonoBehaviour
     public bool connectionFailed;
     public bool foundDarkMatter;
     private GameObject builtObjects;
+    private StateManager stateManager;
 
     //! Called by unity engine on start up to initialize variables.
     private void Start()
@@ -38,6 +39,7 @@ public class DarkMatterCollector : MonoBehaviour
         connectionLine.loop = true;
         connectionLine.enabled = false;
         builtObjects = GameObject.Find("Built_Objects");
+        stateManager = FindObjectOfType<StateManager>();
     }
 
     //! Called once per frame by unity engine.
@@ -46,6 +48,12 @@ public class DarkMatterCollector : MonoBehaviour
         updateTick += 1 * Time.deltaTime;
         if (updateTick > 0.5f + (address * 0.001f))
         {
+            if (stateManager.Busy())
+            {
+                 updateTick = 0;
+                return;
+            }
+
             GetComponent<PhysicsHandler>().UpdatePhysics();
             UpdatePowerReceiver();
 

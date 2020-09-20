@@ -16,15 +16,18 @@ public class ModMachine : BasicMachine
     public new void Update()
     {
         base.Update();
-        TextureDictionary textureDictionary = GameObject.Find("Player").GetComponent<TextureDictionary>();
-        if (textureDictionary.dictionary.ContainsKey(machineName))
+        if (!stateManager.Busy())
         {
-            material.mainTexture = GameObject.Find("Player").GetComponent<TextureDictionary>().dictionary[machineName];
-        }
-        GetComponent<Renderer>().material = material;
-        if (recipes == null)
-        {
-            recipes = GameObject.Find("Player").GetComponent<BuildController>().blockDictionary.GetMachineRecipes(machineName);
+            TextureDictionary textureDictionary = GameObject.Find("Player").GetComponent<TextureDictionary>();
+            if (textureDictionary.dictionary.ContainsKey(machineName))
+            {
+                material.mainTexture = GameObject.Find("Player").GetComponent<TextureDictionary>().dictionary[machineName];
+            }
+            GetComponent<Renderer>().material = material;
+            if (recipes == null)
+            {
+                recipes = GameObject.Find("Player").GetComponent<BuildController>().blockDictionary.GetMachineRecipes(machineName);
+            }
         }
     }
 }

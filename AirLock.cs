@@ -3,6 +3,7 @@
 public class AirLock : MonoBehaviour
 {
     private float updateTick;
+    private StateManager stateManager;
     public string ID = "unassigned";
     public int address;
     public bool open;
@@ -13,6 +14,7 @@ public class AirLock : MonoBehaviour
     //! Called by unity engine on start up to initialize variables.
     public void Start()
     {
+        stateManager = FindObjectOfType<StateManager>();
         if (QualitySettings.GetQualityLevel() < 3)
         {
             effects.SetActive(false);
@@ -25,6 +27,12 @@ public class AirLock : MonoBehaviour
         updateTick += 1 * Time.deltaTime;
         if (updateTick > 0.5f + (address * 0.001f))
         {
+            if (stateManager.Busy())
+            {
+                 updateTick = 0;
+                return;
+            }
+
             GetComponent<PhysicsHandler>().UpdatePhysics();
             updateTick = 0;
         }

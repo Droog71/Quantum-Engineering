@@ -12,13 +12,17 @@ public class InventoryManager : MonoBehaviour
     public int maxStackSize = 1000;
     public bool itemAdded;
 
+    public void Start()
+    {
+        stateManager = FindObjectOfType<StateManager>();
+    }
+
     //! Called once per frame by unity engine.
     public void Update()
     {
-        if (ID != "unassigned" && initialized == false)
+        if (!stateManager.Busy())
         {
-            stateManager = GameObject.Find("GameManager").GetComponent<StateManager>();
-            if (stateManager.worldLoaded == true)
+            if (ID != "unassigned" && initialized == false)
             {
                 inventory = new InventorySlot[16];
                 int count = 0;
@@ -35,30 +39,29 @@ public class InventoryManager : MonoBehaviour
                 }
                 originalID = ID;
                 initialized = true;
-                if (ID.Equals("Rocket"))
-                {
-                    maxStackSize = 100000;
-                }
-                else
-                {
-                    maxStackSize = 1000;
-                }
+                maxStackSize = ID.Equals("Rocket") ? 100000 : 1000;
             }
-        }
 
-        updateTick += 1 * Time.deltaTime;
-        if (updateTick > 0.5f + (address * 0.001f))
-        {
-            if (GetComponent<RailCart>() == null && GetComponent<Retriever>() == null && GetComponent<AutoCrafter>() == null && GetComponent<PlayerController>() == null && GetComponent<Rocket>() == null && ID != "Lander")
+            updateTick += 1 * Time.deltaTime;
+            if (updateTick > 0.5f + (address * 0.001f))
             {
-                GetComponent<PhysicsHandler>().UpdatePhysics();
+                if (IsStorageContainer())
+                {
+                    GetComponent<PhysicsHandler>().UpdatePhysics();
+                }
+                updateTick = 0;
             }
-            if (ID == "player" || ID == "Lander")
-            {
-                SaveData();
-            }
-            updateTick = 0;
         }
+    }
+
+    private bool IsStorageContainer()
+    {
+        return GetComponent<RailCart>() == null
+        && GetComponent<Retriever>() == null
+        && GetComponent<AutoCrafter>() == null
+        && GetComponent<PlayerController>() == null
+        && GetComponent<Rocket>() == null
+        && ID != "Lander";
     }
 
     //! Saves the inventory's contents to disk.

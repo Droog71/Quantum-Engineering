@@ -29,7 +29,7 @@ public class MainMenu : MonoBehaviour
     //! Called by unity engine on start up to initialize variables.
     public void Start()
     {
-        stateManager = GameObject.Find("GameManager").GetComponent<StateManager>();
+        stateManager = FindObjectOfType<StateManager>();
         worldList = new List<string>();
         videoPlayer.GetComponent<VP>().PlayVideo("QE_Title.webm",true,0);
         buttonSounds = menuSoundObject.GetComponent<AudioSource>();
@@ -144,7 +144,7 @@ public class MainMenu : MonoBehaviour
 
         Rect startGameButtonRect = new Rect(ScreenWidth * 0.58f, ScreenHeight * 0.4f, ScreenWidth * 0.15f, ScreenHeight * 0.03f);
         Rect textFieldRect = new Rect(ScreenWidth * 0.41f, ScreenHeight * 0.4f, ScreenWidth * 0.15f, ScreenHeight * 0.03f);
-        Rect loadingMessageRect = new Rect((ScreenWidth * 0.48f), (ScreenHeight * 0.30f), (ScreenWidth * 0.5f), (ScreenHeight * 0.5f));
+        Rect loadingMessageRect = new Rect((ScreenWidth * 0.46f), (ScreenHeight * 0.30f), (ScreenWidth * 0.5f), (ScreenHeight * 0.5f));
 
         Rect buttonRect1 = new Rect((ScreenWidth * 0.405f), (ScreenHeight * 0.50f), (ScreenWidth * 0.020f), (ScreenHeight * 0.025f));
         Rect buttonRect2 = new Rect((ScreenWidth * 0.405f), (ScreenHeight * 0.532f), (ScreenWidth * 0.020f), (ScreenHeight * 0.025f));
@@ -406,17 +406,23 @@ public class MainMenu : MonoBehaviour
                 }
             }
         }
-        else if (stateManager.Loaded == false && finishedLoading == false)
+        else if (finishedLoading == false && (stateManager.worldLoaded == false || stateManager.GetComponent<GameManager>().working == true))
         {
-            GUI.Label(loadingMessageRect, "Loading...");
+            if (videoPlayer.GetComponent<VP>().IsPlaying())
+            {
+                videoPlayer.GetComponent<VP>().StopVideo();
+            }
+            GUI.DrawTexture(backgroundRect, titleTexture);
+            int f = GUI.skin.label.fontSize;
+            GUI.skin.label.fontSize = 16;
+            string loadingMessage = "Loading... " + stateManager.progress + "/" + stateManager.idList.Length;
+            Vector2 size = GetStringSize(loadingMessage);
+            Rect messagePos = new Rect((Screen.width / 2) - (size.x/2), Screen.height * 0.4f, size.x, size.y);
+            GUI.Label(messagePos, loadingMessage);
+            GUI.skin.label.fontSize = f;
         }
-        else if (stateManager.GetComponent<GameManager>().working == true && finishedLoading == false)
+        else
         {
-            GUI.Label(loadingMessageRect, "Loading...");
-        }
-        else if (finishedLoading == false)
-        {
-            videoPlayer.GetComponent<VP>().StopVideo();
             finishedLoading = true;
         }
     }

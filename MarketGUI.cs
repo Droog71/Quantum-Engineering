@@ -58,7 +58,7 @@ public class MarketGUI : MonoBehaviour
     //! Called once per frame by unity engine.
     public void Update()
     {
-        if (playerController.stateManager.worldLoaded == true && loadedValues == false)
+        if (!playerController.stateManager.Busy() == true && loadedValues == false)
         {
             Dictionary<string, int> pd = new Dictionary<string, int>();
             foreach (KeyValuePair<string, int> i in priceDictionary)

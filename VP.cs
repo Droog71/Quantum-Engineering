@@ -5,7 +5,7 @@ public class VP : MonoBehaviour
 {
     public GameObject cam;
 
-    //! Plays a video
+    //! Plays a video.
     public void PlayVideo(string video,bool looping,float volume)
     {
         cam.GetComponent<UnityEngine.Video.VideoPlayer>().url = Application.dataPath + "/Video/" + video;
@@ -14,9 +14,15 @@ public class VP : MonoBehaviour
         cam.GetComponent<UnityEngine.Video.VideoPlayer>().Play();
     }
 
-    //! Stops a video
+    //! Stops a video.
     public void StopVideo()
     {
         cam.GetComponent<UnityEngine.Video.VideoPlayer>().Stop();
+    }
+
+    //! Returns true if a video is playing.
+    public bool IsPlaying()
+    {
+        return cam.GetComponent<UnityEngine.Video.VideoPlayer>().isPlaying;
     }
 }

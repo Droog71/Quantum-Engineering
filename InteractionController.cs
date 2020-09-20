@@ -20,6 +20,8 @@ public class InteractionController : MonoBehaviour
     //! Called once per frame by unity engine.
     public void Update()
     {
+        if (!playerController.stateManager.Busy())
+        {
         // Raycast and associated data for interacting with machines and other objects.
         Transform camPos = Camera.main.gameObject.transform;
         if (Physics.Raycast(camPos.position, camPos.forward, out playerController.playerLookHit, 40))
@@ -151,6 +153,7 @@ public class InteractionController : MonoBehaviour
         else
         {
             EndInteraction();
+        }
         }
     }
 

@@ -9,6 +9,7 @@ public class UniversalExtractor : MonoBehaviour
     public bool hasHeatExchanger;
     private int machineTimer;
     public int power;
+    private int warmup;
     public string type;
     public GameObject outputObject;
     private GameObject inputObject;
@@ -26,6 +27,7 @@ public class UniversalExtractor : MonoBehaviour
     private bool hasResource;
     public int connectionAttempts;
     public bool connectionFailed;
+    private StateManager stateManager;
     private GameObject builtObjects;
     public PowerReceiver powerReceiver;
 
@@ -35,6 +37,7 @@ public class UniversalExtractor : MonoBehaviour
         powerReceiver = gameObject.AddComponent<PowerReceiver>();
         connectionLine = gameObject.AddComponent<LineRenderer>();
         conduitItem = GetComponentInChildren<ConduitItem>(true);
+        stateManager = FindObjectOfType<StateManager>();
         connectionLine.startWidth = 0.2f;
         connectionLine.endWidth = 0.2f;
         connectionLine.material = lineMat;
@@ -72,11 +75,21 @@ public class UniversalExtractor : MonoBehaviour
         updateTick += 1 * Time.deltaTime;
         if (updateTick > 0.5f + (address * 0.001f))
         {
+            if (stateManager.Busy())
+            {
+                updateTick = 0;
+                return;
+            }
+
             GetComponent<PhysicsHandler>().UpdatePhysics();
             UpdatePowerReceiver();
 
             updateTick = 0;
-            if (speed > power)
+            if (warmup < 10)
+            {
+                warmup++;
+            }
+            else if (speed > power)
             {
                 speed = power > 0 ? power : 1;
             }

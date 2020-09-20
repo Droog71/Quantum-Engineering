@@ -4,7 +4,6 @@ using UnityEngine;
 public class MeshPainter : MonoBehaviour
 {
     public int ID;
-    private float saveTimer;
     private Coroutine saveDataCoRoutine;
 
     //! Called by unity engine on start up to initialize variables.
@@ -73,15 +72,10 @@ public class MeshPainter : MonoBehaviour
         }
     }
 
-    //! Called once per frame by unity engine.
-    public void Update()
+    //! Saves mesh colors.
+    public void SaveData()
     {
-        saveTimer += 1 * Time.deltaTime;
-        if (saveTimer >= 1)
-        {
-            saveDataCoRoutine = StartCoroutine(SaveDataCoRoutine());
-            saveTimer = 0;
-        }
+        saveDataCoRoutine = StartCoroutine(SaveDataCoRoutine());
     }
 
     //! Saves the color of painted objects.

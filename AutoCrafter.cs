@@ -23,10 +23,12 @@ public class AutoCrafter : MonoBehaviour
     public Material lineMat;
     private float updateTick;
     private int machineTimer;
+    private int warmup;
     private LineRenderer connectionLine;
     private CraftingManager craftingManager;
     private CraftingDictionary craftingDictionary;
     private GameObject builtObjects;
+    private StateManager stateManager;
 
     //! Called by unity engine on start up to initialize variables.
     public void Start()
@@ -35,6 +37,7 @@ public class AutoCrafter : MonoBehaviour
         powerReceiver = gameObject.AddComponent<PowerReceiver>();
         connectionLine = gameObject.AddComponent<LineRenderer>();
         craftingDictionary = new CraftingDictionary();
+        stateManager = FindObjectOfType<StateManager>();
         connectionLine.startWidth = 0.2f;
         connectionLine.endWidth = 0.2f;
         connectionLine.material = lineMat;
@@ -50,11 +53,21 @@ public class AutoCrafter : MonoBehaviour
         updateTick += 1 * Time.deltaTime;
         if (updateTick > 0.5f + (address * 0.001f))
         {
+            if (stateManager.Busy())
+            {
+                 updateTick = 0;
+                return;
+            }
+
             GetComponent<PhysicsHandler>().UpdatePhysics();
             UpdatePowerReceiver();
 
             updateTick = 0;
-            if (speed > power)
+            if (warmup < 10)
+            {
+                warmup++;
+            }
+            else if (speed > power)
             {
                 speed = power > 0 ? power : 1;
             }

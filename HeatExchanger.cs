@@ -20,6 +20,7 @@ public class HeatExchanger : MonoBehaviour
     public int connectionAttempts;
     public bool connectionFailed;
     private GameObject builtObjects;
+    private StateManager stateManager;
 
     //! Called by unity engine on start up to initialize variables.
     public void Start()
@@ -31,6 +32,7 @@ public class HeatExchanger : MonoBehaviour
         connectionLine.loop = true;
         connectionLine.enabled = false;
         builtObjects = GameObject.Find("Built_Objects");
+        stateManager = FindObjectOfType<StateManager>();
     }
 
     //! Called once per frame by unity engine.
@@ -39,6 +41,12 @@ public class HeatExchanger : MonoBehaviour
         updateTick += 1 * Time.deltaTime;
         if (updateTick > 0.5f + (address * 0.001f))
         {
+            if (stateManager.Busy())
+            {
+                 updateTick = 0;
+                return;
+            }
+
             GetComponent<PhysicsHandler>().UpdatePhysics();
             updateTick = 0;
             if (outputObject == null)
@@ -89,8 +97,15 @@ public class HeatExchanger : MonoBehaviour
                             }
                             else if (amount > 0)
                             {
-                                speed = (int)amount;
-                                providingCooling = true;
+                                if (amount <= inputObject.GetComponent<UniversalConduit>().speed)
+                                {
+                                    speed = (int)amount;
+                                    providingCooling = true;
+                                }
+                                else
+                                {
+                                    speed =  inputObject.GetComponent<UniversalConduit>().speed;
+                                }
                             }
                             else
                             {
