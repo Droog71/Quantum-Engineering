@@ -123,18 +123,12 @@ public class BlockInteraction
         {
             Color color = new Color(playerController.paintRed, playerController.paintGreen, playerController.paintBlue);
             holder.GetComponent<Renderer>().material.color = color;
-            int blockPaintingInterval = 0;
             Transform[] blocks = holder.GetComponentsInChildren<Transform>(true);
             foreach (Transform T in blocks)
             {
                 T.gameObject.GetComponent<Renderer>().material.color = color;
-                blockPaintingInterval++;
-                if (blockPaintingInterval >= 50)
-                {
-                    blockPaintingInterval = 0;
-                    yield return null;
-                }
             }
+            yield return null;
             FileBasedPrefs.SetBool(playerController.stateManager.WorldName + name + holder.GetComponent<MeshPainter>().ID + "painted", true);
         }
     }

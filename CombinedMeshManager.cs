@@ -99,7 +99,7 @@ public class CombinedMeshManager
             }
             ironCount++;
             ironSeprationInterval++;
-            if (ironSeprationInterval >= 150)
+            if (ironSeprationInterval >= 50)
             {
                 yield return null;
                 ironSeprationInterval = 0;
@@ -136,7 +136,7 @@ public class CombinedMeshManager
             }
             glassCount++;
             glassSeprationInterval++;
-            if (glassSeprationInterval >= 150)
+            if (glassSeprationInterval >= 50)
             {
                 yield return null;
                 glassSeprationInterval = 0;
@@ -173,7 +173,7 @@ public class CombinedMeshManager
             }
             steelCount++;
             steelSeprationInterval++;
-            if (steelSeprationInterval >= 150)
+            if (steelSeprationInterval >= 50)
             {
                 yield return null;
                 steelSeprationInterval = 0;
@@ -210,7 +210,7 @@ public class CombinedMeshManager
             }
             brickCount++;
             brickSeprationInterval++;
-            if (brickSeprationInterval >= 150)
+            if (brickSeprationInterval >= 50)
             {
                 yield return null;
                 brickSeprationInterval = 0;
@@ -231,7 +231,7 @@ public class CombinedMeshManager
                 SpawnDummy(realObject, dummyObject, gameManager.ironHolder, "Iron Dummy");
                 ironCount++;
                 ironDummyInterval++;
-                if (ironDummyInterval >= 150)
+                if (ironDummyInterval >= 50)
                 {
                     yield return null;
                     ironDummyInterval = 0;
@@ -249,7 +249,7 @@ public class CombinedMeshManager
                 SpawnDummy(realObject, dummyObject, gameManager.glassHolder, "Glass Dummy");
                 glassCount++;
                 glassDummyInterval++;
-                if (glassDummyInterval >= 150)
+                if (glassDummyInterval >= 50)
                 {
                     yield return null;
                     glassDummyInterval = 0;
@@ -267,7 +267,7 @@ public class CombinedMeshManager
                 SpawnDummy(realObject, dummyObject, gameManager.steelHolder, "Steel Dummy");
                 steelCount++;
                 steelDummyInterval++;
-                if (steelDummyInterval >= 150)
+                if (steelDummyInterval >= 50)
                 {
                     yield return null;
                     steelDummyInterval = 0;
@@ -285,7 +285,7 @@ public class CombinedMeshManager
                 SpawnDummy(realObject, dummyObject, gameManager.brickHolder, "Brick Dummy");
                 brickCount++;
                 brickDummyInterval++;
-                if (brickDummyInterval >= 150)
+                if (brickDummyInterval >= 50)
                 {
                     yield return null;
                     brickDummyInterval = 0;
@@ -303,6 +303,8 @@ public class CombinedMeshManager
         {
             gameManager.working = false;
         }
+
+        gameManager.blocksCombined = false;
     }
 
     //! Returns true if any combined mesh needs to be created or rebuilt.
@@ -353,7 +355,7 @@ public class CombinedMeshManager
                 }
             }
             combineInterval++;
-            if (combineInterval >= 150)
+            if (combineInterval >= 50)
             {
                 combineInterval = 0;
                 yield return null;
@@ -377,7 +379,7 @@ public class CombinedMeshManager
                 }
             }
             combineInterval++;
-            if (combineInterval >= 150)
+            if (combineInterval >= 50)
             {
                 combineInterval = 0;
                 yield return null;
@@ -401,7 +403,7 @@ public class CombinedMeshManager
                 }
             }
             combineInterval++;
-            if (combineInterval >= 150)
+            if (combineInterval >= 50)
             {
                 combineInterval = 0;
                 yield return null;
@@ -425,7 +427,7 @@ public class CombinedMeshManager
                 }
             }
             combineInterval++;
-            if (combineInterval >= 150)
+            if (combineInterval >= 50)
             {
                 combineInterval = 0;
                 yield return null;
@@ -442,7 +444,7 @@ public class CombinedMeshManager
                 SpawnDummy(realObject, dummyObject, gameManager.ironHolder, "Iron Dummy");
                 ironCount++;
                 combineInterval++;
-                if (combineInterval >= 150)
+                if (combineInterval >= 50)
                 {
                     combineInterval = 0;
                     yield return null;
@@ -462,7 +464,7 @@ public class CombinedMeshManager
                 SpawnDummy(realObject, dummyObject, gameManager.steelHolder, "Steel Dummy");
                 steelCount++;
                 combineInterval++;
-                if (combineInterval >= 150)
+                if (combineInterval >= 50)
                 {
                     combineInterval = 0;
                     yield return null;
@@ -482,7 +484,7 @@ public class CombinedMeshManager
                 SpawnDummy(realObject, dummyObject, gameManager.glassHolder, "Glass Dummy");
                 glassCount++;
                 combineInterval++;
-                if (combineInterval >= 150)
+                if (combineInterval >= 50)
                 {
                     combineInterval = 0;
                     yield return null;
@@ -502,7 +504,7 @@ public class CombinedMeshManager
                 SpawnDummy(realObject, dummyObject, gameManager.brickHolder, "Brick Dummy");
                 brickCount++;
                 combineInterval++;
-                if (combineInterval >= 150)
+                if (combineInterval >= 50)
                 {
                     combineInterval = 0;
                     yield return null;
@@ -578,7 +580,7 @@ public class CombinedMeshManager
             {
                 CreateCombinedMesh(holder);
                 ironCombineInterval++;
-                if (ironCombineInterval >= 150)
+                if (ironCombineInterval >= 50)
                 {
                     yield return null;
                     ironCombineInterval = 0;
@@ -594,7 +596,7 @@ public class CombinedMeshManager
             {
                 CreateCombinedMesh(holder);
                 glassCombineInterval++;
-                if (glassCombineInterval >= 150)
+                if (glassCombineInterval >= 50)
                 {
                     yield return null;
                     glassCombineInterval = 0;
@@ -610,7 +612,7 @@ public class CombinedMeshManager
             {
                 CreateCombinedMesh(holder);
                 steelCombineInterval++;
-                if (steelCombineInterval >= 150)
+                if (steelCombineInterval >= 50)
                 {
                     yield return null;
                     steelCombineInterval = 0;
@@ -626,7 +628,7 @@ public class CombinedMeshManager
             {
                 CreateCombinedMesh(holder);
                 brickCombineInterval++;
-                if (brickCombineInterval >= 150)
+                if (brickCombineInterval >= 50)
                 {
                     yield return null;
                     brickCombineInterval = 0;
@@ -643,7 +645,7 @@ public class CombinedMeshManager
             {
                 Object.Destroy(h.gameObject);
                 dummyDestroyInterval++;
-                if (dummyDestroyInterval >= 150)
+                if (dummyDestroyInterval >= 50)
                 {
                     yield return null;
                     dummyDestroyInterval = 0;
