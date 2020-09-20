@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
 
 public class BlockInteraction
 {
@@ -96,24 +97,45 @@ public class BlockInteraction
             if (Input.GetKeyDown(KeyCode.Mouse0))
             {
                 playerController.paintGun.GetComponent<AudioSource>().Play();
-                playerController.objectInSight.GetComponent<Renderer>().material.color = new Color(playerController.paintRed, playerController.paintGreen, playerController.paintBlue);
                 if (playerController.objectInSight.name.Equals("brickHolder(Clone)"))
                 {
-                    FileBasedPrefs.SetBool(playerController.stateManager.WorldName + "brickHolder" + playerController.objectInSight.GetComponent<MeshPainter>().ID + "painted", true);
+                    interactionController.paintingCoroutine = interactionController.StartCoroutine(PaintMesh(playerController.gameManager.bricks, "brickHolder"));
                 }
                 if (playerController.objectInSight.name.Equals("glassHolder(Clone)"))
                 {
-                    FileBasedPrefs.SetBool(playerController.stateManager.WorldName + "glassHolder" + playerController.objectInSight.GetComponent<MeshPainter>().ID + "painted", true);
+                    interactionController.paintingCoroutine = interactionController.StartCoroutine(PaintMesh(playerController.gameManager.glass, "glassHolder"));
                 }
                 if (playerController.objectInSight.name.Equals("ironHolder(Clone)"))
                 {
-                    FileBasedPrefs.SetBool(playerController.stateManager.WorldName + "ironHolder" + playerController.objectInSight.GetComponent<MeshPainter>().ID + "painted", true);
+                    interactionController.paintingCoroutine = interactionController.StartCoroutine(PaintMesh(playerController.gameManager.ironBlocks, "ironHolder"));
                 }
                 if (playerController.objectInSight.name.Equals("steelHolder(Clone)"))
                 {
-                    FileBasedPrefs.SetBool(playerController.stateManager.WorldName + "steelHolder" + playerController.objectInSight.GetComponent<MeshPainter>().ID + "painted", true);
+                    interactionController.paintingCoroutine = interactionController.StartCoroutine(PaintMesh(playerController.gameManager.steel, "steelHolder"));
                 }
             }
+        }
+    }
+
+    private IEnumerator PaintMesh(GameObject[] holders, string name)
+    {
+        foreach (GameObject holder in holders)
+        {
+            Color color = new Color(playerController.paintRed, playerController.paintGreen, playerController.paintBlue);
+            holder.GetComponent<Renderer>().material.color = color;
+            int blockPaintingInterval = 0;
+            Transform[] blocks = holder.GetComponentsInChildren<Transform>(true);
+            foreach (Transform T in blocks)
+            {
+                T.gameObject.GetComponent<Renderer>().material.color = color;
+                blockPaintingInterval++;
+                if (blockPaintingInterval >= 50)
+                {
+                    blockPaintingInterval = 0;
+                    yield return null;
+                }
+            }
+            FileBasedPrefs.SetBool(playerController.stateManager.WorldName + name + holder.GetComponent<MeshPainter>().ID + "painted", true);
         }
     }
 }

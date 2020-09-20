@@ -91,10 +91,18 @@ public class BuildController : MonoBehaviour
                         buildObjectMaterial.color = distance > 40 ? Color.red : Color.white;
                         if (hit.transform.gameObject.tag == "Built")
                         {
+                            if (autoAxis == true)
+                            {
+                                AutoSelectBuildAxis(hit);
+                            }
                             SetupBuildAxis(hit);
                         }
                         else
                         {
+                            if (autoAxis == true)
+                            {
+                                playerController.cubeloc = "up";
+                            }
                             SetupFreePlacement(hit);
                         }
                     }
@@ -103,10 +111,6 @@ public class BuildController : MonoBehaviour
                         if (buildHit.collider.gameObject.tag != "CombinedMesh")
                         {
                             playerController.buildObject.GetComponent<MeshRenderer>().material.color = Color.white;
-                            if (autoAxis == true)
-                            {
-                                AutoSelectBuildAxis(buildHit);
-                            }
                             if (cInput.GetKeyDown("Place Object"))
                             {
                                 if (blockDictionary.machineDictionary.ContainsKey(playerController.buildType))
@@ -397,37 +401,38 @@ public class BuildController : MonoBehaviour
                         foundItems = true;
                         int h = 0;
                         Vector3 origin = playerController.buildObject.transform.position;
+                        string direction = playerController.cubeloc;
                         Quaternion rotation = playerController.buildObject.transform.rotation;
                         Vector3 multiBuildPlacement = playerController.buildObject.transform.position;
+                        slot.amountInSlot -= playerController.buildMultiplier;
                         for (int i = 0; i < playerController.buildMultiplier; i++)
                         {
-                            if (playerController.cubeloc == "up")
+                            if (direction == "up")
                             {
                                 multiBuildPlacement = new Vector3(origin.x, origin.y + h, origin.z);
                             }
-                            if (playerController.cubeloc == "down")
+                            if (direction == "down")
                             {
                                 multiBuildPlacement = new Vector3(origin.x, origin.y - h, origin.z);
                             }
-                            if (playerController.cubeloc == "left")
+                            if (direction == "left")
                             {
                                 multiBuildPlacement = new Vector3(origin.x + h, origin.y, origin.z);
                             }
-                            if (playerController.cubeloc == "right")
+                            if (direction == "right")
                             {
                                 multiBuildPlacement = new Vector3(origin.x - h, origin.y, origin.z);
                             }
-                            if (playerController.cubeloc == "front")
+                            if (direction == "front")
                             {
                                 multiBuildPlacement = new Vector3(origin.x, origin.y, origin.z + h);
                             }
-                            if (playerController.cubeloc == "back")
+                            if (direction == "back")
                             {
                                 multiBuildPlacement = new Vector3(origin.x, origin.y, origin.z - h);
                             }
                             h += 5;
                             Instantiate(blockDictionary.blockDictionary[type], multiBuildPlacement, rotation);
-                            slot.amountInSlot -= 1;
                             playerController.builderSound.Play();
                             playerController.destroyTimer = 0;
                             playerController.buildTimer = 0;

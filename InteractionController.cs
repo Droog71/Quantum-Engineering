@@ -7,6 +7,7 @@ public class InteractionController : MonoBehaviour
     private MachineInteraction machineInteraction;
     private StorageInteraction storageInteraction;
     private BlockInteraction blockInteraction;
+    public Coroutine paintingCoroutine;
 
     //! Called by unity engine on start up to initialize variables.
     public void Start()
@@ -192,6 +193,7 @@ public class InteractionController : MonoBehaviour
         {
             playerController.playerInventory.AddItem(type, 1);
             Destroy(playerController.objectInSight);
+            playerController.destroyTimer = 0;
             playerController.PlayCraftingSound();
         }
         else
