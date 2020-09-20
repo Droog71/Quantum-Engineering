@@ -9,7 +9,11 @@ public class MeshPainter : MonoBehaviour
     //! Called by unity engine on start up to initialize variables.
     public void Start()
     {
-        string worldName = GameObject.Find("GameManager").GetComponent<StateManager>().WorldName;
+        string worldName = FindObjectOfType<StateManager>().WorldName;
+        bool paintedIron = false;
+        bool paintedGlass = false;
+        bool paintedBrick = false;
+        bool paintedSteel = false;
         if (gameObject.name.Equals("ironHolder(Clone)"))
         {
             if (FileBasedPrefs.GetBool(worldName + "ironHolder" + ID + "painted") == true)
@@ -18,10 +22,16 @@ public class MeshPainter : MonoBehaviour
                 float g = FileBasedPrefs.GetFloat(worldName + "ironHolder" + ID + "Green");
                 float b = FileBasedPrefs.GetFloat(worldName + "ironHolder" + ID + "Blue");
                 GetComponent<Renderer>().material.color = new Color(r, g, b);
-                Transform[] blocks = gameObject.GetComponentsInChildren<Transform>(true);
-                foreach (Transform T in blocks)
+                if (paintedIron == false)
                 {
-                    T.gameObject.GetComponent<Renderer>().material.color = new Color(r, g, b);
+                    Transform[] allBuiltObjects = FindObjectOfType<GameManager>().builtObjects.GetComponentsInChildren<Transform>(true);
+                    foreach (Transform block in allBuiltObjects)
+                    {
+                        if (block.GetComponent<IronBlock>() != null)
+                        {
+                            block.GetComponent<Renderer>().material.color = new Color(r, g, b);
+                        }
+                    }
                 }
             }
         }
@@ -33,10 +43,16 @@ public class MeshPainter : MonoBehaviour
                 float g = FileBasedPrefs.GetFloat(worldName + "steelHolder" + ID + "Green");
                 float b = FileBasedPrefs.GetFloat(worldName + "steelHolder" + ID + "Blue");
                 GetComponent<Renderer>().material.color = new Color(r, g, b);
-                Transform[] blocks = gameObject.GetComponentsInChildren<Transform>(true);
-                foreach (Transform T in blocks)
+                if (paintedSteel == false)
                 {
-                    T.gameObject.GetComponent<Renderer>().material.color = new Color(r, g, b);
+                    Transform[] allBuiltObjects = FindObjectOfType<GameManager>().builtObjects.GetComponentsInChildren<Transform>(true);
+                    foreach (Transform block in allBuiltObjects)
+                    {
+                        if (block.GetComponent<Steel>() != null)
+                        {
+                            block.GetComponent<Renderer>().material.color = new Color(r, g, b);
+                        }
+                    }
                 }
             }
         }
@@ -48,10 +64,16 @@ public class MeshPainter : MonoBehaviour
                 float g = FileBasedPrefs.GetFloat(worldName + "brickHolder" + ID + "Green");
                 float b = FileBasedPrefs.GetFloat(worldName + "brickHolder" + ID + "Blue");
                 GetComponent<Renderer>().material.color = new Color(r, g, b);
-                Transform[] blocks = gameObject.GetComponentsInChildren<Transform>(true);
-                foreach (Transform T in blocks)
+                if (paintedBrick == false)
                 {
-                    T.gameObject.GetComponent<Renderer>().material.color = new Color(r, g, b);
+                    Transform[] allBuiltObjects = FindObjectOfType<GameManager>().builtObjects.GetComponentsInChildren<Transform>(true);
+                    foreach (Transform block in allBuiltObjects)
+                    {
+                        if (block.GetComponent<Brick>() != null)
+                        {
+                            block.GetComponent<Renderer>().material.color = new Color(r, g, b);
+                        }
+                    }
                 }
             }
        }
@@ -63,10 +85,16 @@ public class MeshPainter : MonoBehaviour
                 float g = FileBasedPrefs.GetFloat(worldName + "glassHolder" + ID + "Green");
                 float b = FileBasedPrefs.GetFloat(worldName + "glassHolder" + ID + "Blue");
                 GetComponent<Renderer>().material.color = new Color(r, g, b);
-                Transform[] blocks = gameObject.GetComponentsInChildren<Transform>(true);
-                foreach (Transform T in blocks)
+                if (paintedGlass == false)
                 {
-                    T.gameObject.GetComponent<Renderer>().material.color = new Color(r, g, b);
+                    Transform[] allBuiltObjects = FindObjectOfType<GameManager>().builtObjects.GetComponentsInChildren<Transform>(true);
+                    foreach (Transform block in allBuiltObjects)
+                    {
+                        if (block.GetComponent<Glass>() != null)
+                        {
+                            block.GetComponent<Renderer>().material.color = new Color(r, g, b);
+                        }
+                    }
                 }
             }
         }

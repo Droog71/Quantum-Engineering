@@ -78,7 +78,7 @@ public class CombinedMeshManager
                 if (i != null)
                 {
                     float distance = Vector3.Distance(i.position, target);
-                    if (distance < 40 && type.Equals("all"))
+                    if (distance < 80 && type.Equals("all"))
                     {
                         i.gameObject.SetActive(true);
                         i.parent = gameManager.builtObjects.transform;
@@ -115,7 +115,7 @@ public class CombinedMeshManager
                 if (g != null)
                 {
                     float distance = Vector3.Distance(g.position, target);
-                    if (distance < 40 && type.Equals("all"))
+                    if (distance < 80 && type.Equals("all"))
                     {
                         g.gameObject.SetActive(true);
                         g.parent = gameManager.builtObjects.transform;
@@ -152,7 +152,7 @@ public class CombinedMeshManager
                 if (s != null)
                 {
                     float distance = Vector3.Distance(s.position, target);
-                    if (distance < 40 && type.Equals("all"))
+                    if (distance < 80 && type.Equals("all"))
                     {
                         s.gameObject.SetActive(true);
                         s.parent = gameManager.builtObjects.transform;
@@ -189,7 +189,7 @@ public class CombinedMeshManager
                 if (b != null)
                 {
                     float distance = Vector3.Distance(b.position, target);
-                    if (distance < 40 && type.Equals("all"))
+                    if (distance < 80 && type.Equals("all"))
                     {
                         b.gameObject.SetActive(true);
                         b.parent = gameManager.builtObjects.transform;

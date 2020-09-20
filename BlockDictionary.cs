@@ -10,7 +10,6 @@ public class BlockDictionary
     private PlayerController playerController;
     public Dictionary<string, GameObject> machineDictionary;
     public Dictionary<string, GameObject> blockDictionary;
-    public Type[] objectTypes;
 
     public BlockDictionary(PlayerController playerController)
     {
@@ -144,39 +143,6 @@ public class BlockDictionary
             { "Turret", playerController.turret },
             { "Universal Conduit", playerController.universalConduit },
             { "Universal Extractor", playerController.universalExtractor }
-        };
-
-        objectTypes = new Type[] 
-        { 
-            typeof(AirLock), 
-            typeof(AlloySmelter), 
-            typeof(Auger),  
-            typeof(AutoCrafter), 
-            typeof(Brick), 
-            typeof(DarkMatterCollector), 
-            typeof(DarkMatterConduit), 
-            typeof(ElectricLight),
-            typeof(Extruder), 
-            typeof(GearCutter), 
-            typeof(PowerSource), 
-            typeof(Glass),
-            typeof(HeatExchanger),
-            typeof(UniversalResource),
-            typeof(NuclearReactor),
-            typeof(PowerConduit),
-            typeof(Press),
-            typeof(RailCart),
-            typeof(RailCartHub),
-            typeof(PowerSource),
-            typeof(Retriever),
-            typeof(Smelter),
-            typeof(PowerSource),
-            typeof(Steel),
-            typeof(StorageComputer),
-            typeof(InventoryManager),
-            typeof(Turret),
-            typeof(UniversalConduit),
-            typeof(UniversalExtractor)
         };
     }
 }
