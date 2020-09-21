@@ -55,14 +55,14 @@ public class GameManager : MonoBehaviour
     //! Called by unity engine on start up to initialize variables.
     public void Start()
     {
-        ironBlocks = new GameObject[50];
-        glass = new GameObject[50];
-        steel = new GameObject[50];
-        bricks = new GameObject[50];
-        ironBlocksDummy = new GameObject[50];
-        glassDummy = new GameObject[50];
-        steelDummy = new GameObject[50];
-        bricksDummy = new GameObject[50];
+        ironBlocks = new GameObject[10];
+        glass = new GameObject[10];
+        steel = new GameObject[10];
+        bricks = new GameObject[10];
+        ironBlocksDummy = new GameObject[10];
+        glassDummy = new GameObject[10];
+        steelDummy = new GameObject[10];
+        bricksDummy = new GameObject[10];
         int ironCount = 0;
         int glassCount = 0;
         int steelCount = 0;

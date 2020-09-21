@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class CombinedMeshManager
@@ -344,8 +345,22 @@ public class CombinedMeshManager
             if (block != null)
             {
                 Transform[] blocks = gameManager.ironBlocks[ironCount].GetComponentsInChildren<Transform>(true);
-                if (blocks.Length >= 300)
+                if (blocks.Length >= 500)
                 {
+                    if (ironCount == gameManager.ironBlocks.Length - 1)
+                    {
+                        List<GameObject> ironList = gameManager.ironBlocks.ToList();
+                        GameObject ironHolder = Object.Instantiate(gameManager.ironHolder, gameManager.transform.position, gameManager.transform.rotation);
+                        ironHolder.transform.parent = gameManager.builtObjects.transform;
+                        ironHolder.GetComponent<MeshPainter>().ID = ironCount + 1;
+                        ironHolder.SetActive(false);
+                        ironList.Add(ironHolder);
+                        gameManager.ironBlocks = ironList.ToArray();
+                        List<GameObject> ironDummyList = gameManager.ironBlocksDummy.ToList();
+                        GameObject newDummy = new GameObject();
+                        ironDummyList.Add(newDummy);
+                        gameManager.ironBlocksDummy = ironDummyList.ToArray();
+                    }
                     ironCount++;
                 }
                 if (block.GetComponent<PhysicsHandler>().IsSupported())
@@ -368,8 +383,22 @@ public class CombinedMeshManager
             if (block != null)
             {
                 Transform[] blocks = gameManager.glass[glassCount].GetComponentsInChildren<Transform>(true);
-                if (blocks.Length >= 300)
+                if (blocks.Length >= 500)
                 {
+                    if (glassCount == gameManager.glass.Length - 1)
+                    {
+                        List<GameObject> glassList = gameManager.glass.ToList();
+                        GameObject glassHolder = Object.Instantiate(gameManager.glassHolder, gameManager.transform.position, gameManager.transform.rotation);
+                        glassHolder.transform.parent = gameManager.builtObjects.transform;
+                        glassHolder.GetComponent<MeshPainter>().ID = glassCount + 1;
+                        glassHolder.SetActive(false);
+                        glassList.Add(glassHolder);
+                        gameManager.glass = glassList.ToArray();
+                        List<GameObject> glassDummyList = gameManager.glassDummy.ToList();
+                        GameObject newDummy = new GameObject();
+                        glassDummyList.Add(newDummy);
+                        gameManager.glassDummy = glassDummyList.ToArray();
+                    }
                     glassCount++;
                 }
                 if (block.GetComponent<PhysicsHandler>().IsSupported())
@@ -392,8 +421,22 @@ public class CombinedMeshManager
             if (block != null)
             {
                 Transform[] blocks = gameManager.steel[steelCount].GetComponentsInChildren<Transform>(true);
-                if (blocks.Length >= 300)
+                if (blocks.Length >= 500)
                 {
+                    if (steelCount == gameManager.steel.Length - 1)
+                    {
+                        List<GameObject> steelList = gameManager.steel.ToList();
+                        GameObject steelHolder = Object.Instantiate(gameManager.steelHolder, gameManager.transform.position, gameManager.transform.rotation);
+                        steelHolder.transform.parent = gameManager.builtObjects.transform;
+                        steelHolder.GetComponent<MeshPainter>().ID = steelCount + 1;
+                        steelHolder.SetActive(false);
+                        steelList.Add(steelHolder);
+                        gameManager.steel = steelList.ToArray();
+                        List<GameObject> steelDummyList = gameManager.steelDummy.ToList();
+                        GameObject newDummy = new GameObject();
+                        steelDummyList.Add(newDummy);
+                        gameManager.steelDummy = steelDummyList.ToArray();
+                    }
                     steelCount++;
                 }
                 if (block.GetComponent<PhysicsHandler>().IsSupported())
@@ -416,8 +459,22 @@ public class CombinedMeshManager
             if (block != null)
             {
                 Transform[] blocks = gameManager.bricks[brickCount].GetComponentsInChildren<Transform>(true);
-                if (blocks.Length >= 300)
+                if (blocks.Length >= 500)
                 {
+                    if (brickCount == gameManager.bricks.Length - 1)
+                    {
+                        List<GameObject> brickList = gameManager.bricks.ToList();
+                        GameObject brickHolder = Object.Instantiate(gameManager.brickHolder, gameManager.transform.position, gameManager.transform.rotation);
+                        brickHolder.transform.parent = gameManager.builtObjects.transform;
+                        brickHolder.GetComponent<MeshPainter>().ID = brickCount + 1;
+                        brickHolder.SetActive(false);
+                        brickList.Add(brickHolder);
+                        gameManager.bricks = brickList.ToArray();
+                        List<GameObject> bricksDummyList = gameManager.bricksDummy.ToList();
+                        GameObject newDummy = new GameObject();
+                        bricksDummyList.Add(newDummy);
+                        gameManager.bricksDummy = bricksDummyList.ToArray();
+                    }
                     brickCount++;
                 }
                 if (block.GetComponent<PhysicsHandler>().IsSupported())
@@ -436,13 +493,11 @@ public class CombinedMeshManager
 
         if (ironBlockCount > 0)
         {
-            ironCount = 0;
-            foreach (GameObject obj in gameManager.ironBlocks)
+            for (int i = 0; i < gameManager.ironBlocks.Length; i++)
             {
                 GameObject realObject = gameManager.ironBlocks[ironCount];
                 GameObject dummyObject = gameManager.ironBlocksDummy[ironCount];
                 SpawnDummy(realObject, dummyObject, gameManager.ironHolder, "Iron Dummy");
-                ironCount++;
                 combineInterval++;
                 if (combineInterval >= 50)
                 {
@@ -456,13 +511,11 @@ public class CombinedMeshManager
 
         if (steelBlockCount > 0)
         {
-            steelCount = 0;
-            foreach (GameObject obj in gameManager.steel)
+            for (int i = 0; i < gameManager.steel.Length; i++)
             {
                 GameObject realObject = gameManager.steel[steelCount];
                 GameObject dummyObject = gameManager.steelDummy[steelCount];
                 SpawnDummy(realObject, dummyObject, gameManager.steelHolder, "Steel Dummy");
-                steelCount++;
                 combineInterval++;
                 if (combineInterval >= 50)
                 {
@@ -476,13 +529,11 @@ public class CombinedMeshManager
 
         if (glassBlockCount > 0)
         {
-            glassCount = 0;
-            foreach (GameObject obj in gameManager.glass)
+            for (int i = 0; i < gameManager.glass.Length; i++)
             {
                 GameObject realObject = gameManager.glass[glassCount];
                 GameObject dummyObject = gameManager.glassDummy[glassCount];
                 SpawnDummy(realObject, dummyObject, gameManager.glassHolder, "Glass Dummy");
-                glassCount++;
                 combineInterval++;
                 if (combineInterval >= 50)
                 {
@@ -496,13 +547,11 @@ public class CombinedMeshManager
 
         if (brickBlockCount > 0)
         {
-            brickCount = 0;
-            foreach (GameObject obj in gameManager.bricks)
+            for (int i = 0; i < gameManager.bricks.Length; i++)
             {
                 GameObject realObject = gameManager.bricks[brickCount];
                 GameObject dummyObject = gameManager.bricksDummy[brickCount];
                 SpawnDummy(realObject, dummyObject, gameManager.brickHolder, "Brick Dummy");
-                brickCount++;
                 combineInterval++;
                 if (combineInterval >= 50)
                 {
@@ -655,4 +704,5 @@ public class CombinedMeshManager
         gameManager.working = false;
     }
 }
+
 
