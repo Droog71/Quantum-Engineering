@@ -63,7 +63,7 @@ public class BuildController : MonoBehaviour
                 else
                 {
                     float distance = Vector3.Distance(transform.position, playerController.buildStartPosition);
-                    if (distance > 60)
+                    if (distance > gameManager.chunkSize - 40)
                     {
                         if (gameManager.working == false)
                         {
@@ -84,11 +84,11 @@ public class BuildController : MonoBehaviour
                 }
                 else
                 {
-                    if (Physics.Raycast(Camera.main.gameObject.transform.position, Camera.main.gameObject.transform.forward, out RaycastHit hit, 100))
+                    if (Physics.Raycast(Camera.main.gameObject.transform.position, Camera.main.gameObject.transform.forward, out RaycastHit hit, gameManager.chunkSize))
                     {
                         float distance = Vector3.Distance(transform.position, playerController.buildObject.transform.position);
                         Material buildObjectMaterial = playerController.buildObject.GetComponent<MeshRenderer>().material;
-                        buildObjectMaterial.color = distance > 60 ? Color.red : Color.white;
+                        buildObjectMaterial.color = distance > gameManager.chunkSize - 40 ? Color.red : Color.white;
                         if (hit.transform.gameObject.tag == "Built")
                         {
                             if (autoAxis == true)
@@ -106,7 +106,7 @@ public class BuildController : MonoBehaviour
                             SetupFreePlacement(hit);
                         }
                     }
-                    if (Physics.Raycast(Camera.main.gameObject.transform.position, Camera.main.gameObject.transform.forward, out RaycastHit buildHit, 60))
+                    if (Physics.Raycast(Camera.main.gameObject.transform.position, Camera.main.gameObject.transform.forward, out RaycastHit buildHit, gameManager.chunkSize - 40))
                     {
                         if (buildHit.collider.gameObject.tag != "CombinedMesh")
                         {

@@ -483,6 +483,7 @@ public class PlayerGUI : MonoBehaviour
                 GUI.Label(guiCoordinates.sliderLabel4Rect, "FOV");
                 GUI.Label(guiCoordinates.sliderLabel5Rect, "Draw Distance");
                 GUI.Label(guiCoordinates.sliderLabel6Rect, "Fog Density");
+                GUI.Label(guiCoordinates.sliderLabel7Rect, "Chunk Size");
 
                 MSACC_SettingsCameraFirstPerson csSensitivity = GetComponent<MSCameraController>().CameraSettings.firstPerson;
                 csSensitivity.sensibilityX = GUI.HorizontalSlider(guiCoordinates.optionsButton4Rect, csSensitivity.sensibilityX, 0, 10);
@@ -496,8 +497,10 @@ public class PlayerGUI : MonoBehaviour
 
                 RenderSettings.fogDensity = GUI.HorizontalSlider(guiCoordinates.optionsButton9Rect, RenderSettings.fogDensity, 0.00025f, 0.025f);
 
+                gameManager.chunkSize = (int)GUI.HorizontalSlider(guiCoordinates.optionsButton10Rect, gameManager.chunkSize, 100, 500);
+
                 string fogDisplay = RenderSettings.fog == true ? "ON" : "OFF";
-                if (GUI.Button(guiCoordinates.optionsButton10Rect, "Fog: " + fogDisplay))
+                if (GUI.Button(guiCoordinates.optionsButton11Rect, "Fog: " + fogDisplay))
                 {
                     RenderSettings.fog = !RenderSettings.fog;
                     PlayerPrefsX.SetPersistentBool("blockPhysics", gameManager.blockPhysics);
@@ -505,7 +508,7 @@ public class PlayerGUI : MonoBehaviour
                 }
 
                 string blockPhysicsDisplay = gameManager.blockPhysics == true ? "ON" : "OFF";
-                if (GUI.Button(guiCoordinates.optionsButton11Rect, "Block Physics: "+ blockPhysicsDisplay))
+                if (GUI.Button(guiCoordinates.optionsButton12Rect, "Block Physics: "+ blockPhysicsDisplay))
                 {
                     gameManager.blockPhysics = !gameManager.blockPhysics;
                     PlayerPrefsX.SetPersistentBool("blockPhysics", gameManager.blockPhysics);
@@ -513,13 +516,13 @@ public class PlayerGUI : MonoBehaviour
                 }
 
                 string hazardsEnabledDisplay = gameManager.hazardsEnabled == true ? "ON" : "OFF";
-                if (GUI.Button(guiCoordinates.optionsButton12Rect, "Hazards: " + hazardsEnabledDisplay))
+                if (GUI.Button(guiCoordinates.optionsButton13Rect, "Hazards: " + hazardsEnabledDisplay))
                 {
                     gameManager.hazardsEnabled = !gameManager.hazardsEnabled;
                     PlayerPrefsX.SetPersistentBool("hazardsEnabled", gameManager.hazardsEnabled);
                     playerController.PlayButtonSound();
                 }
-                if (GUI.Button(guiCoordinates.optionsButton13Rect, "BACK"))
+                if (GUI.Button(guiCoordinates.optionsButton14Rect, "BACK"))
                 {
                     playerController.ApplySettings();
                     playerController.optionsGUIopen = false;

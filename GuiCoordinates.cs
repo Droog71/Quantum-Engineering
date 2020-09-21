@@ -214,12 +214,14 @@ public class GuiCoordinates
     public Rect optionsButton11Rect;
     public Rect optionsButton12Rect;
     public Rect optionsButton13Rect;
+    public Rect optionsButton14Rect;
     public Rect sliderLabel1Rect;
     public Rect sliderLabel2Rect;
     public Rect sliderLabel3Rect;
     public Rect sliderLabel4Rect;
     public Rect sliderLabel5Rect;
     public Rect sliderLabel6Rect;
+    public Rect sliderLabel7Rect;
     public Rect schematicCloseRect;
 
     //HELP MENUS
@@ -511,7 +513,7 @@ public class GuiCoordinates
         buildItemCountRect = new Rect((ScreenWidth * 0.92f), (ScreenHeight * 0.241f), (ScreenWidth * 0.05f), (ScreenHeight * 0.2f));
 
         //OPTIONS MENU
-        optionsMenuBackgroundRect = new Rect((ScreenWidth * 0.4f), (ScreenHeight * 0.04f), (ScreenWidth * 0.2f), (ScreenHeight * 0.86f));
+        optionsMenuBackgroundRect = new Rect((ScreenWidth * 0.4f), (ScreenHeight * 0.04f), (ScreenWidth * 0.2f), (ScreenHeight * 0.94f));
         optionsButton1Rect = new Rect((ScreenWidth * 0.43f), (ScreenHeight * 0.08f), (ScreenWidth * 0.14f), (ScreenHeight * 0.05f));
         optionsButton2Rect = new Rect((ScreenWidth * 0.43f), (ScreenHeight * 0.14f), (ScreenWidth * 0.14f), (ScreenHeight * 0.05f));
         optionsButton3Rect = new Rect((ScreenWidth * 0.43f), (ScreenHeight * 0.20f), (ScreenWidth * 0.14f), (ScreenHeight * 0.05f));
@@ -525,6 +527,7 @@ public class GuiCoordinates
         optionsButton11Rect = new Rect((ScreenWidth * 0.43f), (ScreenHeight * 0.68f), (ScreenWidth * 0.14f), (ScreenHeight * 0.05f));
         optionsButton12Rect = new Rect((ScreenWidth * 0.43f), (ScreenHeight * 0.74f), (ScreenWidth * 0.14f), (ScreenHeight * 0.05f));
         optionsButton13Rect = new Rect((ScreenWidth * 0.43f), (ScreenHeight * 0.80f), (ScreenWidth * 0.14f), (ScreenHeight * 0.05f));
+        optionsButton14Rect = new Rect((ScreenWidth * 0.43f), (ScreenHeight * 0.86f), (ScreenWidth * 0.14f), (ScreenHeight * 0.05f));
 
         videoMenuBackgroundRect = new Rect((ScreenWidth * 0.4f), (ScreenHeight * 0.22f), (ScreenWidth * 0.2f), (ScreenHeight * 0.67f));
         schematicsMenuBackgroundRect = new Rect((ScreenWidth * 0.4f), (ScreenHeight * 0.22f), (ScreenWidth * 0.2f), (ScreenHeight * 0.55f));
@@ -545,6 +548,7 @@ public class GuiCoordinates
         sliderLabel4Rect = new Rect((ScreenWidth * 0.43f), (ScreenHeight * 0.41f), (ScreenWidth * 0.14f), (ScreenHeight * 0.05f));
         sliderLabel5Rect = new Rect((ScreenWidth * 0.43f), (ScreenHeight * 0.47f), (ScreenWidth * 0.14f), (ScreenHeight * 0.05f));
         sliderLabel6Rect = new Rect((ScreenWidth * 0.43f), (ScreenHeight * 0.53f), (ScreenWidth * 0.14f), (ScreenHeight * 0.05f));
+        sliderLabel7Rect = new Rect((ScreenWidth * 0.43f), (ScreenHeight * 0.59f), (ScreenWidth * 0.14f), (ScreenHeight * 0.05f));
 
         //MACHINE INFO HUD
         infoRectBG = new Rect(0, (ScreenHeight * 0.60f), (ScreenWidth * 0.30f), (ScreenHeight * 0.40f));

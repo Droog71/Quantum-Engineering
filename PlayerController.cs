@@ -475,6 +475,7 @@ public class PlayerController : MonoBehaviour
         PlayerPrefs.SetFloat("volume", GetComponent<MSCameraController>().cameras[0].volume);
         PlayerPrefsX.SetPersistentBool("fogEnabled", RenderSettings.fog);
         PlayerPrefs.SetFloat("fogDensity", RenderSettings.fogDensity);
+        PlayerPrefs.SetInt("chunkSize", gameManager.chunkSize);
         PlayerPrefs.Save();
     }
 

@@ -25,7 +25,7 @@ public class InteractionController : MonoBehaviour
         {
         // Raycast and associated data for interacting with machines and other objects.
         Transform camPos = Camera.main.gameObject.transform;
-        if (Physics.Raycast(camPos.position, camPos.forward, out playerController.playerLookHit, 40))
+        if (Physics.Raycast(camPos.position, camPos.forward, out playerController.playerLookHit, playerController.gameManager.chunkSize - 40))
         {
             if (playerController.inventoryOpen == false && playerController.escapeMenuOpen == false && playerController.tabletOpen == false)
             {

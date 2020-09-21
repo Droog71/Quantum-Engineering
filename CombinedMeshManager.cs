@@ -61,178 +61,165 @@ public class CombinedMeshManager
             yield return null;
         }
 
-        int ironCount = 0;
-        int steelCount = 0;
-        int brickCount = 0;
-        int glassCount = 0;
         int totalIron = 0;
         int totalBrick = 0;
         int totalGlass = 0;
         int totalSteel = 0;
 
         int ironSeprationInterval = 0;
-        foreach (GameObject obj in gameManager.ironBlocks)
+        for (int i = 0; i < gameManager.ironBlocks.Length; i++)
         {
-            Transform[] blocks = gameManager.ironBlocks[ironCount].GetComponentsInChildren<Transform>(true);
-            foreach (Transform i in blocks)
+            Transform[] blocks = gameManager.ironBlocks[i].GetComponentsInChildren<Transform>(true);
+            foreach (Transform ironBlock in blocks)
             {
-                if (i != null)
+                if (ironBlock != null)
                 {
-                    float distance = Vector3.Distance(i.position, target);
-                    if (distance < 80 && type.Equals("all"))
+                    float distance = Vector3.Distance(ironBlock.position, target);
+                    if (distance < gameManager.chunkSize - 20 && type.Equals("all"))
                     {
-                        i.gameObject.SetActive(true);
-                        i.parent = gameManager.builtObjects.transform;
+                        ironBlock.gameObject.SetActive(true);
+                        ironBlock.parent = gameManager.builtObjects.transform;
                         totalIron++;
                     }
                     if (distance < 20 && type.Equals("iron"))
                     {
-                        i.gameObject.SetActive(true);
-                        i.parent = gameManager.builtObjects.transform; ;
+                        ironBlock.gameObject.SetActive(true);
+                        ironBlock.parent = gameManager.builtObjects.transform;
                         totalIron++;
                     }
                     if (distance < 10 && type.Equals("iron"))
                     {
-                        i.gameObject.GetComponent<PhysicsHandler>().Explode();
+                        ironBlock.gameObject.GetComponent<PhysicsHandler>().Explode();
                         totalIron++;
                     }
                 }
-            }
-            ironCount++;
-            ironSeprationInterval++;
-            if (ironSeprationInterval >= 50)
-            {
-                yield return null;
-                ironSeprationInterval = 0;
+                ironSeprationInterval++;
+                if (ironSeprationInterval >= 250)
+                {
+                    yield return null;
+                    ironSeprationInterval = 0;
+                }
             }
         }
 
         int glassSeprationInterval = 0;
-        foreach (GameObject obj in gameManager.glass)
+        for (int i = 0; i < gameManager.glass.Length; i++)
         {
-            Transform[] glassBlocks = gameManager.glass[glassCount].GetComponentsInChildren<Transform>(true);
-            foreach (Transform g in glassBlocks)
+            Transform[] glassBlocks = gameManager.glass[i].GetComponentsInChildren<Transform>(true);
+            foreach (Transform glassBlock in glassBlocks)
             {
-                if (g != null)
+                if (glassBlock != null)
                 {
-                    float distance = Vector3.Distance(g.position, target);
-                    if (distance < 80 && type.Equals("all"))
+                    float distance = Vector3.Distance(glassBlock.position, target);
+                    if (distance < gameManager.chunkSize - 20 && type.Equals("all"))
                     {
-                        g.gameObject.SetActive(true);
-                        g.parent = gameManager.builtObjects.transform;
+                        glassBlock.gameObject.SetActive(true);
+                        glassBlock.parent = gameManager.builtObjects.transform;
                         totalGlass++;
                     }
                     if (distance < 20 && type.Equals("glass"))
                     {
-                        g.gameObject.SetActive(true);
-                        g.parent = gameManager.builtObjects.transform; ;
+                        glassBlock.gameObject.SetActive(true);
+                        glassBlock.parent = gameManager.builtObjects.transform; ;
                         totalGlass++;
                     }
                     if (distance < 10 && type.Equals("glass"))
                     {
-                        g.gameObject.GetComponent<PhysicsHandler>().Explode();
+                        glassBlock.gameObject.GetComponent<PhysicsHandler>().Explode();
                         totalGlass++;
                     }
                 }
-            }
-            glassCount++;
-            glassSeprationInterval++;
-            if (glassSeprationInterval >= 50)
-            {
-                yield return null;
-                glassSeprationInterval = 0;
+                glassSeprationInterval++;
+                if (glassSeprationInterval >= 250)
+                {
+                    yield return null;
+                    glassSeprationInterval = 0;
+                }
             }
         }
 
         int steelSeprationInterval = 0;
-        foreach (GameObject obj in gameManager.steel)
+        for (int i = 0; i < gameManager.steel.Length; i++)
         {
-            Transform[] steelBlocks = gameManager.steel[steelCount].GetComponentsInChildren<Transform>(true);
-            foreach (Transform s in steelBlocks)
+            Transform[] steelBlocks = gameManager.steel[i].GetComponentsInChildren<Transform>(true);
+            foreach (Transform steelBlock in steelBlocks)
             {
-                if (s != null)
+                if (steelBlock != null)
                 {
-                    float distance = Vector3.Distance(s.position, target);
-                    if (distance < 80 && type.Equals("all"))
+                    float distance = Vector3.Distance(steelBlock.position, target);
+                    if (distance < gameManager.chunkSize - 20 && type.Equals("all"))
                     {
-                        s.gameObject.SetActive(true);
-                        s.parent = gameManager.builtObjects.transform;
+                        steelBlock.gameObject.SetActive(true);
+                        steelBlock.parent = gameManager.builtObjects.transform;
                         totalSteel++;
                     }
                     if (distance < 20 && type.Equals("steel"))
                     {
-                        s.gameObject.SetActive(true);
-                        s.parent = gameManager.builtObjects.transform;
+                        steelBlock.gameObject.SetActive(true);
+                        steelBlock.parent = gameManager.builtObjects.transform;
                         totalSteel++;
                     }
                     if (distance < 10 && type.Equals("steel"))
                     {
-                        s.gameObject.GetComponent<PhysicsHandler>().Explode();
+                        steelBlock.gameObject.GetComponent<PhysicsHandler>().Explode();
                         totalSteel++;
                     }
                 }
-            }
-            steelCount++;
-            steelSeprationInterval++;
-            if (steelSeprationInterval >= 50)
-            {
-                yield return null;
-                steelSeprationInterval = 0;
+                steelSeprationInterval++;
+                if (steelSeprationInterval >= 250)
+                {
+                    yield return null;
+                    steelSeprationInterval = 0;
+                }
             }
         }
 
         int brickSeprationInterval = 0;
-        foreach (GameObject obj in gameManager.bricks)
+        for (int i = 0; i < gameManager.bricks.Length; i++)
         {
-            Transform[] brickBlocks = gameManager.bricks[brickCount].GetComponentsInChildren<Transform>(true);
-            foreach (Transform b in brickBlocks)
+            Transform[] brickBlocks = gameManager.bricks[i].GetComponentsInChildren<Transform>(true);
+            foreach (Transform brickBlock in brickBlocks)
             {
-                if (b != null)
+                if (brickBlock != null)
                 {
-                    float distance = Vector3.Distance(b.position, target);
-                    if (distance < 80 && type.Equals("all"))
+                    float distance = Vector3.Distance(brickBlock.position, target);
+                    if (distance < gameManager.chunkSize - 20 && type.Equals("all"))
                     {
-                        b.gameObject.SetActive(true);
-                        b.parent = gameManager.builtObjects.transform;
+                        brickBlock.gameObject.SetActive(true);
+                        brickBlock.parent = gameManager.builtObjects.transform;
                         totalBrick++;
                     }
                     if (distance < 20 && type.Equals("brick"))
                     {
-                        b.gameObject.SetActive(true);
-                        b.parent = gameManager.builtObjects.transform; ;
+                        brickBlock.gameObject.SetActive(true);
+                        brickBlock.parent = gameManager.builtObjects.transform; ;
                         totalBrick++;
                     }
                     if (distance < 10 && type.Equals("brick"))
                     {
-                        b.gameObject.GetComponent<PhysicsHandler>().Explode();
+                        brickBlock.gameObject.GetComponent<PhysicsHandler>().Explode();
                         totalBrick++;
                     }
                 }
-            }
-            brickCount++;
-            brickSeprationInterval++;
-            if (brickSeprationInterval >= 50)
-            {
-                yield return null;
-                brickSeprationInterval = 0;
+                brickSeprationInterval++;
+                if (brickSeprationInterval >= 250)
+                {
+                    yield return null;
+                    brickSeprationInterval = 0;
+                }
             }
         }
 
-        ironCount = 0;
-        steelCount = 0;
-        glassCount = 0;
-        brickCount = 0;
         if (totalIron > 0)
         {
             int ironDummyInterval = 0;
-            foreach (GameObject obj in gameManager.ironBlocks)
+            for (int i = 0; i < gameManager.ironBlocks.Length; i++)
             {
-                GameObject realObject = gameManager.ironBlocks[ironCount];
-                GameObject dummyObject = gameManager.ironBlocksDummy[ironCount];
+                GameObject realObject = gameManager.ironBlocks[i];
+                GameObject dummyObject = gameManager.ironBlocksDummy[i];
                 SpawnDummy(realObject, dummyObject, gameManager.ironHolder, "Iron Dummy");
-                ironCount++;
                 ironDummyInterval++;
-                if (ironDummyInterval >= 50)
+                if (ironDummyInterval >= 10)
                 {
                     yield return null;
                     ironDummyInterval = 0;
@@ -240,17 +227,17 @@ public class CombinedMeshManager
             }
             ironMeshRequired = true;
         }
+
         if (totalGlass > 0)
         {
             int glassDummyInterval = 0;
-            foreach (GameObject obj in gameManager.glass)
+            for (int i = 0; i < gameManager.glass.Length; i++)
             {
-                GameObject realObject = gameManager.glass[glassCount];
-                GameObject dummyObject = gameManager.glassDummy[glassCount];
+                GameObject realObject = gameManager.glass[i];
+                GameObject dummyObject = gameManager.glassDummy[i];
                 SpawnDummy(realObject, dummyObject, gameManager.glassHolder, "Glass Dummy");
-                glassCount++;
                 glassDummyInterval++;
-                if (glassDummyInterval >= 50)
+                if (glassDummyInterval >= 10)
                 {
                     yield return null;
                     glassDummyInterval = 0;
@@ -258,17 +245,17 @@ public class CombinedMeshManager
             }
             glassMeshRequired = true;
         }
+
         if (totalSteel > 0)
         {
             int steelDummyInterval = 0;
-            foreach (GameObject obj in gameManager.steel)
+            for (int i = 0; i < gameManager.steel.Length; i++)
             {
-                GameObject realObject = gameManager.steel[steelCount];
-                GameObject dummyObject = gameManager.steelDummy[steelCount];
+                GameObject realObject = gameManager.steel[i];
+                GameObject dummyObject = gameManager.steelDummy[i];
                 SpawnDummy(realObject, dummyObject, gameManager.steelHolder, "Steel Dummy");
-                steelCount++;
                 steelDummyInterval++;
-                if (steelDummyInterval >= 50)
+                if (steelDummyInterval >= 10)
                 {
                     yield return null;
                     steelDummyInterval = 0;
@@ -276,17 +263,17 @@ public class CombinedMeshManager
             }
             steelMeshRequired = true;
         }
+
         if (totalBrick > 0)
         {
             int brickDummyInterval = 0;
-            foreach (GameObject obj in gameManager.bricks)
+            for (int i = 0; i < gameManager.bricks.Length; i++)
             {
-                GameObject realObject = gameManager.bricks[brickCount];
-                GameObject dummyObject = gameManager.bricksDummy[brickCount];
+                GameObject realObject = gameManager.bricks[i];
+                GameObject dummyObject = gameManager.bricksDummy[i];
                 SpawnDummy(realObject, dummyObject, gameManager.brickHolder, "Brick Dummy");
-                brickCount++;
                 brickDummyInterval++;
-                if (brickDummyInterval >= 50)
+                if (brickDummyInterval >= 10)
                 {
                     yield return null;
                     brickDummyInterval = 0;
@@ -370,7 +357,7 @@ public class CombinedMeshManager
                 }
             }
             combineInterval++;
-            if (combineInterval >= 50)
+            if (combineInterval >= 250)
             {
                 combineInterval = 0;
                 yield return null;
@@ -408,7 +395,7 @@ public class CombinedMeshManager
                 }
             }
             combineInterval++;
-            if (combineInterval >= 50)
+            if (combineInterval >= 250)
             {
                 combineInterval = 0;
                 yield return null;
@@ -446,7 +433,7 @@ public class CombinedMeshManager
                 }
             }
             combineInterval++;
-            if (combineInterval >= 50)
+            if (combineInterval >= 250)
             {
                 combineInterval = 0;
                 yield return null;
@@ -484,12 +471,14 @@ public class CombinedMeshManager
                 }
             }
             combineInterval++;
-            if (combineInterval >= 50)
+            if (combineInterval >= 250)
             {
                 combineInterval = 0;
                 yield return null;
             }
         }
+
+        combineInterval = 0;
 
         if (ironBlockCount > 0)
         {
@@ -499,7 +488,7 @@ public class CombinedMeshManager
                 GameObject dummyObject = gameManager.ironBlocksDummy[ironCount];
                 SpawnDummy(realObject, dummyObject, gameManager.ironHolder, "Iron Dummy");
                 combineInterval++;
-                if (combineInterval >= 50)
+                if (combineInterval >= 10)
                 {
                     combineInterval = 0;
                     yield return null;
@@ -517,7 +506,7 @@ public class CombinedMeshManager
                 GameObject dummyObject = gameManager.steelDummy[steelCount];
                 SpawnDummy(realObject, dummyObject, gameManager.steelHolder, "Steel Dummy");
                 combineInterval++;
-                if (combineInterval >= 50)
+                if (combineInterval >= 10)
                 {
                     combineInterval = 0;
                     yield return null;
@@ -535,7 +524,7 @@ public class CombinedMeshManager
                 GameObject dummyObject = gameManager.glassDummy[glassCount];
                 SpawnDummy(realObject, dummyObject, gameManager.glassHolder, "Glass Dummy");
                 combineInterval++;
-                if (combineInterval >= 50)
+                if (combineInterval >= 10)
                 {
                     combineInterval = 0;
                     yield return null;
@@ -553,7 +542,7 @@ public class CombinedMeshManager
                 GameObject dummyObject = gameManager.bricksDummy[brickCount];
                 SpawnDummy(realObject, dummyObject, gameManager.brickHolder, "Brick Dummy");
                 combineInterval++;
-                if (combineInterval >= 50)
+                if (combineInterval >= 10)
                 {
                     combineInterval = 0;
                     yield return null;
@@ -629,7 +618,7 @@ public class CombinedMeshManager
             {
                 CreateCombinedMesh(holder);
                 ironCombineInterval++;
-                if (ironCombineInterval >= 50)
+                if (ironCombineInterval >= 10)
                 {
                     yield return null;
                     ironCombineInterval = 0;
@@ -645,7 +634,7 @@ public class CombinedMeshManager
             {
                 CreateCombinedMesh(holder);
                 glassCombineInterval++;
-                if (glassCombineInterval >= 50)
+                if (glassCombineInterval >= 10)
                 {
                     yield return null;
                     glassCombineInterval = 0;
@@ -661,7 +650,7 @@ public class CombinedMeshManager
             {
                 CreateCombinedMesh(holder);
                 steelCombineInterval++;
-                if (steelCombineInterval >= 50)
+                if (steelCombineInterval >= 10)
                 {
                     yield return null;
                     steelCombineInterval = 0;
@@ -677,7 +666,7 @@ public class CombinedMeshManager
             {
                 CreateCombinedMesh(holder);
                 brickCombineInterval++;
-                if (brickCombineInterval >= 50)
+                if (brickCombineInterval >= 10)
                 {
                     yield return null;
                     brickCombineInterval = 0;
@@ -704,5 +693,3 @@ public class CombinedMeshManager
         gameManager.working = false;
     }
 }
-
-

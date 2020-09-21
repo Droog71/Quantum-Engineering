@@ -22,7 +22,7 @@ public class GameManager : MonoBehaviour
     public GameObject lander;
     public GameObject rocketObject;
     public GameObject builtObjects;
-    public int totalBlockCount;
+    public int chunkSize;
     public bool blockPhysics;
     public bool hazardsEnabled = true;
     public float meteorTimer;
@@ -55,51 +55,6 @@ public class GameManager : MonoBehaviour
     //! Called by unity engine on start up to initialize variables.
     public void Start()
     {
-        ironBlocks = new GameObject[10];
-        glass = new GameObject[10];
-        steel = new GameObject[10];
-        bricks = new GameObject[10];
-        ironBlocksDummy = new GameObject[10];
-        glassDummy = new GameObject[10];
-        steelDummy = new GameObject[10];
-        bricksDummy = new GameObject[10];
-        int ironCount = 0;
-        int glassCount = 0;
-        int steelCount = 0;
-        int brickCount = 0;
-        foreach (GameObject obj in ironBlocks)
-        {
-            ironBlocks[ironCount] = Instantiate(ironHolder, transform.position, transform.rotation);
-            ironBlocks[ironCount].transform.parent = builtObjects.transform;
-            ironBlocks[ironCount].GetComponent<MeshPainter>().ID = ironCount;
-            ironBlocks[ironCount].SetActive(false);
-            ironCount++;
-        }
-        foreach (GameObject obj in glass)
-        {
-            glass[glassCount] = Instantiate(glassHolder, transform.position, transform.rotation);
-            glass[glassCount].transform.parent = builtObjects.transform;
-            glass[glassCount].GetComponent<MeshPainter>().ID = glassCount;
-            glass[glassCount].SetActive(false);
-            glassCount++;
-        }
-        foreach (GameObject obj in steel)
-        {
-            steel[steelCount] = Instantiate(steelHolder, transform.position, transform.rotation);
-            steel[steelCount].transform.parent = builtObjects.transform;
-            steel[steelCount].GetComponent<MeshPainter>().ID = steelCount;
-            steel[steelCount].SetActive(false);
-            steelCount++;
-        }
-        foreach (GameObject obj in bricks)
-        {
-            bricks[brickCount] = Instantiate(brickHolder, transform.position, transform.rotation);
-            bricks[brickCount].transform.parent = builtObjects.transform;
-            bricks[brickCount].GetComponent<MeshPainter>().ID = brickCount;
-            bricks[brickCount].SetActive(false);
-            brickCount++;
-        }
-
         // Get a reference to the player.
         player = GameObject.Find("Player").GetComponent<PlayerController>();
 
@@ -114,6 +69,42 @@ public class GameManager : MonoBehaviour
 
         // Create the combined mesh manager.
         meshManager = new CombinedMeshManager(this);
+
+        // Load chunk size setting.
+        int cs = PlayerPrefs.GetInt("chunkSize");
+        chunkSize = cs > 0 ? cs : 300;
+
+        // Create initial iron block holder for mesh manager.
+        GameObject ironInit = Instantiate(ironHolder, transform.position, transform.rotation);
+        ironInit.transform.parent = builtObjects.transform;
+        ironInit.GetComponent<MeshPainter>().ID = 0;
+        ironInit.SetActive(false);
+        ironBlocks = new GameObject[] { ironInit };
+        ironBlocksDummy = new GameObject[ironBlocks.Length];
+
+        // Create initial iron block holder for mesh manager.
+        GameObject glassInit = Instantiate(glassHolder, transform.position, transform.rotation);
+        glassInit.transform.parent = builtObjects.transform;
+        glassInit.GetComponent<MeshPainter>().ID = 0;
+        glassInit.SetActive(false);
+        glass = new GameObject[] { glassInit };
+        glassDummy = new GameObject[glass.Length];
+
+        // Create initial iron block holder for mesh manager.
+        GameObject steelInit = Instantiate(steelHolder, transform.position, transform.rotation);
+        steelInit.transform.parent = builtObjects.transform;
+        steelInit.GetComponent<MeshPainter>().ID = 0;
+        steelInit.SetActive(false);
+        steel = new GameObject[] { steelInit };
+        steelDummy = new GameObject[steel.Length];
+
+        // Create initial iron block holder for mesh manager.
+        GameObject brickInit = Instantiate(brickHolder, transform.position, transform.rotation);
+        brickInit.transform.parent = builtObjects.transform;
+        brickInit.GetComponent<MeshPainter>().ID = 0;
+        brickInit.SetActive(false);
+        bricks = new GameObject[] { brickInit };
+        bricksDummy = new GameObject[bricks.Length];
     }
 
     //! Called once per frame by unity engine.
