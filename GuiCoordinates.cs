@@ -513,7 +513,7 @@ public class GuiCoordinates
         buildItemCountRect = new Rect((ScreenWidth * 0.92f), (ScreenHeight * 0.241f), (ScreenWidth * 0.05f), (ScreenHeight * 0.2f));
 
         //OPTIONS MENU
-        optionsMenuBackgroundRect = new Rect((ScreenWidth * 0.4f), (ScreenHeight * 0.04f), (ScreenWidth * 0.2f), (ScreenHeight * 0.94f));
+        optionsMenuBackgroundRect = new Rect((ScreenWidth * 0.4f), (ScreenHeight * 0.04f), (ScreenWidth * 0.2f), (ScreenHeight * 0.915f));
         optionsButton1Rect = new Rect((ScreenWidth * 0.43f), (ScreenHeight * 0.08f), (ScreenWidth * 0.14f), (ScreenHeight * 0.05f));
         optionsButton2Rect = new Rect((ScreenWidth * 0.43f), (ScreenHeight * 0.14f), (ScreenWidth * 0.14f), (ScreenHeight * 0.05f));
         optionsButton3Rect = new Rect((ScreenWidth * 0.43f), (ScreenHeight * 0.20f), (ScreenWidth * 0.14f), (ScreenHeight * 0.05f));
