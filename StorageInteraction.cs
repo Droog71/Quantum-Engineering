@@ -12,10 +12,10 @@ public class StorageInteraction
         this.interactionController = interactionController;
     }
 
-
     //! Called when the player is looking at a storage container.
     public void InteractWithStorageContainer()
     {
+        InventoryManager inventory = playerController.objectInSight.GetComponent<InventoryManager>();
         if (cInput.GetKeyDown("Interact"))
         {
             if (playerController.storageGUIopen == false)
@@ -37,7 +37,7 @@ public class StorageInteraction
                         playerController.requestedBuildingStop = true;
                     }
                 }
-                if (playerController.objectInSight.GetComponent<InventoryManager>().initialized == true)
+                if (inventory.initialized == true)
                 {
                     Cursor.visible = true;
                     Cursor.lockState = CursorLockMode.None;
@@ -45,7 +45,7 @@ public class StorageInteraction
                     playerController.craftingGUIopen = false;
                     playerController.machineGUIopen = false;
                     playerController.inventoryOpen = true;
-                    playerController.storageInventory = playerController.objectInSight.GetComponent<InventoryManager>();
+                    playerController.storageInventory = inventory;
                     playerController.remoteStorageActive = false;
                 }
             }
@@ -59,7 +59,7 @@ public class StorageInteraction
                 playerController.storageGUIopen = false;
             }
         }
-        if (cInput.GetKeyDown("Collect Object") && playerController.objectInSight.GetComponent<InventoryManager>().ID != "Rocket" && playerController.objectInSight.GetComponent<InventoryManager>().ID != "Lander")
+        if (cInput.GetKeyDown("Collect Object") && inventory.ID != "Rocket" && inventory.ID != "Lander")
         {
             bool spaceAvailable = false;
             foreach (InventorySlot slot in playerController.playerInventory.inventory)
@@ -71,7 +71,7 @@ public class StorageInteraction
             }
             if (spaceAvailable == true)
             {
-                InventoryManager thisContainer = playerController.objectInSight.GetComponent<InventoryManager>();
+                InventoryManager thisContainer = inventory;
                 foreach (InventorySlot slot in thisContainer.inventory)
                 {
                     slot.typeInSlot = "nothing";
@@ -101,8 +101,9 @@ public class StorageInteraction
     public void InteractWithStorageComputer()
     {
         playerController.machineInSight = playerController.objectInSight;
-        playerController.machineID = playerController.objectInSight.GetComponent<StorageComputer>().ID;
-        playerController.machineHasPower = playerController.objectInSight.GetComponent<StorageComputer>().powerON;
+        StorageComputer computer = playerController.objectInSight.GetComponent<StorageComputer>();
+        playerController.machineID = computer.ID;
+        playerController.machineHasPower = computer.powerON;
         if (cInput.GetKeyDown("Interact"))
         {
             if (playerController.storageGUIopen == false)
@@ -124,15 +125,15 @@ public class StorageInteraction
                         playerController.requestedBuildingStop = true;
                     }
                 }
-                if (playerController.objectInSight.GetComponent<StorageComputer>().powerON == true && playerController.objectInSight.GetComponent<StorageComputer>().initialized == true)
+                if (computer.powerON == true && computer.initialized == true)
                 {
                     bool foundContainer = false;
                     int containerCount = 0;
-                    foreach (InventoryManager manager in playerController.objectInSight.GetComponent<StorageComputer>().computerContainers)
+                    foreach (InventoryManager manager in computer.computerContainers)
                     {
                         if (foundContainer == false)
                         {
-                            if (playerController.objectInSight.GetComponent<StorageComputer>().computerContainers[containerCount] != null)
+                            if (computer.computerContainers[containerCount] != null)
                             {
                                 Cursor.visible = true;
                                 Cursor.lockState = CursorLockMode.None;
@@ -140,13 +141,17 @@ public class StorageInteraction
                                 playerController.craftingGUIopen = false;
                                 playerController.machineGUIopen = false;
                                 playerController.inventoryOpen = true;
-                                playerController.storageInventory = playerController.objectInSight.GetComponent<StorageComputer>().computerContainers[0];
+                                playerController.storageInventory = computer.computerContainers[0];
                                 playerController.currentStorageComputer = playerController.objectInSight;
                                 playerController.remoteStorageActive = true;
                                 foundContainer = true;
                             }
                             containerCount++;
                         }
+                    }
+                    if (foundContainer == false)
+                    {
+                        computer.Reboot();
                     }
                 }
             }

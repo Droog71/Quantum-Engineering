@@ -90,25 +90,35 @@ public class StorageComputer : MonoBehaviour
         foreach (InventoryManager container in allContainers)
         {
             GameObject containerObject = container.gameObject;
-            if (container.initialized == true && containerObject.GetComponent<RailCart>() == null && containerObject.GetComponent<Retriever>() == null && containerObject.GetComponent<AutoCrafter>() == null && container.ID != "player" && container.ID != "Rocket")
+            Transform containerTransform = containerObject.transform;
+            float distance = Vector3.Distance(transform.position, containerObject.transform.position);
+            if (IsValidContainer(containerObject) && distance < 40)
             {
-                if (Vector3.Distance(transform.position, containerObject.transform.position) < 40)
-                {
-                    computerContainerList.Add(container);
-                    GameObject spawnedConnection = Instantiate(connectionObject, containerObject.transform.position, containerObject.transform.rotation);
-                    spawnedConnection.transform.parent = containerObject.transform;
-                    spawnedConnection.SetActive(true);
-                    LineRenderer inputLine = spawnedConnection.AddComponent<LineRenderer>();
-                    inputLine.startWidth = 0.2f;
-                    inputLine.endWidth = 0.2f;
-                    inputLine.material = lineMat;
-                    inputLine.SetPosition(0, transform.position);
-                    inputLine.SetPosition(1, containerObject.transform.position);
-                    spawnedConnectionList.Add(spawnedConnection);
-                }
+                computerContainerList.Add(container);
+                GameObject spawnedConnection = Instantiate(connectionObject, containerTransform.position, containerTransform.rotation);
+                spawnedConnection.transform.parent = containerObject.transform;
+                spawnedConnection.SetActive(true);
+                LineRenderer inputLine = spawnedConnection.AddComponent<LineRenderer>();
+                inputLine.startWidth = 0.2f;
+                inputLine.endWidth = 0.2f;
+                inputLine.material = lineMat;
+                inputLine.SetPosition(0, transform.position);
+                inputLine.SetPosition(1, containerObject.transform.position);
+                spawnedConnectionList.Add(spawnedConnection);
             }
         }
         computerContainers = computerContainerList.ToArray();
+    }
+
+    //! Returns true if the computer can access the container.
+    private bool IsValidContainer(GameObject obj)
+    {
+        return obj.GetComponent<InventoryManager>().initialized == true
+        && obj.GetComponent<RailCart>() == null
+        && obj.GetComponent<Retriever>() == null
+        && obj.GetComponent<AutoCrafter>() == null
+        && obj.GetComponent<InventoryManager>().ID != "player"
+        && obj.GetComponent<InventoryManager>().ID != "Rocket";
     }
 
     //! Gets power values from power receiver.

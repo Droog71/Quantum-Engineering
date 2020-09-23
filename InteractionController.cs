@@ -23,124 +23,125 @@ public class InteractionController : MonoBehaviour
     {
         if (!playerController.stateManager.Busy())
         {
-        // Raycast and associated data for interacting with machines and other objects.
-        Transform camPos = Camera.main.gameObject.transform;
-        if (Physics.Raycast(camPos.position, camPos.forward, out playerController.playerLookHit, playerController.gameManager.chunkSize - 40))
-        {
-            if (playerController.inventoryOpen == false && playerController.escapeMenuOpen == false && playerController.tabletOpen == false)
+            // Raycast and associated data for interacting with machines and other objects.
+            float range = playerController.gameManager.chunkSize - 40;
+            Transform camPos = Camera.main.gameObject.transform;
+            if (Physics.Raycast(camPos.position, camPos.forward, out RaycastHit hit, range))
             {
-                playerController.objectInSight = playerController.playerLookHit.collider.gameObject;
-                if (!IsResource(playerController.objectInSight))
+                float distance = Vector3.Distance(camPos.position, hit.point);
+                GameObject obj = hit.collider.gameObject;
+                if (GuiFree() && !IsResource(obj))
                 {
-                    if (IsStorageContainer(playerController.objectInSight))
+                    playerController.objectInSight = obj;
+                    if (IsStorageContainer(obj) && distance <= 40)
                     {
                         storageInteraction.InteractWithStorageContainer();
                     }
-                    else if (playerController.objectInSight.GetComponent<StorageComputer>() != null)
+                    else if (obj.GetComponent<StorageComputer>() != null && distance <= 40)
                     {
                         storageInteraction.InteractWithStorageComputer();
                     }
-                    else if (playerController.objectInSight.GetComponent<PowerSource>() != null)
+                    else if (obj.GetComponent<PowerSource>() != null && distance <= 40)
                     {
                         machineInteraction.InteractWithPowerSource();
                     }
-                    else if (playerController.objectInSight.GetComponent<NuclearReactor>() != null)
+                    else if (obj.GetComponent<NuclearReactor>() != null && distance <= 40)
                     {
                         machineInteraction.InteractWithNuclearReactor();
                     }
-                    else if (playerController.objectInSight.GetComponent<PowerConduit>() != null)
+                    else if (obj.GetComponent<PowerConduit>() != null && distance <= 40)
                     {
                         machineInteraction.InteractWithPowerConduit();
                     }
-                    else if (playerController.objectInSight.GetComponent<Turret>() != null)
+                    else if (obj.GetComponent<Turret>() != null && distance <= 40)
                     {
                         machineInteraction.InteractWithTurret();
                     }
-                    else if (playerController.objectInSight.GetComponent<UniversalExtractor>() != null)
+                    else if (obj.GetComponent<UniversalExtractor>() != null && distance <= 40)
                     {
                         machineInteraction.InteractWithUniversalExtractor();
                     }
-                    else if (playerController.objectInSight.GetComponent<Auger>() != null)
+                    else if (obj.GetComponent<Auger>() != null && distance <= 40)
                     {
                         machineInteraction.InteractWithAuger();
                     }
-                    else if (playerController.objectInSight.GetComponent<DarkMatterCollector>() != null)
+                    else if (obj.GetComponent<DarkMatterCollector>() != null && distance <= 40)
                     {
                         machineInteraction.InteractWithDarkMatterCollector();
                     }
-                    else if (playerController.objectInSight.GetComponent<UniversalConduit>() != null)
+                    else if (obj.GetComponent<UniversalConduit>() != null && distance <= 40)
                     {
                         machineInteraction.InteractWithUniversalConduit();
                     }
-                    else if (playerController.objectInSight.GetComponent<DarkMatterConduit>() != null)
+                    else if (obj.GetComponent<DarkMatterConduit>() != null && distance <= 40)
                     {
                         machineInteraction.InteractWithDarkMatterConduit();
                     }
-                    else if (playerController.objectInSight.GetComponent<Smelter>() != null)
+                    else if (obj.GetComponent<Smelter>() != null && distance <= 40)
                     {
                         machineInteraction.InteractWithSmelter();
                     }
-                    else if (playerController.objectInSight.GetComponent<AlloySmelter>() != null)
+                    else if (obj.GetComponent<AlloySmelter>() != null && distance <= 40)
                     {
                         machineInteraction.InteractWithAlloySmelter();
                     }
-                    else if (playerController.objectInSight.GetComponent<Extruder>() != null)
+                    else if (obj.GetComponent<Extruder>() != null && distance <= 40)
                     {
                         machineInteraction.InteractWithExtruder();
                     }
-                    else if (playerController.objectInSight.GetComponent<RailCartHub>() != null)
+                    else if (obj.GetComponent<RailCartHub>() != null && distance <= 40)
                     {
                         machineInteraction.InteractWithRailCartHub();
                     }
-                    else if (playerController.objectInSight.GetComponent<Retriever>() != null)
+                    else if (obj.GetComponent<Retriever>() != null && distance <= 40)
                     {
                         machineInteraction.InteractWithRetriever();
                     }
-                    else if (playerController.objectInSight.GetComponent<AutoCrafter>() != null)
+                    else if (obj.GetComponent<AutoCrafter>() != null && distance <= 40)
                     {
                         machineInteraction.InteractWithAutoCrafter();
                     }
-                    else if (playerController.objectInSight.GetComponent<HeatExchanger>() != null)
+                    else if (obj.GetComponent<HeatExchanger>() != null && distance <= 40)
                     {
                         machineInteraction.InteractWithHeatExchanger();
                     }
-                    else if (playerController.objectInSight.GetComponent<GearCutter>() != null)
+                    else if (obj.GetComponent<GearCutter>() != null && distance <= 40)
                     {
                         machineInteraction.InteractWithGearCutter();
                     }
-                    else if (playerController.objectInSight.GetComponent<Press>() != null)
+                    else if (obj.GetComponent<Press>() != null && distance <= 40)
                     {
                         machineInteraction.InteractWithPress();
                     }
-                    else if (playerController.objectInSight.GetComponent<ElectricLight>() != null)
+                    else if (obj.GetComponent<ElectricLight>() != null && distance <= 40)
                     {
                         machineInteraction.InteractWithElectricLight();
                     }
-                    else if (playerController.objectInSight.GetComponent<AirLock>() != null)
+                    else if (obj.GetComponent<AirLock>() != null && distance <= 40)
                     {
                         machineInteraction.InteractWithAirLock();
                     }
-                    else if (playerController.objectInSight.GetComponent<ModMachine>() != null)
+                    else if (obj.GetComponent<ModMachine>() != null && distance <= 40)
                     {
                         machineInteraction.InteractWithModMachine();
                     }
-                    else if (playerController.objectInSight.GetComponent<IronBlock>() != null)
+                    else if (obj.GetComponent<IronBlock>() != null)
                     {
                         blockInteraction.InteractWithIronBlock();
                     }
-                    else if (playerController.objectInSight.GetComponent<Steel>() != null)
+                    else if (obj.GetComponent<Steel>() != null)
                     {
                         blockInteraction.InteractWithSteelBlock();
                     }
-                    else if (playerController.objectInSight.GetComponent<Glass>() != null)
+                    else if (obj.GetComponent<Glass>() != null)
                     {
                         blockInteraction.InteractWithGlass();
                     }
-                    else if (playerController.objectInSight.GetComponent<Brick>() != null)
+                    else if (obj.GetComponent<Brick>() != null)
                     {
                         blockInteraction.InteractWithBricks();
                     }
-                    else if (playerController.objectInSight.tag.Equals("CombinedMesh"))
+                    else if (obj.tag.Equals("CombinedMesh"))
                     {
                         blockInteraction.InteractWithCombinedMesh();
                     }
@@ -149,13 +150,25 @@ public class InteractionController : MonoBehaviour
                         EndInteraction();
                     }
                 }
+                else if (GuiFree() && distance <= 40 && IsResource(obj))
+                {
+                    playerController.objectInSight = obj;
+                }
+            }
+            else
+            {
+                EndInteraction();
             }
         }
-        else
-        {
-            EndInteraction();
-        }
-        }
+    }
+
+    //! Returns true if the GUI is available.
+    private bool GuiFree()
+    {
+        return playerController.inventoryOpen == false
+        && playerController.escapeMenuOpen == false
+        && playerController.tabletOpen == false
+        && playerController.marketGUIopen == false;
     }
 
     //! Returns true if the object in question is a resource node.

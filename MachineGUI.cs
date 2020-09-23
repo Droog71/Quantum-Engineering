@@ -296,7 +296,7 @@ public class MachineGUI : MonoBehaviour
                             if (hx.connectionFailed == false)
                             {
                                 GUI.Label(guiCoordinates.outputLabelRect, "Output");
-                                hx.speed = (int)GUI.HorizontalSlider(guiCoordinates.outputControlButton2Rect, hx.speed, 0, hx.inputObject.GetComponent<UniversalConduit>().speed);
+                                hx.speed = (int)GUI.HorizontalSlider(guiCoordinates.outputControlButton2Rect, hx.speed, 0, playerController.hxAmount);
                             }
                             else
                             {

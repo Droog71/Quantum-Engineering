@@ -259,14 +259,28 @@ public class AutoCrafter : MonoBehaviour
         {
             for (int count = 0; count < speed; count++)
             {
-                craftingManager.CraftItemUsingStorageComputer(craftingDictionary.dictionary[type]);
+                if (craftingDictionary.dictionary.ContainsKey(type))
+                {
+                    craftingManager.CraftItemUsingStorageComputer(craftingDictionary.dictionary[type]);
+                }
+                else if (craftingDictionary.modDictionary.ContainsKey(type))
+                {
+                    craftingManager.CraftItemUsingStorageComputer(craftingDictionary.modDictionary[type]);
+                }
             }
         }
         else 
         {
             for (int count = 0; count < speed; count++)
             {
-                craftingManager.CraftItemUsingStorageContainer(craftingDictionary.dictionary[type]);
+                if (craftingDictionary.dictionary.ContainsKey(type))
+                {
+                    craftingManager.CraftItemUsingStorageContainer(craftingDictionary.dictionary[type]);
+                }
+                else if (craftingDictionary.modDictionary.ContainsKey(type))
+                {
+                    craftingManager.CraftItemUsingStorageContainer(craftingDictionary.modDictionary[type]);
+                }
             }
         }
     }

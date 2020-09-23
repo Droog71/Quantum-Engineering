@@ -113,6 +113,7 @@ public class CraftingDictionary
     {
         modDictionary = new Dictionary<string, CraftingRecipe>();
         string modPath = Path.Combine(Application.persistentDataPath, "Mods");
+        Directory.CreateDirectory(modPath);
         string[] modDirs = Directory.GetDirectories(modPath);
         foreach (string path in modDirs)
         {

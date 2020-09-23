@@ -13,6 +13,7 @@ public class PluginLoader :MonoBehaviour
     public void Start()
     {
         string modPath = Path.Combine(Application.persistentDataPath, "Mods");
+        Directory.CreateDirectory(modPath);
         string[] modDirs = Directory.GetDirectories(modPath);
         foreach (string path in modDirs)
         {

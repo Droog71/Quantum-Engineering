@@ -559,11 +559,12 @@ public class GuiCoordinates
         buildInfoRect = new Rect((ScreenWidth * 0.04f), (ScreenHeight * 0.80f), (ScreenWidth * 0.35f), (ScreenHeight * 0.20f));
 
         //MARKET MESSAGE
-        marketMessageRect = new Rect(((ScreenWidth / 2) - 300), ((ScreenHeight / 2) - 200), 600, 400);
-        marketMessageLabelRect = new Rect(((ScreenWidth / 2) - 175), ((ScreenHeight / 2) - 100), 400, 100);
-        marketMessageButtonRect = new Rect(((ScreenWidth / 2) - (ScreenWidth * 0.07f)), ((ScreenHeight / 2) + 30), (ScreenWidth * 0.14f), (ScreenHeight * 0.05f));
+        marketMessageRect = new Rect(((ScreenWidth / 2) - (ScreenWidth * 0.22f)), ((ScreenHeight / 2) - 200), 600, 400);
+        marketMessageLabelRect = new Rect(((ScreenWidth / 2) - (ScreenWidth * 0.16f)), ((ScreenHeight / 2) - 100), (ScreenWidth * 0.44f), 100);
+        marketMessageButtonRect = new Rect(((ScreenWidth / 2) - (ScreenWidth * 0.07f)), ((ScreenHeight / 2) + 20), (ScreenWidth * 0.14f), (ScreenHeight * 0.05f));
 
         //PAINT GUN COLOR SELECTION BACKGROUND
         paintGunMenuBackgroundRect = new Rect((ScreenWidth * 0.4f), (ScreenHeight * 0.04f), (ScreenWidth * 0.2f), (ScreenHeight * 0.56f));
     }
 }
+

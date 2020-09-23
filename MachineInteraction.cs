@@ -880,6 +880,7 @@ public class MachineInteraction
         {
             if (playerController.machineGUIopen == false)
             {
+                playerController.hxAmount = heatExchanger.amount;
                 playerController.machineGUIopen = true;
             }
             else

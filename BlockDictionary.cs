@@ -21,6 +21,7 @@ public class BlockDictionary
     public string GetMachineDescription(string machineName)
     {
         string modPath = Path.Combine(Application.persistentDataPath, "Mods");
+        Directory.CreateDirectory(modPath);
         string[] modDirs = Directory.GetDirectories(modPath);
         foreach (string path in modDirs)
         {
@@ -46,6 +47,7 @@ public class BlockDictionary
     public BasicMachineRecipe[] GetMachineRecipes(string machineName)
     {
         string modPath = Path.Combine(Application.persistentDataPath, "Mods");
+        Directory.CreateDirectory(modPath);
         string[] modDirs = Directory.GetDirectories(modPath);
         foreach (string path in modDirs)
         {
@@ -80,6 +82,7 @@ public class BlockDictionary
     public void AddModMachines(Dictionary<string, GameObject> dictionary)
     {
         string modPath = Path.Combine(Application.persistentDataPath, "Mods");
+        Directory.CreateDirectory(modPath);
         string[] modDirs = Directory.GetDirectories(modPath);
         foreach (string path in modDirs)
         {

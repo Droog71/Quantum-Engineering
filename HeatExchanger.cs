@@ -105,6 +105,7 @@ public class HeatExchanger : MonoBehaviour
                                 else
                                 {
                                     speed =  inputObject.GetComponent<UniversalConduit>().speed;
+                                    providingCooling = true;
                                 }
                             }
                             else

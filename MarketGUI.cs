@@ -720,8 +720,19 @@ public class MarketGUI : MonoBehaviour
             }
             else if (GameObject.Find("Rocket").GetComponent<Rocket>().landed == true || GameObject.Find("Rocket").GetComponent<Rocket>().rocketRequested == true)
             {
-                GUI.DrawTexture(guiCoordinates.marketMessageRect, textureDictionary.dictionary["Interface Background"]);
-                GUI.Label(guiCoordinates.marketMessageLabelRect, "You need to be within 4 meters of the rocket to use the market.");
+                string message = "You need to be within 4 meters of the rocket to use the market.";
+                GUIContent content = new GUIContent(message);
+                GUIStyle style = GUI.skin.box;
+                style.alignment = TextAnchor.MiddleCenter;
+                Vector2 size = style.CalcSize(content);
+                float backgroundWidth = size.x * 1.1f;
+                Rect backgroundRect = new Rect((Screen.width / 2) - (backgroundWidth / 2), ((ScreenHeight / 2) - 100), backgroundWidth * 1.05f, 200);
+                Rect messageRect = new Rect((Screen.width / 2) - (size.x / 3), ((ScreenHeight / 2) - 50), size.x, size.y);
+                GUI.DrawTexture(backgroundRect, textureDictionary.dictionary["Interface Background"]);
+                int f = GUI.skin.label.fontSize;
+                GUI.skin.label.fontSize = 12;
+                GUI.Label(messageRect, message);
+                GUI.skin.label.fontSize = f;
                 if (GUI.Button(guiCoordinates.marketMessageButtonRect, "OK"))
                 {
                     Cursor.visible = false;
@@ -733,8 +744,19 @@ public class MarketGUI : MonoBehaviour
             }
             else if (GameObject.Find("Rocket").GetComponent<Rocket>().landed == false && GameObject.Find("Rocket").GetComponent<Rocket>().rocketRequested == false)
             {
-                GUI.DrawTexture(guiCoordinates.marketMessageRect, textureDictionary.dictionary["Interface Background"]);
-                GUI.Label(guiCoordinates.marketMessageLabelRect, "You need to be within 4 meters of the rocket to use the market.");
+                string message = "You need to be within 4 meters of the rocket to use the market.";
+                GUIContent content = new GUIContent(message);
+                GUIStyle style = GUI.skin.box;
+                style.alignment = TextAnchor.MiddleCenter;
+                Vector2 size = style.CalcSize(content);
+                float backgroundWidth = size.x * 1.1f;
+                Rect backgroundRect = new Rect((Screen.width / 2) - (backgroundWidth / 2), ((ScreenHeight / 2) - 100), backgroundWidth * 1.05f, 200);
+                Rect messageRect = new Rect((Screen.width / 2) - (size.x / 3), ((ScreenHeight / 2) - 50), size.x, size.y);
+                GUI.DrawTexture(backgroundRect, textureDictionary.dictionary["Interface Background"]);
+                int f = GUI.skin.label.fontSize;
+                GUI.skin.label.fontSize = 12;
+                GUI.Label(messageRect, message);
+                GUI.skin.label.fontSize = f;
                 if (GUI.Button(guiCoordinates.marketMessageButtonRect, "Request Rocket"))
                 {
                     GameObject.Find("Rocket").GetComponent<Rocket>().rocketRequested = true;

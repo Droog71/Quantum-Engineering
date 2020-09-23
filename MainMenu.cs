@@ -9,6 +9,7 @@ public class MainMenu : MonoBehaviour
     public GUISkin thisGUIskin;
     public Texture2D titleTexture;
     public Texture2D title2Texture;
+    public Texture2D titleTextureSD;
     public Texture2D worlListBackground;
     public GameObject videoPlayer;
     public GameObject menuSoundObject;
@@ -21,6 +22,7 @@ public class MainMenu : MonoBehaviour
     private AudioSource buttonSounds;
     private AudioSource ambient;
     private float waitForVideoTimer;
+    private bool notWideScreen;
     private bool worldSelectPrompt;
     private bool playingVideo;
     private bool deletePrompt;
@@ -113,6 +115,11 @@ public class MainMenu : MonoBehaviour
         return style.CalcSize(content);
     }
 
+    private bool loadingWorld()
+    {
+        return stateManager.worldLoaded == false || stateManager.GetComponent<GameManager>().working == true;
+    }
+
     //! Called by unity engine for rendering and handling GUI events.
     public void OnGUI()
     {
@@ -125,13 +132,14 @@ public class MainMenu : MonoBehaviour
         if (ScreenWidth / ScreenHeight < 1.7f)
         {
             ScreenHeight = (ScreenHeight * 0.75f);
+            notWideScreen = true;
         }
         if (ScreenHeight < 700)
         {
             GUI.skin.label.fontSize = 10;
         }
 
-        Rect backgroundRect = new Rect(0, 0, ScreenWidth, ScreenHeight);
+        Rect backgroundRect = new Rect(0, 0, Screen.width, Screen.height);
 
         Rect worldListBackgroundRect = new Rect((ScreenWidth * 0.40f), (ScreenHeight * 0.45f), (ScreenWidth * 0.17f), (ScreenHeight * 0.40f));
         Rect worldListRect = new Rect((ScreenWidth * 0.43f), (ScreenHeight * 0.47f), (ScreenWidth * 0.15f), (ScreenHeight * 0.55f));
@@ -176,7 +184,8 @@ public class MainMenu : MonoBehaviour
             }
             if (playingVideo == false)
             {
-                GUI.DrawTexture(backgroundRect, titleTexture);
+                Texture2D bgTexture = notWideScreen ? titleTextureSD : titleTexture;
+                GUI.DrawTexture(backgroundRect, bgTexture);
                 waitForVideoTimer += 1 * Time.deltaTime;
             }
             else
@@ -352,6 +361,8 @@ public class MainMenu : MonoBehaviour
                 if (GUI.Button(deletePromptButton1Rect, "Yes"))
                 {
                     buttonSounds.Play();
+                    string savePath = Path.Combine(Application.persistentDataPath, "SaveData");
+                    Directory.CreateDirectory(savePath);
                     string savFile = "SaveData/" + worldName + ".sav";
                     string bakFile = "SaveData/" + worldName + ".bak";
                     string savPath = Path.Combine(Application.persistentDataPath, savFile);
@@ -406,13 +417,14 @@ public class MainMenu : MonoBehaviour
                 }
             }
         }
-        else if (finishedLoading == false && (stateManager.worldLoaded == false || stateManager.GetComponent<GameManager>().working == true))
+        else if (finishedLoading == false && loadingWorld() == true)
         {
             if (videoPlayer.GetComponent<VP>().IsPlaying())
             {
                 videoPlayer.GetComponent<VP>().StopVideo();
             }
-            GUI.DrawTexture(backgroundRect, titleTexture);
+            Texture2D bgTexture = notWideScreen ? titleTextureSD : titleTexture;
+            GUI.DrawTexture(backgroundRect, bgTexture);
             int f = GUI.skin.label.fontSize;
             GUI.skin.label.fontSize = 16;
             string loadingMessage = "Loading... " + stateManager.progress + "/" + stateManager.idList.Length;
@@ -421,8 +433,12 @@ public class MainMenu : MonoBehaviour
             GUI.Label(messagePos, loadingMessage);
             GUI.skin.label.fontSize = f;
         }
-        else
+        else if (finishedLoading == false)
         {
+            if (videoPlayer.GetComponent<VP>().IsPlaying())
+            {
+                videoPlayer.GetComponent<VP>().StopVideo();
+            }
             finishedLoading = true;
         }
     }

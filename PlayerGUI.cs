@@ -446,7 +446,7 @@ public class PlayerGUI : MonoBehaviour
                     }
                     if (SchematicActive())
                     {
-                        if (GUI.Button(guiCoordinates.schematicCloseRect,"CLOSE") || Input.anyKey)
+                        if (GUI.Button(guiCoordinates.schematicCloseRect,"CLOSE") || Input.GetKeyDown(KeyCode.Escape))
                         {
                             ClearSchematic();
                             playerController.PlayButtonSound();
@@ -493,7 +493,7 @@ public class PlayerGUI : MonoBehaviour
                 GetComponent<MSCameraController>().cameras[0].volume = AudioListener.volume;
 
                 playerController.mCam.fieldOfView = GUI.HorizontalSlider(guiCoordinates.optionsButton7Rect, playerController.mCam.fieldOfView, 60, 80);
-                playerController.mCam.farClipPlane = GUI.HorizontalSlider(guiCoordinates.optionsButton8Rect, playerController.mCam.farClipPlane, 1000, 100000);
+                playerController.mCam.farClipPlane = GUI.HorizontalSlider(guiCoordinates.optionsButton8Rect, playerController.mCam.farClipPlane, 1000, 10000);
 
                 RenderSettings.fogDensity = GUI.HorizontalSlider(guiCoordinates.optionsButton9Rect, RenderSettings.fogDensity, 0.00025f, 0.025f);
 

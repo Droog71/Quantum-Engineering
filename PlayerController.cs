@@ -12,7 +12,6 @@ public class PlayerController : MonoBehaviour
 
     public Vector3 destroyStartPosition;
     public Vector3 buildStartPosition;
-    public RaycastHit playerLookHit;
     public StateManager stateManager;
     public GameManager gameManager;
     public Camera mCam;
@@ -78,7 +77,6 @@ public class PlayerController : MonoBehaviour
     private bool movedPlayer;
     private bool introDisplayed;
 
-
     public string cubeloc = "up";
     public string machineID = "unassigned";
     public string machineOutputID = "unassigned";
@@ -99,6 +97,7 @@ public class PlayerController : MonoBehaviour
     public float outOfSpaceTimer;
     public float cannotCollectTimer;
     public float collectorAmount;
+    public float hxAmount;
     public float machineAmount;
     public float machineAmount2;
     public float machineInputAmount;
@@ -202,16 +201,16 @@ public class PlayerController : MonoBehaviour
     // Called by unity engine on start up to initialize variables.
     public void Start()
     {
-        //!REFERENCE TO THE GAME AND STATE MANAGER
+        // Reference to the game manager and state manager.
         gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
         stateManager = GameObject.Find("GameManager").GetComponent<StateManager>();
 
 
-        // INITIALIZE COMPONENT CLASSES
+        // Initialize component classes.
         playerInventory = GetComponent<InventoryManager>();
         laserController = new LaserController(this, gameManager);
 
-        // LOAD MOUSE SETTINGS
+        // Load mouse settings.
         Cursor.visible = true;
         Cursor.lockState = CursorLockMode.None;
         if (PlayerPrefs.GetFloat("xSensitivity") != 0)
@@ -325,7 +324,7 @@ public class PlayerController : MonoBehaviour
                     destructionMessageReceived = false;
                 }
 
-                // PIRATE ATTACK INCOMING
+                // Pirate attack warnings.
                 if (pirateAttackWarningActive == true)
                 {
                     currentTabletMessage = "Warning! Warning! Warning! Warning! Warning!\n\nIncoming pirate attack!";
@@ -340,7 +339,7 @@ public class PlayerController : MonoBehaviour
                     pirateAttackWarningReceived = false;
                 }
 
-                // METEOR SHOWER INCOMING
+                // Meteor shower warnings.
                 if (meteorShowerWarningActive == true)
                 {
                     currentTabletMessage = "Warning! Warning! Warning! Warning! Warning!\n\nIncoming meteor shower!";

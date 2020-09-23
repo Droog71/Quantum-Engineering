@@ -16,6 +16,7 @@ public class TextureDictionary : MonoBehaviour
     public static IEnumerator AddModTextures(Dictionary<string, Texture2D> dictionary)
     {
         string modPath = Path.Combine(Application.persistentDataPath, "Mods");
+        Directory.CreateDirectory(modPath);
         string[] modDirs = Directory.GetDirectories(modPath);
         foreach (string path in modDirs)
         {
