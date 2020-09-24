@@ -21,6 +21,7 @@ public class TextureDictionary : MonoBehaviour
         foreach (string path in modDirs)
         {
             string texturePath = path + "/Textures/";
+            Directory.CreateDirectory(texturePath);
             DirectoryInfo d = new DirectoryInfo(texturePath);
             foreach (FileInfo file in d.GetFiles("*.png"))
             {

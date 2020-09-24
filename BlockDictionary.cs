@@ -26,6 +26,7 @@ public class BlockDictionary
         foreach (string path in modDirs)
         {
             string machinePath = path + "/Machines/";
+            Directory.CreateDirectory(machinePath);
             DirectoryInfo d = new DirectoryInfo(machinePath);
             foreach (FileInfo file in d.GetFiles("*.qe"))
             {
@@ -52,6 +53,7 @@ public class BlockDictionary
         foreach (string path in modDirs)
         {
             string machinePath = path + "/Machines/";
+            Directory.CreateDirectory(machinePath);
             DirectoryInfo d = new DirectoryInfo(machinePath);
             foreach (FileInfo file in d.GetFiles("*.qe"))
             {
@@ -87,6 +89,7 @@ public class BlockDictionary
         foreach (string path in modDirs)
         {
             string machinePath = path + "/Machines/";
+            Directory.CreateDirectory(machinePath);
             DirectoryInfo d = new DirectoryInfo(machinePath);
             foreach (FileInfo file in d.GetFiles("*.qe"))
             {

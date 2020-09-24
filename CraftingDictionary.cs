@@ -117,22 +117,23 @@ public class CraftingDictionary
         string[] modDirs = Directory.GetDirectories(modPath);
         foreach (string path in modDirs)
         {
-            string machinePath = path + "/Recipes/";
-            DirectoryInfo info = new DirectoryInfo(machinePath);
+            string recipePath = path + "/Recipes/";
+            Directory.CreateDirectory(recipePath);
+            DirectoryInfo info = new DirectoryInfo(recipePath);
             foreach (FileInfo file in info.GetFiles("*.qe"))
             {
-                string filePath = machinePath + file.Name;
+                string filePath = recipePath + file.Name;
                 string fileContents = File.ReadAllText(filePath);
                 string output = file.Name.Remove(file.Name.Length - 3);
-                string[] machineContents = fileContents.Split('}');
-                string[] ingredients = machineContents[0].Split(',');
-                string[] amountsString = machineContents[1].Split(',');
+                string[] recipeContents = fileContents.Split('}');
+                string[] ingredients = recipeContents[0].Split(',');
+                string[] amountsString = recipeContents[1].Split(',');
                 int[] amounts = new int[amountsString.Length];
                 for (int i = 0; i < amountsString.Length; i++)
                 {
                     amounts[i] = int.Parse(amountsString[i]);
                 }
-                int outputAmount = int.Parse(machineContents[2]);
+                int outputAmount = int.Parse(recipeContents[2]);
                 CraftingRecipe modRecipe = new CraftingRecipe(ingredients, amounts, output, outputAmount);
                 if (!dictionary.ContainsKey(output))
                 {

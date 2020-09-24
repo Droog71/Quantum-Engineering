@@ -18,6 +18,7 @@ public class PluginLoader :MonoBehaviour
         foreach (string path in modDirs)
         {
             string pluginPath = path + "/Plugins/";
+            Directory.CreateDirectory(pluginPath);
             DirectoryInfo d = new DirectoryInfo(pluginPath);
             foreach (FileInfo file in d.GetFiles("*.dll"))
             {
