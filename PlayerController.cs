@@ -224,8 +224,15 @@ public class PlayerController : MonoBehaviour
         GetComponent<MSCameraController>().CameraSettings.firstPerson.invertYInput = PlayerPrefsX.GetPersistentBool("mouseInverted");
 
         // Loading volume settings.
-        AudioListener.volume = PlayerPrefs.GetFloat("volume");
-        GetComponent<MSCameraController>().cameras[0].volume = AudioListener.volume;
+        if (PlayerPrefs.GetFloat("volume") > 0)
+        {
+            AudioListener.volume = PlayerPrefs.GetFloat("volume");
+            GetComponent<MSCameraController>().cameras[0].volume = AudioListener.volume;
+        }
+        else
+        {
+            GetComponent<MSCameraController>().cameras[0].volume = 2.5f;
+        }
 
         // Audio source for placing blocks.
         builderSound = builder.GetComponent<AudioSource>();
@@ -551,7 +558,6 @@ public class PlayerController : MonoBehaviour
                 Cursor.visible = true;
                 Cursor.lockState = CursorLockMode.None;
                 tabletOpen = true;
-                GetComponent<MSCameraController>().cameras[0].volume = 2.5f;
                 introDisplayed = true;
             }
         }
