@@ -751,6 +751,7 @@ public class PlayerController : MonoBehaviour
             if (distance > 40)
             {
                 storageGUIopen = false;
+                inventoryOpen = false;
             }
         }
         else
@@ -759,6 +760,7 @@ public class PlayerController : MonoBehaviour
             if (distance > 40)
             {
                 storageGUIopen = false;
+                inventoryOpen = false;
             }
         }
     }

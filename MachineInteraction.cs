@@ -100,7 +100,7 @@ public class MachineInteraction
         }
         if (cInput.GetKeyDown("Interact"))
         {
-            interactionController.OpenMachineGUI();
+            interactionController.ToggleMachineGUI();
         }
     }
 
@@ -137,7 +137,7 @@ public class MachineInteraction
         }
         if (cInput.GetKeyDown("Interact"))
         {
-            interactionController.OpenMachineGUI();
+            interactionController.ToggleMachineGUI();
         }
     }
 
@@ -158,7 +158,7 @@ public class MachineInteraction
         }
         if (cInput.GetKeyDown("Interact"))
         {
-            interactionController.OpenMachineGUI();
+            interactionController.ToggleMachineGUI();
         }
     }
 
@@ -181,7 +181,7 @@ public class MachineInteraction
         }
         if (cInput.GetKeyDown("Interact"))
         {
-            interactionController.OpenMachineGUI();
+            interactionController.ToggleMachineGUI();
         }
     }
 
@@ -203,7 +203,7 @@ public class MachineInteraction
         }
         if (cInput.GetKeyDown("Interact"))
         {
-            interactionController.OpenMachineGUI();
+            interactionController.ToggleMachineGUI();
         }
     }
 
@@ -421,7 +421,7 @@ public class MachineInteraction
         }
         if (cInput.GetKeyDown("Interact"))
         {
-            interactionController.OpenMachineGUI();
+            interactionController.ToggleMachineGUI();
         }
     }
 
@@ -499,7 +499,7 @@ public class MachineInteraction
         }
         if (cInput.GetKeyDown("Interact"))
         {
-            interactionController.OpenMachineGUI();
+            interactionController.ToggleMachineGUI();
         }
     }
 
@@ -737,7 +737,7 @@ public class MachineInteraction
         }
         if (cInput.GetKeyDown("Interact"))
         {
-            interactionController.OpenMachineGUI();
+            interactionController.ToggleMachineGUI();
         }
     }
 

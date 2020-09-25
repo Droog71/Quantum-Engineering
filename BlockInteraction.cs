@@ -16,6 +16,7 @@ public class BlockInteraction
     //! Called once per frame when the player is looking at an iron block.
     public void InteractWithIronBlock()
     {
+        playerController.machineGUIopen = false;
         if (cInput.GetKeyDown("Collect Object"))
         {
             string objectName = "";
@@ -36,6 +37,7 @@ public class BlockInteraction
     //! Called once per frame when the player is looking at a steel block.
     public void InteractWithSteelBlock()
     {
+        playerController.machineGUIopen = false;
         if (cInput.GetKeyDown("Collect Object"))
         {
             string objectName = "";
@@ -55,6 +57,7 @@ public class BlockInteraction
     //! Called once per frame when the player is looking at a glass block.
     public void InteractWithGlass()
     {
+        playerController.machineGUIopen = false;
         if (cInput.GetKeyDown("Collect Object"))
         {
             interactionController.CollectObject("Glass Block");
@@ -64,6 +67,7 @@ public class BlockInteraction
     //! Called once per frame when the player is looking at a brick block.
     public void InteractWithBricks()
     {
+        playerController.machineGUIopen = false;
         if (cInput.GetKeyDown("Collect Object"))
         {
             interactionController.CollectObject("Brick");
@@ -73,6 +77,7 @@ public class BlockInteraction
     //! Called once per frame when the player is looking at a combined mesh object.
     public void InteractWithCombinedMesh()
     {
+        playerController.machineGUIopen = false;
         playerController.lookingAtCombinedMesh = true;
         if (cInput.GetKeyDown("Collect Object") && playerController.paintGunActive == false)
         {
@@ -119,6 +124,7 @@ public class BlockInteraction
 
     private IEnumerator PaintMesh(GameObject[] holders, string name)
     {
+        playerController.machineGUIopen = false;
         BlockDictionary blockDictionary = new BlockDictionary(playerController);
         Color color = new Color(playerController.paintRed, playerController.paintGreen, playerController.paintBlue);
         foreach (GameObject holder in holders)

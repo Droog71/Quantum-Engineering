@@ -15,6 +15,7 @@ public class StorageInteraction
     //! Called when the player is looking at a storage container.
     public void InteractWithStorageContainer()
     {
+        playerController.machineGUIopen = false;
         InventoryManager inventory = playerController.objectInSight.GetComponent<InventoryManager>();
         if (cInput.GetKeyDown("Interact"))
         {
@@ -100,6 +101,7 @@ public class StorageInteraction
     //! Called when the player is looking at a storage computer.
     public void InteractWithStorageComputer()
     {
+        playerController.machineGUIopen = false;
         playerController.machineInSight = playerController.objectInSight;
         StorageComputer computer = playerController.objectInSight.GetComponent<StorageComputer>();
         playerController.machineID = computer.ID;

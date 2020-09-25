@@ -154,6 +154,10 @@ public class InteractionController : MonoBehaviour
                 {
                     playerController.objectInSight = obj;
                 }
+                else
+                {
+                    EndInteraction();
+                }
             }
             else
             {
@@ -217,7 +221,7 @@ public class InteractionController : MonoBehaviour
     }
 
     //! Opens the machine GUI.
-    public void OpenMachineGUI()
+    public void ToggleMachineGUI()
     {
         if (playerController.machineGUIopen == false)
         {
@@ -260,10 +264,7 @@ public class InteractionController : MonoBehaviour
     //! Called when the player is no longer looking at any interactive objects.
     private void EndInteraction()
     {
-        if (playerController.machineGUIopen == true)
-        {
-            playerController.machineGUIopen = false;
-        }
+        playerController.machineGUIopen = false;
         playerController.lookingAtCombinedMesh = false;
         playerController.objectInSight = null;
         playerController.machineInSight = null;
