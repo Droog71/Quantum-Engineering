@@ -1,10 +1,9 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class ExtruderPiston : MonoBehaviour
 {
     public GameObject extruder;
+    private StateManager stateManager;
     private Vector3 originalPosition;
     private Vector3 endPosition;
     private bool setEndPosition;
@@ -12,52 +11,56 @@ public class ExtruderPiston : MonoBehaviour
     private bool movingBack;
     private bool soundPlayed;
 
-    // Start is called before the first frame update
-    void Start()
+    //! Called by unity engine on start up to initialize variables.
+    public void Start()
     {
+        stateManager = FindObjectOfType<StateManager>();
         originalPosition = transform.position;
     }
 
-    // Update is called once per frame
-    void Update()
+    //! Called once per frame by unity engine.
+    public void Update()
     {
-        if (extruder.GetComponent<Light>().enabled == true)
+        if (!stateManager.Busy())
         {
-            float startDistance = Vector3.Distance(transform.position, originalPosition);
-            if (startDistance < 1.2f && movingForward == true)
+            if (extruder.GetComponent<Light>().enabled == true)
             {
-                if (soundPlayed == false)
+                float startDistance = Vector3.Distance(transform.position, originalPosition);
+                if (startDistance < 1.2f && movingForward == true)
                 {
-                    extruder.GetComponent<AudioSource>().Play();
-                    soundPlayed = true;
+                    if (soundPlayed == false)
+                    {
+                        extruder.GetComponent<AudioSource>().Play();
+                        soundPlayed = true;
+                    }
+                    transform.position += transform.right * 1.1f * Time.deltaTime;
                 }
-                transform.position += transform.right * 1.1f * Time.deltaTime;
-            }
-            else
-            {
-                if (setEndPosition == false)
+                else
                 {
-                    endPosition = transform.position;
-                    setEndPosition = true;
+                    if (setEndPosition == false)
+                    {
+                        endPosition = transform.position;
+                        setEndPosition = true;
+                    }
+                    movingBack = true;
+                    movingForward = false;
                 }
-                movingBack = true;
-                movingForward = false;
-            }
 
-            float endDistance = Vector3.Distance(transform.position, endPosition);
-            if (endDistance < 1.2f && movingBack == true)
-            {
-                if (soundPlayed == true)
+                float endDistance = Vector3.Distance(transform.position, endPosition);
+                if (endDistance < 1.2f && movingBack == true)
                 {
-                    soundPlayed = false;
+                    if (soundPlayed == true)
+                    {
+                        soundPlayed = false;
+                    }
+                    transform.position -= transform.right * 1.1f * Time.deltaTime;
                 }
-                transform.position -= transform.right * 1.1f * Time.deltaTime;
-            }
-            else
-            {
-                setEndPosition = false;
-                movingBack = false;
-                movingForward = true;
+                else
+                {
+                    setEndPosition = false;
+                    movingBack = false;
+                    movingForward = true;
+                }
             }
         }
     }

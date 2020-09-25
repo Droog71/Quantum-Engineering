@@ -1,23 +1,33 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
+//! This class handles animation of the gear cutter's laser.
 public class LaserCutter : MonoBehaviour
 {
     public GameObject gearCutter;
+    private StateManager stateManager;
 
-    // Start is called before the first frame update
-    void Start()
+    //! Called by unity engine on start up to initialize variables.
+    public void Start()
     {
-
+        stateManager = FindObjectOfType<StateManager>();
     }
 
-    // Update is called once per frame
-    void Update()
+    //! Update is called once per frame.
+    public void Update()
     {
-        if (gearCutter.GetComponent<AudioSource>().enabled == true)
+        if (!stateManager.Busy())
         {
-            transform.Rotate(-Vector3.up * 600 * Time.deltaTime);
+            if (gearCutter.GetComponent<Light>().enabled == true)
+            {
+                GetComponentInChildren<Renderer>().enabled = true;
+                gearCutter.GetComponent<AudioSource>().enabled = true;
+                transform.Rotate(-Vector3.up * 600 * Time.deltaTime);
+            }
+            else
+            {
+                gearCutter.GetComponent<AudioSource>().enabled = false;
+                GetComponentInChildren<Renderer>().enabled = false;
+            }
         }
     }
 }

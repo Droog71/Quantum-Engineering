@@ -1,20 +1,7 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
+//! This class is attached to placeholder objects identified through Unity's GetComponent method.
 public class BlockDummy : MonoBehaviour
 {
     public string type;
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 }

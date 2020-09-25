@@ -1,21 +1,31 @@
 ﻿using UnityEngine;
-using System.Collections;
 
 public class Meteor : MonoBehaviour
 {
     public GameObject explosion;
     public GameObject fire;
-    GameManager game;
-    public bool destroying;
-    float destroyTimer;
     public float altitude;
+    public bool destroying;
+    private GameManager game;
+    private PlayerController playerController;
+    private float destroyTimer;
 
-    void Start()
+
+    //! Called by unity engine on start up to initialize variables.
+    public void Start()
     {
         game = GameObject.Find("GameManager").GetComponent<GameManager>();
+        playerController = GameObject.Find("Player").GetComponent<PlayerController>();
     }
 
-    void Update()
+    //! Returns true if a message can be sent to the player's tablet.
+    private bool CanSendDestructionMessage()
+    {
+        return playerController.timeToDeliver == false && playerController.meteorShowerWarningActive == false && playerController.pirateAttackWarningActive == false;
+    }
+
+    //! Called once per frame by unity engine.
+    public void Update()
     {
         if (destroying == false)
         {
@@ -32,15 +42,15 @@ public class Meteor : MonoBehaviour
                     {
                         hit.collider.gameObject.GetComponent<PhysicsHandler>().Explode();
                     }
-                    if (GameObject.Find("Player").GetComponent<PlayerController>().timeToDeliver == false && GameObject.Find("Player").GetComponent<PlayerController>().meteorShowerWarningActive == false && GameObject.Find("Player").GetComponent<PlayerController>().pirateAttackWarningActive == false)
+                    if (CanSendDestructionMessage())
                     {
-                        if (GameObject.Find("Player").GetComponent<PlayerController>().destructionMessageActive == false)
+                        if (playerController.destructionMessageActive == false)
                         {
-                            GameObject.Find("Player").GetComponent<PlayerController>().destructionMessageActive = true;
-                            GameObject.Find("Player").GetComponent<PlayerController>().currentTabletMessage = "";
+                            playerController.destructionMessageActive = true;
+                            playerController.currentTabletMessage = "";
                         }
-                        GameObject.Find("Player").GetComponent<PlayerController>().currentTabletMessage += "ALERT: " + hit.collider.gameObject.name.Split('(')[0] + " destroyed by a meteor!\n";
-                        GameObject.Find("Player").GetComponent<PlayerController>().destructionMessageCount += 1;
+                        playerController.currentTabletMessage += "ALERT: " + hit.collider.gameObject.name.Split('(')[0] + " destroyed by a meteor!\n";
+                        playerController.destructionMessageCount += 1;
                     }
                     Explode();
                 }
@@ -52,16 +62,16 @@ public class Meteor : MonoBehaviour
                         {
                             if (chanceOfDestruction > 25)
                             {
-                                game.SeparateBlocks(transform.position, "glass", false);
-                                if (GameObject.Find("Player").GetComponent<PlayerController>().timeToDeliver == false && GameObject.Find("Player").GetComponent<PlayerController>().meteorShowerWarningActive == false && GameObject.Find("Player").GetComponent<PlayerController>().pirateAttackWarningActive == false)
+                                game.meshManager.SeparateBlocks(transform.position, "glass", false);
+                                if (CanSendDestructionMessage())
                                 {
-                                    if (GameObject.Find("Player").GetComponent<PlayerController>().destructionMessageActive == false)
+                                    if (playerController.destructionMessageActive == false)
                                     {
-                                        GameObject.Find("Player").GetComponent<PlayerController>().destructionMessageActive = true;
-                                        GameObject.Find("Player").GetComponent<PlayerController>().currentTabletMessage = "";
+                                        playerController.destructionMessageActive = true;
+                                        playerController.currentTabletMessage = "";
                                     }
-                                    GameObject.Find("Player").GetComponent<PlayerController>().currentTabletMessage += "ALERT: Some glass blocks were hit by a meteor!\n";
-                                    GameObject.Find("Player").GetComponent<PlayerController>().destructionMessageCount += 1;
+                                    playerController.currentTabletMessage += "ALERT: Some glass blocks were hit by a meteor!\n";
+                                    playerController.destructionMessageCount += 1;
                                 }
                             }
                         }
@@ -73,16 +83,16 @@ public class Meteor : MonoBehaviour
                         {
                             if (chanceOfDestruction > 50)
                             {
-                                game.SeparateBlocks(transform.position, "brick", false);
-                                if (GameObject.Find("Player").GetComponent<PlayerController>().timeToDeliver == false && GameObject.Find("Player").GetComponent<PlayerController>().meteorShowerWarningActive == false && GameObject.Find("Player").GetComponent<PlayerController>().pirateAttackWarningActive == false)
+                                game.meshManager.SeparateBlocks(transform.position, "brick", false);
+                                if (CanSendDestructionMessage())
                                 {
-                                    if (GameObject.Find("Player").GetComponent<PlayerController>().destructionMessageActive == false)
+                                    if (playerController.destructionMessageActive == false)
                                     {
-                                        GameObject.Find("Player").GetComponent<PlayerController>().destructionMessageActive = true;
-                                        GameObject.Find("Player").GetComponent<PlayerController>().currentTabletMessage = "";
+                                        playerController.destructionMessageActive = true;
+                                        playerController.currentTabletMessage = "";
                                     }
-                                    GameObject.Find("Player").GetComponent<PlayerController>().currentTabletMessage += "ALERT: Some bricks were hit by a meteor!\n";
-                                    GameObject.Find("Player").GetComponent<PlayerController>().destructionMessageCount += 1;
+                                    playerController.currentTabletMessage += "ALERT: Some bricks were hit by a meteor!\n";
+                                    playerController.destructionMessageCount += 1;
                                 }
                             }
                             Explode();
@@ -94,16 +104,16 @@ public class Meteor : MonoBehaviour
                         {
                             if (chanceOfDestruction > 75)
                             {
-                                game.SeparateBlocks(transform.position, "iron", false);
-                                if (GameObject.Find("Player").GetComponent<PlayerController>().timeToDeliver == false && GameObject.Find("Player").GetComponent<PlayerController>().meteorShowerWarningActive == false && GameObject.Find("Player").GetComponent<PlayerController>().pirateAttackWarningActive == false)
+                                game.meshManager.SeparateBlocks(transform.position, "iron", false);
+                                if (CanSendDestructionMessage())
                                 {
-                                    if (GameObject.Find("Player").GetComponent<PlayerController>().destructionMessageActive == false)
+                                    if (playerController.destructionMessageActive == false)
                                     {
-                                        GameObject.Find("Player").GetComponent<PlayerController>().destructionMessageActive = true;
-                                        GameObject.Find("Player").GetComponent<PlayerController>().currentTabletMessage = "";
+                                        playerController.destructionMessageActive = true;
+                                        playerController.currentTabletMessage = "";
                                     }
-                                    GameObject.Find("Player").GetComponent<PlayerController>().currentTabletMessage += "ALERT: Some iron blocks were hit by a meteor!\n";
-                                    GameObject.Find("Player").GetComponent<PlayerController>().destructionMessageCount += 1;
+                                    playerController.currentTabletMessage += "ALERT: Some iron blocks were hit by a meteor!\n";
+                                    playerController.destructionMessageCount += 1;
                                 }
                             }
                             Explode();
@@ -115,16 +125,16 @@ public class Meteor : MonoBehaviour
                         {
                             if (chanceOfDestruction > 99)
                             {
-                                game.SeparateBlocks(transform.position, "steel", false);
-                                if (GameObject.Find("Player").GetComponent<PlayerController>().timeToDeliver == false && GameObject.Find("Player").GetComponent<PlayerController>().meteorShowerWarningActive == false && GameObject.Find("Player").GetComponent<PlayerController>().pirateAttackWarningActive == false)
+                                game.meshManager.SeparateBlocks(transform.position, "steel", false);
+                                if (CanSendDestructionMessage())
                                 {
-                                    if (GameObject.Find("Player").GetComponent<PlayerController>().destructionMessageActive == false)
+                                    if (playerController.destructionMessageActive == false)
                                     {
-                                        GameObject.Find("Player").GetComponent<PlayerController>().destructionMessageActive = true;
-                                        GameObject.Find("Player").GetComponent<PlayerController>().currentTabletMessage = "";
+                                        playerController.destructionMessageActive = true;
+                                        playerController.currentTabletMessage = "";
                                     }
-                                    GameObject.Find("Player").GetComponent<PlayerController>().currentTabletMessage += "ALERT: Some steel blocks were hit by a meteor!\n";
-                                    GameObject.Find("Player").GetComponent<PlayerController>().destructionMessageCount += 1;
+                                    playerController.currentTabletMessage += "ALERT: Some steel blocks were hit by a meteor!\n";
+                                    playerController.destructionMessageCount += 1;
                                 }
                             }
                             Explode();
@@ -135,7 +145,6 @@ public class Meteor : MonoBehaviour
                 {
                     Explode();
                 }
-
             }
         }
         else
@@ -148,6 +157,7 @@ public class Meteor : MonoBehaviour
         }
     }
 
+    //! Destroys the meteor and spawns explosion effects.
     public void Explode()
     {
         Instantiate(explosion, new Vector3(transform.position.x,transform.position.y+10,transform.position.z), transform.rotation);

@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using System.Collections;
 
 public class Auger : MonoBehaviour
 {
@@ -11,19 +10,26 @@ public class Auger : MonoBehaviour
     public int cooling;
     public GameObject outputObject;
     public GameObject powerObject;
-    public GameObject conduitItem;
+    public ConduitItem conduitItem;
+    public PowerReceiver powerReceiver;
     public Material lineMat;
     public string ID = "unassigned";
     public string creationMethod;
-    LineRenderer connectionLine;
-    private float updateTick;
     public int address;
     public bool powerON;
+    private LineRenderer connectionLine;
+    private StateManager stateManager;
+    private float updateTick;
     private int machineTimer;
+    private int warmup;
 
-    void Start()
+    //! Called by unity engine on start up to initialize variables.
+    public void Start()
     {
+        powerReceiver = gameObject.AddComponent<PowerReceiver>();
         connectionLine = gameObject.AddComponent<LineRenderer>();
+        conduitItem = GetComponentInChildren<ConduitItem>(true);
+        stateManager = FindObjectOfType<StateManager>();
         connectionLine.startWidth = 0.2f;
         connectionLine.endWidth = 0.2f;
         connectionLine.material = lineMat;
@@ -31,19 +37,30 @@ public class Auger : MonoBehaviour
         connectionLine.enabled = false;
     }
 
-    void OnDestroy()
-    {
-
-    }
-
-    void Update()
+    //! Called once per frame by unity engine.
+    public void Update()
     {
         updateTick += 1 * Time.deltaTime;
         if (updateTick > 0.5f + (address * 0.001f))
         {
-            //Debug.Log(ID + " Machine update tick: " + address * 0.1f);
+            if (stateManager.Busy())
+            {
+                 updateTick = 0;
+                return;
+            }
+
             GetComponent<PhysicsHandler>().UpdatePhysics();
+            UpdatePowerReceiver();
+
             updateTick = 0;
+            if (warmup < 10)
+            {
+                warmup++;
+            }
+            else if (speed > power)
+            {
+                speed = power > 0 ? power : 1;
+            }
             if (speed > 1)
             {
                 heat = speed - 1 - cooling;
@@ -56,6 +73,7 @@ public class Auger : MonoBehaviour
             {
                 heat = 0;
             }
+
             if (outputObject != null)
             {
                 connectionLine.SetPosition(0, transform.position);
@@ -69,7 +87,7 @@ public class Auger : MonoBehaviour
 
             if (powerON == true && speed > 0)
             {
-                conduitItem.GetComponent<ConduitItem>().active = true;
+                conduitItem.active = true;
                 GetComponent<Light>().enabled = true;
                 GetComponent<AudioSource>().enabled = true;
                 machineTimer += 1;
@@ -82,10 +100,19 @@ public class Auger : MonoBehaviour
             else
             {
                 machineTimer = 0;
-                conduitItem.GetComponent<ConduitItem>().active = false;
+                conduitItem.active = false;
                 GetComponent<Light>().enabled = false;
                 GetComponent<AudioSource>().enabled = false;
             }
         }
+    }
+
+    //! Gets power values from power receiver.
+    private void UpdatePowerReceiver()
+    {
+        powerReceiver.ID = ID;
+        power = powerReceiver.power;
+        powerON = powerReceiver.powerON;
+        powerObject = powerReceiver.powerObject;
     }
 }

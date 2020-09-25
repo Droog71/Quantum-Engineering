@@ -1,76 +1,70 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class InventoryManager : MonoBehaviour
 {
     public InventorySlot[] inventory;
-    StateManager game;
+    private StateManager stateManager;
     public string ID = "unassigned";
     public int address;
-    string originalID;
+    private string originalID;
     public bool initialized;
     private float updateTick;
     public int maxStackSize = 1000;
     public bool itemAdded;
 
-    // Start is called before the first frame update
-    void Start()
+    public void Start()
     {
-        
+        stateManager = FindObjectOfType<StateManager>();
     }
 
-    // Update is called once per frame
-    void Update()
+    //! Called once per frame by unity engine.
+    public void Update()
     {
-        if (ID != "unassigned" && initialized == false)
+        if (!stateManager.Busy())
         {
-            game = GameObject.Find("GameManager").GetComponent<StateManager>();
-            if (game.worldLoaded == true)
+            if (ID != "unassigned" && initialized == false)
             {
                 inventory = new InventorySlot[16];
                 int count = 0;
                 while (count <= 15)
                 {
                     inventory[count] = gameObject.AddComponent<InventorySlot>();
-                    string countType = PlayerPrefs.GetString(game.WorldName + "inventory" + ID + "slot" + count + "type");
+                    string countType = FileBasedPrefs.GetString(stateManager.WorldName + "inventory" + ID + "slot" + count + "type");
                     if (!countType.Equals(""))
                     {
-                        inventory[count].typeInSlot = PlayerPrefs.GetString(game.WorldName + "inventory" + ID + "slot" + count + "type");
-                        inventory[count].amountInSlot = PlayerPrefs.GetInt(game.WorldName + "inventory" + ID + "slot" + count + "amount");
+                        inventory[count].typeInSlot = FileBasedPrefs.GetString(stateManager.WorldName + "inventory" + ID + "slot" + count + "type");
+                        inventory[count].amountInSlot = FileBasedPrefs.GetInt(stateManager.WorldName + "inventory" + ID + "slot" + count + "amount");
                     }
                     count++;
                 }
                 originalID = ID;
                 initialized = true;
-                if (ID.Equals("Rocket"))
-                {
-                    maxStackSize = 100000;
-                }
-                else
-                {
-                    maxStackSize = 1000;
-                }
-                //Debug.Log("Loaded inventory for : " + ID);
+                maxStackSize = ID.Equals("Rocket") ? 100000 : 1000;
             }
-        }
 
-        updateTick += 1 * Time.deltaTime;
-        if (updateTick > 0.5f + (address * 0.001f))
-        {
-            //Debug.Log(ID + " Machine update tick: " + address * 0.1f);
-            if (GetComponent<RailCart>() == null && GetComponent<Retriever>() == null && GetComponent<AutoCrafter>() == null && GetComponent<PlayerController>() == null && GetComponent<Rocket>() == null && ID != "Lander")
+            updateTick += 1 * Time.deltaTime;
+            if (updateTick > 0.5f + (address * 0.001f))
             {
-                GetComponent<PhysicsHandler>().UpdatePhysics();
+                if (IsStorageContainer())
+                {
+                    GetComponent<PhysicsHandler>().UpdatePhysics();
+                }
+                updateTick = 0;
             }
-            if (ID == "player" || ID == "Lander")
-            {
-                SaveData();
-            }
-            updateTick = 0;
         }
     }
 
+    private bool IsStorageContainer()
+    {
+        return GetComponent<RailCart>() == null
+        && GetComponent<Retriever>() == null
+        && GetComponent<AutoCrafter>() == null
+        && GetComponent<PlayerController>() == null
+        && GetComponent<Rocket>() == null
+        && ID != "Lander";
+    }
+
+    //! Saves the inventory's contents to disk.
     public void SaveData()
     {
         if (initialized == true)
@@ -80,8 +74,8 @@ public class InventoryManager : MonoBehaviour
                 int originalCount = 0;
                 while (originalCount <= 15)
                 {
-                    PlayerPrefs.SetString(game.WorldName + "inventory" + originalID + "slot" + originalCount + "type", "nothing");
-                    PlayerPrefs.SetInt(game.WorldName + "inventory" + originalID + "slot" + originalCount + "amount", 0);
+                    FileBasedPrefs.SetString(stateManager.WorldName + "inventory" + originalID + "slot" + originalCount + "type", "nothing");
+                    FileBasedPrefs.SetInt(stateManager.WorldName + "inventory" + originalID + "slot" + originalCount + "amount", 0);
                     originalCount++;
                 }
                 originalID = ID;
@@ -89,13 +83,14 @@ public class InventoryManager : MonoBehaviour
             int count = 0;
             while (count <= 15)
             {
-                PlayerPrefs.SetString(game.WorldName + "inventory" + ID + "slot" + count + "type", inventory[count].typeInSlot);
-                PlayerPrefs.SetInt(game.WorldName + "inventory" + ID + "slot" + count + "amount", inventory[count].amountInSlot);
+                FileBasedPrefs.SetString(stateManager.WorldName + "inventory" + ID + "slot" + count + "type", inventory[count].typeInSlot);
+                FileBasedPrefs.SetInt(stateManager.WorldName + "inventory" + ID + "slot" + count + "amount", inventory[count].amountInSlot);
                 count++;
             }
         }
     }
 
+    //! Adds an item to the inventory.
     public void AddItem(string type, int amount)
     {
         itemAdded = false;
@@ -116,6 +111,7 @@ public class InventoryManager : MonoBehaviour
         }
     }
 
+    // Adds an item to a specific inventory slot.
     public void AddItemToSlot(string type, int amount, int slot)
     {
         inventory[slot].typeInSlot = type;

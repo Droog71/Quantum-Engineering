@@ -1,31 +1,36 @@
 using UnityEngine;
-using System.Collections;
 
 public class DarkMatter: MonoBehaviour
 {
-    float size;
+    private float size;
     public GameObject collector;
+    private StateManager stateManager;
 
-    void Start()
+    //! Called by unity engine on start up to initialize variables.
+    public void Start()
     {
-
+        stateManager = FindObjectOfType<StateManager>();
     }
 
-    void Update()
+    //! Called once per frame by unity engine
+    public void Update()
     {
-        if (size < 10)
+        if (!stateManager.Busy())
         {
-            transform.localScale = Vector3.Lerp(transform.localScale, new Vector3(10, 10, 10), Time.deltaTime * 0.5f);
-            size += 1;
-        }
-        else if (size >= 10 && size < 20)
-        {
-            transform.localScale = Vector3.Lerp(transform.localScale, new Vector3(5, 5, 5), Time.deltaTime * 0.5f);
-            size += 1;
-        }
-        else if (size >= 20)
-        {
-            size = 0;
+            if (size < 10)
+            {
+                transform.localScale = Vector3.Lerp(transform.localScale, new Vector3(10, 10, 10), Time.deltaTime * 0.5f);
+                size += 1;
+            }
+            else if (size >= 10 && size < 20)
+            {
+                transform.localScale = Vector3.Lerp(transform.localScale, new Vector3(5, 5, 5), Time.deltaTime * 0.5f);
+                size += 1;
+            }
+            else if (size >= 20)
+            {
+                size = 0;
+            }
         }
     }
 }

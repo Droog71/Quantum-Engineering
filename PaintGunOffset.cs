@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class PaintGunOffset : MonoBehaviour
 {
@@ -8,11 +6,8 @@ public class PaintGunOffset : MonoBehaviour
     public GameObject adjustedPaintGun;
     public GameObject adjustedPaintGun2;
 
-    void Start()
-    {
-
-    }
-    void Update()
+    //! Called once per frame by unity engine.
+    public void Update()
     {
         if (Camera.main.fieldOfView > 66.6667 && Camera.main.fieldOfView < 73.3334)
         {

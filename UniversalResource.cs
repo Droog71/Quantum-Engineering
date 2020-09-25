@@ -1,21 +1,8 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
+//! This class is attached to all resource nodes.
 public class UniversalResource : MonoBehaviour
 {
     public string type;
     public GameObject extractor;
-
-    // Start is called before the first frame update
-    void Start()
-    {
-
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
 }

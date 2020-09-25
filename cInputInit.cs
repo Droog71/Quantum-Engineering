@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using System.Collections;
 
 public class cInputInit : MonoBehaviour 
 {
@@ -29,8 +28,10 @@ public class cInputInit : MonoBehaviour
         cInput.SetKey("Collect Object", "F", Keys.F);
         cInput.SetKey("Rotate Block", "R", Keys.R);
         cInput.SetKey("Build Axis", "V", Keys.V);
+        cInput.SetKey("Auto Axis", "Y", Keys.Y);
         cInput.SetKey("Inventory", "I", Keys.I);
         cInput.SetKey("Crafting", "C", Keys.C);
+        cInput.SetKey("Market", "M", Keys.M);
         cInput.SetKey("Headlamp", "H", Keys.H);
         cInput.SetKey("Scanner", "F1", Keys.F1);
         cInput.SetKey("Laser Cannon", "F2", Keys.F2);

@@ -1,25 +1,32 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
+//! This class is attached to all iron block prefabs.
 public class IronBlock : MonoBehaviour
 {
     public string ID = "unassigned";
     public string creationMethod;
     public int address;
     private float updateTick;
+    private StateManager stateManager;
 
-    void Start()
+    //! Called by unity engine on start up to initialize variables.
+    public void Start()
     {
-
+        stateManager = FindObjectOfType<StateManager>();
     }
 
-    void Update()
+    //! Called once per frame by unity engine.
+    public void Update()
     {
         updateTick += 1 * Time.deltaTime;
         if (updateTick > 0.5f + (address * 0.001f))
         {
-            //Debug.Log(ID + " Physics update tick: " + address * 0.1f);
+            if (stateManager.Busy())
+            {
+                updateTick = 0;
+                return;
+            }
+
             GetComponent<PhysicsHandler>().UpdatePhysics();
             updateTick = 0;
         }

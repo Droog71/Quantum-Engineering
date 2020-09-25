@@ -1,23 +1,26 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
+//! This class handles animations for reactor turbines.
 public class TurbineImpeller : MonoBehaviour
 {
     public GameObject turbine;
+    private StateManager stateManager;
 
-    // Start is called before the first frame update
+    //! Called by unity engine on start up to initialize variables.
     void Start()
     {
-
+        stateManager = FindObjectOfType<StateManager>();
     }
 
-    // Update is called once per frame
+    //! Update is called once per frame.
     void Update()
     {
-        if (turbine.GetComponent<AudioSource>().isPlaying == true)
+        if (!stateManager.Busy())
         {
-            transform.Rotate(-Vector3.forward * 600 * Time.deltaTime);
+            if (turbine.GetComponent<AudioSource>().isPlaying == true)
+            {
+                transform.Rotate(-Vector3.forward * 600 * Time.deltaTime);
+            }
         }
     }
 }

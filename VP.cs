@@ -1,16 +1,11 @@
-﻿// Examples of VideoPlayer function
+﻿using UnityEngine;
 
-using UnityEngine;
-
+//! Video Player
 public class VP : MonoBehaviour
 {
     public GameObject cam;
 
-    void Start()
-    {
-
-    }
-
+    //! Plays a video.
     public void PlayVideo(string video,bool looping,float volume)
     {
         cam.GetComponent<UnityEngine.Video.VideoPlayer>().url = Application.dataPath + "/Video/" + video;
@@ -18,9 +13,16 @@ public class VP : MonoBehaviour
         cam.GetComponent<UnityEngine.Video.VideoPlayer>().SetDirectAudioVolume(0,volume);
         cam.GetComponent<UnityEngine.Video.VideoPlayer>().Play();
     }
-    
+
+    //! Stops a video.
     public void StopVideo()
     {
         cam.GetComponent<UnityEngine.Video.VideoPlayer>().Stop();
+    }
+
+    //! Returns true if a video is playing.
+    public bool IsPlaying()
+    {
+        return cam.GetComponent<UnityEngine.Video.VideoPlayer>().isPlaying;
     }
 }

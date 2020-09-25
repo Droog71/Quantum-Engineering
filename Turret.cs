@@ -9,7 +9,7 @@ public class Turret : MonoBehaviour
     public bool hasHeatExchanger;
     public int cooling;
     public string ID = "unassigned";
-    public string creationMethod;
+    public string creationMethod = "built";
     private float updateTick;
     public int address;
     public bool powerON;
@@ -23,12 +23,18 @@ public class Turret : MonoBehaviour
     private bool hasTarget;
     private Coroutine fireCoroutine;
     private bool firing;
+    private int warmup;
     private GameManager game;
-    LineRenderer laser;
+    private StateManager stateManager;
+    private LineRenderer laser;
+    public PowerReceiver powerReceiver;
 
-    void Start()
+    //! Called by unity engine on start up to initialize variables.
+    public void Start()
     {
+        powerReceiver = gameObject.AddComponent<PowerReceiver>();
         laser = gameObject.AddComponent<LineRenderer>();
+        stateManager = FindObjectOfType<StateManager>();
         laser.startWidth = 0.2f;
         laser.endWidth = 0.2f;
         laser.material = laserMat;
@@ -38,13 +44,21 @@ public class Turret : MonoBehaviour
         restingRotation = barrel.transform.rotation;
     }
 
-    void Update()
+    //! Called once per frame by unity engine.
+    public void Update()
     {
         updateTick += 1 * Time.deltaTime;
         if (updateTick > 0.5f + (address * 0.001f))
         {
-            //Debug.Log(ID + " Machine update tick: " + address * 0.1f);
+            if (stateManager.Busy())
+            {
+                 updateTick = 0;
+                return;
+            }
+
             GetComponent<PhysicsHandler>().UpdatePhysics();
+            UpdatePowerReceiver();
+
             updateTick = 0;
             if (game == null)
             {
@@ -52,7 +66,14 @@ public class Turret : MonoBehaviour
             }
             if (game != null)
             {
-                //Debug.Log(ID + " game manager is not null");
+                if (warmup < 10)
+                {
+                    warmup++;
+                }
+                else if (speed > power)
+                {
+                    speed = power > 0 ? power : 1;
+                }
                 if (speed > 1)
                 {
                     heat = speed - 1 - cooling;
@@ -67,10 +88,8 @@ public class Turret : MonoBehaviour
                 }
                 if (game.meteorShowerTimer >= 540 && game.meteorShowerTimer < 900 || game.pirateAttackTimer >= 540 && game.pirateAttackTimer < 900 && GameObject.Find("Rocket").GetComponent<Rocket>().day >= 5)
                 {
-                    //Debug.Log(ID + " attack timer active");
                     if (foundTarget == false)
                     {
-                        //Debug.Log(ID+" searching for target.");
                         targets = new GameObject[speed - heat];
                         int count = 0;
                         GameObject[] allObjects = GameObject.FindGameObjectsWithTag("Entity");
@@ -94,7 +113,6 @@ public class Turret : MonoBehaviour
                                     {
                                         if (count < speed - heat && obj.GetComponent<Pirate>().destroying == false)
                                         {
-                                            //Debug.Log(ID + " found pirate target");
                                             foundTarget = true;
                                             targets[count] = obj;
                                             count++;
@@ -106,10 +124,8 @@ public class Turret : MonoBehaviour
                     }
                     else
                     {
-                        //Debug.Log(ID + " update: " + " power: " + powerON + " firing: " + firing);
                         if (powerON == true && firing == false && speed > 0)
                         {
-                            //Debug.Log(ID + " calling fire coroutine");
                             fireCoroutine = StartCoroutine(Fire());
                         }
                     }
@@ -118,26 +134,22 @@ public class Turret : MonoBehaviour
         }
     }
 
-    IEnumerator Fire()
+    //! Fires at all targets on the target list.
+    private IEnumerator Fire()
     {
         firing = true;
         hasTarget = false;
-        //Debug.Log(ID+ " Fire coroutine");
         foreach (GameObject target in targets)
         {
             if (target != null)
             {
-                //Debug.Log(ID + "Target is not null");
                 if (target.GetComponent<Meteor>() != null)
                 {
                     if (target.GetComponent<Meteor>().destroying == false)
                     {
-                        //Debug.Log(ID + "Target is a meteor");
                         hasTarget = true;
                         if (!GetComponent<AudioSource>().isPlaying)
-                        {
-
-                            //Debug.Log(ID + " firing at meteor");
+                        {                     
                             barrel.GetComponent<AudioSource>().Play();
                             float angle = Vector3.Angle(transform.forward, target.transform.position);
                             if (angle > 90)
@@ -173,14 +185,11 @@ public class Turret : MonoBehaviour
                 }
                 else if (target.GetComponent<Pirate>() != null)
                 {
-                    //Debug.Log(ID + "Target is a pirate");
                     if (target.GetComponent<Pirate>().destroying == false)
                     {
-                        //Debug.Log(ID + " Target is alive");
                         hasTarget = true;
                         if (!GetComponent<AudioSource>().isPlaying)
                         {
-                            //Debug.Log("Turret firing.");
                             barrel.GetComponent<AudioSource>().Play();
                             float angle = Vector3.Angle(transform.forward, target.transform.position);
                             if (angle > 90)
@@ -224,8 +233,14 @@ public class Turret : MonoBehaviour
         {
             foundTarget = false;
         }
-        //Debug.Log(ID + "Has target: " + hasTarget);
-        //Debug.Log(ID + "Firing: " + firing);
-        //Debug.Log(ID + "Found Target: " + foundTarget);
+    }
+
+    //! Gets power values from power receiver.
+    private void UpdatePowerReceiver()
+    {
+        powerReceiver.ID = ID;
+        power = powerReceiver.power;
+        powerON = powerReceiver.powerON;
+        powerObject = powerReceiver.powerObject;
     }
 }

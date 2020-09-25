@@ -1,23 +1,25 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class AugerBlade : MonoBehaviour
 {
     public GameObject auger;
-    
-    // Start is called before the first frame update
-    void Start()
+    private StateManager stateManager;
+
+    //! Called by unity engine on start up to initialize variables.
+    public void Start()
     {
-        
+        stateManager = FindObjectOfType<StateManager>();
     }
 
-    // Update is called once per frame
-    void Update()
+    //! Called once per frame by unity engine.
+    public void Update()
     {
-        if (auger.GetComponent<AudioSource>().enabled == true)
+        if (!stateManager.Busy())
         {
-            transform.Rotate(-Vector3.forward * 600 * Time.deltaTime);
+            if (auger.GetComponent<AudioSource>().enabled == true)
+            {
+                transform.Rotate(-Vector3.forward * 600 * Time.deltaTime);
+            }
         }
     } 
 }

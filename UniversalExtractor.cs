@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using System.Collections;
 
 public class UniversalExtractor : MonoBehaviour
 {
@@ -10,16 +9,17 @@ public class UniversalExtractor : MonoBehaviour
     public bool hasHeatExchanger;
     private int machineTimer;
     public int power;
+    private int warmup;
     public string type;
     public GameObject outputObject;
     private GameObject inputObject;
     public GameObject powerObject;
-    public GameObject conduitItem;
+    public ConduitItem conduitItem;
     public Material lineMat;
     public string ID = "unassigned";
-    public string creationMethod;
-    LineRenderer connectionLine;
-    LineRenderer inputLine;
+    public string creationMethod = "built";
+    private LineRenderer connectionLine;
+    private LineRenderer inputLine;
     private float updateTick;
     public int address;
     public bool powerON;
@@ -27,12 +27,17 @@ public class UniversalExtractor : MonoBehaviour
     private bool hasResource;
     public int connectionAttempts;
     public bool connectionFailed;
+    private StateManager stateManager;
     private GameObject builtObjects;
+    public PowerReceiver powerReceiver;
 
-
-    void Start()
+    //! Called by unity engine on start up to initialize variables.
+    public void Start()
     {
+        powerReceiver = gameObject.AddComponent<PowerReceiver>();
         connectionLine = gameObject.AddComponent<LineRenderer>();
+        conduitItem = GetComponentInChildren<ConduitItem>(true);
+        stateManager = FindObjectOfType<StateManager>();
         connectionLine.startWidth = 0.2f;
         connectionLine.endWidth = 0.2f;
         connectionLine.material = lineMat;
@@ -40,7 +45,8 @@ public class UniversalExtractor : MonoBehaviour
         builtObjects = GameObject.Find("Built_Objects");
     }
 
-    void OnDestroy()
+    //! Used to remove the connection line renderer when the block is destroyed.
+    public void OnDestroy()
     {
         if (inputLine != null)
         {
@@ -48,15 +54,46 @@ public class UniversalExtractor : MonoBehaviour
         }
     }
 
-    void Update()
+    //! The object exists, is active and is a resource node.
+    private bool IsValidResource(GameObject obj)
+    {
+        return obj != null && obj.transform.parent != builtObjects.transform && obj.activeInHierarchy && obj.GetComponent<UniversalResource>() != null;
+    }
+
+    //! Gets power values from power receiver.
+    private void UpdatePowerReceiver()
+    {
+        powerReceiver.ID = ID;
+        power = powerReceiver.power;
+        powerON = powerReceiver.powerON;
+        powerObject = powerReceiver.powerObject;
+    }
+
+    //! Called once per frame by unity engine.
+    public void Update()
     {
         updateTick += 1 * Time.deltaTime;
         if (updateTick > 0.5f + (address * 0.001f))
         {
-            //Debug.Log(ID + " Machine update tick: " + address * 0.1f);
+            if (stateManager.Busy())
+            {
+                updateTick = 0;
+                return;
+            }
+
             GetComponent<PhysicsHandler>().UpdatePhysics();
+            UpdatePowerReceiver();
+
             updateTick = 0;
-            if (speed > 1 && extractingIce == false)
+            if (warmup < 10)
+            {
+                warmup++;
+            }
+            else if (speed > power)
+            {
+                speed = power > 0 ? power : 1;
+            }
+            if (extractingIce == false)
             {
                 heat = speed - 1 - cooling;
             }
@@ -84,7 +121,7 @@ public class UniversalExtractor : MonoBehaviour
                 connectionAttempts = 0;
                 if (powerON == true && connectionFailed == false && speed > 0)
                 {
-                    conduitItem.GetComponent<ConduitItem>().active = true;
+                    conduitItem.active = true;
                     GetComponent<Light>().enabled = true;
                     GetComponent<AudioSource>().enabled = true;
                     machineTimer += 1;
@@ -96,11 +133,10 @@ public class UniversalExtractor : MonoBehaviour
                 }
                 else
                 {
-                    conduitItem.GetComponent<ConduitItem>().active = false;
+                    conduitItem.active = false;
                     GetComponent<Light>().enabled = false;
                     GetComponent<AudioSource>().enabled = false;
                 }
-                //Debug.Log("Smelter trying to add " + outputType + " to " + outputObject.GetComponent<InventoryManager>().ID);
                 type = inputObject.GetComponent<UniversalResource>().type;
             }
             else
@@ -117,45 +153,36 @@ public class UniversalExtractor : MonoBehaviour
                     foreach (UniversalResource r in allResources)
                     {
                         GameObject obj = r.gameObject;
-                        if (obj != null)
+                        if (IsValidResource(obj))
                         {
-                            if (obj.transform.parent != builtObjects.transform)
+                            float distance = Vector3.Distance(transform.position, obj.transform.position);
+                            if (distance < 20)
                             {
-                                if (obj.activeInHierarchy)
+                                if (obj.GetComponent<UniversalResource>().extractor == null)
                                 {
-                                    if (obj.GetComponent<UniversalResource>() != null)
+                                    obj.GetComponent<UniversalResource>().extractor = gameObject;
+                                }
+                                if (obj.GetComponent<UniversalResource>().extractor == gameObject)
+                                {
+                                    if (obj.GetComponent<UniversalResource>().type.Equals("Ice"))
                                     {
-                                        float distance = Vector3.Distance(transform.position, obj.transform.position);
-                                        if (distance < 20)
-                                        {
-                                            if (obj.GetComponent<UniversalResource>().extractor == null)
-                                            {
-                                                obj.GetComponent<UniversalResource>().extractor = this.gameObject;
-                                            }
-                                            if (obj.GetComponent<UniversalResource>().extractor == this.gameObject)
-                                            {
-                                                if (obj.GetComponent<UniversalResource>().type.Equals("Ice"))
-                                                {
-                                                    extractingIce = true;
-                                                }
-                                                else
-                                                {
-                                                    extractingIce = false;
-                                                }
-                                                if (inputLine == null && obj.GetComponent<LineRenderer>() == null)
-                                                {
-                                                    inputLine = obj.AddComponent<LineRenderer>();
-                                                    inputLine.startWidth = 0.2f;
-                                                    inputLine.endWidth = 0.2f;
-                                                    inputLine.material = lineMat;
-                                                    inputLine.SetPosition(0, transform.position);
-                                                    inputLine.SetPosition(1, obj.transform.position);
-                                                }
-                                                inputObject = obj;
-                                                hasResource = true;
-                                            }
-                                        }
+                                        extractingIce = true;
                                     }
+                                    else
+                                    {
+                                        extractingIce = false;
+                                    }
+                                    if (inputLine == null && obj.GetComponent<LineRenderer>() == null)
+                                    {
+                                        inputLine = obj.AddComponent<LineRenderer>();
+                                        inputLine.startWidth = 0.2f;
+                                        inputLine.endWidth = 0.2f;
+                                        inputLine.material = lineMat;
+                                        inputLine.SetPosition(0, transform.position);
+                                        inputLine.SetPosition(1, obj.transform.position);
+                                    }
+                                    inputObject = obj;
+                                    hasResource = true;
                                 }
                             }
                         }

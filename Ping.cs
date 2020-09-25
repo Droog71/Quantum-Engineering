@@ -1,10 +1,9 @@
 ﻿using UnityEngine;
 using UnityEngine.SceneManagement;
-using System.Collections;
 
 public class Ping : MonoBehaviour
 {
-    float timer;
+    private float timer;
     public string type;
     public GameObject billboard;
     public GameObject attachedLight;
@@ -15,8 +14,10 @@ public class Ping : MonoBehaviour
     public Material darkMatterMat;
     public Material iceMat;
     public Material coalMat;
+    public Material unknownMat;
 
-    void Start()
+    //! Called by unity engine on start up to initialize variables.
+    public void Start()
     {
         if (SceneManager.GetActiveScene().name.Equals("QE_World_Atmo"))
         {
@@ -50,9 +51,14 @@ public class Ping : MonoBehaviour
         {
             billboard.GetComponent<MeshRenderer>().material = coalMat;
         }
+        if(type.Equals("unknown"))
+        {
+            billboard.GetComponent<MeshRenderer>().material = unknownMat;
+        }
     }
 
-    void Update()
+    //! Called once per frame by unity engine.
+    public void Update()
     {
         transform.LookAt(GameObject.Find("Player").transform);
         timer += 1 * Time.deltaTime;

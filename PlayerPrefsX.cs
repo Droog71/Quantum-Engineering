@@ -18,7 +18,7 @@ public class PlayerPrefsX
     {
         try
         {
-            PlayerPrefs.SetInt(name, value ? 1 : 0);
+            FileBasedPrefs.SetInt(name, value ? 1 : 0);
         }
         catch
         {
@@ -29,20 +29,38 @@ public class PlayerPrefsX
 
     public static bool GetBool(String name)
     {
-        return PlayerPrefs.GetInt(name) == 1;
+        return FileBasedPrefs.GetInt(name) == 1;
     }
 
     public static bool GetBool(String name, bool defaultValue)
     {
-        return (1 == PlayerPrefs.GetInt(name, defaultValue ? 1 : 0));
+        return (1 == FileBasedPrefs.GetInt(name, defaultValue ? 1 : 0));
+    }
+
+    public static bool GetPersistentBool(String name)
+    {
+        return PlayerPrefs.GetInt(name) == 1;
+    }
+
+    public static bool SetPersistentBool(String name, bool value)
+    {
+        try
+        {
+            PlayerPrefs.SetInt(name, value ? 1 : 0);
+        }
+        catch
+        {
+            return false;
+        }
+        return true;
     }
 
     public static long GetLong(string key, long defaultValue)
     {
         int lowBits, highBits;
         SplitLong(defaultValue, out lowBits, out highBits);
-        lowBits = PlayerPrefs.GetInt(key + "_lowBits", lowBits);
-        highBits = PlayerPrefs.GetInt(key + "_highBits", highBits);
+        lowBits = FileBasedPrefs.GetInt(key + "_lowBits", lowBits);
+        highBits = FileBasedPrefs.GetInt(key + "_highBits", highBits);
 
         // unsigned, to prevent loss of sign bit.
         ulong ret = (uint)highBits;
@@ -52,8 +70,8 @@ public class PlayerPrefsX
 
     public static long GetLong(string key)
     {
-        int lowBits = PlayerPrefs.GetInt(key + "_lowBits");
-        int highBits = PlayerPrefs.GetInt(key + "_highBits");
+        int lowBits = FileBasedPrefs.GetInt(key + "_lowBits");
+        int highBits = FileBasedPrefs.GetInt(key + "_highBits");
 
         // unsigned, to prevent loss of sign bit.
         ulong ret = (uint)highBits;
@@ -72,8 +90,8 @@ public class PlayerPrefsX
     {
         int lowBits, highBits;
         SplitLong(value, out lowBits, out highBits);
-        PlayerPrefs.SetInt(key + "_lowBits", lowBits);
-        PlayerPrefs.SetInt(key + "_highBits", highBits);
+        FileBasedPrefs.SetInt(key + "_lowBits", lowBits);
+        FileBasedPrefs.SetInt(key + "_highBits", highBits);
     }
 
     public static bool SetVector2(String key, Vector2 vector)
@@ -93,7 +111,7 @@ public class PlayerPrefsX
 
     public static Vector2 GetVector2(String key, Vector2 defaultValue)
     {
-        if (PlayerPrefs.HasKey(key))
+        if (FileBasedPrefs.HasKey(key))
         {
             return GetVector2(key);
         }
@@ -117,7 +135,7 @@ public class PlayerPrefsX
 
     public static Vector3 GetVector3(String key, Vector3 defaultValue)
     {
-        if (PlayerPrefs.HasKey(key))
+        if (FileBasedPrefs.HasKey(key))
         {
             return GetVector3(key);
         }
@@ -141,7 +159,7 @@ public class PlayerPrefsX
 
     public static Quaternion GetQuaternion(String key, Quaternion defaultValue)
     {
-        if (PlayerPrefs.HasKey(key))
+        if (FileBasedPrefs.HasKey(key))
         {
             return GetQuaternion(key);
         }
@@ -165,7 +183,7 @@ public class PlayerPrefsX
 
     public static Color GetColor(String key, Color defaultValue)
     {
-        if (PlayerPrefs.HasKey(key))
+        if (FileBasedPrefs.HasKey(key))
         {
             return GetColor(key);
         }
@@ -188,9 +206,9 @@ public class PlayerPrefsX
 
     public static bool[] GetBoolArray(String key)
     {
-        if (PlayerPrefs.HasKey(key))
+        if (FileBasedPrefs.HasKey(key))
         {
-            var bytes = System.Convert.FromBase64String(PlayerPrefs.GetString(key));
+            var bytes = System.Convert.FromBase64String(FileBasedPrefs.GetString(key));
             if (bytes.Length < 5)
             {
                 Debug.LogError("Corrupt preference file for " + key);
@@ -219,7 +237,7 @@ public class PlayerPrefsX
 
     public static bool[] GetBoolArray(String key, bool defaultValue, int defaultSize)
     {
-        if (PlayerPrefs.HasKey(key))
+        if (FileBasedPrefs.HasKey(key))
         {
             return GetBoolArray(key);
         }
@@ -255,7 +273,7 @@ public class PlayerPrefsX
 
         try
         {
-            PlayerPrefs.SetString(key, System.Convert.ToBase64String(bytes) + "|" + String.Join("", stringArray));
+            FileBasedPrefs.SetString(key, System.Convert.ToBase64String(bytes) + "|" + String.Join("", stringArray));
         }
         catch
         {
@@ -265,6 +283,78 @@ public class PlayerPrefsX
     }
 
     public static String[] GetStringArray(String key)
+    {
+        if (FileBasedPrefs.HasKey(key))
+        {
+            var completeString = FileBasedPrefs.GetString(key);
+            var separatorIndex = completeString.IndexOf("|"[0]);
+            if (separatorIndex < 4)
+            {
+                Debug.LogError("Corrupt preference file for " + key);
+                return new String[0];
+            }
+            var bytes = System.Convert.FromBase64String(completeString.Substring(0, separatorIndex));
+            if ((ArrayType)bytes[0] != ArrayType.String)
+            {
+                Debug.LogError(key + " is not a string array");
+                return new String[0];
+            }
+            Initialize();
+
+            var numberOfEntries = bytes.Length - 1;
+            var stringArray = new String[numberOfEntries];
+            var stringIndex = separatorIndex + 1;
+            for (var i = 0; i < numberOfEntries; i++)
+            {
+                int stringLength = bytes[idx++];
+                if (stringIndex + stringLength > completeString.Length)
+                {
+                    Debug.LogError("Corrupt preference file for " + key);
+                    return new String[0];
+                }
+                stringArray[i] = completeString.Substring(stringIndex, stringLength);
+                stringIndex += stringLength;
+            }
+
+            return stringArray;
+        }
+        return new String[0];
+    }
+
+    public static bool SetPersistentStringArray(String key, String[] stringArray)
+    {
+        var bytes = new byte[stringArray.Length + 1];
+        bytes[0] = System.Convert.ToByte(ArrayType.String); // Identifier
+        Initialize();
+
+        // Store the length of each string that's in stringArray, so we can extract the correct strings in GetStringArray
+        for (var i = 0; i < stringArray.Length; i++)
+        {
+            if (stringArray[i] == null)
+            {
+                Debug.LogError("Can't save null entries in the string array when setting " + key);
+                return false;
+            }
+            if (stringArray[i].Length > 255)
+            {
+                Debug.LogError("Strings cannot be longer than 255 characters when setting " + key);
+                return false;
+            }
+            bytes[idx++] = (byte)stringArray[i].Length;
+        }
+
+        try
+        {
+            PlayerPrefs.SetString(key, System.Convert.ToBase64String(bytes) + "|" + String.Join("", stringArray));
+        }
+        catch
+        {
+            return false;
+        }
+        return true;
+    }
+
+    public static String[] GetPersistentStringArray(String key)
     {
         if (PlayerPrefs.HasKey(key))
         {
@@ -305,7 +395,7 @@ public class PlayerPrefsX
 
     public static String[] GetStringArray(String key, String defaultValue, int defaultSize)
     {
-        if (PlayerPrefs.HasKey(key))
+        if (FileBasedPrefs.HasKey(key))
         {
             return GetStringArray(key);
         }
@@ -408,7 +498,7 @@ public class PlayerPrefsX
 
     public static int[] GetIntArray(String key, int defaultValue, int defaultSize)
     {
-        if (PlayerPrefs.HasKey(key))
+        if (FileBasedPrefs.HasKey(key))
         {
             return GetIntArray(key);
         }
@@ -429,7 +519,7 @@ public class PlayerPrefsX
 
     public static float[] GetFloatArray(String key, float defaultValue, int defaultSize)
     {
-        if (PlayerPrefs.HasKey(key))
+        if (FileBasedPrefs.HasKey(key))
         {
             return GetFloatArray(key);
         }
@@ -450,7 +540,7 @@ public class PlayerPrefsX
 
     public static Vector2[] GetVector2Array(String key, Vector2 defaultValue, int defaultSize)
     {
-        if (PlayerPrefs.HasKey(key))
+        if (FileBasedPrefs.HasKey(key))
         {
             return GetVector2Array(key);
         }
@@ -471,7 +561,7 @@ public class PlayerPrefsX
 
     public static Vector3[] GetVector3Array(String key, Vector3 defaultValue, int defaultSize)
     {
-        if (PlayerPrefs.HasKey(key))
+        if (FileBasedPrefs.HasKey(key))
 
         {
             return GetVector3Array(key);
@@ -493,7 +583,7 @@ public class PlayerPrefsX
 
     public static Quaternion[] GetQuaternionArray(String key, Quaternion defaultValue, int defaultSize)
     {
-        if (PlayerPrefs.HasKey(key))
+        if (FileBasedPrefs.HasKey(key))
         {
             return GetQuaternionArray(key);
         }
@@ -514,7 +604,7 @@ public class PlayerPrefsX
 
     public static Color[] GetColorArray(String key, Color defaultValue, int defaultSize)
     {
-        if (PlayerPrefs.HasKey(key))
+        if (FileBasedPrefs.HasKey(key))
         {
             return GetColorArray(key);
         }
@@ -528,9 +618,9 @@ public class PlayerPrefsX
 
     private static void GetValue<T>(String key, T list, ArrayType arrayType, int vectorNumber, Action<T, byte[]> convert) where T : IList
     {
-        if (PlayerPrefs.HasKey(key))
+        if (FileBasedPrefs.HasKey(key))
         {
-            var bytes = System.Convert.FromBase64String(PlayerPrefs.GetString(key));
+            var bytes = System.Convert.FromBase64String(FileBasedPrefs.GetString(key));
             if ((bytes.Length - 1) % (vectorNumber * 4) != 0)
             {
                 Debug.LogError("Corrupt preference file for " + key);
@@ -583,7 +673,7 @@ public class PlayerPrefsX
 
     public static void ShowArrayType(String key)
     {
-        var bytes = System.Convert.FromBase64String(PlayerPrefs.GetString(key));
+        var bytes = System.Convert.FromBase64String(FileBasedPrefs.GetString(key));
         if (bytes.Length > 0)
         {
             ArrayType arrayType = (ArrayType)bytes[0];
@@ -614,7 +704,7 @@ public class PlayerPrefsX
     {
         try
         {
-            PlayerPrefs.SetString(key, System.Convert.ToBase64String(bytes));
+            FileBasedPrefs.SetString(key, System.Convert.ToBase64String(bytes));
         }
         catch
         {

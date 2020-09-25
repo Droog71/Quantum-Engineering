@@ -1,28 +1,27 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class HeldItemSway : MonoBehaviour
 {
-    float timer;
+    private float timer;
     public bool active;
     public string type;
-    Quaternion originalRotation;
+    private Quaternion originalRotation;
     public GameObject player;
 
-    // Start is called before the first frame update
+    //! Start is called before the first frame update.
     void Start()
     {
         originalRotation = transform.localRotation;
     }
 
+    //! Resets the object's rotation.
     public void Reset()
     {
         transform.localRotation = originalRotation;
         timer = 0;
     }
 
-    // Update is called once per frame
+    //! Update is called once per frame.
     void Update()
     {
         if (active == true)
