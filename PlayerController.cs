@@ -17,7 +17,6 @@ public class PlayerController : MonoBehaviour
     public Camera mCam;
     public InventoryManager playerInventory;
     public InventoryManager storageInventory;
-    public InventorySlot slotDraggingFrom;
     public AudioSource builderSound;
     public AudioSource guiSound;
     public GameObject objectInSight;
@@ -89,7 +88,6 @@ public class PlayerController : MonoBehaviour
     public string machineInputType2;
     public string machineOutputType;
     public string currentTabletMessage = "";
-    public string itemToDrag;
     public string buildType = "Dark Matter Collector";
     public string nextBuildType = "Turret";
     public string previousBuildType = "Dark Matter Conduit";
@@ -125,7 +123,6 @@ public class PlayerController : MonoBehaviour
     public double machineRange;
     public int machineHeat;
     public int machineCooling;
-    public int amountToDrag;
     public int buildMultiplier = 1;
     public int money;
     public int destructionMessageCount;
@@ -504,7 +501,7 @@ public class PlayerController : MonoBehaviour
     //! Plays a sound.
     public void PlayMissingItemsSound()
     {
-        guiSound.volume = 0.15f;
+        guiSound.volume = 0.3f;
         guiSound.clip = missingItemsClip;
         guiSound.Play();
     }

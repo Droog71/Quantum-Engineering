@@ -238,6 +238,7 @@ public class GuiCoordinates
 
     //MARKET
     public Rect marketMessageRect;
+    public Rect marketMoneyRect;
     public Rect marketMessageLabelRect;
     public Rect marketMessageButtonRect;
 
@@ -290,8 +291,9 @@ public class GuiCoordinates
         storageSearchLabelRect = new Rect((ScreenWidth * 0.32f), (ScreenHeight * 0.26f), (ScreenWidth * 0.2f), (ScreenHeight * 0.5f));
         storageComputerMessageRect = new Rect((ScreenWidth * 0.42f), (ScreenHeight * 0.28f), (ScreenWidth * 0.2f), (ScreenHeight * 0.5f));
 
-        craftingTitleRect = new Rect((ScreenWidth * 0.25f), (ScreenHeight * 0.60f), (ScreenWidth * 0.20f), (ScreenHeight * 0.10f));
-        marketTitleRect = new Rect((ScreenWidth * 0.265f), (ScreenHeight * 0.60f), (ScreenWidth * 0.20f), (ScreenHeight * 0.10f));
+        craftingTitleRect = new Rect((ScreenWidth * 0.25f), (ScreenHeight * 0.58f), (ScreenWidth * 0.20f), (ScreenHeight * 0.10f));
+        marketTitleRect = new Rect((ScreenWidth * 0.265f), (ScreenHeight * 0.58f), (ScreenWidth * 0.20f), (ScreenHeight * 0.10f));
+        marketMoneyRect = new Rect((ScreenWidth * 0.27f), (ScreenHeight * 0.62f), (ScreenWidth * 0.20f), (ScreenHeight * 0.10f));
 
         craftingPreviousRect = new Rect((ScreenWidth * 0.08f), (ScreenHeight * 0.63f), (ScreenWidth * 0.07f), (ScreenHeight * 0.025f));
         craftingNextRect = new Rect((ScreenWidth * 0.45f), (ScreenHeight * 0.63f), (ScreenWidth * 0.07f), (ScreenHeight * 0.025f));

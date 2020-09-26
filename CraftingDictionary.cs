@@ -8,35 +8,92 @@ public class CraftingDictionary
     public Dictionary<string, CraftingRecipe> dictionary;
     public Dictionary<string, CraftingRecipe> modDictionary;
 
-    private readonly string[] ironBlockIngredients = { "Iron Plate" };
-    private readonly string[] steelBlockIngredients = { "Steel Plate" };
-    private readonly string[] quantumHatchwayIngredients = { "Tin Plate", "Dark Matter" };
-    private readonly string[] electricLightIngredients = { "Glass Block", "Tin Plate", "Copper Wire" };
-    private readonly string[] augerIngredients = { "Iron Ingot", "Copper Ingot" };
-    private readonly string[] storageContainerIngredients = { "Iron Plate" };
-    private readonly string[] extruderIngredients = { "Iron Ingot", "Copper Ingot" };
-    private readonly string[] pressIngredients = { "Iron Ingot", "Iron Pipe", "Copper Wire" };
-    private readonly string[] universalExtractorIngredients = { "Iron Plate", "Iron Pipe", "Copper Wire", "Dark Matter" };
-    private readonly string[] universalConduitIngredients = { "Iron Plate", "Iron Pipe", "Copper Wire", "Dark Matter" };
-    private readonly string[] retrieverIngredients = { "Iron Plate", "Iron Pipe", "Copper Wire", "Electric Motor", "Circuit Board" };
-    private readonly string[] generatorIngredients = { "Iron Plate", "Iron Pipe", "Copper Wire", "Copper Plate", "Glass Block" };
-    private readonly string[] reactorTurbineIngredients = { "Generator", "Glass Block", "Steel Pipe", "Steel Gear", "Copper Wire", "Steel Plate" };
-    private readonly string[] railCartHubIngredients = { "Iron Plate", "Iron Pipe", "Circuit Board" };
-    private readonly string[] railCartIngredients = { "Electric Motor", "Copper Wire", "Tin Plate", "Aluminum Gear", "Storage Container", "Solar Panel" };
-    private readonly string[] circuitBoardIngredients = { "Tin Plate", "Glass Block", "Copper Wire", "Dark Matter" };
-    private readonly string[] electricMotorIngredients = { "Iron Plate", "Iron Pipe", "Iron Gear", "Copper Wire" };
-    private readonly string[] autoCrafterIngredients = { "Bronze Gear", "Steel Plate", "Electric Motor", "Circuit Board", "Dark Matter" };
-    private readonly string[] solarPanelIngredients = { "Iron Plate", "Iron Pipe", "Copper Wire", "Copper Plate", "Glass Block" };
-    private readonly string[] powerConduitIngredients = { "Aluminum Plate", "Copper Wire", "Glass Block" };
-    private readonly string[] nuclearReactorIngredients = { "Steel Plate", "Steel Pipe", "Copper Wire", "Copper Plate", "Glass Block", "Dark Matter" };
-    private readonly string[] heatExchangerIngredients = { "Steel Plate", "Steel Pipe" };
-    private readonly string[] smelterIngredients = { "Iron Pipe", "Iron Plate", "Copper Wire" };
-    private readonly string[] gearCutterIngredients = { "Iron Plate", "Tin Plate", "Iron Pipe", "Aluminum Wire", "Copper Wire" };
-    private readonly string[] storageComputerIngredients = { "Retriever", "Universal Conduit", "Aluminum Plate", "Copper Wire", "Tin Gear", "Dark Matter Conduit", "Glass Block" };
-    private readonly string[] alloySmelterIngredients = { "Iron Plate", "Tin Plate", "Iron Pipe", "Iron Gear", "Aluminum Wire", "Copper Wire" };
-    private readonly string[] turretIngredients = { "Steel Plate", "Steel Pipe", "Bronze Plate", "Steel Gear", "Aluminum Wire", "Copper Wire", "Electric Motor", "Circuit Board" };
-    private readonly string[] darkMatterCollectorIngredients = { "Steel Plate", "Steel Pipe", "Tin Gear", "Steel Gear", "Bronze Gear", "Aluminum Wire", "Copper Wire", "Dark Matter" };
-    private readonly string[] darkMatterConduitIngredients = { "Steel Plate", "Steel Pipe", "Tin Gear", "Steel Gear", "Bronze Gear", "Aluminum Wire", "Copper Wire", "Dark Matter" };
+    private readonly string[] ironBlockIngredients = 
+    { "Iron Plate" };
+
+    private readonly string[] steelBlockIngredients = 
+    { "Steel Plate" };
+
+    private readonly string[] quantumHatchwayIngredients = 
+    { "Tin Plate", "Dark Matter" };
+
+    private readonly string[] electricLightIngredients = 
+    { "Glass Block", "Tin Plate", "Copper Wire" };
+
+    private readonly string[] augerIngredients = 
+    { "Iron Ingot", "Copper Ingot" };
+
+    private readonly string[] storageContainerIngredients = 
+    { "Iron Plate" };
+
+    private readonly string[] extruderIngredients = 
+    { "Iron Ingot", "Copper Ingot" };
+
+    private readonly string[] pressIngredients = 
+    { "Iron Ingot", "Iron Pipe", "Copper Wire" };
+
+    private readonly string[] universalExtractorIngredients = 
+    { "Iron Plate", "Iron Pipe", "Copper Wire", "Dark Matter" };
+
+    private readonly string[] universalConduitIngredients = 
+    { "Iron Plate", "Iron Pipe", "Copper Wire", "Dark Matter" };
+
+    private readonly string[] retrieverIngredients = 
+    { "Iron Plate", "Iron Pipe", "Copper Wire", "Electric Motor", "Circuit Board" };
+
+    private readonly string[] generatorIngredients = 
+    { "Iron Plate", "Iron Pipe", "Copper Wire", "Copper Plate", "Glass Block" };
+
+    private readonly string[] reactorTurbineIngredients = 
+    { "Generator", "Glass Block", "Steel Pipe", "Steel Gear", "Copper Wire", "Steel Plate" };
+
+    private readonly string[] railCartHubIngredients = 
+    { "Iron Plate", "Iron Pipe", "Circuit Board" };
+
+    private readonly string[] railCartIngredients = 
+    { "Electric Motor", "Copper Wire", "Tin Plate", "Aluminum Gear", "Storage Container", "Solar Panel" };
+
+    private readonly string[] circuitBoardIngredients = 
+    { "Tin Plate", "Glass Block", "Copper Wire", "Dark Matter" };
+
+    private readonly string[] electricMotorIngredients = 
+    { "Iron Plate", "Iron Pipe", "Iron Gear", "Copper Wire" };
+
+    private readonly string[] autoCrafterIngredients = 
+    { "Bronze Gear", "Steel Plate", "Electric Motor", "Circuit Board", "Dark Matter" };
+
+    private readonly string[] solarPanelIngredients = 
+    { "Iron Plate", "Iron Pipe", "Copper Wire", "Copper Plate", "Glass Block" };
+
+    private readonly string[] powerConduitIngredients = 
+    { "Aluminum Plate", "Copper Wire", "Glass Block" };
+
+    private readonly string[] nuclearReactorIngredients = 
+    { "Steel Plate", "Steel Pipe", "Copper Wire", "Copper Plate", "Glass Block", "Dark Matter" };
+
+    private readonly string[] heatExchangerIngredients = 
+    { "Steel Plate", "Steel Pipe" };
+
+    private readonly string[] smelterIngredients = 
+    { "Iron Pipe", "Iron Plate", "Copper Wire" };
+
+    private readonly string[] gearCutterIngredients = 
+    { "Iron Plate", "Tin Plate", "Iron Pipe", "Aluminum Wire", "Copper Wire" };
+
+    private readonly string[] storageComputerIngredients = 
+    { "Retriever", "Universal Conduit", "Aluminum Plate", "Copper Wire", "Tin Gear", "Dark Matter Conduit", "Glass Block" };
+
+    private readonly string[] alloySmelterIngredients = 
+    { "Iron Plate", "Tin Plate", "Iron Pipe", "Iron Gear", "Aluminum Wire", "Copper Wire" };
+
+    private readonly string[] turretIngredients = 
+    { "Steel Plate", "Steel Pipe", "Bronze Plate", "Steel Gear", "Aluminum Wire", "Copper Wire", "Electric Motor", "Circuit Board" };
+
+    private readonly string[] darkMatterCollectorIngredients = 
+    { "Steel Plate", "Steel Pipe", "Tin Gear", "Steel Gear", "Bronze Gear", "Aluminum Wire", "Copper Wire", "Dark Matter" };
+
+    private readonly string[] darkMatterConduitIngredients = 
+    { "Steel Plate", "Steel Pipe", "Tin Gear", "Steel Gear", "Bronze Gear", "Aluminum Wire", "Copper Wire", "Dark Matter" };
 
     private readonly int[] ironBlockAmounts = { 1 };
     private readonly int[] steelBlockAmounts = { 1 };
