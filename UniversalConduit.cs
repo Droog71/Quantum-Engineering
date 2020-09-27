@@ -50,7 +50,7 @@ public class UniversalConduit : MonoBehaviour
         {
             if (stateManager.Busy())
             {
-                 updateTick = 0;
+                updateTick = 0;
                 return;
             }
 

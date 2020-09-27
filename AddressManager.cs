@@ -187,7 +187,7 @@ public class AddressManager
                     idCount++;
 
                     addressingInterval++;
-                    if (addressingInterval >= 100)
+                    if (addressingInterval >= 10)
                     {
                         yield return null;
                         addressingInterval = 0;
@@ -245,7 +245,7 @@ public class AddressManager
                 }
 
                 addressingInterval++;
-                if (addressingInterval >= 100)
+                if (addressingInterval >= 10)
                 {
                     yield return null;
                     addressingInterval = 0;

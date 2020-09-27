@@ -4,6 +4,7 @@ using UnityEngine;
 public class HazardManager
 {
     private GameManager gameManager;
+    private bool hazardsRemoved;
 
     //! This class handles all meteor showers and pirate attacks.
     public HazardManager(GameManager gameManager)
@@ -16,6 +17,7 @@ public class HazardManager
     {
         if (gameManager.hazardsEnabled == true)
         {
+            hazardsRemoved = false;
             if (gameManager.player.timeToDeliver == false && gameManager.rocketScript.gameTime < 2000)
             {
                 // Pirate attacks.
@@ -169,7 +171,10 @@ public class HazardManager
             gameManager.player.pirateAttackWarningActive = false;
             gameManager.player.destructionMessageActive = false;
         }
-        gameManager.hazardRemovalCoroutine = gameManager.StartCoroutine(HazardRemovalCoroutine());
+        if (hazardsRemoved == false)
+        {
+            gameManager.hazardRemovalCoroutine = gameManager.StartCoroutine(HazardRemovalCoroutine());
+        }
     }
 
     //! Removes all hazards from the world.
@@ -193,5 +198,6 @@ public class HazardManager
             }
             yield return new WaitForSeconds(0.1f);
         }
+        hazardsRemoved = true;
     }
 }
