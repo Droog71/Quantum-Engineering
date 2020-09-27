@@ -22,7 +22,6 @@ public class PhysicsHandler : MonoBehaviour
     private int supportedXnegative;
     private int supportCount;
     public float lifetime;
-    private float duplicateClearingTimer;
     private float missingBlockTimer;
     private float supportCheckTimer;
     private float worldLoadTimer;
@@ -40,17 +39,6 @@ public class PhysicsHandler : MonoBehaviour
         rb = gameObject.AddComponent<Rigidbody>();
         rb.constraints = RigidbodyConstraints.FreezeRotation | RigidbodyConstraints.FreezePosition;
         rb.isKinematic = true;
-        if (GetComponent<AirLock>() != null)
-        {
-            if (GetComponent<AirLock>().open == false)
-            {
-                GetComponent<Collider>().isTrigger = false;
-            }
-        }
-        else
-        {
-            GetComponent<Collider>().isTrigger = false;
-        }
     }
 
     //! Updates the physics state of the object.
@@ -74,36 +62,6 @@ public class PhysicsHandler : MonoBehaviour
             else
             {
                 lifetime += 0.01f * Time.deltaTime;
-                duplicateClearingTimer++;
-                if (duplicateClearingTimer > 8 && duplicateClearingTimer < 10)
-                {
-                    if (Physics.Raycast(transform.position, transform.up, out RaycastHit playerHit, 5))
-                    {
-                        if (playerHit.collider.gameObject.GetComponent<PlayerController>() == null)
-                        {
-                            GetComponent<Collider>().isTrigger = true;
-                        }
-                    }
-                    else
-                    {
-                        GetComponent<Collider>().isTrigger = true;
-                    }
-                }
-                else if (duplicateClearingTimer >= 10)
-                {
-                    if (GetComponent<AirLock>() != null)
-                    {
-                        if (GetComponent<AirLock>().open == false)
-                        {
-                            GetComponent<Collider>().isTrigger = false;
-                        }
-                    }
-                    else
-                    {
-                        GetComponent<Collider>().isTrigger = false;
-                    }
-                    duplicateClearingTimer = 0;
-                }
                 if (GameObject.Find("GameManager").GetComponent<GameManager>().blockPhysics == true)
                 {
                     if (transform.position.y > 500 || transform.position.y < -5000)
@@ -425,34 +383,6 @@ public class PhysicsHandler : MonoBehaviour
     public bool IsSupported()
     {
         return falling == false && fallingStack == false && needsSupportCheck == false;
-    }
-
-    //! Called by unity engine once per physics update for every collider that is touching the trigger.
-    public void OnTriggerStay(Collider other)
-    {
-        if (other.gameObject.tag.Equals("Landscape"))
-        {
-            buried = true;
-            needsSupportCheck = false;
-        }
-    }
-
-    //! Called by unity engine when two objects collide.
-    public void OnTriggerEnter(Collider other)
-    {
-        if (other.gameObject.GetComponent<PhysicsHandler>() != null)
-        {
-            if (rb.constraints == (RigidbodyConstraints.FreezeRotation | RigidbodyConstraints.FreezePosition))
-            {
-                if (other.bounds.Contains(transform.position))
-                {
-                    if (lifetime < other.gameObject.GetComponent<PhysicsHandler>().lifetime)
-                    {
-                        Destroy(gameObject);
-                    }
-                }
-            }
-        }
     }
 
     //! Destroyes the object and spawns explosion effects.

@@ -4,184 +4,30 @@ public class InventoryGUI : MonoBehaviour
 {
     private PlayerController playerController;
     private InventoryManager playerInventory;
+    private InventoryHandler inventoryHandler;
     private TextureDictionary textureDictionary;
     private GuiCoordinates guiCoordinates;
-    private InventorySlot slotDraggingFrom;
     private string storageComputerSearchText = "";
-    private string itemToDrag;
-    private int amountToDrag;
-
+    private bool outOfSpace;
+    private float outOfSpaceTimer;
 
     //! Called by unity engine on start up to initialize variables.
     public void Start()
     {
         playerController = GetComponent<PlayerController>();
         playerInventory = GetComponent<InventoryManager>();
+        inventoryHandler = new InventoryHandler(playerController, playerInventory);
         textureDictionary = GetComponent<TextureDictionary>();
         guiCoordinates = new GuiCoordinates();
-    }
-
-    //! Returns true if the item can be transferred from dragSlot to dropSlot.
-    private bool CanTransfer(InventorySlot dragSlot, InventorySlot dropSlot)
-    {
-        return dropSlot.typeInSlot.Equals("nothing")
-        || (dropSlot.typeInSlot.Equals(dragSlot.typeInSlot)
-        && dropSlot.amountInSlot <= 1000 - dragSlot.amountInSlot);
-    }
-
-    //! Searches for items in all containers connected to the computer.
-    private void SearchComputerContainers(StorageComputer computer)
-    {
-        int containerCount = 0;
-        foreach (InventoryManager manager in computer.computerContainers)
-        {
-            foreach (InventorySlot slot in manager.inventory)
-            {
-                if (storageComputerSearchText.Length < slot.typeInSlot.Length)
-                {
-                    if (slot.typeInSlot.Substring(0, storageComputerSearchText.Length).ToLower().Equals(storageComputerSearchText.ToLower()))
-                    {
-                        playerController.storageComputerInventory = containerCount;
-                        playerController.storageInventory = computer.computerContainers[playerController.storageComputerInventory];
-                    }
-                }
-                else if (storageComputerSearchText.Length > slot.typeInSlot.Length)
-                {
-                    if (slot.typeInSlot.ToLower().Equals(storageComputerSearchText.Substring(0, slot.typeInSlot.Length).ToLower()))
-                    {
-                        playerController.storageComputerInventory = containerCount;
-                        playerController.storageInventory = computer.computerContainers[playerController.storageComputerInventory];
-                    }
-                }
-                else if (storageComputerSearchText.Length == slot.typeInSlot.Length)
-                {
-                    if (slot.typeInSlot.ToLower().Equals(storageComputerSearchText.ToLower()))
-                    {
-                        playerController.storageComputerInventory = containerCount;
-                        playerController.storageInventory = computer.computerContainers[playerController.storageComputerInventory];
-                    }
-                }
-            }
-            containerCount++;
-        }
-    }
-
-    //! Begins dragging an item from an inventory slot.
-    private void DragItemFromSlot(InventorySlot dragSlot, InventoryManager destination)
-    {
-        bool flag = false;
-        if (playerController.storageGUIopen == true)
-        {
-            if (Input.GetKey(KeyCode.LeftControl))
-            {
-                flag = true;
-                foreach (InventorySlot slot in destination.inventory)
-                {
-                    if (CanTransfer(dragSlot, slot))
-                    {
-                        destination.AddItem(dragSlot.typeInSlot, dragSlot.amountInSlot);
-                        dragSlot.typeInSlot = "nothing";
-                        dragSlot.amountInSlot = 0;
-                    }
-                }
-            }
-        }
-        if (flag == false)
-        {
-            playerController.draggingItem = true;
-            itemToDrag = dragSlot.typeInSlot;
-            slotDraggingFrom = dragSlot;
-            if (Input.GetKey(KeyCode.LeftShift))
-            {
-                if (dragSlot.amountInSlot > 1)
-                {
-                    amountToDrag = dragSlot.amountInSlot / 2;
-                }
-                else if (dragSlot.amountInSlot > 0)
-                {
-                    amountToDrag = dragSlot.amountInSlot;
-                }
-            }
-            else if (dragSlot.amountInSlot > 0)
-            {
-                amountToDrag = dragSlot.amountInSlot;
-            }
-        }
-    }
-
-    //! Drops an item into an inventory slot.
-    private void DropItemInSlot(Vector2 mousePos, bool usingContainer)
-    {
-        playerController.draggingItem = false;
-        int inventoryDropSlot = 0;
-        foreach (Rect rect in guiCoordinates.inventorySlotRects)
-        {
-            InventorySlot dropSlot = playerInventory.inventory[inventoryDropSlot];
-            if (rect.Contains(mousePos) && slotDraggingFrom != dropSlot)
-            {
-                if (dropSlot.typeInSlot == "nothing" || dropSlot.typeInSlot == "" || dropSlot.typeInSlot == itemToDrag)
-                {
-                    if (dropSlot.amountInSlot <= playerInventory.maxStackSize - amountToDrag)
-                    {
-                        playerInventory.AddItemToSlot(itemToDrag, amountToDrag, inventoryDropSlot);
-                        slotDraggingFrom.amountInSlot -= amountToDrag;
-                        if (slotDraggingFrom.amountInSlot <= 0)
-                        {
-                            slotDraggingFrom.typeInSlot = "nothing";
-                        }
-                    }
-                }
-                else
-                {
-                    slotDraggingFrom.typeInSlot = dropSlot.typeInSlot;
-                    slotDraggingFrom.amountInSlot = dropSlot.amountInSlot;
-                    dropSlot.typeInSlot = itemToDrag;
-                    dropSlot.amountInSlot = amountToDrag;
-                }
-            }
-            inventoryDropSlot++;
-        }
-
-        if (usingContainer == true)
-        {
-            int storageInventoryDropSlot = 0;
-            foreach (Rect rect in guiCoordinates.storageInventorySlotRects)
-            {
-                InventorySlot dropSlot = playerController.storageInventory.inventory[storageInventoryDropSlot];
-                if (rect.Contains(mousePos) && slotDraggingFrom != dropSlot)
-                {
-                    if (dropSlot.typeInSlot == "nothing" || dropSlot.typeInSlot == "" || dropSlot.typeInSlot == itemToDrag)
-                    {
-                        if (dropSlot.amountInSlot <= playerController.storageInventory.maxStackSize - amountToDrag)
-                        {
-                            playerController.storageInventory.AddItemToSlot(itemToDrag, amountToDrag, storageInventoryDropSlot);
-                            slotDraggingFrom.amountInSlot -= amountToDrag;
-                            if (slotDraggingFrom.amountInSlot <= 0)
-                            {
-                                slotDraggingFrom.typeInSlot = "nothing";
-                            }
-                        }
-                    }
-                    else
-                    {
-                        slotDraggingFrom.typeInSlot = dropSlot.typeInSlot;
-                        slotDraggingFrom.amountInSlot = dropSlot.amountInSlot;
-                        dropSlot.typeInSlot = itemToDrag;
-                        dropSlot.amountInSlot = amountToDrag;
-                    }
-                }
-                storageInventoryDropSlot++;
-            }
-        }
     }
 
     //! Called by unity engine for rendering and handling GUI events.
     public void OnGUI()
     {
-        // STYLE
+        // Style
         GUI.skin = GetComponent<PlayerGUI>().thisGUIskin;
 
-        // ASPECT RATIO
+        // Aspect ratio.
         float ScreenHeight = Screen.height;
         float ScreenWidth = Screen.width;
         if (ScreenWidth / ScreenHeight < 1.7f)
@@ -200,7 +46,7 @@ public class InventoryGUI : MonoBehaviour
                 gameObject.GetComponent<MSCameraController>().enabled = false;
                 GUI.DrawTexture(guiCoordinates.inventoryBackgroundRect, textureDictionary.dictionary["Container Background"]);
 
-                // INVENTORY ITEM DRAWING
+                // Inventory item drawing.
                 int inventorySlotNumber = 0;
                 foreach (InventorySlot slot in playerInventory.inventory)
                 {
@@ -215,7 +61,7 @@ public class InventoryGUI : MonoBehaviour
                     inventorySlotNumber++;
                 }
 
-                // STORAGE CONTAINER ITEM DRAWING
+                // Storage container item drawing.
                 if (playerController.storageGUIopen == true)
                 {
                     GUI.DrawTexture(guiCoordinates.inventoryInfoRectBG, textureDictionary.dictionary["Interface Background"]);
@@ -240,7 +86,7 @@ public class InventoryGUI : MonoBehaviour
                 // // // // // DRAG AND DROP // // // // //
                 Vector2 mousePos = Event.current.mousePosition;
 
-                // DRAGGING ITEMS FROM THE PLAYER'S INVENTORY
+                // Dragging items from the player's inventory.
                 int inventoryDragSlot = 0;
                 foreach (Rect rect in guiCoordinates.inventorySlotRects)
                 {
@@ -252,14 +98,14 @@ public class InventoryGUI : MonoBehaviour
                             GUI.Label(guiCoordinates.inventoryMesageRect, dragSlot.typeInSlot);
                             if (Input.GetKeyDown(KeyCode.Mouse0))
                             {
-                                DragItemFromSlot(dragSlot, playerController.storageInventory);
+                                inventoryHandler.DragItemFromSlot(dragSlot, playerController.storageInventory);
                             }
                         }
                     }
                     inventoryDragSlot++;
                 }
 
-                // PLAYER IS ACCESSING A STORAGE CONTAINER
+                // The player is accessing a storage container.
                 if (playerController.storageGUIopen == true) 
                 {
                     int storageInventoryDragSlot = 0;
@@ -280,7 +126,7 @@ public class InventoryGUI : MonoBehaviour
                                 }
                                 if (Input.GetKeyDown(KeyCode.Mouse0))
                                 {
-                                    DragItemFromSlot(dragSlot, playerInventory);
+                                    inventoryHandler.DragItemFromSlot(dragSlot, playerInventory);
                                 }
                             }
                         }
@@ -288,20 +134,21 @@ public class InventoryGUI : MonoBehaviour
                     }
                 }
 
-                // PLAYER IS DRAGGING AN ITEM
+                // The player is dragging an inventory item.
                 if (playerController.draggingItem == true)
                 {
                     float orgX = Event.current.mousePosition.x - ScreenWidth * 0.0145f;
                     float orgY = Event.current.mousePosition.y - ScreenHeight * 0.03f;
                     Rect mouseRect = new Rect(orgX, orgY, ScreenWidth * 0.029f, ScreenHeight * 0.06f);
-                    GUI.DrawTexture(mouseRect, textureDictionary.dictionary[itemToDrag]);
+                    GUI.DrawTexture(mouseRect, textureDictionary.dictionary[inventoryHandler.itemToDrag]);
                     if (Input.GetKeyUp(KeyCode.Mouse0))
                     {
-                        DropItemInSlot(mousePos, playerController.storageGUIopen);
+                        inventoryHandler.DropItemInSlot(mousePos, playerController.storageGUIopen);
                     }
                 }
+                // // // // // END DRAG AND DROP // // // // //
 
-                // STORAGE COMPUTER INVENTORY SWITCHING
+                // Cycling between inventories connected to a storage computer.
                 if (playerController.storageGUIopen == true && playerController.remoteStorageActive == true)
                 {
                     StorageComputer computer = playerController.currentStorageComputer.GetComponent<StorageComputer>();
@@ -309,7 +156,7 @@ public class InventoryGUI : MonoBehaviour
                     storageComputerSearchText = GUI.TextField(guiCoordinates.storageComputerSearchRect, storageComputerSearchText);
                     if (Event.current.isKey && Event.current.keyCode != KeyCode.LeftShift && Event.current.keyCode != KeyCode.LeftControl)
                     {
-                        SearchComputerContainers(computer);
+                        inventoryHandler.SearchComputerContainers(computer, storageComputerSearchText);
                     }
                     if (GUI.Button(guiCoordinates.storageComputerPreviousRect, "<-"))
                     {
@@ -341,21 +188,22 @@ public class InventoryGUI : MonoBehaviour
                     }
                 }
 
-                // MESSAGE TELLING THE PLAYER THEIR INVENTORY IS FULL
-                if (playerController.outOfSpace == true)
+                // Display a message if the player's inventory does not have adequate free space to complete a task.
+                if (outOfSpace == true)
                 {
-                    if (playerController.outOfSpaceTimer < 3)
+                    if (outOfSpaceTimer < 3)
                     {
                         GUI.Label(guiCoordinates.inventoryMesageRect, "\nNo space in inventory.");
-                        playerController.outOfSpaceTimer += 1 * Time.deltaTime;
+                        outOfSpaceTimer += 1 * Time.deltaTime;
                     }
                     else
                     {
-                        playerController.outOfSpace = false;
-                        playerController.outOfSpaceTimer = 0;
+                        outOfSpace = false;
+                        outOfSpaceTimer = 0;
                     }
                 }
 
+                // Buttons.
                 if (playerController.marketGUIopen == false)
                 {
                     if (playerController.storageGUIopen == false)

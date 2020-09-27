@@ -24,7 +24,6 @@ public class PlayerController : MonoBehaviour
     public LaserController laserController;
     public BlockSelector blockSelector;
 
-    public bool outOfSpace;
     public bool cannotCollect;
     public bool building;
     public bool inventoryOpen;
@@ -92,7 +91,6 @@ public class PlayerController : MonoBehaviour
     public string nextBuildType = "Turret";
     public string previousBuildType = "Dark Matter Conduit";
 
-    public float outOfSpaceTimer;
     public float cannotCollectTimer;
     public float collectorAmount;
     public float hxAmount;

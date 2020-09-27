@@ -637,7 +637,6 @@ public class CraftingGUI : MonoBehaviour
                         }
                         playerController.PlayButtonSound();
                     }
-
                     if (craftingManager.missingItem == true)
                     {
                         if (missingItemTimer < 3)
@@ -656,4 +655,3 @@ public class CraftingGUI : MonoBehaviour
         }
     }
 }
-

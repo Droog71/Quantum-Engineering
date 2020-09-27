@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Collections;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
@@ -31,6 +32,7 @@ public class GameManager : MonoBehaviour
     public bool blocksCombined;
     public bool working;
     public bool replacingMeshFilters;
+    public bool checkingForDuplicates;
     private float mfDelay;
     public bool clearBrickDummies;
     public bool clearGlassDummies;
@@ -50,6 +52,7 @@ public class GameManager : MonoBehaviour
     public Coroutine meshCombineCoroutine;
     public Coroutine blockCombineCoroutine;
     public Coroutine hazardRemovalCoroutine;
+    private Coroutine duplicateRemovalCoroutine;
     public List<Vector3> meteorShowerLocationList;
 
     //! Called by unity engine on start up to initialize variables.
@@ -202,6 +205,12 @@ public class GameManager : MonoBehaviour
                 }
             }
 
+            // Check for duplicate blocks.
+            if (checkingForDuplicates == false)
+            {
+                duplicateRemovalCoroutine = StartCoroutine(CheckForDuplicates());
+            }
+
             // Used to ensure components are removed before combining meshes.
             if (replacingMeshFilters == true)
             {
@@ -216,6 +225,60 @@ public class GameManager : MonoBehaviour
 
             hazardManager.UpdateHazards();
         }
+    }
+
+    //! Checks for multiple blocks placed in the same location and removes the duplicate.
+    public IEnumerator CheckForDuplicates()
+    {
+        checkingForDuplicates = true;
+        int primary = 0;
+        Transform[] blocks = builtObjects.GetComponentsInChildren<Transform>(true);
+        foreach (Transform block in blocks)
+        {
+            if (block != null)
+            {
+                int secondary = 0;
+                Transform[] otherBlocks = builtObjects.GetComponentsInChildren<Transform>(true);
+                foreach (Transform otherBlock in otherBlocks)
+                {
+                    if (block != null && otherBlock != null)
+                    {
+                        if (block.position == otherBlock.position && block != otherBlock)
+                        {
+                            PhysicsHandler blockHandler = block.GetComponent<PhysicsHandler>();
+                            PhysicsHandler otherBlockHandler = otherBlock.GetComponent<PhysicsHandler>();
+                            if (blockHandler != null && otherBlockHandler != null)
+                            {
+                                if (blockHandler.lifetime > 0 && otherBlockHandler.lifetime > 0)
+                                {
+                                    if (blockHandler.lifetime < otherBlockHandler.lifetime)
+                                    {
+                                        Destroy(block.gameObject);
+                                    }
+                                    else
+                                    {
+                                        Destroy(otherBlock.gameObject);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    secondary++;
+                    if (secondary >= 100)
+                    {
+                        secondary = 0;
+                        yield return null;
+                    }
+                }
+            }
+            primary++;
+            if (primary >= 100)
+            {
+                primary = 0;
+                yield return null;
+            }
+        }
+        checkingForDuplicates = false;
     }
 
     //! Saves the game on exit.

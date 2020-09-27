@@ -432,7 +432,8 @@ public class BuildController : MonoBehaviour
                                 multiBuildPlacement = new Vector3(origin.x, origin.y, origin.z - h);
                             }
                             h += 5;
-                            Instantiate(blockDictionary.blockDictionary[type], multiBuildPlacement, rotation);
+                            GameObject obj = Instantiate(blockDictionary.blockDictionary[type], multiBuildPlacement, rotation);
+                            obj.transform.parent = builtObjects.transform;
                             playerController.builderSound.Play();
                             playerController.destroyTimer = 0;
                             playerController.buildTimer = 0;

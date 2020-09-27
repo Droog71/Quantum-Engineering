@@ -11,6 +11,12 @@ public class MarketGUI : MonoBehaviour
     private int marketPage;
     private bool selling;
     private bool loadedValues;
+    private bool cannotAfford;
+    private bool missingItem;
+    private bool outOfSpace;
+    private float cannotAffordTimer;
+    private float missingItemTimer;
+    private float outOfSpaceTimer;
 
     //! Called by unity engine on start up to initialize variables.
     public void Start()
@@ -109,6 +115,7 @@ public class MarketGUI : MonoBehaviour
         }
         else
         {
+            cannotAfford = true;
             playerController.PlayMissingItemsSound();
         }
     }
@@ -704,17 +711,59 @@ public class MarketGUI : MonoBehaviour
                 string buyingOrSelling;
                 if (selling == true)
                 {
-                    buyingOrSelling = "SELL";
+                    buyingOrSelling = "SELLING";
                 }
                 else
                 {
-                    buyingOrSelling = "BUY";
+                    buyingOrSelling = "BUYING";
                 }
 
                 if (GUI.Button(guiCoordinates.craftingButtonRect, buyingOrSelling))
                 {
                     selling = !selling;
                     playerController.PlayButtonSound();
+                }
+
+                if (cannotAfford == true)
+                {
+                    if (cannotAffordTimer < 3)
+                    {
+                        GUI.Label(guiCoordinates.inventoryMesageRect, "Cannot afford.");
+                        cannotAffordTimer += 1 * Time.deltaTime;
+                    }
+                    else
+                    {
+                        cannotAfford = false;
+                        cannotAffordTimer = 0;
+                    }
+                }
+
+                if (missingItem == true)
+                {
+                    if (missingItemTimer < 3)
+                    {
+                        GUI.Label(guiCoordinates.inventoryMesageRect, "Missing items.");
+                        missingItemTimer += 1 * Time.deltaTime;
+                    }
+                    else
+                    {
+                        missingItem = false;
+                        missingItemTimer = 0;
+                    }
+                }
+
+                if (outOfSpace == true)
+                {
+                    if (outOfSpaceTimer < 3)
+                    {
+                        GUI.Label(guiCoordinates.inventoryMesageRect, "\nNo space in inventory.");
+                        outOfSpaceTimer += 1 * Time.deltaTime;
+                    }
+                    else
+                    {
+                        outOfSpace = false;
+                        outOfSpaceTimer = 0;
+                    }
                 }
 
                 if (GUI.Button(guiCoordinates.closeButtonRect, "CLOSE"))
