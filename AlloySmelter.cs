@@ -140,7 +140,7 @@ public class AlloySmelter : MonoBehaviour
     }
 
     //! Returns true if the object exists, is active and is not a standard building block.
-    bool IsValidObject(GameObject obj)
+    private bool IsValidObject(GameObject obj)
     {
         if (obj != null)
         {
@@ -150,7 +150,7 @@ public class AlloySmelter : MonoBehaviour
     }
 
     //! The object is a potential output connection.
-    bool IsValidOutputObject(GameObject obj)
+    private bool IsValidOutputObject(GameObject obj)
     {
         return outputObject == null && inputObject1 != null && inputObject2 != null && obj != inputObject1 && obj != inputObject2 && obj != gameObject;
     }

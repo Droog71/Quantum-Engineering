@@ -17,7 +17,6 @@ public class PlayerController : MonoBehaviour
     public Camera mCam;
     public InventoryManager playerInventory;
     public InventoryManager storageInventory;
-    public InventorySlot slotDraggingFrom;
     public AudioSource builderSound;
     public AudioSource guiSound;
     public GameObject objectInSight;
@@ -25,7 +24,6 @@ public class PlayerController : MonoBehaviour
     public LaserController laserController;
     public BlockSelector blockSelector;
 
-    public bool outOfSpace;
     public bool cannotCollect;
     public bool building;
     public bool inventoryOpen;
@@ -89,12 +87,10 @@ public class PlayerController : MonoBehaviour
     public string machineInputType2;
     public string machineOutputType;
     public string currentTabletMessage = "";
-    public string itemToDrag;
     public string buildType = "Dark Matter Collector";
     public string nextBuildType = "Turret";
     public string previousBuildType = "Dark Matter Conduit";
 
-    public float outOfSpaceTimer;
     public float cannotCollectTimer;
     public float collectorAmount;
     public float hxAmount;
@@ -125,7 +121,6 @@ public class PlayerController : MonoBehaviour
     public double machineRange;
     public int machineHeat;
     public int machineCooling;
-    public int amountToDrag;
     public int buildMultiplier = 1;
     public int money;
     public int destructionMessageCount;
@@ -239,6 +234,9 @@ public class PlayerController : MonoBehaviour
 
         // Audio source for GUI related sounds.
         guiSound = guiObject.GetComponent<AudioSource>();
+
+        // Vsync.
+        QualitySettings.vSyncCount = PlayerPrefs.GetInt("vSyncCount");
 
         // Fog and Scanner color for atmospheric worlds.
         if (SceneManager.GetActiveScene().name.Equals("QE_World_Atmo"))
@@ -479,9 +477,12 @@ public class PlayerController : MonoBehaviour
         PlayerPrefs.SetFloat("FOV", mCam.fieldOfView);
         PlayerPrefs.SetFloat("drawDistance", mCam.farClipPlane);
         PlayerPrefs.SetFloat("volume", GetComponent<MSCameraController>().cameras[0].volume);
+        PlayerPrefsX.SetPersistentBool("blockPhysics", gameManager.blockPhysics);
+        PlayerPrefsX.SetPersistentBool("hazardsEnabled", gameManager.hazardsEnabled);
         PlayerPrefsX.SetPersistentBool("fogEnabled", RenderSettings.fog);
         PlayerPrefs.SetFloat("fogDensity", RenderSettings.fogDensity);
         PlayerPrefs.SetInt("chunkSize", gameManager.chunkSize);
+        PlayerPrefs.SetInt("vSyncCount", QualitySettings.vSyncCount);
         PlayerPrefs.Save();
     }
 
@@ -504,7 +505,7 @@ public class PlayerController : MonoBehaviour
     //! Plays a sound.
     public void PlayMissingItemsSound()
     {
-        guiSound.volume = 0.15f;
+        guiSound.volume = 0.6f;
         guiSound.clip = missingItemsClip;
         guiSound.Play();
     }

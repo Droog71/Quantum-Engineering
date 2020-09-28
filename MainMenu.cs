@@ -31,6 +31,7 @@ public class MainMenu : MonoBehaviour
     //! Called by unity engine on start up to initialize variables.
     public void Start()
     {
+        FileBasedPrefs.initialized = false;
         stateManager = FindObjectOfType<StateManager>();
         worldList = new List<string>();
         videoPlayer.GetComponent<VP>().PlayVideo("QE_Title.webm",true,0);
@@ -93,6 +94,7 @@ public class MainMenu : MonoBehaviour
         PlayerPrefsX.SetPersistentBool("changingWorld", true);
         PlayerPrefs.SetString("worldName", worldName);
         PlayerPrefsX.SetPersistentBool(worldName + "sceneChangeRequired", true);
+        PlayerPrefs.Save();
         SceneManager.LoadScene(1);
     }
 
@@ -101,6 +103,7 @@ public class MainMenu : MonoBehaviour
     {
         PlayerPrefsX.SetPersistentStringArray("Worlds", worldList.ToArray());
         FileBasedPrefs.SetWorldName(worldName);
+        PlayerPrefs.Save();
         stateManager.WorldName = worldName;
         worldSelected = true;
         ambient.enabled = false;
@@ -115,7 +118,7 @@ public class MainMenu : MonoBehaviour
         return style.CalcSize(content);
     }
 
-    private bool loadingWorld()
+    private bool LoadingWorld()
     {
         return stateManager.worldLoaded == false || stateManager.GetComponent<GameManager>().working == true;
     }
@@ -377,7 +380,9 @@ public class MainMenu : MonoBehaviour
                             worldList.Remove(w);
                         }
                     }
+                    PlayerPrefs.DeleteKey(worldName + "sceneChangeRequired");
                     PlayerPrefsX.SetPersistentStringArray("Worlds", worldList.ToArray());
+                    PlayerPrefs.Save();
                     deletePrompt = false;
                 }
                 if (GUI.Button(deletePromptButton2Rect, "No"))
@@ -417,7 +422,7 @@ public class MainMenu : MonoBehaviour
                 }
             }
         }
-        else if (finishedLoading == false && loadingWorld() == true)
+        else if (finishedLoading == false && LoadingWorld() == true)
         {
             if (videoPlayer.GetComponent<VP>().IsPlaying())
             {

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Collections;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
@@ -15,6 +16,7 @@ public class GameManager : MonoBehaviour
     public GameObject[] glassDummy;
     public GameObject[] steelDummy;
     public GameObject[] bricksDummy;
+    private List<GameObject> blocksToRemove;
     public GameObject ironHolder;
     public GameObject glassHolder;
     public GameObject steelHolder;
@@ -31,6 +33,7 @@ public class GameManager : MonoBehaviour
     public bool blocksCombined;
     public bool working;
     public bool replacingMeshFilters;
+    public bool checkingForDuplicates;
     private float mfDelay;
     public bool clearBrickDummies;
     public bool clearGlassDummies;
@@ -50,6 +53,8 @@ public class GameManager : MonoBehaviour
     public Coroutine meshCombineCoroutine;
     public Coroutine blockCombineCoroutine;
     public Coroutine hazardRemovalCoroutine;
+    private Coroutine duplicateRemovalCoroutine;
+    private Coroutine duplicateDestructionCoroutine;
     public List<Vector3> meteorShowerLocationList;
 
     //! Called by unity engine on start up to initialize variables.
@@ -73,6 +78,9 @@ public class GameManager : MonoBehaviour
         // Load chunk size setting.
         int cs = PlayerPrefs.GetInt("chunkSize");
         chunkSize = cs > 0 ? cs : 300;
+
+        // Initial list to hold duplicate blocks pending removal.
+        blocksToRemove = new List<GameObject>();
 
         // Create initial iron block holder for mesh manager.
         GameObject ironInit = Instantiate(ironHolder, transform.position, transform.rotation);
@@ -214,7 +222,85 @@ public class GameManager : MonoBehaviour
                 }
             }
 
-            hazardManager.UpdateHazards();
+            if (GetComponent<StateManager>().worldLoaded == true)
+            {
+                hazardManager.UpdateHazards();
+                CheckForDuplicates();
+            }
+        }
+    }
+
+    public void CheckForDuplicates()
+    {
+        if (checkingForDuplicates == false)
+        {
+            duplicateRemovalCoroutine = StartCoroutine(RemoveDuplicates());
+        }
+    }
+
+    //! Checks for multiple blocks placed in the same location and removes the duplicate.
+    private IEnumerator RemoveDuplicates()
+    {
+        checkingForDuplicates = true;
+        Transform[] blocks = builtObjects.GetComponentsInChildren<Transform>(false);
+        foreach (Transform block in blocks)
+        {
+            if (block != null)
+            {
+                int interval = 0;
+                Transform[] otherBlocks = builtObjects.GetComponentsInChildren<Transform>(false);
+                foreach (Transform otherBlock in otherBlocks)
+                {
+                    if (block != null && otherBlock != null)
+                    {
+                        if (block.position == otherBlock.position && block != otherBlock)
+                        {
+                            PhysicsHandler blockHandler = block.GetComponent<PhysicsHandler>();
+                            PhysicsHandler otherBlockHandler = otherBlock.GetComponent<PhysicsHandler>();
+                            if (blockHandler != null && otherBlockHandler != null)
+                            {
+                                if (blockHandler.lifetime > 0 && otherBlockHandler.lifetime > 0)
+                                {
+                                    if (blockHandler.lifetime < otherBlockHandler.lifetime)
+                                    {
+                                        block.gameObject.SetActive(false);
+                                        blocksToRemove.Add(block.gameObject);
+                                    }
+                                    else
+                                    {
+                                        otherBlock.gameObject.SetActive(false);
+                                        blocksToRemove.Add(otherBlock.gameObject);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    interval++;
+                    if (interval >= 300)
+                    {
+                        interval = 0;
+                        yield return null;
+                    }
+                }
+            }
+        }
+        duplicateDestructionCoroutine = StartCoroutine(DestroyDuplicates());
+        checkingForDuplicates = false;
+    }
+
+    private IEnumerator DestroyDuplicates()
+    {
+        int interval = 0;
+        GameObject[] blocks = blocksToRemove.ToArray();
+        foreach (GameObject block in blocks)
+        {
+            blocksToRemove.Remove(block);
+            Destroy(block);
+            interval++;
+            if (interval >= 100)
+            {
+                yield return null;
+            }
         }
     }
 
