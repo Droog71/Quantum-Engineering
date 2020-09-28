@@ -377,6 +377,7 @@ public class MainMenu : MonoBehaviour
                             worldList.Remove(w);
                         }
                     }
+                    PlayerPrefs.DeleteKey(worldName + "sceneChangeRequired");
                     PlayerPrefsX.SetPersistentStringArray("Worlds", worldList.ToArray());
                     deletePrompt = false;
                 }
