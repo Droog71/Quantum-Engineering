@@ -235,6 +235,9 @@ public class PlayerController : MonoBehaviour
         // Audio source for GUI related sounds.
         guiSound = guiObject.GetComponent<AudioSource>();
 
+        // Vsync.
+        QualitySettings.vSyncCount = PlayerPrefs.GetInt("vSyncCount");
+
         // Fog and Scanner color for atmospheric worlds.
         if (SceneManager.GetActiveScene().name.Equals("QE_World_Atmo"))
         {
@@ -474,9 +477,12 @@ public class PlayerController : MonoBehaviour
         PlayerPrefs.SetFloat("FOV", mCam.fieldOfView);
         PlayerPrefs.SetFloat("drawDistance", mCam.farClipPlane);
         PlayerPrefs.SetFloat("volume", GetComponent<MSCameraController>().cameras[0].volume);
+        PlayerPrefsX.SetPersistentBool("blockPhysics", gameManager.blockPhysics);
+        PlayerPrefsX.SetPersistentBool("hazardsEnabled", gameManager.hazardsEnabled);
         PlayerPrefsX.SetPersistentBool("fogEnabled", RenderSettings.fog);
         PlayerPrefs.SetFloat("fogDensity", RenderSettings.fogDensity);
         PlayerPrefs.SetInt("chunkSize", gameManager.chunkSize);
+        PlayerPrefs.SetInt("vSyncCount", QualitySettings.vSyncCount);
         PlayerPrefs.Save();
     }
 
@@ -499,7 +505,7 @@ public class PlayerController : MonoBehaviour
     //! Plays a sound.
     public void PlayMissingItemsSound()
     {
-        guiSound.volume = 0.3f;
+        guiSound.volume = 0.6f;
         guiSound.clip = missingItemsClip;
         guiSound.Play();
     }

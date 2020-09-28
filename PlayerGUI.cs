@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerGUI : MonoBehaviour
 {
@@ -499,30 +500,41 @@ public class PlayerGUI : MonoBehaviour
 
                 gameManager.chunkSize = (int)GUI.HorizontalSlider(guiCoordinates.optionsButton10Rect, gameManager.chunkSize, 100, 500);
 
-                string fogDisplay = RenderSettings.fog == true ? "ON" : "OFF";
-                if (GUI.Button(guiCoordinates.optionsButton11Rect, "Fog: " + fogDisplay))
+                string vsyncDisplay = QualitySettings.vSyncCount == 1 ? "ON" : "OFF";
+                if (GUI.Button(guiCoordinates.optionsButton11Rect, "Vsync: " + vsyncDisplay))
                 {
-                    RenderSettings.fog = !RenderSettings.fog;
-                    PlayerPrefsX.SetPersistentBool("blockPhysics", gameManager.blockPhysics);
+                    QualitySettings.vSyncCount = QualitySettings.vSyncCount == 0 ? 1 : 0;
+                    playerController.PlayButtonSound();
+                }
+
+                string fogDisplay = RenderSettings.fog == true ? "ON" : "OFF";
+                if (GUI.Button(guiCoordinates.optionsButton12Rect, "Fog: " + fogDisplay))
+                {
+                    if (SceneManager.GetActiveScene().name.Equals("QE_World_Atmo"))
+                    {
+                        RenderSettings.fog = !RenderSettings.fog;
+                    }
+                    else
+                    {
+                        RenderSettings.fog = false;
+                    }
                     playerController.PlayButtonSound();
                 }
 
                 string blockPhysicsDisplay = gameManager.blockPhysics == true ? "ON" : "OFF";
-                if (GUI.Button(guiCoordinates.optionsButton12Rect, "Block Physics: "+ blockPhysicsDisplay))
+                if (GUI.Button(guiCoordinates.optionsButton13Rect, "Block Physics: "+ blockPhysicsDisplay))
                 {
                     gameManager.blockPhysics = !gameManager.blockPhysics;
-                    PlayerPrefsX.SetPersistentBool("blockPhysics", gameManager.blockPhysics);
                     playerController.PlayButtonSound();
                 }
 
                 string hazardsEnabledDisplay = gameManager.hazardsEnabled == true ? "ON" : "OFF";
-                if (GUI.Button(guiCoordinates.optionsButton13Rect, "Hazards: " + hazardsEnabledDisplay))
+                if (GUI.Button(guiCoordinates.optionsButton14Rect, "Hazards: " + hazardsEnabledDisplay))
                 {
                     gameManager.hazardsEnabled = !gameManager.hazardsEnabled;
-                    PlayerPrefsX.SetPersistentBool("hazardsEnabled", gameManager.hazardsEnabled);
                     playerController.PlayButtonSound();
                 }
-                if (GUI.Button(guiCoordinates.optionsButton14Rect, "BACK"))
+                if (GUI.Button(guiCoordinates.optionsButton15Rect, "BACK"))
                 {
                     playerController.ApplySettings();
                     playerController.optionsGUIopen = false;

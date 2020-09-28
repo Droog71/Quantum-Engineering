@@ -110,6 +110,7 @@ public class MarketGUI : MonoBehaviour
             }
             else
             {
+                outOfSpace = true;
                 playerController.PlayMissingItemsSound();
             }
         }
@@ -149,6 +150,7 @@ public class MarketGUI : MonoBehaviour
         }
         else
         {
+            missingItem = true;
             playerController.PlayMissingItemsSound();
         }
     }
@@ -728,7 +730,7 @@ public class MarketGUI : MonoBehaviour
                 {
                     if (cannotAffordTimer < 3)
                     {
-                        GUI.Label(guiCoordinates.inventoryMesageRect, "Cannot afford.");
+                        GUI.Label(guiCoordinates.marketMessageRect, "Cannot afford.");
                         cannotAffordTimer += 1 * Time.deltaTime;
                     }
                     else
@@ -742,7 +744,7 @@ public class MarketGUI : MonoBehaviour
                 {
                     if (missingItemTimer < 3)
                     {
-                        GUI.Label(guiCoordinates.inventoryMesageRect, "Missing items.");
+                        GUI.Label(guiCoordinates.marketMessageRect, "Missing items.");
                         missingItemTimer += 1 * Time.deltaTime;
                     }
                     else
@@ -756,7 +758,7 @@ public class MarketGUI : MonoBehaviour
                 {
                     if (outOfSpaceTimer < 3)
                     {
-                        GUI.Label(guiCoordinates.inventoryMesageRect, "\nNo space in inventory.");
+                        GUI.Label(guiCoordinates.marketMessageRect, "\nNo space in inventory.");
                         outOfSpaceTimer += 1 * Time.deltaTime;
                     }
                     else
