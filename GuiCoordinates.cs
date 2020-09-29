@@ -443,8 +443,8 @@ public class GuiCoordinates
 
         //CRAFTING
         craftingBackgroundRect = new Rect(0, (ScreenHeight * 0.05f), (ScreenWidth * 0.60f), (ScreenHeight * 0.68f));
-        craftingInfoBackgroundRect = new Rect((ScreenWidth * 0.04f), (ScreenHeight * 0.65f), (ScreenWidth * 0.50f), (ScreenHeight * 0.35f));
-        craftingInfoRect = new Rect((ScreenWidth * 0.08f), (ScreenHeight * 0.69f), (ScreenWidth * 0.42f), (ScreenHeight * 0.31f));
+        craftingInfoBackgroundRect = new Rect((ScreenWidth * 0.04f), (ScreenHeight * 0.65f), (ScreenWidth * 0.50f), (Screen.height * 0.35f));
+        craftingInfoRect = new Rect((ScreenWidth * 0.08f), (ScreenHeight * 0.69f), (ScreenWidth * 0.42f), (Screen.height * 0.31f));
 
         //CRAFTING GUI BUTTONS
         button1Rect = new Rect((ScreenWidth * 0.08f), (ScreenHeight * 0.15f), (ScreenWidth * 0.14f), (ScreenHeight * 0.05f));

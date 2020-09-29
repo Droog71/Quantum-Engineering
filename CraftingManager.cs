@@ -26,13 +26,17 @@ public class CraftingManager : MonoBehaviour
     //! Called when the player crafts an item from the inventory GUI.
     public void CraftItemAsPlayer(CraftingRecipe recipe)
     {
+        int outputAmount = recipe.outputAmount;
+        int[] amounts = new int[recipe.amounts.Length];
+        recipe.amounts.CopyTo(amounts, 0);
+
         if (Input.GetKey(KeyCode.LeftShift))
         {
-            for (int i = 0; i < recipe.amounts.Length; i++)
+            for (int i = 0; i < amounts.Length; i++)
             {
-                recipe.amounts[i] *= 10;
+                amounts[i] = recipe.amounts[i] * 10;
             }
-            recipe.outputAmount *= 10;
+            outputAmount = recipe.outputAmount * 10;
         }
 
         InventorySlot[] slots = new InventorySlot[recipe.ingredients.Length];
@@ -43,7 +47,7 @@ public class CraftingManager : MonoBehaviour
             int currentSlot = 0;
             foreach (InventorySlot slot in inventoryManager.inventory)
             {
-                if (slot.amountInSlot >= recipe.amounts[i])
+                if (slot.amountInSlot >= amounts[i])
                 {
                     if (slot.typeInSlot.Equals(recipe.ingredients[i]))
                     {
@@ -67,12 +71,12 @@ public class CraftingManager : MonoBehaviour
 
         if (!missingItem)
         {
-            inventoryManager.AddItem(recipe.output, recipe.outputAmount);
+            inventoryManager.AddItem(recipe.output, outputAmount);
             if (inventoryManager.itemAdded)
             {
                 for (int i = 0; i < recipe.ingredients.Length; i++)
                 {
-                    slots[i].amountInSlot -= recipe.amounts[i];
+                    slots[i].amountInSlot -= amounts[i];
                     if (slots[i].amountInSlot <= 0)
                     {
                         slots[i].typeInSlot = "nothing";
