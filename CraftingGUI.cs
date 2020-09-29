@@ -11,7 +11,6 @@ public class CraftingGUI : MonoBehaviour
     private Descriptions descriptions;
     private int craftingPage;
     private int modCraftingIndex;
-     private float missingItemTimer;
 
     //! Called by unity engine on start up to initialize variables.
     public void Start()
@@ -26,10 +25,10 @@ public class CraftingGUI : MonoBehaviour
 
     public void OnGUI()
     {
-        // STYLE
+        // Style.
         GUI.skin = GetComponent<PlayerGUI>().thisGUIskin;
 
-        // ASPECT RATIO
+        // Aspect ratio.
         float ScreenHeight = Screen.height;
         float ScreenWidth = Screen.width;
         if (ScreenWidth / ScreenHeight < 1.7f)
@@ -636,19 +635,6 @@ public class CraftingGUI : MonoBehaviour
                             craftingPage += 1;
                         }
                         playerController.PlayButtonSound();
-                    }
-                    if (craftingManager.missingItem == true)
-                    {
-                        if (missingItemTimer < 3)
-                        {
-                            GUI.Label(guiCoordinates.inventoryMesageRect, "Missing items.");
-                            missingItemTimer += 1 * Time.deltaTime;
-                        }
-                        else
-                        {
-                            craftingManager.missingItem = false;
-                            missingItemTimer = 0;
-                        }
                     }
                 }
             }

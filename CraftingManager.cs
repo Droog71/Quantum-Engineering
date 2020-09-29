@@ -84,9 +84,15 @@ public class CraftingManager : MonoBehaviour
                 }
                 playerController.PlayCraftingSound();
             }
+            else
+            {
+                GetComponent<InventoryGUI>().outOfSpace = true;
+                playerController.PlayMissingItemsSound();
+            }
         }
         else
         {
+            GetComponent<InventoryGUI>().missingItem = true;
             playerController.PlayMissingItemsSound();
         }
     }

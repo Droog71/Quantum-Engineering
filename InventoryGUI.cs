@@ -8,8 +8,13 @@ public class InventoryGUI : MonoBehaviour
     private TextureDictionary textureDictionary;
     private GuiCoordinates guiCoordinates;
     private string storageComputerSearchText = "";
-    private bool outOfSpace;
+    public bool outOfSpace;
+    public bool cannotAfford;
+    public bool missingItem;
     private float outOfSpaceTimer;
+    private float cannotAffordTimer;
+    private float missingItemTimer;
+
 
     //! Called by unity engine on start up to initialize variables.
     public void Start()
@@ -24,7 +29,7 @@ public class InventoryGUI : MonoBehaviour
     //! Called by unity engine for rendering and handling GUI events.
     public void OnGUI()
     {
-        // Style
+        // Style.
         GUI.skin = GetComponent<PlayerGUI>().thisGUIskin;
 
         // Aspect ratio.
@@ -188,7 +193,37 @@ public class InventoryGUI : MonoBehaviour
                     }
                 }
 
-                // Display a message if the player's inventory does not have adequate free space to complete a task.
+                // Message displayed when the player attempts to purchase something they cannot afford from the market.
+                if (cannotAfford == true)
+                {
+                    if (cannotAffordTimer < 3)
+                    {
+                        GUI.Label(guiCoordinates.inventoryMesageRect, "Cannot afford.");
+                        cannotAffordTimer += 1 * Time.deltaTime;
+                    }
+                    else
+                    {
+                        cannotAfford = false;
+                        cannotAffordTimer = 0;
+                    }
+                }
+
+                // Message displayed when the player is missing a required item for sale or crafting.
+                if (missingItem == true)
+                {
+                    if (missingItemTimer < 3)
+                    {
+                        GUI.Label(guiCoordinates.inventoryMesageRect, "Missing items.");
+                        missingItemTimer += 1 * Time.deltaTime;
+                    }
+                    else
+                    {
+                        missingItem = false;
+                        missingItemTimer = 0;
+                    }
+                }
+
+                // Message displayed when the player does not have adequate inventory space to craft or purchase an item.
                 if (outOfSpace == true)
                 {
                     if (outOfSpaceTimer < 3)
