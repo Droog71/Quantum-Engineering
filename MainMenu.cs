@@ -31,7 +31,6 @@ public class MainMenu : MonoBehaviour
     //! Called by unity engine on start up to initialize variables.
     public void Start()
     {
-        FileBasedPrefs.initialized = false;
         stateManager = FindObjectOfType<StateManager>();
         worldList = new List<string>();
         videoPlayer.GetComponent<VP>().PlayVideo("QE_Title.webm",true,0);
@@ -40,9 +39,10 @@ public class MainMenu : MonoBehaviour
         ambient.Play();
         if (PlayerPrefsX.GetPersistentBool("changingWorld") == true)
         {
-            PlayerPrefsX.SetPersistentBool("changingWorld", false);
-            FileBasedPrefs.SetWorldName(PlayerPrefs.GetString("worldName"));
             stateManager.WorldName = PlayerPrefs.GetString("worldName");
+            PlayerPrefs.DeleteKey("changingWorld");
+            PlayerPrefs.DeleteKey("worldName");
+            PlayerPrefs.Save();
             worldSelected = true;
             ambient.enabled = false;
         }
@@ -53,6 +53,7 @@ public class MainMenu : MonoBehaviour
     {
         if (worldSelected == false && worldName != "Enter World Name")
         {
+            FileBasedPrefs.SetWorldName(worldName);
             worldList = PlayerPrefsX.GetPersistentStringArray("Worlds").ToList();
             if (worldList.Count < 10)
             {
@@ -63,7 +64,7 @@ public class MainMenu : MonoBehaviour
                 }
                 else
                 {
-                    if (PlayerPrefsX.GetPersistentBool(worldName + "sceneChangeRequired") == true)
+                    if (FileBasedPrefs.GetBool(worldName + "sceneChangeRequired") == true)
                     {
                         ChangeScene();
                     }
@@ -75,7 +76,7 @@ public class MainMenu : MonoBehaviour
             }
             else if (worldList.Contains(worldName))
             {
-                if (PlayerPrefsX.GetPersistentBool(worldName + "sceneChangeRequired") == true)
+                if (FileBasedPrefs.GetBool(worldName + "sceneChangeRequired") == true)
                 {
                     ChangeScene();
                 }
@@ -90,10 +91,11 @@ public class MainMenu : MonoBehaviour
     //! Called when Kepler-1625 is selected and the scene needs to be changed.
     private void ChangeScene()
     {
+        FileBasedPrefs.SetBool(worldName + "sceneChangeRequired", true);
         PlayerPrefsX.SetPersistentStringArray("Worlds", worldList.ToArray());
         PlayerPrefsX.SetPersistentBool("changingWorld", true);
         PlayerPrefs.SetString("worldName", worldName);
-        PlayerPrefsX.SetPersistentBool(worldName + "sceneChangeRequired", true);
+        FileBasedPrefs.ManuallySave();
         PlayerPrefs.Save();
         SceneManager.LoadScene(1);
     }
@@ -101,8 +103,9 @@ public class MainMenu : MonoBehaviour
     //! Called when Gliese 876 is selected and the scene does not need to be changed.
     private void StartGame()
     {
+        FileBasedPrefs.SetBool(worldName + "sceneChangeRequired", false);
         PlayerPrefsX.SetPersistentStringArray("Worlds", worldList.ToArray());
-        FileBasedPrefs.SetWorldName(worldName);
+        FileBasedPrefs.ManuallySave();
         PlayerPrefs.Save();
         stateManager.WorldName = worldName;
         worldSelected = true;
@@ -380,7 +383,6 @@ public class MainMenu : MonoBehaviour
                             worldList.Remove(w);
                         }
                     }
-                    PlayerPrefs.DeleteKey(worldName + "sceneChangeRequired");
                     PlayerPrefsX.SetPersistentStringArray("Worlds", worldList.ToArray());
                     PlayerPrefs.Save();
                     deletePrompt = false;
