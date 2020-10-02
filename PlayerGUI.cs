@@ -8,6 +8,7 @@ public class PlayerGUI : MonoBehaviour
     private StateManager stateManager;
     private InventoryManager playerInventory;
     private TextureDictionary textureDictionary;
+    private Texture2D paintSelectionTexture;
     private GuiCoordinates guiCoordinates;
     public GUISkin thisGUIskin;
     public GameObject videoPlayer;
@@ -28,6 +29,7 @@ public class PlayerGUI : MonoBehaviour
         stateManager = GameObject.Find("GameManager").GetComponent<StateManager>();
         textureDictionary = GetComponent<TextureDictionary>();
         guiCoordinates = new GuiCoordinates();
+        paintSelectionTexture = new Texture2D(512, 128);
     }
 
     //! Returns true if the escape menu should be displayed.
@@ -664,24 +666,48 @@ public class PlayerGUI : MonoBehaviour
                 if (playerController.paintColorSelected == false)
                 {
                     GUI.DrawTexture(guiCoordinates.paintGunMenuBackgroundRect, textureDictionary.dictionary["Menu Background"]);
-                    GUI.Label(guiCoordinates.optionsButton1Rect, "        Paint  Gun");
-                    GUI.Label(guiCoordinates.optionsButton2Rect, "       Select Color");
-                    GUI.Label(guiCoordinates.sliderLabel1Rect, "Red");
-                    GUI.Label(guiCoordinates.sliderLabel2Rect, "Green");
-                    GUI.Label(guiCoordinates.sliderLabel3Rect, "Blue");
-                    playerController.paintRed = GUI.HorizontalSlider(guiCoordinates.optionsButton4Rect, playerController.paintRed, 0, 1);
-                    playerController.paintGreen = GUI.HorizontalSlider(guiCoordinates.optionsButton5Rect, playerController.paintGreen, 0, 1);
-                    playerController.paintBlue = GUI.HorizontalSlider(guiCoordinates.optionsButton6Rect, playerController.paintBlue, 0, 1);
+
+                    int f = GUI.skin.label.fontSize;
+                    GUI.skin.label.fontSize = 14;
+
+                    GUIStyle style = GUI.skin.box;
+                    style.alignment = TextAnchor.MiddleCenter;
+                    GUIContent content = new GUIContent("Paint Gun");
+                    Vector2 size = style.CalcSize(content);
+                    Rect titleRect = new Rect((Screen.width / 2) - (size.x / 2.5f), ScreenHeight * 0.05f, size.x, size.y);
+                    GUI.Label(titleRect, "Paint Gun");
+
+                    GUIStyle style2 = GUI.skin.box;
+                    style2.alignment = TextAnchor.MiddleCenter;
+                    GUIContent content2 = new GUIContent("Select Color");
+                    Vector2 size2 = style2.CalcSize(content2);
+                    Rect titleRect2 = new Rect((Screen.width / 2) - (size2.x / 2.5f), ScreenHeight * 0.11f, size2.x, size2.y);
+                    GUI.Label(titleRect2, "Select Color");
+
+                    GUI.skin.label.fontSize = f;
+
+                    GUI.Label(guiCoordinates.sliderLabel2Rect, "Red");
+                    GUI.Label(guiCoordinates.sliderLabel3Rect, "Green");
+                    GUI.Label(guiCoordinates.sliderLabel4Rect, "Blue");
+
+                    playerController.paintRed = GUI.HorizontalSlider(guiCoordinates.optionsButton5Rect, playerController.paintRed, 0, 1);
+                    playerController.paintGreen = GUI.HorizontalSlider(guiCoordinates.optionsButton6Rect, playerController.paintGreen, 0, 1);
+                    playerController.paintBlue = GUI.HorizontalSlider(guiCoordinates.optionsButton7Rect, playerController.paintBlue, 0, 1);
+
                     Color paintcolor = new Color(playerController.paintRed, playerController.paintGreen, playerController.paintBlue);
+
                     Material tankMat = playerController.paintGunTank.GetComponent<Renderer>().material;
                     Material adjTankMat = playerController.adjustedPaintGunTank.GetComponent<Renderer>().material;
                     Material adjTank2Mat = playerController.adjustedPaintGunTank2.GetComponent<Renderer>().material;
+
                     tankMat.color = paintcolor;
                     adjTankMat.color = paintcolor;
                     adjTank2Mat.color = paintcolor;
+
                     GUI.color = paintcolor;
-                    GUI.DrawTexture(guiCoordinates.optionsButton3Rect, textureDictionary.dictionary["Iron Block"]);
+                    GUI.DrawTexture(guiCoordinates.optionsButton3Rect, paintSelectionTexture);
                     GUI.color = Color.white;
+
                     if (GUI.Button(guiCoordinates.optionsButton8Rect, "DONE"))
                     {
                         playerController.paintColorSelected = true;

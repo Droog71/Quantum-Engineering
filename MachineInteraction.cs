@@ -867,6 +867,10 @@ public class MachineInteraction
             {
                 playerController.machineOutputID = heatExchanger.outputObject.GetComponent<Turret>().ID;
             }
+            if (heatExchanger.outputObject.GetComponent<NuclearReactor>() != null)
+            {
+                playerController.machineOutputID = heatExchanger.outputObject.GetComponent<NuclearReactor>().ID;
+            }
             if (heatExchanger.outputObject.GetComponent<ModMachine>() != null)
             {
                 playerController.machineOutputID = heatExchanger.outputObject.GetComponent<ModMachine>().ID;

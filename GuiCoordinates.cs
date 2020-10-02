@@ -566,7 +566,7 @@ public class GuiCoordinates
         marketMessageButtonRect = new Rect(((ScreenWidth / 2) - (ScreenWidth * 0.07f)), ((ScreenHeight / 2) + 20), (ScreenWidth * 0.14f), (ScreenHeight * 0.05f));
 
         //PAINT GUN COLOR SELECTION BACKGROUND
-        paintGunMenuBackgroundRect = new Rect((ScreenWidth * 0.4f), (ScreenHeight * 0.04f), (ScreenWidth * 0.2f), (ScreenHeight * 0.56f));
+        paintGunMenuBackgroundRect = new Rect((ScreenWidth * 0.4f), (ScreenHeight * 0.01f), (ScreenWidth * 0.2f), (ScreenHeight * 0.56f));
     }
 }
 
