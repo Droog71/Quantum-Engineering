@@ -524,6 +524,34 @@ public class MachineGUI : MonoBehaviour
                     }
                 }
 
+                if (obj.GetComponent<ModMachine>() != null)
+                {
+                    GUI.DrawTexture(guiCoordinates.speedControlBGRect, textureDictionary.dictionary["Interface Background"]);
+                    ModMachine modMachine = obj.GetComponent<ModMachine>();
+                    if (modMachine.connectionFailed == false)
+                    {
+                        if (modMachine.power > 0)
+                        {
+                            GUI.Label(guiCoordinates.outputLabelRect, "Output");
+                            modMachine.speed = (int)GUI.HorizontalSlider(guiCoordinates.outputControlButton2Rect, modMachine.speed, 0, modMachine.power);
+                        }
+                        else
+                        {
+                            GUI.Label(guiCoordinates.outputLabelRect, "No Power");
+                        }
+                    }
+                    else
+                    {
+                        GUI.Label(guiCoordinates.outputLabelRect, "Offline");
+                        if (GUI.Button(guiCoordinates.outputControlButton2Rect, "Reboot"))
+                        {
+                            modMachine.connectionAttempts = 0;
+                            modMachine.connectionFailed = false;
+                            playerController.PlayButtonSound();
+                        }
+                    }
+                }
+
                 if (obj.GetComponent<Turret>() != null)
                 {
                     GUI.DrawTexture(guiCoordinates.speedControlBGRect, textureDictionary.dictionary["Interface Background"]);
