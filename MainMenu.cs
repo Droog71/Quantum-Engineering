@@ -157,6 +157,7 @@ public class MainMenu : MonoBehaviour
         Rect deletePromptButton2Rect = new Rect((ScreenWidth * 0.51f), (ScreenHeight * 0.22f), (ScreenWidth * 0.10f), (ScreenHeight * 0.05f));
 
         Rect startGameButtonRect = new Rect(ScreenWidth * 0.58f, ScreenHeight * 0.4f, ScreenWidth * 0.15f, ScreenHeight * 0.03f);
+        Rect modioButtonRect = new Rect(ScreenWidth * 0.58f, ScreenHeight * 0.44f, ScreenWidth * 0.15f, ScreenHeight * 0.03f);
         Rect textFieldRect = new Rect(ScreenWidth * 0.41f, ScreenHeight * 0.4f, ScreenWidth * 0.15f, ScreenHeight * 0.03f);
         Rect loadingMessageRect = new Rect((ScreenWidth * 0.46f), (ScreenHeight * 0.30f), (ScreenWidth * 0.5f), (ScreenHeight * 0.5f));
 
@@ -202,6 +203,11 @@ public class MainMenu : MonoBehaviour
             {
                 buttonSounds.Play();
                 SelectWorld();
+            }
+            if (GUI.Button(modioButtonRect, "MODS") || Event.current.keyCode.Equals(KeyCode.Return))
+            {
+                buttonSounds.Play();
+                SceneManager.LoadScene(2);
             }
 
             GUI.DrawTexture(worldListBackgroundRect, worlListBackground);
