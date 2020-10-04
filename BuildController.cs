@@ -344,10 +344,9 @@ public class BuildController : MonoBehaviour
                             {
                                 obj.GetComponent<RailCart>().target = hit.collider.gameObject;
                             }
-                            if (t.GetComponent<ModMachine>() != null)
+                            if (obj.GetComponent<ModMachine>() != null)
                             {
-                                ModMachine machine = t.GetComponent<ModMachine>();
-                                machine.machineName = type;
+                                obj.GetComponent<ModMachine>().machineName = type;
                             }
                             slot.amountInSlot -= 1;
                             playerController.builderSound.Play();
