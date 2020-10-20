@@ -5,7 +5,7 @@ Website:
 https://droog71.itch.io/quantum-engineering
 
 Modding Documentation:
-https://www.dropbox.com/scl/fi/dkqw53yakudkokihrkidi/Modding_Documentation.odt?dl=0
+https://www.dropbox.com/s/w3vzrrcmtf2drhh/Modding_Documentation.odt?dl=0
 
 mod.io page:
 https://qe.mod.io/
