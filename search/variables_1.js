@@ -12,6 +12,7 @@ var searchData=
   ['blockphysics',['blockPhysics',['../classGameManager.html#a8b1831c6383d50f3bd15e0ecc2e5a27a',1,'GameManager']]],
   ['blockscombined',['blocksCombined',['../classGameManager.html#ac25ef40000b8caf84c5ca8b05733e00a',1,'GameManager']]],
   ['blockselector',['blockSelector',['../classPlayerController.html#ac1174b40e4b2bdc1fedf2ae12dfda288',1,'PlayerController']]],
+  ['blockstoremove',['blocksToRemove',['../classGameManager.html#a577dd85a2708440245bbbf0343c1444e',1,'GameManager']]],
   ['boottimer',['bootTimer',['../classStorageComputer.html#a00aaa6a4a43902d824feca0a6c882b99',1,'StorageComputer']]],
   ['brick',['brick',['../classPlayerController.html#ae3d22d7d1ad09e84bd10de51d27db8f2',1,'PlayerController.brick()'],['../classStateManager.html#ae0d7813e53392794392e95706327ce25',1,'StateManager.Brick()']]],
   ['brickholder',['brickHolder',['../classGameManager.html#abf7421ff2488f6e6c2e151963babc5c8',1,'GameManager']]],

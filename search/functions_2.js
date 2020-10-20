@@ -2,9 +2,11 @@ var searchData=
 [
   ['canconnect',['CanConnect',['../classRailCartHub.html#a1451fb4c0d9672cfee1d6f419611c629',1,'RailCartHub']]],
   ['cansenddestructionmessage',['CanSendDestructionMessage',['../classLaserController.html#ac597a56cd4a3985436026155e5b4a16e',1,'LaserController.CanSendDestructionMessage()'],['../classMeteor.html#a3d977db6a7cad45897b2e681266edbb9',1,'Meteor.CanSendDestructionMessage()'],['../classPirate.html#ad3e438a96cdf7278ba52e0d76881dd65',1,'Pirate.CanSendDestructionMessage()']]],
+  ['cantransfer',['CanTransfer',['../classInventoryHandler.html#a34f92a4417e4dcf65b6ced958738548f',1,'InventoryHandler']]],
   ['changebuildaxis',['ChangeBuildAxis',['../classBuildController.html#abb33d60ccfec3c5173b4921be125584f',1,'BuildController']]],
   ['changescene',['ChangeScene',['../classMainMenu.html#a1502ccdb138468f54e19c3d730ca1983',1,'MainMenu']]],
   ['checkcargo',['CheckCargo',['../classRocket.html#acee47166aa379d5df89e4c6b1d496e10',1,'Rocket']]],
+  ['checkforduplicates',['CheckForDuplicates',['../classGameManager.html#ae715140c88b3eeb7ec3fddd7a37ddadf',1,'GameManager']]],
   ['checkforsupport',['CheckForSupport',['../classPhysicsHandler.html#aa3927f94c04139aceb2b368f3c2576a7',1,'PhysicsHandler']]],
   ['checkstoragedistance',['CheckStorageDistance',['../classPlayerController.html#ae647c87147aab61ad3700724c4d0caec',1,'PlayerController']]],
   ['clearinventory',['ClearInventory',['../classRocket.html#af578246129482758d76316f19d384dfd',1,'Rocket']]],

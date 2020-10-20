@@ -4,6 +4,7 @@ var searchData=
   ['inputmanager',['InputManager',['../classInputManager.html',1,'']]],
   ['interactioncontroller',['InteractionController',['../classInteractionController.html',1,'']]],
   ['inventorygui',['InventoryGUI',['../classInventoryGUI.html',1,'']]],
+  ['inventoryhandler',['InventoryHandler',['../classInventoryHandler.html',1,'']]],
   ['inventorymanager',['InventoryManager',['../classInventoryManager.html',1,'']]],
   ['inventoryslot',['InventorySlot',['../classInventorySlot.html',1,'']]],
   ['iron',['Iron',['../classIron.html',1,'']]],

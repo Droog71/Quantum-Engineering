@@ -7,6 +7,7 @@ var searchData=
   ['toggleheadlamp',['ToggleHeadLamp',['../classActionManager.html#a89521ebff28605bdf80f210abc9a98c1',1,'ActionManager']]],
   ['toggleinventory',['ToggleInventory',['../classActionManager.html#aef4b5399df6b140ae5d8f8c554391e60',1,'ActionManager']]],
   ['togglelasercannon',['ToggleLaserCannon',['../classActionManager.html#af2ad9fc545951d4cd2c36b263be85a33',1,'ActionManager']]],
+  ['togglemachinegui',['ToggleMachineGUI',['../classInteractionController.html#a73bb90011d2c6cd71cdfd09bc95dcda6',1,'InteractionController']]],
   ['togglemarketgui',['ToggleMarketGUI',['../classActionManager.html#a53589c7767bad9c404f8ecea6161dbba',1,'ActionManager']]],
   ['toggleopen',['ToggleOpen',['../classAirLock.html#afba594db2b50160a725a4937e1e3d4df',1,'AirLock']]],
   ['togglepaintgun',['TogglePaintGun',['../classActionManager.html#a90114f33399090718f0258092e57d490',1,'ActionManager']]],

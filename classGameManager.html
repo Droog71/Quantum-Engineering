@@ -61,6 +61,7 @@ $(function() {
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pub-attribs">Public Attributes</a> &#124;
+<a href="#pri-methods">Private Member Functions</a> &#124;
 <a href="#pri-attribs">Private Attributes</a> &#124;
 <a href="classGameManager-members.html">List of all members</a>  </div>
   <div class="headertitle">
@@ -84,6 +85,8 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a44c79b205dec16bfe650e21259860c5b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classGameManager.html#a44c79b205dec16bfe650e21259860c5b">Update</a> ()</td></tr>
 <tr class="memdesc:a44c79b205dec16bfe650e21259860c5b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Called once per frame by unity engine.  <a href="#a44c79b205dec16bfe650e21259860c5b">More...</a><br /></td></tr>
 <tr class="separator:a44c79b205dec16bfe650e21259860c5b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae715140c88b3eeb7ec3fddd7a37ddadf"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classGameManager.html#ae715140c88b3eeb7ec3fddd7a37ddadf">CheckForDuplicates</a> ()</td></tr>
+<tr class="separator:ae715140c88b3eeb7ec3fddd7a37ddadf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a64c22c6ac1fc2b109b802720c480a2e1"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classGameManager.html#a64c22c6ac1fc2b109b802720c480a2e1">RequestSaveOperation</a> ()</td></tr>
 <tr class="memdesc:a64c22c6ac1fc2b109b802720c480a2e1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Saves the game on exit.  <a href="#a64c22c6ac1fc2b109b802720c480a2e1">More...</a><br /></td></tr>
 <tr class="separator:a64c22c6ac1fc2b109b802720c480a2e1"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -144,6 +147,8 @@ Public Attributes</h2></td></tr>
 <tr class="separator:a09b2d1f2f22c99331f4dd8fc970d293d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac62850d94759992eda494a858bca864b"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classGameManager.html#ac62850d94759992eda494a858bca864b">replacingMeshFilters</a></td></tr>
 <tr class="separator:ac62850d94759992eda494a858bca864b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a858bac55777e4afbabd1a12b37937772"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classGameManager.html#a858bac55777e4afbabd1a12b37937772">checkingForDuplicates</a></td></tr>
+<tr class="separator:a858bac55777e4afbabd1a12b37937772"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6b450935a945c2b19b9ef1e979c448fc"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classGameManager.html#a6b450935a945c2b19b9ef1e979c448fc">clearBrickDummies</a></td></tr>
 <tr class="separator:a6b450935a945c2b19b9ef1e979c448fc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac338b2c865a99a67d2d1628c2fc643ea"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classGameManager.html#ac338b2c865a99a67d2d1628c2fc643ea">clearGlassDummies</a></td></tr>
@@ -179,18 +184,109 @@ Public Attributes</h2></td></tr>
 <tr class="memitem:a2de5dd501ee1893f1fca59efaaba1dea"><td class="memItemLeft" align="right" valign="top">List&lt; Vector3 &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classGameManager.html#a2de5dd501ee1893f1fca59efaaba1dea">meteorShowerLocationList</a></td></tr>
 <tr class="separator:a2de5dd501ee1893f1fca59efaaba1dea"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-methods"></a>
+Private Member Functions</h2></td></tr>
+<tr class="memitem:ad0aeb962c9b1d9b6f78c8ad0aecb0f84"><td class="memItemLeft" align="right" valign="top">IEnumerator&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classGameManager.html#ad0aeb962c9b1d9b6f78c8ad0aecb0f84">RemoveDuplicates</a> ()</td></tr>
+<tr class="memdesc:ad0aeb962c9b1d9b6f78c8ad0aecb0f84"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks for multiple blocks placed in the same location and removes the duplicate.  <a href="#ad0aeb962c9b1d9b6f78c8ad0aecb0f84">More...</a><br /></td></tr>
+<tr class="separator:ad0aeb962c9b1d9b6f78c8ad0aecb0f84"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a37be8bb2a4a7d38436de35be84dd8c9a"><td class="memItemLeft" align="right" valign="top">IEnumerator&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classGameManager.html#a37be8bb2a4a7d38436de35be84dd8c9a">DestroyDuplicates</a> ()</td></tr>
+<tr class="separator:a37be8bb2a4a7d38436de35be84dd8c9a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
 <tr class="memitem:a6d0d92821547bb9c8cbeffc259a87dab"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classHazardManager.html">HazardManager</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classGameManager.html#a6d0d92821547bb9c8cbeffc259a87dab">hazardManager</a></td></tr>
 <tr class="separator:a6d0d92821547bb9c8cbeffc259a87dab"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a577dd85a2708440245bbbf0343c1444e"><td class="memItemLeft" align="right" valign="top">List&lt; GameObject &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classGameManager.html#a577dd85a2708440245bbbf0343c1444e">blocksToRemove</a></td></tr>
+<tr class="separator:a577dd85a2708440245bbbf0343c1444e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a56a0bd7e6353daf8da6611e7ac9590c0"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classGameManager.html#a56a0bd7e6353daf8da6611e7ac9590c0">mfDelay</a></td></tr>
 <tr class="separator:a56a0bd7e6353daf8da6611e7ac9590c0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a303d5b78339387f04d5482f81a959158"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classGameManager.html#a303d5b78339387f04d5482f81a959158">loadedBlockPhysics</a></td></tr>
 <tr class="separator:a303d5b78339387f04d5482f81a959158"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acd1f95f730568a00318dfd6060936a0b"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classGameManager.html#acd1f95f730568a00318dfd6060936a0b">loadedHazardsEnabled</a></td></tr>
 <tr class="separator:acd1f95f730568a00318dfd6060936a0b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa4ec39295b69f70551bae76308b478db"><td class="memItemLeft" align="right" valign="top">Coroutine&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classGameManager.html#aa4ec39295b69f70551bae76308b478db">duplicateRemovalCoroutine</a></td></tr>
+<tr class="separator:aa4ec39295b69f70551bae76308b478db"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acaafdacf815834468388cb17ad7b910c"><td class="memItemLeft" align="right" valign="top">Coroutine&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classGameManager.html#acaafdacf815834468388cb17ad7b910c">duplicateDestructionCoroutine</a></td></tr>
+<tr class="separator:acaafdacf815834468388cb17ad7b910c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Member Function Documentation</h2>
+<a id="ae715140c88b3eeb7ec3fddd7a37ddadf"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae715140c88b3eeb7ec3fddd7a37ddadf">&#9670;&nbsp;</a></span>CheckForDuplicates()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void GameManager.CheckForDuplicates </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a37be8bb2a4a7d38436de35be84dd8c9a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a37be8bb2a4a7d38436de35be84dd8c9a">&#9670;&nbsp;</a></span>DestroyDuplicates()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">IEnumerator GameManager.DestroyDuplicates </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ad0aeb962c9b1d9b6f78c8ad0aecb0f84"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad0aeb962c9b1d9b6f78c8ad0aecb0f84">&#9670;&nbsp;</a></span>RemoveDuplicates()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">IEnumerator GameManager.RemoveDuplicates </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Checks for multiple blocks placed in the same location and removes the duplicate. </p>
+
+</div>
+</div>
 <a id="a64c22c6ac1fc2b109b802720c480a2e1"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a64c22c6ac1fc2b109b802720c480a2e1">&#9670;&nbsp;</a></span>RequestSaveOperation()</h2>
 
@@ -315,6 +411,28 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="a577dd85a2708440245bbbf0343c1444e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a577dd85a2708440245bbbf0343c1444e">&#9670;&nbsp;</a></span>blocksToRemove</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">List&lt;GameObject&gt; GameManager.blocksToRemove</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="abf7421ff2488f6e6c2e151963babc5c8"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#abf7421ff2488f6e6c2e151963babc5c8">&#9670;&nbsp;</a></span>brickHolder</h2>
 
@@ -365,6 +483,20 @@ Private Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">GameObject GameManager.builtObjects</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a858bac55777e4afbabd1a12b37937772"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a858bac55777e4afbabd1a12b37937772">&#9670;&nbsp;</a></span>checkingForDuplicates</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool GameManager.checkingForDuplicates</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -451,6 +583,50 @@ Private Attributes</h2></td></tr>
           <td class="memname">bool GameManager.dataSaveRequested</td>
         </tr>
       </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="acaafdacf815834468388cb17ad7b910c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acaafdacf815834468388cb17ad7b910c">&#9670;&nbsp;</a></span>duplicateDestructionCoroutine</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Coroutine GameManager.duplicateDestructionCoroutine</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aa4ec39295b69f70551bae76308b478db"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa4ec39295b69f70551bae76308b478db">&#9670;&nbsp;</a></span>duplicateRemovalCoroutine</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Coroutine GameManager.duplicateRemovalCoroutine</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
 </div>

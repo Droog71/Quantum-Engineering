@@ -25,7 +25,7 @@ var searchData=
   ['inputid2',['inputID2',['../classAlloySmelter.html#a3734327f5ded8f145c3eb6d109dac313',1,'AlloySmelter']]],
   ['inputline',['inputLine',['../classDarkMatterCollector.html#ab93d569fedaaeafdef0c965b5b2602b7',1,'DarkMatterCollector.inputLine()'],['../classRetriever.html#aedee8ab75e93f3b37c4615ccf747becc',1,'Retriever.inputLine()'],['../classUniversalExtractor.html#a9af93f658ccc11228089d198bcad2e1c',1,'UniversalExtractor.inputLine()']]],
   ['inputmachinedisabled',['inputMachineDisabled',['../classUniversalConduit.html#ae2667802b75b8d3a2230fc80a5552851',1,'UniversalConduit']]],
-  ['inputmanager',['InputManager',['../classInputManager.html',1,'InputManager'],['../classPlayerController.html#a9cf9d5fc3771e502396c907c9cc5a951',1,'PlayerController.inputManager()'],['../classInputManager.html#a961d760ac68c81e11b80aa8357600214',1,'InputManager.InputManager()']]],
+  ['inputmanager',['InputManager',['../classInputManager.html',1,'InputManager'],['../classInputManager.html#a961d760ac68c81e11b80aa8357600214',1,'InputManager.InputManager()'],['../classPlayerController.html#a9cf9d5fc3771e502396c907c9cc5a951',1,'PlayerController.inputManager()']]],
   ['inputmanager_2ecs',['InputManager.cs',['../InputManager_8cs.html',1,'']]],
   ['inputobject',['inputObject',['../classAutoCrafter.html#ac7f57c47272360996f01e72d094ce4f5',1,'AutoCrafter.inputObject()'],['../classBasicMachine.html#a0a95693575a1b9a56c62b8f475500d36',1,'BasicMachine.inputObject()'],['../classDarkMatterConduit.html#ad1f91a872ea8a4f61ed46bcbb3340eef',1,'DarkMatterConduit.inputObject()'],['../classHeatExchanger.html#a505818000b8374660c2704bce2cb9e33',1,'HeatExchanger.inputObject()'],['../classPowerConduit.html#a744f1a79093eed0af5111b78b0f5b3d3',1,'PowerConduit.inputObject()'],['../classPowerSource.html#a6cc48a1ad018854c18f66f37774acc33',1,'PowerSource.inputObject()'],['../classRailCartHub.html#ade3cd1180724f799ac7c14c86db5c884',1,'RailCartHub.inputObject()'],['../classRetriever.html#aa75ea2bef167fb7b2548f95887e77156',1,'Retriever.inputObject()'],['../classUniversalConduit.html#a5a66e68412d778a8a1800934c6b61883',1,'UniversalConduit.inputObject()'],['../classUniversalExtractor.html#aaa66f3562cdcc8743fde0407c21fda64',1,'UniversalExtractor.inputObject()']]],
   ['inputobject1',['inputObject1',['../classAlloySmelter.html#a0a3d2b9af4bc72025e68835910183de9',1,'AlloySmelter']]],
@@ -74,6 +74,8 @@ var searchData=
   ['inventorybackgroundrect',['inventoryBackgroundRect',['../classGuiCoordinates.html#a106a2b7c188b4450db716fc93d13cf09',1,'GuiCoordinates']]],
   ['inventorygui',['InventoryGUI',['../classInventoryGUI.html',1,'']]],
   ['inventorygui_2ecs',['InventoryGUI.cs',['../InventoryGUI_8cs.html',1,'']]],
+  ['inventoryhandler',['InventoryHandler',['../classInventoryHandler.html',1,'InventoryHandler'],['../classInventoryHandler.html#a1c18021f5e5e3f1ea918805de9a2c36e',1,'InventoryHandler.InventoryHandler()'],['../classInventoryGUI.html#adbecf5c50848c62ad4260b607935c4ad',1,'InventoryGUI.inventoryHandler()']]],
+  ['inventoryhandler_2ecs',['InventoryHandler.cs',['../InventoryHandler_8cs.html',1,'']]],
   ['inventoryinforect',['inventoryInfoRect',['../classGuiCoordinates.html#a9423bd033746f2836c06fed6b1dca582',1,'GuiCoordinates']]],
   ['inventoryinforectbg',['inventoryInfoRectBG',['../classGuiCoordinates.html#a5c12ecb63ce72301dbf67564b6ae1bb9',1,'GuiCoordinates']]],
   ['inventorymanager',['InventoryManager',['../classInventoryManager.html',1,'InventoryManager'],['../classCraftingManager.html#aad3b4b15f02e92d735edf6e7a2b74c59',1,'CraftingManager.inventoryManager()']]],
@@ -118,7 +120,7 @@ var searchData=
   ['inventoryslotrects',['inventorySlotRects',['../classGuiCoordinates.html#ac8a8f614c7df239f5fddc7cfeea67f9a',1,'GuiCoordinates']]],
   ['iron',['Iron',['../classIron.html',1,'']]],
   ['iron_2ecs',['Iron.cs',['../Iron_8cs.html',1,'']]],
-  ['ironblock',['IronBlock',['../classIronBlock.html',1,'IronBlock'],['../classPlayerController.html#ad8ef78f36df6b9a0ee004df5feb4110d',1,'PlayerController.ironBlock()'],['../classStateManager.html#a59f0575866a96ef9737ce590cd649bd6',1,'StateManager.IronBlock()']]],
+  ['ironblock',['IronBlock',['../classIronBlock.html',1,'IronBlock'],['../classDescriptions.html#a7880b860ba1e53e71c3dc0c548d184aa',1,'Descriptions.ironBlock()'],['../classPlayerController.html#ad8ef78f36df6b9a0ee004df5feb4110d',1,'PlayerController.ironBlock()'],['../classStateManager.html#a59f0575866a96ef9737ce590cd649bd6',1,'StateManager.IronBlock()']]],
   ['ironblock_2ecs',['IronBlock.cs',['../IronBlock_8cs.html',1,'']]],
   ['ironblockamounts',['ironBlockAmounts',['../classCraftingDictionary.html#acc8231d2ecfe1dff67e383794b405d84',1,'CraftingDictionary']]],
   ['ironblockingredients',['ironBlockIngredients',['../classCraftingDictionary.html#a38dd8c573abc7de47bd4038fb2e14475',1,'CraftingDictionary']]],
@@ -127,7 +129,7 @@ var searchData=
   ['ironholder',['ironHolder',['../classGameManager.html#af579d2e9a03ae5044eae9112670e92c6',1,'GameManager']]],
   ['ironmat',['ironMat',['../classPing.html#a6b6d89469d40ab7bc22073fff55fb238',1,'Ping']]],
   ['ironmeshrequired',['ironMeshRequired',['../classCombinedMeshManager.html#a53fd97347bf85317008749c86cd8ee66',1,'CombinedMeshManager']]],
-  ['ironramp',['ironRamp',['../classPlayerController.html#ac82c2d7a052435d5664014bbd7917031',1,'PlayerController.ironRamp()'],['../classStateManager.html#a5ef0350431bc074e57ec3d7bca00727e',1,'StateManager.IronRamp()']]],
+  ['ironramp',['ironRamp',['../classDescriptions.html#a246ebbff46fded5a453d2acec52be2e9',1,'Descriptions.ironRamp()'],['../classPlayerController.html#ac82c2d7a052435d5664014bbd7917031',1,'PlayerController.ironRamp()'],['../classStateManager.html#a5ef0350431bc074e57ec3d7bca00727e',1,'StateManager.IronRamp()']]],
   ['isplaying',['IsPlaying',['../classVP.html#a0a72087fab15326f62da585ee46646d2',1,'VP']]],
   ['isresource',['IsResource',['../classInteractionController.html#a9a7c501dc6764beff25240a3e36e5d75',1,'InteractionController']]],
   ['isstandardblock',['IsStandardBlock',['../classPlayerGUI.html#ad1492d2c379f1b8c92033a17ee718b7f',1,'PlayerGUI']]],
@@ -140,5 +142,5 @@ var searchData=
   ['isvalidresource',['IsValidResource',['../classUniversalExtractor.html#ab76420bc2796434ff351c00ebab20a06',1,'UniversalExtractor']]],
   ['item',['item',['../classRoboticArm.html#a520996976ad11c956f87120b2ccdce35',1,'RoboticArm']]],
   ['itemadded',['itemAdded',['../classInventoryManager.html#ad2af93be5b6d50cae05326ff3f08694d',1,'InventoryManager']]],
-  ['itemtodrag',['itemToDrag',['../classPlayerController.html#aeb02d86f1d057fabff111f36e204366e',1,'PlayerController']]]
+  ['itemtodrag',['itemToDrag',['../classInventoryHandler.html#ae8956da0098cc1ff910d260e4d9f893a',1,'InventoryHandler']]]
 ];

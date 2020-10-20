@@ -1,10 +1,11 @@
 var searchData=
 [
   ['effects',['effects',['../classAirLock.html#a6c7ef108afcd6d9710a9fe43d7a45192',1,'AirLock']]],
-  ['electriclight',['ElectricLight',['../classElectricLight.html',1,'ElectricLight'],['../classPlayerController.html#a547d99ebe3056963b35f21340a668280',1,'PlayerController.electricLight()'],['../classStateManager.html#a068228b0545324b9408eac047614f16a',1,'StateManager.ElectricLight()']]],
+  ['electriclight',['ElectricLight',['../classElectricLight.html',1,'ElectricLight'],['../classDescriptions.html#a715ecabc63e39c4f976e5313f7ee9662',1,'Descriptions.electricLight()'],['../classPlayerController.html#a547d99ebe3056963b35f21340a668280',1,'PlayerController.electricLight()'],['../classStateManager.html#a068228b0545324b9408eac047614f16a',1,'StateManager.ElectricLight()']]],
   ['electriclight_2ecs',['ElectricLight.cs',['../ElectricLight_8cs.html',1,'']]],
   ['electriclightamounts',['electricLightAmounts',['../classCraftingDictionary.html#a3e22946b47c96f8b9cd2d401a2b3abfe',1,'CraftingDictionary']]],
   ['electriclightingredients',['electricLightIngredients',['../classCraftingDictionary.html#a9849ca1416838854681dee4f439d0e94',1,'CraftingDictionary']]],
+  ['electricmotor',['electricMotor',['../classDescriptions.html#ac6d839d28022740e7108359e44883cb1',1,'Descriptions']]],
   ['electricmotoramounts',['electricMotorAmounts',['../classCraftingDictionary.html#a901e95c2ae3a9ff4736c336a18ed6041',1,'CraftingDictionary']]],
   ['electricmotoringredients',['electricMotorIngredients',['../classCraftingDictionary.html#a328649ee7f2eb5ca26de142f4b2c3150',1,'CraftingDictionary']]],
   ['emptyvector',['EmptyVector',['../classStateManager.html#a116db58d53170dc8b91f55668a5d5d3e',1,'StateManager']]],
@@ -30,7 +31,7 @@ var searchData=
   ['explosion_2ecs',['Explosion.cs',['../Explosion_8cs.html',1,'']]],
   ['extractingice',['extractingIce',['../classUniversalExtractor.html#ad79ed4e61677c68a20712c4658f5d275',1,'UniversalExtractor']]],
   ['extractor',['extractor',['../classUniversalResource.html#a2a484da6f12731df09d28938e623bc4c',1,'UniversalResource']]],
-  ['extruder',['Extruder',['../classExtruder.html',1,'Extruder'],['../classExtruderPiston.html#acc5af2768ef795364b96405de84c2db2',1,'ExtruderPiston.extruder()'],['../classPlayerController.html#af52d1b44120ec06ff7fdfd040c3dff26',1,'PlayerController.extruder()'],['../classStateManager.html#aebbbcd01f124fcada5027ea53d29435d',1,'StateManager.Extruder()']]],
+  ['extruder',['Extruder',['../classExtruder.html',1,'Extruder'],['../classDescriptions.html#a4df50e89ac7233d29095455611db5e25',1,'Descriptions.extruder()'],['../classExtruderPiston.html#acc5af2768ef795364b96405de84c2db2',1,'ExtruderPiston.extruder()'],['../classPlayerController.html#af52d1b44120ec06ff7fdfd040c3dff26',1,'PlayerController.extruder()'],['../classStateManager.html#aebbbcd01f124fcada5027ea53d29435d',1,'StateManager.Extruder()']]],
   ['extruder_2ecs',['Extruder.cs',['../Extruder_8cs.html',1,'']]],
   ['extruderamounts',['extruderAmounts',['../classCraftingDictionary.html#a6a0144b2ef599890e6e19501a3087a8c',1,'CraftingDictionary']]],
   ['extruderingredients',['extruderIngredients',['../classCraftingDictionary.html#a079e29b9d3c2d01fed32c5fe7cad557b',1,'CraftingDictionary']]],
