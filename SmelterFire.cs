@@ -23,5 +23,9 @@ public class SmelterFire : MonoBehaviour
                 fireObject.SetActive(true);
             }
         }
+        else
+        {
+            fireObject.SetActive(false);
+        }
     }
 }
