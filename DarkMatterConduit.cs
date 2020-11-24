@@ -25,6 +25,8 @@ public class DarkMatterConduit : MonoBehaviour
     public ConduitItem storageComputerConduitItem;
     private GameObject builtObjects;
     private StateManager stateManager;
+    private bool linkedToRailCart;
+    private int findRailCartsInterval;
 
     //! Called by unity engine on start up to initialize variables.
     public void Start()
@@ -397,14 +399,7 @@ public class DarkMatterConduit : MonoBehaviour
     //! Moves dark matter to a storage container.
     private void OutputToInventory()
     {
-        if (outputObject.GetComponent<RailCart>() != null)
-        {
-            outputID = outputObject.GetComponent<RailCart>().ID;
-        }
-        else
-        {
-            outputID = outputObject.GetComponent<InventoryManager>().ID;
-        }
+        SetOutputID();
         if (Vector3.Distance(transform.position, outputObject.transform.position) <= range)
         {
             if (darkMatterAmount >= speed && connectionFailed == false && speed > 0)
@@ -412,12 +407,7 @@ public class DarkMatterConduit : MonoBehaviour
                 PlayerController playerController = GameObject.Find("Player").GetComponent<PlayerController>();
                 if (outputObject.GetComponent<Rocket>() == null || playerController.timeToDeliver == true)
                 {
-                    float lineHeight = outputObject.GetComponent<Rocket>() != null ? outputObject.transform.position.y + 40 : 0;
-                    connectionLine.SetPosition(1, outputObject.transform.position + outputObject.transform.up * lineHeight);
-                    connectionLine.enabled = true;
-                    conduitItem.active = true;
-                    GetComponent<Light>().enabled = true;
-                    GetComponent<AudioSource>().enabled = true;
+                    EnableEffects();
                     outputObject.GetComponent<InventoryManager>().AddItem("Dark Matter", speed);
                     if (outputObject.GetComponent<InventoryManager>().itemAdded == true)
                     {
@@ -428,10 +418,85 @@ public class DarkMatterConduit : MonoBehaviour
         }
         else
         {
-            connectionLine.enabled = false;
-            conduitItem.active = false;
-            GetComponent<Light>().enabled = false;
-            GetComponent<AudioSource>().enabled = false;
+            CheckForRailCart();
+        }
+    }
+
+    //!Sets the output ID to that of the current output object.
+    private void SetOutputID()
+    {
+        if (outputObject.GetComponent<RailCart>() != null)
+        {
+            outputID = outputObject.GetComponent<RailCart>().ID;
+            linkedToRailCart = true;
+        }
+        else
+        {
+            outputID = outputObject.GetComponent<InventoryManager>().ID;
+            linkedToRailCart = false;
+        }
+    }
+
+    //!Turns on line renderer, audio and light effects.
+    private void EnableEffects()
+    {
+        float lineHeight = outputObject.GetComponent<Rocket>() != null ? outputObject.transform.position.y + 40 : 0;
+        connectionLine.SetPosition(1, outputObject.transform.position + outputObject.transform.up * lineHeight);
+        connectionLine.enabled = true;
+        conduitItem.active = true;
+        GetComponent<Light>().enabled = true;
+        GetComponent<AudioSource>().enabled = true;
+    }
+
+    //!Turns off line renderer, audio and light effects.
+    private void DisableEffects()
+    {
+        connectionLine.enabled = false;
+        conduitItem.active = false;
+        GetComponent<Light>().enabled = false;
+        GetComponent<AudioSource>().enabled = false;
+    }
+
+    //!Checks if there is a rail cart near the retreiver.
+    private void CheckForRailCart()
+    {
+        if (linkedToRailCart == true)
+        {
+            findRailCartsInterval++;
+            if (findRailCartsInterval == 5)
+            {
+                bool foundRailCart = false;
+                List<RailCart> railCarts = FindObjectsOfType<RailCart>().ToList();
+                foreach (RailCart cart in railCarts)
+                {
+                    if (foundRailCart == false)
+                    {
+                        Vector3 conPos = gameObject.transform.position;
+                        Vector3 cartPos = cart.gameObject.transform.position;
+                        float cartDistance = Vector3.Distance(conPos, cartPos);
+                        if (cartDistance < range)
+                        {
+                            outputObject = cart.gameObject;
+                            outputID = cart.ID;
+                            EnableEffects();
+                            foundRailCart = true;
+                        }
+                    }
+                }
+                if (foundRailCart == false)
+                {
+                    DisableEffects();
+                }
+                findRailCartsInterval = 0;
+            }
+            else
+            {
+                DisableEffects();
+            }
+        }
+        else
+        {
+            DisableEffects();
         }
     }
 }
