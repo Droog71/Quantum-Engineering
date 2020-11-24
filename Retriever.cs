@@ -478,7 +478,7 @@ public class Retriever : MonoBehaviour
     private void CheckForRailCart()
     {
         findRailCartsInterval++;
-        if (findRailCartsInterval == 10)
+        if (findRailCartsInterval == 5)
         {
             bool foundRailCart = false;
             List<RailCart> railCarts = FindObjectsOfType<RailCart>().ToList();
@@ -495,8 +495,8 @@ public class Retriever : MonoBehaviour
                         inputID = cart.ID;
                         inputLine.enabled = true;
                         inputLine.SetPosition(1, inputObject.transform.position);
+                        foundRailCart = true;
                     }
-                    foundRailCart = true;
                 }
             }
             if (foundRailCart == false)
@@ -506,6 +506,12 @@ public class Retriever : MonoBehaviour
                 GetComponent<Light>().enabled = false;
             }
             findRailCartsInterval = 0;
+        }
+        else
+        {
+            inputLine.enabled = false;
+            conduitItem.active = false;
+            GetComponent<Light>().enabled = false;
         }
     }
 
