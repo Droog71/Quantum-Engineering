@@ -39,6 +39,7 @@ public class Retriever : MonoBehaviour
     public PowerReceiver powerReceiver;
     private GameObject builtObjects;
     private StateManager stateManager;
+    private int findRailCartsInterval;
 
     //! Called by unity engine on start up to initialize variables.
     void Start()
@@ -336,9 +337,11 @@ public class Retriever : MonoBehaviour
     //! Retrieves items from storage containers.
     private void RetrieveFromStorageContainer()
     {
+        bool linkedToRailCart = false;
         if (inputObject.GetComponent<RailCart>() != null)
         {
             inputID = inputObject.GetComponent<RailCart>().ID;
+            linkedToRailCart = true;
         }
         else
         {
@@ -451,14 +454,62 @@ public class Retriever : MonoBehaviour
                 }
                 else
                 {
-                    inputLine.enabled = false;
-                    conduitItem.active = false;
-                    GetComponent<Light>().enabled = false;
+                    if (linkedToRailCart == true)
+                    {
+                        CheckForRailCart();
+                    }
+                    else
+                    {
+                        inputLine.enabled = false;
+                        conduitItem.active = false;
+                        GetComponent<Light>().enabled = false;
+                    }
                 }
             }
         }
         else
         {
+            conduitItem.active = false;
+            GetComponent<Light>().enabled = false;
+        }
+    }
+
+    //!Checks if there is a rail cart near the retreiver.
+    private void CheckForRailCart()
+    {
+        findRailCartsInterval++;
+        if (findRailCartsInterval == 5)
+        {
+            bool foundRailCart = false;
+            List<RailCart> railCarts = FindObjectsOfType<RailCart>().ToList();
+            foreach (RailCart cart in railCarts)
+            {
+                if (foundRailCart == false)
+                {
+                    Vector3 retPos = gameObject.transform.position;
+                    Vector3 cartPos = cart.gameObject.transform.position;
+                    float cartDistance = Vector3.Distance(retPos, cartPos);
+                    if (cartDistance < 20)
+                    {
+                        inputObject = cart.gameObject;
+                        inputID = cart.ID;
+                        inputLine.enabled = true;
+                        inputLine.SetPosition(1, inputObject.transform.position);
+                        foundRailCart = true;
+                    }
+                }
+            }
+            if (foundRailCart == false)
+            {
+                inputLine.enabled = false;
+                conduitItem.active = false;
+                GetComponent<Light>().enabled = false;
+            }
+            findRailCartsInterval = 0;
+        }
+        else
+        {
+            inputLine.enabled = false;
             conduitItem.active = false;
             GetComponent<Light>().enabled = false;
         }

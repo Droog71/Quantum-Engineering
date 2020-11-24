@@ -193,6 +193,7 @@ public class ConduitItem : MonoBehaviour
             }
             else
             {
+                transform.position = startPosition;
                 billboard.GetComponent<Renderer>().enabled = false;
                 textureDictionary = GetComponent<TextureDictionary>().dictionary;
             }
