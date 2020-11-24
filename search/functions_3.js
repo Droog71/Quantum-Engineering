@@ -3,6 +3,7 @@ var searchData=
   ['decreasebuildamount',['DecreaseBuildAmount',['../classActionManager.html#ac3db35ad8a75f875ab0955f3c9bc69e4',1,'ActionManager']]],
   ['descend',['Descend',['../classRocket.html#a7aaf4ff16f0139b8ccfa84a36c66e8bb',1,'Rocket']]],
   ['destroyduplicates',['DestroyDuplicates',['../classGameManager.html#a37be8bb2a4a7d38436de35be84dd8c9a',1,'GameManager']]],
+  ['disableeffects',['DisableEffects',['../classDarkMatterConduit.html#a0c800ce068a9805ed8ec01e700cd6812',1,'DarkMatterConduit.DisableEffects()'],['../classUniversalConduit.html#ad253d01a73c1ae90ce3766ca24df585f',1,'UniversalConduit.DisableEffects()']]],
   ['disablerenderers',['DisableRenderers',['../classRocket.html#a646e6f76940023021031e8632e7dd9c3',1,'Rocket']]],
   ['displaydeliverywarning',['DisplayDeliveryWarning',['../classPlayerController.html#a1ccb2fdb06f62e0ef2a1e61a0a8a5d6f',1,'PlayerController']]],
   ['distributeasgenerator',['DistributeAsGenerator',['../classPowerSource.html#ac037a5c6875cb666066eb0c50fb75cbf',1,'PowerSource']]],

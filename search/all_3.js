@@ -31,6 +31,7 @@ var searchData=
   ['destructionmessagereceived',['destructionMessageReceived',['../classPlayerController.html#af469a317a512d8abeab1657bb1d3077c',1,'PlayerController']]],
   ['dictionary',['dictionary',['../classCraftingDictionary.html#a2a49e014955a8985b5adddd3e32344ae',1,'CraftingDictionary.dictionary()'],['../classTextureDictionary.html#a706d31832c25b59010dd8d5929a9b2b4',1,'TextureDictionary.dictionary()']]],
   ['dirline',['dirLine',['../classBuildController.html#ad60bce48865999a32889ec2a5a009301',1,'BuildController']]],
+  ['disableeffects',['DisableEffects',['../classDarkMatterConduit.html#a0c800ce068a9805ed8ec01e700cd6812',1,'DarkMatterConduit.DisableEffects()'],['../classUniversalConduit.html#ad253d01a73c1ae90ce3766ca24df585f',1,'UniversalConduit.DisableEffects()']]],
   ['disablerenderers',['DisableRenderers',['../classRocket.html#a646e6f76940023021031e8632e7dd9c3',1,'Rocket']]],
   ['displaydeliverywarning',['DisplayDeliveryWarning',['../classPlayerController.html#a1ccb2fdb06f62e0ef2a1e61a0a8a5d6f',1,'PlayerController']]],
   ['displayingbuilditem',['displayingBuildItem',['../classPlayerController.html#a749ad10b3e5da3f2be22093bfd743bc9',1,'PlayerController']]],

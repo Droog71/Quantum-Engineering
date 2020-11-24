@@ -9,6 +9,7 @@ var searchData=
   ['electricmotoramounts',['electricMotorAmounts',['../classCraftingDictionary.html#a901e95c2ae3a9ff4736c336a18ed6041',1,'CraftingDictionary']]],
   ['electricmotoringredients',['electricMotorIngredients',['../classCraftingDictionary.html#a328649ee7f2eb5ca26de142f4b2c3150',1,'CraftingDictionary']]],
   ['emptyvector',['EmptyVector',['../classStateManager.html#a116db58d53170dc8b91f55668a5d5d3e',1,'StateManager']]],
+  ['enableeffects',['EnableEffects',['../classDarkMatterConduit.html#ac87c48d2e0d66166c382ee33cffcc9aa',1,'DarkMatterConduit.EnableEffects()'],['../classUniversalConduit.html#a928ffcd47d7d690db89c07ea96664cc2',1,'UniversalConduit.EnableEffects()']]],
   ['enablerenderers',['EnableRenderers',['../classRocket.html#a5d13554748d80933ee437006b1ebb9f9',1,'Rocket']]],
   ['endiandiff1',['endianDiff1',['../classPlayerPrefsX.html#a336aa2d20ef2403900985ced485c2548',1,'PlayerPrefsX']]],
   ['endiandiff2',['endianDiff2',['../classPlayerPrefsX.html#ac0db8941102112bcaef6a3206a0c27ff',1,'PlayerPrefsX']]],

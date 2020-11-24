@@ -152,6 +152,18 @@ Private Member Functions</h2></td></tr>
 <tr class="memitem:abb345194c275ee0dc57fe37380a2ef92"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classDarkMatterConduit.html#abb345194c275ee0dc57fe37380a2ef92">OutputToInventory</a> ()</td></tr>
 <tr class="memdesc:abb345194c275ee0dc57fe37380a2ef92"><td class="mdescLeft">&#160;</td><td class="mdescRight">Moves dark matter to a storage container.  <a href="#abb345194c275ee0dc57fe37380a2ef92">More...</a><br /></td></tr>
 <tr class="separator:abb345194c275ee0dc57fe37380a2ef92"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a12ffe0e722c301af0117f942ac796c26"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classDarkMatterConduit.html#a12ffe0e722c301af0117f942ac796c26">SetOutputID</a> ()</td></tr>
+<tr class="memdesc:a12ffe0e722c301af0117f942ac796c26"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the output ID to that of the current output object.  <a href="#a12ffe0e722c301af0117f942ac796c26">More...</a><br /></td></tr>
+<tr class="separator:a12ffe0e722c301af0117f942ac796c26"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac87c48d2e0d66166c382ee33cffcc9aa"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classDarkMatterConduit.html#ac87c48d2e0d66166c382ee33cffcc9aa">EnableEffects</a> ()</td></tr>
+<tr class="memdesc:ac87c48d2e0d66166c382ee33cffcc9aa"><td class="mdescLeft">&#160;</td><td class="mdescRight">Turns on line renderer, audio and light effects.  <a href="#ac87c48d2e0d66166c382ee33cffcc9aa">More...</a><br /></td></tr>
+<tr class="separator:ac87c48d2e0d66166c382ee33cffcc9aa"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0c800ce068a9805ed8ec01e700cd6812"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classDarkMatterConduit.html#a0c800ce068a9805ed8ec01e700cd6812">DisableEffects</a> ()</td></tr>
+<tr class="memdesc:a0c800ce068a9805ed8ec01e700cd6812"><td class="mdescLeft">&#160;</td><td class="mdescRight">Turns off line renderer, audio and light effects.  <a href="#a0c800ce068a9805ed8ec01e700cd6812">More...</a><br /></td></tr>
+<tr class="separator:a0c800ce068a9805ed8ec01e700cd6812"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6598f14eaf1e6eb8fb7808d1b6a20088"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classDarkMatterConduit.html#a6598f14eaf1e6eb8fb7808d1b6a20088">CheckForRailCart</a> ()</td></tr>
+<tr class="memdesc:a6598f14eaf1e6eb8fb7808d1b6a20088"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks if there is a rail cart near the retreiver.  <a href="#a6598f14eaf1e6eb8fb7808d1b6a20088">More...</a><br /></td></tr>
+<tr class="separator:a6598f14eaf1e6eb8fb7808d1b6a20088"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
@@ -163,8 +175,93 @@ Private Attributes</h2></td></tr>
 <tr class="separator:aef07031cfd28ad1a35d86c11f41ac70b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1d0414be883dac8079bfa0b25c1283cb"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classStateManager.html">StateManager</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classDarkMatterConduit.html#a1d0414be883dac8079bfa0b25c1283cb">stateManager</a></td></tr>
 <tr class="separator:a1d0414be883dac8079bfa0b25c1283cb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aaa9fbe4aa2710989dfd6d9315359eefc"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classDarkMatterConduit.html#aaa9fbe4aa2710989dfd6d9315359eefc">linkedToRailCart</a></td></tr>
+<tr class="separator:aaa9fbe4aa2710989dfd6d9315359eefc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a96b6c132882d176a2ef43eb040c56566"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classDarkMatterConduit.html#a96b6c132882d176a2ef43eb040c56566">findRailCartsInterval</a></td></tr>
+<tr class="separator:a96b6c132882d176a2ef43eb040c56566"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Member Function Documentation</h2>
+<a id="a6598f14eaf1e6eb8fb7808d1b6a20088"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6598f14eaf1e6eb8fb7808d1b6a20088">&#9670;&nbsp;</a></span>CheckForRailCart()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void DarkMatterConduit.CheckForRailCart </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Checks if there is a rail cart near the retreiver. </p>
+
+</div>
+</div>
+<a id="a0c800ce068a9805ed8ec01e700cd6812"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0c800ce068a9805ed8ec01e700cd6812">&#9670;&nbsp;</a></span>DisableEffects()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void DarkMatterConduit.DisableEffects </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Turns off line renderer, audio and light effects. </p>
+
+</div>
+</div>
+<a id="ac87c48d2e0d66166c382ee33cffcc9aa"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac87c48d2e0d66166c382ee33cffcc9aa">&#9670;&nbsp;</a></span>EnableEffects()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void DarkMatterConduit.EnableEffects </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Turns on line renderer, audio and light effects. </p>
+
+</div>
+</div>
 <a id="a3baa723ffb8db76bf98f8b752ef0a6d7"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a3baa723ffb8db76bf98f8b752ef0a6d7">&#9670;&nbsp;</a></span>FindConnections()</h2>
 
@@ -411,6 +508,33 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="a12ffe0e722c301af0117f942ac796c26"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a12ffe0e722c301af0117f942ac796c26">&#9670;&nbsp;</a></span>SetOutputID()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void DarkMatterConduit.SetOutputID </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Sets the output ID to that of the current output object. </p>
+
+</div>
+</div>
 <a id="a3fac37126b3414ee13120c3e968d6664"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a3fac37126b3414ee13120c3e968d6664">&#9670;&nbsp;</a></span>Start()</h2>
 
@@ -608,6 +732,28 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="a96b6c132882d176a2ef43eb040c56566"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a96b6c132882d176a2ef43eb040c56566">&#9670;&nbsp;</a></span>findRailCartsInterval</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int DarkMatterConduit.findRailCartsInterval</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="a27e7f29ba9d1739ad143ceb8126a1729"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a27e7f29ba9d1739ad143ceb8126a1729">&#9670;&nbsp;</a></span>ID</h2>
 
@@ -660,6 +806,28 @@ Private Attributes</h2></td></tr>
           <td class="memname">Material DarkMatterConduit.lineMat</td>
         </tr>
       </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aaa9fbe4aa2710989dfd6d9315359eefc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aaa9fbe4aa2710989dfd6d9315359eefc">&#9670;&nbsp;</a></span>linkedToRailCart</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool DarkMatterConduit.linkedToRailCart</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
 </div>

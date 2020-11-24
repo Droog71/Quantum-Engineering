@@ -12,7 +12,7 @@ var searchData=
   ['generatoringredients',['generatorIngredients',['../classCraftingDictionary.html#a3d15d8dc1b0e572867c5d830d1303a42',1,'CraftingDictionary']]],
   ['generatorofftexture',['generatorOffTexture',['../classPowerSource.html#aed59cf19c3e33fd1de2252e119f3ff92',1,'PowerSource']]],
   ['generatorontexture',['generatorOnTexture',['../classPowerSource.html#a24d4687dd3722db67c3610122fa4dc7b',1,'PowerSource']]],
-  ['glass',['glass',['../classGameManager.html#abaa6a7c603da4540e451e237672353ae',1,'GameManager.glass()'],['../classPlayerController.html#a68606ad80b321920ad6129b7d1f8b3c9',1,'PlayerController.glass()'],['../classStateManager.html#a9251ffdc9d8186a58137ecdcf70405a7',1,'StateManager.Glass()']]],
+  ['glass',['Glass',['../classStateManager.html#a9251ffdc9d8186a58137ecdcf70405a7',1,'StateManager.Glass()'],['../classGameManager.html#abaa6a7c603da4540e451e237672353ae',1,'GameManager.glass()'],['../classPlayerController.html#a68606ad80b321920ad6129b7d1f8b3c9',1,'PlayerController.glass()']]],
   ['glassdummy',['glassDummy',['../classGameManager.html#a39574280505d89543f9c6dd0bafc6173',1,'GameManager']]],
   ['glassholder',['glassHolder',['../classGameManager.html#adaf8e2a0aaa3509a62cb2177ad6325f1',1,'GameManager']]],
   ['glassmeshrequired',['glassMeshRequired',['../classCombinedMeshManager.html#ab4d4210a678efe608c9c2513896f7d94',1,'CombinedMeshManager']]],

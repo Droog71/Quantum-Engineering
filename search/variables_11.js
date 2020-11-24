@@ -27,7 +27,7 @@ var searchData=
   ['totalobjects',['totalObjects',['../classAddressManager.html#a9856b7159195c0883058c780f86a7dfb',1,'AddressManager.totalObjects()'],['../classSaveManager.html#a62d1a2b1f9894640e5fa5b0395fd9fd7',1,'SaveManager.totalObjects()']]],
   ['turbine',['turbine',['../classTurbineImpeller.html#af05b0f5e40f32ece012d3582d1916454',1,'TurbineImpeller']]],
   ['turbinecount',['turbineCount',['../classNuclearReactor.html#ab9329f6f95333a8e047c39b7995ba781',1,'NuclearReactor']]],
-  ['turret',['Turret',['../classStateManager.html#a8f0bd9753108d80d3dffc483770732a3',1,'StateManager.Turret()'],['../classDescriptions.html#a2d9d6fcc62e01c5d6bcf9e5e32e2898e',1,'Descriptions.turret()'],['../classPlayerController.html#a08224ef9f6a83c0bd98507de076a8013',1,'PlayerController.turret()']]],
+  ['turret',['turret',['../classDescriptions.html#a2d9d6fcc62e01c5d6bcf9e5e32e2898e',1,'Descriptions.turret()'],['../classPlayerController.html#a08224ef9f6a83c0bd98507de076a8013',1,'PlayerController.turret()'],['../classStateManager.html#a8f0bd9753108d80d3dffc483770732a3',1,'StateManager.Turret()']]],
   ['turretamounts',['turretAmounts',['../classCraftingDictionary.html#a984a2a4a157aea3e2c1336bb903a3d40',1,'CraftingDictionary']]],
   ['turretingredients',['turretIngredients',['../classCraftingDictionary.html#a160d42411a1b4c3a0f39358bad7fcba0',1,'CraftingDictionary']]],
   ['twolinehighmessagebackgroundrect',['twoLineHighMessageBackgroundRect',['../classGuiCoordinates.html#a3d63aee39bb8f2a4e9f83e568f6c78ac',1,'GuiCoordinates']]],

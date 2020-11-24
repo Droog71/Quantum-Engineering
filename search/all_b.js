@@ -23,7 +23,7 @@ var searchData=
   ['machineinputtype',['machineInputType',['../classPlayerController.html#af594cf5b8b088f3a592b09899df72413',1,'PlayerController']]],
   ['machineinputtype2',['machineInputType2',['../classPlayerController.html#ac869c572caaed0090742099d22768b36',1,'PlayerController']]],
   ['machineinsight',['machineInSight',['../classPlayerController.html#af1b0d7ad9d22ee85aff86297da9890d4',1,'PlayerController']]],
-  ['machineinteraction',['MachineInteraction',['../classMachineInteraction.html',1,'MachineInteraction'],['../classMachineInteraction.html#a7ad87ed4e65b09b9768f33816d428c55',1,'MachineInteraction.MachineInteraction()'],['../classInteractionController.html#adf535aa24280feb2a6f231a7327936b5',1,'InteractionController.machineInteraction()']]],
+  ['machineinteraction',['MachineInteraction',['../classMachineInteraction.html',1,'MachineInteraction'],['../classInteractionController.html#adf535aa24280feb2a6f231a7327936b5',1,'InteractionController.machineInteraction()'],['../classMachineInteraction.html#a7ad87ed4e65b09b9768f33816d428c55',1,'MachineInteraction.MachineInteraction()']]],
   ['machineinteraction_2ecs',['MachineInteraction.cs',['../MachineInteraction_8cs.html',1,'']]],
   ['machinename',['machineName',['../classModMachine.html#a4df97ef71c47c5af2bb902536982d438',1,'ModMachine']]],
   ['machineoutputamount',['machineOutputAmount',['../classPlayerController.html#a7ea9d5c708f0d1588f638fde093a1fbf',1,'PlayerController']]],
