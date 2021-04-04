@@ -37,6 +37,8 @@ public class MarketGUI : MonoBehaviour
             { "Storage Container", 50 },
             { "Smelter", 500 },
             { "Turret", 2500 },
+            { "Missile Turret", 3500 },
+            { "Missile", 500 },
             { "Solar Panel", 250 },
             { "Generator", 500 },
             { "Power Conduit", 100 },
@@ -574,8 +576,26 @@ public class MarketGUI : MonoBehaviour
                         GUI.DrawTexture(guiCoordinates.craftingInfoBackgroundRect, textureDictionary.dictionary["Interface Background"]);
                         GUI.Label(guiCoordinates.craftingInfoRect, descriptions.turret + "\n\n[WORTH]\n$" + priceDictionary["Turret"]);
                     }
+                    if (guiCoordinates.button12Rect.Contains(Event.current.mousePosition))
+                    {
+                        GUI.DrawTexture(guiCoordinates.craftingInfoBackgroundRect, textureDictionary.dictionary["Interface Background"]);
+                        GUI.Label(guiCoordinates.craftingInfoRect, descriptions.missileTurret + "\n\n[WORTH]\n$" + priceDictionary["Missile Turret"]);
+                    }
+                    if (guiCoordinates.button13Rect.Contains(Event.current.mousePosition))
+                    {
+                        GUI.DrawTexture(guiCoordinates.craftingInfoBackgroundRect, textureDictionary.dictionary["Interface Background"]);
+                        GUI.Label(guiCoordinates.craftingInfoRect, descriptions.missile + "\n\n[WORTH]\n$" + priceDictionary["Missile"]);
+                    }
 
                     GUI.DrawTexture(guiCoordinates.craftingBackgroundRect, textureDictionary.dictionary["Interface Background"]);
+                    int f = GUI.skin.label.fontSize;
+                    GUI.skin.label.fontSize = 24;
+                    GUI.color = new Color(0.44f, 0.72f, 0.82f, 1);
+                    GUI.Label(guiCoordinates.marketTitleRect, "MARKET");
+                    GUI.skin.label.fontSize = f;
+                    GUI.Label(guiCoordinates.marketMoneyRect, "$" + playerController.money);
+                    GUI.color = Color.white;
+
                     if (GUI.Button(guiCoordinates.button1Rect, "Iron Block"))
                     {
                         if (selling == false)
@@ -684,6 +704,28 @@ public class MarketGUI : MonoBehaviour
                         else
                         {
                             SellItem("Turret");
+                        }
+                    }
+                    if (GUI.Button(guiCoordinates.button12Rect, "Missile Turret"))
+                    {
+                        if (selling == false)
+                        {
+                            BuyItem("Missile Turret");
+                        }
+                        else
+                        {
+                            SellItem("Missile Turret");
+                        }
+                    }
+                    if (GUI.Button(guiCoordinates.button13Rect, "Missile"))
+                    {
+                        if (selling == false)
+                        {
+                            BuyItem("Missile");
+                        }
+                        else
+                        {
+                            SellItem("Missile");
                         }
                     }
                 }

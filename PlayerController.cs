@@ -166,6 +166,7 @@ public class PlayerController : MonoBehaviour
     public GameObject electricLight;
     public GameObject smelter;
     public GameObject turret;
+    public GameObject missileTurret;
     public GameObject solarPanel;
     public GameObject generator;
     public GameObject reactorTurbine;

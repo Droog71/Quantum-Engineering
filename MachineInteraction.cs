@@ -162,6 +162,29 @@ public class MachineInteraction
         }
     }
 
+    //! Called when the player is looking at a turret.
+    public void InteractWithMissileTurret()
+    {
+        MissileTurret turret = playerController.objectInSight.GetComponent<MissileTurret>();
+        playerController.machineInSight = playerController.objectInSight;
+        playerController.machineID = turret.ID;
+        playerController.machineHasPower = turret.powerON;
+        playerController.machineSpeed = turret.speed;
+        playerController.machinePower = turret.power;
+        playerController.machineHeat = turret.heat;
+        playerController.machineCooling = turret.cooling;
+        playerController.machineType = turret.ammoType;
+        playerController.machineAmount = turret.ammoAmount;
+        if (cInput.GetKeyDown("Collect Object"))
+        {
+            interactionController.CollectObject("Missile Turret");
+        }
+        if (cInput.GetKeyDown("Interact"))
+        {
+            interactionController.ToggleMachineGUI();
+        }
+    }
+
     //! Called when the player is looking at a universal extractor.
     public void InteractWithUniversalExtractor()
     {
@@ -369,6 +392,12 @@ public class MachineInteraction
                 playerController.machineOutputID = conduitOutput.GetComponent<GearCutter>().ID;
                 playerController.machineOutputAmount = conduitOutput.GetComponent<GearCutter>().amount;
                 playerController.machineOutputType = conduitOutput.GetComponent<GearCutter>().inputType;
+            }
+            if (conduitOutput.GetComponent<MissileTurret>() != null)
+            {
+                playerController.machineOutputID = conduitOutput.GetComponent<MissileTurret>().ID;
+                playerController.machineOutputAmount = conduitOutput.GetComponent<MissileTurret>().ammoAmount;
+                playerController.machineOutputType = conduitOutput.GetComponent<MissileTurret>().ammoType;
             }
             if (conduitOutput.GetComponent<AlloySmelter>() != null)
             {
@@ -866,6 +895,10 @@ public class MachineInteraction
             if (heatExchanger.outputObject.GetComponent<Turret>() != null)
             {
                 playerController.machineOutputID = heatExchanger.outputObject.GetComponent<Turret>().ID;
+            }
+            if (heatExchanger.outputObject.GetComponent<MissileTurret>() != null)
+            {
+                playerController.machineOutputID = heatExchanger.outputObject.GetComponent<MissileTurret>().ID;
             }
             if (heatExchanger.outputObject.GetComponent<NuclearReactor>() != null)
             {

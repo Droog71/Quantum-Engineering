@@ -102,6 +102,8 @@ public class TextureDictionary : MonoBehaviour
             { "Aluminum Gear", Resources.Load("AluminumGear") as Texture2D },
             { "Smelter", Resources.Load("Smelter") as Texture2D },
             { "Turret", Resources.Load("Turret") as Texture2D },
+            { "Missile", Resources.Load("Missile") as Texture2D },
+            { "Missile Turret", Resources.Load("MissileTurret") as Texture2D },
             { "Solar Panel", Resources.Load("SolarPanel") as Texture2D },
             { "Generator", Resources.Load("Generator") as Texture2D },
             { "Power Conduit", Resources.Load("PowerConduit") as Texture2D },

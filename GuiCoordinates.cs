@@ -535,6 +535,7 @@ public class GuiCoordinates
 
         videoMenuBackgroundRect = new Rect((ScreenWidth * 0.4f), (ScreenHeight * 0.22f), (ScreenWidth * 0.2f), (ScreenHeight * 0.67f));
         schematicsMenuBackgroundRect = new Rect((ScreenWidth * 0.4f), (ScreenHeight * 0.22f), (ScreenWidth * 0.2f), (ScreenHeight * 0.55f));
+        schematicCloseRect = new Rect(0, 0, ScreenWidth * 0.14f, ScreenHeight * 0.05f);
         helpButton1Rect = new Rect((ScreenWidth * 0.43f), (ScreenHeight * 0.26f), (ScreenWidth * 0.14f), (ScreenHeight * 0.05f));
         helpButton2Rect = new Rect((ScreenWidth * 0.43f), (ScreenHeight * 0.32f), (ScreenWidth * 0.14f), (ScreenHeight * 0.05f));
         helpButton3Rect = new Rect((ScreenWidth * 0.43f), (ScreenHeight * 0.38f), (ScreenWidth * 0.14f), (ScreenHeight * 0.05f));

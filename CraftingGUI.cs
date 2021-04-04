@@ -516,6 +516,30 @@ public class CraftingGUI : MonoBehaviour
                             }
                             GUI.Label(guiCoordinates.craftingInfoRect, descriptions.turret + "\n\n[CRAFTING]\n" + string.Join("\n", crafting));
                         }
+                        if (guiCoordinates.button12Rect.Contains(Event.current.mousePosition))
+                        {
+                            GUI.DrawTexture(guiCoordinates.craftingInfoBackgroundRect, textureDictionary.dictionary["Interface Background"]);
+                            CraftingRecipe recipe = craftingDictionary.dictionary["Missile Turret"];
+                            int length = recipe.ingredients.Length;
+                            string[] crafting = new string[length];
+                            for (int i = 0; i < length; i++)
+                            {
+                                crafting[i] = recipe.amounts[i] + "x " + recipe.ingredients[i];
+                            }
+                            GUI.Label(guiCoordinates.craftingInfoRect, descriptions.missileTurret + "\n\n[CRAFTING]\n" + string.Join("\n", crafting));
+                        }
+                        if (guiCoordinates.button13Rect.Contains(Event.current.mousePosition))
+                        {
+                            GUI.DrawTexture(guiCoordinates.craftingInfoBackgroundRect, textureDictionary.dictionary["Interface Background"]);
+                            CraftingRecipe recipe = craftingDictionary.dictionary["Missile"];
+                            int length = recipe.ingredients.Length;
+                            string[] crafting = new string[length];
+                            for (int i = 0; i < length; i++)
+                            {
+                                crafting[i] = recipe.amounts[i] + "x " + recipe.ingredients[i];
+                            }
+                            GUI.Label(guiCoordinates.craftingInfoRect, descriptions.missile + "\n\n[CRAFTING]\n" + string.Join("\n", crafting));
+                        }
 
                         GUI.DrawTexture(guiCoordinates.craftingBackgroundRect, textureDictionary.dictionary["Interface Background"]);
                         if (GUI.Button(guiCoordinates.button1Rect, "Iron Block"))
@@ -557,6 +581,14 @@ public class CraftingGUI : MonoBehaviour
                         if (GUI.Button(guiCoordinates.button11Rect, "Turret"))
                         {
                             craftingManager.CraftItemAsPlayer(craftingDictionary.dictionary["Turret"]);
+                        }
+                        if (GUI.Button(guiCoordinates.button12Rect, "Missile Turret"))
+                        {
+                            craftingManager.CraftItemAsPlayer(craftingDictionary.dictionary["Missile Turret"]);
+                        }
+                        if (GUI.Button(guiCoordinates.button13Rect, "Missile"))
+                        {
+                            craftingManager.CraftItemAsPlayer(craftingDictionary.dictionary["Missile"]);
                         }
                     }
                     if (craftingPage == 2)

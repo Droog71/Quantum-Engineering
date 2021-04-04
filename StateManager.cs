@@ -28,6 +28,7 @@ public class StateManager : MonoBehaviour
     public GameObject Generator;
     public GameObject Extruder;
     public GameObject Turret;
+    public GameObject MissileTurret;
     public GameObject Auger;
     public GameObject HeatExchanger;
     public GameObject ElectricLight;
@@ -300,6 +301,17 @@ public class StateManager : MonoBehaviour
                         GameObject SpawnedObject = Instantiate(Turret, ObjectPosition, ObjectRotation);
                         SpawnedObject.GetComponent<Turret>().speed = FileBasedPrefs.GetInt(ObjectName + objectID + "speed");
                         SpawnedObject.GetComponent<Turret>().creationMethod = "spawned";
+                        SpawnedObject.GetComponent<PhysicsHandler>().falling = FileBasedPrefs.GetBool(ObjectName + objectID + "falling");
+                        SpawnedObject.GetComponent<PhysicsHandler>().fallingStack = FileBasedPrefs.GetBool(ObjectName + objectID + "fallingStack");
+                        SpawnedObject.GetComponent<PhysicsHandler>().creationMethod = "spawned";
+                    }
+                    if (ObjectName == WorldName + "MissileTurret")
+                    {
+                        GameObject SpawnedObject = Instantiate(MissileTurret, ObjectPosition, ObjectRotation);
+                        SpawnedObject.GetComponent<MissileTurret>().speed = FileBasedPrefs.GetInt(ObjectName + objectID + "speed");
+                        SpawnedObject.GetComponent<MissileTurret>().ammoType = FileBasedPrefs.GetString(ObjectName + objectID + "ammoType");
+                        SpawnedObject.GetComponent<MissileTurret>().ammoAmount = FileBasedPrefs.GetInt(ObjectName + objectID + "ammoAmount");
+                        SpawnedObject.GetComponent<MissileTurret>().creationMethod = "spawned";
                         SpawnedObject.GetComponent<PhysicsHandler>().falling = FileBasedPrefs.GetBool(ObjectName + objectID + "falling");
                         SpawnedObject.GetComponent<PhysicsHandler>().fallingStack = FileBasedPrefs.GetBool(ObjectName + objectID + "fallingStack");
                         SpawnedObject.GetComponent<PhysicsHandler>().creationMethod = "spawned";

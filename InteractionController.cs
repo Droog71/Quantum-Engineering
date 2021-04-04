@@ -57,6 +57,10 @@ public class InteractionController : MonoBehaviour
                     {
                         machineInteraction.InteractWithTurret();
                     }
+                    else if (obj.GetComponent<MissileTurret>() != null && distance <= 40)
+                    {
+                        machineInteraction.InteractWithMissileTurret();
+                    }
                     else if (obj.GetComponent<UniversalExtractor>() != null && distance <= 40)
                     {
                         machineInteraction.InteractWithUniversalExtractor();

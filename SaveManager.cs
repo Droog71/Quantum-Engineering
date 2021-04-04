@@ -243,6 +243,21 @@ public class SaveManager
                         FileBasedPrefs.SetBool(worldID + "falling", go.GetComponent<PhysicsHandler>().falling);
                         FileBasedPrefs.SetBool(worldID + "fallingStack", go.GetComponent<PhysicsHandler>().fallingStack);
                     }
+                    if (go.GetComponent<MissileTurret>() != null)
+                    {
+                        objectName = stateManager.WorldName + "MissileTurret";
+                        worldID = go.GetComponent<MissileTurret>().ID;
+                        objectID = int.Parse(worldID.Substring(objectName.Length));
+                        idList.Add(objectID);
+                        int speed = go.GetComponent<MissileTurret>().speed;
+                        string ammoType = go.GetComponent<MissileTurret>().ammoType;
+                        int ammoAmount = go.GetComponent<MissileTurret>().ammoAmount;
+                        FileBasedPrefs.SetString(worldID + "ammoType", ammoType);
+                        FileBasedPrefs.SetInt(worldID + "ammoAmount", ammoAmount);
+                        FileBasedPrefs.SetInt(worldID + "speed", speed);
+                        FileBasedPrefs.SetBool(worldID + "falling", go.GetComponent<PhysicsHandler>().falling);
+                        FileBasedPrefs.SetBool(worldID + "fallingStack", go.GetComponent<PhysicsHandler>().fallingStack);
+                    }
                     if (go.GetComponent<PowerSource>() != null)
                     {
                         if (go.GetComponent<PowerSource>().type == "Solar Panel")
@@ -264,7 +279,7 @@ public class SaveManager
                         string fuelType = go.GetComponent<PowerSource>().fuelType;
                         int fuelAmount = go.GetComponent<PowerSource>().fuelAmount;
                         FileBasedPrefs.SetString(worldID + "outputID", outputID);
-                        FileBasedPrefs.SetString(worldID + "fuelType", outputID);
+                        FileBasedPrefs.SetString(worldID + "fuelType", fuelType);
                         FileBasedPrefs.SetInt(worldID + "fuelAmount", fuelAmount);
                         FileBasedPrefs.SetBool(worldID + "falling", go.GetComponent<PhysicsHandler>().falling);
                         FileBasedPrefs.SetBool(worldID + "fallingStack", go.GetComponent<PhysicsHandler>().fallingStack);

@@ -675,7 +675,7 @@ public class InfoHUD : MonoBehaviour
                 if (playerController.machineInSight != null)
                 {
                     GUI.DrawTexture(guiCoordinates.infoRectBG, textureDictionary.dictionary["Interface Background"]);
-                    int rpm = (int)(60 / (0.2f + (3 - (playerController.machineSpeed * 0.1f))));
+                    int rpm = (int)(60 / (1 + (3 - (playerController.machineSpeed * 0.1f))));
                     GUI.Label(guiCoordinates.infoRect, "Turret" + 
                     "\nID: " + machineDisplayID + 
                     "\nEnergized: " + playerController.machineHasPower + 
@@ -683,6 +683,23 @@ public class InfoHUD : MonoBehaviour
                     "\nOutput: " + rpm + " RPM" + 
                     "\nHeat: " + playerController.machineHeat + " KBTU" + 
                     "\nCooling: " + playerController.machineCooling);
+                }
+            }
+            else if (obj.GetComponent<MissileTurret>() != null)
+            {
+                GUI.Label(guiCoordinates.messageRect, "\nPress F to collect.\nPress E to interact.");
+                if (playerController.machineInSight != null)
+                {
+                    GUI.DrawTexture(guiCoordinates.infoRectBG, textureDictionary.dictionary["Interface Background"]);
+                    int rpm = (int)(60 / (1 + (3 - (playerController.machineSpeed * 0.1f))));
+                    GUI.Label(guiCoordinates.infoRect, "Missile Turret" + 
+                    "\nID: " + machineDisplayID + 
+                    "\nEnergized: " + playerController.machineHasPower + 
+                    "\nPower: " + playerController.machinePower + " MW" +
+                    "\nOutput: " + rpm + " RPM" + 
+                    "\nHeat: " + playerController.machineHeat + " KBTU" + 
+                    "\nCooling: " + playerController.machineCooling +
+                    "\nAmmo: " + playerController.machineAmount + " " + playerController.machineType);
                 }
             }
             else if (obj.GetComponent<HeatExchanger>() != null)

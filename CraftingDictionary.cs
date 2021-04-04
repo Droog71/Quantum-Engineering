@@ -42,7 +42,7 @@ public class CraftingDictionary
     { "Iron Plate", "Iron Pipe", "Copper Wire", "Electric Motor", "Circuit Board" };
 
     private readonly string[] generatorIngredients = 
-    { "Iron Plate", "Iron Pipe", "Copper Wire", "Copper Plate", "Glass Block" };
+    { "Smelter", "Electric Motor", "Iron Gear", "Iron Pipe", "Iron Plate", "Copper Wire" };
 
     private readonly string[] reactorTurbineIngredients = 
     { "Generator", "Glass Block", "Steel Pipe", "Steel Gear", "Copper Wire", "Steel Plate" };
@@ -89,6 +89,9 @@ public class CraftingDictionary
     private readonly string[] turretIngredients = 
     { "Steel Plate", "Steel Pipe", "Bronze Plate", "Steel Gear", "Aluminum Wire", "Copper Wire", "Electric Motor", "Circuit Board" };
 
+    private readonly string[] missileIngredients = 
+    { "Steel Plate", "Steel Pipe", "Copper Wire", "Electric Motor", "Circuit Board", "Dark Matter" };
+
     private readonly string[] darkMatterCollectorIngredients = 
     { "Steel Plate", "Steel Pipe", "Tin Gear", "Steel Gear", "Bronze Gear", "Aluminum Wire", "Copper Wire", "Dark Matter" };
 
@@ -106,7 +109,7 @@ public class CraftingDictionary
     private readonly int[] universalExtractorAmounts = { 10, 10, 10, 10 };
     private readonly int[] universalConduitAmounts = { 5, 5, 5, 5 };
     private readonly int[] retrieverAmounts = { 4, 2, 4, 2, 2 };
-    private readonly int[] generatorAmounts = { 4, 4, 4, 4, 4 };
+    private readonly int[] generatorAmounts = { 1, 1, 2, 2, 4, 4 };
     private readonly int[] reactorTurbineAmounts = { 1, 1, 2, 2, 4, 4 };
     private readonly int[] railCartHubAmounts = { 6, 10, 1 };
     private readonly int[] railCartAmounts = { 2, 10, 4, 8, 1, 1 };
@@ -122,6 +125,8 @@ public class CraftingDictionary
     private readonly int[] storageComputerAmounts = { 5, 5, 5, 10, 10, 1, 1 };
     private readonly int[] alloySmelterAmounts = { 20, 20, 20, 20, 40, 40 };
     private readonly int[] turretAmounts = { 5, 5, 5, 5, 10, 10, 4, 4 };
+    private readonly int[] missileAmounts = { 2, 1, 5, 1, 1, 10 };
+    private readonly int[] missileTurretAmounts = { 10, 10, 10, 10, 20, 20, 8, 8 };
     private readonly int[] darkMatterCollectorAmounts = { 50, 50, 50, 50, 50, 100, 100, 100 };
     private readonly int[] darkMatterConduitAmounts = { 25, 25, 25, 25, 25, 50, 50, 50 };
 
@@ -142,7 +147,7 @@ public class CraftingDictionary
             { "Universal Extractor", new CraftingRecipe(universalExtractorIngredients, universalExtractorAmounts, "Universal Extractor", 1) },
             { "Universal Conduit", new CraftingRecipe(universalConduitIngredients, universalConduitAmounts, "Universal Conduit", 1) },
             { "Retriever", new CraftingRecipe(retrieverIngredients, retrieverAmounts, "Retriever", 1) },
-            { "Generator", new CraftingRecipe(generatorIngredients, generatorAmounts, "Solar Panel", 1) },
+            { "Generator", new CraftingRecipe(generatorIngredients, generatorAmounts, "Generator", 1) },
             { "Reactor Turbine", new CraftingRecipe(reactorTurbineIngredients, reactorTurbineAmounts, "Reactor Turbine", 1) },
             { "Rail Cart Hub", new CraftingRecipe(railCartHubIngredients, railCartHubAmounts, "Rail Cart Hub", 1) },
             { "Rail Cart", new CraftingRecipe(railCartIngredients, railCartAmounts, "Rail Cart", 1) },
@@ -158,6 +163,8 @@ public class CraftingDictionary
             { "Storage Computer", new CraftingRecipe(storageComputerIngredients, storageComputerAmounts, "Storage Computer", 1) },
             { "Alloy Smelter", new CraftingRecipe(alloySmelterIngredients, alloySmelterAmounts, "Alloy Smelter", 1) },
             { "Turret", new CraftingRecipe(turretIngredients, turretAmounts, "Turret", 1)  },
+            { "Missile", new CraftingRecipe(missileIngredients, missileAmounts, "Missile", 1)  },
+            { "Missile Turret", new CraftingRecipe(turretIngredients, missileTurretAmounts, "Missile Turret", 1)  },
             { "Dark Matter Collector", new CraftingRecipe(darkMatterCollectorIngredients, darkMatterCollectorAmounts, "Dark Matter Conduit", 1)  },
             { "Dark Matter Conduit", new CraftingRecipe(darkMatterConduitIngredients, darkMatterConduitAmounts, "Dark Matter Conduit", 1) }
         };

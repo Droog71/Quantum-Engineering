@@ -64,6 +64,7 @@ public class Turret : MonoBehaviour
             {
                 game = GameObject.Find("GameManager").GetComponent<GameManager>();
             }
+
             if (game != null)
             {
                 if (warmup < 10)
@@ -74,6 +75,7 @@ public class Turret : MonoBehaviour
                 {
                     speed = power > 0 ? power : 1;
                 }
+
                 if (speed > 1)
                 {
                     heat = speed - 1 - cooling;
@@ -82,11 +84,13 @@ public class Turret : MonoBehaviour
                 {
                     heat = 0;
                 }
+
                 if (heat < 0)
                 {
                     heat = 0;
                 }
-                if (game.meteorShowerTimer >= 540 && game.meteorShowerTimer < 900 || game.pirateAttackTimer >= 540 && game.pirateAttackTimer < 900 && GameObject.Find("Rocket").GetComponent<Rocket>().day >= 5)
+
+                if (HazardsPresent() == true)
                 {
                     if (foundTarget == false)
                     {
@@ -149,7 +153,7 @@ public class Turret : MonoBehaviour
                     {
                         hasTarget = true;
                         if (!GetComponent<AudioSource>().isPlaying)
-                        {                     
+                        {
                             barrel.GetComponent<AudioSource>().Play();
                             float angle = Vector3.Angle(transform.forward, target.transform.position);
                             if (angle > 90)
@@ -157,7 +161,11 @@ public class Turret : MonoBehaviour
                                 barrel.transform.Rotate(transform.up, 180);
                             }
                             barrel.transform.LookAt(target.transform.position);
-                            yield return new WaitForSeconds(0.10f);
+                            if (barrel.transform.rotation.x < -45)
+                            {
+                                barrel.transform.rotation = Quaternion.Euler(-45, barrel.transform.rotation.y, barrel.transform.rotation.z);
+                            }
+                            yield return new WaitForSeconds(0.45f);
                             GetComponent<AudioSource>().Play();
                             laser.enabled = true;
                             GetComponent<Light>().enabled = true;
@@ -173,6 +181,7 @@ public class Turret : MonoBehaviour
                             }
                             laser.enabled = false;
                             GetComponent<Light>().enabled = false;
+                            yield return new WaitForSeconds(0.45f);
                             barrel.transform.rotation = restingRotation;
                             float outputPenalty = 3 - (speed * 0.1f);
                             if (outputPenalty < 0)
@@ -197,7 +206,11 @@ public class Turret : MonoBehaviour
                                 barrel.transform.Rotate(transform.up, 180);
                             }
                             barrel.transform.LookAt(target.transform.position);
-                            yield return new WaitForSeconds(0.10f);
+                            if (barrel.transform.rotation.x < -45)
+                            {
+                                barrel.transform.rotation = Quaternion.Euler(-45, barrel.transform.rotation.y, barrel.transform.rotation.z);
+                            }
+                            yield return new WaitForSeconds(0.45f);
                             GetComponent<AudioSource>().Play();
                             laser.enabled = true;
                             GetComponent<Light>().enabled = true;
@@ -213,6 +226,7 @@ public class Turret : MonoBehaviour
                             }
                             laser.enabled = false;
                             GetComponent<Light>().enabled = false;
+                            yield return new WaitForSeconds(0.45f);
                             barrel.transform.rotation = restingRotation;
                             float outputPenalty = 3 - (speed * 0.1f);
                             if (outputPenalty < 0)
@@ -229,10 +243,17 @@ public class Turret : MonoBehaviour
         GetComponent<Light>().enabled = false;
         barrel.transform.rotation = restingRotation;
         firing = false;
-        if (hasTarget == false)
-        {
-            foundTarget = false;
-        }
+        foundTarget = hasTarget;
+    }
+
+    //! Returns true during a meteor shower or pirate attack.
+    private bool HazardsPresent()
+    {
+        return game.meteorShowerTimer >= 540 &&
+        game.meteorShowerTimer < 900 ||
+        game.pirateAttackTimer >= 540 &&
+        game.pirateAttackTimer < 900 &&
+        GameObject.Find("Rocket").GetComponent<Rocket>().day >= 5;
     }
 
     //! Gets power values from power receiver.

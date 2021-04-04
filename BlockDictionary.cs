@@ -147,6 +147,7 @@ public class BlockDictionary
             { "Storage Computer", playerController.storageComputer },
             { "Storage Container", playerController.storageContainer },
             { "Turret", playerController.turret },
+            { "Missile Turret", playerController.missileTurret },
             { "Universal Conduit", playerController.universalConduit },
             { "Universal Extractor", playerController.universalExtractor }
         };

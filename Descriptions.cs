@@ -131,6 +131,13 @@
 	" Requires a power source such as a solar panel, nuclear reactor or power conduit." +
 	" Turrets have an adjustable output measured in rounds per minute.";
 
+    public string missileTurret = "Protects your equipment from meteor showers and other hazards." +
+    " Requires a power source such as a solar panel, nuclear reactor or power conduit." +
+    " Turrets have an adjustable output measured in rounds per minute." +
+    " Missile turrets must be supplied with missiles via universal conduit.";
+
+    public string missile = "Ammo for missile turrets. Highly effective against hostile spacecraft.";
+
     public string universalConduit = "Transfers items from a machine to another universal conduit, another machine or a storage container." +
     " Universal conduits have an adjustable input/output range and do not require power to operate.";
 

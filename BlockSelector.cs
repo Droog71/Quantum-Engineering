@@ -40,7 +40,8 @@
             "Auto Crafter",
             "Dark Matter Conduit",
             "Dark Matter Collector",
-            "Turret"
+            "Turret",
+            "Missile Turret"
         };
     }
 

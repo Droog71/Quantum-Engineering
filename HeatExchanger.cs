@@ -217,6 +217,11 @@ public class HeatExchanger : MonoBehaviour
                 outputObject.GetComponent<Turret>().cooling = 0;
                 outputObject.GetComponent<Turret>().hasHeatExchanger = false;
             }
+            if (outputObject.GetComponent<MissileTurret>() != null)
+            {
+                outputObject.GetComponent<MissileTurret>().cooling = 0;
+                outputObject.GetComponent<MissileTurret>().hasHeatExchanger = false;
+            }
         }
     }
 
@@ -655,6 +660,42 @@ public class HeatExchanger : MonoBehaviour
                 }
             }
         }
+        if (obj.GetComponent<MissileTurret>() != null)
+        {
+            float distance = Vector3.Distance(transform.position, obj.transform.position);
+            if (distance < 20)
+            {
+                if (obj != gameObject)
+                {
+                    if (creationMethod.Equals("spawned"))
+                    {
+                        if (obj.GetComponent<MissileTurret>().ID.Equals(outputID))
+                        {
+                            if (obj.GetComponent<MissileTurret>().hasHeatExchanger == false)
+                            {
+                                outputObject = obj;
+                                outputObject.GetComponent<MissileTurret>().hasHeatExchanger = true;
+                                connectionLine.SetPosition(0, transform.position);
+                                connectionLine.SetPosition(1, obj.transform.position);
+                                connectionLine.enabled = true;
+                                creationMethod = "built";
+                            }
+                        }
+                    }
+                    else if (creationMethod.Equals("built"))
+                    {
+                        if (obj.GetComponent<MissileTurret>().hasHeatExchanger == false)
+                        {
+                            outputObject = obj;
+                            outputObject.GetComponent<MissileTurret>().hasHeatExchanger = true;
+                            connectionLine.SetPosition(0, transform.position);
+                            connectionLine.SetPosition(1, obj.transform.position);
+                            connectionLine.enabled = true;
+                        }
+                    }
+                }
+            }
+        }
     }
 
     //! Sets the heat exchanger's output ID to the output object's ID.
@@ -711,6 +752,10 @@ public class HeatExchanger : MonoBehaviour
         if (outputObject.GetComponent<Turret>() != null)
         {
             outputID = outputObject.GetComponent<Turret>().ID;
+        }
+        if (outputObject.GetComponent<MissileTurret>() != null)
+        {
+            outputID = outputObject.GetComponent<MissileTurret>().ID;
         }
     }
 
@@ -938,6 +983,22 @@ public class HeatExchanger : MonoBehaviour
             else
             {
                 outputObject.GetComponent<Turret>().cooling = 0;
+                GetComponent<Light>().enabled = false;
+                GetComponent<AudioSource>().enabled = false;
+            }
+        }
+        if (outputObject.GetComponent<MissileTurret>() != null)
+        {
+            if (providingCooling == true && connectionFailed == false && inputObject != null)
+            {
+                outputObject.GetComponent<MissileTurret>().cooling = speed;
+                amount -= speed;
+                GetComponent<Light>().enabled = true;
+                GetComponent<AudioSource>().enabled = true;
+            }
+            else
+            {
+                outputObject.GetComponent<MissileTurret>().cooling = 0;
                 GetComponent<Light>().enabled = false;
                 GetComponent<AudioSource>().enabled = false;
             }

@@ -251,7 +251,7 @@ public class UniversalConduit : MonoBehaviour
         GetComponent<AudioSource>().enabled = false;
     }
 
-    //!Checks if there is a rail cart near the retreiver.
+    //!Checks if there is a rail cart near the conduit.
     private void CheckForRailCart()
     {
         if (linkedToRailCart == true)
@@ -723,6 +723,33 @@ public class UniversalConduit : MonoBehaviour
                 }
             }
         }
+        if (obj.GetComponent<MissileTurret>() != null)
+        {
+            float distance = Vector3.Distance(transform.position, obj.transform.position);
+            if (IsValidOutputObject(obj) && distance < range)
+            {
+                if (obj.GetComponent<MissileTurret>().inputObject == null)
+                {
+                    if (creationMethod.Equals("spawned") && obj.GetComponent<MissileTurret>().ID.Equals(outputID))
+                    {
+                        outputObject = obj;
+                        obj.GetComponent<MissileTurret>().inputObject = gameObject;
+                        connectionLine.SetPosition(0, transform.position);
+                        connectionLine.SetPosition(1, obj.transform.position);
+                        connectionLine.enabled = true;
+                        creationMethod = "built";
+                    }
+                    else if (creationMethod.Equals("built"))
+                    {
+                        outputObject = obj;
+                        obj.GetComponent<MissileTurret>().inputObject = gameObject;
+                        connectionLine.SetPosition(0, transform.position);
+                        connectionLine.SetPosition(1, obj.transform.position);
+                        connectionLine.enabled = true;
+                    }
+                }
+            }
+        }
         if (obj.GetComponent<ModMachine>() != null)
         {
             float distance = Vector3.Distance(transform.position, obj.transform.position);
@@ -992,6 +1019,32 @@ public class UniversalConduit : MonoBehaviour
                             outputObject.GetComponent<PowerSource>().fuelAmount += speed;
                         }
                         amount -= speed;
+                        conduitItem.active = true;
+                        GetComponent<Light>().enabled = true;
+                        GetComponent<AudioSource>().enabled = true;
+                    }
+                }
+                else
+                {
+                    conduitItem.active = false;
+                    GetComponent<Light>().enabled = false;
+                    GetComponent<AudioSource>().enabled = false;
+                }
+            }
+            if (outputObject.GetComponent<MissileTurret>() != null)
+            {
+                if (type.Equals("Missile"))
+                {
+                    outputObject.GetComponent<MissileTurret>().ammoType = type;
+                    outputObject.GetComponent<MissileTurret>().inputID = ID;
+                    outputID = outputObject.GetComponent<MissileTurret>().ID;
+                    if (amount >= speed)
+                    {
+                        if (outputObject.GetComponent<MissileTurret>().ammoAmount < 1000)
+                        {
+                            outputObject.GetComponent<MissileTurret>().ammoAmount += speed;
+                            amount -= speed;
+                        }
                         conduitItem.active = true;
                         GetComponent<Light>().enabled = true;
                         GetComponent<AudioSource>().enabled = true;

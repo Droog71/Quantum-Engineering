@@ -98,6 +98,12 @@ public class AddressManager
                         go.GetComponent<Turret>().address = idCount;
                         go.GetComponent<Turret>().ID = (objectName   + idCount);
                     }
+                    if (go.GetComponent<MissileTurret>() != null)
+                    {
+                        objectName = stateManager.WorldName + "MissileTurret";
+                        go.GetComponent<MissileTurret>().address = idCount;
+                        go.GetComponent<MissileTurret>().ID = (objectName   + idCount);
+                    }
                     if (go.GetComponent<PowerSource>() != null)
                     {
                         if (go.GetComponent<PowerSource>().type == "Solar Panel")

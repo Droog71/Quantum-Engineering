@@ -457,7 +457,7 @@ public class DarkMatterConduit : MonoBehaviour
         GetComponent<AudioSource>().enabled = false;
     }
 
-    //!Checks if there is a rail cart near the retreiver.
+    //!Checks if there is a rail cart near the conduit.
     private void CheckForRailCart()
     {
         if (linkedToRailCart == true)

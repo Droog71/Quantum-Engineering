@@ -574,6 +574,28 @@ public class MachineGUI : MonoBehaviour
                     }
                 }
 
+                if (obj.GetComponent<MissileTurret>() != null)
+                {
+                    GUI.DrawTexture(guiCoordinates.speedControlBGRect, textureDictionary.dictionary["Interface Background"]);
+                    MissileTurret turret = obj.GetComponent<MissileTurret>();
+                    if (turret.power > 0)
+                    {
+                        GUI.Label(guiCoordinates.outputLabelRect, "Output");
+                        if (turret.power < 30)
+                        {
+                            turret.speed = (int)GUI.HorizontalSlider(guiCoordinates.outputControlButton2Rect, turret.speed, 0, turret.power);
+                        }
+                        else
+                        {
+                            turret.speed = (int)GUI.HorizontalSlider(guiCoordinates.outputControlButton2Rect, turret.speed, 0, 30);
+                        }
+                    }
+                    else
+                    {
+                        GUI.Label(guiCoordinates.outputLabelRect, "No Power");
+                    }
+                }
+
                 if (obj.GetComponent<GearCutter>() != null)
                 {
                     GUI.DrawTexture(guiCoordinates.speedControlBGRect, textureDictionary.dictionary["Interface Background"]);
