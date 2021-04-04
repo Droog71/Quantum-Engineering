@@ -21,7 +21,7 @@ var searchData=
   ['requestedescapemenu',['requestedEscapeMenu',['../classPlayerController.html#a607bdeffbb354f354c6f1697823e0c6c',1,'PlayerController']]],
   ['requestedsave',['requestedSave',['../classPlayerController.html#aa336bddf7a75677da551cc5ccf5b7f3a',1,'PlayerController']]],
   ['requestedsavetimer',['requestedSaveTimer',['../classPlayerController.html#ab97c5e73d521bd6e2787608cef68d32c',1,'PlayerController']]],
-  ['restingrotation',['restingRotation',['../classTurret.html#a4e48c20e4eb2dd2da6922110cc20d013',1,'Turret']]],
+  ['restingrotation',['restingRotation',['../classMissileTurret.html#a094ea8ed30e547b63b45cd83d9e2b325',1,'MissileTurret.restingRotation()'],['../classTurret.html#a4e48c20e4eb2dd2da6922110cc20d013',1,'Turret.restingRotation()']]],
   ['retriever',['Retriever',['../classStateManager.html#ad5ae41c22ce0e66af537ee443dc63084',1,'StateManager.Retriever()'],['../classDescriptions.html#a51040dca94fc322e9a22a428416237a8',1,'Descriptions.retriever()'],['../classPlayerController.html#ae5406b4fb8b486de6b3e08fe0cdc7996',1,'PlayerController.retriever()'],['../classRoboticArm.html#ad04c1efc49308c30ddbe1e601a0dfd9e',1,'RoboticArm.retriever()']]],
   ['retrieveramounts',['retrieverAmounts',['../classCraftingDictionary.html#a5e9d562e91bc0d5fd3b6f66b5cb2e9d7',1,'CraftingDictionary']]],
   ['retrieveringredients',['retrieverIngredients',['../classCraftingDictionary.html#a729fb9a4dec714a7fd655e0e83478855',1,'CraftingDictionary']]],

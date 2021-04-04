@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['game',['game',['../classMeteor.html#ace230d94cbf3bd6ff2cdfd011d4cf916',1,'Meteor.game()'],['../classPirate.html#a8c395539c7841abb85f93fc17525fd46',1,'Pirate.game()'],['../classTurret.html#a241238d43841df1f9e593ec300fb5c4d',1,'Turret.game()']]],
+  ['game',['game',['../classMeteor.html#ace230d94cbf3bd6ff2cdfd011d4cf916',1,'Meteor.game()'],['../classMissileTurret.html#a0dbf9386ca5919065b47652eb0b994c3',1,'MissileTurret.game()'],['../classPirate.html#a8c395539c7841abb85f93fc17525fd46',1,'Pirate.game()'],['../classTurret.html#a241238d43841df1f9e593ec300fb5c4d',1,'Turret.game()']]],
   ['gamemanager',['gameManager',['../classBuildController.html#ae917071cbbeea88d4f542447eb148ce1',1,'BuildController.gameManager()'],['../classCombinedMeshManager.html#a0378a4d9084e5e2ee0b057d8d5520785',1,'CombinedMeshManager.gameManager()'],['../classHazardManager.html#a3baae13ba237bcd0b25523a026f26d33',1,'HazardManager.gameManager()'],['../classLaserController.html#a21f02a0bd4613e4789ccc0c44b14a135',1,'LaserController.gameManager()'],['../classPhysicsHandler.html#ad28836a0451c56f9188cdd5218924f6c',1,'PhysicsHandler.gameManager()'],['../classPlayerController.html#ab71a808b87ea114cdfaa1403a1b2aa4c',1,'PlayerController.gameManager()'],['../classPlayerGUI.html#a1df99c36de23d30074b8bd84e947093e',1,'PlayerGUI.gameManager()']]],
   ['gamestarted',['gameStarted',['../classPlayerController.html#afe3d23ba557ed56ab347efaeaf6bbac6',1,'PlayerController']]],
   ['gametime',['gameTime',['../classRocket.html#a1de4189fab40b986688183f00efeacaf',1,'Rocket']]],
