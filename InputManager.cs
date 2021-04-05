@@ -35,16 +35,16 @@ public class InputManager
         }
 
         // SPRINTING
-        if (cInput.GetKey("Sprint") && playerController.exiting == false)
+        if (cInput.GetKey("Sprint/Boost") && playerController.exiting == false)
         {
-            playerController.playerMoveSpeed = 25;
+            playerController.playerMoveSpeed = 30;
             playerController.footStepSoundFrquency = 0.25f;
         }
         else
         {
             if (!Physics.Raycast(playerController.gameObject.transform.position, -playerController.gameObject.transform.up, out RaycastHit hit, 10))
             {
-                playerController.playerMoveSpeed = 25;
+                playerController.playerMoveSpeed = 30;
                 playerController.footStepSoundFrquency = 0.25f;
             }
             else
@@ -54,7 +54,7 @@ public class InputManager
             }
         }
 
-        if (cInput.GetKeyDown("Sprint") || cInput.GetKeyUp("Sprint"))
+        if (cInput.GetKeyDown("Sprint/Boost") || cInput.GetKeyUp("Sprint/Boost"))
         {
             actionManager.ResetHeldItemSway();
         }
@@ -62,22 +62,10 @@ public class InputManager
         // MOVEMENT INPUT
         if (playerController.exiting == false)
         {
-            if (cInput.GetKey("Walk Forward"))
-            {
-                actionManager.WalkForward();
-            }
-            if (cInput.GetKey("Walk Backward"))
-            {
-                actionManager.WalkBackward();
-            }
-            if (cInput.GetKey("Strafe Left"))
-            {
-                actionManager.StrafeLeft();
-            }
-            if (cInput.GetKey("Strafe Right"))
-            {
-                actionManager.StrafeRight();
-            }
+            playerController.moveForward = cInput.GetKey("Walk Forward");
+            playerController.moveBackward = cInput.GetKey("Walk Backward");
+            playerController.moveLeft = cInput.GetKey("Strafe Left");
+            playerController.moveRight = cInput.GetKey("Strafe Right");
         }
 
         if (!cInput.GetKey("Jetpack") && (cInput.GetKey("Walk Forward") || cInput.GetKey("Walk Backward") || cInput.GetKey("Strafe Left") || cInput.GetKey("Strafe Right")))
@@ -94,6 +82,10 @@ public class InputManager
         }
         else if (!cInput.GetKey("Jetpack") && !cInput.GetKey("Walk Forward") && !cInput.GetKey("Walk Backward") && !cInput.GetKey("Strafe Left") && !cInput.GetKey("Strafe Right"))
         {
+            if (Physics.Raycast(playerController.gameObject.transform.position, -playerController.gameObject.transform.up, out RaycastHit hit, 10))
+            {
+                playerController.stopMovement = true;
+            }
             playerController.gameObject.GetComponent<AudioSource>().Stop();
             actionManager.StopGroundEffects();
         }
@@ -184,12 +176,16 @@ public class InputManager
         {
             actionManager.JetPackThrust();
         }
-        else if (!cInput.GetKey("Walk Forward") && !cInput.GetKey("Walk Backward") && !cInput.GetKey("Strafe Left") && !cInput.GetKey("Strafe Right"))
+        else 
         {
-            if (playerController.gameObject.GetComponent<AudioSource>().isPlaying == true)
+            if (!cInput.GetKey("Walk Forward") && !cInput.GetKey("Walk Backward") && !cInput.GetKey("Strafe Left") && !cInput.GetKey("Strafe Right"))
             {
-                playerController.gameObject.GetComponent<AudioSource>().Stop();
+                if (playerController.gameObject.GetComponent<AudioSource>().isPlaying == true)
+                {
+                    playerController.gameObject.GetComponent<AudioSource>().Stop();
+                }
             }
+            playerController.moveUp = false;
         }
 
         // BUILD MULTIPLIER

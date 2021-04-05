@@ -66,6 +66,13 @@ public class PlayerController : MonoBehaviour
     public bool scannerActive;
     public bool firing;
     public bool scanning;
+    public bool moveForward;
+    public bool moveBackward;
+    public bool moveLeft;
+    public bool moveRight;
+    public bool moveUp;
+    public bool moveDown;
+    public bool stopMovement;
 
     private bool gotPosition;
     private bool gameStarted;
@@ -428,6 +435,55 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    //! Frame-rate independent physics calculations.
+    public void FixedUpdate()
+    {
+        if (moveForward == true)
+        {
+            Vector3 moveDir = Vector3.Normalize(new Vector3(mCam.gameObject.transform.forward.x, 0, mCam.gameObject.transform.forward.z));
+            GetComponent<Rigidbody>().AddForce(moveDir * playerMoveSpeed * 200);
+        }
+
+        if (moveBackward == true)
+        {
+            Vector3 moveDir = Vector3.Normalize(new Vector3(mCam.gameObject.transform.forward.x, 0, mCam.gameObject.transform.forward.z));
+            GetComponent<Rigidbody>().AddForce(-moveDir * playerMoveSpeed * 200);
+        }
+
+        if (moveLeft == true)
+        {
+            GetComponent<Rigidbody>().AddForce(-mCam.gameObject.transform.right * playerMoveSpeed * 200);
+        }
+
+        if (moveRight == true)
+        {
+            GetComponent<Rigidbody>().AddForce(mCam.gameObject.transform.right * playerMoveSpeed * 200);
+        }
+
+        if (moveUp == true)
+        {
+            if (cInput.GetKey("Sprint/Boost"))
+            {
+                GetComponent<Rigidbody>().AddForce(Vector3.up * 10000);
+            }
+            else
+            {
+                GetComponent<Rigidbody>().AddForce(Vector3.up * 5800);
+            }
+        }
+
+        if (stopMovement == true)
+        {
+            GetComponent<Rigidbody>().velocity = new Vector3(0,0,0);
+            stopMovement = false;
+        }
+
+        if (!Physics.Raycast(transform.position, -transform.up, out RaycastHit hit, 10))
+        {
+            GetComponent<Rigidbody>().AddForce(-transform.up * 5000);
+        }
+    }
+
     //! Returns true when prerequisites are met for loading machines added by mods.
     private bool ReadyToLoadModMachines()
     {
@@ -703,23 +759,23 @@ public class PlayerController : MonoBehaviour
     {
         if (gameObject.transform.position.x > 4500)
         {
-            gameObject.transform.position = new Vector3(4490, gameObject.transform.position.y, gameObject.transform.position.z);
+            gameObject.transform.position = new Vector3(4500, gameObject.transform.position.y, gameObject.transform.position.z);
         }
         if (gameObject.transform.position.z > 4500)
         {
-            gameObject.transform.position = new Vector3(gameObject.transform.position.x, gameObject.transform.position.y, 4490);
+            gameObject.transform.position = new Vector3(gameObject.transform.position.x, gameObject.transform.position.y, 4500);
         }
         if (gameObject.transform.position.x < -4500)
         {
-            gameObject.transform.position = new Vector3(-4490, gameObject.transform.position.y, gameObject.transform.position.z);
+            gameObject.transform.position = new Vector3(-4500, gameObject.transform.position.y, gameObject.transform.position.z);
         }
         if (gameObject.transform.position.z < -4500)
         {
-            gameObject.transform.position = new Vector3(gameObject.transform.position.x, gameObject.transform.position.y, -4490);
+            gameObject.transform.position = new Vector3(gameObject.transform.position.x, gameObject.transform.position.y, -4500);
         }
         if (gameObject.transform.position.y > 500)
         {
-            gameObject.transform.position = new Vector3(gameObject.transform.position.x, 490, gameObject.transform.position.z);
+            gameObject.transform.position = new Vector3(gameObject.transform.position.x, 500, gameObject.transform.position.z);
         }
         if (gameObject.transform.position.y < -100)
         {

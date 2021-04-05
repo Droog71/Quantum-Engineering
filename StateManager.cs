@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 //! This class handles unique ID assignment and saving & loading of worlds.
 public class StateManager : MonoBehaviour
@@ -9,6 +10,8 @@ public class StateManager : MonoBehaviour
     public bool worldLoaded;
     public int progress;
     public int[] idList;
+    public List<string> modTextureList;
+    public List<string> modRecipeList;
     public GameObject DarkMatterCollector;
     public GameObject DarkMatterConduit;
     public GameObject IronBlock;

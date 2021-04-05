@@ -14,7 +14,7 @@ public class cInputInit : MonoBehaviour
         cInput.SetKey("Walk Backward", "S", Keys.DownArrow);
         cInput.SetKey("Strafe Left", "A", Keys.LeftArrow);
         cInput.SetKey("Strafe Right", "D", Keys.RightArrow);
-        cInput.SetKey("Sprint", "LeftShift", Keys.LeftShift);
+        cInput.SetKey("Sprint/Boost", "LeftShift", Keys.LeftShift);
         cInput.SetKey("Jetpack", "Space", Keys.Space);
         cInput.SetKey("Fire", "Mouse0", Keys.Mouse0);
         cInput.SetKey("Interact", "E", Keys.E);

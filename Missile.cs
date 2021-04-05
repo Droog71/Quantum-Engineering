@@ -1,8 +1,8 @@
 ﻿using UnityEngine;
 
-public class Missile : MonoBehaviour 
+public class Missile : MonoBehaviour
 {	
-    public GameObject explosion;	
+    public GameObject explosion;
 	public AudioClip sound;
     public bool destroying;
     private float destroyTimer;
@@ -11,8 +11,8 @@ public class Missile : MonoBehaviour
 	public GameObject target;
     public GameObject exhaust;
 	
-	// Use this for initialization
-	public void Start () 
+	//! Called by unity engine on start up to initialize variables.
+	public void Start ()
 	{
 		audioSource = gameObject.AddComponent<AudioSource>();
 		audioSource.rolloffMode = AudioRolloffMode.Linear;
@@ -23,18 +23,18 @@ public class Missile : MonoBehaviour
 		audioSource.spread = 360;
 		audioSource.clip = sound;
 		audioSource.loop = true;
-		audioSource.Play();		
+		audioSource.Play();
 	}
-	
-	// Update is called once per frame
-	public void Update () 
+
+	//! Called once per frame by unity engine.
+	public void Update ()
 	{
         if (destroying == false)
         {
             if (target != null)
             {
                 transform.LookAt(target.transform);
-            }   
+            }
 
             lifeSpan += 1 * Time.deltaTime;
             transform.position += transform.forward * 250 * Time.deltaTime;
@@ -45,7 +45,7 @@ public class Missile : MonoBehaviour
             }
 
             if (lifeSpan > 10)
-            {   
+            {
                 Explode();
             }
         }
@@ -58,7 +58,8 @@ public class Missile : MonoBehaviour
             }
         }
     }
-	
+
+    //! Simulates collision of the missile and the target.
 	private void Collide()
 	{
         Meteor hitMeteor = target.gameObject.GetComponent<Meteor>();
@@ -83,6 +84,7 @@ public class Missile : MonoBehaviour
         }
 	}
 
+    //! Spawns explosion effect and disables rendering of the misile.
     private void Explode()
     {
         audioSource.Stop();

@@ -309,52 +309,6 @@ public class ActionManager
         }
     }
 
-    //! Moves the player forward.
-    public void WalkForward()
-    {
-        if (!Physics.Raycast(playerController.mCam.gameObject.transform.position, playerController.mCam.gameObject.transform.forward, out RaycastHit hit, 5))
-        {
-            Vector3 moveDir = Vector3.Normalize(new Vector3(playerController.mCam.gameObject.transform.forward.x, 0, playerController.mCam.gameObject.transform.forward.z));
-            playerController.gameObject.transform.position += moveDir * playerController.playerMoveSpeed * Time.deltaTime;
-        }
-        else if (hit.collider.gameObject.GetComponent<AirLock>() != null)
-        {
-            if (hit.collider.gameObject.GetComponent<Collider>().isTrigger == true)
-            {
-                Vector3 moveDir = Vector3.Normalize(new Vector3(playerController.mCam.gameObject.transform.forward.x, 0, playerController.mCam.gameObject.transform.forward.z));
-                playerController.gameObject.transform.position += moveDir * playerController.playerMoveSpeed * Time.deltaTime;
-            }
-        }
-    }
-
-    //! Moves the player backward.
-    public void WalkBackward()
-    {
-        if (!Physics.Raycast(playerController.mCam.gameObject.transform.position, -playerController.mCam.gameObject.transform.forward, out RaycastHit hit, 5))
-        {
-            Vector3 moveDir = Vector3.Normalize(new Vector3(playerController.mCam.gameObject.transform.forward.x, 0, playerController.mCam.gameObject.transform.forward.z));
-            playerController.gameObject.transform.position -= moveDir * playerController.playerMoveSpeed * Time.deltaTime;
-        }
-    }
-
-    //! Moves the player left.
-    public void StrafeLeft()
-    {
-        if (!Physics.Raycast(playerController.mCam.gameObject.transform.position, -playerController.mCam.gameObject.transform.right, out RaycastHit hit, 5))
-        {
-            playerController.gameObject.transform.position -= playerController.mCam.gameObject.transform.right * playerController.playerMoveSpeed * Time.deltaTime;
-        }
-    }
-
-    //! Moves the player right.
-    public void StrafeRight()
-    {
-        if (!Physics.Raycast(playerController.mCam.gameObject.transform.position, playerController.mCam.gameObject.transform.right, out RaycastHit hit, 5))
-        {
-            playerController.gameObject.transform.position += playerController.mCam.gameObject.transform.right * playerController.playerMoveSpeed * Time.deltaTime;
-        }
-    }
-
     //! Returns true when the player is walking on metal.
     private bool OnMetal(RaycastHit hit)
     {
@@ -593,7 +547,7 @@ public class ActionManager
         }
         if (playerController.gameObject.transform.position.y < 500 && !Physics.Raycast(playerController.gameObject.transform.position, playerController.gameObject.transform.up, out RaycastHit upHit, 5))
         {
-            playerController.gameObject.transform.position += Vector3.up * 25 * Time.deltaTime;
+            playerController.moveUp = true;
         }
         playerController.mCam.GetComponent<HeadBob>().active = false;
         playerController.scanner.GetComponent<HeldItemSway>().active = false;

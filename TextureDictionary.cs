@@ -15,6 +15,7 @@ public class TextureDictionary : MonoBehaviour
     //! Loads textures from files for mods.
     public static IEnumerator AddModTextures(Dictionary<string, Texture2D> dictionary)
     {
+        StateManager stateManager = GameObject.Find("GameManager").GetComponent<StateManager>();
         string modPath = Path.Combine(Application.persistentDataPath, "Mods");
         Directory.CreateDirectory(modPath);
         string[] modDirs = Directory.GetDirectories(modPath);
@@ -35,13 +36,17 @@ public class TextureDictionary : MonoBehaviour
                         Texture2D texture = DownloadHandlerTexture.GetContent(uwr);
                         string textureName = file.Name.Remove(file.Name.Length - 4);
                         dictionary.Add(textureName, texture);
-                        GameObject.Find("Player").GetComponent<TextureDictionary>().addedModTextures = true;
                         string modName = new DirectoryInfo(path).Name;
-                        Debug.Log(modName+" loaded texture for [" + textureName + "]");
+                        if (!stateManager.modTextureList.Contains(textureName))
+                        {
+                            stateManager.modTextureList.Add(textureName);
+                            Debug.Log("Mod "+"["+modName+"]"+" loaded texture [" + textureName + ".png]");
+                        }
                     }
                 }
             }
         }
+        GameObject.Find("Player").GetComponent<TextureDictionary>().addedModTextures = true;
     }
 
     //! Called by unity engine to initialize variables on startup.
@@ -69,7 +74,7 @@ public class TextureDictionary : MonoBehaviour
             { "Aluminum Ingot", Resources.Load("AluminumIngot") as Texture2D },
             { "Copper Ingot", Resources.Load("CopperIngot") as Texture2D },
             { "Bronze Ingot", Resources.Load("BronzeIngot") as Texture2D },
-            { "Steel Ingot", Resources.Load("IronIngot") as Texture2D },
+            { "Steel Ingot", Resources.Load("SteelIngot") as Texture2D },
             { "Iron Block", Resources.Load("IronBlock") as Texture2D },
             { "Iron Ramp", Resources.Load("IronRamp") as Texture2D },
             { "Steel Block", Resources.Load("SteelBlock") as Texture2D },
@@ -92,13 +97,13 @@ public class TextureDictionary : MonoBehaviour
             { "Iron Plate", Resources.Load("IronPlate") as Texture2D },
             { "Tin Plate", Resources.Load("TinPlate") as Texture2D },
             { "Bronze Plate", Resources.Load("BronzePlate") as Texture2D },
-            { "Steel Plate", Resources.Load("IronPlate") as Texture2D },
+            { "Steel Plate", Resources.Load("SteelPlate") as Texture2D },
             { "Aluminum Plate", Resources.Load("AluminumPlate") as Texture2D },
             { "Copper Gear", Resources.Load("CopperGear") as Texture2D },
             { "Iron Gear", Resources.Load("IronGear") as Texture2D },
             { "Tin Gear", Resources.Load("TinGear") as Texture2D },
             { "Bronze Gear", Resources.Load("BronzeGear") as Texture2D },
-            { "Steel Gear", Resources.Load("IronGear") as Texture2D },
+            { "Steel Gear", Resources.Load("SteelGear") as Texture2D },
             { "Aluminum Gear", Resources.Load("AluminumGear") as Texture2D },
             { "Smelter", Resources.Load("Smelter") as Texture2D },
             { "Turret", Resources.Load("Turret") as Texture2D },

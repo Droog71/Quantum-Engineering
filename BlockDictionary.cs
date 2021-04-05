@@ -47,6 +47,7 @@ public class BlockDictionary
     //! Gets recipes for a specfic machine.
     public BasicMachineRecipe[] GetMachineRecipes(string machineName)
     {
+        StateManager stateManager = GameObject.Find("GameManager").GetComponent<StateManager>();
         string modPath = Path.Combine(Application.persistentDataPath, "Mods");
         Directory.CreateDirectory(modPath);
         string[] modDirs = Directory.GetDirectories(modPath);
@@ -72,7 +73,11 @@ public class BlockDictionary
                         machineRecipes[i] = new BasicMachineRecipe(input, output);
                     }
                     string modName = new DirectoryInfo(path).Name;
-                    Debug.Log(modName+" added recipes for [" + machineName + "]");
+                    if (!stateManager.modRecipeList.Contains(machineName))
+                    {
+                        stateManager.modRecipeList.Add(machineName);
+                        Debug.Log("Mod "+"["+modName+"]"+" added recipes for [" + machineName + "]");
+                    }
                     return machineRecipes;
                 }
             }
@@ -103,7 +108,7 @@ public class BlockDictionary
                     objList.Add(machineName);
                     playerController.blockSelector.objectNames = objList.ToArray();
                     string modName = new DirectoryInfo(path).Name;
-                    Debug.Log(modName+" created a new machine: [" + machineName + "]");
+                    Debug.Log("Mod "+"["+modName+"]"+" created a new machine: [" + machineName + "]");
                 }
             }
         }

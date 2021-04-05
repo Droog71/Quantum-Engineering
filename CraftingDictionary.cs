@@ -203,13 +203,13 @@ public class CraftingDictionary
                 {
                     modDictionary.Add(output, modRecipe);
                     string modName = new DirectoryInfo(path).Name;
-                    Debug.Log(modName+" added a new crafting recipe for [" + output + "]");
+                    Debug.Log("Mod "+"["+modName+"]"+" added a new crafting recipe for [" + output + "]");
                 }
                 else
                 {
                     dictionary[output] = modRecipe;
                     string modName = new DirectoryInfo(path).Name;
-                    Debug.Log(modName+" has overridden the crafting recipe for [" + output + "]");
+                    Debug.Log("Mod "+"["+modName+"]"+" has overridden the crafting recipe for [" + output + "]");
                 }
             }
         }
