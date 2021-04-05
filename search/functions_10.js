@@ -3,7 +3,7 @@ var searchData=
   ['save',['Save',['../classPlayerController.html#ac151da13f9630ce51a82d185ac8b449e',1,'PlayerController']]],
   ['savebytes',['SaveBytes',['../classPlayerPrefsX.html#ab3191f3e95d07ca25507c11912ca2504',1,'PlayerPrefsX']]],
   ['savedata',['SaveData',['../classInventoryManager.html#a48c954b148d6646101a425ca11deffce',1,'InventoryManager.SaveData()'],['../classMeshPainter.html#ab2319d8b5d875c9137815cf817dc85c9',1,'MeshPainter.SaveData()'],['../classStateManager.html#af6885ecc1349a759d9f001544109939c',1,'StateManager.SaveData()']]],
-  ['savedatacoroutine',['SaveDataCoroutine',['../classSaveManager.html#a4ac9b164dd617a75d1c1d5aa098c6a0c',1,'SaveManager.SaveDataCoroutine()'],['../classMeshPainter.html#a6a4c3393d848ab42a1a6e081158e4f18',1,'MeshPainter.SaveDataCoRoutine()']]],
+  ['savedatacoroutine',['SaveDataCoRoutine',['../classMeshPainter.html#a6a4c3393d848ab42a1a6e081158e4f18',1,'MeshPainter.SaveDataCoRoutine()'],['../classSaveManager.html#a4ac9b164dd617a75d1c1d5aa098c6a0c',1,'SaveManager.SaveDataCoroutine()']]],
   ['savemanager',['SaveManager',['../classSaveManager.html#abd4f376236ae665452c56ec89df2305f',1,'SaveManager']]],
   ['saveplayerdata',['SavePlayerData',['../classPlayerController.html#aff3cdd4acd54cf6da96c2a3b5da59da1',1,'PlayerController']]],
   ['saveprices',['SavePrices',['../classMarketGUI.html#a26eac2fdeaaddc0f3e2914b3d4704d33',1,'MarketGUI']]],
@@ -50,7 +50,5 @@ var searchData=
   ['stopgroundeffects',['StopGroundEffects',['../classActionManager.html#a20e7e043f63f8807a3cfee635482e2ad',1,'ActionManager']]],
   ['stophazards',['StopHazards',['../classHazardManager.html#aa5e13d29866d39b276a2991a6c6169e7',1,'HazardManager']]],
   ['stopvideo',['StopVideo',['../classVP.html#a090997a19a6f844384aa498ba44a3d16',1,'VP']]],
-  ['storageinteraction',['StorageInteraction',['../classStorageInteraction.html#abcf3ba896aaac23f3aef16870a8879a7',1,'StorageInteraction']]],
-  ['strafeleft',['StrafeLeft',['../classActionManager.html#a0c2380b9c1195bb6f98e59103ec9530b',1,'ActionManager']]],
-  ['straferight',['StrafeRight',['../classActionManager.html#a69a5b2b84ab39d10af0ad6a62cfee9bf',1,'ActionManager']]]
+  ['storageinteraction',['StorageInteraction',['../classStorageInteraction.html#abcf3ba896aaac23f3aef16870a8879a7',1,'StorageInteraction']]]
 ];

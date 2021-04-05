@@ -5,7 +5,7 @@ var searchData=
   ['laser',['laser',['../classPirate.html#a7e468278594b0c8d0c7a783d68ca28df',1,'Pirate.laser()'],['../classPrintingArm.html#ad17637a76bd0cbad13bb2906c7a960a0',1,'PrintingArm.laser()'],['../classTurret.html#a2ab1ec6ebc09d511c4d057daf758a762',1,'Turret.laser()']]],
   ['lasercannon',['laserCannon',['../classPlayerController.html#a84eed3aeeec622881d98db77c4ba7e62',1,'PlayerController']]],
   ['lasercannonactive',['laserCannonActive',['../classPlayerController.html#aa425518d17fa3f419087ab40d9922cd8',1,'PlayerController']]],
-  ['lasercontroller',['LaserController',['../classLaserController.html',1,'LaserController'],['../classPlayerController.html#a25006ffe76c56bde0757657caaf326a5',1,'PlayerController.laserController()'],['../classLaserController.html#a8f5a6382dac54af7c38c4a9574a55540',1,'LaserController.LaserController()']]],
+  ['lasercontroller',['LaserController',['../classLaserController.html',1,'LaserController'],['../classLaserController.html#a8f5a6382dac54af7c38c4a9574a55540',1,'LaserController.LaserController()'],['../classPlayerController.html#a25006ffe76c56bde0757657caaf326a5',1,'PlayerController.laserController()']]],
   ['lasercontroller_2ecs',['LaserController.cs',['../LaserController_8cs.html',1,'']]],
   ['lasercutter',['LaserCutter',['../classLaserCutter.html',1,'']]],
   ['lasercutter_2ecs',['LaserCutter.cs',['../LaserCutter_8cs.html',1,'']]],
