@@ -5,6 +5,8 @@ public class MachineGUI : MonoBehaviour
     private PlayerController playerController;
     private GuiCoordinates guiCoordinates;
     private TextureDictionary textureDictionary;
+    private Coroutine updateNetworkConduitCoroutine;
+    private Coroutine updateNetworkMachineCoroutine;
     private bool hubStopWindowOpen;
 
     //! Called by unity engine on start up to initialize variables.
@@ -42,6 +44,7 @@ public class MachineGUI : MonoBehaviour
 
                 if (obj.GetComponent<PowerConduit>() != null)
                 {
+                    bool netFlag = false;
                     PowerConduit powerConduit = obj.GetComponent<PowerConduit>();
                     if (powerConduit.connectionFailed == false)
                     {
@@ -72,15 +75,30 @@ public class MachineGUI : MonoBehaviour
                         GUI.Label(guiCoordinates.outputLabelRect, "Offline");
                         if (GUI.Button(guiCoordinates.outputControlButton2Rect, "Reboot"))
                         {
+                            netFlag = true;
                             powerConduit.connectionAttempts = 0;
                             powerConduit.connectionFailed = false;
                             playerController.PlayButtonSound();
+                        }
+                    }
+                    if (PlayerPrefsX.GetPersistentBool("multiplayer") == true)
+                    {
+                        bool rangeDeSync = powerConduit.range != playerController.networkedConduitRange;
+                        bool outputDeSync = powerConduit.dualOutput != playerController.networkedDualPower;
+                        if (rangeDeSync || outputDeSync || netFlag)
+                        {
+                            NetworkSend net = playerController.networkController.networkSend;
+                            Vector3 location = powerConduit.gameObject.transform.position;
+                            updateNetworkConduitCoroutine = StartCoroutine(net.SendPowerData(location,powerConduit.range,powerConduit.dualOutput));
+                            playerController.networkedConduitRange = powerConduit.range;
+                            playerController.networkedDualPower = powerConduit.dualOutput;
                         }
                     }
                 }
 
                 if (obj.GetComponent<RailCartHub>() != null)
                 {
+                    bool netFlag = false;
                     RailCartHub hub = obj.GetComponent<RailCartHub>();
                     if (hub.connectionFailed == false)
                     {
@@ -148,15 +166,32 @@ public class MachineGUI : MonoBehaviour
                         GUI.Label(guiCoordinates.outputLabelRect, "Offline");
                         if (GUI.Button(guiCoordinates.outputControlButton2Rect, "Reboot"))
                         {
+                            netFlag = true;
                             hub.connectionAttempts = 0;
                             hub.connectionFailed = false;
                             playerController.PlayButtonSound();
+                        }
+                    }
+                    if (PlayerPrefsX.GetPersistentBool("multiplayer") == true)
+                    {
+                        bool rangeDeSync = hub.range != playerController.networkedHubRange;
+                        bool stopDeSync = hub.stop != playerController.networkedHubStop;
+                        bool timeDeSync = (int)hub.stopTime != (int)playerController.networkedHubStopTime;
+                        if (rangeDeSync || stopDeSync || timeDeSync || netFlag)
+                        {
+                            NetworkSend net = playerController.networkController.networkSend;
+                            Vector3 location = hub.gameObject.transform.position;
+                            updateNetworkConduitCoroutine = StartCoroutine(net.SendHubData(location,hub.range,hub.stop,hub.stopTime));
+                            playerController.networkedHubRange = hub.range;
+                            playerController.networkedHubStop = hub.stop;
+                            playerController.networkedHubStopTime = hub.stopTime;
                         }
                     }
                 }
 
                 if (obj.GetComponent<Retriever>() != null)
                 {
+                    bool netFlag = false;
                     Retriever retriever = obj.GetComponent<Retriever>();
                     if (retriever.connectionFailed == false)
                     {
@@ -192,15 +227,27 @@ public class MachineGUI : MonoBehaviour
                         GUI.Label(guiCoordinates.outputLabelRect, "Offline");
                         if (GUI.Button(guiCoordinates.outputControlButton2Rect, "Reboot"))
                         {
+                            netFlag = true;
                             retriever.connectionAttempts = 0;
                             retriever.connectionFailed = false;
                             playerController.PlayButtonSound();
+                        }
+                    }
+                    if (PlayerPrefsX.GetPersistentBool("multiplayer") == true)
+                    {
+                        if (retriever.speed != playerController.networkedConduitRange || netFlag == true)
+                        {
+                            NetworkSend net = playerController.networkController.networkSend;
+                            Vector3 location = retriever.gameObject.transform.position;
+                            updateNetworkConduitCoroutine = StartCoroutine(net.SendConduitData(location,retriever.speed));
+                            playerController.networkedConduitRange = retriever.speed;
                         }
                     }
                 }
 
                 if (obj.GetComponent<AutoCrafter>() != null)
                 {
+                    bool netFlag = false;
                     AutoCrafter autoCrafter = obj.GetComponent<AutoCrafter>();
                     if (autoCrafter.connectionFailed == false)
                     {
@@ -236,15 +283,27 @@ public class MachineGUI : MonoBehaviour
                         GUI.Label(guiCoordinates.outputLabelRect, "Offline");
                         if (GUI.Button(guiCoordinates.outputControlButton2Rect, "Reboot"))
                         {
+                            netFlag = true;
                             autoCrafter.connectionAttempts = 0;
                             autoCrafter.connectionFailed = false;
                             playerController.PlayButtonSound();
+                        }
+                    }
+                    if (PlayerPrefsX.GetPersistentBool("multiplayer") == true)
+                    {
+                        if (autoCrafter.speed != playerController.networkedConduitRange || netFlag == true)
+                        {
+                            NetworkSend net = playerController.networkController.networkSend;
+                            Vector3 location = autoCrafter.gameObject.transform.position;
+                            updateNetworkConduitCoroutine = StartCoroutine(net.SendConduitData(location,autoCrafter.speed));
+                            playerController.networkedConduitRange = autoCrafter.speed;
                         }
                     }
                 }
 
                 if (obj.GetComponent<UniversalConduit>() != null)
                 {
+                    bool netFlag = false;
                     GUI.DrawTexture(guiCoordinates.speedControlBGRect, textureDictionary.dictionary["Interface Background"]);
                     UniversalConduit conduit = obj.GetComponent<UniversalConduit>();
                     if (conduit.connectionFailed == false)
@@ -257,15 +316,27 @@ public class MachineGUI : MonoBehaviour
                         GUI.Label(guiCoordinates.outputLabelRect, "Offline");
                         if (GUI.Button(guiCoordinates.outputControlButton2Rect, "Reboot"))
                         {
+                            netFlag = true;
                             conduit.connectionAttempts = 0;
                             conduit.connectionFailed = false;
                             playerController.PlayButtonSound();
+                        }
+                    }
+                    if (PlayerPrefsX.GetPersistentBool("multiplayer") == true)
+                    {
+                        if (conduit.range != playerController.networkedConduitRange || netFlag == true)
+                        {
+                            NetworkSend net = playerController.networkController.networkSend;
+                            Vector3 location = conduit.gameObject.transform.position;
+                            updateNetworkConduitCoroutine = StartCoroutine(net.SendConduitData(location,conduit.range));
+                            playerController.networkedConduitRange = conduit.range;
                         }
                     }
                 }
 
                 if (obj.GetComponent<DarkMatterConduit>() != null)
                 {
+                    bool netFlag = false;
                     GUI.DrawTexture(guiCoordinates.speedControlBGRect, textureDictionary.dictionary["Interface Background"]);
                     DarkMatterConduit conduit = obj.GetComponent<DarkMatterConduit>();
                     if (conduit.connectionFailed == false)
@@ -278,15 +349,27 @@ public class MachineGUI : MonoBehaviour
                         GUI.Label(guiCoordinates.outputLabelRect, "Offline");
                         if (GUI.Button(guiCoordinates.outputControlButton2Rect, "Reboot"))
                         {
+                            netFlag = true;
                             conduit.connectionAttempts = 0;
                             conduit.connectionFailed = false;
                             playerController.PlayButtonSound();
+                        }
+                    }
+                    if (PlayerPrefsX.GetPersistentBool("multiplayer") == true)
+                    {
+                        if (conduit.range != playerController.networkedConduitRange || netFlag == true)
+                        {
+                            NetworkSend net = playerController.networkController.networkSend;
+                            Vector3 location = conduit.gameObject.transform.position;
+                            updateNetworkConduitCoroutine = StartCoroutine(net.SendConduitData(location,conduit.range));
+                            playerController.networkedConduitRange = conduit.range;
                         }
                     }
                 }
 
                 if (obj.GetComponent<HeatExchanger>() != null)
                 {
+                    bool netFlag = false;
                     GUI.DrawTexture(guiCoordinates.speedControlBGRect, textureDictionary.dictionary["Interface Background"]);
                     HeatExchanger hx = obj.GetComponent<HeatExchanger>();
                     if (hx.inputObject != null)
@@ -303,9 +386,20 @@ public class MachineGUI : MonoBehaviour
                                 GUI.Label(guiCoordinates.outputLabelRect, "Offline");
                                 if (GUI.Button(guiCoordinates.outputControlButton2Rect, "Reboot"))
                                 {
+                                    netFlag = true;
                                     hx.connectionAttempts = 0;
                                     hx.connectionFailed = false;
                                     playerController.PlayButtonSound();
+                                }
+                            }
+                            if (PlayerPrefsX.GetPersistentBool("multiplayer") == true)
+                            {
+                                if (hx.speed != playerController.networkedMachineSpeed || netFlag == true)
+                                {
+                                    NetworkSend net = playerController.networkController.networkSend;
+                                    Vector3 location = hx.gameObject.transform.position;
+                                    updateNetworkMachineCoroutine = StartCoroutine(net.SendMachineData(location,hx.speed));
+                                    playerController.networkedMachineSpeed = hx.speed;
                                 }
                             }
                         }
@@ -353,10 +447,21 @@ public class MachineGUI : MonoBehaviour
                     {
                         GUI.Label(guiCoordinates.outputLabelRect, "No Power");
                     }
+                    if (PlayerPrefsX.GetPersistentBool("multiplayer") == true)
+                    {
+                        if (auger.speed != playerController.networkedMachineSpeed)
+                        {
+                            NetworkSend net = playerController.networkController.networkSend;
+                            Vector3 location = auger.gameObject.transform.position;
+                            updateNetworkMachineCoroutine = StartCoroutine(net.SendMachineData(location,auger.speed));
+                            playerController.networkedMachineSpeed = auger.speed;
+                        }
+                    }
                 }
 
                 if (obj.GetComponent<UniversalExtractor>() != null)
                 {
+                    bool netFlag = false;
                     GUI.DrawTexture(guiCoordinates.speedControlBGRect, textureDictionary.dictionary["Interface Background"]);
                     UniversalExtractor extractor = obj.GetComponent<UniversalExtractor>();
                     if (extractor.connectionFailed == false)
@@ -377,14 +482,26 @@ public class MachineGUI : MonoBehaviour
                         GUI.Label(guiCoordinates.outputLabelRect, "Offline");
                         if (GUI.Button(guiCoordinates.outputControlButton2Rect, "Reboot"))
                         {
+                            netFlag = true;
                             extractor.connectionAttempts = 0;
                             extractor.connectionFailed = false;
                             playerController.PlayButtonSound();
                         }
                     }
+                    if (PlayerPrefsX.GetPersistentBool("multiplayer") == true)
+                    {
+                        if (extractor.speed != playerController.networkedMachineSpeed || netFlag == true)
+                        {
+                            NetworkSend net = playerController.networkController.networkSend;
+                            Vector3 location = extractor.gameObject.transform.position;
+                            updateNetworkMachineCoroutine = StartCoroutine(net.SendMachineData(location,extractor.speed));
+                            playerController.networkedMachineSpeed = extractor.speed;
+                        }
+                    }
                 }
                 if (obj.GetComponent<DarkMatterCollector>() != null)
                 {
+                    bool netFlag = false;
                     GUI.DrawTexture(guiCoordinates.speedControlBGRect, textureDictionary.dictionary["Interface Background"]);
                     DarkMatterCollector collector = obj.GetComponent<DarkMatterCollector>();
                     if (collector.connectionFailed == false)
@@ -404,15 +521,27 @@ public class MachineGUI : MonoBehaviour
                         GUI.Label(guiCoordinates.outputLabelRect, "Offline");
                         if (GUI.Button(guiCoordinates.outputControlButton2Rect, "Reboot"))
                         {
+                            netFlag = true;
                             collector.connectionAttempts = 0;
                             collector.connectionFailed = false;
                             playerController.PlayButtonSound();
+                        }
+                    }
+                    if (PlayerPrefsX.GetPersistentBool("multiplayer") == true)
+                    {
+                        if (collector.speed != playerController.networkedMachineSpeed || netFlag == true)
+                        {
+                            NetworkSend net = playerController.networkController.networkSend;
+                            Vector3 location = collector.gameObject.transform.position;
+                            updateNetworkMachineCoroutine = StartCoroutine(net.SendMachineData(location,collector.speed));
+                            playerController.networkedMachineSpeed = collector.speed;
                         }
                     }
                 }
 
                 if (obj.GetComponent<Smelter>() != null)
                 {
+                    bool netFlag = false;
                     GUI.DrawTexture(guiCoordinates.speedControlBGRect, textureDictionary.dictionary["Interface Background"]);
                     Smelter smelter = obj.GetComponent<Smelter>();
                     if (smelter.connectionFailed == false)
@@ -433,15 +562,27 @@ public class MachineGUI : MonoBehaviour
                         GUI.Label(guiCoordinates.outputLabelRect, "Offline");
                         if (GUI.Button(guiCoordinates.outputControlButton2Rect, "Reboot"))
                         {
+                            netFlag = true;
                             smelter.connectionAttempts = 0;
                             smelter.connectionFailed = false;
                             playerController.PlayButtonSound();
+                        }
+                    }
+                    if (PlayerPrefsX.GetPersistentBool("multiplayer") == true)
+                    {
+                        if (smelter.speed != playerController.networkedMachineSpeed || netFlag == true)
+                        {
+                            NetworkSend net = playerController.networkController.networkSend;
+                            Vector3 location = smelter.gameObject.transform.position;
+                            updateNetworkMachineCoroutine = StartCoroutine(net.SendMachineData(location,smelter.speed));
+                            playerController.networkedMachineSpeed = smelter.speed;
                         }
                     }
                 }
 
                 if (obj.GetComponent<AlloySmelter>() != null)
                 {
+                    bool netFlag = false;
                     GUI.DrawTexture(guiCoordinates.speedControlBGRect, textureDictionary.dictionary["Interface Background"]);
                     AlloySmelter alloySmelter = obj.GetComponent<AlloySmelter>();
                     if (alloySmelter.connectionFailed == false)
@@ -461,15 +602,27 @@ public class MachineGUI : MonoBehaviour
                         GUI.Label(guiCoordinates.outputLabelRect, "Offline");
                         if (GUI.Button(guiCoordinates.outputControlButton2Rect, "Reboot"))
                         {
+                            netFlag = true;
                             alloySmelter.connectionAttempts = 0;
                             alloySmelter.connectionFailed = false;
                             playerController.PlayButtonSound();
+                        }
+                    }
+                    if (PlayerPrefsX.GetPersistentBool("multiplayer") == true)
+                    {
+                        if (alloySmelter.speed != playerController.networkedMachineSpeed || netFlag == true)
+                        {
+                            NetworkSend net = playerController.networkController.networkSend;
+                            Vector3 location = alloySmelter.gameObject.transform.position;
+                            updateNetworkMachineCoroutine = StartCoroutine(net.SendMachineData(location,alloySmelter.speed));
+                            playerController.networkedMachineSpeed = alloySmelter.speed;
                         }
                     }
                 }
 
                 if (obj.GetComponent<Press>() != null)
                 {
+                    bool netFlag = false;
                     GUI.DrawTexture(guiCoordinates.speedControlBGRect, textureDictionary.dictionary["Interface Background"]);
                     Press press = obj.GetComponent<Press>();
                     if (press.connectionFailed == false)
@@ -489,15 +642,27 @@ public class MachineGUI : MonoBehaviour
                         GUI.Label(guiCoordinates.outputLabelRect, "Offline");
                         if (GUI.Button(guiCoordinates.outputControlButton2Rect, "Reboot"))
                         {
+                            netFlag = true;
                             press.connectionAttempts = 0;
                             press.connectionFailed = false;
                             playerController.PlayButtonSound();
+                        }
+                    }
+                    if (PlayerPrefsX.GetPersistentBool("multiplayer") == true)
+                    {
+                        if (press.speed != playerController.networkedMachineSpeed || netFlag == true)
+                        {
+                            NetworkSend net = playerController.networkController.networkSend;
+                            Vector3 location = press.gameObject.transform.position;
+                            updateNetworkMachineCoroutine = StartCoroutine(net.SendMachineData(location,press.speed));
+                            playerController.networkedMachineSpeed = press.speed;
                         }
                     }
                 }
 
                 if (obj.GetComponent<Extruder>() != null)
                 {
+                    bool netFlag = false;
                     GUI.DrawTexture(guiCoordinates.speedControlBGRect, textureDictionary.dictionary["Interface Background"]);
                     Extruder extruder = obj.GetComponent<Extruder>();
                     if (extruder.connectionFailed == false)
@@ -517,15 +682,27 @@ public class MachineGUI : MonoBehaviour
                         GUI.Label(guiCoordinates.outputLabelRect, "Offline");
                         if (GUI.Button(guiCoordinates.outputControlButton2Rect, "Reboot"))
                         {
+                            netFlag = true;
                             extruder.connectionAttempts = 0;
                             extruder.connectionFailed = false;
                             playerController.PlayButtonSound();
+                        }
+                    }
+                    if (PlayerPrefsX.GetPersistentBool("multiplayer") == true)
+                    {
+                        if (extruder.speed != playerController.networkedMachineSpeed || netFlag == true)
+                        {
+                            NetworkSend net = playerController.networkController.networkSend;
+                            Vector3 location = extruder.gameObject.transform.position;
+                            updateNetworkMachineCoroutine = StartCoroutine(net.SendMachineData(location,extruder.speed));
+                            playerController.networkedMachineSpeed = extruder.speed;
                         }
                     }
                 }
 
                 if (obj.GetComponent<ModMachine>() != null)
                 {
+                    bool netFlag = false;
                     GUI.DrawTexture(guiCoordinates.speedControlBGRect, textureDictionary.dictionary["Interface Background"]);
                     ModMachine modMachine = obj.GetComponent<ModMachine>();
                     if (modMachine.connectionFailed == false)
@@ -545,9 +722,20 @@ public class MachineGUI : MonoBehaviour
                         GUI.Label(guiCoordinates.outputLabelRect, "Offline");
                         if (GUI.Button(guiCoordinates.outputControlButton2Rect, "Reboot"))
                         {
+                            netFlag = true;
                             modMachine.connectionAttempts = 0;
                             modMachine.connectionFailed = false;
                             playerController.PlayButtonSound();
+                        }
+                    }
+                    if (PlayerPrefsX.GetPersistentBool("multiplayer") == true)
+                    {
+                        if (modMachine.speed != playerController.networkedMachineSpeed || netFlag == true)
+                        {
+                            NetworkSend net = playerController.networkController.networkSend;
+                            Vector3 location = modMachine.gameObject.transform.position;
+                            updateNetworkMachineCoroutine = StartCoroutine(net.SendMachineData(location,modMachine.speed));
+                            playerController.networkedMachineSpeed = modMachine.speed;
                         }
                     }
                 }
@@ -572,6 +760,16 @@ public class MachineGUI : MonoBehaviour
                     {
                         GUI.Label(guiCoordinates.outputLabelRect, "No Power");
                     }
+                    if (PlayerPrefsX.GetPersistentBool("multiplayer") == true)
+                    {
+                        if (turret.speed != playerController.networkedMachineSpeed)
+                        {
+                            NetworkSend net = playerController.networkController.networkSend;
+                            Vector3 location = turret.gameObject.transform.position;
+                            updateNetworkMachineCoroutine = StartCoroutine(net.SendMachineData(location,turret.speed));
+                            playerController.networkedMachineSpeed = turret.speed;
+                        }
+                    }
                 }
 
                 if (obj.GetComponent<MissileTurret>() != null)
@@ -594,10 +792,21 @@ public class MachineGUI : MonoBehaviour
                     {
                         GUI.Label(guiCoordinates.outputLabelRect, "No Power");
                     }
+                    if (PlayerPrefsX.GetPersistentBool("multiplayer") == true)
+                    {
+                        if (turret.speed != playerController.networkedMachineSpeed)
+                        {
+                            NetworkSend net = playerController.networkController.networkSend;
+                            Vector3 location = turret.gameObject.transform.position;
+                            updateNetworkMachineCoroutine = StartCoroutine(net.SendMachineData(location,turret.speed));
+                            playerController.networkedMachineSpeed = turret.speed;
+                        }
+                    }
                 }
 
                 if (obj.GetComponent<GearCutter>() != null)
                 {
+                    bool netFlag = false;
                     GUI.DrawTexture(guiCoordinates.speedControlBGRect, textureDictionary.dictionary["Interface Background"]);
                     GearCutter gearCutter = obj.GetComponent<GearCutter>();
                     if (gearCutter.connectionFailed == false)
@@ -617,9 +826,20 @@ public class MachineGUI : MonoBehaviour
                         GUI.Label(guiCoordinates.outputLabelRect, "Offline");
                         if (GUI.Button(guiCoordinates.outputControlButton2Rect, "Reboot"))
                         {
+                            netFlag = true;
                             gearCutter.connectionAttempts = 0;
                             gearCutter.connectionFailed = false;
                             playerController.PlayButtonSound();
+                        }
+                    }
+                    if (PlayerPrefsX.GetPersistentBool("multiplayer") == true)
+                    {
+                        if (gearCutter.speed != playerController.networkedMachineSpeed || netFlag == true)
+                        {
+                            NetworkSend net = playerController.networkController.networkSend;
+                            Vector3 location = gearCutter.gameObject.transform.position;
+                            updateNetworkMachineCoroutine = StartCoroutine(net.SendMachineData(location,gearCutter.speed));
+                            playerController.networkedMachineSpeed = gearCutter.speed;
                         }
                     }
                 }

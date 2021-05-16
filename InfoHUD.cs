@@ -20,17 +20,13 @@ public class InfoHUD : MonoBehaviour
     }
 
     //! Returns true if the info hud should be drawn.
-    private bool ShouldDrawInfoHud()
+    public bool ShouldDrawInfoHud()
     {
         return !playerController.stateManager.Busy()
         && playerController.objectInSight != playerController.gameObject
         && GetComponent<MainMenu>().finishedLoading == true
         && playerController.objectInSight != null
-        && playerController.building == false
-        && playerController.inventoryOpen == false
-        && playerController.marketGUIopen == false
-        && playerController.escapeMenuOpen == false
-        && playerController.tabletOpen == false;
+        && !playerController.GuiOpen();
     }
 
     //! Called by unity engine for rendering and handling GUI events.
@@ -61,9 +57,9 @@ public class InfoHUD : MonoBehaviour
             {
                 machineDisplayID = playerController.machineID;
             }
-            else if (playerController.machineID.Length > playerController.stateManager.WorldName.Length)
+            else if (playerController.machineID.Length > playerController.stateManager.worldName.Length)
             {
-                machineDisplayID = playerController.machineID.Substring(playerController.stateManager.WorldName.Length);
+                machineDisplayID = playerController.machineID.Substring(playerController.stateManager.worldName.Length);
             }
             else
             {
@@ -74,9 +70,9 @@ public class InfoHUD : MonoBehaviour
             {
                 machineDisplayInputID = playerController.machineInputID;
             }
-            else if (playerController.machineInputID.Length > playerController.stateManager.WorldName.Length)
+            else if (playerController.machineInputID.Length > playerController.stateManager.worldName.Length)
             {
-                machineDisplayInputID = playerController.machineInputID.Substring(playerController.stateManager.WorldName.Length);
+                machineDisplayInputID = playerController.machineInputID.Substring(playerController.stateManager.worldName.Length);
             }
             else
             {
@@ -87,9 +83,9 @@ public class InfoHUD : MonoBehaviour
             {
                 machineDisplayInputID2 = playerController.machineInputID2;
             }
-            else if (playerController.machineInputID2.Length > playerController.stateManager.WorldName.Length)
+            else if (playerController.machineInputID2.Length > playerController.stateManager.worldName.Length)
             {
-                machineDisplayInputID2 = playerController.machineInputID2.Substring(playerController.stateManager.WorldName.Length);
+                machineDisplayInputID2 = playerController.machineInputID2.Substring(playerController.stateManager.worldName.Length);
             }
             else
             {
@@ -100,9 +96,9 @@ public class InfoHUD : MonoBehaviour
             {
                 machineDisplayOutputID = playerController.machineOutputID;
             }
-            else if (playerController.machineOutputID.Length > playerController.stateManager.WorldName.Length)
+            else if (playerController.machineOutputID.Length > playerController.stateManager.worldName.Length)
             {
-                machineDisplayOutputID = playerController.machineOutputID.Substring(playerController.stateManager.WorldName.Length);
+                machineDisplayOutputID = playerController.machineOutputID.Substring(playerController.stateManager.worldName.Length);
             }
             else
             {
@@ -113,9 +109,9 @@ public class InfoHUD : MonoBehaviour
             {
                 machineDisplayOutputID2 = playerController.machineOutputID2;
             }
-            else if (playerController.machineOutputID2.Length > playerController.stateManager.WorldName.Length)
+            else if (playerController.machineOutputID2.Length > playerController.stateManager.worldName.Length)
             {
-                machineDisplayOutputID2 = playerController.machineOutputID2.Substring(playerController.stateManager.WorldName.Length);
+                machineDisplayOutputID2 = playerController.machineOutputID2.Substring(playerController.stateManager.worldName.Length);
             }
             else
             {
@@ -141,6 +137,18 @@ public class InfoHUD : MonoBehaviour
                     GUI.Label(guiCoordinates.messageRect, "Storage Container" + "\nPress E to open." + "\nPress F to Collect.");
                 }
             }
+            else if (obj.GetComponent<NetworkPlayer>() != null)
+            {
+                int f = GUI.skin.label.fontSize;
+                GUI.skin.label.fontSize = 16;
+                GUIContent content = new GUIContent(obj.name);
+                GUIStyle style = GUI.skin.box;
+                style.alignment = TextAnchor.MiddleCenter;
+                Vector2 size = style.CalcSize(content);
+                Rect resourceInfoRect = new Rect((Screen.width / 2) - (size.x / 2), (Screen.height - 70) - (size.y / 2), size.x, size.y);
+                GUI.Label(resourceInfoRect, obj.name);
+                GUI.skin.label.fontSize = f;
+            }
             else if (obj.GetComponent<DarkMatter>() != null || obj.GetComponent<UniversalResource>() != null)
             {
                 string resourceName = obj.GetComponent<DarkMatter>() != null ? "Dark Matter" : obj.GetComponent<UniversalResource>().type;
@@ -150,7 +158,7 @@ public class InfoHUD : MonoBehaviour
                 GUIStyle style = GUI.skin.box;
                 style.alignment = TextAnchor.MiddleCenter;
                 Vector2 size = style.CalcSize(content);
-                Rect resourceInfoRect = new Rect((Screen.width / 2) - (size.x / 2), (Screen.height - 70) - (size.y / 2), size.x, size.y);
+                Rect resourceInfoRect = new Rect((Screen.width / 2) - (size.x / 2.1f), (Screen.height - 70) - (size.y / 2), size.x, size.y);
                 GUI.Label(resourceInfoRect, resourceName);
                 GUI.skin.label.fontSize = f;
             }
@@ -162,12 +170,12 @@ public class InfoHUD : MonoBehaviour
                 GUIStyle style = GUI.skin.box;
                 style.alignment = TextAnchor.MiddleCenter;
                 Vector2 size = style.CalcSize(content);
-                Rect resourceInfoRect = new Rect((Screen.width / 2) - (size.x / 2), (Screen.height - 70) - (size.y / 2), size.x, size.y);
+                Rect resourceInfoRect = new Rect((Screen.width / 2) - (size.x / 2.1f), (Screen.height - 70) - (size.y / 2), size.x, size.y);
                 GUI.Label(resourceInfoRect, "Iron Block");
                 if (playerController.paintGunActive == false)
                 {
                     GUI.DrawTexture(guiCoordinates.buildInfoRectBG, textureDictionary.dictionary["Interface Background"]);
-                    GUI.Label(guiCoordinates.buildInfoRect, "Press F to remove blocks.\nPress B to add blocks.\nPress Q to stop building.");
+                    GUI.Label(guiCoordinates.buildInfoRect, "Press F to remove blocks.\nPress B to add blocks.\nPress B to stop building.");
                 }
                 GUI.skin.label.fontSize = f;
             }
@@ -179,12 +187,12 @@ public class InfoHUD : MonoBehaviour
                 GUIStyle style = GUI.skin.box;
                 style.alignment = TextAnchor.MiddleCenter;
                 Vector2 size = style.CalcSize(content);
-                Rect resourceInfoRect = new Rect((Screen.width / 2) - (size.x / 2), (Screen.height - 70) - (size.y / 2), size.x, size.y);
+                Rect resourceInfoRect = new Rect((Screen.width / 2) - (size.x / 2.1f), (Screen.height - 70) - (size.y / 2), size.x, size.y);
                 GUI.Label(resourceInfoRect, "Steel Block");
                 if (playerController.paintGunActive == false)
                 {
                     GUI.DrawTexture(guiCoordinates.buildInfoRectBG, textureDictionary.dictionary["Interface Background"]);
-                    GUI.Label(guiCoordinates.buildInfoRect, "Press F to remove blocks.\nPress B to add blocks.\nPress Q to stop building.");
+                    GUI.Label(guiCoordinates.buildInfoRect, "Press F to remove blocks.\nPress B to add blocks.\nPress B to stop building.");
                 }
                 GUI.skin.label.fontSize = f;
             }
@@ -196,12 +204,12 @@ public class InfoHUD : MonoBehaviour
                 GUIStyle style = GUI.skin.box;
                 style.alignment = TextAnchor.MiddleCenter;
                 Vector2 size = style.CalcSize(content);
-                Rect resourceInfoRect = new Rect((Screen.width / 2) - (size.x / 2), (Screen.height - 70) - (size.y / 2), size.x, size.y);
+                Rect resourceInfoRect = new Rect((Screen.width / 2) - (size.x / 2.1f), (Screen.height - 70) - (size.y / 2), size.x, size.y);
                 GUI.Label(resourceInfoRect, "Glass Block");
                 if (playerController.paintGunActive == false)
                 {
                     GUI.DrawTexture(guiCoordinates.buildInfoRectBG, textureDictionary.dictionary["Interface Background"]);
-                    GUI.Label(guiCoordinates.buildInfoRect, "Press F to remove blocks.\nPress B to add blocks.\nPress Q to stop building.");
+                    GUI.Label(guiCoordinates.buildInfoRect, "Press F to remove blocks.\nPress B to add blocks.\nPress B to stop building.");
                 }
                 GUI.skin.label.fontSize = f;
             }
@@ -213,12 +221,30 @@ public class InfoHUD : MonoBehaviour
                 GUIStyle style = GUI.skin.box;
                 style.alignment = TextAnchor.MiddleCenter;
                 Vector2 size = style.CalcSize(content);
-                Rect resourceInfoRect = new Rect((Screen.width / 2) - (size.x / 2), (Screen.height - 70) - (size.y / 2), size.x, size.y);
+                Rect resourceInfoRect = new Rect((Screen.width / 2) - (size.x / 2.1f), (Screen.height - 70) - (size.y / 2), size.x, size.y);
                 GUI.Label(resourceInfoRect, "Brick Block");
                 if (playerController.paintGunActive == false)
                 {
                     GUI.DrawTexture(guiCoordinates.buildInfoRectBG, textureDictionary.dictionary["Interface Background"]);
-                    GUI.Label(guiCoordinates.buildInfoRect, "Press F to remove blocks.\nPress B to add blocks.\nPress Q to stop building.");
+                    GUI.Label(guiCoordinates.buildInfoRect, "Press F to remove blocks.\nPress B to add blocks.\nPress B to stop building.");
+                }
+                GUI.skin.label.fontSize = f;
+            }
+            else if (obj.GetComponent<ModBlock>() != null)
+            {
+                string blockName = obj.GetComponent<ModBlock>().blockName;
+                int f = GUI.skin.label.fontSize;
+                GUI.skin.label.fontSize = 16;
+                GUIContent content = new GUIContent(blockName);
+                GUIStyle style = GUI.skin.box;
+                style.alignment = TextAnchor.MiddleCenter;
+                Vector2 size = style.CalcSize(content);
+                Rect resourceInfoRect = new Rect((Screen.width / 2) - (size.x / 2.1f), (Screen.height - 70) - (size.y / 2), size.x, size.y);
+                GUI.Label(resourceInfoRect, blockName);
+                if (playerController.paintGunActive == false)
+                {
+                    GUI.DrawTexture(guiCoordinates.buildInfoRectBG, textureDictionary.dictionary["Interface Background"]);
+                    GUI.Label(guiCoordinates.buildInfoRect, "Press F to remove blocks.\nPress B to add blocks.\nPress B to stop building.");
                 }
                 GUI.skin.label.fontSize = f;
             }
@@ -226,9 +252,9 @@ public class InfoHUD : MonoBehaviour
             {
                 GUI.Label(guiCoordinates.messageRect, "\nElectric Light" + "\nPress F to Collect.");
             }
-            else if (obj.GetComponent<AirLock>() != null)
+            else if (obj.GetComponent<Door>() != null)
             {
-                GUI.Label(guiCoordinates.messageRect, "Quantum Hatchway" + "\nPress E to interact." + "\nPress F to Collect.");
+                GUI.Label(guiCoordinates.messageRect, obj.GetComponent<Door>().type + "\nPress E to operate." + "\nPress Ctrl+E to edit." + "\nPress F to Collect.");
             }
             else if (obj.GetComponent<StorageComputer>() != null)
             {
@@ -735,12 +761,12 @@ public class InfoHUD : MonoBehaviour
                     GUIStyle style = GUI.skin.box;
                     style.alignment = TextAnchor.MiddleCenter;
                     Vector2 size = style.CalcSize(content);
-                    Rect resourceInfoRect = new Rect((Screen.width / 2) - (size.x / 2), (Screen.height - 70) - (size.y / 2), size.x, size.y);
+                    Rect resourceInfoRect = new Rect((Screen.width / 2) - (size.x / 2.1f), (Screen.height - 70) - (size.y / 2), size.x, size.y);
                     GUI.Label(resourceInfoRect, "Iron Structure");
                     if (playerController.paintGunActive == false)
                     {
                         GUI.DrawTexture(guiCoordinates.buildInfoRectBG, textureDictionary.dictionary["Interface Background"]);
-                        GUI.Label(guiCoordinates.buildInfoRect, "Press F to remove blocks.\nPress B to add blocks.\nPress Q to stop building.");
+                        GUI.Label(guiCoordinates.buildInfoRect, "Press F to remove blocks.\nPress B to add blocks.\nPress B to stop building.");
                     }
                     GUI.skin.label.fontSize = f;
                 }
@@ -752,12 +778,12 @@ public class InfoHUD : MonoBehaviour
                     GUIStyle style = GUI.skin.box;
                     style.alignment = TextAnchor.MiddleCenter;
                     Vector2 size = style.CalcSize(content);
-                    Rect resourceInfoRect = new Rect((Screen.width / 2) - (size.x / 2), (Screen.height - 70) - (size.y / 2), size.x, size.y);
+                    Rect resourceInfoRect = new Rect((Screen.width / 2) - (size.x / 2.1f), (Screen.height - 70) - (size.y / 2), size.x, size.y);
                     GUI.Label(resourceInfoRect, "Glass Structure");
                     if (playerController.paintGunActive == false)
                     {
                         GUI.DrawTexture(guiCoordinates.buildInfoRectBG, textureDictionary.dictionary["Interface Background"]);
-                        GUI.Label(guiCoordinates.buildInfoRect, "Press F to remove blocks.\nPress B to add blocks.\nPress Q to stop building.");
+                        GUI.Label(guiCoordinates.buildInfoRect, "Press F to remove blocks.\nPress B to add blocks.\nPress B to stop building.");
                     }
                     GUI.skin.label.fontSize = f;
                 }
@@ -769,12 +795,12 @@ public class InfoHUD : MonoBehaviour
                     GUIStyle style = GUI.skin.box;
                     style.alignment = TextAnchor.MiddleCenter;
                     Vector2 size = style.CalcSize(content);
-                    Rect resourceInfoRect = new Rect((Screen.width / 2) - (size.x / 2), (Screen.height - 70) - (size.y / 2), size.x, size.y);
+                    Rect resourceInfoRect = new Rect((Screen.width / 2) - (size.x / 2.1f), (Screen.height - 70) - (size.y / 2), size.x, size.y);
                     GUI.Label(resourceInfoRect, "Steel Structure");
                     if (playerController.paintGunActive == false)
                     {
                         GUI.DrawTexture(guiCoordinates.buildInfoRectBG, textureDictionary.dictionary["Interface Background"]);
-                        GUI.Label(guiCoordinates.buildInfoRect, "Press F to remove blocks.\nPress B to add blocks.\nPress Q to stop building.");
+                        GUI.Label(guiCoordinates.buildInfoRect, "Press F to remove blocks.\nPress B to add blocks.\nPress B to stop building.");
                     }
                     GUI.skin.label.fontSize = f;
                 }
@@ -786,12 +812,40 @@ public class InfoHUD : MonoBehaviour
                     GUIStyle style = GUI.skin.box;
                     style.alignment = TextAnchor.MiddleCenter;
                     Vector2 size = style.CalcSize(content);
-                    Rect resourceInfoRect = new Rect((Screen.width / 2) - (size.x / 2), (Screen.height - 70) - (size.y / 2), size.x, size.y);
+                    Rect resourceInfoRect = new Rect((Screen.width / 2) - (size.x / 2.1f), (Screen.height - 70) - (size.y / 2), size.x, size.y);
                     GUI.Label(resourceInfoRect, "Brick Structure");
                     if (playerController.paintGunActive == false)
                     {
                         GUI.DrawTexture(guiCoordinates.buildInfoRectBG, textureDictionary.dictionary["Interface Background"]);
-                        GUI.Label(guiCoordinates.buildInfoRect, "Press F to remove blocks.\nPress B to add blocks.\nPress Q to stop building.");
+                        GUI.Label(guiCoordinates.buildInfoRect, "Press F to remove blocks.\nPress B to add blocks.\nPress B to stop building.");
+                    }
+                    GUI.skin.label.fontSize = f;
+                }
+                if (obj.name.Equals("modBlockHolder(Clone)"))
+                {
+                    string blockType = "Mod";
+                    Transform[] transforms = obj.GetComponentsInChildren<Transform>(true);
+                    foreach (Transform t in transforms)
+                    {
+                        ModBlock modBlock = t.gameObject.GetComponentInChildren<ModBlock>();
+                        if (modBlock != null)
+                        {
+                            blockType = modBlock.blockName;
+                            break;
+                        }
+                    }
+                    int f = GUI.skin.label.fontSize;
+                    GUI.skin.label.fontSize = 16;
+                    GUIContent content = new GUIContent(blockType);
+                    GUIStyle style = GUI.skin.box;
+                    style.alignment = TextAnchor.MiddleCenter;
+                    Vector2 size = style.CalcSize(content);
+                    Rect resourceInfoRect = new Rect((Screen.width / 2) - (size.x / 2.1f), (Screen.height - 70) - (size.y / 2), size.x, size.y);
+                    GUI.Label(resourceInfoRect, blockType);
+                    if (playerController.paintGunActive == false)
+                    {
+                        GUI.DrawTexture(guiCoordinates.buildInfoRectBG, textureDictionary.dictionary["Interface Background"]);
+                        GUI.Label(guiCoordinates.buildInfoRect, "Press F to remove blocks.\nPress B to add blocks.\nPress B to stop building.");
                     }
                     GUI.skin.label.fontSize = f;
                 }

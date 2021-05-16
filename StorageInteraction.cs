@@ -21,23 +21,6 @@ public class StorageInteraction
         {
             if (playerController.storageGUIopen == false)
             {
-                if (playerController.building == true)
-                {
-                    if (GameObject.Find("GameManager").GetComponent<GameManager>().working == false)
-                    {
-                        playerController.stoppingBuildCoRoutine = true;
-                        playerController.gameManager.meshManager.CombineBlocks();
-                        playerController.separatedBlocks = false;
-                        playerController.destroyTimer = 0;
-                        playerController.buildTimer = 0;
-                        playerController.building = false;
-                        playerController.destroying = false;
-                    }
-                    else
-                    {
-                        playerController.requestedBuildingStop = true;
-                    }
-                }
                 if (inventory.initialized == true)
                 {
                     Cursor.visible = true;
@@ -81,11 +64,11 @@ public class StorageInteraction
                 thisContainer.SaveData();
                 if (playerController.objectInSight.GetComponent<RailCart>() != null)
                 {
-                    playerController.playerInventory.AddItem("Rail Cart", 1);
+                    interactionController.CollectObject("Rail Cart");
                 }
                 else
                 {
-                    playerController.playerInventory.AddItem("Storage Container", 1);
+                    interactionController.CollectObject("Storage Container");
                 }
                 Object.Destroy(playerController.objectInSight);
                 playerController.PlayCraftingSound();
@@ -110,23 +93,6 @@ public class StorageInteraction
         {
             if (playerController.storageGUIopen == false)
             {
-                if (playerController.building == true)
-                {
-                    if (GameObject.Find("GameManager").GetComponent<GameManager>().working == false)
-                    {
-                        playerController.stoppingBuildCoRoutine = true;
-                        playerController.gameManager.meshManager.CombineBlocks();
-                        playerController.separatedBlocks = false;
-                        playerController.destroyTimer = 0;
-                        playerController.buildTimer = 0;
-                        playerController.building = false;
-                        playerController.destroying = false;
-                    }
-                    else
-                    {
-                        playerController.requestedBuildingStop = true;
-                    }
-                }
                 if (computer.powerON == true && computer.initialized == true)
                 {
                     bool foundContainer = false;

@@ -74,6 +74,16 @@ public class BlockInteraction
         }
     }
 
+    //! Called once per frame when the player is looking at an iron block.
+    public void InteractWithModBlock(string blockName)
+    {
+        playerController.machineGUIopen = false;
+        if (cInput.GetKeyDown("Collect Object"))
+        {
+            interactionController.CollectObject(blockName);
+        }
+    }
+
     //! Called once per frame when the player is looking at a combined mesh object.
     public void InteractWithCombinedMesh()
     {
@@ -104,19 +114,19 @@ public class BlockInteraction
                 playerController.paintGun.GetComponent<AudioSource>().Play();
                 if (playerController.objectInSight.name.Equals("glassHolder(Clone)"))
                 {
-                    interactionController.paintingCoroutine = interactionController.StartCoroutine(PaintMesh(playerController.gameManager.glass, "glassHolder"));
+                    interactionController.paintingCoroutine = interactionController.StartCoroutine(PaintMesh(playerController.gameManager.glassHolders, "glassHolder"));
                 }
                 if (playerController.objectInSight.name.Equals("brickHolder(Clone)"))
                 {
-                    interactionController.paintingCoroutine = interactionController.StartCoroutine(PaintMesh(playerController.gameManager.bricks, "brickHolder"));
+                    interactionController.paintingCoroutine = interactionController.StartCoroutine(PaintMesh(playerController.gameManager.brickHolders, "brickHolder"));
                 }
                 if (playerController.objectInSight.name.Equals("ironHolder(Clone)"))
                 {
-                    interactionController.paintingCoroutine = interactionController.StartCoroutine(PaintMesh(playerController.gameManager.ironBlocks, "ironHolder"));
+                    interactionController.paintingCoroutine = interactionController.StartCoroutine(PaintMesh(playerController.gameManager.ironHolders, "ironHolder"));
                 }
                 if (playerController.objectInSight.name.Equals("steelHolder(Clone)"))
                 {
-                    interactionController.paintingCoroutine = interactionController.StartCoroutine(PaintMesh(playerController.gameManager.steel, "steelHolder"));
+                    interactionController.paintingCoroutine = interactionController.StartCoroutine(PaintMesh(playerController.gameManager.steelHolders, "steelHolder"));
                 }
             }
         }
@@ -130,7 +140,7 @@ public class BlockInteraction
         foreach (GameObject holder in holders)
         {
             holder.GetComponent<Renderer>().material.color = color;
-            FileBasedPrefs.SetBool(playerController.stateManager.WorldName + name + holder.GetComponent<MeshPainter>().ID + "painted", true);
+            FileBasedPrefs.SetBool(playerController.stateManager.worldName + name + holder.GetComponent<MeshPainter>().ID + "painted", true);
             yield return null;
         }
         int interval = 0;

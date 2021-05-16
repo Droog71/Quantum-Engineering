@@ -17,6 +17,9 @@ public class CraftingDictionary
     private readonly string[] quantumHatchwayIngredients = 
     { "Tin Plate", "Dark Matter" };
 
+    private readonly string[] doorIngredients = 
+    { "Iron Plate", "Dark Matter" };
+
     private readonly string[] electricLightIngredients = 
     { "Glass Block", "Tin Plate", "Copper Wire" };
 
@@ -100,6 +103,7 @@ public class CraftingDictionary
 
     private readonly int[] ironBlockAmounts = { 1 };
     private readonly int[] steelBlockAmounts = { 1 };
+    private readonly int[] doorAmounts = { 1, 1 };
     private readonly int[] quantumHatchwayAmounts = { 1, 1 };
     private readonly int[] electricLightAmounts = { 1, 1, 2 };
     private readonly int[] augerAmounts = { 10, 10 };
@@ -138,6 +142,7 @@ public class CraftingDictionary
             { "Iron Ramp", new CraftingRecipe(ironBlockIngredients, ironBlockAmounts, "Iron Ramp", 10) },
             { "Steel Block", new CraftingRecipe(steelBlockIngredients, steelBlockAmounts, "Steel Block", 10) },
             { "Steel Ramp", new CraftingRecipe(steelBlockIngredients, steelBlockAmounts, "Steel Ramp", 10) },
+            { "Door", new CraftingRecipe(doorIngredients, doorAmounts, "Door", 1)  },
             { "Quantum Hatchway", new CraftingRecipe(quantumHatchwayIngredients, quantumHatchwayAmounts, "Quantum Hatchway", 1)  },
             { "Electric Light", new CraftingRecipe(electricLightIngredients, electricLightAmounts, "Electric Light", 1) },
             { "Auger", new CraftingRecipe(augerIngredients, augerAmounts, "Auger", 1) },

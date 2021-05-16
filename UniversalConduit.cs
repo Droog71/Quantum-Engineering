@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -26,6 +27,9 @@ public class UniversalConduit : MonoBehaviour
     private StateManager stateManager;
     private GameObject builtObjects;
     private LineRenderer connectionLine;
+    private Coroutine connectionCoroutine;
+    private List<GameObject> objList;
+    private bool connectionCoroutineBusy;
     private float updateTick;
     private bool linkedToRailCart;
     private int findRailCartsInterval;
@@ -36,17 +40,21 @@ public class UniversalConduit : MonoBehaviour
         connectionLine = gameObject.AddComponent<LineRenderer>();
         conduitItem = GetComponentInChildren<ConduitItem>(true);
         stateManager = FindObjectOfType<StateManager>();
+        objList = new List<GameObject>();
         connectionLine.startWidth = 0.2f;
         connectionLine.endWidth = 0.2f;
         connectionLine.material = lineMat;
         connectionLine.loop = true;
         connectionLine.enabled = false;
-        builtObjects = GameObject.Find("Built_Objects");
+        builtObjects = GameObject.Find("BuiltObjects");
     }
 
     //! Called once per frame by unity engine.
     public void Update()
     {
+        if (ID == "unassigned")
+            return;
+
         updateTick += 1 * Time.deltaTime;
         if (updateTick > 0.5f + (address * 0.001f))
         {
@@ -79,16 +87,9 @@ public class UniversalConduit : MonoBehaviour
                 }
                 if (connectionFailed == false)
                 {
-                    GameObject[] allObjects = GameObject.FindGameObjectsWithTag("Built");
-                    List<GameObject> objList = allObjects.ToList();
-                    objList.Add(GameObject.Find("Rocket"));
-                    objList.Add(GameObject.Find("LanderCargo"));
-                    foreach (GameObject obj in objList)
+                    if (connectionCoroutineBusy == false)
                     {
-                        if (IsValidObject(obj))
-                        {
-                            ConnectToObject(obj);
-                        }
+                        connectionCoroutine = StartCoroutine(AttemptConnection());
                     }
                 }
             }
@@ -151,6 +152,24 @@ public class UniversalConduit : MonoBehaviour
             return !obj.GetComponent<InventoryManager>().ID.Equals("player") && obj.GetComponent<Retriever>() == null && obj.GetComponent<AutoCrafter>() == null;
         }
         return false;
+    }
+
+    private IEnumerator AttemptConnection()
+    {
+        connectionCoroutineBusy = true;
+        GameObject[] allObjects = GameObject.FindGameObjectsWithTag("Built");
+        objList = allObjects.ToList();
+        objList.Add(GameObject.Find("Rocket"));
+        objList.Add(GameObject.Find("LanderCargo"));
+        foreach (GameObject obj in objList)
+        {
+            if (IsValidObject(obj))
+            {
+                ConnectToObject(obj);
+            }
+            yield return null;
+        }
+        connectionCoroutineBusy = false;
     }
 
     //! Puts items into a storage container or other object with attached inventory manager.

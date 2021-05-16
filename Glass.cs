@@ -18,12 +18,15 @@ public class Glass : MonoBehaviour
     //! Called once per frame by unity engine.
     public void Update()
     {
+        if (ID == "unassigned")
+            return;
+
         updateTick += 1 * Time.deltaTime;
         if (updateTick > 0.5f + (address * 0.001f))
         {
             if (stateManager.Busy())
             {
-                 updateTick = 0;
+                updateTick = 0;
                 return;
             }
 

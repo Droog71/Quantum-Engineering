@@ -38,15 +38,17 @@ public class DarkMatterConduit : MonoBehaviour
         connectionLine.material = lineMat;
         connectionLine.loop = true;
         connectionLine.enabled = false;
-        builtObjects = GameObject.Find("Built_Objects");
+        builtObjects = GameObject.Find("BuiltObjects");
         stateManager = FindObjectOfType<StateManager>();
     }
 
     //! Called once per frame by unity engine.
     public void Update()
     {
-        updateTick += 1 * Time.deltaTime;
+        if (ID == "unassigned")
+            return;
 
+        updateTick += 1 * Time.deltaTime;
         if (updateTick > 0.5f + (address * 0.001f))
         {
             if (stateManager.Busy())

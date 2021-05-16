@@ -9,7 +9,7 @@ public class MeshPainter : MonoBehaviour
     //! Called by unity engine on start up to initialize variables.
     public void Start()
     {
-        string worldName = FindObjectOfType<StateManager>().WorldName;
+        string worldName = FindObjectOfType<StateManager>().worldName;
         bool paintedIron = false;
         bool paintedGlass = false;
         bool paintedBrick = false;
@@ -77,8 +77,8 @@ public class MeshPainter : MonoBehaviour
                 }
             }
        }
-        if (gameObject.name.Equals("glassHolder(Clone)"))
-        {
+       if (gameObject.name.Equals("glassHolder(Clone)"))
+       {
             if (FileBasedPrefs.GetBool(worldName + "glassHolder" + ID + "painted") == true)
             {
                 float r = FileBasedPrefs.GetFloat(worldName + "glassHolder" + ID + "Red");
@@ -109,7 +109,7 @@ public class MeshPainter : MonoBehaviour
     //! Saves the color of painted objects.
     private IEnumerator SaveDataCoRoutine()
     {
-        string worldName = GameObject.Find("GameManager").GetComponent<StateManager>().WorldName;
+        string worldName = GameObject.Find("GameManager").GetComponent<StateManager>().worldName;
         if (gameObject.name.Equals("ironHolder(Clone)") && FileBasedPrefs.GetBool(worldName + "ironHolder" + ID + "painted") == true)
         {
             float r = GetComponent<Renderer>().material.color.r;

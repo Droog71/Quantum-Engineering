@@ -47,12 +47,7 @@ public class PlayerGUI : MonoBehaviour
     //! Returns true if the block is a building block, used with combined meshes.
     private bool IsStandardBlock(string type)
     {
-        return type == "Brick"
-        || type == "Glass Block"
-        || type == "Iron Block"
-        || type == "Iron Ramp"
-        || type == "Steel Block"
-        || type == "Steel Ramp";
+        return playerController.GetComponent<BuildController>().blockDictionary.blockDictionary.ContainsKey(type);
     }
 
     //! Returns true if the saving world message should be displayed.
@@ -97,6 +92,13 @@ public class PlayerGUI : MonoBehaviour
         || schematic7 == true;
     }
 
+    private bool ShowCrosshair()
+    {
+        return playerController.crosshairEnabled &&
+        !playerController.GuiOpen() &&
+        !playerController.paintGunActive;
+    }
+
     //! Called by unity engine for rendering and handling GUI events.
     public void OnGUI()
     {
@@ -121,11 +123,45 @@ public class PlayerGUI : MonoBehaviour
             if (playerController.displayingBuildItem == true)
             {
                 GUI.Label(guiCoordinates.topRightInfoRect, "\n\nBuild item set to " + playerController.buildType);
-                GUI.DrawTexture(guiCoordinates.previousBuildItemTextureRect, textureDictionary.dictionary[playerController.previousBuildType]);
-                GUI.DrawTexture(guiCoordinates.buildItemTextureRect, textureDictionary.dictionary[playerController.buildType]);
-                GUI.DrawTexture(guiCoordinates.currentBuildItemTextureRect, textureDictionary.dictionary[playerController.buildType]);
+
+                if (textureDictionary.dictionary.ContainsKey(playerController.previousBuildType + "_Icon"))
+                {
+                    GUI.DrawTexture(guiCoordinates.previousBuildItemTextureRect, textureDictionary.dictionary[playerController.previousBuildType + "_Icon"]);
+                }
+                else
+                {
+                    GUI.DrawTexture(guiCoordinates.previousBuildItemTextureRect, textureDictionary.dictionary[playerController.previousBuildType]);
+                }
+
+                if (textureDictionary.dictionary.ContainsKey(playerController.buildType + "_Icon"))
+                {
+                    GUI.DrawTexture(guiCoordinates.buildItemTextureRect, textureDictionary.dictionary[playerController.buildType + "_Icon"]);
+                }
+                else
+                {
+                    GUI.DrawTexture(guiCoordinates.buildItemTextureRect, textureDictionary.dictionary[playerController.buildType]);
+                }
+
+                if (textureDictionary.dictionary.ContainsKey(playerController.buildType + "_Icon"))
+                {
+                    GUI.DrawTexture(guiCoordinates.currentBuildItemTextureRect, textureDictionary.dictionary[playerController.buildType + "_Icon"]);
+                }
+                else
+                {
+                    GUI.DrawTexture(guiCoordinates.currentBuildItemTextureRect, textureDictionary.dictionary[playerController.buildType]);
+                }
+
                 GUI.DrawTexture(guiCoordinates.buildItemTextureRect, textureDictionary.dictionary["Selection Box"]);
-                GUI.DrawTexture(guiCoordinates.nextBuildItemTextureRect, textureDictionary.dictionary[playerController.nextBuildType]);
+
+                if (textureDictionary.dictionary.ContainsKey(playerController.nextBuildType + "_Icon"))
+                {
+                    GUI.DrawTexture(guiCoordinates.nextBuildItemTextureRect, textureDictionary.dictionary[playerController.nextBuildType + "_Icon"]);
+                }
+                else
+                {
+                    GUI.DrawTexture(guiCoordinates.nextBuildItemTextureRect, textureDictionary.dictionary[playerController.nextBuildType]);
+                }
+
                 int buildItemCount = 0;
                 foreach (InventorySlot slot in playerInventory.inventory)
                 {
@@ -500,7 +536,7 @@ public class PlayerGUI : MonoBehaviour
 
                 RenderSettings.fogDensity = GUI.HorizontalSlider(guiCoordinates.optionsButton9Rect, RenderSettings.fogDensity, 0.00025f, 0.025f);
 
-                gameManager.chunkSize = (int)GUI.HorizontalSlider(guiCoordinates.optionsButton10Rect, gameManager.chunkSize, 100, 500);
+                gameManager.chunkSize = (int)GUI.HorizontalSlider(guiCoordinates.optionsButton10Rect, gameManager.chunkSize, 20, 100);
 
                 string vsyncDisplay = QualitySettings.vSyncCount == 1 ? "ON" : "OFF";
                 if (GUI.Button(guiCoordinates.optionsButton11Rect, "Vsync: " + vsyncDisplay))
@@ -526,7 +562,10 @@ public class PlayerGUI : MonoBehaviour
                 string blockPhysicsDisplay = gameManager.blockPhysics == true ? "ON" : "OFF";
                 if (GUI.Button(guiCoordinates.optionsButton13Rect, "Block Physics: "+ blockPhysicsDisplay))
                 {
-                    gameManager.blockPhysics = !gameManager.blockPhysics;
+                    if (PlayerPrefsX.GetPersistentBool("multiplayer") == false)
+                    {
+                        gameManager.blockPhysics = !gameManager.blockPhysics;
+                    }
                     playerController.PlayButtonSound();
                 }
 
@@ -614,8 +653,8 @@ public class PlayerGUI : MonoBehaviour
 
             if (playerController.stoppingBuildCoRoutine == true || playerController.requestedBuildingStop == true)
             {
-                GUI.DrawTexture(guiCoordinates.highMessageBackgroundRect, textureDictionary.dictionary["Interface Background"]);
-                GUI.Label(guiCoordinates.longHighMessageRect, "Stopping Build System...");
+                GUI.DrawTexture(guiCoordinates.buildingMessageBackgroundRect, textureDictionary.dictionary["Interface Background"]);
+                GUI.Label(guiCoordinates.buildingMessageRect, "Stopping Build System...");
             }
 
             if (playerController.blockLimitMessage == true)
@@ -634,14 +673,26 @@ public class PlayerGUI : MonoBehaviour
             }
 
             // BUILDING INSTRUCTIONS
-            if (playerController.building == true && playerController.tabletOpen == false)
+            bool playerBuilding = playerController.building == true && !playerController.GuiOpen();
+            bool drawingInfoHud = playerController.GetComponent<InfoHUD>().ShouldDrawInfoHud();
+
+            if (playerBuilding && !drawingInfoHud)
             {
                 GUI.DrawTexture(guiCoordinates.buildInfoRectBG, textureDictionary.dictionary["Interface Background"]);
                 int f = GUI.skin.label.fontSize;
                 GUI.skin.label.fontSize = 16;
-                GUI.Label(guiCoordinates.buildInfoRect, "Right click to place block.\nPress F to collect.\nPress R to rotate.\nPress Q to stop building.");
+                GUI.Label(guiCoordinates.buildInfoRect, "Right click to place block.\nPress F to collect.\nPress R or Ctrl+R to rotate.\nPress B to stop building.");
                 GUI.skin.label.fontSize = f;
-                GUI.DrawTexture(guiCoordinates.currentBuildItemTextureRect, textureDictionary.dictionary[playerController.buildType]);
+
+                if (textureDictionary.dictionary.ContainsKey(playerController.buildType + "_Icon"))
+                {
+                    GUI.DrawTexture(guiCoordinates.currentBuildItemTextureRect, textureDictionary.dictionary[playerController.buildType + "_Icon"]);
+                }
+                else
+                {
+                    GUI.DrawTexture(guiCoordinates.currentBuildItemTextureRect, textureDictionary.dictionary[playerController.buildType]);
+                }
+
                 int buildItemCount = 0;
                 foreach (InventorySlot slot in playerInventory.inventory)
                 {
@@ -650,6 +701,7 @@ public class PlayerGUI : MonoBehaviour
                         buildItemCount += slot.amountInSlot;
                     }
                 }
+
                 if (IsStandardBlock(playerController.buildType))
                 {
                     GUI.Label(guiCoordinates.buildItemCountRect, "" + buildItemCount + "\nx" + playerController.buildMultiplier);
@@ -729,23 +781,95 @@ public class PlayerGUI : MonoBehaviour
                 }
             }
 
-            // CROSSHAIR
-            if (!playerController.inventoryOpen && !playerController.machineGUIopen && !playerController.marketGUIopen)
+            // BUILD AMOUNT
+            if (playerController.buildAmountGUIopen)
             {
-                if (!playerController.escapeMenuOpen && !playerController.tabletOpen && !playerController.paintGunActive)
+                GUI.DrawTexture(guiCoordinates.buildAmountRect, textureDictionary.dictionary["Menu Background"]);
+                int f = GUI.skin.label.fontSize;
+                GUI.skin.label.fontSize = 12;
+                GUI.Label(guiCoordinates.buildAmountTitleRect, "Enter Build Amount");
+                GUI.skin.label.fontSize = f;
+
+                string amountString = GUI.TextField(guiCoordinates.buildAmountTextFieldRect, playerController.buildMultiplier.ToString(), 3);
+                try
                 {
-                    if (playerController.crosshairEnabled)
-                    {
-                        GUIContent content = new GUIContent(Resources.Load("Crosshair") as Texture2D);
-                        GUIStyle style = GUI.skin.box;
-                        style.alignment = TextAnchor.MiddleCenter;
-                        Vector2 size = style.CalcSize(content);
-                        size.x = size.x / 3.5f;
-                        size.y = size.y / 4;
-                        Rect crosshairRect = new Rect((Screen.width / 2) - (size.x / 2), (Screen.height / 2) - (size.y / 2), size.x, size.y);
-                        GUI.DrawTexture(crosshairRect, textureDictionary.dictionary["Crosshair"]);
-                    }
+                    playerController.buildMultiplier = int.Parse(amountString);
                 }
+                catch
+                {
+                    // NOOP
+                }
+
+                int i = playerController.buildMultiplier;
+                i = i > 100 ? 100 : i;
+                playerController.buildMultiplier = i;
+
+                if (GUI.Button(guiCoordinates.buildAmountButtonRect, "OK"))
+                {
+                    Cursor.visible = false;
+                    Cursor.lockState = CursorLockMode.Locked;
+                    playerController.buildAmountGUIopen = false;
+                    playerController.PlayButtonSound();
+                }
+            }
+
+            // DOOR SETTINGS
+            if (playerController.doorGUIopen)
+            {
+                GUI.DrawTexture(guiCoordinates.doorSettingsRect, textureDictionary.dictionary["Menu Background"]);
+                int f = GUI.skin.label.fontSize;
+                GUI.skin.label.fontSize = 12;
+                GUI.Label(guiCoordinates.doorTitleRect, "Door Settings");
+                GUI.skin.label.fontSize = f;
+
+                if (GUI.Button(guiCoordinates.doorTextureRect,"Material"))
+                {
+                    Door door = playerController.doorToEdit;
+
+                    if (door.textureIndex < door.textures.Length - 1)
+                        door.textureIndex++;
+                    else
+                        door.textureIndex = 0;
+
+                    door.material = door.textures[door.textureIndex];
+                    gameManager.meshManager.SetMaterial(door.closedObject, door.material);
+                    door.edited = true;
+                    playerController.PlayButtonSound();
+                }
+
+                if (GUI.Button(guiCoordinates.doorSoundRect,"Sound"))
+                {
+                    Door door = playerController.doorToEdit;
+
+                    if (door.audioClip < door.audioClips.Length - 1)
+                        door.audioClip++;
+                    else
+                        door.audioClip = 0;
+
+                    door.GetComponent<AudioSource>().clip = door.audioClips[door.audioClip];
+                    door.GetComponent<AudioSource>().Play();
+                }
+
+                if (GUI.Button(guiCoordinates.doorCloseRect, "OK"))
+                {
+                    Cursor.visible = false;
+                    Cursor.lockState = CursorLockMode.Locked;
+                    playerController.doorGUIopen = false;
+                    playerController.PlayButtonSound();
+                }
+            }
+
+            // CROSSHAIR
+            if (ShowCrosshair() == true)
+            {
+                GUIContent content = new GUIContent(Resources.Load("Crosshair") as Texture2D);
+                GUIStyle style = GUI.skin.box;
+                style.alignment = TextAnchor.MiddleCenter;
+                Vector2 size = style.CalcSize(content);
+                size.x = size.x / 3.5f;
+                size.y = size.y / 4;
+                Rect crosshairRect = new Rect((Screen.width / 2) - (size.x / 2), (Screen.height / 2) - (size.y / 2), size.x, size.y);
+                GUI.DrawTexture(crosshairRect, textureDictionary.dictionary["Crosshair"]);
             }
         }
     }

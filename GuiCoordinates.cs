@@ -18,6 +18,8 @@ public class GuiCoordinates
     public Rect longHighMessageBackgroundRect;
     public Rect secondLineHighMessageBackgroundRect;
     public Rect twoLineHighMessageBackgroundRect;
+    public Rect buildingMessageBackgroundRect;
+    public Rect buildingMessageRect;
 
     //INVENTORY
     public Rect inventoryMesageRect;
@@ -40,6 +42,7 @@ public class GuiCoordinates
 
     public Rect craftingPreviousRect;
     public Rect craftingNextRect;
+    public Rect craftingItemRect;
 
     public Rect inventorySlot1Rect;
     public Rect inventorySlot2Rect;
@@ -76,6 +79,12 @@ public class GuiCoordinates
     public Rect inventorySlot15TexRect;
     public Rect inventorySlot16TexRect;
     public Rect[] inventorySlotRects;
+
+    public Rect inventoryDropSlotRect;
+    public Rect inventoryDropSlotLabelRect;
+
+    public Rect inventoryTrashSlotRect;
+    public Rect inventoryTrashSlotLabelRect;
 
     //STORAGE CONTAINERS
     public Rect storageInventoryBackgroundRect;
@@ -180,6 +189,19 @@ public class GuiCoordinates
     public Rect escapeButton4Rect;
     public Rect escapeButton5Rect;
 
+    //BUILD AMOUNT GUI
+    public Rect buildAmountRect;
+    public Rect buildAmountTitleRect;
+    public Rect buildAmountTextFieldRect;
+    public Rect buildAmountButtonRect;
+
+    //DOOR SETTINGS GUI
+    public Rect doorSettingsRect;
+    public Rect doorTitleRect;
+    public Rect doorTextureRect;
+    public Rect doorSoundRect;
+    public Rect doorCloseRect;
+
     //TABLET MESSAGES
     public Rect topLeftInfoRect;
 
@@ -265,6 +287,9 @@ public class GuiCoordinates
         highMessageBackgroundRect = new Rect((ScreenWidth * 0.42f), (ScreenHeight * 0.28f), (ScreenWidth * 0.18f), (ScreenHeight * 0.05f));
         longHighMessageBackgroundRect = new Rect((ScreenWidth * 0.42f), (ScreenHeight * 0.28f), (ScreenWidth * 0.23f), (ScreenHeight * 0.05f));
 
+        buildingMessageBackgroundRect = new Rect((ScreenWidth * 0.42f), (ScreenHeight * 0.02f), (ScreenWidth * 0.18f), (ScreenHeight * 0.05f));
+        buildingMessageRect = new Rect((ScreenWidth * 0.45f), (ScreenHeight * 0.032f), (ScreenWidth * 0.55f), (ScreenHeight * 0.5f));
+
         lowMessageRect = new Rect((ScreenWidth * 0.47f), (ScreenHeight * 0.644f), (ScreenWidth * 0.5f), (ScreenHeight * 0.5f));
         saveMessageRect = new Rect((ScreenWidth * 0.44f), (ScreenHeight * 0.644f), (ScreenWidth * 0.5f), (ScreenHeight * 0.5f));
         midMessageRect = new Rect((ScreenWidth * 0.455f), (ScreenHeight * 0.562f), (ScreenWidth * 0.5f), (ScreenHeight * 0.5f));
@@ -292,12 +317,13 @@ public class GuiCoordinates
         storageComputerMessageRect = new Rect((ScreenWidth * 0.42f), (ScreenHeight * 0.28f), (ScreenWidth * 0.2f), (ScreenHeight * 0.5f));
 
         craftingTitleRect = new Rect((ScreenWidth * 0.25f), (ScreenHeight * 0.58f), (ScreenWidth * 0.20f), (ScreenHeight * 0.10f));
+        craftingItemRect = new Rect((ScreenWidth * 0.27f), (ScreenHeight * 0.40f), (ScreenWidth * 0.05f), (ScreenHeight * 0.1f));
+        craftingPreviousRect = new Rect((ScreenWidth * 0.08f), (ScreenHeight * 0.63f), (ScreenWidth * 0.07f), (ScreenHeight * 0.025f));
+        craftingNextRect = new Rect((ScreenWidth * 0.45f), (ScreenHeight * 0.63f), (ScreenWidth * 0.07f), (ScreenHeight * 0.025f));
+
         marketTitleRect = new Rect((ScreenWidth * 0.265f), (ScreenHeight * 0.58f), (ScreenWidth * 0.20f), (ScreenHeight * 0.10f));
         marketMoneyRect = new Rect((ScreenWidth * 0.27f), (ScreenHeight * 0.62f), (ScreenWidth * 0.20f), (ScreenHeight * 0.10f));
         marketMessageRect = new Rect((ScreenWidth * 0.08f), (ScreenHeight * 0.92f), (ScreenWidth * 0.42f), (ScreenHeight * 0.31f));
-
-        craftingPreviousRect = new Rect((ScreenWidth * 0.08f), (ScreenHeight * 0.63f), (ScreenWidth * 0.07f), (ScreenHeight * 0.025f));
-        craftingNextRect = new Rect((ScreenWidth * 0.45f), (ScreenHeight * 0.63f), (ScreenWidth * 0.07f), (ScreenHeight * 0.025f));
 
         inventorySlot1Rect = new Rect((ScreenWidth * 0.714f), (ScreenHeight * 0.325f), (ScreenWidth * 0.05f), (ScreenHeight * 0.05f));
         inventorySlot2Rect = new Rect((ScreenWidth * 0.768f), (ScreenHeight * 0.325f), (ScreenWidth * 0.05f), (ScreenHeight * 0.05f));
@@ -368,6 +394,12 @@ public class GuiCoordinates
         inventorySlotRects[13] = inventorySlot14TexRect;
         inventorySlotRects[14] = inventorySlot15TexRect;
         inventorySlotRects[15] = inventorySlot16TexRect;
+
+        inventoryDropSlotRect = new Rect((ScreenWidth * 0.60f), (ScreenHeight * 0.33f), (ScreenWidth * 0.046f), (ScreenHeight * 0.09f));
+        inventoryDropSlotLabelRect = new Rect((ScreenWidth * 0.612f), (ScreenHeight * 0.36f), (ScreenWidth * 0.046f), (ScreenHeight * 0.05f));
+
+        inventoryTrashSlotRect = new Rect((ScreenWidth * 0.60f), (ScreenHeight * 0.60f), (ScreenWidth * 0.046f), (ScreenHeight * 0.09f));
+        inventoryTrashSlotLabelRect = new Rect((ScreenWidth * 0.61f), (ScreenHeight * 0.63f), (ScreenWidth * 0.046f), (ScreenHeight * 0.05f));
 
         //STORAGE CONTAINERS
         storageInventoryBackgroundRect = new Rect(0, (ScreenHeight * 0.20f), (ScreenWidth * 0.60f), (ScreenHeight * 0.62f));
@@ -497,6 +529,19 @@ public class GuiCoordinates
         escapeButton3Rect = new Rect((ScreenWidth * 0.43f), (ScreenHeight * 0.50f), (ScreenWidth * 0.14f), (ScreenHeight * 0.05f));
         escapeButton4Rect = new Rect((ScreenWidth * 0.43f), (ScreenHeight * 0.58f), (ScreenWidth * 0.14f), (ScreenHeight * 0.05f));
         escapeButton5Rect = new Rect((ScreenWidth * 0.43f), (ScreenHeight * 0.66f), (ScreenWidth * 0.14f), (ScreenHeight * 0.05f));
+
+        //BUILD AMOUNT GUI
+        buildAmountRect = new Rect((ScreenWidth * 0.4f), (ScreenHeight * 0.10f), (ScreenWidth * 0.2f), (ScreenHeight * 0.452f));
+        buildAmountTitleRect = new Rect((ScreenWidth * 0.437f), (ScreenHeight * 0.14f), (ScreenWidth * 0.14f), (ScreenHeight * 0.05f));
+        buildAmountTextFieldRect = new Rect((ScreenWidth * 0.43f), (ScreenHeight * 0.22f), (ScreenWidth * 0.14f), (ScreenHeight * 0.05f));
+        buildAmountButtonRect = new Rect((ScreenWidth * 0.43f), (ScreenHeight * 0.30f), (ScreenWidth * 0.14f), (ScreenHeight * 0.05f));
+
+        //DOOR SETTINGS GUI
+        doorSettingsRect = new Rect((ScreenWidth * 0.4f), (ScreenHeight * 0.10f), (ScreenWidth * 0.2f), (ScreenHeight * 0.452f));
+        doorTitleRect = new Rect((ScreenWidth * 0.465f), (ScreenHeight * 0.14f), (ScreenWidth * 0.14f), (ScreenHeight * 0.05f));
+        doorTextureRect = new Rect((ScreenWidth * 0.43f), (ScreenHeight * 0.22f), (ScreenWidth * 0.14f), (ScreenHeight * 0.05f));
+        doorSoundRect = new Rect((ScreenWidth * 0.43f), (ScreenHeight * 0.30f), (ScreenWidth * 0.14f), (ScreenHeight * 0.05f));
+        doorCloseRect = new Rect((ScreenWidth * 0.43f), (ScreenHeight * 0.38f), (ScreenWidth * 0.14f), (ScreenHeight * 0.05f));
 
         //TABLET MESSAGES
         topLeftInfoRect = new Rect(0, 0, (ScreenWidth * 0.5f), (ScreenHeight * 0.2f));

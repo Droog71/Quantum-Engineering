@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using UnityEngine;
+using System.Net;
 
 public class BuildController : MonoBehaviour
 {
@@ -9,6 +10,8 @@ public class BuildController : MonoBehaviour
     private LineRenderer dirLine;
     public Material lineMat;
     public GameObject builtObjects;
+    public AudioClip singleBuildClip;
+    public AudioClip multiBuildClip;
     public bool autoAxis;
     private Coroutine buildBlockCoroutine;
 
@@ -18,7 +21,7 @@ public class BuildController : MonoBehaviour
         playerController = GetComponent<PlayerController>();
         gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
         blockDictionary = new BlockDictionary(playerController);
-        builtObjects = GameObject.Find("Built_Objects");
+        builtObjects = GameObject.Find("BuiltObjects");
     }
 
     //! Called once per frame by unity engine
@@ -28,25 +31,6 @@ public class BuildController : MonoBehaviour
         {
             if (playerController.building == true)
             {
-                playerController.buildTimer += 1 * Time.deltaTime;
-                if (playerController.buildTimer >= 30)
-                {
-                    if (GameObject.Find("GameManager").GetComponent<GameManager>().working == false)
-                    {
-                        playerController.stoppingBuildCoRoutine = true;
-                        gameManager.meshManager.CombineBlocks();
-                        playerController.separatedBlocks = false;
-                        playerController.destroyTimer = 0;
-                        playerController.buildTimer = 0;
-                        playerController.building = false;
-                        playerController.destroying = false;
-                    }
-                    else
-                    {
-                        playerController.requestedBuildingStop = true;
-                    }
-                }
-
                 if (playerController.separatedBlocks == false)
                 {
                     if (gameManager.working == false)
@@ -63,7 +47,7 @@ public class BuildController : MonoBehaviour
                 else
                 {
                     float distance = Vector3.Distance(transform.position, playerController.buildStartPosition);
-                    if (distance > gameManager.chunkSize - 40)
+                    if (distance > gameManager.chunkSize * 0.75f)
                     {
                         if (gameManager.working == false)
                         {
@@ -88,7 +72,7 @@ public class BuildController : MonoBehaviour
                     {
                         float distance = Vector3.Distance(transform.position, playerController.buildObject.transform.position);
                         Material buildObjectMaterial = playerController.buildObject.GetComponent<MeshRenderer>().material;
-                        buildObjectMaterial.color = distance > gameManager.chunkSize - 40 ? Color.red : Color.white;
+                        buildObjectMaterial.color = distance > gameManager.chunkSize * 0.75f ? Color.red : Color.white;
                         if (hit.transform.gameObject.tag == "Built")
                         {
                             if (autoAxis == true)
@@ -106,7 +90,7 @@ public class BuildController : MonoBehaviour
                             SetupFreePlacement(hit);
                         }
                     }
-                    if (Physics.Raycast(Camera.main.gameObject.transform.position, Camera.main.gameObject.transform.forward, out RaycastHit buildHit, gameManager.chunkSize - 40))
+                    if (Physics.Raycast(Camera.main.gameObject.transform.position, Camera.main.gameObject.transform.forward, out RaycastHit buildHit, gameManager.chunkSize * 0.75f))
                     {
                         if (buildHit.collider.gameObject.tag != "CombinedMesh")
                         {
@@ -129,6 +113,10 @@ public class BuildController : MonoBehaviour
                             if (gameManager.working == false)
                             {
                                 gameManager.meshManager.SeparateBlocks(buildHit.point, "all", true);
+                            }
+                            else
+                            {
+                                playerController.requestedChunkLoad = true;
                             }
                         }
                     }
@@ -204,9 +192,6 @@ public class BuildController : MonoBehaviour
             if (znDif > xnDif && znDif > ynDif)
                 playerController.cubeloc = "back";
         }
-
-        playerController.destroyTimer = 0;
-        playerController.buildTimer = 0;
     }
 
     //! Changes the axis along which blocks will be placed.
@@ -236,9 +221,6 @@ public class BuildController : MonoBehaviour
         {
             playerController.cubeloc = "up";
         }
-
-        playerController.destroyTimer = 0;
-        playerController.buildTimer = 0;
     }
 
     //! Implements the current build axis.
@@ -300,6 +282,7 @@ public class BuildController : MonoBehaviour
     private void BuildMachine(string type, RaycastHit hit)
     {
         bool foundItems = false;
+        gameManager.undoBlocks.Clear();
         foreach (InventorySlot slot in playerController.playerInventory.inventory)
         {
             if (foundItems == false)
@@ -348,10 +331,14 @@ public class BuildController : MonoBehaviour
                             {
                                 obj.GetComponent<ModMachine>().machineName = type;
                             }
+                            gameManager.undoBlocks.Add(new GameManager.Block(type, obj));
                             slot.amountInSlot -= 1;
+                            playerController.builderSound.clip = singleBuildClip;
                             playerController.builderSound.Play();
-                            playerController.destroyTimer = 0;
-                            playerController.buildTimer = 0;
+                            if (PlayerPrefsX.GetPersistentBool("multiplayer") == true)
+                            {
+                                UpdateNetwork(0,type,pos, obj.transform.rotation);
+                            }
                         }
                     }
                     if (slot.amountInSlot == 0)
@@ -363,25 +350,25 @@ public class BuildController : MonoBehaviour
         }
         if (foundItems == false)
         {
-            if (gameManager.working == false)
-            {
-                playerController.stoppingBuildCoRoutine = true;
-                gameManager.meshManager.CombineBlocks();
-                playerController.separatedBlocks = false;
-                playerController.destroyTimer = 0;
-                playerController.buildTimer = 0;
-                playerController.building = false;
-                playerController.destroying = false;
-            }
-            else
-            {
-                playerController.requestedBuildingStop = true;
-            }
+            playerController.PlayMissingItemsSound();
+        }
+    }
+
+    //! Sends instantiated block info to the server in multiplayer games.
+    private void UpdateNetwork(int destroy, string type, Vector3 pos, Quaternion rot)
+    {
+        using(WebClient client = new WebClient())
+        {
+            System.Uri uri = new System.Uri(PlayerPrefs.GetString("serverURL") + "/blocks");
+            string position = Mathf.Round(pos.x) + "," + Mathf.Round(pos.y) + "," + Mathf.Round(pos.z);
+            string rotation = Mathf.Round(rot.x) + "," + Mathf.Round(rot.y) + "," + Mathf.Round(rot.z) + "," + Mathf.Round(rot.w);
+            client.UploadStringAsync(uri, "POST", "@" + destroy + ":" + type + ":" + position + ":" + rotation);
         }
     }
 
     private void BuildBlock(string type)
     {
+        gameManager.undoBlocks.Clear();
         buildBlockCoroutine = StartCoroutine(BuildBlockCoroutine(type));
     }
 
@@ -432,10 +419,18 @@ public class BuildController : MonoBehaviour
                             }
                             h += 5;
                             GameObject obj = Instantiate(blockDictionary.blockDictionary[type], multiBuildPlacement, rotation);
+                            if (obj.GetComponent<ModBlock>() != null)
+                            {
+                                obj.GetComponent<ModBlock>().blockName = type;
+                            }
                             obj.transform.parent = builtObjects.transform;
+                            gameManager.undoBlocks.Add(new GameManager.Block(type, obj));
+                            playerController.builderSound.clip = playerController.buildMultiplier > 1 ? multiBuildClip : singleBuildClip;
                             playerController.builderSound.Play();
-                            playerController.destroyTimer = 0;
-                            playerController.buildTimer = 0;
+                            if (PlayerPrefsX.GetPersistentBool("multiplayer") == true)
+                            {
+                                UpdateNetwork(0, type, obj.transform.position, obj.transform.rotation);
+                            }
                             yield return null;
                         }
                     }
@@ -448,20 +443,7 @@ public class BuildController : MonoBehaviour
         }
         if (foundItems == false)
         {
-            if (gameManager.working == false)
-            {
-                playerController.stoppingBuildCoRoutine = true;
-                gameManager.meshManager.CombineBlocks();
-                playerController.separatedBlocks = false;
-                playerController.destroyTimer = 0;
-                playerController.buildTimer = 0;
-                playerController.building = false;
-                playerController.destroying = false;
-            }
-            else
-            {
-                playerController.requestedBuildingStop = true;
-            }
+            playerController.PlayMissingItemsSound();
         }
     }
 }

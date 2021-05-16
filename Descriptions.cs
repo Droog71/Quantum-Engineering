@@ -74,7 +74,9 @@
     " Must be connected to a power source such as a solar panel, nuclear reactor or power conduit" +
     " and has an adjustable output measured in items per cycle.";
 
-    public string quantumHatchway = "Hatchway used for entering structures.";
+    public string door = "Standard door used for entering structures.";
+
+    public string quantumHatchway = "Forcefield door used for entering structures.";
 
     public string railCart = "A mobile storage container that rides on rails from one rail cart hub to the next." +
     " Configure the hubs to stop the cart near a conduit or retriever so it can be loaded or unloaded." +

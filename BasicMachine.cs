@@ -29,6 +29,7 @@ public class BasicMachine : MonoBehaviour
     private LineRenderer connectionLine;
     private GameObject builtObjects;
     public StateManager stateManager;
+    public bool hasCustomSound;
     private int machineTimer;
     private int warmup;
 
@@ -44,12 +45,15 @@ public class BasicMachine : MonoBehaviour
         connectionLine.material = lineMat;
         connectionLine.loop = true;
         connectionLine.enabled = false;
-        builtObjects = GameObject.Find("Built_Objects");
+        builtObjects = GameObject.Find("BuiltObjects");
     }
 
     //! Called once per frame by unity engine.
     public void Update()
     {
+        if (ID == "unassigned")
+            return;
+
         updateTick += 1 * Time.deltaTime;
         if (updateTick > 0.5f + (address * 0.001f))
         {
@@ -242,6 +246,10 @@ public class BasicMachine : MonoBehaviour
                                 outputObject.GetComponent<UniversalConduit>().amount += speed - heat;
                                 amount -= speed - heat;
                                 machineTimer = 0;
+                                if (hasCustomSound == true)
+                                {
+                                    GetComponent<AudioSource>().Play();
+                                }
                             }
                         }
                         else

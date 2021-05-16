@@ -36,13 +36,16 @@ public class PowerSource : MonoBehaviour
         connectionLine.material = lineMat;
         connectionLine.loop = true;
         connectionLine.enabled = false;
-        builtObjects = GameObject.Find("Built_Objects");
+        builtObjects = GameObject.Find("BuiltObjects");
         stateManager = FindObjectOfType<StateManager>();
     }
 
     //! Called once per frame by unity engine.
     public void Update()
     {
+        if (ID == "unassigned")
+            return;
+
         updateTick += 1 * Time.deltaTime;
         if (updateTick > 0.5f + (address * 0.001f))
         {
@@ -127,7 +130,7 @@ public class PowerSource : MonoBehaviour
     private void ConnectToOutput(GameObject obj)
     {
         float distance = Vector3.Distance(transform.position, obj.transform.position);
-        if (distance < 40)
+        if (distance <= 40)
         {
             if (obj.GetComponent<PowerReceiver>() != null && outputObject == null)
             {

@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System.Net;
 
 public class InventoryHandler
 {
@@ -8,6 +9,7 @@ public class InventoryHandler
     private GuiCoordinates guiCoordinates;
     public string itemToDrag;
     private int amountToDrag;
+    private int dragSlotIndex;
 
     //! This class handles inventory related functions that don't directly require the OnGUI method.
     public InventoryHandler(PlayerController playerController, InventoryManager playerInventory)
@@ -63,21 +65,50 @@ public class InventoryHandler
     }
 
     //! Begins dragging an item from an inventory slot.
-    public void DragItemFromSlot(InventorySlot dragSlot, InventoryManager destination)
+    public void DragItemFromSlot(int index, InventorySlot dragSlot, InventoryManager destination)
     {
         bool flag = false;
+        dragSlotIndex = index;
         if (playerController.storageGUIopen == true)
         {
             if (Input.GetKey(KeyCode.LeftControl))
             {
                 flag = true;
-                foreach (InventorySlot slot in destination.inventory)
+                for (int i = 0; i < destination.inventory.Length; i++)
                 {
+                    InventorySlot slot = destination.inventory[i];
                     if (CanTransfer(dragSlot, slot))
                     {
                         destination.AddItem(dragSlot.typeInSlot, dragSlot.amountInSlot);
                         dragSlot.typeInSlot = "nothing";
                         dragSlot.amountInSlot = 0;
+                        if (PlayerPrefsX.GetPersistentBool("multiplayer") == true)
+                        {
+                            if (destination == playerController.playerInventory)
+                            {
+                                Vector3 pos = playerController.storageInventory.gameObject.transform.position;
+                                float x = Mathf.Round(pos.x);
+                                float y = Mathf.Round(pos.y); 
+                                float z = Mathf.Round(pos.z); 
+                                using (WebClient client = new WebClient())
+                                {
+                                    System.Uri uri = new System.Uri(PlayerPrefs.GetString("serverURL") + "/storage");
+                                    client.UploadStringAsync(uri, "POST", "@" + x + "," + y + "," + z + ":" + index + ";" + dragSlot.typeInSlot + "=" + dragSlot.amountInSlot);
+                                }
+                            }
+                            else
+                            {
+                                Vector3 pos = destination.gameObject.transform.position;
+                                float x = Mathf.Round(pos.x);
+                                float y = Mathf.Round(pos.y); 
+                                float z = Mathf.Round(pos.z); 
+                                using(WebClient client = new WebClient())
+                                {
+                                    System.Uri uri = new System.Uri(PlayerPrefs.GetString("serverURL") + "/storage");
+                                    client.UploadStringAsync(uri, "POST", "@" + x + "," + y + "," + z + ":"+i+";"+slot.typeInSlot+"="+slot.amountInSlot);
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -109,6 +140,21 @@ public class InventoryHandler
     public void DropItemInSlot(Vector2 mousePos, bool usingContainer)
     {
         playerController.draggingItem = false;
+
+        if (guiCoordinates.inventoryDropSlotRect.Contains(mousePos))
+        {
+            playerController.DropItem(slotDraggingFrom);
+            return;
+        }
+
+        if (guiCoordinates.inventoryTrashSlotRect.Contains(mousePos))
+        {
+            slotDraggingFrom.amountInSlot = 0;
+            slotDraggingFrom.typeInSlot = "nothing";
+            playerController.PlayCraftingSound();
+            return;
+        }
+
         int inventoryDropSlot = 0;
         foreach (Rect rect in guiCoordinates.inventorySlotRects)
         {
@@ -133,6 +179,18 @@ public class InventoryHandler
                     slotDraggingFrom.amountInSlot = dropSlot.amountInSlot;
                     dropSlot.typeInSlot = itemToDrag;
                     dropSlot.amountInSlot = amountToDrag;
+                }
+                if (PlayerPrefsX.GetPersistentBool("multiplayer") == true)
+                {
+                    Vector3 pos = playerController.storageInventory.gameObject.transform.position;
+                    float x = Mathf.Round(pos.x);
+                    float y = Mathf.Round(pos.y); 
+                    float z = Mathf.Round(pos.z); 
+                    using(WebClient client = new WebClient())
+                    {
+                        System.Uri uri = new System.Uri(PlayerPrefs.GetString("serverURL") + "/storage");
+                        client.UploadStringAsync(uri, "POST", "@" + x + "," + y + "," + z + ":"+dragSlotIndex+";"+slotDraggingFrom.typeInSlot+"="+slotDraggingFrom.amountInSlot);
+                    }
                 }
             }
             inventoryDropSlot++;
@@ -164,6 +222,18 @@ public class InventoryHandler
                         slotDraggingFrom.amountInSlot = dropSlot.amountInSlot;
                         dropSlot.typeInSlot = itemToDrag;
                         dropSlot.amountInSlot = amountToDrag;
+                    }
+                    if (PlayerPrefsX.GetPersistentBool("multiplayer") == true && PlayerPrefsX.GetPersistentBool("hosting") == false)
+                    {
+                        using(WebClient client = new WebClient())
+                        {
+                            System.Uri uri = new System.Uri(PlayerPrefs.GetString("serverURL") + "/storage");
+                            Vector3 pos = playerController.storageInventory.gameObject.transform.position;
+                            float x = Mathf.Round(pos.x);
+                            float y = Mathf.Round(pos.y); 
+                            float z = Mathf.Round(pos.z); 
+                            client.UploadStringAsync(uri, "POST", "@" + x + "," + y + "," + z + ":"+storageInventoryDropSlot+";"+dropSlot.typeInSlot+"="+dropSlot.amountInSlot);
+                        }
                     }
                 }
                 storageInventoryDropSlot++;

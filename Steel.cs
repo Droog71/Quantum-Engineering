@@ -18,6 +18,9 @@ public class Steel : MonoBehaviour
     //! Called once per frame by unity engine.
     public void Update()
     {
+        if (ID == "unassigned")
+            return;
+
         updateTick += 1 * Time.deltaTime;
         if (updateTick > 0.5f + (address * 0.001f))
         {

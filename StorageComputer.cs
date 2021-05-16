@@ -32,6 +32,9 @@ public class StorageComputer : MonoBehaviour
     //! Called once per frame by unity engine.
     public void Update()
     {
+        if (ID == "unassigned")
+            return;
+
         updateTick += 1 * Time.deltaTime;
         if (updateTick > 0.5f + (address * 0.001f))
         {
@@ -92,7 +95,7 @@ public class StorageComputer : MonoBehaviour
             GameObject containerObject = container.gameObject;
             Transform containerTransform = containerObject.transform;
             float distance = Vector3.Distance(transform.position, containerObject.transform.position);
-            if (IsValidContainer(containerObject) && distance < 40)
+            if (IsValidContainer(containerObject) && distance <= 40)
             {
                 computerContainerList.Add(container);
                 GameObject spawnedConnection = Instantiate(connectionObject, containerTransform.position, containerTransform.rotation);

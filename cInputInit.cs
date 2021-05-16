@@ -18,14 +18,15 @@ public class cInputInit : MonoBehaviour
         cInput.SetKey("Jetpack", "Space", Keys.Space);
         cInput.SetKey("Fire", "Mouse0", Keys.Mouse0);
         cInput.SetKey("Interact", "E", Keys.E);
-        cInput.SetKey("Build", "B", Keys.B);
-        cInput.SetKey("Stop Building", "Q", Keys.Q);
+        cInput.SetKey("Build Mode", "B", Keys.B);
         cInput.SetKey("Next Item", "Mouse Wheel Up", Keys.X);
         cInput.SetKey("Previous Item", "Mouse Wheel Down", Keys.Z);
+        cInput.SetKey("Build Amount", "Equals", Keys.EqualSign);
         cInput.SetKey("Build Amount +", "RightBracket", Keys.RightBracket);
         cInput.SetKey("Build Amount  -", "LeftBracket", Keys.LeftBracket);
         cInput.SetKey("Place Object", "Mouse1", Keys.Mouse1);
         cInput.SetKey("Collect Object", "F", Keys.F);
+        cInput.SetKey("Undo", "U", Keys.U);
         cInput.SetKey("Rotate Block", "R", Keys.R);
         cInput.SetKey("Build Axis", "V", Keys.V);
         cInput.SetKey("Auto Axis", "Y", Keys.Y);

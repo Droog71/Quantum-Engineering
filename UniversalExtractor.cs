@@ -42,7 +42,7 @@ public class UniversalExtractor : MonoBehaviour
         connectionLine.endWidth = 0.2f;
         connectionLine.material = lineMat;
         connectionLine.loop = true;
-        builtObjects = GameObject.Find("Built_Objects");
+        builtObjects = GameObject.Find("BuiltObjects");
     }
 
     //! Used to remove the connection line renderer when the block is destroyed.
@@ -72,6 +72,9 @@ public class UniversalExtractor : MonoBehaviour
     //! Called once per frame by unity engine.
     public void Update()
     {
+        if (ID == "unassigned")
+            return;
+
         updateTick += 1 * Time.deltaTime;
         if (updateTick > 0.5f + (address * 0.001f))
         {

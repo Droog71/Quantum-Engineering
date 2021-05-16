@@ -27,7 +27,7 @@ public class SaveManager
         List<int> idList = new List<int>();
 
         GameObject[] machines = GameObject.FindGameObjectsWithTag("Built");
-        Transform[] blocks = stateManager.BuiltObjects.GetComponentsInChildren<Transform>(true);
+        Transform[] blocks = stateManager.builtObjects.GetComponentsInChildren<Transform>(true);
         MeshPainter[] meshPainters = Object.FindObjectsOfType<MeshPainter>();
 
         if (totalObjects == 0)
@@ -39,13 +39,13 @@ public class SaveManager
         {
             if (go != null)
             {
-                if (go.transform.parent != stateManager.BuiltObjects.transform)
+                if (go.transform.parent != stateManager.builtObjects.transform)
                 {
                     Vector3 objectPosition = go.transform.position;
                     Quaternion objectRotation = go.transform.rotation;
                     if (go.GetComponent<Auger>() != null)
                     {
-                        objectName = stateManager.WorldName + "Auger";
+                        objectName = stateManager.worldName + "Auger";
                         worldID = go.GetComponent<Auger>().ID;
                         objectID = int.Parse(worldID.Substring(objectName.Length));
                         idList.Add(objectID);
@@ -58,7 +58,7 @@ public class SaveManager
                     }
                     if (go.GetComponent<ElectricLight>() != null)
                     {
-                        objectName = stateManager.WorldName + "ElectricLight";
+                        objectName = stateManager.worldName + "ElectricLight";
                         worldID = go.GetComponent<ElectricLight>().ID;
                         objectID = int.Parse(worldID.Substring(objectName.Length));
                         idList.Add(objectID);
@@ -67,7 +67,7 @@ public class SaveManager
                     }
                     if (go.GetComponent<DarkMatterCollector>() != null)
                     {
-                        objectName = stateManager.WorldName + "DarkMatterCollector";
+                        objectName = stateManager.worldName + "DarkMatterCollector";
                         worldID = go.GetComponent<DarkMatterCollector>().ID;
                         objectID = int.Parse(worldID.Substring(objectName.Length));
                         idList.Add(objectID);
@@ -80,7 +80,7 @@ public class SaveManager
                     }
                     if (go.GetComponent<DarkMatterConduit>() != null)
                     {
-                        objectName = stateManager.WorldName + "DarkMatterConduit";
+                        objectName = stateManager.worldName + "DarkMatterConduit";
                         worldID = go.GetComponent<DarkMatterConduit>().ID;
                         objectID = int.Parse(worldID.Substring(objectName.Length));
                         idList.Add(objectID);
@@ -99,7 +99,7 @@ public class SaveManager
                     }
                     if (go.GetComponent<RailCart>() != null)
                     {
-                        objectName = stateManager.WorldName + "RailCart";
+                        objectName = stateManager.worldName + "RailCart";
                         worldID = go.GetComponent<RailCart>().ID;
                         objectID = int.Parse(worldID.Substring(objectName.Length));
                         idList.Add(objectID);
@@ -112,7 +112,7 @@ public class SaveManager
                     }
                     if (go.GetComponent<RailCartHub>() != null)
                     {
-                        objectName = stateManager.WorldName + "RailCartHub";
+                        objectName = stateManager.worldName + "RailCartHub";
                         worldID = go.GetComponent<RailCartHub>().ID;
                         objectID = int.Parse(worldID.Substring(objectName.Length));
                         idList.Add(objectID);
@@ -135,7 +135,7 @@ public class SaveManager
                     }
                     if (go.GetComponent<UniversalConduit>() != null)
                     {
-                        objectName = stateManager.WorldName + "UniversalConduit";
+                        objectName = stateManager.worldName + "UniversalConduit";
                         worldID = go.GetComponent<UniversalConduit>().ID;
                         objectID = int.Parse(worldID.Substring(objectName.Length));
                         idList.Add(objectID);
@@ -156,7 +156,7 @@ public class SaveManager
                     }
                     if (go.GetComponent<HeatExchanger>() != null)
                     {
-                        objectName = stateManager.WorldName + "HeatExchanger";
+                        objectName = stateManager.worldName + "HeatExchanger";
                         worldID = go.GetComponent<HeatExchanger>().ID;
                         objectID = int.Parse(worldID.Substring(objectName.Length));
                         idList.Add(objectID);
@@ -175,7 +175,7 @@ public class SaveManager
                     }
                     if (go.GetComponent<Retriever>() != null)
                     {
-                        objectName = stateManager.WorldName + "Retriever";
+                        objectName = stateManager.worldName + "Retriever";
                         worldID = go.GetComponent<Retriever>().ID;
                         objectID = int.Parse(worldID.Substring(objectName.Length));
                         idList.Add(objectID);
@@ -196,7 +196,7 @@ public class SaveManager
                     }
                     if (go.GetComponent<AutoCrafter>() != null)
                     {
-                        objectName = stateManager.WorldName + "AutoCrafter";
+                        objectName = stateManager.worldName + "AutoCrafter";
                         worldID = go.GetComponent<AutoCrafter>().ID;
                         objectID = int.Parse(worldID.Substring(objectName.Length));
                         idList.Add(objectID);
@@ -213,7 +213,7 @@ public class SaveManager
                     }
                     if (go.GetComponent<Smelter>() != null)
                     {
-                        objectName = stateManager.WorldName + "Smelter";
+                        objectName = stateManager.worldName + "Smelter";
                         worldID = go.GetComponent<Smelter>().ID;
                         objectID = int.Parse(worldID.Substring(objectName.Length));
                         idList.Add(objectID);
@@ -234,7 +234,7 @@ public class SaveManager
                     }
                     if (go.GetComponent<Turret>() != null)
                     {
-                        objectName = stateManager.WorldName + "Turret";
+                        objectName = stateManager.worldName + "Turret";
                         worldID = go.GetComponent<Turret>().ID;
                         objectID = int.Parse(worldID.Substring(objectName.Length));
                         idList.Add(objectID);
@@ -245,7 +245,7 @@ public class SaveManager
                     }
                     if (go.GetComponent<MissileTurret>() != null)
                     {
-                        objectName = stateManager.WorldName + "MissileTurret";
+                        objectName = stateManager.worldName + "MissileTurret";
                         worldID = go.GetComponent<MissileTurret>().ID;
                         objectID = int.Parse(worldID.Substring(objectName.Length));
                         idList.Add(objectID);
@@ -262,15 +262,15 @@ public class SaveManager
                     {
                         if (go.GetComponent<PowerSource>().type == "Solar Panel")
                         {
-                            objectName = stateManager.WorldName + "SolarPanel";
+                            objectName = stateManager.worldName + "SolarPanel";
                         }
                         else if (go.GetComponent<PowerSource>().type == "Generator")
                         {
-                            objectName = stateManager.WorldName + "Generator";
+                            objectName = stateManager.worldName + "Generator";
                         }
                         else if (go.GetComponent<PowerSource>().type == "Reactor Turbine")
                         {
-                            objectName = stateManager.WorldName + "ReactorTurbine";
+                            objectName = stateManager.worldName + "ReactorTurbine";
                         }
                         worldID = go.GetComponent<PowerSource>().ID;
                         objectID = int.Parse(worldID.Substring(objectName.Length));
@@ -286,7 +286,7 @@ public class SaveManager
                     }
                     if (go.GetComponent<NuclearReactor>() != null)
                     {
-                        objectName = stateManager.WorldName + "NuclearReactor";
+                        objectName = stateManager.worldName + "NuclearReactor";
                         worldID = go.GetComponent<NuclearReactor>().ID;
                         objectID = int.Parse(worldID.Substring(objectName.Length));
                         idList.Add(objectID);
@@ -295,7 +295,7 @@ public class SaveManager
                     }
                     if (go.GetComponent<PowerConduit>() != null)
                     {
-                        objectName = stateManager.WorldName + "PowerConduit";
+                        objectName = stateManager.worldName + "PowerConduit";
                         worldID = go.GetComponent<PowerConduit>().ID;
                         objectID = int.Parse(worldID.Substring(objectName.Length));
                         idList.Add(objectID);
@@ -315,7 +315,7 @@ public class SaveManager
                     }
                     if (go.GetComponent<AlloySmelter>() != null)
                     {
-                        objectName = stateManager.WorldName + "AlloySmelter";
+                        objectName = stateManager.worldName + "AlloySmelter";
                         worldID = go.GetComponent<AlloySmelter>().ID;
                         objectID = int.Parse(worldID.Substring(objectName.Length));
                         idList.Add(objectID);
@@ -344,7 +344,7 @@ public class SaveManager
                     }
                     if (go.GetComponent<Press>() != null)
                     {
-                        objectName = stateManager.WorldName + "Press";
+                        objectName = stateManager.worldName + "Press";
                         worldID = go.GetComponent<Press>().ID;
                         objectID = int.Parse(worldID.Substring(objectName.Length));
                         idList.Add(objectID);
@@ -365,7 +365,7 @@ public class SaveManager
                     }
                     if (go.GetComponent<Extruder>() != null)
                     {
-                        objectName = stateManager.WorldName + "Extruder";
+                        objectName = stateManager.worldName + "Extruder";
                         worldID = go.GetComponent<Extruder>().ID;
                         objectID = int.Parse(worldID.Substring(objectName.Length));
                         idList.Add(objectID);
@@ -386,7 +386,7 @@ public class SaveManager
                     }
                     if (go.GetComponent<GearCutter>() != null)
                     {
-                        objectName = stateManager.WorldName + "GearCutter";
+                        objectName = stateManager.worldName + "GearCutter";
                         worldID = go.GetComponent<GearCutter>().ID;
                         objectID = int.Parse(worldID.Substring(objectName.Length));
                         idList.Add(objectID);
@@ -407,7 +407,7 @@ public class SaveManager
                     }
                     if (go.GetComponent<UniversalExtractor>() != null)
                     {
-                        objectName = stateManager.WorldName + "UniversalExtractor";
+                        objectName = stateManager.worldName + "UniversalExtractor";
                         worldID = go.GetComponent<UniversalExtractor>().ID;
                         objectID = int.Parse(worldID.Substring(objectName.Length));
                         idList.Add(objectID);
@@ -422,7 +422,7 @@ public class SaveManager
                     }
                     if (stateManager.IsStorageContainer(go))
                     {
-                        objectName = stateManager.WorldName + "StorageContainer";
+                        objectName = stateManager.worldName + "StorageContainer";
                         worldID = go.GetComponent<InventoryManager>().ID;
                         objectID = int.Parse(worldID.Substring(objectName.Length));
                         idList.Add(objectID);
@@ -432,25 +432,42 @@ public class SaveManager
                     }
                     if (go.GetComponent<StorageComputer>() != null)
                     {
-                        objectName = stateManager.WorldName + "StorageComputer";
+                        objectName = stateManager.worldName + "StorageComputer";
                         worldID = go.GetComponent<StorageComputer>().ID;
                         objectID = int.Parse(worldID.Substring(objectName.Length));
                         idList.Add(objectID);
                         FileBasedPrefs.SetBool(worldID + "falling", go.GetComponent<PhysicsHandler>().falling);
                         FileBasedPrefs.SetBool(worldID + "fallingStack", go.GetComponent<PhysicsHandler>().fallingStack);
                     }
-                    if (go.GetComponent<AirLock>() != null)
+                    if (go.GetComponent<Door>() != null)
                     {
-                        objectName = stateManager.WorldName + "AirLock";
-                        worldID = go.GetComponent<AirLock>().ID;
+                        Debug.Log("trying to save door with type: " + go.GetComponent<Door>().type);
+                        if (go.GetComponent<Door>().type == "Door")
+                        {
+                            objectName = stateManager.worldName + "Door";
+                        }
+                        else if (go.GetComponent<Door>().type == "Quantum Hatchway")
+                        {
+                            Debug.Log("Saving hatch");
+                            objectName = stateManager.worldName + "QuantumHatchway";
+                        }
+                        worldID = go.GetComponent<Door>().ID;
                         objectID = int.Parse(worldID.Substring(objectName.Length));
                         idList.Add(objectID);
+                        int audioClip = go.GetComponent<Door>().audioClip;
+                        int texture = go.GetComponent<Door>().textureIndex;
+                        string material = go.GetComponent<Door>().material;
+                        bool edited = go.GetComponent<Door>().edited;
+                        FileBasedPrefs.SetInt(worldID + "audioClip", audioClip);
+                        FileBasedPrefs.SetInt(worldID + "texture", texture);
+                        FileBasedPrefs.SetString(worldID + "material", material);
+                        FileBasedPrefs.SetBool(worldID + "edited", edited);
                         FileBasedPrefs.SetBool(worldID + "falling", go.GetComponent<PhysicsHandler>().falling);
                         FileBasedPrefs.SetBool(worldID + "fallingStack", go.GetComponent<PhysicsHandler>().fallingStack);
                     }
                     if (go.GetComponent<ModMachine>() != null)
                     {
-                        objectName = stateManager.WorldName + "ModMachine";
+                        objectName = stateManager.worldName + "ModMachine";
                         worldID = go.GetComponent<ModMachine>().ID;
                         objectID = int.Parse(worldID.Substring(objectName.Length));
                         idList.Add(objectID);
@@ -472,9 +489,9 @@ public class SaveManager
                         FileBasedPrefs.SetBool(worldID + "fallingStack", go.GetComponent<PhysicsHandler>().fallingStack);
                     }
 
-                    FileBasedPrefs.SetString(stateManager.WorldName + objectID + "Name", objectName);
-                    PlayerPrefsX.SetVector3(stateManager.WorldName + objectID + "Position", objectPosition);
-                    PlayerPrefsX.SetQuaternion(stateManager.WorldName + objectID + "Rotation", objectRotation);
+                    FileBasedPrefs.SetString(stateManager.worldName + objectID + "Name", objectName);
+                    PlayerPrefsX.SetVector3(stateManager.worldName + objectID + "Position", objectPosition);
+                    PlayerPrefsX.SetQuaternion(stateManager.worldName + objectID + "Rotation", objectRotation);
 
                     currentObject++;
                     saveInterval++;
@@ -497,18 +514,18 @@ public class SaveManager
                 {
                     if (T.gameObject.name.Equals("IronRamp(Clone)"))
                     {
-                        objectName = stateManager.WorldName + "IronRamp";
+                        objectName = stateManager.worldName + "IronRamp";
                     }
                     else
                     {
-                        objectName = stateManager.WorldName + "IronBlock";
+                        objectName = stateManager.worldName + "IronBlock";
                     }
                     worldID = T.gameObject.GetComponent<IronBlock>().ID;
                     objectID = int.Parse(worldID.Substring(objectName.Length));
                     idList.Add(objectID);
-                    FileBasedPrefs.SetString(stateManager.WorldName + objectID + "Name", objectName);
-                    PlayerPrefsX.SetVector3(stateManager.WorldName + objectID + "Position", objectPosition);
-                    PlayerPrefsX.SetQuaternion(stateManager.WorldName + objectID + "Rotation", objectRotation);
+                    FileBasedPrefs.SetString(stateManager.worldName + objectID + "Name", objectName);
+                    PlayerPrefsX.SetVector3(stateManager.worldName + objectID + "Position", objectPosition);
+                    PlayerPrefsX.SetQuaternion(stateManager.worldName + objectID + "Rotation", objectRotation);
                     FileBasedPrefs.SetBool(worldID + "falling", T.gameObject.GetComponent<PhysicsHandler>().falling);
                     FileBasedPrefs.SetBool(worldID + "fallingStack", T.gameObject.GetComponent<PhysicsHandler>().fallingStack);
                 }
@@ -516,42 +533,56 @@ public class SaveManager
                 {
                     if (T.gameObject.name.Equals("SteelRamp(Clone)"))
                     {
-                        objectName = stateManager.WorldName + "SteelRamp";
+                        objectName = stateManager.worldName + "SteelRamp";
                     }
                     else
                     {
-                        objectName = stateManager.WorldName + "Steel";
+                        objectName = stateManager.worldName + "Steel";
                     }
                     worldID = T.gameObject.GetComponent<Steel>().ID;
                     objectID = int.Parse(worldID.Substring(objectName.Length));
                     idList.Add(objectID);
-                    FileBasedPrefs.SetString(stateManager.WorldName + objectID + "Name", objectName);
-                    PlayerPrefsX.SetVector3(stateManager.WorldName + objectID + "Position", objectPosition);
-                    PlayerPrefsX.SetQuaternion(stateManager.WorldName + objectID + "Rotation", objectRotation);
+                    FileBasedPrefs.SetString(stateManager.worldName + objectID + "Name", objectName);
+                    PlayerPrefsX.SetVector3(stateManager.worldName + objectID + "Position", objectPosition);
+                    PlayerPrefsX.SetQuaternion(stateManager.worldName + objectID + "Rotation", objectRotation);
                     FileBasedPrefs.SetBool(worldID + "falling", T.gameObject.GetComponent<PhysicsHandler>().falling);
                     FileBasedPrefs.SetBool(worldID + "fallingStack", T.gameObject.GetComponent<PhysicsHandler>().fallingStack);
                 }
                 if (T.gameObject.GetComponent<Brick>() != null)
                 {
-                    objectName = stateManager.WorldName + "Brick";
+                    objectName = stateManager.worldName + "Brick";
                     worldID = T.gameObject.GetComponent<Brick>().ID;
                     objectID = int.Parse(worldID.Substring(objectName.Length));
                     idList.Add(objectID);
-                    FileBasedPrefs.SetString(stateManager.WorldName + objectID + "Name", objectName);
-                    PlayerPrefsX.SetVector3(stateManager.WorldName + objectID + "Position", objectPosition);
-                    PlayerPrefsX.SetQuaternion(stateManager.WorldName + objectID + "Rotation", objectRotation);
+                    FileBasedPrefs.SetString(stateManager.worldName + objectID + "Name", objectName);
+                    PlayerPrefsX.SetVector3(stateManager.worldName + objectID + "Position", objectPosition);
+                    PlayerPrefsX.SetQuaternion(stateManager.worldName + objectID + "Rotation", objectRotation);
                     FileBasedPrefs.SetBool(worldID + "falling", T.gameObject.GetComponent<PhysicsHandler>().falling);
                     FileBasedPrefs.SetBool(worldID + "fallingStack", T.gameObject.GetComponent<PhysicsHandler>().fallingStack);
                 }
                 if (T.gameObject.GetComponent<Glass>() != null)
                 {
-                    objectName = stateManager.WorldName + "Glass";
+                    objectName = stateManager.worldName + "Glass";
                     worldID = T.gameObject.GetComponent<Glass>().ID;
                     objectID = int.Parse(worldID.Substring(objectName.Length));
                     idList.Add(objectID);
-                    FileBasedPrefs.SetString(stateManager.WorldName + objectID + "Name", objectName);
-                    PlayerPrefsX.SetVector3(stateManager.WorldName + objectID + "Position", objectPosition);
-                    PlayerPrefsX.SetQuaternion(stateManager.WorldName + objectID + "Rotation", objectRotation);
+                    FileBasedPrefs.SetString(stateManager.worldName + objectID + "Name", objectName);
+                    PlayerPrefsX.SetVector3(stateManager.worldName + objectID + "Position", objectPosition);
+                    PlayerPrefsX.SetQuaternion(stateManager.worldName + objectID + "Rotation", objectRotation);
+                    FileBasedPrefs.SetBool(worldID + "falling", T.gameObject.GetComponent<PhysicsHandler>().falling);
+                    FileBasedPrefs.SetBool(worldID + "fallingStack", T.gameObject.GetComponent<PhysicsHandler>().fallingStack);
+                }
+                if (T.gameObject.GetComponent<ModBlock>() != null)
+                {
+                    objectName = stateManager.worldName + "ModBlock";
+                    worldID = T.gameObject.GetComponent<ModBlock>().ID;
+                    objectID = int.Parse(worldID.Substring(objectName.Length));
+                    idList.Add(objectID);
+                    string blockName = T.gameObject.GetComponent<ModBlock>().blockName;
+                    FileBasedPrefs.SetString(worldID + "blockName", blockName);
+                    FileBasedPrefs.SetString(stateManager.worldName + objectID + "Name", objectName);
+                    PlayerPrefsX.SetVector3(stateManager.worldName + objectID + "Position", objectPosition);
+                    PlayerPrefsX.SetQuaternion(stateManager.worldName + objectID + "Rotation", objectRotation);
                     FileBasedPrefs.SetBool(worldID + "falling", T.gameObject.GetComponent<PhysicsHandler>().falling);
                     FileBasedPrefs.SetBool(worldID + "fallingStack", T.gameObject.GetComponent<PhysicsHandler>().fallingStack);
                 }
@@ -580,7 +611,7 @@ public class SaveManager
 
         if (idList.Count > 0)
         {
-            PlayerPrefsX.SetIntArray(stateManager.WorldName + "idList", idList.ToArray());
+            PlayerPrefsX.SetIntArray(stateManager.worldName + "idList", idList.ToArray());
         }
 
         FileBasedPrefs.ManuallySave();

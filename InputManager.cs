@@ -15,14 +15,9 @@ public class InputManager
     }
 
     //! Returns true if the player's current build type is a standard block.
-    private bool PlacingStandardBlock()
+    private bool PlacingStandardBlock(string type)
     {
-        return playerController.buildType.Equals("Glass Block")
-        || playerController.buildType.Equals("Brick")
-        || playerController.buildType.Equals("Iron Block")
-        || playerController.buildType.Equals("Steel Block")
-        || playerController.buildType.Equals("Steel Ramp")
-        || playerController.buildType.Equals("Iron Ramp");
+        return playerController.GetComponent<BuildController>().blockDictionary.blockDictionary.ContainsKey(type);
     }
 
     //! Recieves all actions from cInput.
@@ -189,7 +184,7 @@ public class InputManager
         }
 
         // BUILD MULTIPLIER
-        if (playerController.building == true && PlacingStandardBlock())
+        if (playerController.building == true && PlacingStandardBlock(playerController.buildType))
         {
             if (cInput.GetKey("Build Amount +") && playerController.buildMultiplier < 100)
             {
@@ -198,6 +193,19 @@ public class InputManager
             if (cInput.GetKey("Build Amount  -") && playerController.buildMultiplier > 1)
             {
                 actionManager.DecreaseBuildAmount();
+            }
+        }
+
+        // MANUAL BUILD AMOUNT SELECTION
+        if (cInput.GetKeyDown("Build Amount"))
+        {
+            if (!playerController.GuiOpen())
+            {
+                playerController.buildAmountGUIopen = !playerController.buildAmountGUIopen;
+            }
+            else
+            {
+                playerController.buildAmountGUIopen = false;
             }
         }
 
@@ -230,10 +238,21 @@ public class InputManager
         {
             if (playerController.building == true)
             {
-                playerController.buildObject.transform.Rotate(playerController.buildObject.transform.up * 90);
-                playerController.destroyTimer = 0;
-                playerController.buildTimer = 0;
-                playerController.PlayButtonSound();
+                Vector3 buildObjectForward = playerController.buildObject.transform.forward;
+                if (Input.GetKey(KeyCode.LeftControl))
+                {
+                    playerController.buildObject.transform.Rotate(Vector3.right * 90);
+                    playerController.PlayButtonSound();
+                }
+                else if (buildObjectForward != Vector3.up && buildObjectForward != -Vector3.up)
+                {
+                    playerController.buildObject.transform.Rotate(Vector3.up * 90);
+                    playerController.PlayButtonSound();
+                }
+                else
+                {
+                    playerController.PlayMissingItemsSound();
+                }
             }
         }
 
@@ -251,16 +270,16 @@ public class InputManager
             playerController.autoAxisMessage = true;
         }
 
-        // IF THE PLAYER HAS SELECTED AN ITEM AND HAS THAT ITEM IN THE INVENTORY, BEGIN BUILDING ON KEY PRESS
-        if (cInput.GetKeyDown("Build"))
+        // DUPLICATE BLOCK REMOVAL
+        if (cInput.GetKeyDown("Undo"))
         {
-            actionManager.StartBuildMode();
+            actionManager.Undo();
         }
 
-        // CANCEL BUILDING ON KEY PRESS
-        if (cInput.GetKeyDown("Stop Building"))
+        // TOGGLE BUILDING MODE
+        if (cInput.GetKeyDown("Build Mode"))
         {
-            actionManager.StopBuilding();
+            actionManager.ToggleBuilding();
         }
 
         // ACTIVATE INVENTORY GUI ON KEY PRESS
@@ -312,9 +331,23 @@ public class InputManager
                 playerController.paintGunActive = false;
                 playerController.paintColorSelected = false;
             }
+            else if (playerController.buildAmountGUIopen == true)
+            {
+                Cursor.visible = false;
+                Cursor.lockState = CursorLockMode.Locked;
+                playerController.buildAmountGUIopen = false;
+                playerController.PlayButtonSound();
+            }
+            else if (playerController.doorGUIopen == true)
+            {
+                Cursor.visible = false;
+                Cursor.lockState = CursorLockMode.Locked;
+                playerController.doorGUIopen = false;
+                playerController.PlayButtonSound();
+            }
             else if (playerController.escapeMenuOpen == false)
             {
-                playerController.requestedEscapeMenu = true;
+                playerController.OpenEscapeMenu();
             }
             else
             {

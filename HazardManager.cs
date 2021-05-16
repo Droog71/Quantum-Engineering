@@ -26,7 +26,7 @@ public class HazardManager
                     gameManager.pirateAttackTimer += 1 * Time.deltaTime;
                     if (gameManager.loadedPirateTimer == true)
                     {
-                        FileBasedPrefs.SetFloat(gameManager.GetComponent<StateManager>().WorldName + "pirateAttackTimer", gameManager.pirateAttackTimer);
+                        FileBasedPrefs.SetFloat(gameManager.GetComponent<StateManager>().worldName + "pirateAttackTimer", gameManager.pirateAttackTimer);
                     }
                     if (gameManager.pirateAttackTimer >= 530 & gameManager.pirateAttackTimer < 540)
                     {
@@ -74,7 +74,10 @@ public class HazardManager
                     else if (gameManager.pirateAttackTimer >= 900)
                     {
                         gameManager.pirateAttackTimer = 0;
-                        gameManager.player.destructionMessageActive = false;
+                        if (gameManager.player.laserCannonActive == false)
+                        {
+                            gameManager.player.destructionMessageActive = false;
+                        }
                     }
                 }
 
@@ -86,7 +89,7 @@ public class HazardManager
 
                 if (gameManager.loadedMeteorTimer == true)
                 {
-                    FileBasedPrefs.SetFloat(gameManager.GetComponent<StateManager>().WorldName + "meteorShowerTimer", gameManager.meteorShowerTimer);
+                    FileBasedPrefs.SetFloat(gameManager.GetComponent<StateManager>().worldName + "meteorShowerTimer", gameManager.meteorShowerTimer);
                 }
                 if (gameManager.meteorShowerTimer >= 530 && gameManager.meteorShowerTimer < 540)
                 {
@@ -131,7 +134,10 @@ public class HazardManager
                 else if (gameManager.meteorShowerTimer >= 900)
                 {
                     gameManager.meteorShowerTimer = 0;
-                    gameManager.player.destructionMessageActive = false;
+                    if (gameManager.player.laserCannonActive == false)
+                    {
+                        gameManager.player.destructionMessageActive = false;
+                    }
                 }
             }
             else
@@ -140,7 +146,10 @@ public class HazardManager
                 gameManager.meteorShowerTimer = 120;
                 if (gameManager.player != null)
                 {
-                    gameManager.player.destructionMessageActive = false;
+                    if (gameManager.player.laserCannonActive == false)
+                    {
+                        gameManager.player.destructionMessageActive = false;
+                    }
                 }
             }
         }
@@ -159,17 +168,20 @@ public class HazardManager
         gameManager.meteorShowerTimer = 120;
         if (gameManager.loadedMeteorTimer == true)
         {
-            FileBasedPrefs.SetFloat(gameManager.GetComponent<StateManager>().WorldName + "meteorShowerTimer", gameManager.meteorShowerTimer);
+            FileBasedPrefs.SetFloat(gameManager.GetComponent<StateManager>().worldName + "meteorShowerTimer", gameManager.meteorShowerTimer);
         }
         if (gameManager.loadedPirateTimer == true)
         {
-            FileBasedPrefs.SetFloat(gameManager.GetComponent<StateManager>().WorldName + "pirateAttackTimer", gameManager.pirateAttackTimer);
+            FileBasedPrefs.SetFloat(gameManager.GetComponent<StateManager>().worldName + "pirateAttackTimer", gameManager.pirateAttackTimer);
         }
         if (gameManager.player != null)
         {
             gameManager.player.meteorShowerWarningActive = false;
             gameManager.player.pirateAttackWarningActive = false;
-            gameManager.player.destructionMessageActive = false;
+            if (gameManager.player.laserCannonActive == false)
+            {
+                gameManager.player.destructionMessageActive = false;
+            }
         }
         if (hazardsRemoved == false)
         {

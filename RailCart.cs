@@ -16,7 +16,7 @@ public class RailCart : MonoBehaviour
     //! Called by unity engine on start up to initialize variables.
     public void Start()
     {
-        builtObjects = GameObject.Find("Built_Objects");
+        builtObjects = GameObject.Find("BuiltObjects");
         stateManager = FindObjectOfType<StateManager>();
     }
 
