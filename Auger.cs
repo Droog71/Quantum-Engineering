@@ -36,6 +36,7 @@ public class Auger : Machine
         connectionLine.enabled = false;
     }
 
+    //! Called by MachineManager update coroutine.
     public override void UpdateMachine()
     {
         if (ID == "unassigned" || stateManager.Busy())

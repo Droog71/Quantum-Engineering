@@ -16,7 +16,7 @@ public class InventoryManager : Machine
         stateManager = FindObjectOfType<StateManager>();
     }
 
-    //! Called once per frame by unity engine.
+    //! Called by MachineManager update coroutine.
     public override void UpdateMachine()
     {
         if (!stateManager.Busy())

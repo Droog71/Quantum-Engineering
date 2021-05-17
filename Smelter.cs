@@ -31,6 +31,7 @@ public class Smelter : BasicMachine
         }
     }
 
+    //! Called by MachineManager update coroutine.
     public override void UpdateMachine()
     {
         base.UpdateMachine();

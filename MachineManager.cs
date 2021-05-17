@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using UnityEngine;
 
+//! This class controls machine update functions via coroutine .
+//! One machine is updated per frame.
 public class MachineManager : MonoBehaviour
 {
     private bool busy;
@@ -15,6 +17,7 @@ public class MachineManager : MonoBehaviour
         }
     }
 
+    //! Calls the UpdateMachine function on each machine in the world, yielding after each call.
     private IEnumerator MachineUpdateCoroutine()
     {
         busy = true;

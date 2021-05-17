@@ -14,7 +14,7 @@ public class IronBlock : Block
         stateManager = FindObjectOfType<StateManager>();
     }
 
-    //! Called once per frame by unity engine.
+    //! Called by BlockManager update coroutine.
     public override void UpdateBlock()
     {
         if (ID == "unassigned" || stateManager.Busy())

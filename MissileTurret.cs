@@ -39,6 +39,7 @@ public class MissileTurret : Machine
         restingRotation = launcher.transform.rotation;
     }
 
+    //! Called by MachineManager update coroutine.
     public override void UpdateMachine()
     {
         if (ID == "unassigned" || stateManager.Busy())

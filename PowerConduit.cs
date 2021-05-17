@@ -41,6 +41,7 @@ public class PowerConduit : Machine
         outputObjects = new GameObject[] { outputObject1, outputObject2 };
     }
 
+    //! Called by MachineManager update coroutine.
     public override void UpdateMachine()
     {
         if (ID == "unassigned" || stateManager.Busy())

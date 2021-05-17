@@ -41,6 +41,7 @@ public class DarkMatterConduit : Machine
         stateManager = FindObjectOfType<StateManager>();
     }
 
+    //! Called by MachineManager update coroutine.
     public override void UpdateMachine()
     {
         if (ID == "unassigned" || stateManager.Busy())

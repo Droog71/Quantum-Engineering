@@ -20,6 +20,7 @@ public class RailCart : Machine
         stateManager = FindObjectOfType<StateManager>();
     }
 
+    //! Called by MachineManager update coroutine.
     public override void UpdateMachine()
     {
         if (!stateManager.Busy())

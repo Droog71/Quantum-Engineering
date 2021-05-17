@@ -41,6 +41,7 @@ public class Door : Machine
         textures = textureList.ToArray();
     }
 
+    //! Called by MachineManager update coroutine.
     public override void UpdateMachine()
     {
         if (ID == "unassigned" || stateManager.Busy())

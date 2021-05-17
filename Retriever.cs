@@ -55,6 +55,7 @@ public class Retriever : Machine
         builtObjects = GameObject.Find("BuiltObjects");
     }
 
+    //! Called by MachineManager update coroutine.
     public override void UpdateMachine()
     {
         if (ID == "unassigned" || stateManager.Busy())

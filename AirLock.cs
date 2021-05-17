@@ -20,7 +20,7 @@ public class AirLock : Machine
         }
     }
 
-    //! Called once per frame by unity engine.
+    //! Called by MachineManager update coroutine.
     public override void UpdateMachine()
     {
         GetComponent<PhysicsHandler>().UpdatePhysics();

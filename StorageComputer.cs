@@ -28,6 +28,7 @@ public class StorageComputer : Machine
         conduitItem = GetComponentInChildren<ConduitItem>(true);
     }
 
+    //! Called by MachineManager update coroutine.
     public override void UpdateMachine()
     {
         if (ID == "unassigned" || stateManager.Busy())

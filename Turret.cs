@@ -43,7 +43,7 @@ public class Turret : Machine
         restingRotation = barrel.transform.rotation;
     }
 
-    //! Called once per frame by unity engine.
+    //! Called by MachineManager update coroutine.
     public override void UpdateMachine()
     {
         if (ID == "unassigned" || stateManager.Busy())

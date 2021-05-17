@@ -22,6 +22,7 @@ public class ModMachine : BasicMachine
         gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
     }
 
+    //! Called by MachineManager update coroutine.
     public override void UpdateMachine()
     {
         base.UpdateMachine();

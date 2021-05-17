@@ -22,7 +22,7 @@ public class ModBlock : Block
     }
 
     //! Called once per frame by unity engine.
-    public override void UpdateBlock()
+    public void Update()
     {
         if (!stateManager.Busy() && init == false)
         {
@@ -38,8 +38,12 @@ public class ModBlock : Block
             }
             init = true;
         }
+    }
 
-        if (ID != "unassigned")
+    //! Called by BlockManager update coroutine.
+    public override void UpdateBlock()
+    {
+        if (ID == "unassigned" || stateManager.Busy())
         {
             GetComponent<PhysicsHandler>().UpdatePhysics();
         }

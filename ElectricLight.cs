@@ -17,6 +17,7 @@ public class ElectricLight : Machine
         powerReceiver = gameObject.AddComponent<PowerReceiver>();
     }
 
+    //! Called by MachineManager update coroutine.
     public override void UpdateMachine()
     {
         if (ID == "unassigned" || stateManager.Busy())
