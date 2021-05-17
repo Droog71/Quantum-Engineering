@@ -22,10 +22,9 @@ public class ModMachine : BasicMachine
         gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
     }
 
-    //! Called once per frame by unity engine.
-    public new void Update()
+    public override void UpdateMachine()
     {
-        base.Update();
+        base.UpdateMachine();
         if (!stateManager.Busy() && init == false)
         {
             BlockDictionary blockDictionary = playerController.GetComponent<BuildController>().blockDictionary;

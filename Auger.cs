@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class Auger : MonoBehaviour
+public class Auger : Machine
 {
     public float amount;
     public int speed = 1;
@@ -19,7 +19,6 @@ public class Auger : MonoBehaviour
     public bool powerON;
     private LineRenderer connectionLine;
     private StateManager stateManager;
-    private float updateTick;
     private int machineTimer;
     private int warmup;
 
@@ -37,76 +36,64 @@ public class Auger : MonoBehaviour
         connectionLine.enabled = false;
     }
 
-    //! Called once per frame by unity engine.
-    public void Update()
+    public override void UpdateMachine()
     {
-        if (ID == "unassigned")
+        if (ID == "unassigned" || stateManager.Busy())
             return;
 
-        updateTick += 1 * Time.deltaTime;
-        if (updateTick > 0.5f + (address * 0.001f))
+        GetComponent<PhysicsHandler>().UpdatePhysics();
+        UpdatePowerReceiver();
+
+        if (warmup < 10)
         {
-            if (stateManager.Busy())
-            {
-                 updateTick = 0;
-                return;
-            }
+            warmup++;
+        }
+        else if (speed > power)
+        {
+            speed = power > 0 ? power : 1;
+        }
+        if (speed > 1)
+        {
+            heat = speed - 1 - cooling;
+        }
+        else
+        {
+            heat = 0;
+        }
+        if (heat < 0)
+        {
+            heat = 0;
+        }
 
-            GetComponent<PhysicsHandler>().UpdatePhysics();
-            UpdatePowerReceiver();
+        if (outputObject != null)
+        {
+            connectionLine.SetPosition(0, transform.position);
+            connectionLine.SetPosition(1, outputObject.transform.position);
+            connectionLine.enabled = true;
+        }
+        else
+        {
+            connectionLine.enabled = false;
+        }
 
-            updateTick = 0;
-            if (warmup < 10)
+        if (powerON == true && speed > 0)
+        {
+            conduitItem.active = true;
+            GetComponent<Light>().enabled = true;
+            GetComponent<AudioSource>().enabled = true;
+            machineTimer += 1;
+            if (machineTimer > 5 - (address * 0.01f))
             {
-                warmup++;
-            }
-            else if (speed > power)
-            {
-                speed = power > 0 ? power : 1;
-            }
-            if (speed > 1)
-            {
-                heat = speed - 1 - cooling;
-            }
-            else
-            {
-                heat = 0;
-            }
-            if (heat < 0)
-            {
-                heat = 0;
-            }
-
-            if (outputObject != null)
-            {
-                connectionLine.SetPosition(0, transform.position);
-                connectionLine.SetPosition(1, outputObject.transform.position);
-                connectionLine.enabled = true;
-            }
-            else
-            {
-                connectionLine.enabled = false;
-            }
-
-            if (powerON == true && speed > 0)
-            {
-                conduitItem.active = true;
-                GetComponent<Light>().enabled = true;
-                GetComponent<AudioSource>().enabled = true;
-                machineTimer += 1;
-                if (machineTimer > 5 - (address * 0.01f))
-                {
-                    amount += speed - heat;
-                    machineTimer = 0;
-                }
-            }
-            else
-            {
+                amount += speed - heat;
                 machineTimer = 0;
-                conduitItem.active = false;
-                GetComponent<Light>().enabled = false;
-                GetComponent<AudioSource>().enabled = false;
             }
+        }
+        else
+        {
+            machineTimer = 0;
+            conduitItem.active = false;
+            GetComponent<Light>().enabled = false;
+            GetComponent<AudioSource>().enabled = false;
         }
     }
 

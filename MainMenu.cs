@@ -841,7 +841,8 @@ public class MainMenu : MonoBehaviour
             int f = GUI.skin.label.fontSize;
             GUI.skin.label.fontSize = 16;
             GUI.color = new Color(0.2824f, 0.7882f, 0.9569f);
-            string loadingMessage = "Loading... " + stateManager.progress + "/" + stateManager.idList.Length;
+            int idTotal = stateManager.machineIdList.Length + stateManager.blockIdList.Length;
+            string loadingMessage = "Loading... " + stateManager.progress + "/" + idTotal;
             Vector2 size = GetStringSize(loadingMessage);
             Rect messagePos = new Rect((Screen.width / 2) - (size.x/2), Screen.height * 0.4f, size.x, size.y);
             GUI.Label(messagePos, loadingMessage);

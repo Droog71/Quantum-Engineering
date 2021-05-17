@@ -16,7 +16,7 @@ public class MarketGUI : MonoBehaviour
     public void Start()
     {
         playerController = GetComponent<PlayerController>();
-        textureDictionary = GetComponent<TextureDictionary>();
+        textureDictionary = playerController.gameManager.GetComponent<TextureDictionary>();
         guiCoordinates = new GuiCoordinates();
         descriptions = new Descriptions();
         priceDictionary = new Dictionary<string, int>

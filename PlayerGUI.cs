@@ -27,7 +27,7 @@ public class PlayerGUI : MonoBehaviour
         playerInventory = GetComponent<InventoryManager>();
         gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
         stateManager = GameObject.Find("GameManager").GetComponent<StateManager>();
-        textureDictionary = GetComponent<TextureDictionary>();
+        textureDictionary = gameManager.GetComponent<TextureDictionary>();
         guiCoordinates = new GuiCoordinates();
         paintSelectionTexture = new Texture2D(512, 128);
     }

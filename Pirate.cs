@@ -118,7 +118,7 @@ public class Pirate : MonoBehaviour
 
             // Targeting.
             bool targetFound = false;
-            GameObject[] allObjects = GameObject.FindGameObjectsWithTag("Built");
+            GameObject[] allObjects = GameObject.FindGameObjectsWithTag("Machine");
             foreach (GameObject obj in allObjects)
             {
                 if (targetFound == false)
@@ -129,6 +129,7 @@ public class Pirate : MonoBehaviour
                         targetLocation = target.transform.position;
                         targetLocationList.Add(targetLocation);
                         targetFound = true;
+                        break;
                     }
                 }
             }

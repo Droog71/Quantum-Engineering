@@ -538,9 +538,9 @@ public class PlayerController : MonoBehaviour
     //! Returns true when all mod textures have finished loading.
     private bool LoadedModTextures()
     {
-        if (GetComponent<TextureDictionary>() != null)
+        if (gameManager.GetComponent<TextureDictionary>() != null)
         {
-            return GetComponent<TextureDictionary>().addedModTextures;
+            return gameManager.GetComponent<TextureDictionary>().addedModTextures;
         }
         return false;
     }

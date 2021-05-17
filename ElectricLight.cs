@@ -1,10 +1,9 @@
 ﻿using UnityEngine;
 
-public class ElectricLight : MonoBehaviour
+public class ElectricLight : Machine
 {
     public string ID = "unassigned";
     public string creationMethod = "built";
-    private float updateTick;
     public int address;
     public bool powerON;
     public GameObject powerObject;
@@ -18,33 +17,21 @@ public class ElectricLight : MonoBehaviour
         powerReceiver = gameObject.AddComponent<PowerReceiver>();
     }
 
-    //! Called once per frame by unity engine.
-    public void Update()
+    public override void UpdateMachine()
     {
-        if (ID == "unassigned")
+        if (ID == "unassigned" || stateManager.Busy())
             return;
 
-        updateTick += 1 * Time.deltaTime;
-        if (updateTick > 1 + (address * 0.001f))
+        GetComponent<PhysicsHandler>().UpdatePhysics();
+        UpdatePowerReceiver();
+
+        if (powerON == true)
         {
-            if (stateManager.Busy())
-            {
-                 updateTick = 0;
-                return;
-            }
-
-            GetComponent<PhysicsHandler>().UpdatePhysics();
-            UpdatePowerReceiver();
-
-            updateTick = 0;
-            if (powerON == true)
-            {
-                GetComponent<Light>().enabled = true;
-            }
-            else
-            {
-                GetComponent<Light>().enabled = false;
-            }
+            GetComponent<Light>().enabled = true;
+        }
+        else
+        {
+            GetComponent<Light>().enabled = false;
         }
     }
 

@@ -46,7 +46,7 @@ public class TextureDictionary : MonoBehaviour
                 }
             }
         }
-        GameObject.Find("Player").GetComponent<TextureDictionary>().addedModTextures = true;
+        GameObject.Find("GameManager").GetComponent<TextureDictionary>().addedModTextures = true;
     }
 
     //! Called by unity engine to initialize variables on startup.

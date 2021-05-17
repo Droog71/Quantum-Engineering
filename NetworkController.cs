@@ -43,7 +43,7 @@ public class NetworkController
     {
         this.playerController = playerController;
         serverURL = PlayerPrefs.GetString("serverURL");
-        textureDictionary = playerController.GetComponent<TextureDictionary>();
+        textureDictionary = playerController.gameManager.GetComponent<TextureDictionary>();
         networkPlayers = new Dictionary<string, GameObject>();
         playerPositions = new Dictionary<string, Vector3>();
         playerNames = new List<string>();

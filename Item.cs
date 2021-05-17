@@ -6,12 +6,14 @@ public class Item : MonoBehaviour
     public int amount;
     public GameObject billboard;
     private StateManager stateManager;
+    private GameManager gameManager;
 
     //! Called by unity engine on start up to initialize variables.
     public void Start()
     {
         billboard.GetComponent<Renderer>().enabled = false;
         stateManager = FindObjectOfType<StateManager>();
+        gameManager = FindObjectOfType<GameManager>();
     }
 
     //! Called once per frame by unity engine.
@@ -21,18 +23,19 @@ public class Item : MonoBehaviour
         {
             if (type != "nothing")
             {
-                if (GetComponent<TextureDictionary>() != null)
+                TextureDictionary td = gameManager.GetComponent<TextureDictionary>();
+                if (td != null)
                 {
-                    if (GetComponent<TextureDictionary>().dictionary != null)
+                    if (td.dictionary != null)
                     {
-                        if (GetComponent<TextureDictionary>().dictionary.ContainsKey(type + "_Icon"))
+                        if (td.dictionary.ContainsKey(type + "_Icon"))
                         {
-                            billboard.GetComponent<Renderer>().material.mainTexture = GetComponent<TextureDictionary>().dictionary[type + "_Icon"];
+                            billboard.GetComponent<Renderer>().material.mainTexture = td.dictionary[type + "_Icon"];
                             billboard.GetComponent<Renderer>().enabled = true;
                         }
-                        else if (GetComponent<TextureDictionary>().dictionary.ContainsKey(type))
+                        else if (td.dictionary.ContainsKey(type))
                         {
-                            billboard.GetComponent<Renderer>().material.mainTexture = GetComponent<TextureDictionary>().dictionary[type];
+                            billboard.GetComponent<Renderer>().material.mainTexture = td.dictionary[type];
                             billboard.GetComponent<Renderer>().enabled = true;
                         }
                     }

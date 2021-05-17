@@ -2,7 +2,7 @@
 using UnityEngine;
 using System.Linq;
 
-public class DarkMatterConduit : MonoBehaviour
+public class DarkMatterConduit : Machine
 {
     public float darkMatterAmount;
     public int speed = 1;
@@ -16,7 +16,6 @@ public class DarkMatterConduit : MonoBehaviour
     public Material darkMatterMat;
     public Material lineMat;
     private LineRenderer connectionLine;
-    private float updateTick;
     public int address;
     public int range = 6;
     public int connectionAttempts;
@@ -42,55 +41,51 @@ public class DarkMatterConduit : MonoBehaviour
         stateManager = FindObjectOfType<StateManager>();
     }
 
-    //! Called once per frame by unity engine.
-    public void Update()
+    public override void UpdateMachine()
     {
-        if (ID == "unassigned")
+        if (ID == "unassigned" || stateManager.Busy())
             return;
 
-        updateTick += 1 * Time.deltaTime;
-        if (updateTick > 0.5f + (address * 0.001f))
+        GetComponent<PhysicsHandler>().UpdatePhysics();
+
+        if (inputObject == null || outputObject == null)
         {
-            if (stateManager.Busy())
+            connectionAttempts += 1;
+            if (creationMethod.Equals("spawned"))
             {
-                 updateTick = 0;
-                return;
+                if (connectionAttempts >= 30)
+                {
+                    connectionAttempts = 0;
+                    connectionFailed = true;
+                }
             }
-
-            GetComponent<PhysicsHandler>().UpdatePhysics();
-            updateTick = 0;
-            if (inputObject == null || outputObject == null)
+            else
             {
-                connectionAttempts += 1;
-                if (creationMethod.Equals("spawned"))
+                if (connectionAttempts >= 120)
                 {
-                    if (connectionAttempts >= 30)
-                    {
-                        connectionAttempts = 0;
-                        connectionFailed = true;
-                    }
-                }
-                else
-                {
-                    if (connectionAttempts >= 120)
-                    {
-                        connectionAttempts = 0;
-                        connectionFailed = true;
-                    }
-                }
-
-                if (connectionFailed == false)
-                {
-                    FindConnections();
+                    connectionAttempts = 0;
+                    connectionFailed = true;
                 }
             }
 
-            HandleIO();
-
-            if (inputObject != null && outputObject != null)
+            if (connectionFailed == false)
             {
-                connectionAttempts = 0;
+                if (inputObject == null)
+                {
+                    FindInputConnection();
+                }
+                if (outputObject == null)
+                {
+                    FindOutputConnection();
+                }
             }
+        }
+
+        HandleIO();
+
+        if (inputObject != null && outputObject != null)
+        {
+            connectionAttempts = 0;
         }
     }
 
@@ -101,16 +96,6 @@ public class DarkMatterConduit : MonoBehaviour
         {
             storageComputerConduitItem.active = false;
         }
-    }
-
-    //! The object exists, is active and is not a standard building block.
-    bool IsValidObject(GameObject obj)
-    {
-        if (obj != null)
-        {
-            return obj.transform.parent != builtObjects.transform && obj.activeInHierarchy;
-        }
-        return false;
     }
 
     //! The object is a potential output connection.
@@ -129,16 +114,16 @@ public class DarkMatterConduit : MonoBehaviour
         return false;
     }
 
-    //! Makes connections to collectors and other conduits.
-    private void FindConnections()
+    //! Finds an input connection.
+    private void FindInputConnection()
     {
-        GameObject[] allObjects = GameObject.FindGameObjectsWithTag("Built");
+        GameObject[] allObjects = GameObject.FindGameObjectsWithTag("Machine");
         List<GameObject> objList = allObjects.ToList();
         objList.Add(GameObject.Find("Rocket"));
         objList.Add(GameObject.Find("LanderCargo"));
         foreach (GameObject obj in objList)
         {
-            if (IsValidObject(obj))
+            if (obj != null)
             {
                 if (obj.GetComponent<DarkMatterCollector>() != null)
                 {
@@ -153,17 +138,34 @@ public class DarkMatterConduit : MonoBehaviour
                                 {
                                     inputObject = obj;
                                     obj.GetComponent<DarkMatterCollector>().outputObject = gameObject;
+                                    creationMethod = "built";
+                                    break;
                                 }
-                                creationMethod = "built";
                             }
                             else if (creationMethod.Equals("built"))
                             {
                                 inputObject = obj;
                                 obj.GetComponent<DarkMatterCollector>().outputObject = gameObject;
+                                break;
                             }
                         }
                     }
                 }
+            }
+        }
+    }
+
+    //! Finds an output connection.
+    private void FindOutputConnection()
+    {
+        GameObject[] allObjects = GameObject.FindGameObjectsWithTag("Machine");
+        List<GameObject> objList = allObjects.ToList();
+        objList.Add(GameObject.Find("Rocket"));
+        objList.Add(GameObject.Find("LanderCargo"));
+        foreach (GameObject obj in objList)
+        {
+            if (obj != null)
+            {
                 if (IsStorageContainer(obj))
                 {
                     if (IsValidOutputObject(obj))
@@ -179,6 +181,7 @@ public class DarkMatterConduit : MonoBehaviour
                                 connectionLine.SetPosition(1, obj.transform.position + obj.transform.up * lineHeight);
                                 connectionLine.enabled = distance < range;
                                 creationMethod = "built";
+                                break;
                             }
                         }
                         else if (creationMethod.Equals("built") && distance < range)
@@ -188,6 +191,7 @@ public class DarkMatterConduit : MonoBehaviour
                             connectionLine.SetPosition(0, transform.position);
                             connectionLine.SetPosition(1, obj.transform.position + obj.transform.up * lineHeight);
                             connectionLine.enabled = true;
+                            break;
                         }
                     }
                 }
@@ -202,6 +206,7 @@ public class DarkMatterConduit : MonoBehaviour
                             connectionLine.SetPosition(0, transform.position);
                             connectionLine.SetPosition(1, obj.transform.position);
                             connectionLine.enabled = true;
+                            break;
                         }
                         else if (creationMethod.Equals("built"))
                         {
@@ -209,6 +214,7 @@ public class DarkMatterConduit : MonoBehaviour
                             connectionLine.SetPosition(0, transform.position);
                             connectionLine.SetPosition(1, obj.transform.position);
                             connectionLine.enabled = true;
+                            break;
                         }
                     }
                 }
@@ -229,6 +235,7 @@ public class DarkMatterConduit : MonoBehaviour
                                     connectionLine.SetPosition(1, obj.transform.position);
                                     connectionLine.enabled = true;
                                     creationMethod = "built";
+                                    break;
                                 }
                             }
                             else if (creationMethod.Equals("built"))
@@ -238,6 +245,7 @@ public class DarkMatterConduit : MonoBehaviour
                                 connectionLine.SetPosition(0, transform.position);
                                 connectionLine.SetPosition(1, obj.transform.position);
                                 connectionLine.enabled = true;
+                                break;
                             }
                         }
                     }

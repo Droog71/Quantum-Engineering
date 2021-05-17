@@ -31,8 +31,8 @@ public class Extruder : BasicMachine
     }
 
     //! Called once per frame by unity engine.
-    public new void Update()
+    public override void UpdateMachine()
     {
-        base.Update();
+        base.UpdateMachine();
     }
 }

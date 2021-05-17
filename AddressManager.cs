@@ -5,6 +5,8 @@ public class AddressManager
 {
     private StateManager stateManager;
     private int totalObjects;
+    public bool machineIdCoroutineActive;
+    public bool blockIdCoroutineActive;
 
     //! This class assigns a unique ID to every block in the world.
     public AddressManager(StateManager stateManager)
@@ -12,14 +14,13 @@ public class AddressManager
         this.stateManager = stateManager;
     }
 
-    //! Assigns ID to all objects in the world.
-    public IEnumerator AddressingCoroutine()
+    public IEnumerator MachineIdCoroutine()
     {
-        stateManager.assigningIDs = true;
+        machineIdCoroutineActive = true;
         int idCount = 0;
         int addressingInterval = 0;
         string objectName  = "";
-        GameObject[] machines = GameObject.FindGameObjectsWithTag("Built");
+        GameObject[] machines = GameObject.FindGameObjectsWithTag("Machine");
         foreach (GameObject go in machines)
         {
             if (go != null)
@@ -208,7 +209,15 @@ public class AddressManager
                 }
             }
         }
+        machineIdCoroutineActive = false;
+    }
 
+    public IEnumerator BlockIdCoroutine()
+    {
+        blockIdCoroutineActive = true;
+        int idCount = 0;
+        int addressingInterval = 0;
+        string objectName  = "";
         Transform[] blocks = stateManager.builtObjects.GetComponentsInChildren<Transform>(true);
         foreach (Transform T in blocks)
         {
@@ -272,8 +281,7 @@ public class AddressManager
                 }
             }
         }
-
-       stateManager.assigningIDs = false;
+        blockIdCoroutineActive = false;
     }
 }
 

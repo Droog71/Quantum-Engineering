@@ -101,7 +101,7 @@ public class HazardManager
                 else if (gameManager.meteorShowerTimer >= 540 && gameManager.meteorShowerTimer < 600)
                 {
                     bool locationFound = false;
-                    GameObject[] allObjects = GameObject.FindGameObjectsWithTag("Built");
+                    GameObject[] allObjects = GameObject.FindGameObjectsWithTag("Machine");
                     foreach (GameObject go in allObjects)
                     {
                         if (locationFound == false)
@@ -111,6 +111,7 @@ public class HazardManager
                                 gameManager.meteorShowerLocation = go.transform.position;
                                 gameManager.meteorShowerLocationList.Add(gameManager.meteorShowerLocation);
                                 locationFound = true;
+                                break;
                             }
                         }
                     }

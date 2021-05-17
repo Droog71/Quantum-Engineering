@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 
-public class RailCartHub : MonoBehaviour
+public class RailCartHub : Machine
 {
     public string ID = "unassigned";
     public string inputID;
@@ -11,7 +11,6 @@ public class RailCartHub : MonoBehaviour
     public GameObject outputObject;
     private StateManager stateManager;
     private LineRenderer connectionLine;
-    private float updateTick;
     public Material lineMat;
     public int address;
     public int range = 6;
@@ -34,70 +33,59 @@ public class RailCartHub : MonoBehaviour
         connectionLine.enabled = false;
     }
 
-    //! Called once per frame by unity engine.
-    public void Update()
+    public override void UpdateMachine()
     {
-        if (ID == "unassigned")
+        if (ID == "unassigned" || stateManager.Busy())
             return;
 
-        updateTick += 1 * Time.deltaTime;
-        if (updateTick > 0.5f + (address * 0.001f))
-        {
-            if (stateManager.Busy())
-            {
-                 updateTick = 0;
-                return;
-            }
+        GetComponent<PhysicsHandler>().UpdatePhysics();
 
-            GetComponent<PhysicsHandler>().UpdatePhysics();
-            updateTick = 0;
-            if (inputObject == null || outputObject == null)
+        if (inputObject == null || outputObject == null)
+        {
+            connectionAttempts += 1;
+            if (creationMethod.Equals("spawned"))
             {
-                connectionAttempts += 1;
+                if (connectionAttempts >= 30)
+                {
+                    connectionAttempts = 0;
+                    connectionFailed = true;
+                }
+            }
+            else
+            {
+                if (connectionAttempts >= 120)
+                {
+                    connectionAttempts = 0;
+                    connectionFailed = true;
+                }
+            }
+            if (connectionFailed == false)
+            {
+                FindConnection();
+            }
+        }
+        if (inputObject != null)
+        {
+            inputID = inputObject.GetComponent<RailCartHub>().ID;
+        }
+        if (outputObject != null)
+        {
+            outputID = outputObject.GetComponent<RailCartHub>().ID;
+        }
+        if (outputObject == null)
+        {
+            connectionLine.enabled = false;
+            if (connectionFailed == true)
+            {
                 if (creationMethod.Equals("spawned"))
                 {
-                    if (connectionAttempts >= 30)
-                    {
-                        connectionAttempts = 0;
-                        connectionFailed = true;
-                    }
-                }
-                else
-                {
-                    if (connectionAttempts >= 120)
-                    {
-                        connectionAttempts = 0;
-                        connectionFailed = true;
-                    }
-                }
-                if (connectionFailed == false)
-                {
-                    FindConnection();
+                    creationMethod = "built";
                 }
             }
-            if (inputObject != null)
-            {
-                inputID = inputObject.GetComponent<RailCartHub>().ID;
-            }
-            if (outputObject != null)
-            {
-                outputID = outputObject.GetComponent<RailCartHub>().ID;
-            }
-            if (outputObject == null)
-            {
-                connectionLine.enabled = false;
-                if (connectionFailed == true)
-                {
-                    if (creationMethod.Equals("spawned"))
-                    {
-                        creationMethod = "built";
-                    }
-                }
-            }
-            if (inputObject != null && outputObject != null)
-            {
-                connectionAttempts = 0;
-            }
+        }
+        if (inputObject != null && outputObject != null)
+        {
+            connectionAttempts = 0;
         }
     }
 

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 public class ConduitItem : MonoBehaviour
 {
     private StateManager stateManager;
+    private GameManager gameManager;
     public Vector3 startPosition;
     public Dictionary<string, Texture2D> textureDictionary;
     public GameObject target;
@@ -16,6 +17,7 @@ public class ConduitItem : MonoBehaviour
     public void Start()
     {
         stateManager = FindObjectOfType<StateManager>();
+        gameManager = FindObjectOfType<GameManager>();
         startPosition = transform.position;
     }
 
@@ -236,7 +238,7 @@ public class ConduitItem : MonoBehaviour
             {
                 transform.position = startPosition;
                 billboard.GetComponent<Renderer>().enabled = false;
-                textureDictionary = GetComponent<TextureDictionary>().dictionary;
+                textureDictionary = gameManager.GetComponent<TextureDictionary>().dictionary;
             }
         }
     }

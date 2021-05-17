@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class PowerSource : MonoBehaviour
+public class PowerSource : Machine
 {
     public string ID = "unassigned";
     public Material lineMat;
@@ -10,7 +10,6 @@ public class PowerSource : MonoBehaviour
     public string inputID;
     public string outputID;
     private LineRenderer connectionLine;
-    private float updateTick;
     public int address;
     public int powerAmount;
     public string type;
@@ -40,60 +39,52 @@ public class PowerSource : MonoBehaviour
         stateManager = FindObjectOfType<StateManager>();
     }
 
-    //! Called once per frame by unity engine.
-    public void Update()
+    public override void UpdateMachine()
     {
-        if (ID == "unassigned")
+        if (ID == "unassigned" || stateManager.Busy())
             return;
 
-        updateTick += 1 * Time.deltaTime;
-        if (updateTick > 0.5f + (address * 0.001f))
+        GetComponent<PhysicsHandler>().UpdatePhysics();
+
+        if (outputObject == null)
         {
-            if (stateManager.Busy())
-            {
-                 updateTick = 0;
-                return;
-            }
-
-            GetComponent<PhysicsHandler>().UpdatePhysics();
-            updateTick = 0;
-
-            if (outputObject == null)
-            {
-                connectionAttempts += 1;
-                if (connectionAttempts >= 120)
-                {
-                    connectionAttempts = 0;
-                    connectionFailed = true;
-                }
-
-                if (connectionFailed == false)
-                {
-                    GameObject[] allObjects = GameObject.FindGameObjectsWithTag("Built");
-                    foreach (GameObject obj in allObjects)
-                    {
-                        if (IsValidObject(obj))
-                        {
-                            ConnectToOutput(obj);
-                        }
-                    }
-                }
-            }
-
-            if (outputObject != null && connectionFailed == false)
+            connectionAttempts += 1;
+            if (connectionAttempts >= 120)
             {
                 connectionAttempts = 0;
-                DistributePower();
+                connectionFailed = true;
             }
-            else
+
+            if (connectionFailed == false)
             {
-                connectionLine.enabled = false;
-                if (connectionFailed == true)
+                GameObject[] allObjects = GameObject.FindGameObjectsWithTag("Machine");
+                foreach (GameObject obj in allObjects)
                 {
-                    if (creationMethod.Equals("spawned"))
+                    if (outputObject != null)
                     {
-                        creationMethod = "built";
+                        break;
                     }
+                    if (obj != null)
+                    {
+                        AttemptConnection(obj);
+                    }
+                }
+            }
+        }
+
+        if (outputObject != null && connectionFailed == false)
+        {
+            connectionAttempts = 0;
+            DistributePower();
+        }
+        else
+        {
+            connectionLine.enabled = false;
+            if (connectionFailed == true)
+            {
+                if (creationMethod.Equals("spawned"))
+                {
+                    creationMethod = "built";
                 }
             }
         }
@@ -116,18 +107,8 @@ public class PowerSource : MonoBehaviour
         }
     }
 
-    //! Returns true if the object exists, is active and is not a standard building block.
-    private bool IsValidObject(GameObject obj)
-    {
-        if (obj != null)
-        {
-            return obj.transform.parent != builtObjects.transform && obj.activeInHierarchy;
-        }
-        return false;
-    }
-
     //! Connects the power source to a power receiver.
-    private void ConnectToOutput(GameObject obj)
+    private void AttemptConnection(GameObject obj)
     {
         float distance = Vector3.Distance(transform.position, obj.transform.position);
         if (distance <= 40)

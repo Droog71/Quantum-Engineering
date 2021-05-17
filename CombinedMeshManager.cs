@@ -375,7 +375,7 @@ public class CombinedMeshManager
     //! Sets up the material for mod block meshes.
     public void SetMaterial(GameObject obj, string blockType)
     {
-        TextureDictionary textureDictionary = GameObject.Find("Player").GetComponent<TextureDictionary>();
+        TextureDictionary textureDictionary = gameManager.GetComponent<TextureDictionary>();
         if (textureDictionary.dictionary.ContainsKey(blockType))
         {
             if (blockType.ToUpper().Contains("GLASS"))

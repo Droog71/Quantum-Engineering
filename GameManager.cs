@@ -197,7 +197,7 @@ public class GameManager : MonoBehaviour
             // A save game request is pending.
             if (dataSaveRequested == true)
             {
-                if (GetComponent<StateManager>().saving == false && GetComponent<StateManager>().assigningIDs == false)
+                if (GetComponent<StateManager>().saving == false && GetComponent<StateManager>().AddressManagerBusy() == false)
                 {
                     Debug.Log("Saving world...");
                     GetComponent<StateManager>().SaveData();

@@ -1,9 +1,8 @@
 ﻿using UnityEngine;
 
-public class BasicMachine : MonoBehaviour
+public class BasicMachine : Machine
 {
     public float amount;
-    public float updateTick;
     public int address;
     public int speed = 1;
     public int power;
@@ -48,109 +47,87 @@ public class BasicMachine : MonoBehaviour
         builtObjects = GameObject.Find("BuiltObjects");
     }
 
-    //! Called once per frame by unity engine.
-    public void Update()
+    public override void UpdateMachine()
     {
-        if (ID == "unassigned")
+        if (ID == "unassigned" || stateManager.Busy())
             return;
 
-        updateTick += 1 * Time.deltaTime;
-        if (updateTick > 0.5f + (address * 0.001f))
+        UpdatePowerReceiver();
+        GetComponent<PhysicsHandler>().UpdatePhysics();
+
+        if (warmup < 10)
         {
-            if (stateManager.Busy())
-            {
-                 updateTick = 0;
-                return;
-            }
+            warmup++;
+        }
+        else if (speed > power)
+        {
+            speed = power > 0 ? power : 1;
+        }
+        if (speed > 1)
+        {
+            heat = speed - 1 - cooling;
+        }
+        else
+        {
+            heat = 0;
+        }
+        if (heat < 0)
+        {
+            heat = 0;
+        }
 
-            UpdatePowerReceiver();
-            GetComponent<PhysicsHandler>().UpdatePhysics();
-
-            updateTick = 0;
-            if (warmup < 10)
+        if (inputObject == null || outputObject == null)
+        {
+            connectionAttempts += 1;
+            if (creationMethod.Equals("spawned"))
             {
-                warmup++;
-            }
-            else if (speed > power)
-            {
-                speed = power > 0 ? power : 1;
-            }
-            if (speed > 1)
-            {
-                heat = speed - 1 - cooling;
-            }
-            else
-            {
-                heat = 0;
-            }
-            if (heat < 0)
-            {
-                heat = 0;
-            }
-
-            if (inputObject == null || outputObject == null)
-            {
-                connectionAttempts += 1;
-                if (creationMethod.Equals("spawned"))
+                if (connectionAttempts >= 30)
                 {
-                    if (connectionAttempts >= 30)
-                    {
-                        connectionAttempts = 0;
-                        connectionFailed = true;
-                    }
-                }
-                else
-                {
-                    if (connectionAttempts >= 120)
-                    {
-                        connectionAttempts = 0;
-                        connectionFailed = true;
-                    }
-                }
-                if (connectionFailed == false)
-                {
-                    ConnectToOutput();
-                }
-            }
-            if (inputObject != null)
-            {
-                if (inputObject.GetComponent<UniversalConduit>() != null)
-                {
-                    if (amount < 1 || outputType == "nothing")
-                    {
-                        outputType = GetOutputType();
-                    }
-
-                    if (inputObject.GetComponent<UniversalConduit>().conduitItem.active == false)
-                    {
-                        conduitItem.active = false;
-                        GetComponent<Light>().enabled = false;
-                    }
+                    connectionAttempts = 0;
+                    connectionFailed = true;
                 }
             }
             else
             {
-                conduitItem.active = false;
-                GetComponent<Light>().enabled = false;
+                if (connectionAttempts >= 120)
+                {
+                    connectionAttempts = 0;
+                    connectionFailed = true;
+                }
             }
-
-            HandleOutput();
-
-            if (inputObject != null && outputObject != null)
+            if (connectionFailed == false && outputObject == null)
             {
-                connectionAttempts = 0;
+                FindOutputObject();
             }
         }
-    }
-
-    //! The object exists, is active and is not a standard building block.
-    private bool IsValidObject(GameObject obj)
-    {
-        if (obj != null)
+        if (inputObject != null)
         {
-            return obj.transform.parent != builtObjects.transform && obj.activeInHierarchy;
+            if (inputObject.GetComponent<UniversalConduit>() != null)
+            {
+                if (amount < 1 || outputType == "nothing")
+                {
+                    outputType = GetOutputType();
+                }
+
+                if (inputObject.GetComponent<UniversalConduit>().conduitItem.active == false)
+                {
+                    conduitItem.active = false;
+                    GetComponent<Light>().enabled = false;
+                }
+            }
         }
-        return false;
+        else
+        {
+            conduitItem.active = false;
+            GetComponent<Light>().enabled = false;
+        }
+
+        HandleOutput();
+
+        if (inputObject != null && outputObject != null)
+        {
+            connectionAttempts = 0;
+        }
     }
 
     //! The object is a potential output connection.
@@ -160,12 +137,12 @@ public class BasicMachine : MonoBehaviour
     }
 
     //! Finds and connects to a universal conduit for output.
-    private void ConnectToOutput()
+    private void FindOutputObject()
     {
-        GameObject[] allObjects = GameObject.FindGameObjectsWithTag("Built");
+        GameObject[] allObjects = GameObject.FindGameObjectsWithTag("Machine");
         foreach (GameObject obj in allObjects)
         {
-            if (IsValidObject(obj))
+            if (obj != null)
             {
                 if (obj.GetComponent<UniversalConduit>() != null)
                 {
@@ -183,6 +160,7 @@ public class BasicMachine : MonoBehaviour
                                 connectionLine.SetPosition(1, obj.transform.position);
                                 connectionLine.enabled = true;
                                 creationMethod = "built";
+                                break;
                             }
                             else if (creationMethod.Equals("built"))
                             {
@@ -192,6 +170,7 @@ public class BasicMachine : MonoBehaviour
                                 connectionLine.SetPosition(0, transform.position);
                                 connectionLine.SetPosition(1, obj.transform.position);
                                 connectionLine.enabled = true;
+                                break;
                             }
                         }
                     }

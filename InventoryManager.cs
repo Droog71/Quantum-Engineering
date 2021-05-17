@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class InventoryManager : MonoBehaviour
+public class InventoryManager : Machine
 {
     public InventorySlot[] inventory;
     private StateManager stateManager;
@@ -8,7 +8,6 @@ public class InventoryManager : MonoBehaviour
     public int address;
     private string originalID;
     public bool initialized;
-    private float updateTick;
     public int maxStackSize = 1000;
     public bool itemAdded;
 
@@ -18,7 +17,7 @@ public class InventoryManager : MonoBehaviour
     }
 
     //! Called once per frame by unity engine.
-    public void Update()
+    public override void UpdateMachine()
     {
         if (!stateManager.Busy())
         {
@@ -43,15 +42,9 @@ public class InventoryManager : MonoBehaviour
                     initialized = true;
                     maxStackSize = ID.Equals("Rocket") ? 100000 : 1000;
                 }
-
-                updateTick += 1 * Time.deltaTime;
-                if (updateTick > 0.5f + (address * 0.001f))
+                if (IsStorageContainer())
                 {
-                    if (IsStorageContainer())
-                    {
-                        GetComponent<PhysicsHandler>().UpdatePhysics();
-                    }
-                    updateTick = 0;
+                    GetComponent<PhysicsHandler>().UpdatePhysics();
                 }
             }
         }

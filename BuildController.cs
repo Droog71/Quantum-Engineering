@@ -73,7 +73,7 @@ public class BuildController : MonoBehaviour
                         float distance = Vector3.Distance(transform.position, playerController.buildObject.transform.position);
                         Material buildObjectMaterial = playerController.buildObject.GetComponent<MeshRenderer>().material;
                         buildObjectMaterial.color = distance > gameManager.chunkSize * 0.75f ? Color.red : Color.white;
-                        if (hit.transform.gameObject.tag == "Built")
+                        if (hit.transform.gameObject.tag == "Built" || hit.transform.gameObject.tag == "Machine")
                         {
                             if (autoAxis == true)
                             {

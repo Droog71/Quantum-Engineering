@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-public class StorageComputer : MonoBehaviour
+public class StorageComputer : Machine
 {
     public InventoryManager[] computerContainers;
     private List<InventoryManager> computerContainerList;
@@ -10,7 +10,6 @@ public class StorageComputer : MonoBehaviour
     public int bootTimer;
     public bool initialized;
     public int address;
-    private float updateTick;
     private StateManager stateManager;
     private List<GameObject> spawnedConnectionList;
     public GameObject connectionObject;
@@ -29,49 +28,37 @@ public class StorageComputer : MonoBehaviour
         conduitItem = GetComponentInChildren<ConduitItem>(true);
     }
 
-    //! Called once per frame by unity engine.
-    public void Update()
+    public override void UpdateMachine()
     {
-        if (ID == "unassigned")
+        if (ID == "unassigned" || stateManager.Busy())
             return;
 
-        updateTick += 1 * Time.deltaTime;
-        if (updateTick > 0.5f + (address * 0.001f))
+        GetComponent<PhysicsHandler>().UpdatePhysics();
+        UpdatePowerReceiver();
+
+        if (powerON == true)
         {
-            if (stateManager.Busy())
+            if (initialized == false)
             {
-                 updateTick = 0;
-                return;
-            }
-
-            GetComponent<PhysicsHandler>().UpdatePhysics();
-            UpdatePowerReceiver();
-
-            updateTick = 0;
-            if (powerON == true)
-            {
-                if (initialized == false)
+                bootTimer++;
+                if (bootTimer >= 5)
                 {
-                    bootTimer++;
-                    if (bootTimer >= 5)
-                    {
-                        GetContainers();
-                        initialized = true;
-                        bootTimer = 0;
-                    }
+                    GetContainers();
+                    initialized = true;
+                    bootTimer = 0;
                 }
             }
-            else
+        }
+        else
+        {
+            initialized = false;
+            bootTimer = 0;
+            GameObject[] spawnedConnections = spawnedConnectionList.ToArray();
+            foreach (GameObject obj in spawnedConnections)
             {
-                initialized = false;
-                bootTimer = 0;
-                GameObject[] spawnedConnections = spawnedConnectionList.ToArray();
-                foreach (GameObject obj in spawnedConnections)
+                if (obj != null)
                 {
-                    if (obj != null)
-                    {
-                        obj.SetActive(false);
-                    }
+                    obj.SetActive(false);
                 }
             }
         }

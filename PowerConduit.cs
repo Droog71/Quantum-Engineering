@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class PowerConduit : MonoBehaviour
+public class PowerConduit : Machine
 {
     public string ID = "unassigned";
     public Material lineMat;
@@ -15,7 +15,6 @@ public class PowerConduit : MonoBehaviour
     public string inputID;
     private LineRenderer connectionLine;
     private GameObject connectionLine2;
-    private float updateTick;
     public int address;
     public int powerAmount;
     public bool dualOutput;
@@ -42,94 +41,81 @@ public class PowerConduit : MonoBehaviour
         outputObjects = new GameObject[] { outputObject1, outputObject2 };
     }
 
-    //! Called once per frame by unity engine.
-    public void Update()
+    public override void UpdateMachine()
     {
-        if (ID == "unassigned")
+        if (ID == "unassigned" || stateManager.Busy())
             return;
 
-        updateTick += 1 * Time.deltaTime;
-        if (updateTick > 0.5f + (address * 0.001f))
+        GetComponent<PhysicsHandler>().UpdatePhysics();
+
+        UpdatePowerReceiver();
+
+        if (outputObject1 == null && inputObject != null)
         {
-            if (stateManager.Busy())
+            UpdateOutputOne();
+        }
+
+        if (outputObject1 != null && outputObject2 == null && inputObject != null && dualOutput == true)
+        {
+            UpdateOutputTwo();
+        }
+
+        if (outputObject1 != null && connectionFailed == false)
+        {
+            DistributePowerToConnectionOne();
+        }
+
+        if (outputObject2 != null && connectionFailed == false)
+        {
+            DistributePowerToConnectionTwo();
+        }
+
+        if (inputObject != null)
+        {
+            if (inputObject.GetComponent<PowerSource>() != null)
             {
-                 updateTick = 0;
-                return;
-            }
-
-            updateTick = 0;
-
-            GetComponent<PhysicsHandler>().UpdatePhysics();
-
-            UpdatePowerReceiver();
-
-            if (outputObject1 == null && inputObject != null)
-            {
-                UpdateOutputOne();
-            }
-
-            if (outputObject1 != null && outputObject2 == null && inputObject != null && dualOutput == true)
-            {
-                UpdateOutputTwo();
-            }
-
-            if (outputObject1 != null && connectionFailed == false)
-            {
-                DistributePowerToConnectionOne();
-            }
-
-            if (outputObject2 != null && connectionFailed == false)
-            {
-                DistributePowerToConnectionTwo();
-            }
-
-            if (inputObject != null)
-            {
-                if (inputObject.GetComponent<PowerSource>() != null)
+                if (inputObject.GetComponent<PowerSource>().outputObject != gameObject)
                 {
-                    if (inputObject.GetComponent<PowerSource>().outputObject != gameObject)
-                    {
-                        inputObject = null;
-                        powerAmount = 0;
-                    }
+                    inputObject = null;
+                    powerAmount = 0;
                 }
             }
+        }
 
-            if (inputObject != null)
+        if (inputObject != null)
+        {
+            if (inputObject.GetComponent<PowerConduit>() != null)
             {
-                if (inputObject.GetComponent<PowerConduit>() != null)
+                if (inputObject.GetComponent<PowerConduit>().outputObject1 != gameObject && inputObject.GetComponent<PowerConduit>().outputObject2 != gameObject)
                 {
-                    if (inputObject.GetComponent<PowerConduit>().outputObject1 != gameObject && inputObject.GetComponent<PowerConduit>().outputObject2 != gameObject)
-                    {
-                        inputObject = null;
-                        powerAmount = 0;
-                    }
+                    inputObject = null;
+                    powerAmount = 0;
                 }
             }
+        }
 
-            connectionLine.enabled &= outputObject1 != null;
+        connectionLine.enabled &= outputObject1 != null;
 
-            if (outputObject1 == null || outputObject2 == null)
+        if (outputObject1 == null || outputObject2 == null)
+        {
+            if (connectionFailed == true)
             {
-                if (connectionFailed == true)
+                if (creationMethod.Equals("spawned"))
                 {
-                    if (creationMethod.Equals("spawned"))
-                    {
-                        creationMethod = "built";
-                    }
+                    creationMethod = "built";
                 }
             }
+        }
 
-            if (powerAmount < 1)
+        if (powerAmount < 1)
+        {
+            GetComponent<AudioSource>().Stop();
+        }
+        else
+        {
+            if (GetComponent<AudioSource>().isPlaying == false)
             {
-                GetComponent<AudioSource>().Stop();
-            }
-            else
-            {
-                if (GetComponent<AudioSource>().isPlaying == false)
-                {
-                    GetComponent<AudioSource>().Play();
-                }
+                GetComponent<AudioSource>().Play();
             }
         }
     }
@@ -179,16 +165,6 @@ public class PowerConduit : MonoBehaviour
         {
             powerAmount = powerReceiver.power;
         }
-    }
-
-    //! The object exists, is active and is not a standard building block.
-    bool IsValidObject(GameObject obj)
-    {
-        if (obj != null)
-        {
-            return obj.transform.parent != builtObjects.transform && obj.activeInHierarchy;
-        }
-        return false;
     }
 
     //! Creates a line renderer to the second output object
@@ -442,10 +418,10 @@ public class PowerConduit : MonoBehaviour
         }
         if (connectionFailed == false)
         {
-            GameObject[] allObjects = GameObject.FindGameObjectsWithTag("Built");
+            GameObject[] allObjects = GameObject.FindGameObjectsWithTag("Machine");
             foreach (GameObject obj in allObjects)
             {
-                if (IsValidObject(obj))
+                if (obj != null)
                 {
                     float distance = Vector3.Distance(transform.position, obj.transform.position);
                     if (distance < range)
@@ -462,6 +438,10 @@ public class PowerConduit : MonoBehaviour
                             ConnectOutputOneToConduit(obj);
                         }
                     }
+                }
+                if (outputObject1 != null)
+                {
+                    break;
                 }
             }
         }
@@ -490,23 +470,30 @@ public class PowerConduit : MonoBehaviour
         }
         if (dualOutput == true)
         {
-            GameObject[] allObjects = GameObject.FindGameObjectsWithTag("Built");
+            GameObject[] allObjects = GameObject.FindGameObjectsWithTag("Machine");
             foreach (GameObject obj in allObjects)
             {
-                float distance = Vector3.Distance(transform.position, obj.transform.position);
-                if (distance < range)
+                if (obj != null)
                 {
-                    if (obj.GetComponent<PowerReceiver>() != null && obj.GetComponent<PowerConduit>() == null && obj != outputObject1 && outputObject2 == null)
+                    float distance = Vector3.Distance(transform.position, obj.transform.position);
+                    if (distance < range)
                     {
-                        if (obj.GetComponent<PowerReceiver>().powerON == false)
+                        if (obj.GetComponent<PowerReceiver>() != null && obj.GetComponent<PowerConduit>() == null && obj != outputObject1 && outputObject2 == null)
                         {
-                            AttemptMachineTwoConnection(obj);
+                            if (obj.GetComponent<PowerReceiver>().powerON == false)
+                            {
+                                AttemptMachineTwoConnection(obj);
+                            }
+                        }
+                        if (obj.GetComponent<PowerConduit>() != null && obj != outputObject1 && outputObject2 == null)
+                        {
+                            ConnectOutputTwoToConduit(obj);
                         }
                     }
-                    if (obj.GetComponent<PowerConduit>() != null && obj != outputObject1 && outputObject2 == null)
-                    {
-                        ConnectOutputTwoToConduit(obj);
-                    }
+                }
+                if (outputObject2 != null)
+                {
+                    break;
                 }
             }
         }

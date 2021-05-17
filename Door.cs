@@ -1,9 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 
-public class Door : MonoBehaviour
+public class Door : Machine
 {
-    private float updateTick;
     private StateManager stateManager;
     public string ID = "unassigned";
     public int address;
@@ -30,7 +29,7 @@ public class Door : MonoBehaviour
         audioClips = new AudioClip[] { clip1, clip2, clip3 };
         stateManager = FindObjectOfType<StateManager>();
         textureList = new List<string>();
-        Dictionary<string, Texture2D> textureDictionary = GameObject.Find("Player").GetComponent<TextureDictionary>().dictionary;
+        Dictionary<string, Texture2D> textureDictionary = GameObject.Find("GameManager").GetComponent<TextureDictionary>().dictionary;
         Dictionary<string, GameObject> blockDictionary = GameObject.Find("Player").GetComponent<BuildController>().blockDictionary.blockDictionary;
         foreach (KeyValuePair<string, GameObject> kvp in blockDictionary)
         {
@@ -42,37 +41,25 @@ public class Door : MonoBehaviour
         textures = textureList.ToArray();
     }
 
-    //! Called once per frame by unity engine.
-    public void Update()
+    public override void UpdateMachine()
     {
-        if (ID == "unassigned")
+        if (ID == "unassigned" || stateManager.Busy())
             return;
 
-        updateTick += 1 * Time.deltaTime;
-        if (updateTick > 0.5f + (address * 0.001f))
+        if (edited == true && init == false)
         {
-            if (stateManager.Busy())
-            {
-                updateTick = 0;
-                return;
-            }
-
-            if (edited == true && init == false)
-            {
-                GetComponent<AudioSource>().clip = audioClips[audioClip];
-                GameManager gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
-                gameManager.meshManager.SetMaterial(closedObject, material);
-                init = true;
-            }
-
-            if (QualitySettings.GetQualityLevel() < 3 && type == "Quantum Hatchway")
-            {
-                effects.SetActive(false);
-            }
-
-            GetComponent<PhysicsHandler>().UpdatePhysics();
-            updateTick = 0;
+            GetComponent<AudioSource>().clip = audioClips[audioClip];
+            GameManager gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
+            gameManager.meshManager.SetMaterial(closedObject, material);
+            init = true;
         }
+
+        if (QualitySettings.GetQualityLevel() < 3 && type == "Quantum Hatchway")
+        {
+            effects.SetActive(false);
+        }
+
+        GetComponent<PhysicsHandler>().UpdatePhysics();
     }
 
     //! Toggle the open or closed state of the hatchway.
