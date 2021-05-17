@@ -1,27 +1,27 @@
 ﻿using System.Collections;
 using UnityEngine;
 
-public class MachineManager : MonoBehaviour
+public class BlockManager : MonoBehaviour
 {
     private bool busy;
-    private Coroutine machineUpdateCoroutine;
+    private Coroutine blockUpdateCoroutine;
 
     //! Called once per frame by unity engine.
     public void Update()
     {
         if (busy == false && GetComponent<StateManager>().worldLoaded == true)
         {
-            machineUpdateCoroutine = StartCoroutine(MachineUpdateCoroutine());
+            blockUpdateCoroutine = StartCoroutine(BlockUpdateCoroutine());
         }
     }
 
-    private IEnumerator MachineUpdateCoroutine()
+    private IEnumerator BlockUpdateCoroutine()
     {
         busy = true;
-        Machine[] machines = FindObjectsOfType<Machine>();
-        foreach (Machine machine in machines)
+        Block[] blocks = FindObjectsOfType<Block>();
+        foreach (Block block in blocks)
         {
-            machine.UpdateMachine();
+            block.UpdateBlock();
             yield return null;
         }
         busy = false;

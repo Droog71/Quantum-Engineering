@@ -1,12 +1,11 @@
 ﻿using UnityEngine;
 
 //! This class is attached to all glass block prefabs.
-public class Glass : MonoBehaviour
+public class Glass : Block
 {
     public string ID = "unassigned";
     public string creationMethod;
     public int address;
-    private float updateTick;
     private StateManager stateManager;
 
     //! Called by unity engine on start up to initialize variables.
@@ -16,22 +15,11 @@ public class Glass : MonoBehaviour
     }
 
     //! Called once per frame by unity engine.
-    public void Update()
+    public override void UpdateBlock()
     {
-        if (ID == "unassigned")
+        if (ID == "unassigned" || stateManager.Busy())
             return;
 
-        updateTick += 1 * Time.deltaTime;
-        if (updateTick > 0.5f + (address * 0.001f))
-        {
-            if (stateManager.Busy())
-            {
-                updateTick = 0;
-                return;
-            }
-
-            GetComponent<PhysicsHandler>().UpdatePhysics();
-            updateTick = 0;
-        }
+        GetComponent<PhysicsHandler>().UpdatePhysics();
     }
 }

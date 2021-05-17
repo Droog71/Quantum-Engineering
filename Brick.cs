@@ -6,7 +6,6 @@ public class Brick : MonoBehaviour
     public string ID = "unassigned";
     public string creationMethod;
     public int address;
-    private float updateTick;
     private StateManager stateManager;
 
     //! Called by unity engine on start up to initialize variables.
@@ -18,20 +17,9 @@ public class Brick : MonoBehaviour
     //! Called once per frame by unity engine.
     public void Update()
     {
-        if (ID == "unassigned")
+        if (ID == "unassigned" || stateManager.Busy())
             return;
 
-        updateTick += 1 * Time.deltaTime;
-        if (updateTick > 0.5f + (address * 0.001f))
-        {
-            if (stateManager.Busy())
-            {
-                 updateTick = 0;
-                return;
-            }
-
-            GetComponent<PhysicsHandler>().UpdatePhysics();
-            updateTick = 0;
-        }
+        GetComponent<PhysicsHandler>().UpdatePhysics();
     }
 }
