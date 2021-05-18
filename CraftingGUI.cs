@@ -16,7 +16,8 @@ public class CraftingGUI : MonoBehaviour
     public void Start()
     {
         playerController = GetComponent<PlayerController>();
-        textureDictionary = playerController.gameManager.GetComponent<TextureDictionary>();
+        GameManager gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
+        textureDictionary = gameManager.GetComponent<TextureDictionary>();
         craftingManager = GetComponent<CraftingManager>();
         craftingDictionary = new CraftingDictionary();
         guiCoordinates = new GuiCoordinates();

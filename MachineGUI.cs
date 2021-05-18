@@ -13,7 +13,8 @@ public class MachineGUI : MonoBehaviour
     public void Start()
     {
         playerController = GetComponent<PlayerController>();
-        textureDictionary = playerController.gameManager.GetComponent<TextureDictionary>();
+        GameManager gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
+        textureDictionary = gameManager.GetComponent<TextureDictionary>();
         guiCoordinates = new GuiCoordinates();
     }
 

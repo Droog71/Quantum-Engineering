@@ -148,5 +148,19 @@
     " When extracting ice, the extractor will not need a heat exchanger for cooling." +
     " This machine must be connected to a power source such as a solar panel, nuclear reactor or power conduit" +
     " and has an adjustable output measured in items per cycle.";
+
+    public string chunkSize = "This setting adjusts the size of chunks loaded around the player." +
+    " A 'chunk' is an area of blocks separated from their combined mesh to allow editing by the player." +
+    " Blocks farther from the player that are not within the loaded chunk are combined into a single object." +
+    " A smaller chunk size will increase the game's performance." +
+    " A larger chunk size will allow you to modify structures you have built from a greater distance.";
+
+    public string blockPhysics = "With block physics enabled, objects you place in the world are affected by gravity." +
+    " Structures you build will need to be supported or they will collapse." +
+    " Hazards can sometimes damage your structures in a way that will cause a collapse." +
+    " Blocks that land with significant force when falling are often destroyed. ";
+
+    public string hazards = "With hazards enabled, your base will be impacted by meteor showers and attacked by hostile spacecraft." +
+    "You will need to shoot down meteors with your laser cannon and build turrets to defend your base.";
 }
 

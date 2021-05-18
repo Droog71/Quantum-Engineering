@@ -124,6 +124,7 @@ public class PlayerController : MonoBehaviour
     public float paintBlue;
     public float requestedSaveTimer;
     public float blockLimitMessageTimer;
+    public float graphicsQuality = 999;
 
     public int playerMoveSpeed;
     public int machinePower;
@@ -256,6 +257,16 @@ public class PlayerController : MonoBehaviour
         // Audio source for GUI related sounds.
         guiSound = guiObject.GetComponent<AudioSource>();
 
+        // Graphics quality.
+        if (PlayerPrefsX.GetPersistentBool("changedGraphicsQuality") == true)
+        {
+            QualitySettings.SetQualityLevel(PlayerPrefs.GetInt("graphicsQuality"));
+        }
+        else
+        {
+            graphicsQuality = QualitySettings.GetQualityLevel();
+        }
+
         // Vsync.
         QualitySettings.vSyncCount = PlayerPrefs.GetInt("vSyncCount");
 
@@ -264,7 +275,10 @@ public class PlayerController : MonoBehaviour
         {
             scannerFlash.GetComponent<Light>().color = Color.white;
             scannerFlash.GetComponent<Light>().intensity = 1;
+        }
 
+        if (!SceneManager.GetActiveScene().name.Equals("QE_World"))
+        {
             float fogDensity = PlayerPrefs.GetFloat("fogDensity");
             RenderSettings.fogDensity = fogDensity > 0 ? fogDensity : 0.00025f;
             RenderSettings.fog = PlayerPrefsX.GetPersistentBool("fogEnabled");
@@ -559,6 +573,12 @@ public class PlayerController : MonoBehaviour
     //! Applies global settings.
     public void ApplySettings()
     {
+        if ((int)graphicsQuality != 999)
+        {
+            QualitySettings.SetQualityLevel((int)graphicsQuality, true);
+            PlayerPrefsX.SetPersistentBool("changedGraphicsQuality", true);
+        }
+        PlayerPrefs.SetInt("graphicsQuality", (int)graphicsQuality);
         PlayerPrefsX.SetPersistentBool("mouseInverted", GetComponent<MSCameraController>().CameraSettings.firstPerson.invertYInput);
         PlayerPrefs.SetFloat("xSensitivity", GetComponent<MSCameraController>().CameraSettings.firstPerson.sensibilityX);
         PlayerPrefs.SetFloat("ySensitivity", GetComponent<MSCameraController>().CameraSettings.firstPerson.sensibilityY);
