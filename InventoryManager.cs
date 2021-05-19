@@ -50,6 +50,7 @@ public class InventoryManager : Machine
         }
     }
 
+    //! Returns true if this object is a storage container.
     private bool IsStorageContainer()
     {
         return GetComponent<RailCart>() == null

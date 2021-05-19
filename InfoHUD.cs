@@ -27,7 +27,19 @@ public class InfoHUD : MonoBehaviour
         && playerController.objectInSight != playerController.gameObject
         && GetComponent<MainMenu>().finishedLoading == true
         && playerController.objectInSight != null
-        && !playerController.GuiOpen();
+        && !GuiOpen();
+    }
+
+    //! Returns true if any GUI is open with the exception of machine GUIs.
+    public bool GuiOpen()
+    {
+        return cGUI.showingInputGUI == true
+        || playerController.escapeMenuOpen == true
+        || playerController.tabletOpen == true
+        || playerController.marketGUIopen == true
+        || playerController.buildAmountGUIopen == true
+        || playerController.doorGUIopen == true
+        || (playerController.paintGunActive == true && playerController.paintColorSelected == false);
     }
 
     //! Called by unity engine for rendering and handling GUI events.

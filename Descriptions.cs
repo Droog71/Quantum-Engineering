@@ -162,5 +162,8 @@
 
     public string hazards = "With hazards enabled, your base will be impacted by meteor showers and attacked by hostile spacecraft." +
     "You will need to shoot down meteors with your laser cannon and build turrets to defend your base.";
+
+    public string simulationSpeed = "This setting affects the frequency of machine operations and block physics updates. " +
+    "Lower simulation speeds increase the game's performance. Higher speeds cause machines to generate items faster.";
 }
 

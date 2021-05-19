@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using UnityEngine;
 
 //! This class controls machine update functions via coroutine .
@@ -21,11 +22,24 @@ public class MachineManager : MonoBehaviour
     private IEnumerator MachineUpdateCoroutine()
     {
         busy = true;
+        int interval = 0;
         Machine[] machines = FindObjectsOfType<Machine>();
         foreach (Machine machine in machines)
         {
-            machine.UpdateMachine();
-            yield return null;
+            try
+            {
+                machine.UpdateMachine();
+            }
+            catch (Exception e)
+            {
+                Debug.Log(e.Message);
+            }
+            interval++;
+            if (interval >= machines.Length * GetComponent<GameManager>().simulationSpeed)
+            {
+                yield return null;
+                interval = 0;
+            }
         }
         busy = false;
     }

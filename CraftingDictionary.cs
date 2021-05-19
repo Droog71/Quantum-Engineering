@@ -170,7 +170,7 @@ public class CraftingDictionary
             { "Turret", new CraftingRecipe(turretIngredients, turretAmounts, "Turret", 1)  },
             { "Missile", new CraftingRecipe(missileIngredients, missileAmounts, "Missile", 1)  },
             { "Missile Turret", new CraftingRecipe(turretIngredients, missileTurretAmounts, "Missile Turret", 1)  },
-            { "Dark Matter Collector", new CraftingRecipe(darkMatterCollectorIngredients, darkMatterCollectorAmounts, "Dark Matter Conduit", 1)  },
+            { "Dark Matter Collector", new CraftingRecipe(darkMatterCollectorIngredients, darkMatterCollectorAmounts, "Dark Matter Collector", 1)  },
             { "Dark Matter Conduit", new CraftingRecipe(darkMatterConduitIngredients, darkMatterConduitAmounts, "Dark Matter Conduit", 1) }
         };
 

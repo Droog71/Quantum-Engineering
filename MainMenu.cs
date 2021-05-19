@@ -182,8 +182,9 @@ public class MainMenu : MonoBehaviour
                 client.DownloadFile(url+"/world", saveFileLocation);
             }
         }
-        catch(Exception)
+        catch(Exception e)
         {
+            UnityEngine.Debug.Log(e.Message);
             worldName = "Enter world name.";
             downloadPrompt = true;
         }

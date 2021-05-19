@@ -25,6 +25,7 @@ public class GameManager : MonoBehaviour
     public GameObject builtObjects;
     public Material glassMaterial;
     public int chunkSize;
+    public float simulationSpeed;
     public bool blockPhysics;
     public bool hazardsEnabled = true;
     public float meteorTimer;
@@ -98,6 +99,10 @@ public class GameManager : MonoBehaviour
         // Load chunk size setting.
         int cs = PlayerPrefs.GetInt("chunkSize");
         chunkSize = cs > 0 ? cs : 40;
+
+        // Load chunk size setting.
+        float simSpeed = PlayerPrefs.GetFloat("simulationSpeed");
+        simulationSpeed = simSpeed > 0 ? simSpeed : 0.01f;
 
         // Create initial iron block holder for mesh manager.
         GameObject ironInit = Instantiate(ironHolder, transform.position, transform.rotation);

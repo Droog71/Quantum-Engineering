@@ -590,6 +590,7 @@ public class PlayerController : MonoBehaviour
         PlayerPrefsX.SetPersistentBool("fogEnabled", RenderSettings.fog);
         PlayerPrefs.SetFloat("fogDensity", RenderSettings.fogDensity);
         PlayerPrefs.SetInt("chunkSize", gameManager.chunkSize);
+        PlayerPrefs.SetFloat("simulationSpeed", gameManager.simulationSpeed);
         PlayerPrefs.SetInt("vSyncCount", QualitySettings.vSyncCount);
         PlayerPrefs.Save();
     }

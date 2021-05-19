@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class RailCart : Machine
+public class RailCart : MonoBehaviour
 {
     public string ID = "unassigned";
     public string creationMethod = "built";
@@ -20,8 +20,8 @@ public class RailCart : Machine
         stateManager = FindObjectOfType<StateManager>();
     }
 
-    //! Called by MachineManager update coroutine.
-    public override void UpdateMachine()
+    //! Called once per frame by unity engine.
+    public void Update()
     {
         if (!stateManager.Busy())
         {

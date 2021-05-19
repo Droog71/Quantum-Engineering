@@ -221,6 +221,7 @@ public class GuiCoordinates
 
     //OPTIONS MENU
     public Rect optionsMenuBackgroundRect;
+    public Rect optionsSubMenuBackgroundRect;
     public Rect videoMenuBackgroundRect;
     public Rect schematicsMenuBackgroundRect;
     public Rect optionsButton1Rect;
@@ -562,7 +563,8 @@ public class GuiCoordinates
         buildItemCountRect = new Rect((ScreenWidth * 0.92f), (ScreenHeight * 0.241f), (ScreenWidth * 0.05f), (ScreenHeight * 0.2f));
 
         //OPTIONS MENU
-        optionsMenuBackgroundRect = new Rect((ScreenWidth * 0.4f), (ScreenHeight * 0.06f), (ScreenWidth * 0.2f), (ScreenHeight * 0.55f));
+        optionsMenuBackgroundRect = new Rect((ScreenWidth * 0.4f), (ScreenHeight * 0.06f), (ScreenWidth * 0.2f), (ScreenHeight * 0.61f));
+        optionsSubMenuBackgroundRect = new Rect((ScreenWidth * 0.4f), (ScreenHeight * 0.06f), (ScreenWidth * 0.2f), (ScreenHeight * 0.55f));
         optionsButton1Rect = new Rect((ScreenWidth * 0.43f), (ScreenHeight * 0.1f), (ScreenWidth * 0.14f), (ScreenHeight * 0.05f));
         optionsButton2Rect = new Rect((ScreenWidth * 0.43f), (ScreenHeight * 0.16f), (ScreenWidth * 0.14f), (ScreenHeight * 0.05f));
         optionsButton3Rect = new Rect((ScreenWidth * 0.43f), (ScreenHeight * 0.22f), (ScreenWidth * 0.14f), (ScreenHeight * 0.05f));

@@ -47,7 +47,7 @@ public class HeatExchanger : Machine
             connectionAttempts += 1;
             if (creationMethod.Equals("spawned"))
             {
-                if (connectionAttempts >= 30)
+                if (connectionAttempts >= 128)
                 {
                     connectionAttempts = 0;
                     connectionFailed = true;
@@ -55,7 +55,7 @@ public class HeatExchanger : Machine
             }
             else
             {
-                if (connectionAttempts >= 120)
+                if (connectionAttempts >= 512)
                 {
                     connectionAttempts = 0;
                     connectionFailed = true;

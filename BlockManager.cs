@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using UnityEngine;
 
 //! This class controls PhysicsHandler update functions on blocks in the world.
@@ -28,11 +29,24 @@ public class BlockManager : MonoBehaviour
     private IEnumerator BlockUpdateCoroutine()
     {
         busy = true;
+        int interval = 0;
         Block[] blocks = FindObjectsOfType<Block>();
         foreach (Block block in blocks)
         {
-            block.UpdateBlock();
-            yield return null;
+            try
+            {
+                block.UpdateBlock();
+            }
+            catch (Exception e)
+            {
+                Debug.Log(e.Message);
+            }
+            interval++;
+            if (interval >= blocks.Length * GetComponent<GameManager>().simulationSpeed)
+            {
+                yield return null;
+                interval = 0;
+            }
         }
         busy = false;
     }

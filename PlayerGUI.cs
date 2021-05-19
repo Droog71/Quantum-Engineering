@@ -523,7 +523,10 @@ public class PlayerGUI : MonoBehaviour
 
                     GUI.Label(guiCoordinates.sliderLabel1Rect, "Audio Volume");
 
-                    GUI.Label(guiCoordinates.sliderLabel2Rect, "Chunk Size");
+                    GUI.Label(guiCoordinates.sliderLabel2Rect, "Chunk Size " + "(" + gameManager.chunkSize + ")");
+
+                    int simSpeed = (int)(1 + (gameManager.simulationSpeed) * 10000);
+                    GUI.Label(guiCoordinates.sliderLabel3Rect, "Simulation Speed " + "(" + simSpeed + "%)");
 
                     AudioListener.volume = GUI.HorizontalSlider(guiCoordinates.optionsButton4Rect, AudioListener.volume, 0, 5);
                     GetComponent<MSCameraController>().cameras[0].volume = AudioListener.volume;
@@ -536,36 +539,44 @@ public class PlayerGUI : MonoBehaviour
                         GUI.Label(guiCoordinates.craftingInfoRect, descriptions.chunkSize);
                     }
 
+                    gameManager.simulationSpeed = GUI.HorizontalSlider(guiCoordinates.optionsButton6Rect, gameManager.simulationSpeed, 0.01f, 0.04f);
+
+                    if (guiCoordinates.optionsButton6Rect.Contains(mousePos))
+                    {
+                        GUI.DrawTexture(guiCoordinates.craftingInfoBackgroundRect, textureDictionary.dictionary["Interface Background"]);
+                        GUI.Label(guiCoordinates.craftingInfoRect, descriptions.simulationSpeed);
+                    }
+
                     string blockPhysicsDisplay = gameManager.blockPhysics == true ? "ON" : "OFF";
-                    if (GUI.Button(guiCoordinates.optionsButton6Rect, "Block Physics: "+ blockPhysicsDisplay))
+                    if (GUI.Button(guiCoordinates.optionsButton7Rect, "Block Physics: "+ blockPhysicsDisplay))
                     {
                         if (PlayerPrefsX.GetPersistentBool("multiplayer") == false)
                         {
                             gameManager.blockPhysics = !gameManager.blockPhysics;
                         }
                         playerController.PlayButtonSound();
-                    }
+                    }  
 
-                    if (guiCoordinates.optionsButton6Rect.Contains(mousePos))
+                    if (guiCoordinates.optionsButton7Rect.Contains(mousePos))
                     {
                         GUI.DrawTexture(guiCoordinates.craftingInfoBackgroundRect, textureDictionary.dictionary["Interface Background"]);
                         GUI.Label(guiCoordinates.craftingInfoRect, descriptions.blockPhysics);
                     }
 
                     string hazardsEnabledDisplay = gameManager.hazardsEnabled == true ? "ON" : "OFF";
-                    if (GUI.Button(guiCoordinates.optionsButton7Rect, "Hazards: " + hazardsEnabledDisplay))
+                    if (GUI.Button(guiCoordinates.optionsButton8Rect, "Hazards: " + hazardsEnabledDisplay))
                     {
                         gameManager.hazardsEnabled = !gameManager.hazardsEnabled;
                         playerController.PlayButtonSound();
                     }
 
-                    if (guiCoordinates.optionsButton7Rect.Contains(mousePos))
+                    if (guiCoordinates.optionsButton8Rect.Contains(mousePos))
                     {
                         GUI.DrawTexture(guiCoordinates.craftingInfoBackgroundRect, textureDictionary.dictionary["Interface Background"]);
                         GUI.Label(guiCoordinates.craftingInfoRect, descriptions.hazards);
                     }
 
-                    if (GUI.Button(guiCoordinates.optionsButton8Rect, "BACK"))
+                    if (GUI.Button(guiCoordinates.optionsButton9Rect, "BACK"))
                     {
                         playerController.ApplySettings();
                         playerController.optionsGUIopen = false;
@@ -575,7 +586,7 @@ public class PlayerGUI : MonoBehaviour
 
                 if (controlsMenuOpen == true && cGUI.showingInputGUI == false)
                 {    
-                    GUI.DrawTexture(guiCoordinates.optionsMenuBackgroundRect, textureDictionary.dictionary["Menu Background"]);
+                    GUI.DrawTexture(guiCoordinates.optionsSubMenuBackgroundRect, textureDictionary.dictionary["Menu Background"]);
                     if (GUI.Button(guiCoordinates.optionsButton1Rect, "Bindings"))
                     {
                         cGUI.ToggleGUI();
@@ -607,7 +618,7 @@ public class PlayerGUI : MonoBehaviour
 
                 if (graphicsMenuOpen == true)
                 {
-                    GUI.DrawTexture(guiCoordinates.optionsMenuBackgroundRect, textureDictionary.dictionary["Menu Background"]);
+                    GUI.DrawTexture(guiCoordinates.optionsSubMenuBackgroundRect, textureDictionary.dictionary["Menu Background"]);
                     string fogDisplay = RenderSettings.fog == true ? "ON" : "OFF";
                     if (GUI.Button(guiCoordinates.optionsButton1Rect, "Fog: " + fogDisplay))
                     {
