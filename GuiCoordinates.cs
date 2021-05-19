@@ -189,11 +189,9 @@ public class GuiCoordinates
     public Rect escapeButton4Rect;
     public Rect escapeButton5Rect;
 
-    //BUILD AMOUNT GUI
-    public Rect buildAmountRect;
-    public Rect buildAmountTitleRect;
+    //BUILD SETTINGS GUI
+    public Rect buildSettingsRect;
     public Rect buildAmountTextFieldRect;
-    public Rect buildAmountButtonRect;
 
     //DOOR SETTINGS GUI
     public Rect doorSettingsRect;
@@ -532,11 +530,9 @@ public class GuiCoordinates
         escapeButton4Rect = new Rect((ScreenWidth * 0.43f), (ScreenHeight * 0.58f), (ScreenWidth * 0.14f), (ScreenHeight * 0.05f));
         escapeButton5Rect = new Rect((ScreenWidth * 0.43f), (ScreenHeight * 0.66f), (ScreenWidth * 0.14f), (ScreenHeight * 0.05f));
 
-        //BUILD AMOUNT GUI
-        buildAmountRect = new Rect((ScreenWidth * 0.4f), (ScreenHeight * 0.10f), (ScreenWidth * 0.2f), (ScreenHeight * 0.452f));
-        buildAmountTitleRect = new Rect((ScreenWidth * 0.437f), (ScreenHeight * 0.14f), (ScreenWidth * 0.14f), (ScreenHeight * 0.05f));
-        buildAmountTextFieldRect = new Rect((ScreenWidth * 0.43f), (ScreenHeight * 0.22f), (ScreenWidth * 0.14f), (ScreenHeight * 0.05f));
-        buildAmountButtonRect = new Rect((ScreenWidth * 0.43f), (ScreenHeight * 0.30f), (ScreenWidth * 0.14f), (ScreenHeight * 0.05f));
+        //BUILD SETTINGS GUI
+        buildSettingsRect = new Rect((ScreenWidth * 0.4f), (ScreenHeight * 0.10f), (ScreenWidth * 0.2f), (ScreenHeight * 0.452f));
+        buildAmountTextFieldRect = new Rect((ScreenWidth * 0.43f), (ScreenHeight * 0.25f), (ScreenWidth * 0.14f), (ScreenHeight * 0.03f));
 
         //DOOR SETTINGS GUI
         doorSettingsRect = new Rect((ScreenWidth * 0.4f), (ScreenHeight * 0.10f), (ScreenWidth * 0.2f), (ScreenHeight * 0.452f));

@@ -33,7 +33,7 @@ public class PlayerController : MonoBehaviour
     public bool machineGUIopen;
     public bool craftingGUIopen;
     public bool marketGUIopen;
-    public bool buildAmountGUIopen;
+    public bool buildSettingsGuiOpen;
     public bool doorGUIopen;
     public bool remoteStorageActive;
     public bool escapeMenuOpen;
@@ -139,6 +139,7 @@ public class PlayerController : MonoBehaviour
     public int machineHeat;
     public int machineCooling;
     public int buildMultiplier = 1;
+    public int defaultRange = 6;
     public int money;
     public int destructionMessageCount;
     public int storageComputerInventory;
@@ -269,6 +270,9 @@ public class PlayerController : MonoBehaviour
 
         // Vsync.
         QualitySettings.vSyncCount = PlayerPrefs.GetInt("vSyncCount");
+
+        int range = PlayerPrefs.GetInt("defaultRange");
+        defaultRange = range >= 10 ? range : 10;
 
         // Fog and Scanner color for atmospheric worlds.
         if (SceneManager.GetActiveScene().name.Equals("QE_World_Atmo"))
@@ -591,6 +595,7 @@ public class PlayerController : MonoBehaviour
         PlayerPrefs.SetFloat("fogDensity", RenderSettings.fogDensity);
         PlayerPrefs.SetInt("chunkSize", gameManager.chunkSize);
         PlayerPrefs.SetFloat("simulationSpeed", gameManager.simulationSpeed);
+        PlayerPrefs.SetInt("defaultRange", defaultRange);
         PlayerPrefs.SetInt("vSyncCount", QualitySettings.vSyncCount);
         PlayerPrefs.Save();
     }
@@ -629,7 +634,7 @@ public class PlayerController : MonoBehaviour
         || tabletOpen == true
         || marketGUIopen == true
         || (paintGunActive == true && paintColorSelected == false)
-        || buildAmountGUIopen == true
+        || buildSettingsGuiOpen == true
         || doorGUIopen == true;
     }
 

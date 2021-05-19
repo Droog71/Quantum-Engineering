@@ -96,11 +96,21 @@ public class PlayerGUI : MonoBehaviour
         || schematic7 == true;
     }
 
+    //! Returns true if the crosshair should be displayed.
     private bool ShowCrosshair()
     {
         return playerController.crosshairEnabled &&
         !playerController.GuiOpen() &&
         !playerController.paintGunActive;
+    }
+
+    //! Gets the size of in pixels of text so it can be positioned on the screen accordingly.
+    private Vector2 GetStringSize(string str)
+    {
+        GUIContent content = new GUIContent(str);
+        GUIStyle style = GUI.skin.box;
+        style.alignment = TextAnchor.MiddleCenter;
+        return style.CalcSize(content);
     }
 
     //! Called by unity engine for rendering and handling GUI events.
@@ -754,17 +764,8 @@ public class PlayerGUI : MonoBehaviour
             }
 
             // BUILDING INSTRUCTIONS
-            bool playerBuilding = playerController.building == true && !playerController.GuiOpen();
-            bool drawingInfoHud = playerController.GetComponent<InfoHUD>().ShouldDrawInfoHud();
-
-            if (playerBuilding && !drawingInfoHud)
+            if (playerController.building == true && !playerController.GuiOpen())
             {
-                GUI.DrawTexture(guiCoordinates.buildInfoRectBG, textureDictionary.dictionary["Interface Background"]);
-                int f = GUI.skin.label.fontSize;
-                GUI.skin.label.fontSize = 16;
-                GUI.Label(guiCoordinates.buildInfoRect, "Right click to place block.\nPress F to collect.\nPress R or Ctrl+R to rotate.\nPress B to stop building.");
-                GUI.skin.label.fontSize = f;
-
                 if (textureDictionary.dictionary.ContainsKey(playerController.buildType + "_Icon"))
                 {
                     GUI.DrawTexture(guiCoordinates.currentBuildItemTextureRect, textureDictionary.dictionary[playerController.buildType + "_Icon"]);
@@ -790,6 +791,15 @@ public class PlayerGUI : MonoBehaviour
                 else
                 {
                     GUI.Label(guiCoordinates.buildItemCountRect, "" + buildItemCount);
+                }
+
+                if (playerController.machineInSight == null)
+                {
+                    GUI.DrawTexture(guiCoordinates.buildInfoRectBG, textureDictionary.dictionary["Interface Background"]);
+                    int f = GUI.skin.label.fontSize;
+                    GUI.skin.label.fontSize = 16;
+                    GUI.Label(guiCoordinates.buildInfoRect, "Right click to place block.\nPress F to collect.\nPress R or Ctrl+R to rotate.\nPress B to stop building.");
+                    GUI.skin.label.fontSize = f;
                 }
             }
 
@@ -862,14 +872,18 @@ public class PlayerGUI : MonoBehaviour
                 }
             }
 
-            // BUILD AMOUNT
-            if (playerController.buildAmountGUIopen)
+            // BUILD SETTINGS
+            if (playerController.buildSettingsGuiOpen)
             {
-                GUI.DrawTexture(guiCoordinates.buildAmountRect, textureDictionary.dictionary["Menu Background"]);
+                GUI.DrawTexture(guiCoordinates.buildSettingsRect, textureDictionary.dictionary["Menu Background"]);
                 int f = GUI.skin.label.fontSize;
-                GUI.skin.label.fontSize = 12;
-                GUI.Label(guiCoordinates.buildAmountTitleRect, "Enter Build Amount");
+                GUI.skin.label.fontSize = 14;
+                Vector2 size = GetStringSize("Build Settings");
+                Rect messagePos = new Rect((Screen.width / 2) - (size.x / 2.2f), ScreenHeight * 0.14f, size.x, size.y);
+                GUI.Label(messagePos, "Build Settings");
                 GUI.skin.label.fontSize = f;
+
+                GUI.Label(guiCoordinates.optionsButton3Rect, "Build Multiplier");
 
                 string amountString = GUI.TextField(guiCoordinates.buildAmountTextFieldRect, playerController.buildMultiplier.ToString(), 3);
                 try
@@ -885,11 +899,14 @@ public class PlayerGUI : MonoBehaviour
                 i = i > 100 ? 100 : i;
                 playerController.buildMultiplier = i;
 
-                if (GUI.Button(guiCoordinates.buildAmountButtonRect, "OK"))
+                GUI.Label(guiCoordinates.sliderLabel3Rect, "Machine Range " + "(" + playerController.defaultRange / 10 + " meters"  + ")");
+                playerController.defaultRange = (int)GUI.HorizontalSlider(guiCoordinates.optionsButton6Rect, playerController.defaultRange, 10, 120);
+
+                if (GUI.Button(guiCoordinates.optionsButton7Rect, "OK"))
                 {
                     Cursor.visible = false;
                     Cursor.lockState = CursorLockMode.Locked;
-                    playerController.buildAmountGUIopen = false;
+                    playerController.buildSettingsGuiOpen = false;
                     playerController.PlayButtonSound();
                 }
             }

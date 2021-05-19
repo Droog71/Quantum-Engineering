@@ -197,15 +197,15 @@ public class InputManager
         }
 
         // MANUAL BUILD AMOUNT SELECTION
-        if (cInput.GetKeyDown("Build Amount"))
+        if (cInput.GetKeyDown("Build Settings"))
         {
             if (!playerController.GuiOpen())
             {
-                playerController.buildAmountGUIopen = !playerController.buildAmountGUIopen;
+                playerController.buildSettingsGuiOpen = !playerController.buildSettingsGuiOpen;
             }
             else
             {
-                playerController.buildAmountGUIopen = false;
+                playerController.buildSettingsGuiOpen = false;
             }
         }
 
@@ -331,11 +331,11 @@ public class InputManager
                 playerController.paintGunActive = false;
                 playerController.paintColorSelected = false;
             }
-            else if (playerController.buildAmountGUIopen == true)
+            else if (playerController.buildSettingsGuiOpen == true)
             {
                 Cursor.visible = false;
                 Cursor.lockState = CursorLockMode.Locked;
-                playerController.buildAmountGUIopen = false;
+                playerController.buildSettingsGuiOpen = false;
                 playerController.PlayButtonSound();
             }
             else if (playerController.doorGUIopen == true)

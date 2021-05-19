@@ -331,6 +331,22 @@ public class BuildController : MonoBehaviour
                             {
                                 obj.GetComponent<ModMachine>().machineName = type;
                             }
+                            if (obj.GetComponent<UniversalConduit>() != null)
+                            {
+                                obj.GetComponent<UniversalConduit>().range = playerController.defaultRange;
+                            }
+                            if (obj.GetComponent<PowerConduit>() != null)
+                            {
+                                obj.GetComponent<PowerConduit>().range = playerController.defaultRange;
+                            }
+                            if (obj.GetComponent<DarkMatterConduit>() != null)
+                            {
+                                obj.GetComponent<DarkMatterConduit>().range = playerController.defaultRange;
+                            }
+                            if (obj.GetComponent<RailCartHub>() != null)
+                            {
+                                obj.GetComponent<RailCartHub>().range = playerController.defaultRange;
+                            }
                             gameManager.undoBlocks.Add(new GameManager.Block(type, obj));
                             slot.amountInSlot -= 1;
                             playerController.builderSound.clip = singleBuildClip;

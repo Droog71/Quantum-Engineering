@@ -21,7 +21,7 @@ public class cInputInit : MonoBehaviour
         cInput.SetKey("Build Mode", "B", Keys.B);
         cInput.SetKey("Next Item", "Mouse Wheel Up", Keys.X);
         cInput.SetKey("Previous Item", "Mouse Wheel Down", Keys.Z);
-        cInput.SetKey("Build Amount", "Equals", Keys.EqualSign);
+        cInput.SetKey("Build Settings", "Equals", Keys.EqualSign);
         cInput.SetKey("Build Amount +", "RightBracket", Keys.RightBracket);
         cInput.SetKey("Build Amount  -", "LeftBracket", Keys.LeftBracket);
         cInput.SetKey("Place Object", "Mouse1", Keys.Mouse1);
