@@ -263,10 +263,7 @@ public class PlayerController : MonoBehaviour
         {
             QualitySettings.SetQualityLevel(PlayerPrefs.GetInt("graphicsQuality"));
         }
-        else
-        {
-            graphicsQuality = QualitySettings.GetQualityLevel();
-        }
+        graphicsQuality = QualitySettings.GetQualityLevel();
 
         // Vsync.
         QualitySettings.vSyncCount = PlayerPrefs.GetInt("vSyncCount");

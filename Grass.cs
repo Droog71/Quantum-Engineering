@@ -2,8 +2,8 @@
 
 public class Grass : MonoBehaviour
 {
-    //! Called by unity engine on start up to initialize variables.
-    public void Start()
+    //! Called oncer per frame by unity engine.
+    public void Update()
     {
         if (QualitySettings.GetQualityLevel() < 3)
         {

@@ -54,6 +54,9 @@ public class StateManager : MonoBehaviour
     public SaveManager saveManager;
     public Vector3 partPosition = new Vector3(0.0f, 0.0f, 0.0f);
     public Quaternion partRotation = Quaternion.Euler(new Vector3(0.0f, 0.0f, 0.0f));
+    private GameObject player;
+    private PlayerController playerController;
+    private MainMenu mainMenu;
     private Vector3 emptyVector = new Vector3(0.0f, 0.0f, 0.0f);
     private Vector3 objectPosition;
     private Quaternion objectRotation;
@@ -69,29 +72,31 @@ public class StateManager : MonoBehaviour
     public void Start()
     {
         saveManager = new SaveManager(this);
+        player = GameObject.Find("Player");
+        playerController = player.GetComponent<PlayerController>();
+        mainMenu = player.GetComponent<MainMenu>();
     }
 
     //! Update is called once per frame.
     public void Update()
     {
-        GameObject player = GameObject.Find("Player");
-        PlayerController playerController = player.GetComponent<PlayerController>();
-        MainMenu mainMenu = player.GetComponent<MainMenu>();
-
-        if (mainMenu.worldSelected == true && playerController.addedModBlocks == true && loading == false)
+        if (mainMenu != null && playerController != null)
         {
-            loadCoroutine = StartCoroutine(LoadWorld());
-            loading = true;
-        }
-        if (worldLoaded == true)
-        {
-            if (addressManager == null)
+            if (mainMenu.worldSelected == true && playerController.addedModBlocks == true && loading == false)
             {
-                addressManager = new AddressManager(this);
+                loadCoroutine = StartCoroutine(LoadWorld());
+                loading = true;
             }
-            if (AddressManagerBusy() == false && saving == false)
+            if (worldLoaded == true)
             {
-                AssignIDs();
+                if (addressManager == null)
+                {
+                    addressManager = new AddressManager(this);
+                }
+                if (AddressManagerBusy() == false && saving == false)
+                {
+                    AssignIDs();
+                }
             }
         }
     }
@@ -107,11 +112,13 @@ public class StateManager : MonoBehaviour
     {
         if (worldLoaded == false)
         {
-            if (PlayerPrefsX.GetIntArray(worldName + "machineIdList").Length > 0)
+            machineIdList = PlayerPrefsX.GetIntArray(worldName + "machineIdList");
+            blockIdList = PlayerPrefsX.GetIntArray(worldName + "blockIdList");
+
+            if (machineIdList.Length > 0)
             {
                 int loadInterval = 0;
                 progress = 0;
-                machineIdList = PlayerPrefsX.GetIntArray(worldName + "machineIdList");
                 foreach (int objectID in machineIdList)
                 {
                     objectPosition = PlayerPrefsX.GetVector3(worldName + "machine" + objectID + "Position");
@@ -444,10 +451,9 @@ public class StateManager : MonoBehaviour
                 }
             }
 
-            if (PlayerPrefsX.GetIntArray(worldName + "blockIdList").Length > 0)
+            if (blockIdList.Length > 0)
             {
                 int loadInterval = 0;
-                blockIdList = PlayerPrefsX.GetIntArray(worldName + "blockIdList");
                 foreach (int objectID in blockIdList)
                 {
                     while (GetComponent<GameManager>().working == true)

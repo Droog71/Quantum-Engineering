@@ -549,7 +549,7 @@ public class PlayerGUI : MonoBehaviour
                         GUI.Label(guiCoordinates.craftingInfoRect, descriptions.chunkSize);
                     }
 
-                    gameManager.simulationSpeed = GUI.HorizontalSlider(guiCoordinates.optionsButton6Rect, gameManager.simulationSpeed, 0.01f, 0.04f);
+                    gameManager.simulationSpeed = GUI.HorizontalSlider(guiCoordinates.optionsButton6Rect, gameManager.simulationSpeed, 0.01f, 0.1f);
 
                     if (guiCoordinates.optionsButton6Rect.Contains(mousePos))
                     {
@@ -899,7 +899,7 @@ public class PlayerGUI : MonoBehaviour
                 i = i > 100 ? 100 : i;
                 playerController.buildMultiplier = i;
 
-                GUI.Label(guiCoordinates.sliderLabel3Rect, "Machine Range " + "(" + playerController.defaultRange / 10 + " meters"  + ")");
+                GUI.Label(guiCoordinates.sliderLabel3Rect, "Machine Range " + "(" + (double)playerController.defaultRange / 10 + " meters"  + ")");
                 playerController.defaultRange = (int)GUI.HorizontalSlider(guiCoordinates.optionsButton6Rect, playerController.defaultRange, 10, 120);
 
                 if (GUI.Button(guiCoordinates.optionsButton7Rect, "OK"))

@@ -31,7 +31,7 @@ public class InteractionController : MonoBehaviour
             {
                 float distance = Vector3.Distance(camPos.position, hit.point);
                 GameObject obj = hit.collider.gameObject;
-                if (GuiFree() && !IsNonInteractive(obj))
+                if (obj != playerController.gameObject && GuiFree() && !IsNonInteractive(obj))
                 {
                     playerController.objectInSight = obj;
                     if (IsStorageContainer(obj) && distance <= 40)
@@ -159,7 +159,7 @@ public class InteractionController : MonoBehaviour
                         EndInteraction();
                     }
                 }
-                else if (GuiFree() && distance <= 40 && IsNonInteractive(obj))
+                else if (obj != playerController.gameObject && GuiFree() && distance <= 40 && IsNonInteractive(obj))
                 {
                     playerController.objectInSight = obj;
                 }
