@@ -361,6 +361,8 @@ public class MainMenu : MonoBehaviour
         Rect scenePromptButton1Rect = new Rect((ScreenWidth * 0.33f), (ScreenHeight * 0.22f), (ScreenWidth * 0.10f), (ScreenHeight * 0.05f));
         Rect scenePromptButton2Rect = new Rect((ScreenWidth * 0.45f), (ScreenHeight * 0.22f), (ScreenWidth * 0.10f), (ScreenHeight * 0.05f));
         Rect scenePromptButton3Rect = new Rect((ScreenWidth * 0.57f), (ScreenHeight * 0.22f), (ScreenWidth * 0.10f), (ScreenHeight * 0.05f));
+        Rect creativeButtonRect = new Rect((ScreenWidth / 2) - (ScreenWidth * 0.025f), (ScreenHeight * 0.30f), (ScreenWidth * 0.014f), (ScreenHeight * 0.0225f));
+        Rect creativeLabelrect = new Rect((ScreenWidth / 2), (ScreenHeight * 0.299f), (ScreenWidth * 0.12f), (ScreenHeight * 0.05f));
 
         Rect startGameButtonRect = new Rect(ScreenWidth * 0.58f, ScreenHeight * 0.4f, ScreenWidth * 0.15f, ScreenHeight * 0.03f);
         Rect multiplayerButtonRect = new Rect(ScreenWidth * 0.58f, ScreenHeight * 0.44f, ScreenWidth * 0.15f, ScreenHeight * 0.03f);
@@ -597,6 +599,15 @@ public class MainMenu : MonoBehaviour
                     scene = 1;
                     FileBasedPrefs.SetInt(worldName + "scene", scene);
                     ChangeScene();
+                }
+
+                GUI.Label(creativeLabelrect, "Creative Mode");
+                bool creativeMode = FileBasedPrefs.GetBool(worldName + "creativeMode");
+                string check = creativeMode == true ? "X" : "";
+                if (GUI.Button(creativeButtonRect, check))
+                {
+                    creativeMode = !creativeMode;
+                    FileBasedPrefs.SetBool(worldName + "creativeMode", creativeMode);
                 }
             }
 
@@ -844,6 +855,10 @@ public class MainMenu : MonoBehaviour
             GUI.color = new Color(0.2824f, 0.7882f, 0.9569f);
             int idTotal = stateManager.machineIdList.Length + stateManager.blockIdList.Length;
             string loadingMessage = "Loading... " + stateManager.progress + "/" + idTotal;
+            if (stateManager.progress > 0 && stateManager.progress >= idTotal)
+            {
+                loadingMessage = "Initializing... " + stateManager.currentMachine + "/" + stateManager.totalMachines;
+            }
             Vector2 size = GetStringSize(loadingMessage);
             Rect messagePos = new Rect((Screen.width / 2) - (size.x/2), Screen.height * 0.4f, size.x, size.y);
             GUI.Label(messagePos, loadingMessage);

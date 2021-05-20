@@ -4,6 +4,7 @@ using System.Collections.Generic;
 public class Door : Machine
 {
     private StateManager stateManager;
+    private GameManager gameManager;
     public string ID = "unassigned";
     public int address;
     public string type;
@@ -28,6 +29,7 @@ public class Door : Machine
     {
         audioClips = new AudioClip[] { clip1, clip2, clip3 };
         stateManager = FindObjectOfType<StateManager>();
+        gameManager = FindObjectOfType<GameManager>();
         textureList = new List<string>();
         Dictionary<string, Texture2D> textureDictionary = GameObject.Find("GameManager").GetComponent<TextureDictionary>().dictionary;
         Dictionary<string, GameObject> blockDictionary = GameObject.Find("Player").GetComponent<BuildController>().blockDictionary.blockDictionary;
@@ -44,13 +46,12 @@ public class Door : Machine
     //! Called by MachineManager update coroutine.
     public override void UpdateMachine()
     {
-        if (ID == "unassigned" || stateManager.Busy())
+        if (ID == "unassigned" || stateManager.initMachines == false)
             return;
 
         if (edited == true && init == false)
         {
             GetComponent<AudioSource>().clip = audioClips[audioClip];
-            GameManager gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
             gameManager.meshManager.SetMaterial(closedObject, material);
             init = true;
         }

@@ -4,6 +4,7 @@ using System.Collections;
 public class AddressManager
 {
     private StateManager stateManager;
+    private GameManager gameManager;
     private int totalObjects;
     public bool machineIdCoroutineActive;
     public bool blockIdCoroutineActive;
@@ -12,6 +13,7 @@ public class AddressManager
     public AddressManager(StateManager stateManager)
     {
         this.stateManager = stateManager;
+        gameManager = stateManager.GetComponent<GameManager>();
     }
 
     public IEnumerator MachineIdCoroutine()
@@ -201,7 +203,7 @@ public class AddressManager
                     idCount++;
 
                     addressingInterval++;
-                    if (addressingInterval >= 10)
+                    if (addressingInterval >= machines.Length * (gameManager.simulationSpeed / 4))
                     {
                         yield return null;
                         addressingInterval = 0;
@@ -274,7 +276,7 @@ public class AddressManager
                 }
 
                 addressingInterval++;
-                if (addressingInterval >= 10)
+                if (addressingInterval >= blocks.Length * (gameManager.simulationSpeed / 4))
                 {
                     yield return null;
                     addressingInterval = 0;
@@ -284,4 +286,3 @@ public class AddressManager
         blockIdCoroutineActive = false;
     }
 }
-

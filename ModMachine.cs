@@ -26,7 +26,7 @@ public class ModMachine : BasicMachine
     public override void UpdateMachine()
     {
         base.UpdateMachine();
-        if (!stateManager.Busy() && init == false)
+        if (stateManager.initMachines == true && init == false)
         {
             BlockDictionary blockDictionary = playerController.GetComponent<BuildController>().blockDictionary;
             if (blockDictionary != null)

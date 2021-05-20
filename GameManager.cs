@@ -102,7 +102,8 @@ public class GameManager : MonoBehaviour
 
         // Load chunk size setting.
         float simSpeed = PlayerPrefs.GetFloat("simulationSpeed");
-        simulationSpeed = simSpeed > 0 ? simSpeed : 0.01f;
+        simulationSpeed = simSpeed > 0 ? simSpeed : 0.04f;
+        simulationSpeed = PlayerPrefs.GetFloat("simulationSpeed");
 
         // Create initial iron block holder for mesh manager.
         GameObject ironInit = Instantiate(ironHolder, transform.position, transform.rotation);

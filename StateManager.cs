@@ -8,7 +8,10 @@ public class StateManager : MonoBehaviour
     public bool saving;
     public bool dataSaved;
     public bool worldLoaded;
+    public bool initMachines;
     public int progress;
+    public int totalMachines;
+    public int currentMachine;
     public int[] machineIdList;
     public int[] blockIdList;
     public List<string> modTextureList;
@@ -87,24 +90,15 @@ public class StateManager : MonoBehaviour
                 loadCoroutine = StartCoroutine(LoadWorld());
                 loading = true;
             }
-            if (worldLoaded == true)
+            if (addressManager == null)
             {
-                if (addressManager == null)
-                {
-                    addressManager = new AddressManager(this);
-                }
-                if (AddressManagerBusy() == false && saving == false)
-                {
-                    AssignIDs();
-                }
+                addressManager = new AddressManager(this);
+            }
+            if (saving == false)
+            {
+                AssignIDs();
             }
         }
-    }
-
-    //! Returns true if the AddressManager class is actively assigning ids.
-    public bool AddressManagerBusy()
-    {
-        return addressManager.machineIdCoroutineActive || addressManager.blockIdCoroutineActive;
     }
 
     //! Loads a saved world.
@@ -541,16 +535,36 @@ public class StateManager : MonoBehaviour
                 }
             }
         }
-
         GetComponent<GameManager>().meshManager.CombineBlocks();
+        totalMachines = machineIdList.Length;
+        float simSpeed = GetComponent<GameManager>().simulationSpeed;
+        GetComponent<GameManager>().simulationSpeed = 0.1f;
+        initMachines = true;
+        for (currentMachine = 0; currentMachine < totalMachines; currentMachine++)
+        {
+            yield return new WaitForSeconds(0.06f);
+        }
+        GetComponent<GameManager>().simulationSpeed = simSpeed;
         worldLoaded = true;
     }
 
     //! Assigns ID to objects in the world.
     private void AssignIDs()
     {
-        machineIdCoroutine = StartCoroutine(addressManager.MachineIdCoroutine());
-        blockIdCoroutine = StartCoroutine(addressManager.BlockIdCoroutine());
+        if (initMachines == true && addressManager.machineIdCoroutineActive == false)
+        {
+            machineIdCoroutine = StartCoroutine(addressManager.MachineIdCoroutine());
+        }
+        if (worldLoaded == true && addressManager.blockIdCoroutineActive == false)
+        {
+            blockIdCoroutine = StartCoroutine(addressManager.BlockIdCoroutine());
+        }
+    }
+
+    //! Returns true if the AddressManager class is actively assigning ids.
+    public bool AddressManagerBusy()
+    {
+        return addressManager.machineIdCoroutineActive || addressManager.blockIdCoroutineActive;
     }
 
     //! Saves the game.

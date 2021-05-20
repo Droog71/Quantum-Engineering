@@ -12,8 +12,9 @@ public class MachineManager : MonoBehaviour
     //! Called once per frame by unity engine.
     public void Update()
     {
-        if (busy == false && GetComponent<StateManager>().worldLoaded == true)
+        if (busy == false && GetComponent<StateManager>().initMachines == true)
         {
+            Debug.Log("machine coroutine started");
             machineUpdateCoroutine = StartCoroutine(MachineUpdateCoroutine());
         }
     }

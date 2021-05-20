@@ -44,7 +44,7 @@ public class DarkMatterCollector : Machine
     //! Called by MachineManager update coroutine.
     public override void UpdateMachine()
     {
-        if (ID == "unassigned" || stateManager.Busy())
+        if (ID == "unassigned" || stateManager.initMachines == false)
             return;
 
         GetComponent<PhysicsHandler>().UpdatePhysics();

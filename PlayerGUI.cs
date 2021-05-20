@@ -535,7 +535,7 @@ public class PlayerGUI : MonoBehaviour
 
                     GUI.Label(guiCoordinates.sliderLabel2Rect, "Chunk Size " + "(" + gameManager.chunkSize + ")");
 
-                    int simSpeed = (int)(1 + (gameManager.simulationSpeed) * 10000);
+                    int simSpeed = (int)(gameManager.simulationSpeed * 2500);
                     GUI.Label(guiCoordinates.sliderLabel3Rect, "Simulation Speed " + "(" + simSpeed + "%)");
 
                     AudioListener.volume = GUI.HorizontalSlider(guiCoordinates.optionsButton4Rect, AudioListener.volume, 0, 5);
@@ -549,7 +549,7 @@ public class PlayerGUI : MonoBehaviour
                         GUI.Label(guiCoordinates.craftingInfoRect, descriptions.chunkSize);
                     }
 
-                    gameManager.simulationSpeed = GUI.HorizontalSlider(guiCoordinates.optionsButton6Rect, gameManager.simulationSpeed, 0.01f, 0.1f);
+                    gameManager.simulationSpeed = GUI.HorizontalSlider(guiCoordinates.optionsButton6Rect, gameManager.simulationSpeed, 0, 0.1f);
 
                     if (guiCoordinates.optionsButton6Rect.Contains(mousePos))
                     {

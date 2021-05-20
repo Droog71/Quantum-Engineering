@@ -353,12 +353,8 @@ public class PlayerController : MonoBehaviour
 
                 if (checkedForCreativeMode == false && stateManager.worldLoaded == true)
                 {
-                    string worldName = stateManager.worldName.ToUpper();
-                    if (worldName.Contains("CREATIVE"))
-                    {
-                        creativeMode = true;
-                        Debug.Log("World [" + stateManager.worldName + "] running in creative mode.");
-                    }
+                    creativeMode |= FileBasedPrefs.GetBool(stateManager.worldName + "creativeMode");
+                    Debug.Log("World [" + stateManager.worldName + "] running in creative mode.");
                     checkedForCreativeMode = true;
                 }
 
