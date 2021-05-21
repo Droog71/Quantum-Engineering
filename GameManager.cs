@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Collections;
 using UnityEngine;
+using System.Diagnostics;
+using System;
 
 public class GameManager : MonoBehaviour
 {
@@ -36,6 +38,7 @@ public class GameManager : MonoBehaviour
     public bool replacingMeshFilters;
     public bool runningUndo;
     private float mfDelay;
+    private float userSimSpeed;
     public bool clearBrickDummies;
     public bool clearGlassDummies;
     public bool clearIronDummies;
@@ -49,11 +52,13 @@ public class GameManager : MonoBehaviour
     public bool loadedPirateTimer;
     private bool loadedBlockPhysics;
     private bool loadedHazardsEnabled;
+    private bool memoryCoroutineBusy;
     public Rocket rocketScript;
     public Coroutine separateCoroutine;
     public Coroutine meshCombineCoroutine;
     public Coroutine blockCombineCoroutine;
     public Coroutine hazardRemovalCoroutine;
+    private Coroutine memoryCoroutine;
     private Coroutine undoCoroutine;
     public List<Vector3> meteorShowerLocationList;
 
@@ -102,7 +107,7 @@ public class GameManager : MonoBehaviour
 
         // Load chunk size setting.
         float simSpeed = PlayerPrefs.GetFloat("simulationSpeed");
-        simulationSpeed = simSpeed > 0 ? simSpeed : 0.04f;
+        simulationSpeed = simSpeed > 0 ? simSpeed : 0.02f;
         simulationSpeed = PlayerPrefs.GetFloat("simulationSpeed");
 
         // Create initial iron block holder for mesh manager.
@@ -134,9 +139,9 @@ public class GameManager : MonoBehaviour
         brickHolders = new GameObject[] { brickInit };
     }
 
+    //! Creates initial block holders for mod blocks.
     public void InitModBlocks()
     {
-        // Create initial block holders for mod blocks.
         int index = 0;
         int count = modBlockNames.Count;
         foreach (string blockName in modBlockNames)
@@ -205,9 +210,21 @@ public class GameManager : MonoBehaviour
             {
                 if (GetComponent<StateManager>().saving == false && GetComponent<StateManager>().AddressManagerBusy() == false)
                 {
-                    Debug.Log("Saving world...");
+                    UnityEngine.Debug.Log("Saving world...");
                     GetComponent<StateManager>().SaveData();
                     dataSaveRequested = false;
+                }
+                else if (GetComponent<StateManager>().AddressManagerBusy() == true)
+                {
+                    if (GetComponent<GameManager>().simulationSpeed != 0.1f)
+                    {
+                        userSimSpeed = GetComponent<GameManager>().simulationSpeed;
+                    }
+                    GetComponent<GameManager>().simulationSpeed = 0.1f;
+                }
+                else
+                {
+                    GetComponent<GameManager>().simulationSpeed = userSimSpeed;
                 }
             }
 
@@ -227,9 +244,33 @@ public class GameManager : MonoBehaviour
             {
                 hazardManager.UpdateHazards();
             }
+
+            if (memoryCoroutineBusy == false)
+            {
+                memoryCoroutine = StartCoroutine(ManageMemory());
+            }
         }
     }
 
+    //! Unloads unused assets when the game is using too much memory.
+    public IEnumerator ManageMemory()
+    {
+        memoryCoroutineBusy = true;
+        float availableMemory = SystemInfo.systemMemorySize;
+        Process proc = Process.GetCurrentProcess();
+        proc.Refresh();
+        float usedMemory = Math.Abs((int)(proc.WorkingSet64 / (1024*1024)));
+        proc.Dispose();
+        float percentUsedMemory = usedMemory / availableMemory;
+        if (percentUsedMemory >= 0.5f)
+        {
+            Resources.UnloadUnusedAssets();
+        }
+        yield return new WaitForSeconds(60);
+        memoryCoroutineBusy = false;
+    }
+
+    //! Starts the undo coroutine.
     public void UndoBuiltObjects()
     {
         if (runningUndo == false)
@@ -264,7 +305,7 @@ public class GameManager : MonoBehaviour
     {
         if (working == false && GetComponent<StateManager>().saving == false)
         {
-            Debug.Log("Requesting save operation...");
+            UnityEngine.Debug.Log("Requesting save operation...");
             dataSaveRequested = true;
             blocksCombined = false;
         }

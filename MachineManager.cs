@@ -14,7 +14,6 @@ public class MachineManager : MonoBehaviour
     {
         if (busy == false && GetComponent<StateManager>().initMachines == true)
         {
-            Debug.Log("machine coroutine started");
             machineUpdateCoroutine = StartCoroutine(MachineUpdateCoroutine());
         }
     }

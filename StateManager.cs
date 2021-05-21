@@ -9,6 +9,8 @@ public class StateManager : MonoBehaviour
     public bool dataSaved;
     public bool worldLoaded;
     public bool initMachines;
+    public bool finalMachineAddress;
+    public bool finalBlockAddress;
     public int progress;
     public int totalMachines;
     public int currentMachine;
@@ -551,13 +553,32 @@ public class StateManager : MonoBehaviour
     //! Assigns ID to objects in the world.
     private void AssignIDs()
     {
-        if (initMachines == true && addressManager.machineIdCoroutineActive == false)
+        if (GetComponent<GameManager>().dataSaveRequested == true)
         {
-            machineIdCoroutine = StartCoroutine(addressManager.MachineIdCoroutine());
+            if (finalMachineAddress == false || finalBlockAddress == false)
+            {
+                if (initMachines == true && addressManager.machineIdCoroutineActive == false)
+                {
+                    machineIdCoroutine = StartCoroutine(addressManager.MachineIdCoroutine());
+                }
+                if (worldLoaded == true && addressManager.blockIdCoroutineActive == false)
+                {
+                    blockIdCoroutine = StartCoroutine(addressManager.BlockIdCoroutine());
+                }
+            }
         }
-        if (worldLoaded == true && addressManager.blockIdCoroutineActive == false)
+        else
         {
-            blockIdCoroutine = StartCoroutine(addressManager.BlockIdCoroutine());
+            finalMachineAddress = false;
+            finalBlockAddress = false;
+            if (initMachines == true && addressManager.machineIdCoroutineActive == false)
+            {
+                machineIdCoroutine = StartCoroutine(addressManager.MachineIdCoroutine());
+            }
+            if (worldLoaded == true && addressManager.blockIdCoroutineActive == false)
+            {
+                blockIdCoroutine = StartCoroutine(addressManager.BlockIdCoroutine());
+            }
         }
     }
 

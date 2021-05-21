@@ -7,7 +7,7 @@ public class Grass : MonoBehaviour
     {
         if (QualitySettings.GetQualityLevel() < 5)
         {
-            gameObject.SetActive(false);
+            Destroy(gameObject);
         }
     }
 }

@@ -535,7 +535,7 @@ public class PlayerGUI : MonoBehaviour
 
                     GUI.Label(guiCoordinates.sliderLabel2Rect, "Chunk Size " + "(" + gameManager.chunkSize + ")");
 
-                    int simSpeed = (int)(gameManager.simulationSpeed * 2500);
+                    int simSpeed = (int)(gameManager.simulationSpeed * 5000);
                     GUI.Label(guiCoordinates.sliderLabel3Rect, "Simulation Speed " + "(" + simSpeed + "%)");
 
                     AudioListener.volume = GUI.HorizontalSlider(guiCoordinates.optionsButton4Rect, AudioListener.volume, 0, 5);

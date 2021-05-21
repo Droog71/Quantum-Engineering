@@ -212,6 +212,10 @@ public class AddressManager
             }
         }
         machineIdCoroutineActive = false;
+        if (gameManager.dataSaveRequested == true)
+        {
+            stateManager.finalMachineAddress = true;
+        }
     }
 
     public IEnumerator BlockIdCoroutine()
@@ -284,5 +288,9 @@ public class AddressManager
             }
         }
         blockIdCoroutineActive = false;
+        if (gameManager.dataSaveRequested == true)
+        {
+            stateManager.finalBlockAddress = true;
+        }
     }
 }

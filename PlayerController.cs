@@ -856,7 +856,7 @@ public class PlayerController : MonoBehaviour
                     string blockName = t.GetComponent<ModBlock>().blockName.ToUpper();
                     if (blockName.Contains("STAIR"))
                     {
-                        GetComponent<Rigidbody>().AddForce(Vector3.up * 10000);
+                        GetComponent<Rigidbody>().AddForce(Vector3.up * 1000);
                     }
                 }
             }
@@ -866,7 +866,7 @@ public class PlayerController : MonoBehaviour
             string blockName = collision.gameObject.GetComponent<ModBlock>().blockName.ToUpper();
             if (blockName.Contains("STAIR"))
             {
-                GetComponent<Rigidbody>().AddForce(Vector3.up * 10000);
+                GetComponent<Rigidbody>().AddForce(Vector3.up * 1000);
             }
         }
     }

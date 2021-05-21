@@ -5,6 +5,7 @@ public class StorageComputer : Machine
 {
     public InventoryManager[] computerContainers;
     private List<InventoryManager> computerContainerList;
+    private int connectionAttempts;
     public string ID = "unassigned";
     public bool powerON;
     public int bootTimer;
@@ -45,7 +46,23 @@ public class StorageComputer : Machine
                 if (bootTimer >= 5)
                 {
                     GetContainers();
-                    initialized = true;
+                    bool foundContainer = false;
+                    int containerCount = 0;
+                    foreach (InventoryManager manager in computerContainers)
+                    {
+                        foundContainer |= computerContainers[containerCount] != null;
+                        containerCount++;
+                    }
+                    if (foundContainer == false)
+                    {
+                        Reboot();
+                        connectionAttempts++;
+                        initialized |= connectionAttempts >= 128;
+                    }
+                    else
+                    {
+                        initialized = true;
+                    }
                     bootTimer = 0;
                 }
             }

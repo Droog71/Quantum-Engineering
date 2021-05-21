@@ -134,7 +134,7 @@ public class UniversalExtractor : Machine
         else
         {
             connectionAttempts += 1;
-            if (connectionAttempts >= 120)
+            if (connectionAttempts >= 128)
             {
                 connectionAttempts = 0;
                 connectionFailed = true;

@@ -167,7 +167,7 @@ public class MainMenu : MonoBehaviour
     private void DownloadWorld()
     {
         string savePath = Path.Combine(Application.persistentDataPath, "SaveData");
-        if (Application.isEditor)
+        if (Application.isEditor || UnityEngine.Debug.isDebugBuild)
         {
             savePath = Path.Combine(Application.persistentDataPath, "Downloads");
         }
