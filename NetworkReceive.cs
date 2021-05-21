@@ -243,7 +243,6 @@ public class NetworkReceive
         {
             yield return null;
         }
-
         string[] conduitList = conduitData.Split('[');
         for (int i = 2; i < conduitList.Length; i++)
         {
@@ -300,6 +299,7 @@ public class NetworkReceive
                 yield return null;
             }
         }
+        conduitDataCoroutineBusy = false;
     }
 
     //! Processes data from machine database.

@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System.Collections;
 using System.Net;
 
 public class InventoryHandler
@@ -7,6 +8,8 @@ public class InventoryHandler
     private InventoryManager playerInventory;
     private InventorySlot slotDraggingFrom;
     private GuiCoordinates guiCoordinates;
+    private Coroutine networkStorageCoroutine;
+    private bool networkStorageCoroutineBusy;
     public string itemToDrag;
     private int amountToDrag;
     private int dragSlotIndex;
@@ -25,6 +28,23 @@ public class InventoryHandler
         return dropSlot.typeInSlot.Equals("nothing")
         || (dropSlot.typeInSlot.Equals(dragSlot.typeInSlot)
         && dropSlot.amountInSlot <= 1000 - dragSlot.amountInSlot);
+    }
+
+    public IEnumerator NetworkStorageCoroutine(int storageInventoryDropSlot, InventorySlot dropSlot)
+    {
+        networkStorageCoroutineBusy = true;
+        using(WebClient client = new WebClient())
+        {
+            System.Uri uri = new System.Uri(PlayerPrefs.GetString("serverURL") + "/storage");
+            Vector3 pos = playerController.storageInventory.gameObject.transform.position;
+            float x = Mathf.Round(pos.x);
+            float y = Mathf.Round(pos.y); 
+            float z = Mathf.Round(pos.z); 
+            client.UploadStringAsync(uri, "POST", "@" + x + "," + y + "," + z + ":"+storageInventoryDropSlot+";"+dropSlot.typeInSlot+"="+dropSlot.amountInSlot);
+            yield return new WaitForSeconds(0.25f);
+            client.UploadStringAsync(uri, "POST", "@" + x + "," + y + "," + z + ":"+dragSlotIndex+";"+slotDraggingFrom.typeInSlot+"="+slotDraggingFrom.amountInSlot);
+        }
+        networkStorageCoroutineBusy = false;
     }
 
     //! Searches for items in all containers connected to the computer.
@@ -93,6 +113,7 @@ public class InventoryHandler
                                 using (WebClient client = new WebClient())
                                 {
                                     System.Uri uri = new System.Uri(PlayerPrefs.GetString("serverURL") + "/storage");
+                                    Debug.Log(uri + " POST" + "@" + x + "," + y + "," + z + ":" + index + ";" + dragSlot.typeInSlot + "=" + dragSlot.amountInSlot);
                                     client.UploadStringAsync(uri, "POST", "@" + x + "," + y + "," + z + ":" + index + ";" + dragSlot.typeInSlot + "=" + dragSlot.amountInSlot);
                                 }
                             }
@@ -105,6 +126,7 @@ public class InventoryHandler
                                 using(WebClient client = new WebClient())
                                 {
                                     System.Uri uri = new System.Uri(PlayerPrefs.GetString("serverURL") + "/storage");
+                                    Debug.Log(uri + " POST" + "@" + x + "," + y + "," + z + ":" + index + ";" + dragSlot.typeInSlot + "=" + dragSlot.amountInSlot);
                                     client.UploadStringAsync(uri, "POST", "@" + x + "," + y + "," + z + ":"+i+";"+slot.typeInSlot+"="+slot.amountInSlot);
                                 }
                             }
@@ -182,14 +204,26 @@ public class InventoryHandler
                 }
                 if (PlayerPrefsX.GetPersistentBool("multiplayer") == true)
                 {
-                    Vector3 pos = playerController.storageInventory.gameObject.transform.position;
-                    float x = Mathf.Round(pos.x);
-                    float y = Mathf.Round(pos.y); 
-                    float z = Mathf.Round(pos.z); 
-                    using(WebClient client = new WebClient())
+                    bool flag = false;
+                    foreach (InventorySlot slot in playerInventory.inventory)
                     {
-                        System.Uri uri = new System.Uri(PlayerPrefs.GetString("serverURL") + "/storage");
-                        client.UploadStringAsync(uri, "POST", "@" + x + "," + y + "," + z + ":"+dragSlotIndex+";"+slotDraggingFrom.typeInSlot+"="+slotDraggingFrom.amountInSlot);
+                        if (slot == slotDraggingFrom)
+                        {
+                            flag = true;
+                            break;
+                        }
+                    }
+                    if (flag == false)
+                    {
+                        Vector3 pos = playerController.storageInventory.gameObject.transform.position;
+                        float x = Mathf.Round(pos.x);
+                        float y = Mathf.Round(pos.y);
+                        float z = Mathf.Round(pos.z);
+                        using(WebClient client = new WebClient())
+                        {
+                            System.Uri uri = new System.Uri(PlayerPrefs.GetString("serverURL") + "/storage");
+                            client.UploadStringAsync(uri, "POST", "@" + x + "," + y + "," + z + ":"+dragSlotIndex+";"+slotDraggingFrom.typeInSlot+"="+slotDraggingFrom.amountInSlot);
+                        }
                     }
                 }
             }
@@ -225,14 +259,9 @@ public class InventoryHandler
                     }
                     if (PlayerPrefsX.GetPersistentBool("multiplayer") == true && PlayerPrefsX.GetPersistentBool("hosting") == false)
                     {
-                        using(WebClient client = new WebClient())
+                        if (networkStorageCoroutineBusy == false)
                         {
-                            System.Uri uri = new System.Uri(PlayerPrefs.GetString("serverURL") + "/storage");
-                            Vector3 pos = playerController.storageInventory.gameObject.transform.position;
-                            float x = Mathf.Round(pos.x);
-                            float y = Mathf.Round(pos.y); 
-                            float z = Mathf.Round(pos.z); 
-                            client.UploadStringAsync(uri, "POST", "@" + x + "," + y + "," + z + ":"+storageInventoryDropSlot+";"+dropSlot.typeInSlot+"="+dropSlot.amountInSlot);
+                            networkStorageCoroutine = playerController.StartCoroutine(NetworkStorageCoroutine(storageInventoryDropSlot, dropSlot));
                         }
                     }
                 }

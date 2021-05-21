@@ -549,7 +549,7 @@ public class PlayerGUI : MonoBehaviour
                         GUI.Label(guiCoordinates.craftingInfoRect, descriptions.chunkSize);
                     }
 
-                    gameManager.simulationSpeed = GUI.HorizontalSlider(guiCoordinates.optionsButton6Rect, gameManager.simulationSpeed, 0, 0.1f);
+                    gameManager.simulationSpeed = GUI.HorizontalSlider(guiCoordinates.optionsButton6Rect, gameManager.simulationSpeed, 0.0051f, 0.1f);
 
                     if (guiCoordinates.optionsButton6Rect.Contains(mousePos))
                     {

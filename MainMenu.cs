@@ -6,6 +6,7 @@ using System.IO;
 using System.Net;
 using System.Runtime.InteropServices;
 using System.Diagnostics;
+using System.Threading;
 using System;
 
 public class MainMenu : MonoBehaviour
@@ -70,6 +71,40 @@ public class MainMenu : MonoBehaviour
             worldSelected = true;
             ambient.enabled = false;
         }
+        else
+        {
+            string commandLineOptions = Environment.CommandLine;
+            if (commandLineOptions.Contains("-batchmode"))
+            {
+                worldName = commandLineOptions.Contains("-local") ? GetLocalAddress() : GetExternalAddress();
+                FileBasedPrefs.SetWorldName(worldName);
+                PlayerPrefsX.SetPersistentBool("multiplayer", true);
+                PlayerPrefs.SetString("serverURL", "http://" + worldName + ":5000");
+                PlayerPrefs.SetString("UserName", worldName);
+                PlayerPrefs.SetFloat("playerRed", 0);
+                PlayerPrefs.SetFloat("playerGreen", 0);
+                PlayerPrefs.SetFloat("playerBlue", 0);
+                StartServer();
+                Thread.Sleep(5000);
+                SelectWorld();
+                worldList = PlayerPrefsX.GetPersistentStringArray("Worlds").ToList();
+                if (worldList.Count < 10)
+                {
+                    if (!worldList.Contains(worldName))
+                    {
+                        worldList.Add(worldName);
+                    }
+                    else
+                    {
+                        PreStart();
+                    }
+                }
+                else if (worldList.Contains(worldName))
+                {
+                    PreStart();
+                }
+            }
+        }
     }
 
     //! Called once per frame by unity engine.
@@ -101,7 +136,7 @@ public class MainMenu : MonoBehaviour
     //! Gets the local address for LAN games.
     private string GetLocalAddress()
     {
-        if (Application.isEditor)
+        if (Application.isEditor || UnityEngine.Debug.isDebugBuild)
         {
             return "localhost";
         }
@@ -123,19 +158,26 @@ public class MainMenu : MonoBehaviour
     //! Starts the external server program.
     private void StartServer()
     {
+        string commandLineOptions = Environment.CommandLine;
+        bool headless = commandLineOptions.Contains("-headless");
+
         if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
         {
             if (Application.isEditor)
             {
                 UnityEngine.Debug.Log("Starting development server...");
-                Process.Start(Application.dataPath + "/Linux_Server/qe_server", "local devel");
+                string options = headless == true ? "local devel headless" : "local devel";
+                Process.Start(Application.dataPath + "/Linux_Server/qe_server", options);
             }
             else if (local == true)
             {
-                Process.Start(Application.dataPath + "/Linux_Server/qe_server", "local");
+                UnityEngine.Debug.Log("Starting LAN server...");
+                string options = headless == true ? "local headless" : "local";
+                Process.Start(Application.dataPath + "/Linux_Server/qe_server", options);
             }
             else
             {
+                UnityEngine.Debug.Log("Starting online server...");
                 Process.Start(Application.dataPath + "/Linux_Server/qe_server");
             }
         }
@@ -143,10 +185,13 @@ public class MainMenu : MonoBehaviour
         {
             if (local == true)
             {
-                Process.Start(Application.dataPath + "/Windows_Server/qe_server.exe", "local");
+                UnityEngine.Debug.Log("Starting LAN server...");
+                string options = headless == true ? "local headless" : "local";
+                Process.Start(Application.dataPath + "/Windows_Server/qe_server.exe", options);
             }
             else
             {
+                UnityEngine.Debug.Log("Starting online server...");
                 Process.Start(Application.dataPath + "/Windows_Server/qe_server.exe");
             }
         }
@@ -154,10 +199,13 @@ public class MainMenu : MonoBehaviour
         {
             if (local == true)
             {
-                Process.Start(Application.dataPath + "/Mac_Server/qe_server", "local");
+                UnityEngine.Debug.Log("Starting LAN server...");
+                string options = headless == true ? "local headless" : "local";
+                Process.Start(Application.dataPath + "/Mac_Server/qe_server", options);
             }
             else
             {
+                UnityEngine.Debug.Log("Starting online server...");
                 Process.Start(Application.dataPath + "/Mac_Server/qe_server");
             }
         }
@@ -687,6 +735,7 @@ public class MainMenu : MonoBehaviour
                     localPrompt = false;
                     userNamePrompt = true;
                     worldName = local == true ? GetLocalAddress() : GetExternalAddress();
+                    PlayerPrefs.SetString("serverURL", "http://" + worldName + ":5000");
                     StartServer();
                 }
                 if (GUI.Button(deletePromptButton2Rect, "Online"))
@@ -695,6 +744,7 @@ public class MainMenu : MonoBehaviour
                     localPrompt = false;
                     userNamePrompt = true;
                     worldName = local == true ? GetLocalAddress() : GetExternalAddress();
+                    PlayerPrefs.SetString("serverURL", "http://" + worldName + ":5000");
                     StartServer();
                 }
             }

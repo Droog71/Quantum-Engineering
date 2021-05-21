@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -10,6 +11,7 @@ public class NetworkController
     private Dictionary<string, GameObject> networkPlayers;
     private Dictionary<string, Vector3> playerPositions;
     private TextureDictionary textureDictionary;
+    private Coroutine dedicatedServerCoroutine;
     private Coroutine blockUpdateCoroutine;
     private Coroutine storageSendCoroutine;
     private Coroutine storageReceiveCoroutine;
@@ -28,6 +30,7 @@ public class NetworkController
     private float conduitNetTimer;
     private float powerNetTimer;
     private float machineNetTimer;
+    public bool dedicatedServerCoroutineBusy;
     public bool storageCoroutineBusy;
     public bool playerCoroutineBusy;
     public bool playerMovementCoroutineBusy;
@@ -43,6 +46,7 @@ public class NetworkController
     {
         this.playerController = playerController;
         serverURL = PlayerPrefs.GetString("serverURL");
+        Debug.Log("Connected to " + serverURL);
         textureDictionary = playerController.gameManager.GetComponent<TextureDictionary>();
         networkPlayers = new Dictionary<string, GameObject>();
         playerPositions = new Dictionary<string, Vector3>();
@@ -54,6 +58,15 @@ public class NetworkController
     //! Handles all network traffic for multiplayer.
     public void NetWorkUpdate()
     {
+        string commandLineOptions = Environment.CommandLine;
+        if (commandLineOptions.Contains("-batchmode"))
+        {
+            if (dedicatedServerCoroutineBusy == false)
+            {
+                dedicatedServerCoroutine = playerController.StartCoroutine(DedicatedServerCoroutine());
+            }
+        }
+
         if (playerCoroutineBusy == false)
         {
             networkPlayerCoroutine = playerController.StartCoroutine(UpdateNetworkPlayers());
@@ -65,14 +78,14 @@ public class NetworkController
         }
 
         playerNetTimer += 1 * Time.deltaTime;
-        if (playerNetTimer >= Random.Range(0.75f, 1.0f))
+        if (playerNetTimer >= UnityEngine.Random.Range(0.75f, 1.0f))
         {
             networkSend.SendPlayerInfo();
             playerNetTimer = 0;
         }
 
         blockNetTimer += 1 * Time.deltaTime;
-        if (blockNetTimer >= Random.Range(1.0f, 1.25f))
+        if (blockNetTimer >= UnityEngine.Random.Range(1.0f, 1.25f))
         {
             if (blockCoroutineBusy == false)
             {
@@ -82,7 +95,7 @@ public class NetworkController
         }
 
         conduitNetTimer += 1 * Time.deltaTime;
-        if (conduitNetTimer >= Random.Range(1.25f, 1.5f))
+        if (conduitNetTimer >= UnityEngine.Random.Range(1.25f, 1.5f))
         {
             if (networkReceive.conduitDataCoroutineBusy == false)
             {
@@ -92,7 +105,7 @@ public class NetworkController
         }
 
         powerNetTimer += 1 * Time.deltaTime;
-        if (powerNetTimer >= Random.Range(1.5f, 1.75f))
+        if (powerNetTimer >= UnityEngine.Random.Range(1.5f, 1.75f))
         {
             if (networkReceive.powerDataCoroutineBusy == false)
             {
@@ -102,7 +115,7 @@ public class NetworkController
         }
 
         storageNetTimer += 1 * Time.deltaTime;
-        if (storageNetTimer >= Random.Range(1.75f, 2.0f))
+        if (storageNetTimer >= UnityEngine.Random.Range(1.75f, 2.0f))
         {
             if (storageCoroutineBusy == false)
             {
@@ -112,7 +125,7 @@ public class NetworkController
         }
 
         machineNetTimer += 1 * Time.deltaTime;
-        if (machineNetTimer >= Random.Range(2.0f, 2.25f))
+        if (machineNetTimer >= UnityEngine.Random.Range(2.0f, 2.25f))
         {
             if (networkReceive.machineDataCoroutineBusy == false)
             {
@@ -120,6 +133,15 @@ public class NetworkController
             }
             machineNetTimer = 0;
         }
+    }
+
+    //! Saves the world for dedicated servers.
+    public IEnumerator DedicatedServerCoroutine()
+    {
+        dedicatedServerCoroutineBusy = true;
+        yield return new WaitForSeconds(900);
+        playerController.requestedSave = true;
+        dedicatedServerCoroutineBusy = false;
     }
 
     //! Gets information about other players from the server.
@@ -140,7 +162,11 @@ public class NetworkController
         {
             string playerInfo = playerList[i];
             string playerName = playerInfo.Split(':')[0].Split(',')[0].TrimStart('"').TrimEnd('"');
-            if (playerName != PlayerPrefs.GetString("UserName"))
+            float red = float.Parse(playerInfo.Split(',')[6]);
+            float green = float.Parse(playerInfo.Split(',')[7]);
+            float blue = float.Parse(playerInfo.Split(',')[8].Split(']')[0]);
+            Color playerColor = new Color(red, green, blue);
+            if (playerName != PlayerPrefs.GetString("UserName") && playerName != playerController.stateManager.worldName)
             {
                 if (!playerNames.Contains(playerName))
                 {
@@ -148,15 +174,11 @@ public class NetworkController
                 }
                 if (!networkPlayers.ContainsKey(playerName))
                 {
-                    float red = float.Parse(playerInfo.Split(',')[6]);
-                    float green = float.Parse(playerInfo.Split(',')[7]);
-                    float blue = float.Parse(playerInfo.Split(',')[8].Split(']')[0]);
-                    Color playerColor = new Color(red, green, blue);
                     CreateNetworkPlayer(playerName, playerColor);
                 }
                 else
                 {
-                    SetPlayerLocation(playerInfo);
+                    UpdateNetWorkPlayer(playerInfo, playerColor);
                 }
             }
             yield return null;
@@ -168,7 +190,7 @@ public class NetworkController
             if (!playerNames.Contains(entry.Key))
             {
                 networkPlayers.Remove(entry.Key);
-                Object.Destroy(entry.Value);
+                UnityEngine.Object.Destroy(entry.Value);
             }
             yield return null;
         }
@@ -177,7 +199,7 @@ public class NetworkController
     }
 
     //! Sends player positions to server.
-    private void SetPlayerLocation(string playerInfo)
+    private void UpdateNetWorkPlayer(string playerInfo, Color playerColor)
     {
         string playerName = playerInfo.Split(':')[0].Split(',')[0].TrimStart('"').TrimEnd('"');
         float x = float.Parse(playerInfo.Split(',')[1]);
@@ -195,7 +217,13 @@ public class NetworkController
         }
         if (networkPlayers[playerName] != null)
         {
-            networkPlayers[playerName].transform.forward = new Vector3(fx,0,fz);
+            GameObject player = networkPlayers[playerName];
+            player.transform.forward = new Vector3(fx,0,fz);
+            Renderer renderer = player.GetComponentInChildren<Renderer>();
+            if (renderer.material.color != playerColor)
+            {
+                SetPlayerColor(player, playerColor);
+            }
         }
     }
 
@@ -266,12 +294,19 @@ public class NetworkController
     //! Instantiates a gameobject representing another player over the network.
     private void CreateNetworkPlayer(string playerName, Color playerColor)
     {
-        GameObject newPlayer = Object.Instantiate(playerController.networkPlayer);
+        GameObject newPlayer = UnityEngine.Object.Instantiate(playerController.networkPlayer);
         newPlayer.name = playerName;
+        SetPlayerColor(newPlayer, playerColor);
+        networkPlayers.Add(playerName, newPlayer);
+    }
+
+    //! Sets the color of a player character.
+    private void SetPlayerColor(GameObject player, Color playerColor)
+    {
         Material playerMaterial = new Material(Shader.Find("Standard"));
         playerMaterial.SetTexture("_MainTex", textureDictionary.dictionary["Iron Block"]);
         playerMaterial.color = playerColor;
-        Renderer[] renderers = newPlayer.GetComponentsInChildren<Renderer>();
+        Renderer[] renderers = player.GetComponentsInChildren<Renderer>();
         foreach (Renderer renderer in renderers)
         {
             Material[] mats = renderer.materials;
@@ -281,6 +316,5 @@ public class NetworkController
             }
             renderer.materials = mats;
         }
-        networkPlayers.Add(playerName, newPlayer);
     }
 }

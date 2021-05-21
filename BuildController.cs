@@ -14,6 +14,7 @@ public class BuildController : MonoBehaviour
     public AudioClip multiBuildClip;
     public bool autoAxis;
     private Coroutine buildBlockCoroutine;
+    private Coroutine updateNetworkConduitCoroutine;
 
     //! Called by unity engine on start up to initialize variables
     public void Start()
@@ -334,18 +335,46 @@ public class BuildController : MonoBehaviour
                             if (obj.GetComponent<UniversalConduit>() != null)
                             {
                                 obj.GetComponent<UniversalConduit>().range = playerController.defaultRange;
+                                if (PlayerPrefsX.GetPersistentBool("multiplayer") == true)
+                                {
+                                    NetworkSend net = playerController.networkController.networkSend;
+                                    Vector3 location = obj.transform.position;
+                                    updateNetworkConduitCoroutine = StartCoroutine(net.SendConduitData(location,playerController.defaultRange));
+                                }
                             }
                             if (obj.GetComponent<PowerConduit>() != null)
                             {
                                 obj.GetComponent<PowerConduit>().range = playerController.defaultRange;
+                                if (PlayerPrefsX.GetPersistentBool("multiplayer") == true)
+                                {
+                                    NetworkSend net = playerController.networkController.networkSend;
+                                    Vector3 location = obj.transform.position;
+                                    int range = playerController.defaultRange;
+                                    bool dualOutput = obj.GetComponent<PowerConduit>().dualOutput;
+                                    updateNetworkConduitCoroutine = StartCoroutine(net.SendPowerData(location,range,dualOutput));
+                                }
                             }
                             if (obj.GetComponent<DarkMatterConduit>() != null)
                             {
                                 obj.GetComponent<DarkMatterConduit>().range = playerController.defaultRange;
+                                if (PlayerPrefsX.GetPersistentBool("multiplayer") == true)
+                                {
+                                    NetworkSend net = playerController.networkController.networkSend;
+                                    Vector3 location = obj.transform.position;
+                                    updateNetworkConduitCoroutine = StartCoroutine(net.SendConduitData(location,playerController.defaultRange));
+                                }
                             }
                             if (obj.GetComponent<RailCartHub>() != null)
                             {
                                 obj.GetComponent<RailCartHub>().range = playerController.defaultRange;
+                                if (PlayerPrefsX.GetPersistentBool("multiplayer") == true)
+                                {
+                                    NetworkSend net = playerController.networkController.networkSend;
+                                    RailCartHub hub = obj.GetComponent<RailCartHub>();
+                                    Vector3 location = obj.transform.position;
+                                    int range = playerController.defaultRange;
+                                    updateNetworkConduitCoroutine = StartCoroutine(net.SendHubData(location,hub.range,hub.stop,hub.stopTime));
+                                }
                             }
                             gameManager.undoBlocks.Add(new GameManager.Block(type, obj));
                             slot.amountInSlot -= 1;
