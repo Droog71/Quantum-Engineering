@@ -73,7 +73,7 @@ public class MainMenu : MonoBehaviour
         }
         else
         {
-            string commandLineOptions = Environment.CommandLine;
+            string[] commandLineOptions = Environment.GetCommandLineArgs();
             if (commandLineOptions.Contains("-batchmode"))
             {
                 worldName = commandLineOptions.Contains("-local") ? GetLocalAddress() : GetExternalAddress();
@@ -158,12 +158,12 @@ public class MainMenu : MonoBehaviour
     //! Starts the external server program.
     private void StartServer()
     {
-        string commandLineOptions = Environment.CommandLine;
+        string[] commandLineOptions = Environment.GetCommandLineArgs();
         bool headless = commandLineOptions.Contains("-headless");
 
         if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
         {
-            if (Application.isEditor)
+            if (Application.isEditor || UnityEngine.Debug.isDebugBuild)
             {
                 UnityEngine.Debug.Log("Starting development server...");
                 string options = headless == true ? "local devel headless" : "local devel";

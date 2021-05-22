@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
-using System.Collections;
 using System.Net;
+using System.Collections;
+using System;
 
 public class InventoryHandler
 {
@@ -35,14 +36,27 @@ public class InventoryHandler
         networkStorageCoroutineBusy = true;
         using(WebClient client = new WebClient())
         {
-            System.Uri uri = new System.Uri(PlayerPrefs.GetString("serverURL") + "/storage");
+            Uri uri = new Uri(PlayerPrefs.GetString("serverURL") + "/storage");
             Vector3 pos = playerController.storageInventory.gameObject.transform.position;
             float x = Mathf.Round(pos.x);
             float y = Mathf.Round(pos.y); 
             float z = Mathf.Round(pos.z); 
             client.UploadStringAsync(uri, "POST", "@" + x + "," + y + "," + z + ":"+storageInventoryDropSlot+";"+dropSlot.typeInSlot+"="+dropSlot.amountInSlot);
-            yield return new WaitForSeconds(0.25f);
-            client.UploadStringAsync(uri, "POST", "@" + x + "," + y + "," + z + ":"+dragSlotIndex+";"+slotDraggingFrom.typeInSlot+"="+slotDraggingFrom.amountInSlot);
+            bool flag = false;
+            while (flag == false)
+            {
+                yield return new WaitForSeconds(0.25f);
+                try
+                {
+                    client.UploadStringAsync(uri, "POST", "@" + x + "," + y + "," + z + ":"+dragSlotIndex+";"+slotDraggingFrom.typeInSlot+"="+slotDraggingFrom.amountInSlot);
+                    flag = true;
+                }
+                catch(Exception e)
+                {
+                    // NOOP
+                }
+            }
+            yield return null;
         }
         networkStorageCoroutineBusy = false;
     }
@@ -112,8 +126,7 @@ public class InventoryHandler
                                 float z = Mathf.Round(pos.z); 
                                 using (WebClient client = new WebClient())
                                 {
-                                    System.Uri uri = new System.Uri(PlayerPrefs.GetString("serverURL") + "/storage");
-                                    Debug.Log(uri + " POST" + "@" + x + "," + y + "," + z + ":" + index + ";" + dragSlot.typeInSlot + "=" + dragSlot.amountInSlot);
+                                    Uri uri = new Uri(PlayerPrefs.GetString("serverURL") + "/storage");
                                     client.UploadStringAsync(uri, "POST", "@" + x + "," + y + "," + z + ":" + index + ";" + dragSlot.typeInSlot + "=" + dragSlot.amountInSlot);
                                 }
                             }
@@ -125,8 +138,7 @@ public class InventoryHandler
                                 float z = Mathf.Round(pos.z); 
                                 using(WebClient client = new WebClient())
                                 {
-                                    System.Uri uri = new System.Uri(PlayerPrefs.GetString("serverURL") + "/storage");
-                                    Debug.Log(uri + " POST" + "@" + x + "," + y + "," + z + ":" + index + ";" + dragSlot.typeInSlot + "=" + dragSlot.amountInSlot);
+                                    Uri uri = new Uri(PlayerPrefs.GetString("serverURL") + "/storage");
                                     client.UploadStringAsync(uri, "POST", "@" + x + "," + y + "," + z + ":"+i+";"+slot.typeInSlot+"="+slot.amountInSlot);
                                 }
                             }
@@ -158,6 +170,32 @@ public class InventoryHandler
         }
     }
 
+    //! Updates the server when items are removed from storage containers in multiplayer games.
+    private void NetworkRemoveItem()
+    {
+        bool flag = false;
+        foreach (InventorySlot slot in playerController.storageInventory.inventory)
+        {
+            if (slot == slotDraggingFrom)
+            {
+                flag = true;
+                break;
+            }
+        }
+        if (flag == true)
+        {
+            using (WebClient client = new WebClient())
+            {
+                Vector3 pos = playerController.storageInventory.gameObject.transform.position;
+                float x = Mathf.Round(pos.x);
+                float y = Mathf.Round(pos.y);
+                float z = Mathf.Round(pos.z);
+                Uri uri = new Uri(PlayerPrefs.GetString("serverURL") + "/storage");
+                client.UploadStringAsync(uri, "POST", "@" + x + "," + y + "," + z + ":" + dragSlotIndex + ";" + slotDraggingFrom.typeInSlot + "=" + slotDraggingFrom.amountInSlot);
+            }
+        }
+    }
+
     //! Drops an item into an inventory slot.
     public void DropItemInSlot(Vector2 mousePos, bool usingContainer)
     {
@@ -166,6 +204,10 @@ public class InventoryHandler
         if (guiCoordinates.inventoryDropSlotRect.Contains(mousePos))
         {
             playerController.DropItem(slotDraggingFrom);
+            if (PlayerPrefsX.GetPersistentBool("multiplayer") == true)
+            {
+                NetworkRemoveItem();
+            }
             return;
         }
 
@@ -173,6 +215,10 @@ public class InventoryHandler
         {
             slotDraggingFrom.amountInSlot = 0;
             slotDraggingFrom.typeInSlot = "nothing";
+            if (PlayerPrefsX.GetPersistentBool("multiplayer") == true)
+            {
+                NetworkRemoveItem();
+            }
             playerController.PlayCraftingSound();
             return;
         }
@@ -221,7 +267,7 @@ public class InventoryHandler
                         float z = Mathf.Round(pos.z);
                         using(WebClient client = new WebClient())
                         {
-                            System.Uri uri = new System.Uri(PlayerPrefs.GetString("serverURL") + "/storage");
+                            Uri uri = new Uri(PlayerPrefs.GetString("serverURL") + "/storage");
                             client.UploadStringAsync(uri, "POST", "@" + x + "," + y + "," + z + ":"+dragSlotIndex+";"+slotDraggingFrom.typeInSlot+"="+slotDraggingFrom.amountInSlot);
                         }
                     }

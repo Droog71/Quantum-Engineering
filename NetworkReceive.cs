@@ -17,6 +17,7 @@ public class NetworkReceive
     private string paintData;
     private bool chatCoroutineBusy;
     private List<string> chatMessageList;
+    string[] localStorageList;
     public bool conduitDataCoroutineBusy;
     public bool machineDataCoroutineBusy;
     public bool powerDataCoroutineBusy;
@@ -197,40 +198,44 @@ public class NetworkReceive
     public IEnumerator ReceiveNetworkStorage()
     {
         string[] storageList = networkController.storageData.Split('[');
-        for (int i = 2; i < storageList.Length; i++)
+        if (storageList != localStorageList)
         {
-            string storageInfo = storageList[i];
-            float xPos = float.Parse(storageInfo.Split(',')[0]);
-            float yPos = float.Parse(storageInfo.Split(',')[1]);
-            float zPos = float.Parse(storageInfo.Split(',')[2]);
-            Vector3 storagePos = new Vector3(xPos, yPos, zPos);
-            int slot = int.Parse(storageInfo.Split(',')[3]);
-            string type = storageInfo.Split(',')[4].Substring(2).TrimEnd('"');
-            int amount = int.Parse(storageInfo.Split(',')[5].Split(']')[0]);
-            InventoryManager[] allInventories = Object.FindObjectsOfType<InventoryManager>();
-            foreach (InventoryManager manager in allInventories)
+            localStorageList = storageList;
+            for (int i = 2; i < storageList.Length; i++)
             {
-                if (manager != null)
+                string storageInfo = storageList[i];
+                float xPos = float.Parse(storageInfo.Split(',')[0]);
+                float yPos = float.Parse(storageInfo.Split(',')[1]);
+                float zPos = float.Parse(storageInfo.Split(',')[2]);
+                Vector3 storagePos = new Vector3(xPos, yPos, zPos);
+                int slot = int.Parse(storageInfo.Split(',')[3]);
+                string type = storageInfo.Split(',')[4].Substring(2).TrimEnd('"');
+                int amount = int.Parse(storageInfo.Split(',')[5].Split(']')[0]);
+                InventoryManager[] allInventories = Object.FindObjectsOfType<InventoryManager>();
+                foreach (InventoryManager manager in allInventories)
                 {
-                    if (manager.initialized == true)
+                    if (manager != null)
                     {
-                        Vector3 pos = manager.gameObject.transform.position;
-                        float x = Mathf.Round(pos.x);
-                        float y = Mathf.Round(pos.y);
-                        float z = Mathf.Round(pos.z);
-                        Vector3 foundPos = new Vector3(x, y, z);
-                        if (foundPos== storagePos)
+                        if (manager.initialized == true)
                         {
-                            manager.inventory[slot].typeInSlot = type;
-                            manager.inventory[slot].amountInSlot = amount;
-                            break;
+                            Vector3 pos = manager.gameObject.transform.position;
+                            float x = Mathf.Round(pos.x);
+                            float y = Mathf.Round(pos.y);
+                            float z = Mathf.Round(pos.z);
+                            Vector3 foundPos = new Vector3(x, y, z);
+                            if (foundPos == storagePos)
+                            {
+                                manager.inventory[slot].typeInSlot = type;
+                                manager.inventory[slot].amountInSlot = amount;
+                                break;
+                            }
                         }
                     }
+                    yield return null;
                 }
-                yield return null;
             }
+            networkController.receivedNetworkStorage = true;
         }
-        networkController.receivedNetworkStorage = true;
     }
 
     //! Processes data from conduit database.
