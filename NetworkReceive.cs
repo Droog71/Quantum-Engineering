@@ -81,6 +81,7 @@ public class NetworkReceive
         string[] blockList = networkController.blockData.Split('[');
         if (blockList != localBlockList)
         {
+            int databaseInterval = 0;
             localBlockList = blockList;
             for (int i = 2; i < blockList.Length; i++)
             {
@@ -93,7 +94,7 @@ public class NetworkReceive
                 float xRot = float.Parse(blockInfo.Split(',')[5]);
                 float yRot = float.Parse(blockInfo.Split(',')[6]);
                 float zRot = float.Parse(blockInfo.Split(',')[7]);
-                float wRot = float.Parse(blockInfo.Split(',')[8].Split(']')[0]);
+                float wRot = float.Parse(blockInfo.Split(',')[8]);
                 Vector3 blockPos = new Vector3(xPos, yPos, zPos);
                 Quaternion blockRot = new Quaternion(xRot, yRot, zRot, wRot);
                 bool found = false;
@@ -121,7 +122,7 @@ public class NetworkReceive
                             }
                         }
                         blockCheckInterval++;
-                        if (blockCheckInterval >= 10)
+                        if (blockCheckInterval >= 50)
                         {
                             blockCheckInterval = 0;
                             yield return null;
@@ -170,7 +171,7 @@ public class NetworkReceive
                             }
                         }
                         blockCheckInterval++;
-                        if (blockCheckInterval >= 10)
+                        if (blockCheckInterval >= 50)
                         {
                             blockCheckInterval = 0;
                             yield return null;
@@ -195,7 +196,12 @@ public class NetworkReceive
                     }
                 }
 
-                yield return null;
+                databaseInterval++;
+                if (databaseInterval >= 50)
+                {
+                    databaseInterval = 0;
+                    yield return null;
+                }
             }
         }
         networkController.networkBlockCoroutineBusy = false;

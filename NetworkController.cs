@@ -76,6 +76,12 @@ public class NetworkController
         {
             networkMovementCoroutine = playerController.StartCoroutine(MoveNetworkPlayers());
         }
+
+        if (networkBlockCoroutineBusy == false)
+        {
+            networkBlockCoroutineBusy = true;
+            networkBlockCoroutine = playerController.StartCoroutine(UpdateNetworkBlocks());
+        }
     }
 
     //! Send information about this player once per second.
@@ -91,15 +97,6 @@ public class NetworkController
     public IEnumerator NetWorkWorldUpdate()
     {
         networkWorldUpdateCoroutineBusy = true;
-
-        if (NetworkAvailable())
-        {
-            networkBlockCoroutine = playerController.StartCoroutine(UpdateNetworkBlocks());
-        }
-        else
-        {
-            yield return null;
-        }
 
         if (NetworkAvailable())
         {
@@ -143,8 +140,7 @@ public class NetworkController
     //! Returns true if none of the network world update coroutines are running.
     private bool NetworkAvailable()
     {
-        return networkBlockCoroutineBusy == false && 
-        networkReceive.conduitDataCoroutineBusy == false && 
+        return networkReceive.conduitDataCoroutineBusy == false && 
         networkReceive.powerDataCoroutineBusy == false && 
         networkStorageCoroutineBusy == false && 
         networkReceive.machineDataCoroutineBusy == false;
@@ -270,18 +266,13 @@ public class NetworkController
     //! Instantiates blocks over the network.
     public IEnumerator UpdateNetworkBlocks()
     {
-        if (networkBlockCoroutineBusy == false)
+        blockData = "none";
+        networkReceive.GetBlockData();
+        while (blockData == "none")
         {
-            networkBlockCoroutineBusy = true;
-
-            blockData = "none";
-            networkReceive.GetBlockData();
-            while (blockData == "none")
-            {
-                yield return null;
-            }
-            blockUpdateCoroutine = playerController.StartCoroutine(networkReceive.ReceiveNetworkBlocks());
+            yield return null;
         }
+        blockUpdateCoroutine = playerController.StartCoroutine(networkReceive.ReceiveNetworkBlocks());
     }
 
     //! Updates inventories over the network.
