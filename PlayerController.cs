@@ -9,8 +9,8 @@ public class PlayerController : MonoBehaviour
     private InputManager inputManager;
     public NetworkController networkController;
     private Coroutine saveCoroutine;
+    private Coroutine networkWorldUpdateCoroutine;
     private Vector3 originalPosition;
-
     public Vector3 destroyStartPosition;
     public Vector3 buildStartPosition;
     public StateManager stateManager;
@@ -470,7 +470,12 @@ public class PlayerController : MonoBehaviour
 
                 if (PlayerPrefsX.GetPersistentBool("multiplayer") == true)
                 {
-                    networkController.NetWorkUpdate();
+                    networkController.NetworkFrame();
+
+                    if (networkController.networkWorldUpdateCoroutineBusy == false)
+                    {
+                        networkWorldUpdateCoroutine = StartCoroutine(networkController.NetWorkWorldUpdate());
+                    }
                 }
             }
         }

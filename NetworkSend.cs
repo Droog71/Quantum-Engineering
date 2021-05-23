@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.SceneManagement;
 using System.Net;
 
 public class NetworkSend
@@ -33,7 +35,7 @@ public class NetworkSend
     {
         using(WebClient client = new WebClient()) 
         {
-            System.Uri uri = new System.Uri(serverURL+"/chat");
+            Uri uri = new Uri(serverURL+"/chat");
             client.UploadStringAsync(uri, "POST", "@" + PlayerPrefs.GetString("UserName") + ":" + message);
         }
     }
@@ -43,7 +45,7 @@ public class NetworkSend
     {
         using (WebClient client = new WebClient())
         {    
-            System.Uri uri = new System.Uri("https://api.ipify.org");
+            Uri uri = new Uri("https://api.ipify.org");
             return client.DownloadString(uri);
         }
     }
@@ -66,7 +68,16 @@ public class NetworkSend
 
         using(WebClient client = new WebClient()) 
         {
-            System.Uri uri = new System.Uri(serverURL+"/players");
+            Uri uri = null;
+            try
+            {
+                uri = new Uri(serverURL+"/players");
+            }
+            catch(Exception e)
+            {
+                Debug.Log(e.Message);
+                SceneManager.LoadScene(0);
+            }
             client.UploadStringAsync(uri, "POST", "@" + values["name"] + ":"
             + values["x"] + "," + values["y"] + "," + values["z"]
             + "," + values["fx"] + "," + values["fz"] + ","
@@ -86,7 +97,7 @@ public class NetworkSend
             float z = Mathf.Round(pos.z); 
             using (WebClient client = new WebClient())
             {
-                System.Uri uri = new System.Uri(serverURL+"/conduits");
+                Uri uri = new Uri(serverURL+"/conduits");
                 client.UploadStringAsync(uri, "POST", "@" + x + "," + y + "," + z + ":" + range);
             }
             conduitCoroutineBusy = false;
@@ -105,7 +116,7 @@ public class NetworkSend
             float z = Mathf.Round(pos.z); 
             using (WebClient client = new WebClient())
             {
-                System.Uri uri = new System.Uri(serverURL+"/machines");
+                Uri uri = new Uri(serverURL+"/machines");
                 client.UploadStringAsync(uri, "POST", "@" + x + "," + y + "," + z + ":" + speed);
             }
             machineCoroutineBusy = false;
@@ -124,7 +135,7 @@ public class NetworkSend
             float z = Mathf.Round(pos.z); 
             using (WebClient client = new WebClient())
             {
-                System.Uri uri = new System.Uri(serverURL+"/hubs");
+                Uri uri = new Uri(serverURL+"/hubs");
                 client.UploadStringAsync(uri, "POST", "@" + x + "," + y + "," + z + ":" + range + "," + stop + "," + "," + stopTime);
             }
             hubCoroutineBusy = false;
@@ -134,7 +145,7 @@ public class NetworkSend
     //! Sends inventory data to the server.
     public IEnumerator SendNetworkStorage()
     {
-        InventoryManager[] allInventories = Object.FindObjectsOfType<InventoryManager>();
+        InventoryManager[] allInventories = UnityEngine.Object.FindObjectsOfType<InventoryManager>();
         foreach (InventoryManager manager in allInventories)
         {
             if (manager != null)
@@ -146,7 +157,7 @@ public class NetworkSend
                     {
                         using(WebClient client = new WebClient()) 
                         {
-                            System.Uri uri = new System.Uri(serverURL+"/storage");
+                            Uri uri = new Uri(serverURL+"/storage");
                             Vector3 pos = manager.gameObject.transform.position;
                             float x = Mathf.Round(pos.x);
                             float y = Mathf.Round(pos.y); 
@@ -173,7 +184,7 @@ public class NetworkSend
             float z = Mathf.Round(pos.z); 
             using (WebClient client = new WebClient())
             {
-                System.Uri uri = new System.Uri(serverURL+"/power");
+                Uri uri = new Uri(serverURL+"/power");
                 client.UploadStringAsync(uri, "POST", "@" + x + "," + y + "," + z + ":" + range + "," + dual);
             }
             conduitCoroutineBusy = false;
@@ -188,7 +199,7 @@ public class NetworkSend
             yield return new WaitForSeconds(1);
             using (WebClient client = new WebClient())
             {
-                System.Uri uri = new System.Uri(serverURL+"/paint");
+                Uri uri = new Uri(serverURL+"/paint");
                 client.UploadStringAsync(uri, "POST", "@" + block + ":" + red + "," + green + "," + blue);
             }
             paintCoroutineBusy = false;

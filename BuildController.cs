@@ -271,6 +271,10 @@ public class BuildController : MonoBehaviour
     private void SetupFreePlacement(RaycastHit hit)
     {
         Vector3 placementPoint = new Vector3(hit.point.x, (hit.point.y + 2.4f), hit.point.z);
+        if (PlayerPrefsX.GetPersistentBool("multiplayer") == true)
+        {
+            placementPoint = new Vector3(Mathf.Round(hit.point.x), Mathf.Round(hit.point.y + 2.4f), Mathf.Round(hit.point.z));
+        }
         Quaternion placementRotation = playerController.buildObject.transform.rotation;
         playerController.buildObject.transform.position = placementPoint;
         playerController.buildObject.transform.rotation = placementRotation;

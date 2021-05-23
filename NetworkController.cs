@@ -11,31 +11,26 @@ public class NetworkController
     private Dictionary<string, GameObject> networkPlayers;
     private Dictionary<string, Vector3> playerPositions;
     private TextureDictionary textureDictionary;
+    private Coroutine sendNetworkPlayerCoroutine;
     private Coroutine dedicatedServerCoroutine;
     private Coroutine blockUpdateCoroutine;
-    private Coroutine storageSendCoroutine;
     private Coroutine storageReceiveCoroutine;
     private Coroutine networkPowerCoroutine;
     private Coroutine networkBlockCoroutine;
     private Coroutine networkStorageCoroutine;
     private Coroutine networkConduitCoroutine;
     private Coroutine networkMachineCoroutine;
-    private Coroutine networkPlayerCoroutine;
+    private Coroutine getNetworkPlayersCoroutine;
     private Coroutine networkMovementCoroutine;
     private List<string> playerNames;
-    private float storageUpdateInterval;
-    private float blockNetTimer;
-    private float storageNetTimer;
-    private float playerNetTimer;
-    private float conduitNetTimer;
-    private float powerNetTimer;
-    private float machineNetTimer;
     public bool dedicatedServerCoroutineBusy;
-    public bool storageCoroutineBusy;
-    public bool playerCoroutineBusy;
+    public bool networkStorageCoroutineBusy;
+    public bool sendNetworkPlayerCoroutineBusy;
+    public bool getNetworkPlayersCoroutineBusy;
     public bool playerMovementCoroutineBusy;
-    public bool blockCoroutineBusy;
+    public bool networkBlockCoroutineBusy;
     public bool receivedNetworkStorage;
+    public bool networkWorldUpdateCoroutineBusy;
     public string playerData;
     public string blockData;
     public string storageData;
@@ -55,8 +50,8 @@ public class NetworkController
         networkReceive = new NetworkReceive(this);
     }
 
-    //! Handles all network traffic for multiplayer.
-    public void NetWorkUpdate()
+    //! Network functions called once per frame.
+    public void NetworkFrame()
     {
         string commandLineOptions = Environment.CommandLine;
         if (commandLineOptions.Contains("-batchmode"))
@@ -67,72 +62,92 @@ public class NetworkController
             }
         }
 
-        if (playerCoroutineBusy == false)
+        if (sendNetworkPlayerCoroutineBusy == false)
         {
-            networkPlayerCoroutine = playerController.StartCoroutine(UpdateNetworkPlayers());
+            sendNetworkPlayerCoroutine = playerController.StartCoroutine(SendNetworkPlayerInfo());
+        }
+
+        if (getNetworkPlayersCoroutineBusy == false)
+        {
+            getNetworkPlayersCoroutine = playerController.StartCoroutine(GetNetworkPlayers());
         }
 
         if (playerMovementCoroutineBusy == false)
         {
             networkMovementCoroutine = playerController.StartCoroutine(MoveNetworkPlayers());
         }
+    }
 
-        playerNetTimer += 1 * Time.deltaTime;
-        if (playerNetTimer >= UnityEngine.Random.Range(0.75f, 1.0f))
+    //! Send information about this player once per second.
+    public IEnumerator SendNetworkPlayerInfo()
+    {
+        sendNetworkPlayerCoroutineBusy = true;
+        networkSend.SendPlayerInfo();
+        yield return new WaitForSeconds(1.0f);
+        sendNetworkPlayerCoroutineBusy = false;
+    }
+
+    //! Updates the world over the network.
+    public IEnumerator NetWorkWorldUpdate()
+    {
+        networkWorldUpdateCoroutineBusy = true;
+
+        if (NetworkAvailable())
         {
-            networkSend.SendPlayerInfo();
-            playerNetTimer = 0;
+            networkBlockCoroutine = playerController.StartCoroutine(UpdateNetworkBlocks());
+        }
+        else
+        {
+            yield return null;
         }
 
-        blockNetTimer += 1 * Time.deltaTime;
-        if (blockNetTimer >= UnityEngine.Random.Range(1.0f, 1.25f))
+        if (NetworkAvailable())
         {
-            if (blockCoroutineBusy == false)
-            {
-                networkBlockCoroutine = playerController.StartCoroutine(UpdateNetworkBlocks());
-            }
-            blockNetTimer = 0;
+            networkConduitCoroutine = playerController.StartCoroutine(networkReceive.ReceiveConduitData());
+        }
+        else
+        {
+            yield return null;
         }
 
-        conduitNetTimer += 1 * Time.deltaTime;
-        if (conduitNetTimer >= UnityEngine.Random.Range(1.25f, 1.5f))
+        if (NetworkAvailable())
         {
-            if (networkReceive.conduitDataCoroutineBusy == false)
-            {
-                networkConduitCoroutine = playerController.StartCoroutine(networkReceive.ReceiveConduitData());
-            }
-            conduitNetTimer = 0;
+            networkPowerCoroutine = playerController.StartCoroutine(networkReceive.ReceivePowerData());
+        }
+        else
+        {
+            yield return null;
         }
 
-        powerNetTimer += 1 * Time.deltaTime;
-        if (powerNetTimer >= UnityEngine.Random.Range(1.5f, 1.75f))
+        if (NetworkAvailable())
         {
-            if (networkReceive.powerDataCoroutineBusy == false)
-            {
-                networkPowerCoroutine = playerController.StartCoroutine(networkReceive.ReceivePowerData());
-            }
-            powerNetTimer = 0;
+            networkStorageCoroutine = playerController.StartCoroutine(UpdateNetworkStorage());
+        }
+        else
+        {
+            yield return null;
         }
 
-        storageNetTimer += 1 * Time.deltaTime;
-        if (storageNetTimer >= UnityEngine.Random.Range(1.75f, 2.0f))
+        if (NetworkAvailable())
         {
-            if (storageCoroutineBusy == false)
-            {
-                networkStorageCoroutine = playerController.StartCoroutine(UpdateNetworkStorage());
-                storageNetTimer = 0;
-            }
+            networkMachineCoroutine = playerController.StartCoroutine(networkReceive.ReceiveMachineData());
+        }
+        else
+        {
+            yield return null;
         }
 
-        machineNetTimer += 1 * Time.deltaTime;
-        if (machineNetTimer >= UnityEngine.Random.Range(2.0f, 2.25f))
-        {
-            if (networkReceive.machineDataCoroutineBusy == false)
-            {
-                networkMachineCoroutine = playerController.StartCoroutine(networkReceive.ReceiveMachineData());
-            }
-            machineNetTimer = 0;
-        }
+        networkWorldUpdateCoroutineBusy = false;
+    }
+
+    //! Returns true if none of the network world update coroutines are running.
+    private bool NetworkAvailable()
+    {
+        return networkBlockCoroutineBusy == false && 
+        networkReceive.conduitDataCoroutineBusy == false && 
+        networkReceive.powerDataCoroutineBusy == false && 
+        networkStorageCoroutineBusy == false && 
+        networkReceive.machineDataCoroutineBusy == false;
     }
 
     //! Saves the world for dedicated servers.
@@ -145,9 +160,9 @@ public class NetworkController
     }
 
     //! Gets information about other players from the server.
-    public IEnumerator UpdateNetworkPlayers()
+    public IEnumerator GetNetworkPlayers()
     {
-        playerCoroutineBusy = true;
+        getNetworkPlayersCoroutineBusy = true;
 
         playerData = "none";
         networkReceive.GetPlayerData();
@@ -195,7 +210,7 @@ public class NetworkController
             yield return null;
         }
 
-        playerCoroutineBusy = false;
+        getNetworkPlayersCoroutineBusy = false;
     }
 
     //! Sends player positions to server.
@@ -255,9 +270,9 @@ public class NetworkController
     //! Instantiates blocks over the network.
     public IEnumerator UpdateNetworkBlocks()
     {
-        if (blockCoroutineBusy == false)
+        if (networkBlockCoroutineBusy == false)
         {
-            blockCoroutineBusy = true;
+            networkBlockCoroutineBusy = true;
 
             blockData = "none";
             networkReceive.GetBlockData();
@@ -272,7 +287,7 @@ public class NetworkController
     //! Updates inventories over the network.
     public IEnumerator UpdateNetworkStorage()
     {
-        storageCoroutineBusy = true;
+        networkStorageCoroutineBusy = true;
 
         storageData = "none";
         networkReceive.GetStorageData();
@@ -288,7 +303,7 @@ public class NetworkController
             yield return null;
         }
 
-        storageCoroutineBusy = false;
+        networkStorageCoroutineBusy = false;
     }
 
     //! Instantiates a gameobject representing another player over the network.

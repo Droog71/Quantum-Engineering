@@ -48,9 +48,9 @@ public class MainMenu : MonoBehaviour
     private bool playerColorPrompt;
     private bool userNamePrompt;
     private bool networkAddressPrompt;
-    private float playerRed = 0.5f;
-    private float playerGreen = 0.5f;
-    private float playerBlue = 0.5f;
+    private float playerRed = 1.0f;
+    private float playerGreen = 1.0f;
+    private float playerBlue = 1.0f;
 
     //! Called by unity engine on start up to initialize variables.
     public void Start()
@@ -81,9 +81,6 @@ public class MainMenu : MonoBehaviour
                 PlayerPrefsX.SetPersistentBool("multiplayer", true);
                 PlayerPrefs.SetString("serverURL", "http://" + worldName + ":5000");
                 PlayerPrefs.SetString("UserName", worldName);
-                PlayerPrefs.SetFloat("playerRed", 0);
-                PlayerPrefs.SetFloat("playerGreen", 0);
-                PlayerPrefs.SetFloat("playerBlue", 0);
                 StartServer();
                 Thread.Sleep(5000);
                 SelectWorld();
@@ -459,7 +456,7 @@ public class MainMenu : MonoBehaviour
 
             if (playerColorPrompt == false)
             {
-                if (GUI.Button(startGameButtonRect, "SINGLE PLAYER") || Event.current.keyCode.Equals(KeyCode.Return))
+                if (GUI.Button(startGameButtonRect, "SINGLE PLAYER"))
                 {
                     buttonSounds.Play();
                     if (worldName != "Enter world name.")
@@ -473,14 +470,14 @@ public class MainMenu : MonoBehaviour
                     }
                 }
 
-                if (GUI.Button(multiplayerButtonRect, "MULTIPLAYER") || Event.current.keyCode.Equals(KeyCode.Return))
+                if (GUI.Button(multiplayerButtonRect, "MULTIPLAYER"))
                 {
                     buttonSounds.Play();
                     PlayerPrefsX.SetPersistentBool("multiplayer", true);
                     multiplayerPrompt = true;
                 }
 
-                if (GUI.Button(modioButtonRect, "MODS") || Event.current.keyCode.Equals(KeyCode.Return))
+                if (GUI.Button(modioButtonRect, "MODS"))
                 {
                     buttonSounds.Play();
                     SceneManager.LoadScene(2);
@@ -817,10 +814,13 @@ public class MainMenu : MonoBehaviour
                 playerGreen = GUI.HorizontalSlider(new Rect((ScreenWidth * 0.43f), (ScreenHeight * 0.54f), (ScreenWidth * 0.14f), (ScreenHeight * 0.05f)), playerGreen, 0, 1);
                 playerBlue = GUI.HorizontalSlider(new Rect((ScreenWidth * 0.43f), (ScreenHeight * 0.60f), (ScreenWidth * 0.14f), (ScreenHeight * 0.05f)), playerBlue, 0, 1);
 
-                Color playerColor = new Color(playerRed, playerGreen, playerBlue);
+                Color playerColor = new Color(Mathf.Round(playerRed), Mathf.Round(playerGreen), Mathf.Round(playerBlue));
+                Color actualColor = new Color(playerRed, playerGreen, playerBlue);
+
+                GUI.color = actualColor;
+                GUI.DrawTexture(new Rect((ScreenWidth * 0.43f), (ScreenHeight * 0.36f), (ScreenWidth * 0.14f), (ScreenHeight * 0.05f)), colorSelectTexture);
 
                 GUI.color = playerColor;
-                GUI.DrawTexture(new Rect((ScreenWidth * 0.43f), (ScreenHeight * 0.36f), (ScreenWidth * 0.14f), (ScreenHeight * 0.05f)), colorSelectTexture);
                 GUI.DrawTexture(new Rect((ScreenWidth * 0.2f), (ScreenHeight * 0.2f), (ScreenWidth * 0.2f), (ScreenHeight * 0.56f)), playerModel);
                 GUI.DrawTexture(new Rect((ScreenWidth * 0.6f), (ScreenHeight * 0.2f), (ScreenWidth * 0.2f), (ScreenHeight * 0.56f)), playerModel);
                 GUI.color = Color.white;

@@ -31,6 +31,7 @@ public class InventoryHandler
         && dropSlot.amountInSlot <= 1000 - dragSlot.amountInSlot);
     }
 
+    //! When an item is moved from one slot to another in a container, the contents of both slots are updated on the server.
     public IEnumerator NetworkStorageCoroutine(int storageInventoryDropSlot, InventorySlot dropSlot)
     {
         networkStorageCoroutineBusy = true;
@@ -43,7 +44,8 @@ public class InventoryHandler
             float z = Mathf.Round(pos.z); 
             client.UploadStringAsync(uri, "POST", "@" + x + "," + y + "," + z + ":"+storageInventoryDropSlot+";"+dropSlot.typeInSlot+"="+dropSlot.amountInSlot);
             bool flag = false;
-            while (flag == false)
+            int attempt = 0;
+            while (flag == false && attempt < 3)
             {
                 yield return new WaitForSeconds(0.25f);
                 try
@@ -53,7 +55,8 @@ public class InventoryHandler
                 }
                 catch(Exception e)
                 {
-                    // NOOP
+                    Debug.Log(e.Message);
+                    attempt++;
                 }
             }
             yield return null;
