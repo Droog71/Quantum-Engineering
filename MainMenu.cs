@@ -133,7 +133,9 @@ public class MainMenu : MonoBehaviour
     //! Gets the local address for LAN games.
     private string GetLocalAddress()
     {
-        if (Application.isEditor || UnityEngine.Debug.isDebugBuild)
+        string[] commandLineOptions = Environment.GetCommandLineArgs();
+        bool devel = commandLineOptions.Contains("-devel");
+        if (Application.isEditor || UnityEngine.Debug.isDebugBuild || devel == true)
         {
             return "localhost";
         }
@@ -157,10 +159,11 @@ public class MainMenu : MonoBehaviour
     {
         string[] commandLineOptions = Environment.GetCommandLineArgs();
         bool headless = commandLineOptions.Contains("-headless");
+        bool devel = commandLineOptions.Contains("-devel");
 
         if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
         {
-            if (Application.isEditor || UnityEngine.Debug.isDebugBuild)
+            if (Application.isEditor || UnityEngine.Debug.isDebugBuild || devel == true)
             {
                 UnityEngine.Debug.Log("Starting development server...");
                 string options = headless == true ? "local devel headless" : "local devel";
@@ -212,7 +215,9 @@ public class MainMenu : MonoBehaviour
     private void DownloadWorld()
     {
         string savePath = Path.Combine(Application.persistentDataPath, "SaveData");
-        if (Application.isEditor || UnityEngine.Debug.isDebugBuild)
+        string[] commandLineOptions = Environment.GetCommandLineArgs();
+        bool devel = commandLineOptions.Contains("-devel");
+        if (Application.isEditor || UnityEngine.Debug.isDebugBuild || devel == true)
         {
             savePath = Path.Combine(Application.persistentDataPath, "Downloads");
         }
