@@ -105,11 +105,13 @@ public class SaveManager
                         objectID = int.Parse(worldID.Substring(objectName.Length));
                         machineIdList.Add(objectID);
                         string targetID = go.GetComponent<RailCart>().targetID;
+                        Vector3 startPosition = go.GetComponent<RailCart>().startPosition;
                         if (go.GetComponent<InventoryManager>() != null)
                         {
                             go.GetComponent<InventoryManager>().SaveData();
                         }
                         FileBasedPrefs.SetString(worldID + "targetID", targetID);
+                        PlayerPrefsX.SetVector3(worldID + "startPosition", startPosition);
                     }
                     if (go.GetComponent<RailCartHub>() != null)
                     {

@@ -6,6 +6,7 @@ public class RailCart : MonoBehaviour
     public string creationMethod = "built";
     public GameObject target;
     private Vector3 targetPosition;
+    public Vector3 startPosition;
     private StateManager stateManager;
     public int address;
     public string targetID;

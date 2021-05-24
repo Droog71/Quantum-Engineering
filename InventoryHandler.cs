@@ -177,12 +177,15 @@ public class InventoryHandler
     private void NetworkRemoveItem()
     {
         bool flag = false;
-        foreach (InventorySlot slot in playerController.storageInventory.inventory)
+        if (playerController.storageInventory != null)
         {
-            if (slot == slotDraggingFrom)
+            foreach (InventorySlot slot in playerController.storageInventory.inventory)
             {
-                flag = true;
-                break;
+                if (slot == slotDraggingFrom)
+                {
+                    flag = true;
+                    break;
+                }
             }
         }
         if (flag == true)

@@ -14,7 +14,7 @@ public class BuildController : MonoBehaviour
     public AudioClip multiBuildClip;
     public bool autoAxis;
     private Coroutine buildBlockCoroutine;
-    private Coroutine updateNetworkConduitCoroutine;
+    private Coroutine updateNetworkCoroutine;
 
     //! Called by unity engine on start up to initialize variables
     public void Start()
@@ -331,6 +331,7 @@ public class BuildController : MonoBehaviour
                             if (obj.GetComponent<RailCart>() != null)
                             {
                                 obj.GetComponent<RailCart>().target = hit.collider.gameObject;
+                                obj.GetComponent<RailCart>().startPosition = pos;
                             }
                             if (obj.GetComponent<ModMachine>() != null)
                             {
@@ -343,7 +344,7 @@ public class BuildController : MonoBehaviour
                                 {
                                     NetworkSend net = playerController.networkController.networkSend;
                                     Vector3 location = obj.transform.position;
-                                    updateNetworkConduitCoroutine = StartCoroutine(net.SendConduitData(location,playerController.defaultRange));
+                                    updateNetworkCoroutine = StartCoroutine(net.SendConduitData(location,playerController.defaultRange));
                                 }
                             }
                             if (obj.GetComponent<PowerConduit>() != null)
@@ -355,7 +356,7 @@ public class BuildController : MonoBehaviour
                                     Vector3 location = obj.transform.position;
                                     int range = playerController.defaultRange;
                                     bool dualOutput = obj.GetComponent<PowerConduit>().dualOutput;
-                                    updateNetworkConduitCoroutine = StartCoroutine(net.SendPowerData(location,range,dualOutput));
+                                    updateNetworkCoroutine = StartCoroutine(net.SendPowerData(location,range,dualOutput));
                                 }
                             }
                             if (obj.GetComponent<DarkMatterConduit>() != null)
@@ -365,7 +366,7 @@ public class BuildController : MonoBehaviour
                                 {
                                     NetworkSend net = playerController.networkController.networkSend;
                                     Vector3 location = obj.transform.position;
-                                    updateNetworkConduitCoroutine = StartCoroutine(net.SendConduitData(location,playerController.defaultRange));
+                                    updateNetworkCoroutine = StartCoroutine(net.SendConduitData(location,playerController.defaultRange));
                                 }
                             }
                             if (obj.GetComponent<RailCartHub>() != null)
@@ -377,7 +378,7 @@ public class BuildController : MonoBehaviour
                                     RailCartHub hub = obj.GetComponent<RailCartHub>();
                                     Vector3 location = obj.transform.position;
                                     int range = playerController.defaultRange;
-                                    updateNetworkConduitCoroutine = StartCoroutine(net.SendHubData(location,hub.range,hub.stop,hub.stopTime));
+                                    updateNetworkCoroutine = StartCoroutine(net.SendHubData(location, hub.circuit, hub.range, hub.stop, hub.stopTime));
                                 }
                             }
                             gameManager.undoBlocks.Add(new GameManager.Block(type, obj));

@@ -183,6 +183,7 @@ public class StateManager : MonoBehaviour
                             GameObject SpawnedObject = Instantiate(railCart, objectPosition, objectRotation);
                             SpawnedObject.GetComponent<RailCart>().creationMethod = "spawned";
                             SpawnedObject.GetComponent<RailCart>().targetID = FileBasedPrefs.GetString(objectName + objectID + "targetID");
+                            SpawnedObject.GetComponent<RailCart>().startPosition = PlayerPrefsX.GetVector3(objectName + objectID + "startPosition");
                         }
                         if (objectName == worldName + "UniversalConduit")
                         {

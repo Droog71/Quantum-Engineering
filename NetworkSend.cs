@@ -124,7 +124,7 @@ public class NetworkSend
     }
 
     //! Sends rail cart hub data to the server when changed by the player.
-    public IEnumerator SendHubData(Vector3 pos, int range, bool stop, float stopTime)
+    public IEnumerator SendHubData(Vector3 pos, int circuit, int range, bool stop, float stopTime)
     {
         if (hubCoroutineBusy == false)
         {
@@ -132,11 +132,12 @@ public class NetworkSend
             yield return new WaitForSeconds(1);
             float x = Mathf.Round(pos.x);
             float y = Mathf.Round(pos.y); 
-            float z = Mathf.Round(pos.z); 
+            float z = Mathf.Round(pos.z);
+            int isStop = Convert.ToInt32(stop);
             using (WebClient client = new WebClient())
             {
                 Uri uri = new Uri(serverURL+"/hubs");
-                client.UploadStringAsync(uri, "POST", "@" + x + "," + y + "," + z + ":" + range + "," + stop + "," + "," + stopTime);
+                client.UploadStringAsync(uri, "POST", "@" + x + "," + y + "," + z + ":" + circuit + "," + range + "," + isStop + "," + stopTime);
             }
             hubCoroutineBusy = false;
         }

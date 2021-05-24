@@ -20,6 +20,7 @@ public class NetworkController
     private Coroutine networkStorageCoroutine;
     private Coroutine networkConduitCoroutine;
     private Coroutine networkMachineCoroutine;
+    private Coroutine networkHubCoroutine;
     private Coroutine getNetworkPlayersCoroutine;
     private Coroutine networkMovementCoroutine;
     private List<string> playerNames;
@@ -127,6 +128,15 @@ public class NetworkController
 
         if (NetworkAvailable())
         {
+            networkHubCoroutine = playerController.StartCoroutine(networkReceive.ReceiveHubData());
+        }
+        else
+        {
+            yield return null;
+        }
+
+        if (NetworkAvailable())
+        {
             networkMachineCoroutine = playerController.StartCoroutine(networkReceive.ReceiveMachineData());
         }
         else
@@ -140,10 +150,11 @@ public class NetworkController
     //! Returns true if none of the network world update coroutines are running.
     private bool NetworkAvailable()
     {
-        return networkReceive.conduitDataCoroutineBusy == false && 
-        networkReceive.powerDataCoroutineBusy == false && 
-        networkStorageCoroutineBusy == false && 
-        networkReceive.machineDataCoroutineBusy == false;
+        return networkReceive.conduitDataCoroutineBusy == false &&
+        networkReceive.powerDataCoroutineBusy == false &&
+        networkReceive.machineDataCoroutineBusy == false &&
+        networkReceive.hubDataCoroutineBusy == false &&
+        networkStorageCoroutineBusy == false;
     }
 
     //! Saves the world for dedicated servers.

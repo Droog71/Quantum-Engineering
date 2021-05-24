@@ -10,6 +10,7 @@ public class NetworkReceive
     private PlayerController playerController;
     private BlockDictionary blockDictionary;
     private string serverURL;
+    private string hubData;
     private string conduitData;
     private string powerData;
     private string machineData;
@@ -19,9 +20,11 @@ public class NetworkReceive
     private List<string> chatMessageList;
     private string[] localBlockList;
     private string[] localConduitList;
+    private string[] localHubList;
     private string[] localStorageList;
     private string[] localPowerList;
     private string[] localMachineList;
+    public bool hubDataCoroutineBusy;
     public bool conduitDataCoroutineBusy;
     public bool machineDataCoroutineBusy;
     public bool powerDataCoroutineBusy;
@@ -81,7 +84,6 @@ public class NetworkReceive
         string[] blockList = networkController.blockData.Split('[');
         if (blockList != localBlockList)
         {
-            int databaseInterval = 0;
             localBlockList = blockList;
             for (int i = 2; i < blockList.Length; i++)
             {
@@ -94,13 +96,12 @@ public class NetworkReceive
                 float xRot = float.Parse(blockInfo.Split(',')[5]);
                 float yRot = float.Parse(blockInfo.Split(',')[6]);
                 float zRot = float.Parse(blockInfo.Split(',')[7]);
-                float wRot = float.Parse(blockInfo.Split(',')[8]);
+                float wRot = float.Parse(blockInfo.Split(',')[8].Split(']')[0]);
                 Vector3 blockPos = new Vector3(xPos, yPos, zPos);
                 Quaternion blockRot = new Quaternion(xRot, yRot, zRot, wRot);
                 bool found = false;
                 if (blockDictionary.machineDictionary.ContainsKey(blockType))
                 {
-                    int blockCheckInterval = 0;
                     System.Type t = blockDictionary.typeDictionary[blockType];
                     GameObject[] allObjects = Object.FindObjectsOfType<GameObject>();
                     foreach (GameObject obj in allObjects)
@@ -120,18 +121,23 @@ public class NetworkReceive
                                 found = true;
                                 break;
                             }
-                        }
-                        blockCheckInterval++;
-                        if (blockCheckInterval >= 50)
-                        {
-                            blockCheckInterval = 0;
-                            yield return null;
+                            if (obj.GetComponent<RailCart>() != null)
+                            {
+                                if (obj.GetComponent<RailCart>().startPosition == blockPos)
+                                {
+                                    if (destroy == 1)
+                                    {
+                                        Object.Destroy(obj);
+                                    }
+                                    found = true;
+                                    break;
+                                }
+                            }
                         }
                     }
                 }
                 else if (blockDictionary.blockDictionary.ContainsKey(blockType))
                 {
-                    int blockCheckInterval = 0;
                     Transform[] allBlocks = playerController.gameManager.builtObjects.GetComponentsInChildren<Transform>(true);
                     foreach (Transform block in allBlocks)
                     {
@@ -170,12 +176,6 @@ public class NetworkReceive
                                 }
                             }
                         }
-                        blockCheckInterval++;
-                        if (blockCheckInterval >= 50)
-                        {
-                            blockCheckInterval = 0;
-                            yield return null;
-                        }
                     }
                 }
 
@@ -192,18 +192,28 @@ public class NetworkReceive
                     }
                     else if (blockDictionary.machineDictionary.ContainsKey(blockType))
                     {
-                        Object.Instantiate(blockDictionary.machineDictionary[blockType], blockPos, blockRot);
+                        GameObject newObject = Object.Instantiate(blockDictionary.machineDictionary[blockType], blockPos, blockRot);
+                        if (newObject.GetComponent<RailCart>() != null)
+                        {
+                            RailCartHub[] hubs = Object.FindObjectsOfType<RailCartHub>();
+                            foreach (RailCartHub hub in hubs)
+                            {
+                                if (hub != null)
+                                {
+                                    float distance = Vector3.Distance(newObject.transform.position, hub.gameObject.transform.position);
+                                    if (distance <= 5)
+                                    {
+                                        newObject.GetComponent<RailCart>().target = hub.gameObject;
+                                        break;
+                                    }
+                                }
+                            }
+                        }
                     }
-                }
-
-                databaseInterval++;
-                if (databaseInterval >= 50)
-                {
-                    databaseInterval = 0;
-                    yield return null;
                 }
             }
         }
+        yield return null;
         networkController.networkBlockCoroutineBusy = false;
     }
 
@@ -323,6 +333,62 @@ public class NetworkReceive
         }
 
         conduitDataCoroutineBusy = false;
+    }
+
+    //! Processes data from railcart hub database.
+    public IEnumerator ReceiveHubData()
+    {
+        hubDataCoroutineBusy = true;
+        hubData = "none";
+        GetHubData();
+        while (hubData == "none")
+        {
+            yield return null;
+        }
+        string[] hubList = hubData.Split('[');
+        if (hubList != localHubList)
+        {
+            localHubList = hubList;
+            for (int i = 2; i < hubList.Length; i++)
+            {
+                string hubInfo = hubList[i];
+                float xPos = float.Parse(hubInfo.Split(',')[0]);
+                float yPos = float.Parse(hubInfo.Split(',')[1]);
+                float zPos = float.Parse(hubInfo.Split(',')[2]);
+                int circuit = int.Parse(hubInfo.Split(',')[3]);
+                int range = int.Parse(hubInfo.Split(',')[4]);
+                int stop = int.Parse(hubInfo.Split(',')[5]);
+                float time = int.Parse(hubInfo.Split(',')[6].Split(']')[0]);
+                Vector3 hubPos = new Vector3(xPos, yPos, zPos);
+
+                RailCartHub[] allHubs = Object.FindObjectsOfType<RailCartHub>();
+                foreach (RailCartHub hub in allHubs)
+                {
+                    if (hub != null)
+                    {
+                        Vector3 pos = hub.gameObject.transform.position;
+                        float x = Mathf.Round(pos.x);
+                        float y = Mathf.Round(pos.y);
+                        float z = Mathf.Round(pos.z);
+                        Vector3 foundPos = new Vector3(x, y, z);
+                        if (foundPos == hubPos)
+                        {
+                            if (hub.connectionFailed == true)
+                            {
+                                hub.connectionAttempts = 0;
+                                hub.connectionFailed = false;
+                            }
+                            hub.circuit = circuit;
+                            hub.range = range;
+                            hub.stop = stop == 1;
+                            hub.stopTime = time;
+                        }
+                    }
+                    yield return null;
+                }
+            }
+        }
+        hubDataCoroutineBusy = false;
     }
 
     //! Processes data from machine database.
@@ -622,6 +688,16 @@ public class NetworkReceive
         {    
             System.Uri uri = new System.Uri(serverURL+"/players");
             networkController.playerData = await client.DownloadStringTaskAsync(uri);
+        }
+    }
+
+    //! Gets railcart hub data from server.
+    private async Task GetHubData()
+    {
+        using (WebClient client = new WebClient())
+        {    
+            System.Uri uri = new System.Uri(serverURL+"/hubs");
+            hubData = await client.DownloadStringTaskAsync(uri);
         }
     }
 
