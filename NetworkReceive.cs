@@ -195,6 +195,7 @@ public class NetworkReceive
                         GameObject newObject = Object.Instantiate(blockDictionary.machineDictionary[blockType], blockPos, blockRot);
                         if (newObject.GetComponent<RailCart>() != null)
                         {
+                            newObject.GetComponent<RailCart>().startPosition = blockPos;
                             RailCartHub[] hubs = Object.FindObjectsOfType<RailCartHub>();
                             foreach (RailCartHub hub in hubs)
                             {
