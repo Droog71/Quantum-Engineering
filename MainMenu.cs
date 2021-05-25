@@ -76,30 +76,7 @@ public class MainMenu : MonoBehaviour
             string[] commandLineOptions = Environment.GetCommandLineArgs();
             if (commandLineOptions.Contains("-batchmode"))
             {
-                worldName = commandLineOptions.Contains("-local") ? GetLocalAddress() : GetExternalAddress();
-                FileBasedPrefs.SetWorldName(worldName);
-                PlayerPrefsX.SetPersistentBool("multiplayer", true);
-                PlayerPrefs.SetString("serverURL", "http://" + worldName + ":5000");
-                PlayerPrefs.SetString("UserName", worldName);
-                StartServer();
-                Thread.Sleep(5000);
-                SelectWorld();
-                worldList = PlayerPrefsX.GetPersistentStringArray("Worlds").ToList();
-                if (worldList.Count < 10)
-                {
-                    if (!worldList.Contains(worldName))
-                    {
-                        worldList.Add(worldName);
-                    }
-                    else
-                    {
-                        PreStart();
-                    }
-                }
-                else if (worldList.Contains(worldName))
-                {
-                    PreStart();
-                }
+                SetupDedicatedServer(commandLineOptions);
             }
         }
     }
@@ -151,6 +128,64 @@ public class MainMenu : MonoBehaviour
         {    
             Uri uri = new Uri("https://api.ipify.org");
             return client.DownloadString(uri);
+        }
+    }
+
+    //! Sets up a dedicated server.
+    private void SetupDedicatedServer(string[] commandLineOptions)
+    {
+        worldName = commandLineOptions.Contains("-local") ? GetLocalAddress() : GetExternalAddress();
+        FileBasedPrefs.SetWorldName(worldName);
+        PlayerPrefsX.SetPersistentBool("multiplayer", true);
+        PlayerPrefs.SetString("serverURL", "http://" + worldName + ":5000");
+        PlayerPrefs.SetString("UserName", worldName);
+        if (commandLineOptions.Contains("-creative"))
+        {
+            FileBasedPrefs.SetBool(worldName + "creativeMode", true);
+        }
+        StartServer();
+        Thread.Sleep(5000);
+        worldList = PlayerPrefsX.GetPersistentStringArray("Worlds").ToList();
+        if (worldList.Count < 10)
+        {
+            if (!worldList.Contains(worldName))
+            {
+                worldList.Add(worldName);
+                foreach (string option in commandLineOptions)
+                {
+                    if (option.Contains("-scene"))
+                    {
+                        int cmd = 0;
+                        try
+                        {
+                            cmd = int.Parse(option.Split('=')[1]);
+                        }
+                        catch
+                        {
+                            break;
+                        }
+                        scene = cmd == 1 || cmd == 3 ? cmd : 0;
+                        FileBasedPrefs.SetInt(worldName + "scene", scene);
+                        break;
+                    }
+                }
+                if (scene != 0)
+                {
+                    ChangeScene();
+                }
+            }
+            else
+            {
+                PreStart();
+            }
+        }
+        else if (worldList.Contains(worldName))
+        {
+            PreStart();
+        }
+        else
+        {
+            UnityEngine.Debug.Log("Failed to start server. World list is full.");
         }
     }
 
@@ -371,6 +406,8 @@ public class MainMenu : MonoBehaviour
         && userNamePrompt == false;
     }
 
+
+    //! Returns true if the world is currently being loaded.
     private bool LoadingWorld()
     {
         return stateManager.worldLoaded == false || stateManager.GetComponent<GameManager>().working == true;

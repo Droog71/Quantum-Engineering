@@ -1,6 +1,9 @@
-﻿using System.Collections;
+﻿using UnityEngine;
+using UnityEngine.SceneManagement;
+using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
+using System.Linq;
+using System;
 
 //! This class handles unique ID assignment and saving & loading of worlds.
 public class StateManager : MonoBehaviour
@@ -72,6 +75,7 @@ public class StateManager : MonoBehaviour
     private Coroutine saveCoroutine;
     private string objectName = "";
     private bool loading;
+    private int batchmodeLogInterval;
 
     //! Called by unity engine before the first update.
     public void Start()
@@ -92,11 +96,33 @@ public class StateManager : MonoBehaviour
                 loadCoroutine = StartCoroutine(LoadWorld());
                 loading = true;
             }
+
+            string[] commandLineOptions = Environment.GetCommandLineArgs();
+            if (commandLineOptions.Contains("-batchmode"))
+            {
+                if (loading == true && worldLoaded == false)
+                {
+                    batchmodeLogInterval++;
+                    if (batchmodeLogInterval >= 60)
+                    {
+                        int idTotal = machineIdList.Length + blockIdList.Length;
+                        string loadingMessage = "Loading... " + progress + "/" + idTotal;
+                        if (progress > 0 && progress >= idTotal)
+                        {
+                            loadingMessage = "Initializing... " + currentMachine + "/" + totalMachines;
+                        }
+                        Debug.Log(loadingMessage);
+                        batchmodeLogInterval = 0;
+                    }
+                }
+            }
+
             if (addressManager == null)
             {
                 addressManager = new AddressManager(this);
             }
-            if (saving == false)
+
+            if (saving == false && worldLoaded == true)
             {
                 AssignIDs();
             }
@@ -549,6 +575,11 @@ public class StateManager : MonoBehaviour
         }
         GetComponent<GameManager>().simulationSpeed = simSpeed;
         worldLoaded = true;
+        string[] commandLineOptions = Environment.GetCommandLineArgs();
+        if (commandLineOptions.Contains("-batchmode"))
+        {
+            Debug.Log("Server running scene " + SceneManager.GetActiveScene().buildIndex + " @ " + PlayerPrefs.GetString("serverURL"));
+        }
     }
 
     //! Assigns ID to objects in the world.
