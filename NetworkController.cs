@@ -42,13 +42,16 @@ public class NetworkController
     {
         this.playerController = playerController;
         serverURL = PlayerPrefs.GetString("serverURL");
-        Debug.Log("Connected to " + serverURL);
         textureDictionary = playerController.gameManager.GetComponent<TextureDictionary>();
         networkPlayers = new Dictionary<string, GameObject>();
         playerPositions = new Dictionary<string, Vector3>();
         playerNames = new List<string>();
         networkSend = new NetworkSend(this);
         networkReceive = new NetworkReceive(this);
+        if (PlayerPrefsX.GetPersistentBool("multiplayer") == true)
+        {
+            Debug.Log("Connected to " + serverURL);
+        }
     }
 
     //! Network functions called once per frame.
