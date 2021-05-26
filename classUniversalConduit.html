@@ -74,6 +74,7 @@ Inheritance diagram for UniversalConduit:</div>
  <div class="center">
   <img src="classUniversalConduit.png" usemap="#UniversalConduit_map" alt=""/>
   <map id="UniversalConduit_map" name="UniversalConduit_map">
+<area href="classMachine.html" alt="Machine" shape="rect" coords="0,56,108,80"/>
 </map>
  </div></div>
 <table class="memberdecls">
@@ -82,9 +83,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a963a815534b59774dd137f89d929ae2c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classUniversalConduit.html#a963a815534b59774dd137f89d929ae2c">Start</a> ()</td></tr>
 <tr class="memdesc:a963a815534b59774dd137f89d929ae2c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Called by unity engine on start up to initialize variables.  <a href="#a963a815534b59774dd137f89d929ae2c">More...</a><br /></td></tr>
 <tr class="separator:a963a815534b59774dd137f89d929ae2c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afabac84d2f11c67b4d8dc13ea7f84ad4"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classUniversalConduit.html#afabac84d2f11c67b4d8dc13ea7f84ad4">Update</a> ()</td></tr>
-<tr class="memdesc:afabac84d2f11c67b4d8dc13ea7f84ad4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Called once per frame by unity engine.  <a href="#afabac84d2f11c67b4d8dc13ea7f84ad4">More...</a><br /></td></tr>
-<tr class="separator:afabac84d2f11c67b4d8dc13ea7f84ad4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a72663dd7e11c40a1639ffeea572cc4ef"><td class="memItemLeft" align="right" valign="top">override void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classUniversalConduit.html#a72663dd7e11c40a1639ffeea572cc4ef">UpdateMachine</a> ()</td></tr>
+<tr class="memdesc:a72663dd7e11c40a1639ffeea572cc4ef"><td class="mdescLeft">&#160;</td><td class="mdescRight">Called by <a class="el" href="classMachineManager.html">MachineManager</a> update coroutine.  <a href="#a72663dd7e11c40a1639ffeea572cc4ef">More...</a><br /></td></tr>
+<tr class="separator:a72663dd7e11c40a1639ffeea572cc4ef"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ada7ff470118e4aa8e3827a350f6fe461"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classUniversalConduit.html#ada7ff470118e4aa8e3827a350f6fe461">OnDestroy</a> ()</td></tr>
 <tr class="memdesc:ada7ff470118e4aa8e3827a350f6fe461"><td class="mdescLeft">&#160;</td><td class="mdescRight">Used to remove conduit item from storage computer if connected to one.  <a href="#ada7ff470118e4aa8e3827a350f6fe461">More...</a><br /></td></tr>
 <tr class="separator:ada7ff470118e4aa8e3827a350f6fe461"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -132,9 +133,6 @@ Public Attributes</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-methods"></a>
 Private Member Functions</h2></td></tr>
-<tr class="memitem:a6657746f510380a212fd3efeb17c68bc"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classUniversalConduit.html#a6657746f510380a212fd3efeb17c68bc">IsValidObject</a> (GameObject obj)</td></tr>
-<tr class="memdesc:a6657746f510380a212fd3efeb17c68bc"><td class="mdescLeft">&#160;</td><td class="mdescRight">The object exists, is active and is not a standard building block.  <a href="#a6657746f510380a212fd3efeb17c68bc">More...</a><br /></td></tr>
-<tr class="separator:a6657746f510380a212fd3efeb17c68bc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a70a886060830324dc88793deb718c232"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classUniversalConduit.html#a70a886060830324dc88793deb718c232">IsValidOutputObject</a> (GameObject obj)</td></tr>
 <tr class="memdesc:a70a886060830324dc88793deb718c232"><td class="mdescLeft">&#160;</td><td class="mdescRight">The object is a potential output connection.  <a href="#a70a886060830324dc88793deb718c232">More...</a><br /></td></tr>
 <tr class="separator:a70a886060830324dc88793deb718c232"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -162,9 +160,12 @@ Private Member Functions</h2></td></tr>
 <tr class="memitem:ae39dfb1681103d861bd063f7d06e3420"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classUniversalConduit.html#ae39dfb1681103d861bd063f7d06e3420">OutputToStorageComputer</a> ()</td></tr>
 <tr class="memdesc:ae39dfb1681103d861bd063f7d06e3420"><td class="mdescLeft">&#160;</td><td class="mdescRight">Moves items into a storage computer.  <a href="#ae39dfb1681103d861bd063f7d06e3420">More...</a><br /></td></tr>
 <tr class="separator:ae39dfb1681103d861bd063f7d06e3420"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a11b2316aa7e14c2a7a54ac969af5f3bb"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classUniversalConduit.html#a11b2316aa7e14c2a7a54ac969af5f3bb">ConnectToObject</a> (GameObject obj)</td></tr>
-<tr class="memdesc:a11b2316aa7e14c2a7a54ac969af5f3bb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Makes input and output connections.  <a href="#a11b2316aa7e14c2a7a54ac969af5f3bb">More...</a><br /></td></tr>
-<tr class="separator:a11b2316aa7e14c2a7a54ac969af5f3bb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ade284df14c43e6d212cb6e69aa72118b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classUniversalConduit.html#ade284df14c43e6d212cb6e69aa72118b">AttemptInputConnection</a> (GameObject obj)</td></tr>
+<tr class="memdesc:ade284df14c43e6d212cb6e69aa72118b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Makes input and output connections.  <a href="#ade284df14c43e6d212cb6e69aa72118b">More...</a><br /></td></tr>
+<tr class="separator:ade284df14c43e6d212cb6e69aa72118b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aff85604ad996307e45fb3493f0f7c54f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classUniversalConduit.html#aff85604ad996307e45fb3493f0f7c54f">AttemptOutputConnection</a> (GameObject obj)</td></tr>
+<tr class="memdesc:aff85604ad996307e45fb3493f0f7c54f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Makes input and output connections.  <a href="#aff85604ad996307e45fb3493f0f7c54f">More...</a><br /></td></tr>
+<tr class="separator:aff85604ad996307e45fb3493f0f7c54f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1181703716f46eb053ecc516d5441602"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classUniversalConduit.html#a1181703716f46eb053ecc516d5441602">HandleInput</a> ()</td></tr>
 <tr class="memdesc:a1181703716f46eb053ecc516d5441602"><td class="mdescLeft">&#160;</td><td class="mdescRight">Handles items received from input object.  <a href="#a1181703716f46eb053ecc516d5441602">More...</a><br /></td></tr>
 <tr class="separator:a1181703716f46eb053ecc516d5441602"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -180,14 +181,70 @@ Private Attributes</h2></td></tr>
 <tr class="separator:a8cb9de25ecb68850e092566ec9098465"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a921c6e380b471b26e59bc8f4791b1a98"><td class="memItemLeft" align="right" valign="top">LineRenderer&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classUniversalConduit.html#a921c6e380b471b26e59bc8f4791b1a98">connectionLine</a></td></tr>
 <tr class="separator:a921c6e380b471b26e59bc8f4791b1a98"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5e55389aad7a5171da7824e890b5ef99"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classUniversalConduit.html#a5e55389aad7a5171da7824e890b5ef99">updateTick</a></td></tr>
-<tr class="separator:a5e55389aad7a5171da7824e890b5ef99"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae4d78cd246a1f82d954c2c6a52fb06db"><td class="memItemLeft" align="right" valign="top">List&lt; GameObject &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classUniversalConduit.html#ae4d78cd246a1f82d954c2c6a52fb06db">objList</a></td></tr>
+<tr class="separator:ae4d78cd246a1f82d954c2c6a52fb06db"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0f15ae5dcb215eda26b310c320105501"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classUniversalConduit.html#a0f15ae5dcb215eda26b310c320105501">linkedToRailCart</a></td></tr>
 <tr class="separator:a0f15ae5dcb215eda26b310c320105501"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa333d5e80f716c5dbb5ba9dc4d91520d"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classUniversalConduit.html#aa333d5e80f716c5dbb5ba9dc4d91520d">findRailCartsInterval</a></td></tr>
 <tr class="separator:aa333d5e80f716c5dbb5ba9dc4d91520d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Member Function Documentation</h2>
+<a id="ade284df14c43e6d212cb6e69aa72118b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ade284df14c43e6d212cb6e69aa72118b">&#9670;&nbsp;</a></span>AttemptInputConnection()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void UniversalConduit.AttemptInputConnection </td>
+          <td>(</td>
+          <td class="paramtype">GameObject&#160;</td>
+          <td class="paramname"><em>obj</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Makes input and output connections. </p>
+
+</div>
+</div>
+<a id="aff85604ad996307e45fb3493f0f7c54f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aff85604ad996307e45fb3493f0f7c54f">&#9670;&nbsp;</a></span>AttemptOutputConnection()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void UniversalConduit.AttemptOutputConnection </td>
+          <td>(</td>
+          <td class="paramtype">GameObject&#160;</td>
+          <td class="paramname"><em>obj</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Makes input and output connections. </p>
+
+</div>
+</div>
 <a id="a72ea22c5b15d16ff553e7611d6f211ef"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a72ea22c5b15d16ff553e7611d6f211ef">&#9670;&nbsp;</a></span>CheckForRailCart()</h2>
 
@@ -212,34 +269,6 @@ Private Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Checks if there is a rail cart near the conduit. </p>
-
-</div>
-</div>
-<a id="a11b2316aa7e14c2a7a54ac969af5f3bb"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a11b2316aa7e14c2a7a54ac969af5f3bb">&#9670;&nbsp;</a></span>ConnectToObject()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">void UniversalConduit.ConnectToObject </td>
-          <td>(</td>
-          <td class="paramtype">GameObject&#160;</td>
-          <td class="paramname"><em>obj</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Makes input and output connections. </p>
 
 </div>
 </div>
@@ -376,34 +405,6 @@ Private Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Returns true if the object in question is a storage container. </p>
-
-</div>
-</div>
-<a id="a6657746f510380a212fd3efeb17c68bc"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a6657746f510380a212fd3efeb17c68bc">&#9670;&nbsp;</a></span>IsValidObject()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool UniversalConduit.IsValidObject </td>
-          <td>(</td>
-          <td class="paramtype">GameObject&#160;</td>
-          <td class="paramname"><em>obj</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>The object exists, is active and is not a standard building block. </p>
 
 </div>
 </div>
@@ -597,8 +598,8 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="afabac84d2f11c67b4d8dc13ea7f84ad4"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#afabac84d2f11c67b4d8dc13ea7f84ad4">&#9670;&nbsp;</a></span>Update()</h2>
+<a id="a72663dd7e11c40a1639ffeea572cc4ef"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a72663dd7e11c40a1639ffeea572cc4ef">&#9670;&nbsp;</a></span>UpdateMachine()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -607,7 +608,7 @@ Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void UniversalConduit.Update </td>
+          <td class="memname">override void UniversalConduit.UpdateMachine </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -615,12 +616,14 @@ Private Attributes</h2></td></tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
 
-<p>Called once per frame by unity engine. </p>
+<p>Called by <a class="el" href="classMachineManager.html">MachineManager</a> update coroutine. </p>
+
+<p>Reimplemented from <a class="el" href="classMachine.html#a3a602cc698eec55437a68314029e4667">Machine</a>.</p>
 
 </div>
 </div>
@@ -867,6 +870,28 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="ae4d78cd246a1f82d954c2c6a52fb06db"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae4d78cd246a1f82d954c2c6a52fb06db">&#9670;&nbsp;</a></span>objList</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">List&lt;GameObject&gt; UniversalConduit.objList</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="ad9727eddaac06960884ceecfd951ac05"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ad9727eddaac06960884ceecfd951ac05">&#9670;&nbsp;</a></span>outputID</h2>
 
@@ -997,28 +1022,6 @@ Private Attributes</h2></td></tr>
           <td class="memname">string UniversalConduit.type</td>
         </tr>
       </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a5e55389aad7a5171da7824e890b5ef99"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a5e55389aad7a5171da7824e890b5ef99">&#9670;&nbsp;</a></span>updateTick</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">float UniversalConduit.updateTick</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
 </div><div class="memdoc">
 
 </div>

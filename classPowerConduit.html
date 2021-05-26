@@ -74,6 +74,7 @@ Inheritance diagram for PowerConduit:</div>
  <div class="center">
   <img src="classPowerConduit.png" usemap="#PowerConduit_map" alt=""/>
   <map id="PowerConduit_map" name="PowerConduit_map">
+<area href="classMachine.html" alt="Machine" shape="rect" coords="0,56,102,80"/>
 </map>
  </div></div>
 <table class="memberdecls">
@@ -82,9 +83,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a861afb77270ed8f27fd957f5930ad030"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classPowerConduit.html#a861afb77270ed8f27fd957f5930ad030">Start</a> ()</td></tr>
 <tr class="memdesc:a861afb77270ed8f27fd957f5930ad030"><td class="mdescLeft">&#160;</td><td class="mdescRight">Called by unity engine on start up to initialize variables.  <a href="#a861afb77270ed8f27fd957f5930ad030">More...</a><br /></td></tr>
 <tr class="separator:a861afb77270ed8f27fd957f5930ad030"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab4b6b35bb342e626c5178ba9ed53e344"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classPowerConduit.html#ab4b6b35bb342e626c5178ba9ed53e344">Update</a> ()</td></tr>
-<tr class="memdesc:ab4b6b35bb342e626c5178ba9ed53e344"><td class="mdescLeft">&#160;</td><td class="mdescRight">Called once per frame by unity engine.  <a href="#ab4b6b35bb342e626c5178ba9ed53e344">More...</a><br /></td></tr>
-<tr class="separator:ab4b6b35bb342e626c5178ba9ed53e344"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae124e0d77bb98eb1458e8850169aea55"><td class="memItemLeft" align="right" valign="top">override void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classPowerConduit.html#ae124e0d77bb98eb1458e8850169aea55">UpdateMachine</a> ()</td></tr>
+<tr class="memdesc:ae124e0d77bb98eb1458e8850169aea55"><td class="mdescLeft">&#160;</td><td class="mdescRight">Called by <a class="el" href="classMachineManager.html">MachineManager</a> update coroutine.  <a href="#ae124e0d77bb98eb1458e8850169aea55">More...</a><br /></td></tr>
+<tr class="separator:ae124e0d77bb98eb1458e8850169aea55"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a13a8f485e044a1972d0d96ee8b7ffcc6"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classPowerConduit.html#a13a8f485e044a1972d0d96ee8b7ffcc6">OnDestroy</a> ()</td></tr>
 <tr class="memdesc:a13a8f485e044a1972d0d96ee8b7ffcc6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Used to de-energize output objects when the power conduit is destroyed.  <a href="#a13a8f485e044a1972d0d96ee8b7ffcc6">More...</a><br /></td></tr>
 <tr class="separator:a13a8f485e044a1972d0d96ee8b7ffcc6"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -133,9 +134,6 @@ Private Member Functions</h2></td></tr>
 <tr class="memitem:a4797e85664f7e5e5e17b84de721979a7"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classPowerConduit.html#a4797e85664f7e5e5e17b84de721979a7">UpdatePowerReceiver</a> ()</td></tr>
 <tr class="memdesc:a4797e85664f7e5e5e17b84de721979a7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets power values from power receiver.  <a href="#a4797e85664f7e5e5e17b84de721979a7">More...</a><br /></td></tr>
 <tr class="separator:a4797e85664f7e5e5e17b84de721979a7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a337df1992956a87639474ac67edef2e7"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classPowerConduit.html#a337df1992956a87639474ac67edef2e7">IsValidObject</a> (GameObject obj)</td></tr>
-<tr class="memdesc:a337df1992956a87639474ac67edef2e7"><td class="mdescLeft">&#160;</td><td class="mdescRight">The object exists, is active and is not a standard building block.  <a href="#a337df1992956a87639474ac67edef2e7">More...</a><br /></td></tr>
-<tr class="separator:a337df1992956a87639474ac67edef2e7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a035e3f054117b2acee2eb03681a88e30"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classPowerConduit.html#a035e3f054117b2acee2eb03681a88e30">CreateOutput2ConnectionLine</a> ()</td></tr>
 <tr class="memdesc:a035e3f054117b2acee2eb03681a88e30"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a line renderer to the second output object.  <a href="#a035e3f054117b2acee2eb03681a88e30">More...</a><br /></td></tr>
 <tr class="separator:a035e3f054117b2acee2eb03681a88e30"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -190,8 +188,6 @@ Private Attributes</h2></td></tr>
 <tr class="separator:a56731e4f44281210a251943a4052e35c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acdc854e2183b7a69f42448f0a3e08028"><td class="memItemLeft" align="right" valign="top">GameObject&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classPowerConduit.html#acdc854e2183b7a69f42448f0a3e08028">connectionLine2</a></td></tr>
 <tr class="separator:acdc854e2183b7a69f42448f0a3e08028"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a754e45f5e3be8cb360ac30143a1acc17"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classPowerConduit.html#a754e45f5e3be8cb360ac30143a1acc17">updateTick</a></td></tr>
-<tr class="separator:a754e45f5e3be8cb360ac30143a1acc17"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a17493ead6b5c980161daad866021744b"><td class="memItemLeft" align="right" valign="top">GameObject&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classPowerConduit.html#a17493ead6b5c980161daad866021744b">builtObjects</a></td></tr>
 <tr class="separator:a17493ead6b5c980161daad866021744b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa6c6c615e2da831b32e020aa5871184f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classStateManager.html">StateManager</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classPowerConduit.html#aa6c6c615e2da831b32e020aa5871184f">stateManager</a></td></tr>
@@ -559,34 +555,6 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a337df1992956a87639474ac67edef2e7"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a337df1992956a87639474ac67edef2e7">&#9670;&nbsp;</a></span>IsValidObject()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool PowerConduit.IsValidObject </td>
-          <td>(</td>
-          <td class="paramtype">GameObject&#160;</td>
-          <td class="paramname"><em>obj</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>The object exists, is active and is not a standard building block. </p>
-
-</div>
-</div>
 <a id="a13a8f485e044a1972d0d96ee8b7ffcc6"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a13a8f485e044a1972d0d96ee8b7ffcc6">&#9670;&nbsp;</a></span>OnDestroy()</h2>
 
@@ -641,8 +609,8 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="ab4b6b35bb342e626c5178ba9ed53e344"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab4b6b35bb342e626c5178ba9ed53e344">&#9670;&nbsp;</a></span>Update()</h2>
+<a id="ae124e0d77bb98eb1458e8850169aea55"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae124e0d77bb98eb1458e8850169aea55">&#9670;&nbsp;</a></span>UpdateMachine()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -651,7 +619,7 @@ Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void PowerConduit.Update </td>
+          <td class="memname">override void PowerConduit.UpdateMachine </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -659,12 +627,14 @@ Private Attributes</h2></td></tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
 
-<p>Called once per frame by unity engine. </p>
+<p>Called by <a class="el" href="classMachineManager.html">MachineManager</a> update coroutine. </p>
+
+<p>Reimplemented from <a class="el" href="classMachine.html#a3a602cc698eec55437a68314029e4667">Machine</a>.</p>
 
 </div>
 </div>
@@ -1101,28 +1071,6 @@ Private Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname"><a class="el" href="classStateManager.html">StateManager</a> PowerConduit.stateManager</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a754e45f5e3be8cb360ac30143a1acc17"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a754e45f5e3be8cb360ac30143a1acc17">&#9670;&nbsp;</a></span>updateTick</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">float PowerConduit.updateTick</td>
         </tr>
       </table>
   </td>

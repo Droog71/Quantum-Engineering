@@ -124,12 +124,18 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:ac3db35ad8a75f875ab0955f3c9bc69e4"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classActionManager.html#ac3db35ad8a75f875ab0955f3c9bc69e4">DecreaseBuildAmount</a> ()</td></tr>
 <tr class="memdesc:ac3db35ad8a75f875ab0955f3c9bc69e4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reduces the number of blocks to be built along the build axis.  <a href="#ac3db35ad8a75f875ab0955f3c9bc69e4">More...</a><br /></td></tr>
 <tr class="separator:ac3db35ad8a75f875ab0955f3c9bc69e4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aeddcd61c75ca54f59b4a783c20223a96"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classActionManager.html#aeddcd61c75ca54f59b4a783c20223a96">ToggleBuilding</a> ()</td></tr>
+<tr class="memdesc:aeddcd61c75ca54f59b4a783c20223a96"><td class="mdescLeft">&#160;</td><td class="mdescRight">Toggles building mode.  <a href="#aeddcd61c75ca54f59b4a783c20223a96">More...</a><br /></td></tr>
+<tr class="separator:aeddcd61c75ca54f59b4a783c20223a96"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a71c0a236664e37e44f19b198cd708834"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classActionManager.html#a71c0a236664e37e44f19b198cd708834">StartBuildMode</a> ()</td></tr>
 <tr class="memdesc:a71c0a236664e37e44f19b198cd708834"><td class="mdescLeft">&#160;</td><td class="mdescRight">Starts build mode, for placing blocks.  <a href="#a71c0a236664e37e44f19b198cd708834">More...</a><br /></td></tr>
 <tr class="separator:a71c0a236664e37e44f19b198cd708834"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4226cba5fc4c66e1a606741e11e7b905"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classActionManager.html#a4226cba5fc4c66e1a606741e11e7b905">StopBuilding</a> ()</td></tr>
 <tr class="memdesc:a4226cba5fc4c66e1a606741e11e7b905"><td class="mdescLeft">&#160;</td><td class="mdescRight">Stops building mode.  <a href="#a4226cba5fc4c66e1a606741e11e7b905">More...</a><br /></td></tr>
 <tr class="separator:a4226cba5fc4c66e1a606741e11e7b905"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a20231cf607190311d15d88832a5571e1"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classActionManager.html#a20231cf607190311d15d88832a5571e1">Undo</a> ()</td></tr>
+<tr class="memdesc:a20231cf607190311d15d88832a5571e1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Removes duplicate blocks.  <a href="#a20231cf607190311d15d88832a5571e1">More...</a><br /></td></tr>
+<tr class="separator:a20231cf607190311d15d88832a5571e1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1fdb5d5ad25b8a678113287de3e1a7f1"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classActionManager.html#a1fdb5d5ad25b8a678113287de3e1a7f1">CloseMachineGUI</a> ()</td></tr>
 <tr class="memdesc:a1fdb5d5ad25b8a678113287de3e1a7f1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Closes machine GUI.  <a href="#a1fdb5d5ad25b8a678113287de3e1a7f1">More...</a><br /></td></tr>
 <tr class="separator:a1fdb5d5ad25b8a678113287de3e1a7f1"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -623,6 +629,33 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="aeddcd61c75ca54f59b4a783c20223a96"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aeddcd61c75ca54f59b4a783c20223a96">&#9670;&nbsp;</a></span>ToggleBuilding()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void ActionManager.ToggleBuilding </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Toggles building mode. </p>
+
+</div>
+</div>
 <a id="a9210cda98d24ab97f27cedf354a2b5c4"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a9210cda98d24ab97f27cedf354a2b5c4">&#9670;&nbsp;</a></span>ToggleCraftingGUI()</h2>
 
@@ -863,6 +896,33 @@ Private Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Toggles the tablet GUI. </p>
+
+</div>
+</div>
+<a id="a20231cf607190311d15d88832a5571e1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a20231cf607190311d15d88832a5571e1">&#9670;&nbsp;</a></span>Undo()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void ActionManager.Undo </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Removes duplicate blocks. </p>
 
 </div>
 </div>

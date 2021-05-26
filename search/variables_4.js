@@ -1,13 +1,14 @@
 var searchData=
 [
-  ['effects',['effects',['../classAirLock.html#a6c7ef108afcd6d9710a9fe43d7a45192',1,'AirLock']]],
-  ['electriclight',['electricLight',['../classDescriptions.html#a715ecabc63e39c4f976e5313f7ee9662',1,'Descriptions.electricLight()'],['../classPlayerController.html#a547d99ebe3056963b35f21340a668280',1,'PlayerController.electricLight()'],['../classStateManager.html#a068228b0545324b9408eac047614f16a',1,'StateManager.ElectricLight()']]],
+  ['edited',['edited',['../classDoor.html#abd97fc0966c637cbac2d9db4992a26e5',1,'Door']]],
+  ['effects',['effects',['../classAirLock.html#a6c7ef108afcd6d9710a9fe43d7a45192',1,'AirLock.effects()'],['../classDoor.html#a1c61c3fb86f5c6b57980c4ac7346d9d3',1,'Door.effects()']]],
+  ['electriclight',['electricLight',['../classDescriptions.html#a715ecabc63e39c4f976e5313f7ee9662',1,'Descriptions.electricLight()'],['../classPlayerController.html#a547d99ebe3056963b35f21340a668280',1,'PlayerController.electricLight()'],['../classStateManager.html#a7226bd5e1b891333a9837ce03ca73165',1,'StateManager.electricLight()']]],
   ['electriclightamounts',['electricLightAmounts',['../classCraftingDictionary.html#a3e22946b47c96f8b9cd2d401a2b3abfe',1,'CraftingDictionary']]],
   ['electriclightingredients',['electricLightIngredients',['../classCraftingDictionary.html#a9849ca1416838854681dee4f439d0e94',1,'CraftingDictionary']]],
   ['electricmotor',['electricMotor',['../classDescriptions.html#ac6d839d28022740e7108359e44883cb1',1,'Descriptions']]],
   ['electricmotoramounts',['electricMotorAmounts',['../classCraftingDictionary.html#a901e95c2ae3a9ff4736c336a18ed6041',1,'CraftingDictionary']]],
   ['electricmotoringredients',['electricMotorIngredients',['../classCraftingDictionary.html#a328649ee7f2eb5ca26de142f4b2c3150',1,'CraftingDictionary']]],
-  ['emptyvector',['EmptyVector',['../classStateManager.html#a116db58d53170dc8b91f55668a5d5d3e',1,'StateManager']]],
+  ['emptyvector',['emptyVector',['../classStateManager.html#a7a48c76d7d30f278ce54e5c368f9c57d',1,'StateManager']]],
   ['endiandiff1',['endianDiff1',['../classPlayerPrefsX.html#a336aa2d20ef2403900985ced485c2548',1,'PlayerPrefsX']]],
   ['endiandiff2',['endianDiff2',['../classPlayerPrefsX.html#ac0db8941102112bcaef6a3206a0c27ff',1,'PlayerPrefsX']]],
   ['endposition',['endPosition',['../classExtruderPiston.html#a097405c58847802124e356f2e1138050',1,'ExtruderPiston']]],
@@ -24,7 +25,7 @@ var searchData=
   ['explosion',['explosion',['../classMeteor.html#a70c0547431c2d1fc4dfe4c25b79acb45',1,'Meteor.explosion()'],['../classMissile.html#a5411144ea75355408e2263d3f73f0b27',1,'Missile.explosion()'],['../classPhysicsHandler.html#acc14ea60f40ad8296551ea9c3096f706',1,'PhysicsHandler.explosion()'],['../classPirate.html#a2afe151e7fac80863a6aca1824d172f8',1,'Pirate.explosion()']]],
   ['extractingice',['extractingIce',['../classUniversalExtractor.html#ad79ed4e61677c68a20712c4658f5d275',1,'UniversalExtractor']]],
   ['extractor',['extractor',['../classUniversalResource.html#a2a484da6f12731df09d28938e623bc4c',1,'UniversalResource']]],
-  ['extruder',['extruder',['../classDescriptions.html#a4df50e89ac7233d29095455611db5e25',1,'Descriptions.extruder()'],['../classExtruderPiston.html#acc5af2768ef795364b96405de84c2db2',1,'ExtruderPiston.extruder()'],['../classPlayerController.html#af52d1b44120ec06ff7fdfd040c3dff26',1,'PlayerController.extruder()'],['../classStateManager.html#aebbbcd01f124fcada5027ea53d29435d',1,'StateManager.Extruder()']]],
+  ['extruder',['extruder',['../classDescriptions.html#a4df50e89ac7233d29095455611db5e25',1,'Descriptions.extruder()'],['../classExtruderPiston.html#acc5af2768ef795364b96405de84c2db2',1,'ExtruderPiston.extruder()'],['../classPlayerController.html#af52d1b44120ec06ff7fdfd040c3dff26',1,'PlayerController.extruder()'],['../classStateManager.html#a56c48a866ddd5b5496cc59b901d745b7',1,'StateManager.extruder()']]],
   ['extruderamounts',['extruderAmounts',['../classCraftingDictionary.html#a6a0144b2ef599890e6e19501a3087a8c',1,'CraftingDictionary']]],
   ['extruderingredients',['extruderIngredients',['../classCraftingDictionary.html#a079e29b9d3c2d01fed32c5fe7cad557b',1,'CraftingDictionary']]]
 ];

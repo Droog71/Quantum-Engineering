@@ -60,6 +60,7 @@ $(function() {
 <div class="header">
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pub-attribs">Public Attributes</a> &#124;
 <a href="#pri-attribs">Private Attributes</a> &#124;
 <a href="classAddressManager-members.html">List of all members</a>  </div>
   <div class="headertitle">
@@ -72,14 +73,24 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a3021bc9110026e4055ea00733b34fdab"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classAddressManager.html#a3021bc9110026e4055ea00733b34fdab">AddressManager</a> (<a class="el" href="classStateManager.html">StateManager</a> <a class="el" href="classAddressManager.html#a2d48fc9068da3942ee5c687cb4e69d29">stateManager</a>)</td></tr>
 <tr class="memdesc:a3021bc9110026e4055ea00733b34fdab"><td class="mdescLeft">&#160;</td><td class="mdescRight">This class assigns a unique ID to every block in the world.  <a href="#a3021bc9110026e4055ea00733b34fdab">More...</a><br /></td></tr>
 <tr class="separator:a3021bc9110026e4055ea00733b34fdab"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a07fd247f7f7aedf5b2e9fb90f30a5efe"><td class="memItemLeft" align="right" valign="top">IEnumerator&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classAddressManager.html#a07fd247f7f7aedf5b2e9fb90f30a5efe">AddressingCoroutine</a> ()</td></tr>
-<tr class="memdesc:a07fd247f7f7aedf5b2e9fb90f30a5efe"><td class="mdescLeft">&#160;</td><td class="mdescRight">Assigns ID to all objects in the world.  <a href="#a07fd247f7f7aedf5b2e9fb90f30a5efe">More...</a><br /></td></tr>
-<tr class="separator:a07fd247f7f7aedf5b2e9fb90f30a5efe"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a00700f859797ee0e91b79a365adea9e2"><td class="memItemLeft" align="right" valign="top">IEnumerator&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classAddressManager.html#a00700f859797ee0e91b79a365adea9e2">MachineIdCoroutine</a> ()</td></tr>
+<tr class="separator:a00700f859797ee0e91b79a365adea9e2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a69479e1f0650ba50d3d70af3390f2e3f"><td class="memItemLeft" align="right" valign="top">IEnumerator&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classAddressManager.html#a69479e1f0650ba50d3d70af3390f2e3f">BlockIdCoroutine</a> ()</td></tr>
+<tr class="separator:a69479e1f0650ba50d3d70af3390f2e3f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
+Public Attributes</h2></td></tr>
+<tr class="memitem:a213665e980b13a8d2ac0c976a11c5121"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classAddressManager.html#a213665e980b13a8d2ac0c976a11c5121">machineIdCoroutineActive</a></td></tr>
+<tr class="separator:a213665e980b13a8d2ac0c976a11c5121"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae92c6ca108737f3f9f62197d9d61b45e"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classAddressManager.html#ae92c6ca108737f3f9f62197d9d61b45e">blockIdCoroutineActive</a></td></tr>
+<tr class="separator:ae92c6ca108737f3f9f62197d9d61b45e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
 <tr class="memitem:a2d48fc9068da3942ee5c687cb4e69d29"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classStateManager.html">StateManager</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classAddressManager.html#a2d48fc9068da3942ee5c687cb4e69d29">stateManager</a></td></tr>
 <tr class="separator:a2d48fc9068da3942ee5c687cb4e69d29"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad13f6830393394d2fd3aba83a79a6e7c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classGameManager.html">GameManager</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classAddressManager.html#ad13f6830393394d2fd3aba83a79a6e7c">gameManager</a></td></tr>
+<tr class="separator:ad13f6830393394d2fd3aba83a79a6e7c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9856b7159195c0883058c780f86a7dfb"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classAddressManager.html#a9856b7159195c0883058c780f86a7dfb">totalObjects</a></td></tr>
 <tr class="separator:a9856b7159195c0883058c780f86a7dfb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
@@ -113,8 +124,8 @@ Private Attributes</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="a07fd247f7f7aedf5b2e9fb90f30a5efe"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a07fd247f7f7aedf5b2e9fb90f30a5efe">&#9670;&nbsp;</a></span>AddressingCoroutine()</h2>
+<a id="a69479e1f0650ba50d3d70af3390f2e3f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a69479e1f0650ba50d3d70af3390f2e3f">&#9670;&nbsp;</a></span>BlockIdCoroutine()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -123,7 +134,7 @@ Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">IEnumerator AddressManager.AddressingCoroutine </td>
+          <td class="memname">IEnumerator AddressManager.BlockIdCoroutine </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -136,11 +147,84 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Assigns ID to all objects in the world. </p>
+</div>
+</div>
+<a id="a00700f859797ee0e91b79a365adea9e2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a00700f859797ee0e91b79a365adea9e2">&#9670;&nbsp;</a></span>MachineIdCoroutine()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">IEnumerator AddressManager.MachineIdCoroutine </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
 
 </div>
 </div>
 <h2 class="groupheader">Member Data Documentation</h2>
+<a id="ae92c6ca108737f3f9f62197d9d61b45e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae92c6ca108737f3f9f62197d9d61b45e">&#9670;&nbsp;</a></span>blockIdCoroutineActive</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool AddressManager.blockIdCoroutineActive</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ad13f6830393394d2fd3aba83a79a6e7c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad13f6830393394d2fd3aba83a79a6e7c">&#9670;&nbsp;</a></span>gameManager</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classGameManager.html">GameManager</a> AddressManager.gameManager</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a213665e980b13a8d2ac0c976a11c5121"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a213665e980b13a8d2ac0c976a11c5121">&#9670;&nbsp;</a></span>machineIdCoroutineActive</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool AddressManager.machineIdCoroutineActive</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="a2d48fc9068da3942ee5c687cb4e69d29"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a2d48fc9068da3942ee5c687cb4e69d29">&#9670;&nbsp;</a></span>stateManager</h2>
 

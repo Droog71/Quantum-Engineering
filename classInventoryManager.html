@@ -74,6 +74,7 @@ Inheritance diagram for InventoryManager:</div>
  <div class="center">
   <img src="classInventoryManager.png" usemap="#InventoryManager_map" alt=""/>
   <map id="InventoryManager_map" name="InventoryManager_map">
+<area href="classMachine.html" alt="Machine" shape="rect" coords="0,56,116,80"/>
 </map>
  </div></div>
 <table class="memberdecls">
@@ -81,9 +82,9 @@ Inheritance diagram for InventoryManager:</div>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a5b18458e8dd8426c55d2d4e2d184706a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInventoryManager.html#a5b18458e8dd8426c55d2d4e2d184706a">Start</a> ()</td></tr>
 <tr class="separator:a5b18458e8dd8426c55d2d4e2d184706a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab3b9c78aa020937e312b269503281c33"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInventoryManager.html#ab3b9c78aa020937e312b269503281c33">Update</a> ()</td></tr>
-<tr class="memdesc:ab3b9c78aa020937e312b269503281c33"><td class="mdescLeft">&#160;</td><td class="mdescRight">Called once per frame by unity engine.  <a href="#ab3b9c78aa020937e312b269503281c33">More...</a><br /></td></tr>
-<tr class="separator:ab3b9c78aa020937e312b269503281c33"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac6f2d3a149a14690ddde21f4f4808d89"><td class="memItemLeft" align="right" valign="top">override void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInventoryManager.html#ac6f2d3a149a14690ddde21f4f4808d89">UpdateMachine</a> ()</td></tr>
+<tr class="memdesc:ac6f2d3a149a14690ddde21f4f4808d89"><td class="mdescLeft">&#160;</td><td class="mdescRight">Called by <a class="el" href="classMachineManager.html">MachineManager</a> update coroutine.  <a href="#ac6f2d3a149a14690ddde21f4f4808d89">More...</a><br /></td></tr>
+<tr class="separator:ac6f2d3a149a14690ddde21f4f4808d89"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a48c954b148d6646101a425ca11deffce"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInventoryManager.html#a48c954b148d6646101a425ca11deffce">SaveData</a> ()</td></tr>
 <tr class="memdesc:a48c954b148d6646101a425ca11deffce"><td class="mdescLeft">&#160;</td><td class="mdescRight">Saves the inventory's contents to disk.  <a href="#a48c954b148d6646101a425ca11deffce">More...</a><br /></td></tr>
 <tr class="separator:a48c954b148d6646101a425ca11deffce"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -111,6 +112,7 @@ Public Attributes</h2></td></tr>
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-methods"></a>
 Private Member Functions</h2></td></tr>
 <tr class="memitem:ab872fd999f841e338465638e0869bb8c"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInventoryManager.html#ab872fd999f841e338465638e0869bb8c">IsStorageContainer</a> ()</td></tr>
+<tr class="memdesc:ab872fd999f841e338465638e0869bb8c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns true if this object is a storage container.  <a href="#ab872fd999f841e338465638e0869bb8c">More...</a><br /></td></tr>
 <tr class="separator:ab872fd999f841e338465638e0869bb8c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
@@ -119,8 +121,6 @@ Private Attributes</h2></td></tr>
 <tr class="separator:aeb8aad1bc9a84a6c8600f671908be65b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acd8545e99294db520b1e3e740ba8f658"><td class="memItemLeft" align="right" valign="top">string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInventoryManager.html#acd8545e99294db520b1e3e740ba8f658">originalID</a></td></tr>
 <tr class="separator:acd8545e99294db520b1e3e740ba8f658"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8c60127a9e8ca1fef99818a087cc6bc1"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInventoryManager.html#a8c60127a9e8ca1fef99818a087cc6bc1">updateTick</a></td></tr>
-<tr class="separator:a8c60127a9e8ca1fef99818a087cc6bc1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Member Function Documentation</h2>
 <a id="aa3b72f04fe2e3815c70cab0ddf54682d"></a>
@@ -226,6 +226,8 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Returns true if this object is a storage container. </p>
+
 </div>
 </div>
 <a id="a48c954b148d6646101a425ca11deffce"></a>
@@ -280,8 +282,8 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="ab3b9c78aa020937e312b269503281c33"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab3b9c78aa020937e312b269503281c33">&#9670;&nbsp;</a></span>Update()</h2>
+<a id="ac6f2d3a149a14690ddde21f4f4808d89"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac6f2d3a149a14690ddde21f4f4808d89">&#9670;&nbsp;</a></span>UpdateMachine()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -290,7 +292,7 @@ Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void InventoryManager.Update </td>
+          <td class="memname">override void InventoryManager.UpdateMachine </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -298,12 +300,14 @@ Private Attributes</h2></td></tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
 
-<p>Called once per frame by unity engine. </p>
+<p>Called by <a class="el" href="classMachineManager.html">MachineManager</a> update coroutine. </p>
+
+<p>Reimplemented from <a class="el" href="classMachine.html#a3a602cc698eec55437a68314029e4667">Machine</a>.</p>
 
 </div>
 </div>
@@ -425,28 +429,6 @@ Private Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname"><a class="el" href="classStateManager.html">StateManager</a> InventoryManager.stateManager</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a8c60127a9e8ca1fef99818a087cc6bc1"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a8c60127a9e8ca1fef99818a087cc6bc1">&#9670;&nbsp;</a></span>updateTick</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">float InventoryManager.updateTick</td>
         </tr>
       </table>
   </td>

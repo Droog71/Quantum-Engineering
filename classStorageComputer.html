@@ -74,6 +74,7 @@ Inheritance diagram for StorageComputer:</div>
  <div class="center">
   <img src="classStorageComputer.png" usemap="#StorageComputer_map" alt=""/>
   <map id="StorageComputer_map" name="StorageComputer_map">
+<area href="classMachine.html" alt="Machine" shape="rect" coords="0,56,110,80"/>
 </map>
  </div></div>
 <table class="memberdecls">
@@ -82,9 +83,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:aa57ecbb2e54df73f9ed155dadceb5c58"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classStorageComputer.html#aa57ecbb2e54df73f9ed155dadceb5c58">Start</a> ()</td></tr>
 <tr class="memdesc:aa57ecbb2e54df73f9ed155dadceb5c58"><td class="mdescLeft">&#160;</td><td class="mdescRight">Called by unity engine on start up to initialize variables.  <a href="#aa57ecbb2e54df73f9ed155dadceb5c58">More...</a><br /></td></tr>
 <tr class="separator:aa57ecbb2e54df73f9ed155dadceb5c58"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a206250f4e6577637d5073ae81da6be62"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classStorageComputer.html#a206250f4e6577637d5073ae81da6be62">Update</a> ()</td></tr>
-<tr class="memdesc:a206250f4e6577637d5073ae81da6be62"><td class="mdescLeft">&#160;</td><td class="mdescRight">Called once per frame by unity engine.  <a href="#a206250f4e6577637d5073ae81da6be62">More...</a><br /></td></tr>
-<tr class="separator:a206250f4e6577637d5073ae81da6be62"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aaef1ab4a89891613dd5af19864ec7489"><td class="memItemLeft" align="right" valign="top">override void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classStorageComputer.html#aaef1ab4a89891613dd5af19864ec7489">UpdateMachine</a> ()</td></tr>
+<tr class="memdesc:aaef1ab4a89891613dd5af19864ec7489"><td class="mdescLeft">&#160;</td><td class="mdescRight">Called by <a class="el" href="classMachineManager.html">MachineManager</a> update coroutine.  <a href="#aaef1ab4a89891613dd5af19864ec7489">More...</a><br /></td></tr>
+<tr class="separator:aaef1ab4a89891613dd5af19864ec7489"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1dc2a4dfb020ced5be5b2bc362b4a615"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classStorageComputer.html#a1dc2a4dfb020ced5be5b2bc362b4a615">GetContainers</a> ()</td></tr>
 <tr class="memdesc:a1dc2a4dfb020ced5be5b2bc362b4a615"><td class="mdescLeft">&#160;</td><td class="mdescRight">Called when player interacts with the computer.  <a href="#a1dc2a4dfb020ced5be5b2bc362b4a615">More...</a><br /></td></tr>
 <tr class="separator:a1dc2a4dfb020ced5be5b2bc362b4a615"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -133,8 +134,8 @@ Private Member Functions</h2></td></tr>
 Private Attributes</h2></td></tr>
 <tr class="memitem:aa3d6372c9fac739dc298b65f5cfeaf55"><td class="memItemLeft" align="right" valign="top">List&lt; <a class="el" href="classInventoryManager.html">InventoryManager</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classStorageComputer.html#aa3d6372c9fac739dc298b65f5cfeaf55">computerContainerList</a></td></tr>
 <tr class="separator:aa3d6372c9fac739dc298b65f5cfeaf55"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0f20268edd7d6e6c81dca6db2e78ddb6"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classStorageComputer.html#a0f20268edd7d6e6c81dca6db2e78ddb6">updateTick</a></td></tr>
-<tr class="separator:a0f20268edd7d6e6c81dca6db2e78ddb6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afa7dc41e24d9ac04a4c75238d55ac823"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classStorageComputer.html#afa7dc41e24d9ac04a4c75238d55ac823">connectionAttempts</a></td></tr>
+<tr class="separator:afa7dc41e24d9ac04a4c75238d55ac823"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3b2b06fef871855df8bfe64b0696c0a1"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classStateManager.html">StateManager</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classStorageComputer.html#a3b2b06fef871855df8bfe64b0696c0a1">stateManager</a></td></tr>
 <tr class="separator:a3b2b06fef871855df8bfe64b0696c0a1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3fba3e982fa657703f9783ba24271bb9"><td class="memItemLeft" align="right" valign="top">List&lt; GameObject &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classStorageComputer.html#a3fba3e982fa657703f9783ba24271bb9">spawnedConnectionList</a></td></tr>
@@ -277,8 +278,8 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a206250f4e6577637d5073ae81da6be62"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a206250f4e6577637d5073ae81da6be62">&#9670;&nbsp;</a></span>Update()</h2>
+<a id="aaef1ab4a89891613dd5af19864ec7489"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aaef1ab4a89891613dd5af19864ec7489">&#9670;&nbsp;</a></span>UpdateMachine()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -287,7 +288,7 @@ Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void StorageComputer.Update </td>
+          <td class="memname">override void StorageComputer.UpdateMachine </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -295,12 +296,14 @@ Private Attributes</h2></td></tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
 
-<p>Called once per frame by unity engine. </p>
+<p>Called by <a class="el" href="classMachineManager.html">MachineManager</a> update coroutine. </p>
+
+<p>Reimplemented from <a class="el" href="classMachine.html#a3a602cc698eec55437a68314029e4667">Machine</a>.</p>
 
 </div>
 </div>
@@ -406,6 +409,28 @@ Private Attributes</h2></td></tr>
           <td class="memname"><a class="el" href="classConduitItem.html">ConduitItem</a> StorageComputer.conduitItem</td>
         </tr>
       </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="afa7dc41e24d9ac04a4c75238d55ac823"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afa7dc41e24d9ac04a4c75238d55ac823">&#9670;&nbsp;</a></span>connectionAttempts</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int StorageComputer.connectionAttempts</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
 </div>
@@ -541,28 +566,6 @@ Private Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname"><a class="el" href="classStateManager.html">StateManager</a> StorageComputer.stateManager</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a0f20268edd7d6e6c81dca6db2e78ddb6"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a0f20268edd7d6e6c81dca6db2e78ddb6">&#9670;&nbsp;</a></span>updateTick</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">float StorageComputer.updateTick</td>
         </tr>
       </table>
   </td>

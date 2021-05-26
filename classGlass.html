@@ -76,6 +76,7 @@ Inheritance diagram for Glass:</div>
  <div class="center">
   <img src="classGlass.png" usemap="#Glass_map" alt=""/>
   <map id="Glass_map" name="Glass_map">
+<area href="classBlock.html" alt="Block" shape="rect" coords="0,56,102,80"/>
 </map>
  </div></div>
 <table class="memberdecls">
@@ -84,9 +85,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:adf73c55ddbd007499c62aa24044069c4"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classGlass.html#adf73c55ddbd007499c62aa24044069c4">Start</a> ()</td></tr>
 <tr class="memdesc:adf73c55ddbd007499c62aa24044069c4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Called by unity engine on start up to initialize variables.  <a href="#adf73c55ddbd007499c62aa24044069c4">More...</a><br /></td></tr>
 <tr class="separator:adf73c55ddbd007499c62aa24044069c4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4019190ed349ba3d8c7e95735a7c6d33"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classGlass.html#a4019190ed349ba3d8c7e95735a7c6d33">Update</a> ()</td></tr>
-<tr class="memdesc:a4019190ed349ba3d8c7e95735a7c6d33"><td class="mdescLeft">&#160;</td><td class="mdescRight">Called once per frame by unity engine.  <a href="#a4019190ed349ba3d8c7e95735a7c6d33">More...</a><br /></td></tr>
-<tr class="separator:a4019190ed349ba3d8c7e95735a7c6d33"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abb907bcac4ce66b27392ef362a29c97c"><td class="memItemLeft" align="right" valign="top">override void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classGlass.html#abb907bcac4ce66b27392ef362a29c97c">UpdateBlock</a> ()</td></tr>
+<tr class="memdesc:abb907bcac4ce66b27392ef362a29c97c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Called by <a class="el" href="classBlockManager.html">BlockManager</a> update coroutine.  <a href="#abb907bcac4ce66b27392ef362a29c97c">More...</a><br /></td></tr>
+<tr class="separator:abb907bcac4ce66b27392ef362a29c97c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
@@ -99,8 +100,6 @@ Public Attributes</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
-<tr class="memitem:ae0e9f5ec1f9af73ab1021cd13add8dcb"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classGlass.html#ae0e9f5ec1f9af73ab1021cd13add8dcb">updateTick</a></td></tr>
-<tr class="separator:ae0e9f5ec1f9af73ab1021cd13add8dcb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abb59a0a61246424bc13ef143c4d6a286"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classStateManager.html">StateManager</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classGlass.html#abb59a0a61246424bc13ef143c4d6a286">stateManager</a></td></tr>
 <tr class="separator:abb59a0a61246424bc13ef143c4d6a286"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
@@ -134,8 +133,8 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a4019190ed349ba3d8c7e95735a7c6d33"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a4019190ed349ba3d8c7e95735a7c6d33">&#9670;&nbsp;</a></span>Update()</h2>
+<a id="abb907bcac4ce66b27392ef362a29c97c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abb907bcac4ce66b27392ef362a29c97c">&#9670;&nbsp;</a></span>UpdateBlock()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -144,7 +143,7 @@ Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void Glass.Update </td>
+          <td class="memname">override void Glass.UpdateBlock </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -152,12 +151,14 @@ Private Attributes</h2></td></tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
 
-<p>Called once per frame by unity engine. </p>
+<p>Called by <a class="el" href="classBlockManager.html">BlockManager</a> update coroutine. </p>
+
+<p>Reimplemented from <a class="el" href="classBlock.html#a3e9edefdc2072c0c90ff0afaa4ec1ad7">Block</a>.</p>
 
 </div>
 </div>
@@ -215,28 +216,6 @@ Private Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname"><a class="el" href="classStateManager.html">StateManager</a> Glass.stateManager</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="ae0e9f5ec1f9af73ab1021cd13add8dcb"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae0e9f5ec1f9af73ab1021cd13add8dcb">&#9670;&nbsp;</a></span>updateTick</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">float Glass.updateTick</td>
         </tr>
       </table>
   </td>

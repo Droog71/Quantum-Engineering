@@ -94,6 +94,8 @@ Public Member Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
+<tr class="memitem:a8c8db276cd611e530ea741d1576a588c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classBlockInteraction.html">BlockInteraction</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInteractionController.html#a8c8db276cd611e530ea741d1576a588c">blockInteraction</a></td></tr>
+<tr class="separator:a8c8db276cd611e530ea741d1576a588c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acd3489d2ac2633d8045fe2b0ce5fec6c"><td class="memItemLeft" align="right" valign="top">Coroutine&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInteractionController.html#acd3489d2ac2633d8045fe2b0ce5fec6c">paintingCoroutine</a></td></tr>
 <tr class="separator:acd3489d2ac2633d8045fe2b0ce5fec6c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
@@ -102,12 +104,15 @@ Private Member Functions</h2></td></tr>
 <tr class="memitem:ad9c1bed11401d84c36772a5389eaf398"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInteractionController.html#ad9c1bed11401d84c36772a5389eaf398">GuiFree</a> ()</td></tr>
 <tr class="memdesc:ad9c1bed11401d84c36772a5389eaf398"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns true if the GUI is available.  <a href="#ad9c1bed11401d84c36772a5389eaf398">More...</a><br /></td></tr>
 <tr class="separator:ad9c1bed11401d84c36772a5389eaf398"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9a7c501dc6764beff25240a3e36e5d75"><td class="memItemLeft" align="right" valign="top">Boolean&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInteractionController.html#a9a7c501dc6764beff25240a3e36e5d75">IsResource</a> (GameObject obj)</td></tr>
-<tr class="memdesc:a9a7c501dc6764beff25240a3e36e5d75"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns true if the object in question is a resource node.  <a href="#a9a7c501dc6764beff25240a3e36e5d75">More...</a><br /></td></tr>
-<tr class="separator:a9a7c501dc6764beff25240a3e36e5d75"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3b4aa955d5524f7ab0426b211f847fa1"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInteractionController.html#a3b4aa955d5524f7ab0426b211f847fa1">IsNonInteractive</a> (GameObject obj)</td></tr>
+<tr class="memdesc:a3b4aa955d5524f7ab0426b211f847fa1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns true if the object in question cannot be interacted with.  <a href="#a3b4aa955d5524f7ab0426b211f847fa1">More...</a><br /></td></tr>
+<tr class="separator:a3b4aa955d5524f7ab0426b211f847fa1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5923a4371c2a394c2d9825787da733a9"><td class="memItemLeft" align="right" valign="top">Boolean&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInteractionController.html#a5923a4371c2a394c2d9825787da733a9">IsStorageContainer</a> (GameObject obj)</td></tr>
 <tr class="memdesc:a5923a4371c2a394c2d9825787da733a9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns true if the object in question is a storage container.  <a href="#a5923a4371c2a394c2d9825787da733a9">More...</a><br /></td></tr>
 <tr class="separator:a5923a4371c2a394c2d9825787da733a9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9062e8b7033632b5b23e27fcb93b36c5"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInteractionController.html#a9062e8b7033632b5b23e27fcb93b36c5">UpdateNetwork</a> (int destroy, string type, Vector3 pos, Quaternion rot)</td></tr>
+<tr class="memdesc:a9062e8b7033632b5b23e27fcb93b36c5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sends instantiated block info to the server in multiplayer games.  <a href="#a9062e8b7033632b5b23e27fcb93b36c5">More...</a><br /></td></tr>
+<tr class="separator:a9062e8b7033632b5b23e27fcb93b36c5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0817fcab5a01259fb9a77609ba429e78"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInteractionController.html#a0817fcab5a01259fb9a77609ba429e78">EndInteraction</a> ()</td></tr>
 <tr class="memdesc:a0817fcab5a01259fb9a77609ba429e78"><td class="mdescLeft">&#160;</td><td class="mdescRight">Called when the player is no longer looking at any interactive objects.  <a href="#a0817fcab5a01259fb9a77609ba429e78">More...</a><br /></td></tr>
 <tr class="separator:a0817fcab5a01259fb9a77609ba429e78"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -120,8 +125,6 @@ Private Attributes</h2></td></tr>
 <tr class="separator:adf535aa24280feb2a6f231a7327936b5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a95323630266730c5cb93b6e905a3826a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classStorageInteraction.html">StorageInteraction</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInteractionController.html#a95323630266730c5cb93b6e905a3826a">storageInteraction</a></td></tr>
 <tr class="separator:a95323630266730c5cb93b6e905a3826a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8c8db276cd611e530ea741d1576a588c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classBlockInteraction.html">BlockInteraction</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInteractionController.html#a8c8db276cd611e530ea741d1576a588c">blockInteraction</a></td></tr>
-<tr class="separator:a8c8db276cd611e530ea741d1576a588c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Member Function Documentation</h2>
 <a id="a8e390ef8fc813a5f365e510c0e64e237"></a>
@@ -206,8 +209,8 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a9a7c501dc6764beff25240a3e36e5d75"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a9a7c501dc6764beff25240a3e36e5d75">&#9670;&nbsp;</a></span>IsResource()</h2>
+<a id="a3b4aa955d5524f7ab0426b211f847fa1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3b4aa955d5524f7ab0426b211f847fa1">&#9670;&nbsp;</a></span>IsNonInteractive()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -216,7 +219,7 @@ Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">Boolean InteractionController.IsResource </td>
+          <td class="memname">bool InteractionController.IsNonInteractive </td>
           <td>(</td>
           <td class="paramtype">GameObject&#160;</td>
           <td class="paramname"><em>obj</em></td><td>)</td>
@@ -230,7 +233,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Returns true if the object in question is a resource node. </p>
+<p>Returns true if the object in question cannot be interacted with. </p>
 
 </div>
 </div>
@@ -343,9 +346,8 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<h2 class="groupheader">Member Data Documentation</h2>
-<a id="a8c8db276cd611e530ea741d1576a588c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a8c8db276cd611e530ea741d1576a588c">&#9670;&nbsp;</a></span>blockInteraction</h2>
+<a id="a9062e8b7033632b5b23e27fcb93b36c5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9062e8b7033632b5b23e27fcb93b36c5">&#9670;&nbsp;</a></span>UpdateNetwork()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -354,14 +356,57 @@ Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classBlockInteraction.html">BlockInteraction</a> InteractionController.blockInteraction</td>
+          <td class="memname">void InteractionController.UpdateNetwork </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>destroy</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">string&#160;</td>
+          <td class="paramname"><em>type</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Vector3&#160;</td>
+          <td class="paramname"><em>pos</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Quaternion&#160;</td>
+          <td class="paramname"><em>rot</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">private</span></span>  </td>
   </tr>
 </table>
+</div><div class="memdoc">
+
+<p>Sends instantiated block info to the server in multiplayer games. </p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Data Documentation</h2>
+<a id="a8c8db276cd611e530ea741d1576a588c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8c8db276cd611e530ea741d1576a588c">&#9670;&nbsp;</a></span>blockInteraction</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classBlockInteraction.html">BlockInteraction</a> InteractionController.blockInteraction</td>
+        </tr>
+      </table>
 </div><div class="memdoc">
 
 </div>

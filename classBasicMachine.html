@@ -74,11 +74,12 @@ Inheritance diagram for BasicMachine:</div>
  <div class="center">
   <img src="classBasicMachine.png" usemap="#BasicMachine_map" alt=""/>
   <map id="BasicMachine_map" name="BasicMachine_map">
-<area href="classExtruder.html" alt="Extruder" shape="rect" coords="0,112,102,136"/>
-<area href="classGearCutter.html" alt="GearCutter" shape="rect" coords="112,112,214,136"/>
-<area href="classModMachine.html" alt="ModMachine" shape="rect" coords="224,112,326,136"/>
-<area href="classPress.html" alt="Press" shape="rect" coords="336,112,438,136"/>
-<area href="classSmelter.html" alt="Smelter" shape="rect" coords="448,112,550,136"/>
+<area href="classMachine.html" alt="Machine" shape="rect" coords="224,56,326,80"/>
+<area href="classExtruder.html" alt="Extruder" shape="rect" coords="0,168,102,192"/>
+<area href="classGearCutter.html" alt="GearCutter" shape="rect" coords="112,168,214,192"/>
+<area href="classModMachine.html" alt="ModMachine" shape="rect" coords="224,168,326,192"/>
+<area href="classPress.html" alt="Press" shape="rect" coords="336,168,438,192"/>
+<area href="classSmelter.html" alt="Smelter" shape="rect" coords="448,168,550,192"/>
 </map>
  </div></div>
 <table class="memberdecls">
@@ -87,16 +88,14 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a25a93e26866424d85546fa4e1edd1e85"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBasicMachine.html#a25a93e26866424d85546fa4e1edd1e85">Start</a> ()</td></tr>
 <tr class="memdesc:a25a93e26866424d85546fa4e1edd1e85"><td class="mdescLeft">&#160;</td><td class="mdescRight">Called by unity engine on start up to initialize variables.  <a href="#a25a93e26866424d85546fa4e1edd1e85">More...</a><br /></td></tr>
 <tr class="separator:a25a93e26866424d85546fa4e1edd1e85"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a168950cd562f2daff9a1ee1c89c32d19"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBasicMachine.html#a168950cd562f2daff9a1ee1c89c32d19">Update</a> ()</td></tr>
-<tr class="memdesc:a168950cd562f2daff9a1ee1c89c32d19"><td class="mdescLeft">&#160;</td><td class="mdescRight">Called once per frame by unity engine.  <a href="#a168950cd562f2daff9a1ee1c89c32d19">More...</a><br /></td></tr>
-<tr class="separator:a168950cd562f2daff9a1ee1c89c32d19"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a435265636e3d6837f5008c0676a868fe"><td class="memItemLeft" align="right" valign="top">override void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBasicMachine.html#a435265636e3d6837f5008c0676a868fe">UpdateMachine</a> ()</td></tr>
+<tr class="memdesc:a435265636e3d6837f5008c0676a868fe"><td class="mdescLeft">&#160;</td><td class="mdescRight">Called by <a class="el" href="classMachineManager.html">MachineManager</a> update coroutine.  <a href="#a435265636e3d6837f5008c0676a868fe">More...</a><br /></td></tr>
+<tr class="separator:a435265636e3d6837f5008c0676a868fe"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
 <tr class="memitem:a0db98b80b672970a128187b7a3d6638a"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBasicMachine.html#a0db98b80b672970a128187b7a3d6638a">amount</a></td></tr>
 <tr class="separator:a0db98b80b672970a128187b7a3d6638a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1e711ebe7436051e478e4b85afaa8e48"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBasicMachine.html#a1e711ebe7436051e478e4b85afaa8e48">updateTick</a></td></tr>
-<tr class="separator:a1e711ebe7436051e478e4b85afaa8e48"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5d49d231188e2e538b7fb9195ecc536d"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBasicMachine.html#a5d49d231188e2e538b7fb9195ecc536d">address</a></td></tr>
 <tr class="separator:a5d49d231188e2e538b7fb9195ecc536d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9d05d4ee45070268ad303a498248d738"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBasicMachine.html#a9d05d4ee45070268ad303a498248d738">speed</a> = 1</td></tr>
@@ -143,18 +142,17 @@ Public Attributes</h2></td></tr>
 <tr class="separator:ac0d681d5098458fe7a57535b66a61719"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a781238482f32ff1263f25c5881fa6b7c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classStateManager.html">StateManager</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBasicMachine.html#a781238482f32ff1263f25c5881fa6b7c">stateManager</a></td></tr>
 <tr class="separator:a781238482f32ff1263f25c5881fa6b7c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae49ca0988078de4846d45844e3cadb6c"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBasicMachine.html#ae49ca0988078de4846d45844e3cadb6c">hasCustomSound</a></td></tr>
+<tr class="separator:ae49ca0988078de4846d45844e3cadb6c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-methods"></a>
 Private Member Functions</h2></td></tr>
-<tr class="memitem:aeb01dd9dc750e59ed14a701f68079cbf"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBasicMachine.html#aeb01dd9dc750e59ed14a701f68079cbf">IsValidObject</a> (GameObject obj)</td></tr>
-<tr class="memdesc:aeb01dd9dc750e59ed14a701f68079cbf"><td class="mdescLeft">&#160;</td><td class="mdescRight">The object exists, is active and is not a standard building block.  <a href="#aeb01dd9dc750e59ed14a701f68079cbf">More...</a><br /></td></tr>
-<tr class="separator:aeb01dd9dc750e59ed14a701f68079cbf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9da6df4cdeccd050c2be6eefddabd7a4"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBasicMachine.html#a9da6df4cdeccd050c2be6eefddabd7a4">IsValidOutputObject</a> (GameObject obj)</td></tr>
 <tr class="memdesc:a9da6df4cdeccd050c2be6eefddabd7a4"><td class="mdescLeft">&#160;</td><td class="mdescRight">The object is a potential output connection.  <a href="#a9da6df4cdeccd050c2be6eefddabd7a4">More...</a><br /></td></tr>
 <tr class="separator:a9da6df4cdeccd050c2be6eefddabd7a4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a34176b44a435d52977e34c7b538ae47d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBasicMachine.html#a34176b44a435d52977e34c7b538ae47d">ConnectToOutput</a> ()</td></tr>
-<tr class="memdesc:a34176b44a435d52977e34c7b538ae47d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Finds and connects to a universal conduit for output.  <a href="#a34176b44a435d52977e34c7b538ae47d">More...</a><br /></td></tr>
-<tr class="separator:a34176b44a435d52977e34c7b538ae47d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a52be15a6f40b69291fe883438629e9d3"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBasicMachine.html#a52be15a6f40b69291fe883438629e9d3">FindOutputObject</a> ()</td></tr>
+<tr class="memdesc:a52be15a6f40b69291fe883438629e9d3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Finds and connects to a universal conduit for output.  <a href="#a52be15a6f40b69291fe883438629e9d3">More...</a><br /></td></tr>
+<tr class="separator:a52be15a6f40b69291fe883438629e9d3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac46e730a98e723855f8ca782a34969c9"><td class="memItemLeft" align="right" valign="top">string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBasicMachine.html#ac46e730a98e723855f8ca782a34969c9">GetOutputType</a> ()</td></tr>
 <tr class="memdesc:ac46e730a98e723855f8ca782a34969c9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the appropriate output item according to the input.  <a href="#ac46e730a98e723855f8ca782a34969c9">More...</a><br /></td></tr>
 <tr class="separator:ac46e730a98e723855f8ca782a34969c9"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -177,8 +175,8 @@ Private Attributes</h2></td></tr>
 <tr class="separator:a34014ce45da5630ac85ee07372c40eb5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="a34176b44a435d52977e34c7b538ae47d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a34176b44a435d52977e34c7b538ae47d">&#9670;&nbsp;</a></span>ConnectToOutput()</h2>
+<a id="a52be15a6f40b69291fe883438629e9d3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a52be15a6f40b69291fe883438629e9d3">&#9670;&nbsp;</a></span>FindOutputObject()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -187,7 +185,7 @@ Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void BasicMachine.ConnectToOutput </td>
+          <td class="memname">void BasicMachine.FindOutputObject </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -258,34 +256,6 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="aeb01dd9dc750e59ed14a701f68079cbf"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aeb01dd9dc750e59ed14a701f68079cbf">&#9670;&nbsp;</a></span>IsValidObject()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool BasicMachine.IsValidObject </td>
-          <td>(</td>
-          <td class="paramtype">GameObject&#160;</td>
-          <td class="paramname"><em>obj</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>The object exists, is active and is not a standard building block. </p>
-
-</div>
-</div>
 <a id="a9da6df4cdeccd050c2be6eefddabd7a4"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a9da6df4cdeccd050c2be6eefddabd7a4">&#9670;&nbsp;</a></span>IsValidOutputObject()</h2>
 
@@ -341,8 +311,8 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a168950cd562f2daff9a1ee1c89c32d19"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a168950cd562f2daff9a1ee1c89c32d19">&#9670;&nbsp;</a></span>Update()</h2>
+<a id="a435265636e3d6837f5008c0676a868fe"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a435265636e3d6837f5008c0676a868fe">&#9670;&nbsp;</a></span>UpdateMachine()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -351,7 +321,7 @@ Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void BasicMachine.Update </td>
+          <td class="memname">override void BasicMachine.UpdateMachine </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -359,12 +329,16 @@ Private Attributes</h2></td></tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
 
-<p>Called once per frame by unity engine. </p>
+<p>Called by <a class="el" href="classMachineManager.html">MachineManager</a> update coroutine. </p>
+
+<p>Reimplemented from <a class="el" href="classMachine.html#a3a602cc698eec55437a68314029e4667">Machine</a>.</p>
+
+<p>Reimplemented in <a class="el" href="classPress.html#acd8dab15ab6ff6205738118d13084ed9">Press</a>, <a class="el" href="classGearCutter.html#a2f320f7c06bd4f24f8881459fb1f1a7d">GearCutter</a>, <a class="el" href="classSmelter.html#ac2a65cfcbabd160dfed94c793e091f2b">Smelter</a>, <a class="el" href="classExtruder.html#aa0d245bd0d3b4382808b9e2104c18843">Extruder</a>, and <a class="el" href="classModMachine.html#a5d816e54b1b427117edd6b3c60c85bbf">ModMachine</a>.</p>
 
 </div>
 </div>
@@ -532,6 +506,20 @@ Private Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">string BasicMachine.creationMethod = &quot;built&quot;</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ae49ca0988078de4846d45844e3cadb6c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae49ca0988078de4846d45844e3cadb6c">&#9670;&nbsp;</a></span>hasCustomSound</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool BasicMachine.hasCustomSound</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -792,20 +780,6 @@ Private Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname"><a class="el" href="classStateManager.html">StateManager</a> BasicMachine.stateManager</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a1e711ebe7436051e478e4b85afaa8e48"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a1e711ebe7436051e478e4b85afaa8e48">&#9670;&nbsp;</a></span>updateTick</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">float BasicMachine.updateTick</td>
         </tr>
       </table>
 </div><div class="memdoc">

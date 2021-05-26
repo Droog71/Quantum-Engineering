@@ -1,5 +1,6 @@
 var searchData=
 [
+  ['chatgui',['ChatGUI',['../classChatGUI.html',1,'']]],
   ['cinputinit',['cInputInit',['../classcInputInit.html',1,'']]],
   ['combinedmeshmanager',['CombinedMeshManager',['../classCombinedMeshManager.html',1,'']]],
   ['conduititem',['ConduitItem',['../classConduitItem.html',1,'']]],

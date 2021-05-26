@@ -74,12 +74,15 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a1c18021f5e5e3f1ea918805de9a2c36e"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInventoryHandler.html#a1c18021f5e5e3f1ea918805de9a2c36e">InventoryHandler</a> (<a class="el" href="classPlayerController.html">PlayerController</a> <a class="el" href="classInventoryHandler.html#ad74fd7e18b1a6bc83b4128f90b897d91">playerController</a>, <a class="el" href="classInventoryManager.html">InventoryManager</a> <a class="el" href="classInventoryHandler.html#a473505fb86fc3ed69d0cb660948505b5">playerInventory</a>)</td></tr>
 <tr class="memdesc:a1c18021f5e5e3f1ea918805de9a2c36e"><td class="mdescLeft">&#160;</td><td class="mdescRight">This class handles inventory related functions that don't directly require the OnGUI method.  <a href="#a1c18021f5e5e3f1ea918805de9a2c36e">More...</a><br /></td></tr>
 <tr class="separator:a1c18021f5e5e3f1ea918805de9a2c36e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af7ab71a6584e0f2630273e8677705a0f"><td class="memItemLeft" align="right" valign="top">IEnumerator&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInventoryHandler.html#af7ab71a6584e0f2630273e8677705a0f">NetworkStorageCoroutine</a> (int storageInventoryDropSlot, <a class="el" href="classInventorySlot.html">InventorySlot</a> dropSlot)</td></tr>
+<tr class="memdesc:af7ab71a6584e0f2630273e8677705a0f"><td class="mdescLeft">&#160;</td><td class="mdescRight">When an item is moved from one slot to another in a container, the contents of both slots are updated on the server.  <a href="#af7ab71a6584e0f2630273e8677705a0f">More...</a><br /></td></tr>
+<tr class="separator:af7ab71a6584e0f2630273e8677705a0f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae97810c9cc364e2fab8d463416de26ff"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInventoryHandler.html#ae97810c9cc364e2fab8d463416de26ff">SearchComputerContainers</a> (<a class="el" href="classStorageComputer.html">StorageComputer</a> computer, string term)</td></tr>
 <tr class="memdesc:ae97810c9cc364e2fab8d463416de26ff"><td class="mdescLeft">&#160;</td><td class="mdescRight">Searches for items in all containers connected to the computer.  <a href="#ae97810c9cc364e2fab8d463416de26ff">More...</a><br /></td></tr>
 <tr class="separator:ae97810c9cc364e2fab8d463416de26ff"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a872514b783a8c0e25e342162ce475a2a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInventoryHandler.html#a872514b783a8c0e25e342162ce475a2a">DragItemFromSlot</a> (<a class="el" href="classInventorySlot.html">InventorySlot</a> dragSlot, <a class="el" href="classInventoryManager.html">InventoryManager</a> destination)</td></tr>
-<tr class="memdesc:a872514b783a8c0e25e342162ce475a2a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Begins dragging an item from an inventory slot.  <a href="#a872514b783a8c0e25e342162ce475a2a">More...</a><br /></td></tr>
-<tr class="separator:a872514b783a8c0e25e342162ce475a2a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a669db3337d1986c79af0d680b29174b7"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInventoryHandler.html#a669db3337d1986c79af0d680b29174b7">DragItemFromSlot</a> (int index, <a class="el" href="classInventorySlot.html">InventorySlot</a> dragSlot, <a class="el" href="classInventoryManager.html">InventoryManager</a> destination)</td></tr>
+<tr class="memdesc:a669db3337d1986c79af0d680b29174b7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Begins dragging an item from an inventory slot.  <a href="#a669db3337d1986c79af0d680b29174b7">More...</a><br /></td></tr>
+<tr class="separator:a669db3337d1986c79af0d680b29174b7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8c466bc05b4fd6608fbb4b591332f025"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInventoryHandler.html#a8c466bc05b4fd6608fbb4b591332f025">DropItemInSlot</a> (Vector2 mousePos, bool usingContainer)</td></tr>
 <tr class="memdesc:a8c466bc05b4fd6608fbb4b591332f025"><td class="mdescLeft">&#160;</td><td class="mdescRight">Drops an item into an inventory slot.  <a href="#a8c466bc05b4fd6608fbb4b591332f025">More...</a><br /></td></tr>
 <tr class="separator:a8c466bc05b4fd6608fbb4b591332f025"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -94,6 +97,9 @@ Private Member Functions</h2></td></tr>
 <tr class="memitem:a34f92a4417e4dcf65b6ced958738548f"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInventoryHandler.html#a34f92a4417e4dcf65b6ced958738548f">CanTransfer</a> (<a class="el" href="classInventorySlot.html">InventorySlot</a> dragSlot, <a class="el" href="classInventorySlot.html">InventorySlot</a> dropSlot)</td></tr>
 <tr class="memdesc:a34f92a4417e4dcf65b6ced958738548f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns true if the item can be transferred from dragSlot to dropSlot.  <a href="#a34f92a4417e4dcf65b6ced958738548f">More...</a><br /></td></tr>
 <tr class="separator:a34f92a4417e4dcf65b6ced958738548f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1858d52d9531b4effb9d63be66e97f55"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInventoryHandler.html#a1858d52d9531b4effb9d63be66e97f55">NetworkRemoveItem</a> ()</td></tr>
+<tr class="memdesc:a1858d52d9531b4effb9d63be66e97f55"><td class="mdescLeft">&#160;</td><td class="mdescRight">Updates the server when items are removed from storage containers in multiplayer games.  <a href="#a1858d52d9531b4effb9d63be66e97f55">More...</a><br /></td></tr>
+<tr class="separator:a1858d52d9531b4effb9d63be66e97f55"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
@@ -105,8 +111,14 @@ Private Attributes</h2></td></tr>
 <tr class="separator:a735d84d318d38f243dd8f3962aca1979"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab2f09bf9cdd3177935314d24728cf230"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classGuiCoordinates.html">GuiCoordinates</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInventoryHandler.html#ab2f09bf9cdd3177935314d24728cf230">guiCoordinates</a></td></tr>
 <tr class="separator:ab2f09bf9cdd3177935314d24728cf230"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2cf4588592bd742052e53fb26c17f7a0"><td class="memItemLeft" align="right" valign="top">Coroutine&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInventoryHandler.html#a2cf4588592bd742052e53fb26c17f7a0">networkStorageCoroutine</a></td></tr>
+<tr class="separator:a2cf4588592bd742052e53fb26c17f7a0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a18b2ca3166334476c43fea9b8471d746"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInventoryHandler.html#a18b2ca3166334476c43fea9b8471d746">networkStorageCoroutineBusy</a></td></tr>
+<tr class="separator:a18b2ca3166334476c43fea9b8471d746"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aff71c72e9651528a2ccaaf6d10d1a9b1"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInventoryHandler.html#aff71c72e9651528a2ccaaf6d10d1a9b1">amountToDrag</a></td></tr>
 <tr class="separator:aff71c72e9651528a2ccaaf6d10d1a9b1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9d5d7b3f7244b9cecb34c5bf7ee8fef7"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInventoryHandler.html#a9d5d7b3f7244b9cecb34c5bf7ee8fef7">dragSlotIndex</a></td></tr>
+<tr class="separator:a9d5d7b3f7244b9cecb34c5bf7ee8fef7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a1c18021f5e5e3f1ea918805de9a2c36e"></a>
@@ -186,8 +198,8 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a872514b783a8c0e25e342162ce475a2a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a872514b783a8c0e25e342162ce475a2a">&#9670;&nbsp;</a></span>DragItemFromSlot()</h2>
+<a id="a669db3337d1986c79af0d680b29174b7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a669db3337d1986c79af0d680b29174b7">&#9670;&nbsp;</a></span>DragItemFromSlot()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -198,6 +210,12 @@ Private Attributes</h2></td></tr>
         <tr>
           <td class="memname">void InventoryHandler.DragItemFromSlot </td>
           <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>index</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
           <td class="paramtype"><a class="el" href="classInventorySlot.html">InventorySlot</a>&#160;</td>
           <td class="paramname"><em>dragSlot</em>, </td>
         </tr>
@@ -262,6 +280,71 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="a1858d52d9531b4effb9d63be66e97f55"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1858d52d9531b4effb9d63be66e97f55">&#9670;&nbsp;</a></span>NetworkRemoveItem()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void InventoryHandler.NetworkRemoveItem </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Updates the server when items are removed from storage containers in multiplayer games. </p>
+
+</div>
+</div>
+<a id="af7ab71a6584e0f2630273e8677705a0f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af7ab71a6584e0f2630273e8677705a0f">&#9670;&nbsp;</a></span>NetworkStorageCoroutine()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">IEnumerator InventoryHandler.NetworkStorageCoroutine </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>storageInventoryDropSlot</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classInventorySlot.html">InventorySlot</a>&#160;</td>
+          <td class="paramname"><em>dropSlot</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>When an item is moved from one slot to another in a container, the contents of both slots are updated on the server. </p>
+
+</div>
+</div>
 <a id="ae97810c9cc364e2fab8d463416de26ff"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ae97810c9cc364e2fab8d463416de26ff">&#9670;&nbsp;</a></span>SearchComputerContainers()</h2>
 
@@ -323,6 +406,28 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="a9d5d7b3f7244b9cecb34c5bf7ee8fef7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9d5d7b3f7244b9cecb34c5bf7ee8fef7">&#9670;&nbsp;</a></span>dragSlotIndex</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int InventoryHandler.dragSlotIndex</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="ab2f09bf9cdd3177935314d24728cf230"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ab2f09bf9cdd3177935314d24728cf230">&#9670;&nbsp;</a></span>guiCoordinates</h2>
 
@@ -355,6 +460,50 @@ Private Attributes</h2></td></tr>
           <td class="memname">string InventoryHandler.itemToDrag</td>
         </tr>
       </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a2cf4588592bd742052e53fb26c17f7a0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2cf4588592bd742052e53fb26c17f7a0">&#9670;&nbsp;</a></span>networkStorageCoroutine</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Coroutine InventoryHandler.networkStorageCoroutine</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a18b2ca3166334476c43fea9b8471d746"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a18b2ca3166334476c43fea9b8471d746">&#9670;&nbsp;</a></span>networkStorageCoroutineBusy</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool InventoryHandler.networkStorageCoroutineBusy</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
 </div>

@@ -97,6 +97,10 @@ Public Attributes</h2></td></tr>
 <tr class="separator:a6148f06877656830c7ad8ccd3ad3192f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9e30841a317e462c89f2cce68dd2bcc8"><td class="memItemLeft" align="right" valign="top">GameObject&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBuildController.html#a9e30841a317e462c89f2cce68dd2bcc8">builtObjects</a></td></tr>
 <tr class="separator:a9e30841a317e462c89f2cce68dd2bcc8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af964bdf2cdf03561c9afb8875d768c86"><td class="memItemLeft" align="right" valign="top">AudioClip&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBuildController.html#af964bdf2cdf03561c9afb8875d768c86">singleBuildClip</a></td></tr>
+<tr class="separator:af964bdf2cdf03561c9afb8875d768c86"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8d8ed62e5f782fc1fd3926356ca7531b"><td class="memItemLeft" align="right" valign="top">AudioClip&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBuildController.html#a8d8ed62e5f782fc1fd3926356ca7531b">multiBuildClip</a></td></tr>
+<tr class="separator:a8d8ed62e5f782fc1fd3926356ca7531b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab4f63aee71e413ba87472c668c471ba8"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBuildController.html#ab4f63aee71e413ba87472c668c471ba8">autoAxis</a></td></tr>
 <tr class="separator:ab4f63aee71e413ba87472c668c471ba8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
@@ -117,6 +121,9 @@ Private Member Functions</h2></td></tr>
 <tr class="memitem:abaabf4ddefd4fbbc3730c56c2058d8ae"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBuildController.html#abaabf4ddefd4fbbc3730c56c2058d8ae">BuildMachine</a> (string type, RaycastHit hit)</td></tr>
 <tr class="memdesc:abaabf4ddefd4fbbc3730c56c2058d8ae"><td class="mdescLeft">&#160;</td><td class="mdescRight">Places a machine in the world.  <a href="#abaabf4ddefd4fbbc3730c56c2058d8ae">More...</a><br /></td></tr>
 <tr class="separator:abaabf4ddefd4fbbc3730c56c2058d8ae"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3113409f5f6004a5abdd3e95ad6c56aa"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBuildController.html#a3113409f5f6004a5abdd3e95ad6c56aa">UpdateNetwork</a> (int destroy, string type, Vector3 pos, Quaternion rot)</td></tr>
+<tr class="memdesc:a3113409f5f6004a5abdd3e95ad6c56aa"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sends instantiated block info to the server in multiplayer games.  <a href="#a3113409f5f6004a5abdd3e95ad6c56aa">More...</a><br /></td></tr>
+<tr class="separator:a3113409f5f6004a5abdd3e95ad6c56aa"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6e4eebd60696df21390baa5091ac341a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBuildController.html#a6e4eebd60696df21390baa5091ac341a">BuildBlock</a> (string type)</td></tr>
 <tr class="separator:a6e4eebd60696df21390baa5091ac341a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8146156b69f6b55ab8c301eed2788fdd"><td class="memItemLeft" align="right" valign="top">IEnumerator&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBuildController.html#a8146156b69f6b55ab8c301eed2788fdd">BuildBlockCoroutine</a> (string type)</td></tr>
@@ -133,6 +140,8 @@ Private Attributes</h2></td></tr>
 <tr class="separator:ad60bce48865999a32889ec2a5a009301"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad739d213379110b70b7f02fc40fe7da9"><td class="memItemLeft" align="right" valign="top">Coroutine&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBuildController.html#ad739d213379110b70b7f02fc40fe7da9">buildBlockCoroutine</a></td></tr>
 <tr class="separator:ad739d213379110b70b7f02fc40fe7da9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2ee75330db291a84bde0fe3b03a31688"><td class="memItemLeft" align="right" valign="top">Coroutine&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBuildController.html#a2ee75330db291a84bde0fe3b03a31688">updateNetworkCoroutine</a></td></tr>
+<tr class="separator:a2ee75330db291a84bde0fe3b03a31688"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Member Function Documentation</h2>
 <a id="a08486499c55491d26c309bff0e8e2a3d"></a>
@@ -419,6 +428,56 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="a3113409f5f6004a5abdd3e95ad6c56aa"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3113409f5f6004a5abdd3e95ad6c56aa">&#9670;&nbsp;</a></span>UpdateNetwork()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void BuildController.UpdateNetwork </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>destroy</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">string&#160;</td>
+          <td class="paramname"><em>type</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Vector3&#160;</td>
+          <td class="paramname"><em>pos</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Quaternion&#160;</td>
+          <td class="paramname"><em>rot</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Sends instantiated block info to the server in multiplayer games. </p>
+
+</div>
+</div>
 <h2 class="groupheader">Member Data Documentation</h2>
 <a id="ab4f63aee71e413ba87472c668c471ba8"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ab4f63aee71e413ba87472c668c471ba8">&#9670;&nbsp;</a></span>autoAxis</h2>
@@ -542,6 +601,20 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="a8d8ed62e5f782fc1fd3926356ca7531b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8d8ed62e5f782fc1fd3926356ca7531b">&#9670;&nbsp;</a></span>multiBuildClip</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">AudioClip BuildController.multiBuildClip</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="aa57d70a2c475fd0731215e5b206ab2ed"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#aa57d70a2c475fd0731215e5b206ab2ed">&#9670;&nbsp;</a></span>playerController</h2>
 
@@ -553,6 +626,42 @@ Private Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname"><a class="el" href="classPlayerController.html">PlayerController</a> BuildController.playerController</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="af964bdf2cdf03561c9afb8875d768c86"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af964bdf2cdf03561c9afb8875d768c86">&#9670;&nbsp;</a></span>singleBuildClip</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">AudioClip BuildController.singleBuildClip</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a2ee75330db291a84bde0fe3b03a31688"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2ee75330db291a84bde0fe3b03a31688">&#9670;&nbsp;</a></span>updateNetworkCoroutine</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Coroutine BuildController.updateNetworkCoroutine</td>
         </tr>
       </table>
   </td>

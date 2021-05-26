@@ -74,6 +74,7 @@ Inheritance diagram for RailCartHub:</div>
  <div class="center">
   <img src="classRailCartHub.png" usemap="#RailCartHub_map" alt=""/>
   <map id="RailCartHub_map" name="RailCartHub_map">
+<area href="classMachine.html" alt="Machine" shape="rect" coords="0,56,102,80"/>
 </map>
  </div></div>
 <table class="memberdecls">
@@ -82,9 +83,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a56ffbdf07fcfdc81a720cbfbec7255f8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRailCartHub.html#a56ffbdf07fcfdc81a720cbfbec7255f8">Start</a> ()</td></tr>
 <tr class="memdesc:a56ffbdf07fcfdc81a720cbfbec7255f8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Called by unity engine on start up to initialize variables.  <a href="#a56ffbdf07fcfdc81a720cbfbec7255f8">More...</a><br /></td></tr>
 <tr class="separator:a56ffbdf07fcfdc81a720cbfbec7255f8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a437a50aba2a700c840ba322a0974e12b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRailCartHub.html#a437a50aba2a700c840ba322a0974e12b">Update</a> ()</td></tr>
-<tr class="memdesc:a437a50aba2a700c840ba322a0974e12b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Called once per frame by unity engine.  <a href="#a437a50aba2a700c840ba322a0974e12b">More...</a><br /></td></tr>
-<tr class="separator:a437a50aba2a700c840ba322a0974e12b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a95eb06fced1c4c3d7f32320789ccdd7f"><td class="memItemLeft" align="right" valign="top">override void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRailCartHub.html#a95eb06fced1c4c3d7f32320789ccdd7f">UpdateMachine</a> ()</td></tr>
+<tr class="memdesc:a95eb06fced1c4c3d7f32320789ccdd7f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Called by <a class="el" href="classMachineManager.html">MachineManager</a> update coroutine.  <a href="#a95eb06fced1c4c3d7f32320789ccdd7f">More...</a><br /></td></tr>
+<tr class="separator:a95eb06fced1c4c3d7f32320789ccdd7f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
@@ -137,8 +138,6 @@ Private Attributes</h2></td></tr>
 <tr class="separator:a1d01464eccd897ce24f0fb7e040a7a2a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3fc3e649135d89b7b9f76a897522617a"><td class="memItemLeft" align="right" valign="top">LineRenderer&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRailCartHub.html#a3fc3e649135d89b7b9f76a897522617a">connectionLine</a></td></tr>
 <tr class="separator:a3fc3e649135d89b7b9f76a897522617a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a551138abb539ce58dcf2e480d69ce6ec"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRailCartHub.html#a551138abb539ce58dcf2e480d69ce6ec">updateTick</a></td></tr>
-<tr class="separator:a551138abb539ce58dcf2e480d69ce6ec"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Member Function Documentation</h2>
 <a id="a1451fb4c0d9672cfee1d6f419611c629"></a>
@@ -250,8 +249,8 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a437a50aba2a700c840ba322a0974e12b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a437a50aba2a700c840ba322a0974e12b">&#9670;&nbsp;</a></span>Update()</h2>
+<a id="a95eb06fced1c4c3d7f32320789ccdd7f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a95eb06fced1c4c3d7f32320789ccdd7f">&#9670;&nbsp;</a></span>UpdateMachine()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -260,7 +259,7 @@ Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void RailCartHub.Update </td>
+          <td class="memname">override void RailCartHub.UpdateMachine </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -268,12 +267,14 @@ Private Attributes</h2></td></tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
 
-<p>Called once per frame by unity engine. </p>
+<p>Called by <a class="el" href="classMachineManager.html">MachineManager</a> update coroutine. </p>
+
+<p>Reimplemented from <a class="el" href="classMachine.html#a3a602cc698eec55437a68314029e4667">Machine</a>.</p>
 
 </div>
 </div>
@@ -528,28 +529,6 @@ Private Attributes</h2></td></tr>
           <td class="memname">float RailCartHub.stopTime</td>
         </tr>
       </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a551138abb539ce58dcf2e480d69ce6ec"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a551138abb539ce58dcf2e480d69ce6ec">&#9670;&nbsp;</a></span>updateTick</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">float RailCartHub.updateTick</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
 </div><div class="memdoc">
 
 </div>

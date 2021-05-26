@@ -74,6 +74,7 @@ Inheritance diagram for UniversalExtractor:</div>
  <div class="center">
   <img src="classUniversalExtractor.png" usemap="#UniversalExtractor_map" alt=""/>
   <map id="UniversalExtractor_map" name="UniversalExtractor_map">
+<area href="classMachine.html" alt="Machine" shape="rect" coords="0,56,116,80"/>
 </map>
  </div></div>
 <table class="memberdecls">
@@ -85,9 +86,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:aaa0d5faea915d23142fc116b8f0c0ac4"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classUniversalExtractor.html#aaa0d5faea915d23142fc116b8f0c0ac4">OnDestroy</a> ()</td></tr>
 <tr class="memdesc:aaa0d5faea915d23142fc116b8f0c0ac4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Used to remove the connection line renderer when the block is destroyed.  <a href="#aaa0d5faea915d23142fc116b8f0c0ac4">More...</a><br /></td></tr>
 <tr class="separator:aaa0d5faea915d23142fc116b8f0c0ac4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a49d7f061c57d3e05cdbcc99db62b2172"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classUniversalExtractor.html#a49d7f061c57d3e05cdbcc99db62b2172">Update</a> ()</td></tr>
-<tr class="memdesc:a49d7f061c57d3e05cdbcc99db62b2172"><td class="mdescLeft">&#160;</td><td class="mdescRight">Called once per frame by unity engine.  <a href="#a49d7f061c57d3e05cdbcc99db62b2172">More...</a><br /></td></tr>
-<tr class="separator:a49d7f061c57d3e05cdbcc99db62b2172"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2427b2321f038b36ca012029fb5d0d17"><td class="memItemLeft" align="right" valign="top">override void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classUniversalExtractor.html#a2427b2321f038b36ca012029fb5d0d17">UpdateMachine</a> ()</td></tr>
+<tr class="memdesc:a2427b2321f038b36ca012029fb5d0d17"><td class="mdescLeft">&#160;</td><td class="mdescRight">Called by <a class="el" href="classMachineManager.html">MachineManager</a> update coroutine.  <a href="#a2427b2321f038b36ca012029fb5d0d17">More...</a><br /></td></tr>
+<tr class="separator:a2427b2321f038b36ca012029fb5d0d17"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
@@ -149,8 +150,6 @@ Private Attributes</h2></td></tr>
 <tr class="separator:a9c7659ce7a79ff3069c4f0eeb0e2aa88"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9af93f658ccc11228089d198bcad2e1c"><td class="memItemLeft" align="right" valign="top">LineRenderer&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classUniversalExtractor.html#a9af93f658ccc11228089d198bcad2e1c">inputLine</a></td></tr>
 <tr class="separator:a9af93f658ccc11228089d198bcad2e1c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a05f084e1e07af238e212cd7909d55030"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classUniversalExtractor.html#a05f084e1e07af238e212cd7909d55030">updateTick</a></td></tr>
-<tr class="separator:a05f084e1e07af238e212cd7909d55030"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad79ed4e61677c68a20712c4658f5d275"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classUniversalExtractor.html#ad79ed4e61677c68a20712c4658f5d275">extractingIce</a></td></tr>
 <tr class="separator:ad79ed4e61677c68a20712c4658f5d275"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a08bf4a8b682d0da68f0a519bed6864b5"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classUniversalExtractor.html#a08bf4a8b682d0da68f0a519bed6864b5">hasResource</a></td></tr>
@@ -243,8 +242,8 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a49d7f061c57d3e05cdbcc99db62b2172"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a49d7f061c57d3e05cdbcc99db62b2172">&#9670;&nbsp;</a></span>Update()</h2>
+<a id="a2427b2321f038b36ca012029fb5d0d17"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2427b2321f038b36ca012029fb5d0d17">&#9670;&nbsp;</a></span>UpdateMachine()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -253,7 +252,7 @@ Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void UniversalExtractor.Update </td>
+          <td class="memname">override void UniversalExtractor.UpdateMachine </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -261,12 +260,14 @@ Private Attributes</h2></td></tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
 
-<p>Called once per frame by unity engine. </p>
+<p>Called by <a class="el" href="classMachineManager.html">MachineManager</a> update coroutine. </p>
+
+<p>Reimplemented from <a class="el" href="classMachine.html#a3a602cc698eec55437a68314029e4667">Machine</a>.</p>
 
 </div>
 </div>
@@ -722,28 +723,6 @@ Private Attributes</h2></td></tr>
           <td class="memname">string UniversalExtractor.type</td>
         </tr>
       </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a05f084e1e07af238e212cd7909d55030"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a05f084e1e07af238e212cd7909d55030">&#9670;&nbsp;</a></span>updateTick</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">float UniversalExtractor.updateTick</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
 </div><div class="memdoc">
 
 </div>

@@ -74,6 +74,7 @@ Inheritance diagram for Auger:</div>
  <div class="center">
   <img src="classAuger.png" usemap="#Auger_map" alt=""/>
   <map id="Auger_map" name="Auger_map">
+<area href="classMachine.html" alt="Machine" shape="rect" coords="0,56,102,80"/>
 </map>
  </div></div>
 <table class="memberdecls">
@@ -82,9 +83,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a4dadd42de3a42c314d25ef9381313aa4"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classAuger.html#a4dadd42de3a42c314d25ef9381313aa4">Start</a> ()</td></tr>
 <tr class="memdesc:a4dadd42de3a42c314d25ef9381313aa4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Called by unity engine on start up to initialize variables.  <a href="#a4dadd42de3a42c314d25ef9381313aa4">More...</a><br /></td></tr>
 <tr class="separator:a4dadd42de3a42c314d25ef9381313aa4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa971e5c77af49e1c595b6bf5ca4cefab"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classAuger.html#aa971e5c77af49e1c595b6bf5ca4cefab">Update</a> ()</td></tr>
-<tr class="memdesc:aa971e5c77af49e1c595b6bf5ca4cefab"><td class="mdescLeft">&#160;</td><td class="mdescRight">Called once per frame by unity engine.  <a href="#aa971e5c77af49e1c595b6bf5ca4cefab">More...</a><br /></td></tr>
-<tr class="separator:aa971e5c77af49e1c595b6bf5ca4cefab"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6186196c293f652b33eb91c2b6aa2194"><td class="memItemLeft" align="right" valign="top">override void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classAuger.html#a6186196c293f652b33eb91c2b6aa2194">UpdateMachine</a> ()</td></tr>
+<tr class="memdesc:a6186196c293f652b33eb91c2b6aa2194"><td class="mdescLeft">&#160;</td><td class="mdescRight">Called by <a class="el" href="classMachineManager.html">MachineManager</a> update coroutine.  <a href="#a6186196c293f652b33eb91c2b6aa2194">More...</a><br /></td></tr>
+<tr class="separator:a6186196c293f652b33eb91c2b6aa2194"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
@@ -131,8 +132,6 @@ Private Attributes</h2></td></tr>
 <tr class="separator:a4d4f35439c3e90dae531d35fb2332f85"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7f445c67d3cc41ac02c90c40e8794bee"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classStateManager.html">StateManager</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classAuger.html#a7f445c67d3cc41ac02c90c40e8794bee">stateManager</a></td></tr>
 <tr class="separator:a7f445c67d3cc41ac02c90c40e8794bee"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8cc4599f799b42723a2ec92421dcb3f3"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classAuger.html#a8cc4599f799b42723a2ec92421dcb3f3">updateTick</a></td></tr>
-<tr class="separator:a8cc4599f799b42723a2ec92421dcb3f3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4422ac12eca224bfe0ac4efedcf57609"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classAuger.html#a4422ac12eca224bfe0ac4efedcf57609">machineTimer</a></td></tr>
 <tr class="separator:a4422ac12eca224bfe0ac4efedcf57609"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aeff070f33f4b23dba6373503e19b0e86"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classAuger.html#aeff070f33f4b23dba6373503e19b0e86">warmup</a></td></tr>
@@ -166,8 +165,8 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="aa971e5c77af49e1c595b6bf5ca4cefab"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa971e5c77af49e1c595b6bf5ca4cefab">&#9670;&nbsp;</a></span>Update()</h2>
+<a id="a6186196c293f652b33eb91c2b6aa2194"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6186196c293f652b33eb91c2b6aa2194">&#9670;&nbsp;</a></span>UpdateMachine()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -176,7 +175,7 @@ Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void Auger.Update </td>
+          <td class="memname">override void Auger.UpdateMachine </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -184,12 +183,14 @@ Private Attributes</h2></td></tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
 
-<p>Called once per frame by unity engine. </p>
+<p>Called by <a class="el" href="classMachineManager.html">MachineManager</a> update coroutine. </p>
+
+<p>Reimplemented from <a class="el" href="classMachine.html#a3a602cc698eec55437a68314029e4667">Machine</a>.</p>
 
 </div>
 </div>
@@ -486,28 +487,6 @@ Private Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname"><a class="el" href="classStateManager.html">StateManager</a> Auger.stateManager</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a8cc4599f799b42723a2ec92421dcb3f3"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a8cc4599f799b42723a2ec92421dcb3f3">&#9670;&nbsp;</a></span>updateTick</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">float Auger.updateTick</td>
         </tr>
       </table>
   </td>

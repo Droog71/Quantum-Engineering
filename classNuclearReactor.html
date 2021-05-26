@@ -73,6 +73,7 @@ Inheritance diagram for NuclearReactor:</div>
  <div class="center">
   <img src="classNuclearReactor.png" usemap="#NuclearReactor_map" alt=""/>
   <map id="NuclearReactor_map" name="NuclearReactor_map">
+<area href="classMachine.html" alt="Machine" shape="rect" coords="0,56,102,80"/>
 </map>
  </div></div>
 <table class="memberdecls">
@@ -80,9 +81,9 @@ Inheritance diagram for NuclearReactor:</div>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a4dfd88548b1be0dd9b8824259c93264c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classNuclearReactor.html#a4dfd88548b1be0dd9b8824259c93264c">Start</a> ()</td></tr>
 <tr class="separator:a4dfd88548b1be0dd9b8824259c93264c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4e4c11c0946004065b2627f11467bbd2"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classNuclearReactor.html#a4e4c11c0946004065b2627f11467bbd2">Update</a> ()</td></tr>
-<tr class="memdesc:a4e4c11c0946004065b2627f11467bbd2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Called once per frame by unity engine.  <a href="#a4e4c11c0946004065b2627f11467bbd2">More...</a><br /></td></tr>
-<tr class="separator:a4e4c11c0946004065b2627f11467bbd2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7fb193c1554160410975848d3af7a537"><td class="memItemLeft" align="right" valign="top">override void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classNuclearReactor.html#a7fb193c1554160410975848d3af7a537">UpdateMachine</a> ()</td></tr>
+<tr class="memdesc:a7fb193c1554160410975848d3af7a537"><td class="mdescLeft">&#160;</td><td class="mdescRight">Called by <a class="el" href="classMachineManager.html">MachineManager</a> update coroutine.  <a href="#a7fb193c1554160410975848d3af7a537">More...</a><br /></td></tr>
+<tr class="separator:a7fb193c1554160410975848d3af7a537"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
@@ -103,10 +104,8 @@ Public Attributes</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
-<tr class="memitem:a4a7f192f9786cefb0116dbfd9a0f5af1"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classNuclearReactor.html#a4a7f192f9786cefb0116dbfd9a0f5af1">updateTick</a></td></tr>
-<tr class="separator:a4a7f192f9786cefb0116dbfd9a0f5af1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a562364029167150a6c813efb09f3ef3c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classStateManager.html">StateManager</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classNuclearReactor.html#a562364029167150a6c813efb09f3ef3c">stateMananger</a></td></tr>
-<tr class="separator:a562364029167150a6c813efb09f3ef3c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a297ffbb6e6025a921ddd1ebcb706baec"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classStateManager.html">StateManager</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classNuclearReactor.html#a297ffbb6e6025a921ddd1ebcb706baec">stateManager</a></td></tr>
+<tr class="separator:a297ffbb6e6025a921ddd1ebcb706baec"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Member Function Documentation</h2>
 <a id="a4dfd88548b1be0dd9b8824259c93264c"></a>
@@ -134,8 +133,8 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a4e4c11c0946004065b2627f11467bbd2"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a4e4c11c0946004065b2627f11467bbd2">&#9670;&nbsp;</a></span>Update()</h2>
+<a id="a7fb193c1554160410975848d3af7a537"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7fb193c1554160410975848d3af7a537">&#9670;&nbsp;</a></span>UpdateMachine()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -144,7 +143,7 @@ Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void NuclearReactor.Update </td>
+          <td class="memname">override void NuclearReactor.UpdateMachine </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -152,12 +151,14 @@ Private Attributes</h2></td></tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
 
-<p>Called once per frame by unity engine. </p>
+<p>Called by <a class="el" href="classMachineManager.html">MachineManager</a> update coroutine. </p>
+
+<p>Reimplemented from <a class="el" href="classMachine.html#a3a602cc698eec55437a68314029e4667">Machine</a>.</p>
 
 </div>
 </div>
@@ -232,8 +233,8 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a562364029167150a6c813efb09f3ef3c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a562364029167150a6c813efb09f3ef3c">&#9670;&nbsp;</a></span>stateMananger</h2>
+<a id="a297ffbb6e6025a921ddd1ebcb706baec"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a297ffbb6e6025a921ddd1ebcb706baec">&#9670;&nbsp;</a></span>stateManager</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -242,7 +243,7 @@ Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classStateManager.html">StateManager</a> NuclearReactor.stateMananger</td>
+          <td class="memname"><a class="el" href="classStateManager.html">StateManager</a> NuclearReactor.stateManager</td>
         </tr>
       </table>
   </td>
@@ -278,28 +279,6 @@ Private Attributes</h2></td></tr>
           <td class="memname">int NuclearReactor.turbineCount</td>
         </tr>
       </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a4a7f192f9786cefb0116dbfd9a0f5af1"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a4a7f192f9786cefb0116dbfd9a0f5af1">&#9670;&nbsp;</a></span>updateTick</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">float NuclearReactor.updateTick</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
 </div><div class="memdoc">
 
 </div>

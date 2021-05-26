@@ -78,6 +78,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a68a8f196a8ebdc06e033bad676990b82"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCombinedMeshManager.html#a68a8f196a8ebdc06e033bad676990b82">CombineBlocks</a> ()</td></tr>
 <tr class="memdesc:a68a8f196a8ebdc06e033bad676990b82"><td class="mdescLeft">&#160;</td><td class="mdescRight">Starts the coroutine to combine all blocks into combined meshes.  <a href="#a68a8f196a8ebdc06e033bad676990b82">More...</a><br /></td></tr>
 <tr class="separator:a68a8f196a8ebdc06e033bad676990b82"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8765de648e45d96fecb88df301179ddc"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCombinedMeshManager.html#a8765de648e45d96fecb88df301179ddc">SetMaterial</a> (GameObject obj, string blockType)</td></tr>
+<tr class="memdesc:a8765de648e45d96fecb88df301179ddc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets up the material for mod block meshes.  <a href="#a8765de648e45d96fecb88df301179ddc">More...</a><br /></td></tr>
+<tr class="separator:a8765de648e45d96fecb88df301179ddc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a471468029b7745b4a69f0e7120e0356b"><td class="memItemLeft" align="right" valign="top">IEnumerator&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCombinedMeshManager.html#a471468029b7745b4a69f0e7120e0356b">BlockCombineCoroutine</a> ()</td></tr>
 <tr class="memdesc:a471468029b7745b4a69f0e7120e0356b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates combined meshes from placed building blocks.  <a href="#a471468029b7745b4a69f0e7120e0356b">More...</a><br /></td></tr>
 <tr class="separator:a471468029b7745b4a69f0e7120e0356b"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -87,9 +90,9 @@ Public Member Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-methods"></a>
 Private Member Functions</h2></td></tr>
-<tr class="memitem:a23be9d6ea2a387111b881023d7d274c2"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCombinedMeshManager.html#a23be9d6ea2a387111b881023d7d274c2">SpawnDummy</a> (GameObject realObject, GameObject dummyObject, GameObject toSpawn, string name)</td></tr>
-<tr class="memdesc:a23be9d6ea2a387111b881023d7d274c2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Spawns a combined mesh identical to the one being rebuilt, so it is not invisible during the process.  <a href="#a23be9d6ea2a387111b881023d7d274c2">More...</a><br /></td></tr>
-<tr class="separator:a23be9d6ea2a387111b881023d7d274c2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac01d11d786f53f07e9cb1be0797c692b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCombinedMeshManager.html#ac01d11d786f53f07e9cb1be0797c692b">SpawnDummy</a> (GameObject realObject, GameObject toSpawn, string name)</td></tr>
+<tr class="memdesc:ac01d11d786f53f07e9cb1be0797c692b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Spawns a combined mesh identical to the one being rebuilt, so it is not invisible during the process.  <a href="#ac01d11d786f53f07e9cb1be0797c692b">More...</a><br /></td></tr>
+<tr class="separator:ac01d11d786f53f07e9cb1be0797c692b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a925aa889db91813bb9e2df56d8079665"><td class="memItemLeft" align="right" valign="top">IEnumerator&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCombinedMeshManager.html#a925aa889db91813bb9e2df56d8079665">BlockSeparationCoroutine</a> (Vector3 target, string type)</td></tr>
 <tr class="memdesc:a925aa889db91813bb9e2df56d8079665"><td class="mdescLeft">&#160;</td><td class="mdescRight">Separates combined meshes into blocks.  <a href="#a925aa889db91813bb9e2df56d8079665">More...</a><br /></td></tr>
 <tr class="separator:a925aa889db91813bb9e2df56d8079665"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -115,6 +118,8 @@ Private Attributes</h2></td></tr>
 <tr class="separator:ab4d4210a678efe608c9c2513896f7d94"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad9e6afac317696c38a1d7f362d92ad68"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCombinedMeshManager.html#ad9e6afac317696c38a1d7f362d92ad68">brickMeshRequired</a></td></tr>
 <tr class="separator:ad9e6afac317696c38a1d7f362d92ad68"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac226f10bd85df5ae2726ab8e5068eef3"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCombinedMeshManager.html#ac226f10bd85df5ae2726ab8e5068eef3">modMeshRequired</a></td></tr>
+<tr class="separator:ac226f10bd85df5ae2726ab8e5068eef3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="ac48605d475cf532c94c0693fa5b306b5"></a>
@@ -390,8 +395,46 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a23be9d6ea2a387111b881023d7d274c2"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a23be9d6ea2a387111b881023d7d274c2">&#9670;&nbsp;</a></span>SpawnDummy()</h2>
+<a id="a8765de648e45d96fecb88df301179ddc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8765de648e45d96fecb88df301179ddc">&#9670;&nbsp;</a></span>SetMaterial()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void CombinedMeshManager.SetMaterial </td>
+          <td>(</td>
+          <td class="paramtype">GameObject&#160;</td>
+          <td class="paramname"><em>obj</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">string&#160;</td>
+          <td class="paramname"><em>blockType</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Sets up the material for mod block meshes. </p>
+
+</div>
+</div>
+<a id="ac01d11d786f53f07e9cb1be0797c692b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac01d11d786f53f07e9cb1be0797c692b">&#9670;&nbsp;</a></span>SpawnDummy()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -404,12 +447,6 @@ Private Attributes</h2></td></tr>
           <td>(</td>
           <td class="paramtype">GameObject&#160;</td>
           <td class="paramname"><em>realObject</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">GameObject&#160;</td>
-          <td class="paramname"><em>dummyObject</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -518,6 +555,28 @@ Private Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">bool CombinedMeshManager.ironMeshRequired</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ac226f10bd85df5ae2726ab8e5068eef3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac226f10bd85df5ae2726ab8e5068eef3">&#9670;&nbsp;</a></span>modMeshRequired</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool CombinedMeshManager.modMeshRequired</td>
         </tr>
       </table>
   </td>

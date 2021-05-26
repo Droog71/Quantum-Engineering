@@ -74,6 +74,7 @@ Inheritance diagram for Turret:</div>
  <div class="center">
   <img src="classTurret.png" usemap="#Turret_map" alt=""/>
   <map id="Turret_map" name="Turret_map">
+<area href="classMachine.html" alt="Machine" shape="rect" coords="0,56,102,80"/>
 </map>
  </div></div>
 <table class="memberdecls">
@@ -82,9 +83,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:ad52176f06cef871ab568d51292bd0eb9"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classTurret.html#ad52176f06cef871ab568d51292bd0eb9">Start</a> ()</td></tr>
 <tr class="memdesc:ad52176f06cef871ab568d51292bd0eb9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Called by unity engine on start up to initialize variables.  <a href="#ad52176f06cef871ab568d51292bd0eb9">More...</a><br /></td></tr>
 <tr class="separator:ad52176f06cef871ab568d51292bd0eb9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a01d17573c79b3c92107a9a449bdc5cec"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classTurret.html#a01d17573c79b3c92107a9a449bdc5cec">Update</a> ()</td></tr>
-<tr class="memdesc:a01d17573c79b3c92107a9a449bdc5cec"><td class="mdescLeft">&#160;</td><td class="mdescRight">Called once per frame by unity engine.  <a href="#a01d17573c79b3c92107a9a449bdc5cec">More...</a><br /></td></tr>
-<tr class="separator:a01d17573c79b3c92107a9a449bdc5cec"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2fc7f53cd6aa286418c3f18031ddc47d"><td class="memItemLeft" align="right" valign="top">override void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classTurret.html#a2fc7f53cd6aa286418c3f18031ddc47d">UpdateMachine</a> ()</td></tr>
+<tr class="memdesc:a2fc7f53cd6aa286418c3f18031ddc47d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Called by <a class="el" href="classMachineManager.html">MachineManager</a> update coroutine.  <a href="#a2fc7f53cd6aa286418c3f18031ddc47d">More...</a><br /></td></tr>
+<tr class="separator:a2fc7f53cd6aa286418c3f18031ddc47d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
@@ -131,8 +132,6 @@ Private Member Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
-<tr class="memitem:aa16df970fe8a45c116793018737c75e4"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classTurret.html#aa16df970fe8a45c116793018737c75e4">updateTick</a></td></tr>
-<tr class="separator:aa16df970fe8a45c116793018737c75e4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4e48c20e4eb2dd2da6922110cc20d013"><td class="memItemLeft" align="right" valign="top">Quaternion&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classTurret.html#a4e48c20e4eb2dd2da6922110cc20d013">restingRotation</a></td></tr>
 <tr class="separator:a4e48c20e4eb2dd2da6922110cc20d013"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a211b9534e1d49c0b5298cf7cabfa3c32"><td class="memItemLeft" align="right" valign="top">GameObject []&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classTurret.html#a211b9534e1d49c0b5298cf7cabfa3c32">targets</a></td></tr>
@@ -236,8 +235,8 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a01d17573c79b3c92107a9a449bdc5cec"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a01d17573c79b3c92107a9a449bdc5cec">&#9670;&nbsp;</a></span>Update()</h2>
+<a id="a2fc7f53cd6aa286418c3f18031ddc47d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2fc7f53cd6aa286418c3f18031ddc47d">&#9670;&nbsp;</a></span>UpdateMachine()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -246,7 +245,7 @@ Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void Turret.Update </td>
+          <td class="memname">override void Turret.UpdateMachine </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -254,12 +253,14 @@ Private Attributes</h2></td></tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
 
-<p>Called once per frame by unity engine. </p>
+<p>Called by <a class="el" href="classMachineManager.html">MachineManager</a> update coroutine. </p>
+
+<p>Reimplemented from <a class="el" href="classMachine.html#a3a602cc698eec55437a68314029e4667">Machine</a>.</p>
 
 </div>
 </div>
@@ -674,28 +675,6 @@ Private Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">GameObject [] Turret.targets</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="aa16df970fe8a45c116793018737c75e4"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa16df970fe8a45c116793018737c75e4">&#9670;&nbsp;</a></span>updateTick</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">float Turret.updateTick</td>
         </tr>
       </table>
   </td>

@@ -74,11 +74,15 @@ Inheritance diagram for DarkMatterCollector:</div>
  <div class="center">
   <img src="classDarkMatterCollector.png" usemap="#DarkMatterCollector_map" alt=""/>
   <map id="DarkMatterCollector_map" name="DarkMatterCollector_map">
+<area href="classMachine.html" alt="Machine" shape="rect" coords="0,56,126,80"/>
 </map>
  </div></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
+<tr class="memitem:ae034346701a813962272643f86647e35"><td class="memItemLeft" align="right" valign="top">override void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classDarkMatterCollector.html#ae034346701a813962272643f86647e35">UpdateMachine</a> ()</td></tr>
+<tr class="memdesc:ae034346701a813962272643f86647e35"><td class="mdescLeft">&#160;</td><td class="mdescRight">Called by <a class="el" href="classMachineManager.html">MachineManager</a> update coroutine.  <a href="#ae034346701a813962272643f86647e35">More...</a><br /></td></tr>
+<tr class="separator:ae034346701a813962272643f86647e35"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2741ac4d49910f2224201fae99c0924c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classDarkMatterCollector.html#a2741ac4d49910f2224201fae99c0924c">OnDestroy</a> ()</td></tr>
 <tr class="memdesc:a2741ac4d49910f2224201fae99c0924c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Used to remove the connection line renderer when the block is destroyed.  <a href="#a2741ac4d49910f2224201fae99c0924c">More...</a><br /></td></tr>
 <tr class="separator:a2741ac4d49910f2224201fae99c0924c"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -127,9 +131,6 @@ Private Member Functions</h2></td></tr>
 <tr class="memitem:abfef81540fd901c5e25032a888a951b3"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classDarkMatterCollector.html#abfef81540fd901c5e25032a888a951b3">Start</a> ()</td></tr>
 <tr class="memdesc:abfef81540fd901c5e25032a888a951b3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Called by unity engine on start up to initialize variables.  <a href="#abfef81540fd901c5e25032a888a951b3">More...</a><br /></td></tr>
 <tr class="separator:abfef81540fd901c5e25032a888a951b3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac2f654c3c38eb3cd4877faed8c4c13fb"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classDarkMatterCollector.html#ac2f654c3c38eb3cd4877faed8c4c13fb">Update</a> ()</td></tr>
-<tr class="memdesc:ac2f654c3c38eb3cd4877faed8c4c13fb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Called once per frame by unity engine.  <a href="#ac2f654c3c38eb3cd4877faed8c4c13fb">More...</a><br /></td></tr>
-<tr class="separator:ac2f654c3c38eb3cd4877faed8c4c13fb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aec712ff8d011d171e569586969356fa0"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classDarkMatterCollector.html#aec712ff8d011d171e569586969356fa0">IsValidObject</a> (GameObject obj)</td></tr>
 <tr class="memdesc:aec712ff8d011d171e569586969356fa0"><td class="mdescLeft">&#160;</td><td class="mdescRight">The object exists, is active and is not a standard building block.  <a href="#aec712ff8d011d171e569586969356fa0">More...</a><br /></td></tr>
 <tr class="separator:aec712ff8d011d171e569586969356fa0"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -146,8 +147,6 @@ Private Attributes</h2></td></tr>
 <tr class="separator:a6574c45cd1c25af7e77c481eb4cd1086"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab93d569fedaaeafdef0c965b5b2602b7"><td class="memItemLeft" align="right" valign="top">LineRenderer&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classDarkMatterCollector.html#ab93d569fedaaeafdef0c965b5b2602b7">inputLine</a></td></tr>
 <tr class="separator:ab93d569fedaaeafdef0c965b5b2602b7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a02f688efe6982699076f4107892a4f0b"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classDarkMatterCollector.html#a02f688efe6982699076f4107892a4f0b">updateTick</a></td></tr>
-<tr class="separator:a02f688efe6982699076f4107892a4f0b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a40cfb3b367dbfee142c22f6fdf1abe09"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classDarkMatterCollector.html#a40cfb3b367dbfee142c22f6fdf1abe09">machineTimer</a></td></tr>
 <tr class="separator:a40cfb3b367dbfee142c22f6fdf1abe09"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa19513b4a55b80c371ba28e1cc3917c1"><td class="memItemLeft" align="right" valign="top">GameObject&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classDarkMatterCollector.html#aa19513b4a55b80c371ba28e1cc3917c1">builtObjects</a></td></tr>
@@ -265,8 +264,8 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="ac2f654c3c38eb3cd4877faed8c4c13fb"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac2f654c3c38eb3cd4877faed8c4c13fb">&#9670;&nbsp;</a></span>Update()</h2>
+<a id="ae034346701a813962272643f86647e35"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae034346701a813962272643f86647e35">&#9670;&nbsp;</a></span>UpdateMachine()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -275,7 +274,7 @@ Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void DarkMatterCollector.Update </td>
+          <td class="memname">override void DarkMatterCollector.UpdateMachine </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -283,12 +282,14 @@ Private Attributes</h2></td></tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">private</span></span>  </td>
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
 
-<p>Called once per frame by unity engine. </p>
+<p>Called by <a class="el" href="classMachineManager.html">MachineManager</a> update coroutine. </p>
+
+<p>Reimplemented from <a class="el" href="classMachine.html#a3a602cc698eec55437a68314029e4667">Machine</a>.</p>
 
 </div>
 </div>
@@ -671,28 +672,6 @@ Private Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname"><a class="el" href="classStateManager.html">StateManager</a> DarkMatterCollector.stateManager</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a02f688efe6982699076f4107892a4f0b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a02f688efe6982699076f4107892a4f0b">&#9670;&nbsp;</a></span>updateTick</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">float DarkMatterCollector.updateTick</td>
         </tr>
       </table>
   </td>

@@ -74,6 +74,7 @@ Inheritance diagram for DarkMatterConduit:</div>
  <div class="center">
   <img src="classDarkMatterConduit.png" usemap="#DarkMatterConduit_map" alt=""/>
   <map id="DarkMatterConduit_map" name="DarkMatterConduit_map">
+<area href="classMachine.html" alt="Machine" shape="rect" coords="0,56,118,80"/>
 </map>
  </div></div>
 <table class="memberdecls">
@@ -82,9 +83,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a3fac37126b3414ee13120c3e968d6664"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classDarkMatterConduit.html#a3fac37126b3414ee13120c3e968d6664">Start</a> ()</td></tr>
 <tr class="memdesc:a3fac37126b3414ee13120c3e968d6664"><td class="mdescLeft">&#160;</td><td class="mdescRight">Called by unity engine on start up to initialize variables.  <a href="#a3fac37126b3414ee13120c3e968d6664">More...</a><br /></td></tr>
 <tr class="separator:a3fac37126b3414ee13120c3e968d6664"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae09a2109cdcf2f56723ac10fad31b5ef"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classDarkMatterConduit.html#ae09a2109cdcf2f56723ac10fad31b5ef">Update</a> ()</td></tr>
-<tr class="memdesc:ae09a2109cdcf2f56723ac10fad31b5ef"><td class="mdescLeft">&#160;</td><td class="mdescRight">Called once per frame by unity engine.  <a href="#ae09a2109cdcf2f56723ac10fad31b5ef">More...</a><br /></td></tr>
-<tr class="separator:ae09a2109cdcf2f56723ac10fad31b5ef"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ade560dd9ee76587b3350646f488b8eda"><td class="memItemLeft" align="right" valign="top">override void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classDarkMatterConduit.html#ade560dd9ee76587b3350646f488b8eda">UpdateMachine</a> ()</td></tr>
+<tr class="memdesc:ade560dd9ee76587b3350646f488b8eda"><td class="mdescLeft">&#160;</td><td class="mdescRight">Called by <a class="el" href="classMachineManager.html">MachineManager</a> update coroutine.  <a href="#ade560dd9ee76587b3350646f488b8eda">More...</a><br /></td></tr>
+<tr class="separator:ade560dd9ee76587b3350646f488b8eda"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
@@ -128,18 +129,18 @@ Private Member Functions</h2></td></tr>
 <tr class="memitem:a4059851355aa35ee5cc1031b9f2c7ace"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classDarkMatterConduit.html#a4059851355aa35ee5cc1031b9f2c7ace">OnDestroy</a> ()</td></tr>
 <tr class="memdesc:a4059851355aa35ee5cc1031b9f2c7ace"><td class="mdescLeft">&#160;</td><td class="mdescRight">Used to remove conduit item from storage computer if connected to one.  <a href="#a4059851355aa35ee5cc1031b9f2c7ace">More...</a><br /></td></tr>
 <tr class="separator:a4059851355aa35ee5cc1031b9f2c7ace"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a63ae6e8c1a75679e19c6d73d49bd5b3f"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classDarkMatterConduit.html#a63ae6e8c1a75679e19c6d73d49bd5b3f">IsValidObject</a> (GameObject obj)</td></tr>
-<tr class="memdesc:a63ae6e8c1a75679e19c6d73d49bd5b3f"><td class="mdescLeft">&#160;</td><td class="mdescRight">The object exists, is active and is not a standard building block.  <a href="#a63ae6e8c1a75679e19c6d73d49bd5b3f">More...</a><br /></td></tr>
-<tr class="separator:a63ae6e8c1a75679e19c6d73d49bd5b3f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a519192e9dd0606a609fc7a2296df50a2"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classDarkMatterConduit.html#a519192e9dd0606a609fc7a2296df50a2">IsValidOutputObject</a> (GameObject obj)</td></tr>
 <tr class="memdesc:a519192e9dd0606a609fc7a2296df50a2"><td class="mdescLeft">&#160;</td><td class="mdescRight">The object is a potential output connection.  <a href="#a519192e9dd0606a609fc7a2296df50a2">More...</a><br /></td></tr>
 <tr class="separator:a519192e9dd0606a609fc7a2296df50a2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afb03a15a69b0484deac2a21b5b127ec4"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classDarkMatterConduit.html#afb03a15a69b0484deac2a21b5b127ec4">IsStorageContainer</a> (GameObject obj)</td></tr>
 <tr class="memdesc:afb03a15a69b0484deac2a21b5b127ec4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns true if the object is a storage container.  <a href="#afb03a15a69b0484deac2a21b5b127ec4">More...</a><br /></td></tr>
 <tr class="separator:afb03a15a69b0484deac2a21b5b127ec4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3baa723ffb8db76bf98f8b752ef0a6d7"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classDarkMatterConduit.html#a3baa723ffb8db76bf98f8b752ef0a6d7">FindConnections</a> ()</td></tr>
-<tr class="memdesc:a3baa723ffb8db76bf98f8b752ef0a6d7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Makes connections to collectors and other conduits.  <a href="#a3baa723ffb8db76bf98f8b752ef0a6d7">More...</a><br /></td></tr>
-<tr class="separator:a3baa723ffb8db76bf98f8b752ef0a6d7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3d8eb38773d7d0c3b0720fe8ba3539aa"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classDarkMatterConduit.html#a3d8eb38773d7d0c3b0720fe8ba3539aa">FindInputConnection</a> ()</td></tr>
+<tr class="memdesc:a3d8eb38773d7d0c3b0720fe8ba3539aa"><td class="mdescLeft">&#160;</td><td class="mdescRight">Finds an input connection.  <a href="#a3d8eb38773d7d0c3b0720fe8ba3539aa">More...</a><br /></td></tr>
+<tr class="separator:a3d8eb38773d7d0c3b0720fe8ba3539aa"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad4f4cb913e2b52d80dc6ddb3c0904934"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classDarkMatterConduit.html#ad4f4cb913e2b52d80dc6ddb3c0904934">FindOutputConnection</a> ()</td></tr>
+<tr class="memdesc:ad4f4cb913e2b52d80dc6ddb3c0904934"><td class="mdescLeft">&#160;</td><td class="mdescRight">Finds an output connection.  <a href="#ad4f4cb913e2b52d80dc6ddb3c0904934">More...</a><br /></td></tr>
+<tr class="separator:ad4f4cb913e2b52d80dc6ddb3c0904934"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a86e72b5c8e0083b22189f1bd5c2d1130"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classDarkMatterConduit.html#a86e72b5c8e0083b22189f1bd5c2d1130">HandleIO</a> ()</td></tr>
 <tr class="memdesc:a86e72b5c8e0083b22189f1bd5c2d1130"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets values from input object and calls HandleOutput.  <a href="#a86e72b5c8e0083b22189f1bd5c2d1130">More...</a><br /></td></tr>
 <tr class="separator:a86e72b5c8e0083b22189f1bd5c2d1130"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -169,8 +170,6 @@ Private Member Functions</h2></td></tr>
 Private Attributes</h2></td></tr>
 <tr class="memitem:a54cc5d327a49339ae945e680861bbaa0"><td class="memItemLeft" align="right" valign="top">LineRenderer&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classDarkMatterConduit.html#a54cc5d327a49339ae945e680861bbaa0">connectionLine</a></td></tr>
 <tr class="separator:a54cc5d327a49339ae945e680861bbaa0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac7560a2825b3ea2b1931969d1f29098e"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classDarkMatterConduit.html#ac7560a2825b3ea2b1931969d1f29098e">updateTick</a></td></tr>
-<tr class="separator:ac7560a2825b3ea2b1931969d1f29098e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aef07031cfd28ad1a35d86c11f41ac70b"><td class="memItemLeft" align="right" valign="top">GameObject&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classDarkMatterConduit.html#aef07031cfd28ad1a35d86c11f41ac70b">builtObjects</a></td></tr>
 <tr class="separator:aef07031cfd28ad1a35d86c11f41ac70b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1d0414be883dac8079bfa0b25c1283cb"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classStateManager.html">StateManager</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classDarkMatterConduit.html#a1d0414be883dac8079bfa0b25c1283cb">stateManager</a></td></tr>
@@ -262,8 +261,8 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a3baa723ffb8db76bf98f8b752ef0a6d7"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a3baa723ffb8db76bf98f8b752ef0a6d7">&#9670;&nbsp;</a></span>FindConnections()</h2>
+<a id="a3d8eb38773d7d0c3b0720fe8ba3539aa"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3d8eb38773d7d0c3b0720fe8ba3539aa">&#9670;&nbsp;</a></span>FindInputConnection()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -272,7 +271,7 @@ Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void DarkMatterConduit.FindConnections </td>
+          <td class="memname">void DarkMatterConduit.FindInputConnection </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -285,7 +284,34 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Makes connections to collectors and other conduits. </p>
+<p>Finds an input connection. </p>
+
+</div>
+</div>
+<a id="ad4f4cb913e2b52d80dc6ddb3c0904934"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad4f4cb913e2b52d80dc6ddb3c0904934">&#9670;&nbsp;</a></span>FindOutputConnection()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void DarkMatterConduit.FindOutputConnection </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Finds an output connection. </p>
 
 </div>
 </div>
@@ -368,34 +394,6 @@ Private Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Returns true if the object is a storage container. </p>
-
-</div>
-</div>
-<a id="a63ae6e8c1a75679e19c6d73d49bd5b3f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a63ae6e8c1a75679e19c6d73d49bd5b3f">&#9670;&nbsp;</a></span>IsValidObject()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool DarkMatterConduit.IsValidObject </td>
-          <td>(</td>
-          <td class="paramtype">GameObject&#160;</td>
-          <td class="paramname"><em>obj</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>The object exists, is active and is not a standard building block. </p>
 
 </div>
 </div>
@@ -562,8 +560,8 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="ae09a2109cdcf2f56723ac10fad31b5ef"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae09a2109cdcf2f56723ac10fad31b5ef">&#9670;&nbsp;</a></span>Update()</h2>
+<a id="ade560dd9ee76587b3350646f488b8eda"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ade560dd9ee76587b3350646f488b8eda">&#9670;&nbsp;</a></span>UpdateMachine()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -572,7 +570,7 @@ Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void DarkMatterConduit.Update </td>
+          <td class="memname">override void DarkMatterConduit.UpdateMachine </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -580,12 +578,14 @@ Private Attributes</h2></td></tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
 
-<p>Called once per frame by unity engine. </p>
+<p>Called by <a class="el" href="classMachineManager.html">MachineManager</a> update coroutine. </p>
+
+<p>Reimplemented from <a class="el" href="classMachine.html#a3a602cc698eec55437a68314029e4667">Machine</a>.</p>
 
 </div>
 </div>
@@ -934,28 +934,6 @@ Private Attributes</h2></td></tr>
           <td class="memname">GameObject DarkMatterConduit.storageComputerConduitItemObject</td>
         </tr>
       </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="ac7560a2825b3ea2b1931969d1f29098e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac7560a2825b3ea2b1931969d1f29098e">&#9670;&nbsp;</a></span>updateTick</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">float DarkMatterConduit.updateTick</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
 </div><div class="memdoc">
 
 </div>

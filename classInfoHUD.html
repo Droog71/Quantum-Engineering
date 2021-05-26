@@ -60,7 +60,6 @@ $(function() {
 <div class="header">
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
-<a href="#pri-methods">Private Member Functions</a> &#124;
 <a href="#pri-attribs">Private Attributes</a> &#124;
 <a href="classInfoHUD-members.html">List of all members</a>  </div>
   <div class="headertitle">
@@ -81,15 +80,15 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:aa0a357e583d933c7a52366ea0e79741c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInfoHUD.html#aa0a357e583d933c7a52366ea0e79741c">Start</a> ()</td></tr>
 <tr class="memdesc:aa0a357e583d933c7a52366ea0e79741c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Called by unity engine on start up to initialize variables.  <a href="#aa0a357e583d933c7a52366ea0e79741c">More...</a><br /></td></tr>
 <tr class="separator:aa0a357e583d933c7a52366ea0e79741c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aca29d7e0bbea30fb9794287ff0d0da77"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInfoHUD.html#aca29d7e0bbea30fb9794287ff0d0da77">OnGUI</a> ()</td></tr>
-<tr class="memdesc:aca29d7e0bbea30fb9794287ff0d0da77"><td class="mdescLeft">&#160;</td><td class="mdescRight">Called by unity engine for rendering and handling GUI events.  <a href="#aca29d7e0bbea30fb9794287ff0d0da77">More...</a><br /></td></tr>
-<tr class="separator:aca29d7e0bbea30fb9794287ff0d0da77"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-methods"></a>
-Private Member Functions</h2></td></tr>
 <tr class="memitem:a2a74a4dbc36f8f7a84db8622d85a07f7"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInfoHUD.html#a2a74a4dbc36f8f7a84db8622d85a07f7">ShouldDrawInfoHud</a> ()</td></tr>
 <tr class="memdesc:a2a74a4dbc36f8f7a84db8622d85a07f7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns true if the info hud should be drawn.  <a href="#a2a74a4dbc36f8f7a84db8622d85a07f7">More...</a><br /></td></tr>
 <tr class="separator:a2a74a4dbc36f8f7a84db8622d85a07f7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa8af0bd448421819c2cbcc9a76a26c29"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInfoHUD.html#aa8af0bd448421819c2cbcc9a76a26c29">GuiOpen</a> ()</td></tr>
+<tr class="memdesc:aa8af0bd448421819c2cbcc9a76a26c29"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns true if any GUI is open with the exception of machine GUIs.  <a href="#aa8af0bd448421819c2cbcc9a76a26c29">More...</a><br /></td></tr>
+<tr class="separator:aa8af0bd448421819c2cbcc9a76a26c29"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aca29d7e0bbea30fb9794287ff0d0da77"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInfoHUD.html#aca29d7e0bbea30fb9794287ff0d0da77">OnGUI</a> ()</td></tr>
+<tr class="memdesc:aca29d7e0bbea30fb9794287ff0d0da77"><td class="mdescLeft">&#160;</td><td class="mdescRight">Called by unity engine for rendering and handling GUI events.  <a href="#aca29d7e0bbea30fb9794287ff0d0da77">More...</a><br /></td></tr>
+<tr class="separator:aca29d7e0bbea30fb9794287ff0d0da77"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
@@ -111,6 +110,33 @@ Private Attributes</h2></td></tr>
 <tr class="separator:a322b3b5aec1b667356df19ab1a6458af"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Member Function Documentation</h2>
+<a id="aa8af0bd448421819c2cbcc9a76a26c29"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa8af0bd448421819c2cbcc9a76a26c29">&#9670;&nbsp;</a></span>GuiOpen()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool InfoHUD.GuiOpen </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns true if any GUI is open with the exception of machine GUIs. </p>
+
+</div>
+</div>
 <a id="aca29d7e0bbea30fb9794287ff0d0da77"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#aca29d7e0bbea30fb9794287ff0d0da77">&#9670;&nbsp;</a></span>OnGUI()</h2>
 
@@ -158,7 +184,7 @@ Private Attributes</h2></td></tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">private</span></span>  </td>
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">

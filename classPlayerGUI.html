@@ -113,6 +113,12 @@ Private Member Functions</h2></td></tr>
 <tr class="memitem:af9408e42f6e551144e59d3d3081a32dc"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classPlayerGUI.html#af9408e42f6e551144e59d3d3081a32dc">SchematicActive</a> ()</td></tr>
 <tr class="memdesc:af9408e42f6e551144e59d3d3081a32dc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns true if any schematic is being displayed.  <a href="#af9408e42f6e551144e59d3d3081a32dc">More...</a><br /></td></tr>
 <tr class="separator:af9408e42f6e551144e59d3d3081a32dc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8efd25c60237156795262674354919ba"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classPlayerGUI.html#a8efd25c60237156795262674354919ba">ShowCrosshair</a> ()</td></tr>
+<tr class="memdesc:a8efd25c60237156795262674354919ba"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns true if the crosshair should be displayed.  <a href="#a8efd25c60237156795262674354919ba">More...</a><br /></td></tr>
+<tr class="separator:a8efd25c60237156795262674354919ba"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:accd0b1677c963d39952ab7fcdc03e3e4"><td class="memItemLeft" align="right" valign="top">Vector2&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classPlayerGUI.html#accd0b1677c963d39952ab7fcdc03e3e4">GetStringSize</a> (string str)</td></tr>
+<tr class="memdesc:accd0b1677c963d39952ab7fcdc03e3e4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the size of in pixels of text so it can be positioned on the screen accordingly.  <a href="#accd0b1677c963d39952ab7fcdc03e3e4">More...</a><br /></td></tr>
+<tr class="separator:accd0b1677c963d39952ab7fcdc03e3e4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
@@ -130,6 +136,12 @@ Private Attributes</h2></td></tr>
 <tr class="separator:ac2b33acc9c97cd9fbad2f5d442745d3d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a56a4114efc58513fec5e7d9330efd9a9"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classGuiCoordinates.html">GuiCoordinates</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classPlayerGUI.html#a56a4114efc58513fec5e7d9330efd9a9">guiCoordinates</a></td></tr>
 <tr class="separator:a56a4114efc58513fec5e7d9330efd9a9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae60789091c56759c86029eecdfb1cd07"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classDescriptions.html">Descriptions</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classPlayerGUI.html#ae60789091c56759c86029eecdfb1cd07">descriptions</a></td></tr>
+<tr class="separator:ae60789091c56759c86029eecdfb1cd07"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a19330a17fccf57fbc0b2424c62cf8a66"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classPlayerGUI.html#a19330a17fccf57fbc0b2424c62cf8a66">controlsMenuOpen</a></td></tr>
+<tr class="separator:a19330a17fccf57fbc0b2424c62cf8a66"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a937192fefe9bf9399c6c62d86827b8e1"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classPlayerGUI.html#a937192fefe9bf9399c6c62d86827b8e1">graphicsMenuOpen</a></td></tr>
+<tr class="separator:a937192fefe9bf9399c6c62d86827b8e1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6e868d5d840a4023df6e4b0018f33155"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classPlayerGUI.html#a6e868d5d840a4023df6e4b0018f33155">schematic1</a></td></tr>
 <tr class="separator:a6e868d5d840a4023df6e4b0018f33155"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a796af41f6519e707e2c5e551043e5a13"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classPlayerGUI.html#a796af41f6519e707e2c5e551043e5a13">schematic2</a></td></tr>
@@ -170,6 +182,34 @@ Private Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Stops displaying schematics when the menu is closed. </p>
+
+</div>
+</div>
+<a id="accd0b1677c963d39952ab7fcdc03e3e4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#accd0b1677c963d39952ab7fcdc03e3e4">&#9670;&nbsp;</a></span>GetStringSize()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Vector2 PlayerGUI.GetStringSize </td>
+          <td>(</td>
+          <td class="paramtype">string&#160;</td>
+          <td class="paramname"><em>str</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Gets the size of in pixels of text so it can be positioned on the screen accordingly. </p>
 
 </div>
 </div>
@@ -309,6 +349,33 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="a8efd25c60237156795262674354919ba"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8efd25c60237156795262674354919ba">&#9670;&nbsp;</a></span>ShowCrosshair()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool PlayerGUI.ShowCrosshair </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns true if the crosshair should be displayed. </p>
+
+</div>
+</div>
 <a id="adbfa2d96d9a822ed0ab024a18e15af18"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#adbfa2d96d9a822ed0ab024a18e15af18">&#9670;&nbsp;</a></span>Start()</h2>
 
@@ -364,6 +431,50 @@ Private Attributes</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Data Documentation</h2>
+<a id="a19330a17fccf57fbc0b2424c62cf8a66"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a19330a17fccf57fbc0b2424c62cf8a66">&#9670;&nbsp;</a></span>controlsMenuOpen</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool PlayerGUI.controlsMenuOpen</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ae60789091c56759c86029eecdfb1cd07"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae60789091c56759c86029eecdfb1cd07">&#9670;&nbsp;</a></span>descriptions</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classDescriptions.html">Descriptions</a> PlayerGUI.descriptions</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="a1df99c36de23d30074b8bd84e947093e"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a1df99c36de23d30074b8bd84e947093e">&#9670;&nbsp;</a></span>gameManager</h2>
 
@@ -375,6 +486,28 @@ Private Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname"><a class="el" href="classGameManager.html">GameManager</a> PlayerGUI.gameManager</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a937192fefe9bf9399c6c62d86827b8e1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a937192fefe9bf9399c6c62d86827b8e1">&#9670;&nbsp;</a></span>graphicsMenuOpen</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool PlayerGUI.graphicsMenuOpen</td>
         </tr>
       </table>
   </td>

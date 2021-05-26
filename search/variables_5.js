@@ -1,8 +1,15 @@
 var searchData=
 [
+  ['facedata',['faceData',['../structObjImporter_1_1meshStruct.html#abfa0b4d09c7f02f3af2052e2a72a26d3',1,'ObjImporter::meshStruct']]],
+  ['faceuvs',['faceUVs',['../structObjImporter_1_1meshStruct.html#a1f4bac16b095640fd95d118ea0d0cd01',1,'ObjImporter::meshStruct']]],
+  ['faceverts',['faceVerts',['../structObjImporter_1_1meshStruct.html#accbe5c887c4977cdc1eb22152c7580f7',1,'ObjImporter::meshStruct']]],
   ['falldistance',['fallDistance',['../classPhysicsHandler.html#a7b3fca8a0db97d89ebf155b1caa27982',1,'PhysicsHandler']]],
   ['falling',['falling',['../classPhysicsHandler.html#a7ef9d33287501d3b5e07ae565dbde267',1,'PhysicsHandler']]],
   ['fallingstack',['fallingStack',['../classPhysicsHandler.html#aeb5e704caa59b13a1f92978481a43362',1,'PhysicsHandler']]],
+  ['filebasedprefsinitialized',['fileBasedPrefsInitialized',['../classGameManager.html#ae346b4f642fe3fabad2594859140b826',1,'GameManager']]],
+  ['filename',['fileName',['../structObjImporter_1_1meshStruct.html#ad705e47980837fe51e5a790ae1cac46e',1,'ObjImporter::meshStruct']]],
+  ['finalblockaddress',['finalBlockAddress',['../classStateManager.html#acb71d7a33e6f34fa85d62d2d0118604d',1,'StateManager']]],
+  ['finalmachineaddress',['finalMachineAddress',['../classStateManager.html#aa4bd6c5bfff28261b8e8fe07864c1eb0',1,'StateManager']]],
   ['findrailcartsinterval',['findRailCartsInterval',['../classDarkMatterConduit.html#a96b6c132882d176a2ef43eb040c56566',1,'DarkMatterConduit.findRailCartsInterval()'],['../classRetriever.html#ad91ac71c9b0106f3e83ee2187efa4a00',1,'Retriever.findRailCartsInterval()'],['../classUniversalConduit.html#aa333d5e80f716c5dbb5ba9dc4d91520d',1,'UniversalConduit.findRailCartsInterval()']]],
   ['finishedloading',['finishedLoading',['../classMainMenu.html#a0d88ce0f639729150a130903d5c88af0',1,'MainMenu']]],
   ['fire',['fire',['../classMeteor.html#ac3091fdf92f370901f137692719d1fed',1,'Meteor']]],

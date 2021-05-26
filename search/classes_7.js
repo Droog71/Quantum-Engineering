@@ -8,5 +8,6 @@ var searchData=
   ['inventorymanager',['InventoryManager',['../classInventoryManager.html',1,'']]],
   ['inventoryslot',['InventorySlot',['../classInventorySlot.html',1,'']]],
   ['iron',['Iron',['../classIron.html',1,'']]],
-  ['ironblock',['IronBlock',['../classIronBlock.html',1,'']]]
+  ['ironblock',['IronBlock',['../classIronBlock.html',1,'']]],
+  ['item',['Item',['../classItem.html',1,'']]]
 ];

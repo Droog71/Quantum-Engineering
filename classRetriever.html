@@ -74,14 +74,15 @@ Inheritance diagram for Retriever:</div>
  <div class="center">
   <img src="classRetriever.png" usemap="#Retriever_map" alt=""/>
   <map id="Retriever_map" name="Retriever_map">
+<area href="classMachine.html" alt="Machine" shape="rect" coords="0,56,102,80"/>
 </map>
  </div></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:aab6314e3539bcd276d117c5f80e439f2"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRetriever.html#aab6314e3539bcd276d117c5f80e439f2">Update</a> ()</td></tr>
-<tr class="memdesc:aab6314e3539bcd276d117c5f80e439f2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Called once per frame by unity engine.  <a href="#aab6314e3539bcd276d117c5f80e439f2">More...</a><br /></td></tr>
-<tr class="separator:aab6314e3539bcd276d117c5f80e439f2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a749fce87c651575e80bb200b46453408"><td class="memItemLeft" align="right" valign="top">override void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRetriever.html#a749fce87c651575e80bb200b46453408">UpdateMachine</a> ()</td></tr>
+<tr class="memdesc:a749fce87c651575e80bb200b46453408"><td class="mdescLeft">&#160;</td><td class="mdescRight">Called by <a class="el" href="classMachineManager.html">MachineManager</a> update coroutine.  <a href="#a749fce87c651575e80bb200b46453408">More...</a><br /></td></tr>
+<tr class="separator:a749fce87c651575e80bb200b46453408"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
@@ -149,18 +150,18 @@ Private Member Functions</h2></td></tr>
 <tr class="memitem:ab06446aeba5e4867ccfaa8d5b2bdc75e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRetriever.html#ab06446aeba5e4867ccfaa8d5b2bdc75e">UpdatePowerReceiver</a> ()</td></tr>
 <tr class="memdesc:ab06446aeba5e4867ccfaa8d5b2bdc75e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets power values from power receiver.  <a href="#ab06446aeba5e4867ccfaa8d5b2bdc75e">More...</a><br /></td></tr>
 <tr class="separator:ab06446aeba5e4867ccfaa8d5b2bdc75e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9287731e51d762c23405bdaa8f257f2f"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRetriever.html#a9287731e51d762c23405bdaa8f257f2f">IsValidObject</a> (GameObject obj)</td></tr>
-<tr class="memdesc:a9287731e51d762c23405bdaa8f257f2f"><td class="mdescLeft">&#160;</td><td class="mdescRight">The object exists, is active and is not a standard building block.  <a href="#a9287731e51d762c23405bdaa8f257f2f">More...</a><br /></td></tr>
-<tr class="separator:a9287731e51d762c23405bdaa8f257f2f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa1f8222feb3ff7e7689fa3c104b1fe9b"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRetriever.html#aa1f8222feb3ff7e7689fa3c104b1fe9b">IsValidOutputConduit</a> (GameObject obj)</td></tr>
 <tr class="memdesc:aa1f8222feb3ff7e7689fa3c104b1fe9b"><td class="mdescLeft">&#160;</td><td class="mdescRight">The object is a potential output connection.  <a href="#aa1f8222feb3ff7e7689fa3c104b1fe9b">More...</a><br /></td></tr>
 <tr class="separator:aa1f8222feb3ff7e7689fa3c104b1fe9b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2b4e5a4096bdf98023d1b92f6ba77f78"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRetriever.html#a2b4e5a4096bdf98023d1b92f6ba77f78">IsStorageContainer</a> (GameObject obj)</td></tr>
 <tr class="memdesc:a2b4e5a4096bdf98023d1b92f6ba77f78"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns true if the object in question is a storage container.  <a href="#a2b4e5a4096bdf98023d1b92f6ba77f78">More...</a><br /></td></tr>
 <tr class="separator:a2b4e5a4096bdf98023d1b92f6ba77f78"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac52e2ed984aa69cef236f372196a5a67"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRetriever.html#ac52e2ed984aa69cef236f372196a5a67">MakeConnections</a> ()</td></tr>
-<tr class="memdesc:ac52e2ed984aa69cef236f372196a5a67"><td class="mdescLeft">&#160;</td><td class="mdescRight">Connects the retriever to an inventory manager for input and a conduit for output.  <a href="#ac52e2ed984aa69cef236f372196a5a67">More...</a><br /></td></tr>
-<tr class="separator:ac52e2ed984aa69cef236f372196a5a67"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6dced0bc821e313eb7aaa66835406281"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRetriever.html#a6dced0bc821e313eb7aaa66835406281">FindInputObject</a> ()</td></tr>
+<tr class="memdesc:a6dced0bc821e313eb7aaa66835406281"><td class="mdescLeft">&#160;</td><td class="mdescRight">Connects the retriever to an inventory manager for input and a conduit for output.  <a href="#a6dced0bc821e313eb7aaa66835406281">More...</a><br /></td></tr>
+<tr class="separator:a6dced0bc821e313eb7aaa66835406281"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad83f2b5623b7b883626d3c5431b09360"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRetriever.html#ad83f2b5623b7b883626d3c5431b09360">FindOutputObject</a> ()</td></tr>
+<tr class="memdesc:ad83f2b5623b7b883626d3c5431b09360"><td class="mdescLeft">&#160;</td><td class="mdescRight">Connects the retriever to an inventory manager for input and a conduit for output.  <a href="#ad83f2b5623b7b883626d3c5431b09360">More...</a><br /></td></tr>
+<tr class="separator:ad83f2b5623b7b883626d3c5431b09360"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab8d9fcbad0210da4fbac2adaf766d24d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRetriever.html#ab8d9fcbad0210da4fbac2adaf766d24d">RetrieveItems</a> ()</td></tr>
 <tr class="memdesc:ab8d9fcbad0210da4fbac2adaf766d24d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves items.  <a href="#ab8d9fcbad0210da4fbac2adaf766d24d">More...</a><br /></td></tr>
 <tr class="separator:ab8d9fcbad0210da4fbac2adaf766d24d"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -180,8 +181,6 @@ Private Attributes</h2></td></tr>
 <tr class="separator:a4ec11b795a3123cf144cf129be897cbf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aedee8ab75e93f3b37c4615ccf747becc"><td class="memItemLeft" align="right" valign="top">LineRenderer&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRetriever.html#aedee8ab75e93f3b37c4615ccf747becc">inputLine</a></td></tr>
 <tr class="separator:aedee8ab75e93f3b37c4615ccf747becc"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abaccb4d65530c93f5e0f778f5e4f01bc"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRetriever.html#abaccb4d65530c93f5e0f778f5e4f01bc">updateTick</a></td></tr>
-<tr class="separator:abaccb4d65530c93f5e0f778f5e4f01bc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a86896561ee68dd790b45256e201bbdcb"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRetriever.html#a86896561ee68dd790b45256e201bbdcb">retrievingIce</a></td></tr>
 <tr class="separator:a86896561ee68dd790b45256e201bbdcb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac82790af9023f12796bc13724bf55c6f"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRetriever.html#ac82790af9023f12796bc13724bf55c6f">warmup</a></td></tr>
@@ -225,6 +224,60 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="a6dced0bc821e313eb7aaa66835406281"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6dced0bc821e313eb7aaa66835406281">&#9670;&nbsp;</a></span>FindInputObject()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Retriever.FindInputObject </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Connects the retriever to an inventory manager for input and a conduit for output. </p>
+
+</div>
+</div>
+<a id="ad83f2b5623b7b883626d3c5431b09360"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad83f2b5623b7b883626d3c5431b09360">&#9670;&nbsp;</a></span>FindOutputObject()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Retriever.FindOutputObject </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Connects the retriever to an inventory manager for input and a conduit for output. </p>
+
+</div>
+</div>
 <a id="a2b4e5a4096bdf98023d1b92f6ba77f78"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a2b4e5a4096bdf98023d1b92f6ba77f78">&#9670;&nbsp;</a></span>IsStorageContainer()</h2>
 
@@ -253,34 +306,6 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a9287731e51d762c23405bdaa8f257f2f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a9287731e51d762c23405bdaa8f257f2f">&#9670;&nbsp;</a></span>IsValidObject()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool Retriever.IsValidObject </td>
-          <td>(</td>
-          <td class="paramtype">GameObject&#160;</td>
-          <td class="paramname"><em>obj</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>The object exists, is active and is not a standard building block. </p>
-
-</div>
-</div>
 <a id="aa1f8222feb3ff7e7689fa3c104b1fe9b"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#aa1f8222feb3ff7e7689fa3c104b1fe9b">&#9670;&nbsp;</a></span>IsValidOutputConduit()</h2>
 
@@ -306,33 +331,6 @@ Private Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>The object is a potential output connection. </p>
-
-</div>
-</div>
-<a id="ac52e2ed984aa69cef236f372196a5a67"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac52e2ed984aa69cef236f372196a5a67">&#9670;&nbsp;</a></span>MakeConnections()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">void Retriever.MakeConnections </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Connects the retriever to an inventory manager for input and a conduit for output. </p>
 
 </div>
 </div>
@@ -471,8 +469,8 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="aab6314e3539bcd276d117c5f80e439f2"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aab6314e3539bcd276d117c5f80e439f2">&#9670;&nbsp;</a></span>Update()</h2>
+<a id="a749fce87c651575e80bb200b46453408"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a749fce87c651575e80bb200b46453408">&#9670;&nbsp;</a></span>UpdateMachine()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -481,7 +479,7 @@ Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void Retriever.Update </td>
+          <td class="memname">override void Retriever.UpdateMachine </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -489,12 +487,14 @@ Private Attributes</h2></td></tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
 
-<p>Called once per frame by unity engine. </p>
+<p>Called by <a class="el" href="classMachineManager.html">MachineManager</a> update coroutine. </p>
+
+<p>Reimplemented from <a class="el" href="classMachine.html#a3a602cc698eec55437a68314029e4667">Machine</a>.</p>
 
 </div>
 </div>
@@ -1062,28 +1062,6 @@ Private Attributes</h2></td></tr>
           <td class="memname">List&lt;string&gt; Retriever.type</td>
         </tr>
       </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="abaccb4d65530c93f5e0f778f5e4f01bc"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#abaccb4d65530c93f5e0f778f5e4f01bc">&#9670;&nbsp;</a></span>updateTick</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">float Retriever.updateTick</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
 </div><div class="memdoc">
 
 </div>

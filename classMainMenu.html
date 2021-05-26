@@ -82,6 +82,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:ad629921d8cbec1c1bf97e6bc6ad65902"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMainMenu.html#ad629921d8cbec1c1bf97e6bc6ad65902">Start</a> ()</td></tr>
 <tr class="memdesc:ad629921d8cbec1c1bf97e6bc6ad65902"><td class="mdescLeft">&#160;</td><td class="mdescRight">Called by unity engine on start up to initialize variables.  <a href="#ad629921d8cbec1c1bf97e6bc6ad65902">More...</a><br /></td></tr>
 <tr class="separator:ad629921d8cbec1c1bf97e6bc6ad65902"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0964c84fdf857a11558ca62a43aeed12"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMainMenu.html#a0964c84fdf857a11558ca62a43aeed12">Update</a> ()</td></tr>
+<tr class="memdesc:a0964c84fdf857a11558ca62a43aeed12"><td class="mdescLeft">&#160;</td><td class="mdescRight">Called once per frame by unity engine.  <a href="#a0964c84fdf857a11558ca62a43aeed12">More...</a><br /></td></tr>
+<tr class="separator:a0964c84fdf857a11558ca62a43aeed12"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9ff8036bc9a90fbb6db98266af3f30fe"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMainMenu.html#a9ff8036bc9a90fbb6db98266af3f30fe">OnGUI</a> ()</td></tr>
 <tr class="memdesc:a9ff8036bc9a90fbb6db98266af3f30fe"><td class="mdescLeft">&#160;</td><td class="mdescRight">Called by unity engine for rendering and handling GUI events.  <a href="#a9ff8036bc9a90fbb6db98266af3f30fe">More...</a><br /></td></tr>
 <tr class="separator:a9ff8036bc9a90fbb6db98266af3f30fe"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -96,8 +99,12 @@ Public Attributes</h2></td></tr>
 <tr class="separator:a3068c8e9b8533fdef311c24f744ed089"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9f3456119cc5c60fa415f7fcee8ca541"><td class="memItemLeft" align="right" valign="top">Texture2D&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMainMenu.html#a9f3456119cc5c60fa415f7fcee8ca541">titleTextureSD</a></td></tr>
 <tr class="separator:a9f3456119cc5c60fa415f7fcee8ca541"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abf73e61d38d297a7d3112ce0953fa813"><td class="memItemLeft" align="right" valign="top">Texture2D&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMainMenu.html#abf73e61d38d297a7d3112ce0953fa813">worlListBackground</a></td></tr>
-<tr class="separator:abf73e61d38d297a7d3112ce0953fa813"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8f8f2c73d7a48913c161b78bb667b504"><td class="memItemLeft" align="right" valign="top">Texture2D&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMainMenu.html#a8f8f2c73d7a48913c161b78bb667b504">guiBackground</a></td></tr>
+<tr class="separator:a8f8f2c73d7a48913c161b78bb667b504"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae631b8254ea3453fdda695db4efeecf6"><td class="memItemLeft" align="right" valign="top">Texture2D&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMainMenu.html#ae631b8254ea3453fdda695db4efeecf6">worldListBackground</a></td></tr>
+<tr class="separator:ae631b8254ea3453fdda695db4efeecf6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2c083c3367f43207439a99e6a2a6f497"><td class="memItemLeft" align="right" valign="top">Texture2D&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMainMenu.html#a2c083c3367f43207439a99e6a2a6f497">playerModel</a></td></tr>
+<tr class="separator:a2c083c3367f43207439a99e6a2a6f497"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a93f11721ff356d7b9f28f63be080e12c"><td class="memItemLeft" align="right" valign="top">GameObject&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMainMenu.html#a93f11721ff356d7b9f28f63be080e12c">videoPlayer</a></td></tr>
 <tr class="separator:a93f11721ff356d7b9f28f63be080e12c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aac44c916e8e69530fb6953db668d54d9"><td class="memItemLeft" align="right" valign="top">GameObject&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMainMenu.html#aac44c916e8e69530fb6953db668d54d9">menuSoundObject</a></td></tr>
@@ -111,11 +118,29 @@ Public Attributes</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-methods"></a>
 Private Member Functions</h2></td></tr>
+<tr class="memitem:aef63d2b9d835f1146a0c3caed7f3808d"><td class="memItemLeft" align="right" valign="top">string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMainMenu.html#aef63d2b9d835f1146a0c3caed7f3808d">GetLocalAddress</a> ()</td></tr>
+<tr class="memdesc:aef63d2b9d835f1146a0c3caed7f3808d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the local address for LAN games.  <a href="#aef63d2b9d835f1146a0c3caed7f3808d">More...</a><br /></td></tr>
+<tr class="separator:aef63d2b9d835f1146a0c3caed7f3808d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7821a116debbd6065b67c0695487b555"><td class="memItemLeft" align="right" valign="top">string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMainMenu.html#a7821a116debbd6065b67c0695487b555">GetExternalAddress</a> ()</td></tr>
+<tr class="memdesc:a7821a116debbd6065b67c0695487b555"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets external IP address for online games.  <a href="#a7821a116debbd6065b67c0695487b555">More...</a><br /></td></tr>
+<tr class="separator:a7821a116debbd6065b67c0695487b555"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a80eb92165e0f27cc0641bf6ac3287f87"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMainMenu.html#a80eb92165e0f27cc0641bf6ac3287f87">SetupDedicatedServer</a> (string[] commandLineOptions)</td></tr>
+<tr class="memdesc:a80eb92165e0f27cc0641bf6ac3287f87"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets up a dedicated server.  <a href="#a80eb92165e0f27cc0641bf6ac3287f87">More...</a><br /></td></tr>
+<tr class="separator:a80eb92165e0f27cc0641bf6ac3287f87"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a766bf42017bda7a692eaa19577e0eba3"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMainMenu.html#a766bf42017bda7a692eaa19577e0eba3">StartServer</a> ()</td></tr>
+<tr class="memdesc:a766bf42017bda7a692eaa19577e0eba3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Starts the external server program.  <a href="#a766bf42017bda7a692eaa19577e0eba3">More...</a><br /></td></tr>
+<tr class="separator:a766bf42017bda7a692eaa19577e0eba3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4b8170329513f59bbecc01f21ca1d91e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMainMenu.html#a4b8170329513f59bbecc01f21ca1d91e">DownloadWorld</a> ()</td></tr>
+<tr class="memdesc:a4b8170329513f59bbecc01f21ca1d91e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Downloads saved world from server.  <a href="#a4b8170329513f59bbecc01f21ca1d91e">More...</a><br /></td></tr>
+<tr class="separator:a4b8170329513f59bbecc01f21ca1d91e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad16da568ce30cb9ed45f7fa861099cd0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMainMenu.html#ad16da568ce30cb9ed45f7fa861099cd0">SelectWorld</a> ()</td></tr>
 <tr class="memdesc:ad16da568ce30cb9ed45f7fa861099cd0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Confirms world selection and loads the world.  <a href="#ad16da568ce30cb9ed45f7fa861099cd0">More...</a><br /></td></tr>
 <tr class="separator:ad16da568ce30cb9ed45f7fa861099cd0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aee9e3c5162edb6a04c58e9b14291003e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMainMenu.html#aee9e3c5162edb6a04c58e9b14291003e">PreStart</a> ()</td></tr>
+<tr class="memdesc:aee9e3c5162edb6a04c58e9b14291003e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Selects the scene and starts the game.  <a href="#aee9e3c5162edb6a04c58e9b14291003e">More...</a><br /></td></tr>
+<tr class="separator:aee9e3c5162edb6a04c58e9b14291003e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1502ccdb138468f54e19c3d730ca1983"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMainMenu.html#a1502ccdb138468f54e19c3d730ca1983">ChangeScene</a> ()</td></tr>
-<tr class="memdesc:a1502ccdb138468f54e19c3d730ca1983"><td class="mdescLeft">&#160;</td><td class="mdescRight">Called when Kepler-1625 is selected and the scene needs to be changed.  <a href="#a1502ccdb138468f54e19c3d730ca1983">More...</a><br /></td></tr>
+<tr class="memdesc:a1502ccdb138468f54e19c3d730ca1983"><td class="mdescLeft">&#160;</td><td class="mdescRight">Called when Kepler-1625 or Kepler-452b is selected and the scene needs to be changed.  <a href="#a1502ccdb138468f54e19c3d730ca1983">More...</a><br /></td></tr>
 <tr class="separator:a1502ccdb138468f54e19c3d730ca1983"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac2a74cb6e3c827e2a8db8c41141f0984"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMainMenu.html#ac2a74cb6e3c827e2a8db8c41141f0984">StartGame</a> ()</td></tr>
 <tr class="memdesc:ac2a74cb6e3c827e2a8db8c41141f0984"><td class="mdescLeft">&#160;</td><td class="mdescRight">Called when Gliese 876 is selected and the scene does not need to be changed.  <a href="#ac2a74cb6e3c827e2a8db8c41141f0984">More...</a><br /></td></tr>
@@ -123,13 +148,25 @@ Private Member Functions</h2></td></tr>
 <tr class="memitem:a7935202fcec07eb54d70ea6527e0117a"><td class="memItemLeft" align="right" valign="top">Vector2&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMainMenu.html#a7935202fcec07eb54d70ea6527e0117a">GetStringSize</a> (string str)</td></tr>
 <tr class="memdesc:a7935202fcec07eb54d70ea6527e0117a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the size of in pixels of text so it can be positioned on the screen accordingly.  <a href="#a7935202fcec07eb54d70ea6527e0117a">More...</a><br /></td></tr>
 <tr class="separator:a7935202fcec07eb54d70ea6527e0117a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9c5fed6152bdefb8bb6d59c029cecbe3"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMainMenu.html#a9c5fed6152bdefb8bb6d59c029cecbe3">GuiFree</a> ()</td></tr>
+<tr class="memdesc:a9c5fed6152bdefb8bb6d59c029cecbe3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns true if the GUI is available.  <a href="#a9c5fed6152bdefb8bb6d59c029cecbe3">More...</a><br /></td></tr>
+<tr class="separator:a9c5fed6152bdefb8bb6d59c029cecbe3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7cd01844811daea98e2b7951e27e751b"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMainMenu.html#a7cd01844811daea98e2b7951e27e751b">LoadingWorld</a> ()</td></tr>
+<tr class="memdesc:a7cd01844811daea98e2b7951e27e751b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns true if the world is currently being loaded.  <a href="#a7cd01844811daea98e2b7951e27e751b">More...</a><br /></td></tr>
 <tr class="separator:a7cd01844811daea98e2b7951e27e751b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
-<tr class="memitem:a8f470937a717199000851c231c37cc5c"><td class="memItemLeft" align="right" valign="top">string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMainMenu.html#a8f470937a717199000851c231c37cc5c">worldName</a> = &quot;Enter World Name&quot;</td></tr>
+<tr class="memitem:ab082793a677ad1e0f97436c2398f8bc0"><td class="memItemLeft" align="right" valign="top">Texture2D&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMainMenu.html#ab082793a677ad1e0f97436c2398f8bc0">colorSelectTexture</a></td></tr>
+<tr class="separator:ab082793a677ad1e0f97436c2398f8bc0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8f470937a717199000851c231c37cc5c"><td class="memItemLeft" align="right" valign="top">string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMainMenu.html#a8f470937a717199000851c231c37cc5c">worldName</a> = &quot;Enter world name.&quot;</td></tr>
 <tr class="separator:a8f470937a717199000851c231c37cc5c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a56684897ba46df96fb88413d52c8228d"><td class="memItemLeft" align="right" valign="top">string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMainMenu.html#a56684897ba46df96fb88413d52c8228d">username</a> = &quot;Enter user name.&quot;</td></tr>
+<tr class="separator:a56684897ba46df96fb88413d52c8228d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa63f83f585712f56f0a420107fbbe41b"><td class="memItemLeft" align="right" valign="top">string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMainMenu.html#aa63f83f585712f56f0a420107fbbe41b">serverURL</a> = &quot;Enter server IP address.&quot;</td></tr>
+<tr class="separator:aa63f83f585712f56f0a420107fbbe41b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9e36238cdc31eae85cd38067bd843270"><td class="memItemLeft" align="right" valign="top">string []&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMainMenu.html#a9e36238cdc31eae85cd38067bd843270">worlds</a></td></tr>
+<tr class="separator:a9e36238cdc31eae85cd38067bd843270"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0585fa2d5d56cb99e65deac896768874"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classStateManager.html">StateManager</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMainMenu.html#a0585fa2d5d56cb99e65deac896768874">stateManager</a></td></tr>
 <tr class="separator:a0585fa2d5d56cb99e65deac896768874"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad0dbda9b2a5e5eec34fb7493ce54b330"><td class="memItemLeft" align="right" valign="top">List&lt; string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMainMenu.html#ad0dbda9b2a5e5eec34fb7493ce54b330">worldList</a></td></tr>
@@ -138,6 +175,10 @@ Private Attributes</h2></td></tr>
 <tr class="separator:a7911567cf8a90e840acbe3bb307ad11c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af683f22e59eaec9e6e8a174bb9be34d2"><td class="memItemLeft" align="right" valign="top">AudioSource&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMainMenu.html#af683f22e59eaec9e6e8a174bb9be34d2">ambient</a></td></tr>
 <tr class="separator:af683f22e59eaec9e6e8a174bb9be34d2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab332b109165cd69557d7e7b693ea68e4"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMainMenu.html#ab332b109165cd69557d7e7b693ea68e4">scene</a></td></tr>
+<tr class="separator:ab332b109165cd69557d7e7b693ea68e4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a41f9ed78893077e91e53857380d6667c"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMainMenu.html#a41f9ed78893077e91e53857380d6667c">local</a></td></tr>
+<tr class="separator:a41f9ed78893077e91e53857380d6667c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abda3daacbe8f632c42b6afc1ad7cc790"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMainMenu.html#abda3daacbe8f632c42b6afc1ad7cc790">waitForVideoTimer</a></td></tr>
 <tr class="separator:abda3daacbe8f632c42b6afc1ad7cc790"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a58f165838df21c4a5dba6ca38bd8a6ec"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMainMenu.html#a58f165838df21c4a5dba6ca38bd8a6ec">notWideScreen</a></td></tr>
@@ -146,10 +187,32 @@ Private Attributes</h2></td></tr>
 <tr class="separator:ab6f8fe2e3c6792361c3e5aedf70a8c87"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac5f3d7359bf35d5771fd6a372443b5c2"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMainMenu.html#ac5f3d7359bf35d5771fd6a372443b5c2">playingVideo</a></td></tr>
 <tr class="separator:ac5f3d7359bf35d5771fd6a372443b5c2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae529c37871062ede3e5544f13f5a7b2f"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMainMenu.html#ae529c37871062ede3e5544f13f5a7b2f">hosting</a></td></tr>
+<tr class="separator:ae529c37871062ede3e5544f13f5a7b2f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aeca1d70c672f8f94df55094ddf2e38c7"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMainMenu.html#aeca1d70c672f8f94df55094ddf2e38c7">downloadPrompt</a></td></tr>
+<tr class="separator:aeca1d70c672f8f94df55094ddf2e38c7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a64652b0636dd2c37ea625f59d8c7bec1"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMainMenu.html#a64652b0636dd2c37ea625f59d8c7bec1">worldNamePrompt</a></td></tr>
+<tr class="separator:a64652b0636dd2c37ea625f59d8c7bec1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae99423c7ca0c24823826a66353dcc660"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMainMenu.html#ae99423c7ca0c24823826a66353dcc660">deletePrompt</a></td></tr>
 <tr class="separator:ae99423c7ca0c24823826a66353dcc660"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae6c0d532e9a82bc2f6aaaee8384b3f26"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMainMenu.html#ae6c0d532e9a82bc2f6aaaee8384b3f26">escapePrompt</a></td></tr>
 <tr class="separator:ae6c0d532e9a82bc2f6aaaee8384b3f26"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad2cc9a9c21e8aa667cf0ed974af0987a"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMainMenu.html#ad2cc9a9c21e8aa667cf0ed974af0987a">multiplayerPrompt</a></td></tr>
+<tr class="separator:ad2cc9a9c21e8aa667cf0ed974af0987a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aed75cac5b5e1b62ac51d06191450fae4"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMainMenu.html#aed75cac5b5e1b62ac51d06191450fae4">localPrompt</a></td></tr>
+<tr class="separator:aed75cac5b5e1b62ac51d06191450fae4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aad85a7d346fa63d688f40c16e4e2a45d"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMainMenu.html#aad85a7d346fa63d688f40c16e4e2a45d">playerColorPrompt</a></td></tr>
+<tr class="separator:aad85a7d346fa63d688f40c16e4e2a45d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af05516c974511567283f4d23eb189035"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMainMenu.html#af05516c974511567283f4d23eb189035">userNamePrompt</a></td></tr>
+<tr class="separator:af05516c974511567283f4d23eb189035"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3475537f48ec315c51138b53f0313a65"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMainMenu.html#a3475537f48ec315c51138b53f0313a65">networkAddressPrompt</a></td></tr>
+<tr class="separator:a3475537f48ec315c51138b53f0313a65"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab2cc69cd3804205de14a06e8b9f58845"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMainMenu.html#ab2cc69cd3804205de14a06e8b9f58845">playerRed</a> = 1.0f</td></tr>
+<tr class="separator:ab2cc69cd3804205de14a06e8b9f58845"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aabbbb9ed9ece34fc6143a31682618629"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMainMenu.html#aabbbb9ed9ece34fc6143a31682618629">playerGreen</a> = 1.0f</td></tr>
+<tr class="separator:aabbbb9ed9ece34fc6143a31682618629"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa3b4e3c45e44adbeead1dfd972ad5a1a"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMainMenu.html#aa3b4e3c45e44adbeead1dfd972ad5a1a">playerBlue</a> = 1.0f</td></tr>
+<tr class="separator:aa3b4e3c45e44adbeead1dfd972ad5a1a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Member Function Documentation</h2>
 <a id="a1502ccdb138468f54e19c3d730ca1983"></a>
@@ -175,7 +238,88 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Called when Kepler-1625 is selected and the scene needs to be changed. </p>
+<p>Called when Kepler-1625 or Kepler-452b is selected and the scene needs to be changed. </p>
+
+</div>
+</div>
+<a id="a4b8170329513f59bbecc01f21ca1d91e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4b8170329513f59bbecc01f21ca1d91e">&#9670;&nbsp;</a></span>DownloadWorld()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void MainMenu.DownloadWorld </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Downloads saved world from server. </p>
+
+</div>
+</div>
+<a id="a7821a116debbd6065b67c0695487b555"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7821a116debbd6065b67c0695487b555">&#9670;&nbsp;</a></span>GetExternalAddress()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">string MainMenu.GetExternalAddress </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Gets external IP address for online games. </p>
+
+</div>
+</div>
+<a id="aef63d2b9d835f1146a0c3caed7f3808d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aef63d2b9d835f1146a0c3caed7f3808d">&#9670;&nbsp;</a></span>GetLocalAddress()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">string MainMenu.GetLocalAddress </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Gets the local address for LAN games. </p>
 
 </div>
 </div>
@@ -207,6 +351,33 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="a9c5fed6152bdefb8bb6d59c029cecbe3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9c5fed6152bdefb8bb6d59c029cecbe3">&#9670;&nbsp;</a></span>GuiFree()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool MainMenu.GuiFree </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns true if the GUI is available. </p>
+
+</div>
+</div>
 <a id="a7cd01844811daea98e2b7951e27e751b"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a7cd01844811daea98e2b7951e27e751b">&#9670;&nbsp;</a></span>LoadingWorld()</h2>
 
@@ -229,6 +400,8 @@ Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>Returns true if the world is currently being loaded. </p>
 
 </div>
 </div>
@@ -259,6 +432,33 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="aee9e3c5162edb6a04c58e9b14291003e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aee9e3c5162edb6a04c58e9b14291003e">&#9670;&nbsp;</a></span>PreStart()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void MainMenu.PreStart </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Selects the scene and starts the game. </p>
+
+</div>
+</div>
 <a id="ad16da568ce30cb9ed45f7fa861099cd0"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ad16da568ce30cb9ed45f7fa861099cd0">&#9670;&nbsp;</a></span>SelectWorld()</h2>
 
@@ -283,6 +483,34 @@ Private Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Confirms world selection and loads the world. </p>
+
+</div>
+</div>
+<a id="a80eb92165e0f27cc0641bf6ac3287f87"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a80eb92165e0f27cc0641bf6ac3287f87">&#9670;&nbsp;</a></span>SetupDedicatedServer()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void MainMenu.SetupDedicatedServer </td>
+          <td>(</td>
+          <td class="paramtype">string []&#160;</td>
+          <td class="paramname"><em>commandLineOptions</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Sets up a dedicated server. </p>
 
 </div>
 </div>
@@ -337,6 +565,60 @@ Private Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Called when Gliese 876 is selected and the scene does not need to be changed. </p>
+
+</div>
+</div>
+<a id="a766bf42017bda7a692eaa19577e0eba3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a766bf42017bda7a692eaa19577e0eba3">&#9670;&nbsp;</a></span>StartServer()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void MainMenu.StartServer </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Starts the external server program. </p>
+
+</div>
+</div>
+<a id="a0964c84fdf857a11558ca62a43aeed12"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0964c84fdf857a11558ca62a43aeed12">&#9670;&nbsp;</a></span>Update()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void MainMenu.Update </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Called once per frame by unity engine. </p>
 
 </div>
 </div>
@@ -399,6 +681,28 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="ab082793a677ad1e0f97436c2398f8bc0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab082793a677ad1e0f97436c2398f8bc0">&#9670;&nbsp;</a></span>colorSelectTexture</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Texture2D MainMenu.colorSelectTexture</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="ae99423c7ca0c24823826a66353dcc660"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ae99423c7ca0c24823826a66353dcc660">&#9670;&nbsp;</a></span>deletePrompt</h2>
 
@@ -410,6 +714,28 @@ Private Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">bool MainMenu.deletePrompt</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aeca1d70c672f8f94df55094ddf2e38c7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aeca1d70c672f8f94df55094ddf2e38c7">&#9670;&nbsp;</a></span>downloadPrompt</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool MainMenu.downloadPrompt</td>
         </tr>
       </table>
   </td>
@@ -457,6 +783,86 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="a8f8f2c73d7a48913c161b78bb667b504"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8f8f2c73d7a48913c161b78bb667b504">&#9670;&nbsp;</a></span>guiBackground</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Texture2D MainMenu.guiBackground</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ae529c37871062ede3e5544f13f5a7b2f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae529c37871062ede3e5544f13f5a7b2f">&#9670;&nbsp;</a></span>hosting</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool MainMenu.hosting</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a41f9ed78893077e91e53857380d6667c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a41f9ed78893077e91e53857380d6667c">&#9670;&nbsp;</a></span>local</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool MainMenu.local</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aed75cac5b5e1b62ac51d06191450fae4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aed75cac5b5e1b62ac51d06191450fae4">&#9670;&nbsp;</a></span>localPrompt</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool MainMenu.localPrompt</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="aac44c916e8e69530fb6953db668d54d9"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#aac44c916e8e69530fb6953db668d54d9">&#9670;&nbsp;</a></span>menuSoundObject</h2>
 
@@ -467,6 +873,50 @@ Private Attributes</h2></td></tr>
           <td class="memname">GameObject MainMenu.menuSoundObject</td>
         </tr>
       </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ad2cc9a9c21e8aa667cf0ed974af0987a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad2cc9a9c21e8aa667cf0ed974af0987a">&#9670;&nbsp;</a></span>multiplayerPrompt</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool MainMenu.multiplayerPrompt</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a3475537f48ec315c51138b53f0313a65"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3475537f48ec315c51138b53f0313a65">&#9670;&nbsp;</a></span>networkAddressPrompt</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool MainMenu.networkAddressPrompt</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
 </div>
@@ -493,6 +943,108 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="aa3b4e3c45e44adbeead1dfd972ad5a1a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa3b4e3c45e44adbeead1dfd972ad5a1a">&#9670;&nbsp;</a></span>playerBlue</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float MainMenu.playerBlue = 1.0f</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aad85a7d346fa63d688f40c16e4e2a45d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aad85a7d346fa63d688f40c16e4e2a45d">&#9670;&nbsp;</a></span>playerColorPrompt</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool MainMenu.playerColorPrompt</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aabbbb9ed9ece34fc6143a31682618629"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aabbbb9ed9ece34fc6143a31682618629">&#9670;&nbsp;</a></span>playerGreen</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float MainMenu.playerGreen = 1.0f</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a2c083c3367f43207439a99e6a2a6f497"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2c083c3367f43207439a99e6a2a6f497">&#9670;&nbsp;</a></span>playerModel</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Texture2D MainMenu.playerModel</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ab2cc69cd3804205de14a06e8b9f58845"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab2cc69cd3804205de14a06e8b9f58845">&#9670;&nbsp;</a></span>playerRed</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float MainMenu.playerRed = 1.0f</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="ac5f3d7359bf35d5771fd6a372443b5c2"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ac5f3d7359bf35d5771fd6a372443b5c2">&#9670;&nbsp;</a></span>playingVideo</h2>
 
@@ -504,6 +1056,50 @@ Private Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">bool MainMenu.playingVideo</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ab332b109165cd69557d7e7b693ea68e4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab332b109165cd69557d7e7b693ea68e4">&#9670;&nbsp;</a></span>scene</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int MainMenu.scene</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aa63f83f585712f56f0a420107fbbe41b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa63f83f585712f56f0a420107fbbe41b">&#9670;&nbsp;</a></span>serverURL</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">string MainMenu.serverURL = &quot;Enter server IP address.&quot;</td>
         </tr>
       </table>
   </td>
@@ -593,6 +1189,50 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="a56684897ba46df96fb88413d52c8228d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a56684897ba46df96fb88413d52c8228d">&#9670;&nbsp;</a></span>username</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">string MainMenu.username = &quot;Enter user name.&quot;</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="af05516c974511567283f4d23eb189035"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af05516c974511567283f4d23eb189035">&#9670;&nbsp;</a></span>userNamePrompt</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool MainMenu.userNamePrompt</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="a93f11721ff356d7b9f28f63be080e12c"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a93f11721ff356d7b9f28f63be080e12c">&#9670;&nbsp;</a></span>videoPlayer</h2>
 
@@ -651,6 +1291,20 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="ae631b8254ea3453fdda695db4efeecf6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae631b8254ea3453fdda695db4efeecf6">&#9670;&nbsp;</a></span>worldListBackground</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Texture2D MainMenu.worldListBackground</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="a8f470937a717199000851c231c37cc5c"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a8f470937a717199000851c231c37cc5c">&#9670;&nbsp;</a></span>worldName</h2>
 
@@ -661,7 +1315,51 @@ Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">string MainMenu.worldName = &quot;Enter World Name&quot;</td>
+          <td class="memname">string MainMenu.worldName = &quot;Enter world name.&quot;</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a64652b0636dd2c37ea625f59d8c7bec1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a64652b0636dd2c37ea625f59d8c7bec1">&#9670;&nbsp;</a></span>worldNamePrompt</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool MainMenu.worldNamePrompt</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a9e36238cdc31eae85cd38067bd843270"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9e36238cdc31eae85cd38067bd843270">&#9670;&nbsp;</a></span>worlds</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">string [] MainMenu.worlds</td>
         </tr>
       </table>
   </td>
@@ -705,20 +1403,6 @@ Private Attributes</h2></td></tr>
 <span class="mlabels"><span class="mlabel">private</span></span>  </td>
   </tr>
 </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="abf73e61d38d297a7d3112ce0953fa813"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#abf73e61d38d297a7d3112ce0953fa813">&#9670;&nbsp;</a></span>worlListBackground</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">Texture2D MainMenu.worlListBackground</td>
-        </tr>
-      </table>
 </div><div class="memdoc">
 
 </div>

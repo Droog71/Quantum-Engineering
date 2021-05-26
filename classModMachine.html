@@ -60,6 +60,7 @@ $(function() {
 <div class="header">
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pub-static-methods">Static Public Member Functions</a> &#124;
 <a href="#pub-attribs">Public Attributes</a> &#124;
 <a href="#pri-attribs">Private Attributes</a> &#124;
 <a href="classModMachine-members.html">List of all members</a>  </div>
@@ -73,7 +74,8 @@ Inheritance diagram for ModMachine:</div>
  <div class="center">
   <img src="classModMachine.png" usemap="#ModMachine_map" alt=""/>
   <map id="ModMachine_map" name="ModMachine_map">
-<area href="classBasicMachine.html" alt="BasicMachine" shape="rect" coords="0,56,102,80"/>
+<area href="classBasicMachine.html" alt="BasicMachine" shape="rect" coords="0,112,102,136"/>
+<area href="classMachine.html" alt="Machine" shape="rect" coords="0,56,102,80"/>
 </map>
  </div></div>
 <table class="memberdecls">
@@ -82,26 +84,29 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:aac11ebb40754b4f5056743abbbf58034"><td class="memItemLeft" align="right" valign="top">new void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModMachine.html#aac11ebb40754b4f5056743abbbf58034">Start</a> ()</td></tr>
 <tr class="memdesc:aac11ebb40754b4f5056743abbbf58034"><td class="mdescLeft">&#160;</td><td class="mdescRight">Called by unity engine on start up to initialize variables.  <a href="#aac11ebb40754b4f5056743abbbf58034">More...</a><br /></td></tr>
 <tr class="separator:aac11ebb40754b4f5056743abbbf58034"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa198cbff062d86a94ed48edd16884fb7"><td class="memItemLeft" align="right" valign="top">new void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModMachine.html#aa198cbff062d86a94ed48edd16884fb7">Update</a> ()</td></tr>
-<tr class="memdesc:aa198cbff062d86a94ed48edd16884fb7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Called once per frame by unity engine.  <a href="#aa198cbff062d86a94ed48edd16884fb7">More...</a><br /></td></tr>
-<tr class="separator:aa198cbff062d86a94ed48edd16884fb7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5d816e54b1b427117edd6b3c60c85bbf"><td class="memItemLeft" align="right" valign="top">override void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModMachine.html#a5d816e54b1b427117edd6b3c60c85bbf">UpdateMachine</a> ()</td></tr>
+<tr class="memdesc:a5d816e54b1b427117edd6b3c60c85bbf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Called by <a class="el" href="classMachineManager.html">MachineManager</a> update coroutine.  <a href="#a5d816e54b1b427117edd6b3c60c85bbf">More...</a><br /></td></tr>
+<tr class="separator:a5d816e54b1b427117edd6b3c60c85bbf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_classBasicMachine"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classBasicMachine')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classBasicMachine.html">BasicMachine</a></td></tr>
 <tr class="memitem:a25a93e26866424d85546fa4e1edd1e85 inherit pub_methods_classBasicMachine"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBasicMachine.html#a25a93e26866424d85546fa4e1edd1e85">Start</a> ()</td></tr>
 <tr class="memdesc:a25a93e26866424d85546fa4e1edd1e85 inherit pub_methods_classBasicMachine"><td class="mdescLeft">&#160;</td><td class="mdescRight">Called by unity engine on start up to initialize variables.  <a href="classBasicMachine.html#a25a93e26866424d85546fa4e1edd1e85">More...</a><br /></td></tr>
 <tr class="separator:a25a93e26866424d85546fa4e1edd1e85 inherit pub_methods_classBasicMachine"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a168950cd562f2daff9a1ee1c89c32d19 inherit pub_methods_classBasicMachine"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBasicMachine.html#a168950cd562f2daff9a1ee1c89c32d19">Update</a> ()</td></tr>
-<tr class="memdesc:a168950cd562f2daff9a1ee1c89c32d19 inherit pub_methods_classBasicMachine"><td class="mdescLeft">&#160;</td><td class="mdescRight">Called once per frame by unity engine.  <a href="classBasicMachine.html#a168950cd562f2daff9a1ee1c89c32d19">More...</a><br /></td></tr>
-<tr class="separator:a168950cd562f2daff9a1ee1c89c32d19 inherit pub_methods_classBasicMachine"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
+Static Public Member Functions</h2></td></tr>
+<tr class="memitem:a729c7af6e965ceeb1c09675156abe336"><td class="memItemLeft" align="right" valign="top">static IEnumerator&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModMachine.html#a729c7af6e965ceeb1c09675156abe336">GetAudioFile</a> (<a class="el" href="classModMachine.html">ModMachine</a> machine, AudioSource source, string <a class="el" href="classModMachine.html#a4df97ef71c47c5af2bb902536982d438">machineName</a>)</td></tr>
+<tr class="memdesc:a729c7af6e965ceeb1c09675156abe336"><td class="mdescLeft">&#160;</td><td class="mdescRight">Loads sound files.  <a href="#a729c7af6e965ceeb1c09675156abe336">More...</a><br /></td></tr>
+<tr class="separator:a729c7af6e965ceeb1c09675156abe336"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
 <tr class="memitem:a4df97ef71c47c5af2bb902536982d438"><td class="memItemLeft" align="right" valign="top">string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModMachine.html#a4df97ef71c47c5af2bb902536982d438">machineName</a></td></tr>
 <tr class="separator:a4df97ef71c47c5af2bb902536982d438"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3ea96721c10ca29c92d1e1ae1f486f07"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModMachine.html#a3ea96721c10ca29c92d1e1ae1f486f07">init</a></td></tr>
+<tr class="separator:a3ea96721c10ca29c92d1e1ae1f486f07"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_attribs_classBasicMachine"><td colspan="2" onclick="javascript:toggleInherit('pub_attribs_classBasicMachine')"><img src="closed.png" alt="-"/>&#160;Public Attributes inherited from <a class="el" href="classBasicMachine.html">BasicMachine</a></td></tr>
 <tr class="memitem:a0db98b80b672970a128187b7a3d6638a inherit pub_attribs_classBasicMachine"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBasicMachine.html#a0db98b80b672970a128187b7a3d6638a">amount</a></td></tr>
 <tr class="separator:a0db98b80b672970a128187b7a3d6638a inherit pub_attribs_classBasicMachine"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1e711ebe7436051e478e4b85afaa8e48 inherit pub_attribs_classBasicMachine"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBasicMachine.html#a1e711ebe7436051e478e4b85afaa8e48">updateTick</a></td></tr>
-<tr class="separator:a1e711ebe7436051e478e4b85afaa8e48 inherit pub_attribs_classBasicMachine"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5d49d231188e2e538b7fb9195ecc536d inherit pub_attribs_classBasicMachine"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBasicMachine.html#a5d49d231188e2e538b7fb9195ecc536d">address</a></td></tr>
 <tr class="separator:a5d49d231188e2e538b7fb9195ecc536d inherit pub_attribs_classBasicMachine"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9d05d4ee45070268ad303a498248d738 inherit pub_attribs_classBasicMachine"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBasicMachine.html#a9d05d4ee45070268ad303a498248d738">speed</a> = 1</td></tr>
@@ -148,13 +153,65 @@ Public Attributes</h2></td></tr>
 <tr class="separator:ac0d681d5098458fe7a57535b66a61719 inherit pub_attribs_classBasicMachine"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a781238482f32ff1263f25c5881fa6b7c inherit pub_attribs_classBasicMachine"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classStateManager.html">StateManager</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBasicMachine.html#a781238482f32ff1263f25c5881fa6b7c">stateManager</a></td></tr>
 <tr class="separator:a781238482f32ff1263f25c5881fa6b7c inherit pub_attribs_classBasicMachine"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae49ca0988078de4846d45844e3cadb6c inherit pub_attribs_classBasicMachine"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBasicMachine.html#ae49ca0988078de4846d45844e3cadb6c">hasCustomSound</a></td></tr>
+<tr class="separator:ae49ca0988078de4846d45844e3cadb6c inherit pub_attribs_classBasicMachine"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
 <tr class="memitem:ab923cba25c258ed26e5b687eaadfaa50"><td class="memItemLeft" align="right" valign="top">Material&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModMachine.html#ab923cba25c258ed26e5b687eaadfaa50">material</a></td></tr>
 <tr class="separator:ab923cba25c258ed26e5b687eaadfaa50"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae4f5001d9d08eb255f6777fb51418cb5"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classPlayerController.html">PlayerController</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModMachine.html#ae4f5001d9d08eb255f6777fb51418cb5">playerController</a></td></tr>
+<tr class="separator:ae4f5001d9d08eb255f6777fb51418cb5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af300298ba1d923de4b90cb9bc58161bf"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classGameManager.html">GameManager</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModMachine.html#af300298ba1d923de4b90cb9bc58161bf">gameManager</a></td></tr>
+<tr class="separator:af300298ba1d923de4b90cb9bc58161bf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a86f6f546c2f2ff2ce722f7eb331d45c5"><td class="memItemLeft" align="right" valign="top">Coroutine&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModMachine.html#a86f6f546c2f2ff2ce722f7eb331d45c5">modSoundCoroutine</a></td></tr>
+<tr class="separator:a86f6f546c2f2ff2ce722f7eb331d45c5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Member Function Documentation</h2>
+<a id="a729c7af6e965ceeb1c09675156abe336"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a729c7af6e965ceeb1c09675156abe336">&#9670;&nbsp;</a></span>GetAudioFile()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static IEnumerator ModMachine.GetAudioFile </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classModMachine.html">ModMachine</a>&#160;</td>
+          <td class="paramname"><em>machine</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">AudioSource&#160;</td>
+          <td class="paramname"><em>source</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">string&#160;</td>
+          <td class="paramname"><em>machineName</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Loads sound files. </p>
+
+</div>
+</div>
 <a id="aac11ebb40754b4f5056743abbbf58034"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#aac11ebb40754b4f5056743abbbf58034">&#9670;&nbsp;</a></span>Start()</h2>
 
@@ -182,8 +239,8 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="aa198cbff062d86a94ed48edd16884fb7"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa198cbff062d86a94ed48edd16884fb7">&#9670;&nbsp;</a></span>Update()</h2>
+<a id="a5d816e54b1b427117edd6b3c60c85bbf"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5d816e54b1b427117edd6b3c60c85bbf">&#9670;&nbsp;</a></span>UpdateMachine()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -192,7 +249,7 @@ Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">new void ModMachine.Update </td>
+          <td class="memname">override void ModMachine.UpdateMachine </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -200,16 +257,54 @@ Private Attributes</h2></td></tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
 
-<p>Called once per frame by unity engine. </p>
+<p>Called by <a class="el" href="classMachineManager.html">MachineManager</a> update coroutine. </p>
+
+<p>Reimplemented from <a class="el" href="classBasicMachine.html#a435265636e3d6837f5008c0676a868fe">BasicMachine</a>.</p>
 
 </div>
 </div>
 <h2 class="groupheader">Member Data Documentation</h2>
+<a id="af300298ba1d923de4b90cb9bc58161bf"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af300298ba1d923de4b90cb9bc58161bf">&#9670;&nbsp;</a></span>gameManager</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classGameManager.html">GameManager</a> ModMachine.gameManager</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a3ea96721c10ca29c92d1e1ae1f486f07"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3ea96721c10ca29c92d1e1ae1f486f07">&#9670;&nbsp;</a></span>init</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool ModMachine.init</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="a4df97ef71c47c5af2bb902536982d438"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a4df97ef71c47c5af2bb902536982d438">&#9670;&nbsp;</a></span>machineName</h2>
 
@@ -235,6 +330,50 @@ Private Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">Material ModMachine.material</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a86f6f546c2f2ff2ce722f7eb331d45c5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a86f6f546c2f2ff2ce722f7eb331d45c5">&#9670;&nbsp;</a></span>modSoundCoroutine</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Coroutine ModMachine.modSoundCoroutine</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ae4f5001d9d08eb255f6777fb51418cb5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae4f5001d9d08eb255f6777fb51418cb5">&#9670;&nbsp;</a></span>playerController</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classPlayerController.html">PlayerController</a> ModMachine.playerController</td>
         </tr>
       </table>
   </td>

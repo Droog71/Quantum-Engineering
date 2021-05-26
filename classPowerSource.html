@@ -74,6 +74,7 @@ Inheritance diagram for PowerSource:</div>
  <div class="center">
   <img src="classPowerSource.png" usemap="#PowerSource_map" alt=""/>
   <map id="PowerSource_map" name="PowerSource_map">
+<area href="classMachine.html" alt="Machine" shape="rect" coords="0,56,102,80"/>
 </map>
  </div></div>
 <table class="memberdecls">
@@ -82,9 +83,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:afdd72281b3e1f9089eba1fdef2b81e0b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classPowerSource.html#afdd72281b3e1f9089eba1fdef2b81e0b">Start</a> ()</td></tr>
 <tr class="memdesc:afdd72281b3e1f9089eba1fdef2b81e0b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Called by unity engine on start up to initialize variables.  <a href="#afdd72281b3e1f9089eba1fdef2b81e0b">More...</a><br /></td></tr>
 <tr class="separator:afdd72281b3e1f9089eba1fdef2b81e0b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3b4f741ad504ec26df60a34d43967480"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classPowerSource.html#a3b4f741ad504ec26df60a34d43967480">Update</a> ()</td></tr>
-<tr class="memdesc:a3b4f741ad504ec26df60a34d43967480"><td class="mdescLeft">&#160;</td><td class="mdescRight">Called once per frame by unity engine.  <a href="#a3b4f741ad504ec26df60a34d43967480">More...</a><br /></td></tr>
-<tr class="separator:a3b4f741ad504ec26df60a34d43967480"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a51228c5fe6efef8019c9d0160e08575d"><td class="memItemLeft" align="right" valign="top">override void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classPowerSource.html#a51228c5fe6efef8019c9d0160e08575d">UpdateMachine</a> ()</td></tr>
+<tr class="memdesc:a51228c5fe6efef8019c9d0160e08575d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Called by <a class="el" href="classMachineManager.html">MachineManager</a> update coroutine.  <a href="#a51228c5fe6efef8019c9d0160e08575d">More...</a><br /></td></tr>
+<tr class="separator:a51228c5fe6efef8019c9d0160e08575d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac55da6580f7bf30c4f332aa3be912b1b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classPowerSource.html#ac55da6580f7bf30c4f332aa3be912b1b">OnDestroy</a> ()</td></tr>
 <tr class="memdesc:ac55da6580f7bf30c4f332aa3be912b1b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Used to notify power receivers when the power source is destroyed.  <a href="#ac55da6580f7bf30c4f332aa3be912b1b">More...</a><br /></td></tr>
 <tr class="separator:ac55da6580f7bf30c4f332aa3be912b1b"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -132,12 +133,9 @@ Public Attributes</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-methods"></a>
 Private Member Functions</h2></td></tr>
-<tr class="memitem:a469546c078ba395d7ea0d2bea7dc4559"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classPowerSource.html#a469546c078ba395d7ea0d2bea7dc4559">IsValidObject</a> (GameObject obj)</td></tr>
-<tr class="memdesc:a469546c078ba395d7ea0d2bea7dc4559"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns true if the object exists, is active and is not a standard building block.  <a href="#a469546c078ba395d7ea0d2bea7dc4559">More...</a><br /></td></tr>
-<tr class="separator:a469546c078ba395d7ea0d2bea7dc4559"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af060697646fdd89c8931bcf8656e7095"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classPowerSource.html#af060697646fdd89c8931bcf8656e7095">ConnectToOutput</a> (GameObject obj)</td></tr>
-<tr class="memdesc:af060697646fdd89c8931bcf8656e7095"><td class="mdescLeft">&#160;</td><td class="mdescRight">Connects the power source to a power receiver.  <a href="#af060697646fdd89c8931bcf8656e7095">More...</a><br /></td></tr>
-<tr class="separator:af060697646fdd89c8931bcf8656e7095"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae54370e1ea523ab11e9467784155af4d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classPowerSource.html#ae54370e1ea523ab11e9467784155af4d">AttemptConnection</a> (GameObject obj)</td></tr>
+<tr class="memdesc:ae54370e1ea523ab11e9467784155af4d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Connects the power source to a power receiver.  <a href="#ae54370e1ea523ab11e9467784155af4d">More...</a><br /></td></tr>
+<tr class="separator:ae54370e1ea523ab11e9467784155af4d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4cfceda8717118e16353b8ef236f6536"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classPowerSource.html#a4cfceda8717118e16353b8ef236f6536">DistributePower</a> ()</td></tr>
 <tr class="memdesc:a4cfceda8717118e16353b8ef236f6536"><td class="mdescLeft">&#160;</td><td class="mdescRight">Determines the type of power source and calls the appropriate power distribution method.  <a href="#a4cfceda8717118e16353b8ef236f6536">More...</a><br /></td></tr>
 <tr class="separator:a4cfceda8717118e16353b8ef236f6536"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -155,8 +153,6 @@ Private Member Functions</h2></td></tr>
 Private Attributes</h2></td></tr>
 <tr class="memitem:a8e89d6d8a51cb3296b996017fffe439b"><td class="memItemLeft" align="right" valign="top">LineRenderer&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classPowerSource.html#a8e89d6d8a51cb3296b996017fffe439b">connectionLine</a></td></tr>
 <tr class="separator:a8e89d6d8a51cb3296b996017fffe439b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8d185722b06bc2dff0d1fcc86ebf60ea"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classPowerSource.html#a8d185722b06bc2dff0d1fcc86ebf60ea">updateTick</a></td></tr>
-<tr class="separator:a8d185722b06bc2dff0d1fcc86ebf60ea"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a23f6aa647cc37ed1d7110a2dbc610b80"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classPowerSource.html#a23f6aa647cc37ed1d7110a2dbc610b80">fuelConsumptionTimer</a></td></tr>
 <tr class="separator:a23f6aa647cc37ed1d7110a2dbc610b80"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a65a8f33aee525605e79b0cb273779c90"><td class="memItemLeft" align="right" valign="top">GameObject&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classPowerSource.html#a65a8f33aee525605e79b0cb273779c90">builtObjects</a></td></tr>
@@ -165,8 +161,8 @@ Private Attributes</h2></td></tr>
 <tr class="separator:aefc4711b294b26198143797640ca3a9e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="af060697646fdd89c8931bcf8656e7095"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af060697646fdd89c8931bcf8656e7095">&#9670;&nbsp;</a></span>ConnectToOutput()</h2>
+<a id="ae54370e1ea523ab11e9467784155af4d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae54370e1ea523ab11e9467784155af4d">&#9670;&nbsp;</a></span>AttemptConnection()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -175,7 +171,7 @@ Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void PowerSource.ConnectToOutput </td>
+          <td class="memname">void PowerSource.AttemptConnection </td>
           <td>(</td>
           <td class="paramtype">GameObject&#160;</td>
           <td class="paramname"><em>obj</em></td><td>)</td>
@@ -301,34 +297,6 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a469546c078ba395d7ea0d2bea7dc4559"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a469546c078ba395d7ea0d2bea7dc4559">&#9670;&nbsp;</a></span>IsValidObject()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool PowerSource.IsValidObject </td>
-          <td>(</td>
-          <td class="paramtype">GameObject&#160;</td>
-          <td class="paramname"><em>obj</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Returns true if the object exists, is active and is not a standard building block. </p>
-
-</div>
-</div>
 <a id="ac55da6580f7bf30c4f332aa3be912b1b"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ac55da6580f7bf30c4f332aa3be912b1b">&#9670;&nbsp;</a></span>OnDestroy()</h2>
 
@@ -383,8 +351,8 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a3b4f741ad504ec26df60a34d43967480"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a3b4f741ad504ec26df60a34d43967480">&#9670;&nbsp;</a></span>Update()</h2>
+<a id="a51228c5fe6efef8019c9d0160e08575d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a51228c5fe6efef8019c9d0160e08575d">&#9670;&nbsp;</a></span>UpdateMachine()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -393,7 +361,7 @@ Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void PowerSource.Update </td>
+          <td class="memname">override void PowerSource.UpdateMachine </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -401,12 +369,14 @@ Private Attributes</h2></td></tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
 
-<p>Called once per frame by unity engine. </p>
+<p>Called by <a class="el" href="classMachineManager.html">MachineManager</a> update coroutine. </p>
+
+<p>Reimplemented from <a class="el" href="classMachine.html#a3a602cc698eec55437a68314029e4667">Machine</a>.</p>
 
 </div>
 </div>
@@ -761,28 +731,6 @@ Private Attributes</h2></td></tr>
           <td class="memname">string PowerSource.type</td>
         </tr>
       </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a8d185722b06bc2dff0d1fcc86ebf60ea"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a8d185722b06bc2dff0d1fcc86ebf60ea">&#9670;&nbsp;</a></span>updateTick</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">float PowerSource.updateTick</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
 </div><div class="memdoc">
 
 </div>

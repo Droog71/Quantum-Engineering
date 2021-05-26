@@ -73,6 +73,7 @@ Inheritance diagram for AirLock:</div>
  <div class="center">
   <img src="classAirLock.png" usemap="#AirLock_map" alt=""/>
   <map id="AirLock_map" name="AirLock_map">
+<area href="classMachine.html" alt="Machine" shape="rect" coords="0,56,102,80"/>
 </map>
  </div></div>
 <table class="memberdecls">
@@ -81,9 +82,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:affe951be6f5fdf52364b7bead2fbd654"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classAirLock.html#affe951be6f5fdf52364b7bead2fbd654">Start</a> ()</td></tr>
 <tr class="memdesc:affe951be6f5fdf52364b7bead2fbd654"><td class="mdescLeft">&#160;</td><td class="mdescRight">Called by unity engine on start up to initialize variables.  <a href="#affe951be6f5fdf52364b7bead2fbd654">More...</a><br /></td></tr>
 <tr class="separator:affe951be6f5fdf52364b7bead2fbd654"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3eb6266496ae6347df0b30e9208453d0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classAirLock.html#a3eb6266496ae6347df0b30e9208453d0">Update</a> ()</td></tr>
-<tr class="memdesc:a3eb6266496ae6347df0b30e9208453d0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Called once per frame by unity engine.  <a href="#a3eb6266496ae6347df0b30e9208453d0">More...</a><br /></td></tr>
-<tr class="separator:a3eb6266496ae6347df0b30e9208453d0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a310625af731f48fbb7b1f62f357f82b2"><td class="memItemLeft" align="right" valign="top">override void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classAirLock.html#a310625af731f48fbb7b1f62f357f82b2">UpdateMachine</a> ()</td></tr>
+<tr class="memdesc:a310625af731f48fbb7b1f62f357f82b2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Called by <a class="el" href="classMachineManager.html">MachineManager</a> update coroutine.  <a href="#a310625af731f48fbb7b1f62f357f82b2">More...</a><br /></td></tr>
+<tr class="separator:a310625af731f48fbb7b1f62f357f82b2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afba594db2b50160a725a4937e1e3d4df"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classAirLock.html#afba594db2b50160a725a4937e1e3d4df">ToggleOpen</a> ()</td></tr>
 <tr class="memdesc:afba594db2b50160a725a4937e1e3d4df"><td class="mdescLeft">&#160;</td><td class="mdescRight">Toggle the open or closed state of the hatchway.  <a href="#afba594db2b50160a725a4937e1e3d4df">More...</a><br /></td></tr>
 <tr class="separator:afba594db2b50160a725a4937e1e3d4df"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -105,8 +106,6 @@ Public Attributes</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
-<tr class="memitem:aae4dfd132b93767d63732331ecc907a2"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classAirLock.html#aae4dfd132b93767d63732331ecc907a2">updateTick</a></td></tr>
-<tr class="separator:aae4dfd132b93767d63732331ecc907a2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1d15d35640bf55efeb65d9be284d5983"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classStateManager.html">StateManager</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classAirLock.html#a1d15d35640bf55efeb65d9be284d5983">stateManager</a></td></tr>
 <tr class="separator:a1d15d35640bf55efeb65d9be284d5983"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
@@ -165,8 +164,8 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a3eb6266496ae6347df0b30e9208453d0"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a3eb6266496ae6347df0b30e9208453d0">&#9670;&nbsp;</a></span>Update()</h2>
+<a id="a310625af731f48fbb7b1f62f357f82b2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a310625af731f48fbb7b1f62f357f82b2">&#9670;&nbsp;</a></span>UpdateMachine()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -175,7 +174,7 @@ Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void AirLock.Update </td>
+          <td class="memname">override void AirLock.UpdateMachine </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -183,12 +182,14 @@ Private Attributes</h2></td></tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
 
-<p>Called once per frame by unity engine. </p>
+<p>Called by <a class="el" href="classMachineManager.html">MachineManager</a> update coroutine. </p>
+
+<p>Reimplemented from <a class="el" href="classMachine.html#a3a602cc698eec55437a68314029e4667">Machine</a>.</p>
 
 </div>
 </div>
@@ -288,28 +289,6 @@ Private Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname"><a class="el" href="classStateManager.html">StateManager</a> AirLock.stateManager</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="aae4dfd132b93767d63732331ecc907a2"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aae4dfd132b93767d63732331ecc907a2">&#9670;&nbsp;</a></span>updateTick</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">float AirLock.updateTick</td>
         </tr>
       </table>
   </td>

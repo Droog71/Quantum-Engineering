@@ -74,6 +74,7 @@ Inheritance diagram for HeatExchanger:</div>
  <div class="center">
   <img src="classHeatExchanger.png" usemap="#HeatExchanger_map" alt=""/>
   <map id="HeatExchanger_map" name="HeatExchanger_map">
+<area href="classMachine.html" alt="Machine" shape="rect" coords="0,56,102,80"/>
 </map>
  </div></div>
 <table class="memberdecls">
@@ -82,9 +83,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:ad83f76493a64286fdfd47f7d24aea062"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classHeatExchanger.html#ad83f76493a64286fdfd47f7d24aea062">Start</a> ()</td></tr>
 <tr class="memdesc:ad83f76493a64286fdfd47f7d24aea062"><td class="mdescLeft">&#160;</td><td class="mdescRight">Called by unity engine on start up to initialize variables.  <a href="#ad83f76493a64286fdfd47f7d24aea062">More...</a><br /></td></tr>
 <tr class="separator:ad83f76493a64286fdfd47f7d24aea062"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae6a48ab3ca3e9d188049690de301da5a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classHeatExchanger.html#ae6a48ab3ca3e9d188049690de301da5a">Update</a> ()</td></tr>
-<tr class="memdesc:ae6a48ab3ca3e9d188049690de301da5a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Called once per frame by unity engine.  <a href="#ae6a48ab3ca3e9d188049690de301da5a">More...</a><br /></td></tr>
-<tr class="separator:ae6a48ab3ca3e9d188049690de301da5a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad7848c9bc30367aba6c1272f7218e5f0"><td class="memItemLeft" align="right" valign="top">override void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classHeatExchanger.html#ad7848c9bc30367aba6c1272f7218e5f0">UpdateMachine</a> ()</td></tr>
+<tr class="memdesc:ad7848c9bc30367aba6c1272f7218e5f0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Called by <a class="el" href="classMachineManager.html">MachineManager</a> update coroutine.  <a href="#ad7848c9bc30367aba6c1272f7218e5f0">More...</a><br /></td></tr>
+<tr class="separator:ad7848c9bc30367aba6c1272f7218e5f0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af959c65f56de58b2cbd78dec4dd01808"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classHeatExchanger.html#af959c65f56de58b2cbd78dec4dd01808">OnDestroy</a> ()</td></tr>
 <tr class="memdesc:af959c65f56de58b2cbd78dec4dd01808"><td class="mdescLeft">&#160;</td><td class="mdescRight">Used to notify attached machines when the heat exchanger is destroyed.  <a href="#af959c65f56de58b2cbd78dec4dd01808">More...</a><br /></td></tr>
 <tr class="separator:af959c65f56de58b2cbd78dec4dd01808"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -122,12 +123,9 @@ Public Attributes</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-methods"></a>
 Private Member Functions</h2></td></tr>
-<tr class="memitem:aeefee39e2011c6f1d82d8c51c90cc019"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classHeatExchanger.html#aeefee39e2011c6f1d82d8c51c90cc019">IsValidObject</a> (GameObject obj)</td></tr>
-<tr class="memdesc:aeefee39e2011c6f1d82d8c51c90cc019"><td class="mdescLeft">&#160;</td><td class="mdescRight">The object exists, is active and is not a standard building block.  <a href="#aeefee39e2011c6f1d82d8c51c90cc019">More...</a><br /></td></tr>
-<tr class="separator:aeefee39e2011c6f1d82d8c51c90cc019"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afb1b4b367abbdcf16d2e8b89bbe5eeca"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classHeatExchanger.html#afb1b4b367abbdcf16d2e8b89bbe5eeca">ConnectToObject</a> (GameObject obj)</td></tr>
-<tr class="memdesc:afb1b4b367abbdcf16d2e8b89bbe5eeca"><td class="mdescLeft">&#160;</td><td class="mdescRight">Connects to the nearest compatible object.  <a href="#afb1b4b367abbdcf16d2e8b89bbe5eeca">More...</a><br /></td></tr>
-<tr class="separator:afb1b4b367abbdcf16d2e8b89bbe5eeca"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2db1c41e2c4ca718090f22cbe026f460"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classHeatExchanger.html#a2db1c41e2c4ca718090f22cbe026f460">AttemptConnection</a> (GameObject obj)</td></tr>
+<tr class="memdesc:a2db1c41e2c4ca718090f22cbe026f460"><td class="mdescLeft">&#160;</td><td class="mdescRight">Connects to the nearest compatible object.  <a href="#a2db1c41e2c4ca718090f22cbe026f460">More...</a><br /></td></tr>
+<tr class="separator:a2db1c41e2c4ca718090f22cbe026f460"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0b70c0f61aa189900719e104ba12cda7"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classHeatExchanger.html#a0b70c0f61aa189900719e104ba12cda7">SetOutputID</a> ()</td></tr>
 <tr class="memdesc:a0b70c0f61aa189900719e104ba12cda7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the heat exchanger's output ID to the output object's ID.  <a href="#a0b70c0f61aa189900719e104ba12cda7">More...</a><br /></td></tr>
 <tr class="separator:a0b70c0f61aa189900719e104ba12cda7"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -139,8 +137,6 @@ Private Member Functions</h2></td></tr>
 Private Attributes</h2></td></tr>
 <tr class="memitem:af1a3bcc450584107ae43f50ad70ad724"><td class="memItemLeft" align="right" valign="top">LineRenderer&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classHeatExchanger.html#af1a3bcc450584107ae43f50ad70ad724">connectionLine</a></td></tr>
 <tr class="separator:af1a3bcc450584107ae43f50ad70ad724"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5dbede822ec415fa49f6727caaa61373"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classHeatExchanger.html#a5dbede822ec415fa49f6727caaa61373">updateTick</a></td></tr>
-<tr class="separator:a5dbede822ec415fa49f6727caaa61373"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7ddb319441fdebb75829df39a5439945"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classHeatExchanger.html#a7ddb319441fdebb75829df39a5439945">machineTimer</a></td></tr>
 <tr class="separator:a7ddb319441fdebb75829df39a5439945"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9374f5ba77365f0f4072f473e1b63197"><td class="memItemLeft" align="right" valign="top">GameObject&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classHeatExchanger.html#a9374f5ba77365f0f4072f473e1b63197">builtObjects</a></td></tr>
@@ -149,8 +145,8 @@ Private Attributes</h2></td></tr>
 <tr class="separator:aacdecacbdb8d55528d7e8f194b62b56e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="afb1b4b367abbdcf16d2e8b89bbe5eeca"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#afb1b4b367abbdcf16d2e8b89bbe5eeca">&#9670;&nbsp;</a></span>ConnectToObject()</h2>
+<a id="a2db1c41e2c4ca718090f22cbe026f460"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2db1c41e2c4ca718090f22cbe026f460">&#9670;&nbsp;</a></span>AttemptConnection()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -159,7 +155,7 @@ Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void HeatExchanger.ConnectToObject </td>
+          <td class="memname">void HeatExchanger.AttemptConnection </td>
           <td>(</td>
           <td class="paramtype">GameObject&#160;</td>
           <td class="paramname"><em>obj</em></td><td>)</td>
@@ -201,34 +197,6 @@ Private Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Overall operation of the heat exchanger. </p>
-
-</div>
-</div>
-<a id="aeefee39e2011c6f1d82d8c51c90cc019"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aeefee39e2011c6f1d82d8c51c90cc019">&#9670;&nbsp;</a></span>IsValidObject()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool HeatExchanger.IsValidObject </td>
-          <td>(</td>
-          <td class="paramtype">GameObject&#160;</td>
-          <td class="paramname"><em>obj</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>The object exists, is active and is not a standard building block. </p>
 
 </div>
 </div>
@@ -313,8 +281,8 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="ae6a48ab3ca3e9d188049690de301da5a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae6a48ab3ca3e9d188049690de301da5a">&#9670;&nbsp;</a></span>Update()</h2>
+<a id="ad7848c9bc30367aba6c1272f7218e5f0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad7848c9bc30367aba6c1272f7218e5f0">&#9670;&nbsp;</a></span>UpdateMachine()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -323,7 +291,7 @@ Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void HeatExchanger.Update </td>
+          <td class="memname">override void HeatExchanger.UpdateMachine </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -331,12 +299,14 @@ Private Attributes</h2></td></tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
 
-<p>Called once per frame by unity engine. </p>
+<p>Called by <a class="el" href="classMachineManager.html">MachineManager</a> update coroutine. </p>
+
+<p>Reimplemented from <a class="el" href="classMachine.html#a3a602cc698eec55437a68314029e4667">Machine</a>.</p>
 
 </div>
 </div>
@@ -614,28 +584,6 @@ Private Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname"><a class="el" href="classStateManager.html">StateManager</a> HeatExchanger.stateManager</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a5dbede822ec415fa49f6727caaa61373"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a5dbede822ec415fa49f6727caaa61373">&#9670;&nbsp;</a></span>updateTick</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">float HeatExchanger.updateTick</td>
         </tr>
       </table>
   </td>
