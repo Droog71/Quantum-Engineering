@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class HeatExchanger : MonoBehaviour
+public class HeatExchanger : Machine
 {
     public string ID = "unassigned";
     public string inputID;
@@ -14,7 +14,6 @@ public class HeatExchanger : MonoBehaviour
     public GameObject outputObject;
     public string outputID;
     private LineRenderer connectionLine;
-    private float updateTick;
     public int address;
     private int machineTimer;
     public int connectionAttempts;
@@ -31,125 +30,112 @@ public class HeatExchanger : MonoBehaviour
         connectionLine.material = lineMat;
         connectionLine.loop = true;
         connectionLine.enabled = false;
-        builtObjects = GameObject.Find("Built_Objects");
+        builtObjects = GameObject.Find("BuiltObjects");
         stateManager = FindObjectOfType<StateManager>();
     }
 
-    //! Called once per frame by unity engine.
-    public void Update()
+    //! Called by MachineManager update coroutine.
+    public override void UpdateMachine()
     {
-        updateTick += 1 * Time.deltaTime;
-        if (updateTick > 0.5f + (address * 0.001f))
+        if (ID == "unassigned" || stateManager.initMachines == false)
+            return;
+
+        GetComponent<PhysicsHandler>().UpdatePhysics();
+
+        if (outputObject == null)
         {
-            if (stateManager.Busy())
+            connectionAttempts += 1;
+            if (creationMethod.Equals("spawned"))
             {
-                 updateTick = 0;
-                return;
-            }
-
-            GetComponent<PhysicsHandler>().UpdatePhysics();
-            updateTick = 0;
-            if (outputObject == null)
-            {
-                connectionAttempts += 1;
-                if (creationMethod.Equals("spawned"))
+                if (connectionAttempts >= 128)
                 {
-                    if (connectionAttempts >= 30)
-                    {
-                        connectionAttempts = 0;
-                        connectionFailed = true;
-                    }
-                }
-                else
-                {
-                    if (connectionAttempts >= 120)
-                    {
-                        connectionAttempts = 0;
-                        connectionFailed = true;
-                    }
-                }
-
-                if (connectionFailed == false)
-                {
-                    GameObject[] allObjects = GameObject.FindGameObjectsWithTag("Built");
-                    foreach (GameObject obj in allObjects)
-                    {
-                        if (IsValidObject(obj))
-                        {
-                            ConnectToObject(obj);
-                        }
-                    }
-                }
-            }
-
-            if (inputObject != null)
-            {
-                if (inputObject.GetComponent<UniversalConduit>() != null)
-                {
-                    inputType = inputObject.GetComponent<UniversalConduit>().type;
-                    if (inputObject.GetComponent<UniversalConduit>().type.Equals("Ice"))
-                    {
-                        if (speed > 0)
-                        {
-                            if (amount >= speed)
-                            {
-                                providingCooling = true;
-                            }
-                            else if (amount > 0)
-                            {
-                                if (amount <= inputObject.GetComponent<UniversalConduit>().speed)
-                                {
-                                    speed = (int)amount;
-                                    providingCooling = true;
-                                }
-                                else
-                                {
-                                    speed =  inputObject.GetComponent<UniversalConduit>().speed;
-                                    providingCooling = true;
-                                }
-                            }
-                            else
-                            {
-                                speed = 1;
-                                providingCooling = false;
-                            }
-                        }
-                    }
-                }
-            }
-
-            if (outputObject != null)
-            {
-                machineTimer += 1;
-                if (machineTimer > 5 - (address * 0.01f))
-                {
-                    SetOutputID();
-                    DoWork();
-                    machineTimer = 0;
+                    connectionAttempts = 0;
+                    connectionFailed = true;
                 }
             }
             else
             {
-                connectionLine.enabled = false;
-                if (connectionFailed == true)
+                if (connectionAttempts >= 512)
                 {
-                    if (creationMethod.Equals("spawned"))
+                    connectionAttempts = 0;
+                    connectionFailed = true;
+                }
+            }
+
+            if (connectionFailed == false)
+            {
+                GameObject[] allObjects = GameObject.FindGameObjectsWithTag("Machine");
+                foreach (GameObject obj in allObjects)
+                {
+                    if (outputObject != null)
                     {
-                        creationMethod = "built";
+                        break;
+                    }
+                    if (obj != null)
+                    {
+                        AttemptConnection(obj);
                     }
                 }
             }
         }
-    }
 
-    //! The object exists, is active and is not a standard building block.
-    private bool IsValidObject(GameObject obj)
-    {
-        if (obj != null)
+        if (inputObject != null)
         {
-            return obj.transform.parent != builtObjects.transform && obj.activeInHierarchy;
+            if (inputObject.GetComponent<UniversalConduit>() != null)
+            {
+                inputType = inputObject.GetComponent<UniversalConduit>().type;
+                if (inputObject.GetComponent<UniversalConduit>().type.Equals("Ice"))
+                {
+                    if (speed > 0)
+                    {
+                        if (amount >= speed)
+                        {
+                            providingCooling = true;
+                        }
+                        else if (amount > 0)
+                        {
+                            if (amount <= inputObject.GetComponent<UniversalConduit>().speed)
+                            {
+                                speed = (int)amount;
+                                providingCooling = true;
+                            }
+                            else
+                            {
+                                speed =  inputObject.GetComponent<UniversalConduit>().speed;
+                                providingCooling = true;
+                            }
+                        }
+                        else
+                        {
+                            speed = 1;
+                            providingCooling = false;
+                        }
+                    }
+                }
+            }
         }
-        return false;
+
+        if (outputObject != null)
+        {
+            machineTimer += 1;
+            if (machineTimer > 5 - (address * 0.01f))
+            {
+                SetOutputID();
+                DoWork();
+                machineTimer = 0;
+            }
+        }
+        else
+        {
+            connectionLine.enabled = false;
+            if (connectionFailed == true)
+            {
+                if (creationMethod.Equals("spawned"))
+                {
+                    creationMethod = "built";
+                }
+            }
+        }
     }
 
     //! Used to notify attached machines when the heat exchanger is destroyed.
@@ -226,7 +212,7 @@ public class HeatExchanger : MonoBehaviour
     }
 
     //! Connects to the nearest compatible object.
-    private void ConnectToObject(GameObject obj)
+    private void AttemptConnection(GameObject obj)
     {
         if (obj.GetComponent<UniversalExtractor>() != null)
         {

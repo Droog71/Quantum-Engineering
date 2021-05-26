@@ -22,7 +22,8 @@ public class InventoryGUI : MonoBehaviour
         playerController = GetComponent<PlayerController>();
         playerInventory = GetComponent<InventoryManager>();
         inventoryHandler = new InventoryHandler(playerController, playerInventory);
-        textureDictionary = GetComponent<TextureDictionary>();
+        GameManager gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
+        textureDictionary = gameManager.GetComponent<TextureDictionary>();
         guiCoordinates = new GuiCoordinates();
     }
 
@@ -50,6 +51,10 @@ public class InventoryGUI : MonoBehaviour
             {
                 gameObject.GetComponent<MSCameraController>().enabled = false;
                 GUI.DrawTexture(guiCoordinates.inventoryBackgroundRect, textureDictionary.dictionary["Container Background"]);
+                GUI.DrawTexture(guiCoordinates.inventoryDropSlotRect, textureDictionary.dictionary["Shaded Box"]);
+                GUI.Label(guiCoordinates.inventoryDropSlotLabelRect, "DROP");
+                GUI.DrawTexture(guiCoordinates.inventoryTrashSlotRect, textureDictionary.dictionary["Shaded Box"]);
+                GUI.Label(guiCoordinates.inventoryTrashSlotLabelRect, "TRASH");
 
                 // Inventory item drawing.
                 int inventorySlotNumber = 0;
@@ -57,7 +62,14 @@ public class InventoryGUI : MonoBehaviour
                 {
                     if (!slot.typeInSlot.Equals("") && !slot.typeInSlot.Equals("nothing"))
                     {
-                        GUI.DrawTexture(guiCoordinates.inventorySlotRects[inventorySlotNumber], textureDictionary.dictionary[slot.typeInSlot]);
+                        if (textureDictionary.dictionary.ContainsKey(slot.typeInSlot+"_Icon"))
+                        {
+                            GUI.DrawTexture(guiCoordinates.inventorySlotRects[inventorySlotNumber], textureDictionary.dictionary[slot.typeInSlot+"_Icon"]);
+                        }
+                        else
+                        {
+                            GUI.DrawTexture(guiCoordinates.inventorySlotRects[inventorySlotNumber], textureDictionary.dictionary[slot.typeInSlot]);
+                        }
                     }
                     if (slot.amountInSlot != 0)
                     {
@@ -78,7 +90,14 @@ public class InventoryGUI : MonoBehaviour
                     {
                         if (!slot.typeInSlot.Equals("") && !slot.typeInSlot.Equals("nothing"))
                         {
-                            GUI.DrawTexture(guiCoordinates.storageInventorySlotRects[storageInventorySlotNumber], textureDictionary.dictionary[slot.typeInSlot]);
+                            if (textureDictionary.dictionary.ContainsKey(slot.typeInSlot+"_Icon"))
+                            {
+                                GUI.DrawTexture(guiCoordinates.storageInventorySlotRects[storageInventorySlotNumber], textureDictionary.dictionary[slot.typeInSlot+"_Icon"]);
+                            }
+                            else
+                            {
+                                GUI.DrawTexture(guiCoordinates.storageInventorySlotRects[storageInventorySlotNumber], textureDictionary.dictionary[slot.typeInSlot]);
+                            }
                         }
                         if (slot.amountInSlot != 0)
                         {
@@ -103,7 +122,7 @@ public class InventoryGUI : MonoBehaviour
                             GUI.Label(guiCoordinates.inventoryMesageRect, dragSlot.typeInSlot);
                             if (Input.GetKeyDown(KeyCode.Mouse0))
                             {
-                                inventoryHandler.DragItemFromSlot(dragSlot, playerController.storageInventory);
+                                inventoryHandler.DragItemFromSlot(inventoryDragSlot, dragSlot, playerController.storageInventory);
                             }
                         }
                     }
@@ -131,7 +150,7 @@ public class InventoryGUI : MonoBehaviour
                                 }
                                 if (Input.GetKeyDown(KeyCode.Mouse0))
                                 {
-                                    inventoryHandler.DragItemFromSlot(dragSlot, playerInventory);
+                                    inventoryHandler.DragItemFromSlot(storageInventoryDragSlot, dragSlot, playerInventory);
                                 }
                             }
                         }
@@ -145,12 +164,20 @@ public class InventoryGUI : MonoBehaviour
                     float orgX = Event.current.mousePosition.x - ScreenWidth * 0.0145f;
                     float orgY = Event.current.mousePosition.y - ScreenHeight * 0.03f;
                     Rect mouseRect = new Rect(orgX, orgY, ScreenWidth * 0.029f, ScreenHeight * 0.06f);
-                    GUI.DrawTexture(mouseRect, textureDictionary.dictionary[inventoryHandler.itemToDrag]);
+                    if (textureDictionary.dictionary.ContainsKey(inventoryHandler.itemToDrag+"_Icon"))
+                    {
+                        GUI.DrawTexture(mouseRect, textureDictionary.dictionary[inventoryHandler.itemToDrag+"_Icon"]);
+                    }
+                    else
+                    {
+                        GUI.DrawTexture(mouseRect, textureDictionary.dictionary[inventoryHandler.itemToDrag]);
+                    }
                     if (Input.GetKeyUp(KeyCode.Mouse0))
                     {
                         inventoryHandler.DropItemInSlot(mousePos, playerController.storageGUIopen);
                     }
                 }
+
                 // // // // // END DRAG AND DROP // // // // //
 
                 // Cycling between inventories connected to a storage computer.

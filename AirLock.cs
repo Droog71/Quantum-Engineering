@@ -1,8 +1,7 @@
 ﻿using UnityEngine;
 
-public class AirLock : MonoBehaviour
+public class AirLock : Machine
 {
-    private float updateTick;
     private StateManager stateManager;
     public string ID = "unassigned";
     public int address;
@@ -21,21 +20,10 @@ public class AirLock : MonoBehaviour
         }
     }
 
-    //! Called once per frame by unity engine.
-    public void Update()
+    //! Called by MachineManager update coroutine.
+    public override void UpdateMachine()
     {
-        updateTick += 1 * Time.deltaTime;
-        if (updateTick > 0.5f + (address * 0.001f))
-        {
-            if (stateManager.Busy())
-            {
-                 updateTick = 0;
-                return;
-            }
-
-            GetComponent<PhysicsHandler>().UpdatePhysics();
-            updateTick = 0;
-        }
+        GetComponent<PhysicsHandler>().UpdatePhysics();
     }
 
     //! Toggle the open or closed state of the hatchway.

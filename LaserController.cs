@@ -21,6 +21,8 @@ public class LaserController
     //! Called when the player's laser cannon shoots something.
     public void HitTarget(GameObject target,RaycastHit hit)
     {
+        string objName;
+
         if (target.GetComponent<Meteor>() != null)
         {
             target.GetComponent<Meteor>().Explode();
@@ -33,10 +35,20 @@ public class LaserController
 
         if (target.tag.Equals("Built"))
         {
+            if (target.GetComponent<ModBlock>() != null)
+            {
+                objName = target.GetComponent<ModBlock>().blockName;
+            }
+            else
+            {
+                objName = hit.collider.gameObject.name.Split('(')[0];
+            }
+
             if (target.GetComponent<PhysicsHandler>() != null)
             {
                 target.GetComponent<PhysicsHandler>().Explode();
             }
+
             if (CanSendDestructionMessage())
             {
                 if (playerController.destructionMessageActive == false)
@@ -44,10 +56,10 @@ public class LaserController
                     playerController.destructionMessageActive = true;
                     playerController.currentTabletMessage = "";
                 }
-                string objName = hit.collider.gameObject.name.Split('(')[0];
                 playerController.currentTabletMessage += "ALERT: " + objName + " destroyed by your laser cannon!\n";
                 playerController.destructionMessageCount += 1;
             }
+
         }
 
         if (target.tag.Equals("CombinedMesh"))
@@ -78,7 +90,7 @@ public class LaserController
                 {
                     if (chanceOfDestruction > 50)
                     {
-                        gameManager.meshManager.SeparateBlocks(hit.point, "brick",false);
+                        gameManager.meshManager.SeparateBlocks(hit.point, "brick", false);
                         if (CanSendDestructionMessage())
                         {
                             if (playerController.destructionMessageActive == false)
@@ -99,7 +111,7 @@ public class LaserController
                 {
                     if (chanceOfDestruction > 75)
                     {
-                        gameManager.meshManager.SeparateBlocks(hit.point, "iron",false);
+                        gameManager.meshManager.SeparateBlocks(hit.point, "iron", false);
                         if (CanSendDestructionMessage())
                         {
                             if (playerController.destructionMessageActive == false)
@@ -119,7 +131,7 @@ public class LaserController
                 {
                     if (chanceOfDestruction > 99)
                     {
-                        gameManager.meshManager.SeparateBlocks(hit.point, "steel",false);
+                        gameManager.meshManager.SeparateBlocks(hit.point, "steel", false);
                         if (CanSendDestructionMessage())
                         {
                             if (playerController.destructionMessageActive == false)
@@ -128,6 +140,48 @@ public class LaserController
                                 playerController.currentTabletMessage = "";
                             }
                             playerController.currentTabletMessage += "ALERT: Some steel blocks were hit by your laser cannon!\n";
+                            playerController.destructionMessageCount += 1;
+                        }
+                    }
+                }
+            }
+            else if (hit.collider.gameObject.name.Equals("modBlockHolder(Clone)"))
+            {
+                string type = "all";
+                int toughness = 75;
+
+                Transform[] transforms = hit.collider.gameObject.GetComponentsInChildren<Transform>(true);
+                foreach (Transform t in transforms)
+                {
+                    if (t.GetComponent<ModBlock>() != null)
+                    {
+                        type = t.GetComponent<ModBlock>().blockName;
+                        break;
+                    }
+                }
+
+                if (type.ToUpper().Contains("GLASS"))
+                {
+                    toughness = 25;
+                }
+                else if (type.ToUpper().Contains("STEEL"))
+                {
+                    toughness = 99;
+                }
+
+                int chanceOfDestruction = Random.Range(1, 101);
+                {
+                    if (chanceOfDestruction > toughness)
+                    {
+                        gameManager.meshManager.SeparateBlocks(hit.point, type, false);
+                        if (CanSendDestructionMessage())
+                        {
+                            if (playerController.destructionMessageActive == false)
+                            {
+                                playerController.destructionMessageActive = true;
+                                playerController.currentTabletMessage = "";
+                            }
+                            playerController.currentTabletMessage += "ALERT: " + type + " was hit by your laser cannon!\n";
                             playerController.destructionMessageCount += 1;
                         }
                     }

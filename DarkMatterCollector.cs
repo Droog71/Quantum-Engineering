@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class DarkMatterCollector : MonoBehaviour
+public class DarkMatterCollector : Machine
 {
     public float darkMatterAmount;
     public int speed = 1;
@@ -17,7 +17,6 @@ public class DarkMatterCollector : MonoBehaviour
     public PowerReceiver powerReceiver;
     private LineRenderer connectionLine;
     private LineRenderer inputLine;
-    private float updateTick;
     public int address;
     public bool powerON;
     private int machineTimer;
@@ -38,100 +37,92 @@ public class DarkMatterCollector : MonoBehaviour
         connectionLine.material = lineMat;
         connectionLine.loop = true;
         connectionLine.enabled = false;
-        builtObjects = GameObject.Find("Built_Objects");
+        builtObjects = GameObject.Find("BuiltObjects");
         stateManager = FindObjectOfType<StateManager>();
     }
 
-    //! Called once per frame by unity engine.
-    void Update()
+    //! Called by MachineManager update coroutine.
+    public override void UpdateMachine()
     {
-        updateTick += 1 * Time.deltaTime;
-        if (updateTick > 0.5f + (address * 0.001f))
+        if (ID == "unassigned" || stateManager.initMachines == false)
+            return;
+
+        GetComponent<PhysicsHandler>().UpdatePhysics();
+        UpdatePowerReceiver();
+
+        if (speed > power && power != 0)
         {
-            if (stateManager.Busy())
-            {
-                 updateTick = 0;
-                return;
-            }
+            speed = power;
+        }
+        if (speed > 1)
+        {
+            heat = speed - 1 - cooling;
+        }
+        else
+        {
+            heat = 0;
+        }
+        if (heat < 0)
+        {
+            heat = 0;
+        }
 
-            GetComponent<PhysicsHandler>().UpdatePhysics();
-            UpdatePowerReceiver();
+        if (outputObject != null)
+        {
+            connectionLine.SetPosition(0, transform.position);
+            connectionLine.SetPosition(1, outputObject.transform.position);
+            connectionLine.enabled = true;
+        }
+        else
+        {
+            connectionLine.enabled = false;
+        }
 
-            updateTick = 0;
-            if (speed > power && power != 0)
+        if (foundDarkMatter == true)
+        {
+            if (powerON == true && connectionFailed == false && speed > 0)
             {
-                speed = power;
-            }
-            if (speed > 1)
-            {
-                heat = speed - 1 - cooling;
-            }
-            else
-            {
-                heat = 0;
-            }
-            if (heat < 0)
-            {
-                heat = 0;
-            }
-
-            if (outputObject != null)
-            {
-                connectionLine.SetPosition(0, transform.position);
-                connectionLine.SetPosition(1, outputObject.transform.position);
-                connectionLine.enabled = true;
-            }
-            else
-            {
-                connectionLine.enabled = false;
-            }
-
-            if (foundDarkMatter == true)
-            {
-                if (powerON == true && connectionFailed == false && speed > 0)
+                conduitItem.active = connectionLine.enabled;
+                GetComponent<Light>().enabled = true;
+                GetComponent<AudioSource>().enabled = true;
+                machineTimer += 1;
+                if (machineTimer > 5 - (address * 0.01f))
                 {
-                    conduitItem.active = connectionLine.enabled;
-                    GetComponent<Light>().enabled = true;
-                    GetComponent<AudioSource>().enabled = true;
-                    machineTimer += 1;
-                    if (machineTimer > 5 - (address * 0.01f))
-                    {
-                        darkMatterAmount += speed - heat;
-                        machineTimer = 0;
-                    }
-                }
-                else
-                {
+                    darkMatterAmount += speed - heat;
                     machineTimer = 0;
-                    conduitItem.active = false;
-                    GetComponent<Light>().enabled = false;
-                    GetComponent<AudioSource>().enabled = false;
                 }
             }
-            if (foundDarkMatter == false)
+            else
             {
-                connectionAttempts += 1;
-                if (creationMethod.Equals("spawned"))
+                machineTimer = 0;
+                conduitItem.active = false;
+                GetComponent<Light>().enabled = false;
+                GetComponent<AudioSource>().enabled = false;
+            }
+        }
+        if (foundDarkMatter == false)
+        {
+            connectionAttempts += 1;
+            if (creationMethod.Equals("spawned"))
+            {
+                if (connectionAttempts >= 128)
                 {
-                    if (connectionAttempts >= 30)
-                    {
-                        connectionAttempts = 0;
-                        connectionFailed = true;
-                    }
+                    connectionAttempts = 0;
+                    connectionFailed = true;
                 }
-                else
+            }
+            else
+            {
+                if (connectionAttempts >= 512)
                 {
-                    if (connectionAttempts >= 120)
-                    {
-                        connectionAttempts = 0;
-                        connectionFailed = true;
-                    }
+                    connectionAttempts = 0;
+                    connectionFailed = true;
                 }
+            }
 
-                if (connectionFailed == false)
-                {
-                    FindDarkMatter();
-                }
+            if (connectionFailed == false)
+            {
+                FindDarkMatter();
             }
         }
     }

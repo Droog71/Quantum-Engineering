@@ -21,7 +21,6 @@ public class PhysicsHandler : MonoBehaviour
     private int supportedXpositive;
     private int supportedXnegative;
     private int supportCount;
-    public float lifetime;
     private float missingBlockTimer;
     private float supportCheckTimer;
     private float worldLoadTimer;
@@ -61,7 +60,6 @@ public class PhysicsHandler : MonoBehaviour
             }
             else
             {
-                lifetime += 0.01f * Time.deltaTime;
                 if (GameObject.Find("GameManager").GetComponent<GameManager>().blockPhysics == true)
                 {
                     if (transform.position.y > 500 || transform.position.y < -5000)
@@ -369,7 +367,7 @@ public class PhysicsHandler : MonoBehaviour
         {
             if (separatedBlocks == false)
             {
-                gameManager.meshManager.SeparateBlocks(transform.position, "all",false);
+                gameManager.meshManager.SeparateBlocks(transform.position, "all", false);
                 separatedBlocks = true;
             }
             falling = true;

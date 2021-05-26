@@ -69,17 +69,20 @@ public class CraftingManager : MonoBehaviour
         }
         missingItem = itemNotFound;
 
-        if (!missingItem)
+        if (!missingItem || playerController.creativeMode == true)
         {
             inventoryManager.AddItem(recipe.output, outputAmount);
             if (inventoryManager.itemAdded)
             {
-                for (int i = 0; i < recipe.ingredients.Length; i++)
+                if (playerController.creativeMode == false)
                 {
-                    slots[i].amountInSlot -= amounts[i];
-                    if (slots[i].amountInSlot <= 0)
+                    for (int i = 0; i < recipe.ingredients.Length; i++)
                     {
-                        slots[i].typeInSlot = "nothing";
+                        slots[i].amountInSlot -= amounts[i];
+                        if (slots[i].amountInSlot <= 0)
+                        {
+                            slots[i].typeInSlot = "nothing";
+                        }
                     }
                 }
                 playerController.PlayCraftingSound();

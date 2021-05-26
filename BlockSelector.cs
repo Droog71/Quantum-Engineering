@@ -16,6 +16,7 @@
             "Iron Ramp",
             "Steel Block",
             "Steel Ramp",
+            "Door",
             "Quantum Hatchway",
             "Storage Container",
             "Storage Computer",
@@ -53,8 +54,6 @@
         playerController.nextBuildType = selection == objectNames.Length - 1 ? objectNames[0] : objectNames[selection + 1];
         playerController.displayingBuildItem = true;
         playerController.buildItemDisplayTimer = 0;
-        playerController.destroyTimer = 0;
-        playerController.buildTimer = 0;
         playerController.PlayButtonSound();
     }
 

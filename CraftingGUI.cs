@@ -16,13 +16,15 @@ public class CraftingGUI : MonoBehaviour
     public void Start()
     {
         playerController = GetComponent<PlayerController>();
+        GameManager gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
+        textureDictionary = gameManager.GetComponent<TextureDictionary>();
         craftingManager = GetComponent<CraftingManager>();
-        textureDictionary = GetComponent<TextureDictionary>();
         craftingDictionary = new CraftingDictionary();
         guiCoordinates = new GuiCoordinates();
         descriptions = new Descriptions();
     }
 
+    //! Called by unity engine for rendering and handling GUI events.
     public void OnGUI()
     {
         // Style.
@@ -447,6 +449,18 @@ public class CraftingGUI : MonoBehaviour
                         if (guiCoordinates.button5Rect.Contains(Event.current.mousePosition))
                         {
                             GUI.DrawTexture(guiCoordinates.craftingInfoBackgroundRect, textureDictionary.dictionary["Interface Background"]);
+                            CraftingRecipe recipe = craftingDictionary.dictionary["Door"];
+                            int length = recipe.ingredients.Length;
+                            string[] crafting = new string[length];
+                            for (int i = 0; i < length; i++)
+                            {
+                                crafting[i] = recipe.amounts[i] + "x " + recipe.ingredients[i];
+                            }
+                            GUI.Label(guiCoordinates.craftingInfoRect, descriptions.door + "\n\n[CRAFTING]\n" + string.Join("\n", crafting));
+                        }
+                        if (guiCoordinates.button6Rect.Contains(Event.current.mousePosition))
+                        {
+                            GUI.DrawTexture(guiCoordinates.craftingInfoBackgroundRect, textureDictionary.dictionary["Interface Background"]);
                             CraftingRecipe recipe = craftingDictionary.dictionary["Quantum Hatchway"];
                             int length = recipe.ingredients.Length;
                             string[] crafting = new string[length];
@@ -456,7 +470,7 @@ public class CraftingGUI : MonoBehaviour
                             }
                             GUI.Label(guiCoordinates.craftingInfoRect, descriptions.quantumHatchway + "\n\n[CRAFTING]\n" + string.Join("\n", crafting));
                         }
-                        if (guiCoordinates.button6Rect.Contains(Event.current.mousePosition))
+                        if (guiCoordinates.button7Rect.Contains(Event.current.mousePosition))
                         {
                             GUI.DrawTexture(guiCoordinates.craftingInfoBackgroundRect, textureDictionary.dictionary["Interface Background"]);
                             CraftingRecipe recipe = craftingDictionary.dictionary["Electric Light"];
@@ -468,7 +482,7 @@ public class CraftingGUI : MonoBehaviour
                             }
                             GUI.Label(guiCoordinates.craftingInfoRect, descriptions.electricLight + "\n\n[CRAFTING]\n" + string.Join("\n", crafting));
                         }
-                        if (guiCoordinates.button7Rect.Contains(Event.current.mousePosition))
+                        if (guiCoordinates.button9Rect.Contains(Event.current.mousePosition))
                         {
                             GUI.DrawTexture(guiCoordinates.craftingInfoBackgroundRect, textureDictionary.dictionary["Interface Background"]);
                             CraftingRecipe recipe = craftingDictionary.dictionary["Circuit Board"];
@@ -480,7 +494,7 @@ public class CraftingGUI : MonoBehaviour
                             }
                             GUI.Label(guiCoordinates.craftingInfoRect, descriptions.circuitBoard + "\n\n[CRAFTING]\n" + string.Join("\n", crafting));
                         }
-                        if (guiCoordinates.button9Rect.Contains(Event.current.mousePosition))
+                        if (guiCoordinates.button10Rect.Contains(Event.current.mousePosition))
                         {
                             GUI.DrawTexture(guiCoordinates.craftingInfoBackgroundRect, textureDictionary.dictionary["Interface Background"]);
                             CraftingRecipe recipe = craftingDictionary.dictionary["Electric Motor"];
@@ -492,7 +506,7 @@ public class CraftingGUI : MonoBehaviour
                             }
                             GUI.Label(guiCoordinates.craftingInfoRect, descriptions.electricMotor + "\n\n[CRAFTING]\n" + string.Join("\n", crafting));
                         }
-                        if (guiCoordinates.button10Rect.Contains(Event.current.mousePosition))
+                        if (guiCoordinates.button11Rect.Contains(Event.current.mousePosition))
                         {
                             GUI.DrawTexture(guiCoordinates.craftingInfoBackgroundRect, textureDictionary.dictionary["Interface Background"]);
                             CraftingRecipe recipe = craftingDictionary.dictionary["Storage Computer"];
@@ -504,7 +518,7 @@ public class CraftingGUI : MonoBehaviour
                             }
                             GUI.Label(guiCoordinates.craftingInfoRect, descriptions.storageComputer + "\n\n[CRAFTING]\n" + string.Join("\n", crafting));
                         }
-                        if (guiCoordinates.button11Rect.Contains(Event.current.mousePosition))
+                        if (guiCoordinates.button12Rect.Contains(Event.current.mousePosition))
                         {
                             GUI.DrawTexture(guiCoordinates.craftingInfoBackgroundRect, textureDictionary.dictionary["Interface Background"]);
                             CraftingRecipe recipe = craftingDictionary.dictionary["Turret"];
@@ -516,7 +530,7 @@ public class CraftingGUI : MonoBehaviour
                             }
                             GUI.Label(guiCoordinates.craftingInfoRect, descriptions.turret + "\n\n[CRAFTING]\n" + string.Join("\n", crafting));
                         }
-                        if (guiCoordinates.button12Rect.Contains(Event.current.mousePosition))
+                        if (guiCoordinates.button13Rect.Contains(Event.current.mousePosition))
                         {
                             GUI.DrawTexture(guiCoordinates.craftingInfoBackgroundRect, textureDictionary.dictionary["Interface Background"]);
                             CraftingRecipe recipe = craftingDictionary.dictionary["Missile Turret"];
@@ -528,7 +542,7 @@ public class CraftingGUI : MonoBehaviour
                             }
                             GUI.Label(guiCoordinates.craftingInfoRect, descriptions.missileTurret + "\n\n[CRAFTING]\n" + string.Join("\n", crafting));
                         }
-                        if (guiCoordinates.button13Rect.Contains(Event.current.mousePosition))
+                        if (guiCoordinates.button14Rect.Contains(Event.current.mousePosition))
                         {
                             GUI.DrawTexture(guiCoordinates.craftingInfoBackgroundRect, textureDictionary.dictionary["Interface Background"]);
                             CraftingRecipe recipe = craftingDictionary.dictionary["Missile"];
@@ -558,41 +572,55 @@ public class CraftingGUI : MonoBehaviour
                         {
                             craftingManager.CraftItemAsPlayer(craftingDictionary.dictionary["Steel Ramp"]);
                         }
-                        if (GUI.Button(guiCoordinates.button5Rect, "Quantum Hatchway"))
+                        if (GUI.Button(guiCoordinates.button5Rect, "Door"))
+                        {
+                            craftingManager.CraftItemAsPlayer(craftingDictionary.dictionary["Door"]);
+                        }
+                        if (GUI.Button(guiCoordinates.button6Rect, "Quantum Hatchway"))
                         {
                             craftingManager.CraftItemAsPlayer(craftingDictionary.dictionary["Quantum Hatchway"]);
                         }
-                        if (GUI.Button(guiCoordinates.button6Rect, "Electric Light"))
+                        if (GUI.Button(guiCoordinates.button7Rect, "Electric Light"))
                         {
                             craftingManager.CraftItemAsPlayer(craftingDictionary.dictionary["Electric Light"]);
                         }
-                        if (GUI.Button(guiCoordinates.button7Rect, "Circuit Board"))
+                        if (GUI.Button(guiCoordinates.button9Rect, "Circuit Board"))
                         {
                             craftingManager.CraftItemAsPlayer(craftingDictionary.dictionary["Circuit Board"]);
                         }
-                        if (GUI.Button(guiCoordinates.button9Rect, "Electric Motor"))
+                        if (GUI.Button(guiCoordinates.button10Rect, "Electric Motor"))
                         {
                             craftingManager.CraftItemAsPlayer(craftingDictionary.dictionary["Electric Motor"]);
                         }
-                        if (GUI.Button(guiCoordinates.button10Rect, "Storage Computer"))
+                        if (GUI.Button(guiCoordinates.button11Rect, "Storage Computer"))
                         {
                             craftingManager.CraftItemAsPlayer(craftingDictionary.dictionary["Storage Computer"]);
                         }
-                        if (GUI.Button(guiCoordinates.button11Rect, "Turret"))
+                        if (GUI.Button(guiCoordinates.button12Rect, "Turret"))
                         {
                             craftingManager.CraftItemAsPlayer(craftingDictionary.dictionary["Turret"]);
                         }
-                        if (GUI.Button(guiCoordinates.button12Rect, "Missile Turret"))
+                        if (GUI.Button(guiCoordinates.button13Rect, "Missile Turret"))
                         {
                             craftingManager.CraftItemAsPlayer(craftingDictionary.dictionary["Missile Turret"]);
                         }
-                        if (GUI.Button(guiCoordinates.button13Rect, "Missile"))
+                        if (GUI.Button(guiCoordinates.button14Rect, "Missile"))
                         {
                             craftingManager.CraftItemAsPlayer(craftingDictionary.dictionary["Missile"]);
                         }
                     }
                     if (craftingPage == 2)
                     {
+                        GUI.DrawTexture(guiCoordinates.craftingBackgroundRect, textureDictionary.dictionary["Interface Background"]);
+                        GUI.DrawTexture(guiCoordinates.craftingInfoBackgroundRect, textureDictionary.dictionary["Interface Background"]);
+
+                        int f = GUI.skin.label.fontSize;
+                        GUI.skin.label.fontSize = 24;
+                        GUI.color = new Color(0.44f, 0.72f, 0.82f, 1);
+                        GUI.Label(guiCoordinates.craftingTitleRect, "CRAFTING");
+                        GUI.skin.label.fontSize = f;
+                        GUI.color = Color.white;
+
                         int index = 0;
                         KeyValuePair<string, CraftingRecipe>[] recipes = new KeyValuePair<string, CraftingRecipe>[craftingDictionary.modDictionary.Count];
                         foreach (KeyValuePair<string,CraftingRecipe> kvp in craftingDictionary.modDictionary)
@@ -601,13 +629,30 @@ public class CraftingGUI : MonoBehaviour
                             index++;
                         }
 
-                        GUI.DrawTexture(guiCoordinates.craftingBackgroundRect, textureDictionary.dictionary["Interface Background"]);
-                        int f = GUI.skin.label.fontSize;
-                        GUI.skin.label.fontSize = 24;
-                        GUI.color = new Color(0.44f, 0.72f, 0.82f, 1);
-                        GUI.Label(guiCoordinates.craftingTitleRect, "CRAFTING");
-                        GUI.skin.label.fontSize = f;
-                        GUI.color = Color.white;
+                        string desc = recipes[modCraftingIndex].Value.output;
+                        string iconKey = desc + "_Icon";
+
+                        if (textureDictionary.dictionary.ContainsKey(iconKey))
+                        {
+                            GUI.DrawTexture(guiCoordinates.craftingItemRect, textureDictionary.dictionary[iconKey]);
+                        }
+                        else
+                        {
+                            GUI.DrawTexture(guiCoordinates.craftingItemRect, textureDictionary.dictionary[desc]);
+                        }
+
+                        if (GetComponent<BuildController>().blockDictionary.machineDictionary.ContainsKey(recipes[modCraftingIndex].Value.output))
+                        {
+                            desc = GetComponent<BuildController>().blockDictionary.GetMachineDescription(recipes[modCraftingIndex].Value.output);
+                        }
+
+                        string[] crafting = new string[recipes[modCraftingIndex].Value.ingredients.Length];
+                        for (int i = 0; i < recipes[modCraftingIndex].Value.ingredients.Length; i++)
+                        {
+                            crafting[i] = recipes[modCraftingIndex].Value.amounts[i] + "x " + recipes[modCraftingIndex].Value.ingredients[i];
+                        }
+
+                        GUI.Label(guiCoordinates.craftingInfoRect, desc + "\n\n[CRAFTING]\n" + string.Join("\n", crafting));
 
                         if (GUI.Button(guiCoordinates.button3Rect, "<-"))
                         {
@@ -630,22 +675,6 @@ public class CraftingGUI : MonoBehaviour
                         if (GUI.Button(guiCoordinates.button11Rect, recipes[modCraftingIndex].Value.output))
                         {
                             craftingManager.CraftItemAsPlayer(craftingDictionary.modDictionary[recipes[modCraftingIndex].Value.output]);
-                        }
-
-                        if (guiCoordinates.button11Rect.Contains(Event.current.mousePosition))
-                        {
-                            GUI.DrawTexture(guiCoordinates.craftingInfoBackgroundRect, textureDictionary.dictionary["Interface Background"]);
-                            string desc = recipes[modCraftingIndex].Value.output;
-                            if (GetComponent<BuildController>().blockDictionary.machineDictionary.ContainsKey(recipes[modCraftingIndex].Value.output))
-                            {
-                                desc = GetComponent<BuildController>().blockDictionary.GetMachineDescription(recipes[modCraftingIndex].Value.output);
-                            }
-                            string[] crafting = new string[recipes[modCraftingIndex].Value.ingredients.Length];
-                            for (int i = 0; i < recipes[modCraftingIndex].Value.ingredients.Length; i++)
-                            {
-                                crafting[i] = recipes[modCraftingIndex].Value.amounts[i] + "x " + recipes[modCraftingIndex].Value.ingredients[i];
-                            }
-                            GUI.Label(guiCoordinates.craftingInfoRect, desc + "\n\n[CRAFTING]\n" + string.Join("\n", crafting));
                         }
                     }
                     if (GUI.Button(guiCoordinates.craftingPreviousRect, "<-"))

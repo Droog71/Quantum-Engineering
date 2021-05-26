@@ -1,12 +1,13 @@
 ﻿using System;
 using UnityEngine;
+using System.Net;
 
 public class InteractionController : MonoBehaviour
 {
     private PlayerController playerController;
     private MachineInteraction machineInteraction;
     private StorageInteraction storageInteraction;
-    private BlockInteraction blockInteraction;
+    public BlockInteraction blockInteraction;
     public Coroutine paintingCoroutine;
 
     //! Called by unity engine on start up to initialize variables.
@@ -24,13 +25,13 @@ public class InteractionController : MonoBehaviour
         if (!playerController.stateManager.Busy())
         {
             // Raycast and associated data for interacting with machines and other objects.
-            float range = playerController.gameManager.chunkSize - 40;
+            float range = playerController.gameManager.chunkSize * 0.75f;
             Transform camPos = Camera.main.gameObject.transform;
             if (Physics.Raycast(camPos.position, camPos.forward, out RaycastHit hit, range))
             {
                 float distance = Vector3.Distance(camPos.position, hit.point);
                 GameObject obj = hit.collider.gameObject;
-                if (GuiFree() && !IsResource(obj))
+                if (obj != playerController.gameObject && GuiFree() && !IsNonInteractive(obj))
                 {
                     playerController.objectInSight = obj;
                     if (IsStorageContainer(obj) && distance <= 40)
@@ -121,9 +122,9 @@ public class InteractionController : MonoBehaviour
                     {
                         machineInteraction.InteractWithElectricLight();
                     }
-                    else if (obj.GetComponent<AirLock>() != null && distance <= 40)
+                    else if (obj.GetComponent<Door>() != null && distance <= 40)
                     {
-                        machineInteraction.InteractWithAirLock();
+                        machineInteraction.InteractWithDoor();
                     }
                     else if (obj.GetComponent<ModMachine>() != null && distance <= 40)
                     {
@@ -145,6 +146,10 @@ public class InteractionController : MonoBehaviour
                     {
                         blockInteraction.InteractWithBricks();
                     }
+                    else if (obj.GetComponent<ModBlock>() != null)
+                    {
+                        blockInteraction.InteractWithModBlock(obj.GetComponent<ModBlock>().blockName);
+                    }
                     else if (obj.tag.Equals("CombinedMesh"))
                     {
                         blockInteraction.InteractWithCombinedMesh();
@@ -154,7 +159,7 @@ public class InteractionController : MonoBehaviour
                         EndInteraction();
                     }
                 }
-                else if (GuiFree() && distance <= 40 && IsResource(obj))
+                else if (obj != playerController.gameObject && GuiFree() && distance <= 40 && IsNonInteractive(obj))
                 {
                     playerController.objectInSight = obj;
                 }
@@ -179,14 +184,12 @@ public class InteractionController : MonoBehaviour
         && playerController.marketGUIopen == false;
     }
 
-    //! Returns true if the object in question is a resource node.
-    private Boolean IsResource(GameObject obj)
+    //! Returns true if the object in question cannot be interacted with.
+    private bool IsNonInteractive(GameObject obj)
     {
-        if (obj.GetComponent<DarkMatter>() != null || obj.GetComponent<UniversalResource>() != null)
-        {
-            return true;
-        }
-        return false;
+        return obj.GetComponent<DarkMatter>() != null
+        || obj.GetComponent<UniversalResource>() != null
+        || obj.GetComponent<NetworkPlayer>() != null;
     }
 
     //! Returns true if the object in question is a storage container.
@@ -214,8 +217,13 @@ public class InteractionController : MonoBehaviour
         {
             playerController.playerInventory.AddItem(type, 1);
             Destroy(playerController.objectInSight);
-            playerController.destroyTimer = 0;
             playerController.PlayCraftingSound();
+            if (PlayerPrefsX.GetPersistentBool("multiplayer") == true)
+            {
+                Vector3 pos = playerController.objectInSight.transform.position;
+                Quaternion rot = playerController.objectInSight.transform.rotation;
+                UpdateNetwork(1, type, pos, rot);
+            }
         }
         else
         {
@@ -229,24 +237,6 @@ public class InteractionController : MonoBehaviour
     {
         if (playerController.machineGUIopen == false)
         {
-            if (playerController.building == true)
-            {
-                GameManager manager = GameObject.Find("GameManager").GetComponent<GameManager>();
-                if (manager.working == false)
-                {
-                    playerController.stoppingBuildCoRoutine = true;
-                    manager.meshManager.CombineBlocks();
-                    playerController.separatedBlocks = false;
-                    playerController.destroyTimer = 0;
-                    playerController.buildTimer = 0;
-                    playerController.building = false;
-                    playerController.destroying = false;
-                }
-                else
-                {
-                    playerController.requestedBuildingStop = true;
-                }
-            }
             Cursor.visible = true;
             Cursor.lockState = CursorLockMode.None;
             playerController.storageGUIopen = false;
@@ -262,6 +252,18 @@ public class InteractionController : MonoBehaviour
             playerController.craftingGUIopen = false;
             playerController.storageGUIopen = false;
             playerController.machineGUIopen = false;
+        }
+    }
+
+    //! Sends instantiated block info to the server in multiplayer games.
+    private void UpdateNetwork(int destroy, string type, Vector3 pos, Quaternion rot)
+    {
+        using(WebClient client = new WebClient())
+        {
+            Uri uri = new Uri(PlayerPrefs.GetString("serverURL") + "/blocks");
+            string position = Mathf.Round(pos.x) + "," + Mathf.Round(pos.y) + "," + Mathf.Round(pos.z);
+            string rotation = Mathf.Round(rot.x) + "," + Mathf.Round(rot.y) + "," + Mathf.Round(rot.z) + "," + Mathf.Round(rot.w);
+            client.UploadStringAsync(uri, "POST", "@" + destroy + ":" + type + ":" + position + ":" + rotation);
         }
     }
 

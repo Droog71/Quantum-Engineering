@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-public class UniversalConduit : MonoBehaviour
+public class UniversalConduit : Machine
 {
     public float amount;
     public int speed = 1;
@@ -26,7 +26,7 @@ public class UniversalConduit : MonoBehaviour
     private StateManager stateManager;
     private GameObject builtObjects;
     private LineRenderer connectionLine;
-    private float updateTick;
+    private List<GameObject> objList;
     private bool linkedToRailCart;
     private int findRailCartsInterval;
 
@@ -36,105 +36,100 @@ public class UniversalConduit : MonoBehaviour
         connectionLine = gameObject.AddComponent<LineRenderer>();
         conduitItem = GetComponentInChildren<ConduitItem>(true);
         stateManager = FindObjectOfType<StateManager>();
+        objList = new List<GameObject>();
         connectionLine.startWidth = 0.2f;
         connectionLine.endWidth = 0.2f;
         connectionLine.material = lineMat;
         connectionLine.loop = true;
         connectionLine.enabled = false;
-        builtObjects = GameObject.Find("Built_Objects");
+        builtObjects = GameObject.Find("BuiltObjects");
     }
 
-    //! Called once per frame by unity engine.
-    public void Update()
+    //! Called by MachineManager update coroutine.
+    public override void UpdateMachine()
     {
-        updateTick += 1 * Time.deltaTime;
-        if (updateTick > 0.5f + (address * 0.001f))
-        {
-            if (stateManager.Busy())
-            {
-                updateTick = 0;
-                return;
-            }
+        if (ID == "unassigned" || stateManager.initMachines == false)
+            return;
 
-            GetComponent<PhysicsHandler>().UpdatePhysics();
-            updateTick = 0;
-            if (inputObject == null || outputObject == null)
+        GetComponent<PhysicsHandler>().UpdatePhysics();
+
+        if (inputObject == null || outputObject == null)
+        {
+            connectionAttempts += 1;
+            if (creationMethod.Equals("spawned"))
             {
-                connectionAttempts += 1;
-                if (creationMethod.Equals("spawned"))
+                if (connectionAttempts >= 128)
                 {
-                    if (connectionAttempts >= 30)
-                    {
-                        connectionAttempts = 0;
-                        connectionFailed = true;
-                    }
+                    connectionAttempts = 0;
+                    connectionFailed = true;
                 }
-                else
+            }
+            else
+            {
+                if (connectionAttempts >= 512)
                 {
-                    if (connectionAttempts >= 120)
-                    {
-                        connectionAttempts = 0;
-                        connectionFailed = true;
-                    }
+                    connectionAttempts = 0;
+                    connectionFailed = true;
                 }
-                if (connectionFailed == false)
+            }
+            if (connectionFailed == false)
+            {
+                GameObject[] allObjects = GameObject.FindGameObjectsWithTag("Machine");
+                objList = allObjects.ToList();
+                objList.Add(GameObject.Find("Rocket"));
+                objList.Add(GameObject.Find("LanderCargo"));
+                foreach (GameObject obj in objList)
                 {
-                    GameObject[] allObjects = GameObject.FindGameObjectsWithTag("Built");
-                    List<GameObject> objList = allObjects.ToList();
-                    objList.Add(GameObject.Find("Rocket"));
-                    objList.Add(GameObject.Find("LanderCargo"));
-                    foreach (GameObject obj in objList)
+                    if (inputObject != null && outputObject != null)
                     {
-                        if (IsValidObject(obj))
+                        break;
+                    }
+                    if (obj != null)
+                    {
+                        if (inputObject == null)
                         {
-                            ConnectToObject(obj);
+                            AttemptInputConnection(obj);
+                        }
+                        if (outputObject == null)
+                        {
+                            AttemptOutputConnection(obj);
                         }
                     }
                 }
             }
-            if (inputObject != null)
-            {
-                HandleInput();
-            }
-            else
-            {
-                conduitItem.active = false;
-                GetComponent<Light>().enabled = false;
-                GetComponent<AudioSource>().enabled = false;
-            }
-            if (outputObject != null && connectionFailed == false)
-            {
-                HandleOutput();
-            }
-            else
-            {
-                if (connectionFailed == true)
-                {
-                    if (creationMethod.Equals("spawned"))
-                    {
-                        creationMethod = "built";
-                    }
-                }
-                conduitItem.active = false;
-                GetComponent<Light>().enabled = false;
-                GetComponent<AudioSource>().enabled = false;
-                connectionLine.enabled = false;
-            }
-            if (inputObject != null && outputObject != null)
-            {
-                connectionAttempts = 0;
-            }
         }
-    }
-
-    //! The object exists, is active and is not a standard building block.
-    private bool IsValidObject(GameObject obj)
-    {
-        if (obj != null)
+        if (inputObject != null)
         {
-            return obj.transform.parent != builtObjects.transform && obj.activeInHierarchy;
+            HandleInput();
         }
-        return false;
+        else
+        {
+            conduitItem.active = false;
+            GetComponent<Light>().enabled = false;
+            GetComponent<AudioSource>().enabled = false;
+        }
+        if (outputObject != null && connectionFailed == false)
+        {
+            HandleOutput();
+        }
+        else
+        {
+            if (connectionFailed == true)
+            {
+                if (creationMethod.Equals("spawned"))
+                {
+                    creationMethod = "built";
+                }
+            }
+            conduitItem.active = false;
+            GetComponent<Light>().enabled = false;
+            GetComponent<AudioSource>().enabled = false;
+            connectionLine.enabled = false;
+        }
+        if (inputObject != null && outputObject != null)
+        {
+            connectionAttempts = 0;
+        }
     }
 
     //! The object is a potential output connection.
@@ -394,7 +389,7 @@ public class UniversalConduit : MonoBehaviour
     }
 
     //! Makes input and output connections.
-    private void ConnectToObject(GameObject obj)
+    private void AttemptInputConnection(GameObject obj)
     {
         if (obj.GetComponent<Auger>() != null)
         {
@@ -434,6 +429,11 @@ public class UniversalConduit : MonoBehaviour
                 }
             }
         }
+    }
+
+    //! Makes input and output connections.
+    private void AttemptOutputConnection(GameObject obj)
+    {
         if (obj.GetComponent<UniversalConduit>() != null)
         {
             float distance = Vector3.Distance(transform.position, obj.transform.position);

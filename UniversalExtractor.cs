@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class UniversalExtractor : MonoBehaviour
+public class UniversalExtractor : Machine
 {
     public float amount;
     public int speed = 1;
@@ -20,7 +20,6 @@ public class UniversalExtractor : MonoBehaviour
     public string creationMethod = "built";
     private LineRenderer connectionLine;
     private LineRenderer inputLine;
-    private float updateTick;
     public int address;
     public bool powerON;
     private bool extractingIce;
@@ -42,7 +41,7 @@ public class UniversalExtractor : MonoBehaviour
         connectionLine.endWidth = 0.2f;
         connectionLine.material = lineMat;
         connectionLine.loop = true;
-        builtObjects = GameObject.Find("Built_Objects");
+        builtObjects = GameObject.Find("BuiltObjects");
     }
 
     //! Used to remove the connection line renderer when the block is destroyed.
@@ -69,121 +68,113 @@ public class UniversalExtractor : MonoBehaviour
         powerObject = powerReceiver.powerObject;
     }
 
-    //! Called once per frame by unity engine.
-    public void Update()
+    //! Called by MachineManager update coroutine.
+    public override void UpdateMachine()
     {
-        updateTick += 1 * Time.deltaTime;
-        if (updateTick > 0.5f + (address * 0.001f))
+        if (ID == "unassigned" || stateManager.initMachines == false)
+            return;
+
+        GetComponent<PhysicsHandler>().UpdatePhysics();
+        UpdatePowerReceiver();
+
+        if (warmup < 10)
         {
-            if (stateManager.Busy())
-            {
-                updateTick = 0;
-                return;
-            }
+            warmup++;
+        }
+        else if (speed > power)
+        {
+            speed = power > 0 ? power : 1;
+        }
+        if (extractingIce == false)
+        {
+            heat = speed - 1 - cooling;
+        }
+        else
+        {
+            heat = 0;
+        }
+        if (heat < 0)
+        {
+            heat = 0;
+        }
+        if (outputObject != null)
+        {
+            connectionLine.SetPosition(0, transform.position);
+            connectionLine.SetPosition(1, outputObject.transform.position);
+            connectionLine.enabled = true;
+        }
+        else
+        {
+            connectionLine.enabled = false;
+        }
 
-            GetComponent<PhysicsHandler>().UpdatePhysics();
-            UpdatePowerReceiver();
-
-            updateTick = 0;
-            if (warmup < 10)
+        if (hasResource == true)
+        {
+            connectionAttempts = 0;
+            if (powerON == true && connectionFailed == false && speed > 0)
             {
-                warmup++;
-            }
-            else if (speed > power)
-            {
-                speed = power > 0 ? power : 1;
-            }
-            if (extractingIce == false)
-            {
-                heat = speed - 1 - cooling;
+                conduitItem.active = true;
+                GetComponent<Light>().enabled = true;
+                GetComponent<AudioSource>().enabled = true;
+                machineTimer += 1;
+                if (machineTimer > 5 - (address * 0.01f))
+                {
+                    amount += speed - heat;
+                    machineTimer = 0;
+                }
             }
             else
             {
-                heat = 0;
+                conduitItem.active = false;
+                GetComponent<Light>().enabled = false;
+                GetComponent<AudioSource>().enabled = false;
             }
-            if (heat < 0)
-            {
-                heat = 0;
-            }
-            if (outputObject != null)
-            {
-                connectionLine.SetPosition(0, transform.position);
-                connectionLine.SetPosition(1, outputObject.transform.position);
-                connectionLine.enabled = true;
-            }
-            else
-            {
-                connectionLine.enabled = false;
-            }
-
-            if (hasResource == true)
+            type = inputObject.GetComponent<UniversalResource>().type;
+        }
+        else
+        {
+            connectionAttempts += 1;
+            if (connectionAttempts >= 128)
             {
                 connectionAttempts = 0;
-                if (powerON == true && connectionFailed == false && speed > 0)
-                {
-                    conduitItem.active = true;
-                    GetComponent<Light>().enabled = true;
-                    GetComponent<AudioSource>().enabled = true;
-                    machineTimer += 1;
-                    if (machineTimer > 5 - (address * 0.01f))
-                    {
-                        amount += speed - heat;
-                        machineTimer = 0;
-                    }
-                }
-                else
-                {
-                    conduitItem.active = false;
-                    GetComponent<Light>().enabled = false;
-                    GetComponent<AudioSource>().enabled = false;
-                }
-                type = inputObject.GetComponent<UniversalResource>().type;
+                connectionFailed = true;
             }
-            else
+            if (connectionFailed == false)
             {
-                connectionAttempts += 1;
-                if (connectionAttempts >= 120)
+                UniversalResource[] allResources = FindObjectsOfType<UniversalResource>();
+                foreach (UniversalResource r in allResources)
                 {
-                    connectionAttempts = 0;
-                    connectionFailed = true;
-                }
-                if (connectionFailed == false)
-                {
-                    UniversalResource[] allResources = FindObjectsOfType<UniversalResource>();
-                    foreach (UniversalResource r in allResources)
+                    GameObject obj = r.gameObject;
+                    if (IsValidResource(obj))
                     {
-                        GameObject obj = r.gameObject;
-                        if (IsValidResource(obj))
+                        float distance = Vector3.Distance(transform.position, obj.transform.position);
+                        if (distance < 20)
                         {
-                            float distance = Vector3.Distance(transform.position, obj.transform.position);
-                            if (distance < 20)
+                            if (obj.GetComponent<UniversalResource>().extractor == null)
                             {
-                                if (obj.GetComponent<UniversalResource>().extractor == null)
+                                obj.GetComponent<UniversalResource>().extractor = gameObject;
+                            }
+                            if (obj.GetComponent<UniversalResource>().extractor == gameObject)
+                            {
+                                if (obj.GetComponent<UniversalResource>().type.Equals("Ice"))
                                 {
-                                    obj.GetComponent<UniversalResource>().extractor = gameObject;
+                                    extractingIce = true;
                                 }
-                                if (obj.GetComponent<UniversalResource>().extractor == gameObject)
+                                else
                                 {
-                                    if (obj.GetComponent<UniversalResource>().type.Equals("Ice"))
-                                    {
-                                        extractingIce = true;
-                                    }
-                                    else
-                                    {
-                                        extractingIce = false;
-                                    }
-                                    if (inputLine == null && obj.GetComponent<LineRenderer>() == null)
-                                    {
-                                        inputLine = obj.AddComponent<LineRenderer>();
-                                        inputLine.startWidth = 0.2f;
-                                        inputLine.endWidth = 0.2f;
-                                        inputLine.material = lineMat;
-                                        inputLine.SetPosition(0, transform.position);
-                                        inputLine.SetPosition(1, obj.transform.position);
-                                    }
-                                    inputObject = obj;
-                                    hasResource = true;
+                                    extractingIce = false;
                                 }
+                                if (inputLine == null && obj.GetComponent<LineRenderer>() == null)
+                                {
+                                    inputLine = obj.AddComponent<LineRenderer>();
+                                    inputLine.startWidth = 0.2f;
+                                    inputLine.endWidth = 0.2f;
+                                    inputLine.material = lineMat;
+                                    inputLine.SetPosition(0, transform.position);
+                                    inputLine.SetPosition(1, obj.transform.position);
+                                }
+                                inputObject = obj;
+                                hasResource = true;
                             }
                         }
                     }

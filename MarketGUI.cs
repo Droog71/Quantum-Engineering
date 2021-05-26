@@ -16,7 +16,8 @@ public class MarketGUI : MonoBehaviour
     public void Start()
     {
         playerController = GetComponent<PlayerController>();
-        textureDictionary = GetComponent<TextureDictionary>();
+        GameManager gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
+        textureDictionary = gameManager.GetComponent<TextureDictionary>();
         guiCoordinates = new GuiCoordinates();
         descriptions = new Descriptions();
         priceDictionary = new Dictionary<string, int>
@@ -33,6 +34,7 @@ public class MarketGUI : MonoBehaviour
             { "Universal Conduit", 100 },
             { "Universal Extractor", 250 },
             { "Auger", 50 },
+            { "Door", 50 },
             { "Quantum Hatchway", 50 },
             { "Storage Container", 50 },
             { "Smelter", 500 },
@@ -100,7 +102,7 @@ public class MarketGUI : MonoBehaviour
             {
                 playerController.money -= priceDictionary[item];
                 priceDictionary[item] += (int)(priceDictionary[item] * 0.025f);
-                FileBasedPrefs.SetInt(playerController.stateManager.WorldName + "money", playerController.money);
+                FileBasedPrefs.SetInt(playerController.stateManager.worldName + "money", playerController.money);
                 SavePrices();
                 playerController.PlayCraftingSound();
             }
@@ -140,7 +142,7 @@ public class MarketGUI : MonoBehaviour
             }
             playerController.money += priceDictionary[item];
             priceDictionary[item] -= (int)(priceDictionary[item] * 0.025f);
-            FileBasedPrefs.SetInt(playerController.stateManager.WorldName + "money", playerController.money);
+            FileBasedPrefs.SetInt(playerController.stateManager.worldName + "money", playerController.money);
             SavePrices();
             playerController.PlayCraftingSound();
         }
@@ -549,39 +551,44 @@ public class MarketGUI : MonoBehaviour
                     if (guiCoordinates.button5Rect.Contains(Event.current.mousePosition))
                     {
                         GUI.DrawTexture(guiCoordinates.craftingInfoBackgroundRect, textureDictionary.dictionary["Interface Background"]);
-                        GUI.Label(guiCoordinates.craftingInfoRect, descriptions.quantumHatchway + "\n\n[WORTH]\n$" + priceDictionary["Quantum Hatchway"]);
+                        GUI.Label(guiCoordinates.craftingInfoRect, descriptions.door + "\n\n[WORTH]\n$" + priceDictionary["Door"]);
                     }
                     if (guiCoordinates.button6Rect.Contains(Event.current.mousePosition))
                     {
                         GUI.DrawTexture(guiCoordinates.craftingInfoBackgroundRect, textureDictionary.dictionary["Interface Background"]);
-                        GUI.Label(guiCoordinates.craftingInfoRect, descriptions.electricLight + "\n\n[WORTH]\n$" + priceDictionary["Electric Light"]);
+                        GUI.Label(guiCoordinates.craftingInfoRect, descriptions.quantumHatchway + "\n\n[WORTH]\n$" + priceDictionary["Quantum Hatchway"]);
                     }
                     if (guiCoordinates.button7Rect.Contains(Event.current.mousePosition))
                     {
                         GUI.DrawTexture(guiCoordinates.craftingInfoBackgroundRect, textureDictionary.dictionary["Interface Background"]);
-                        GUI.Label(guiCoordinates.craftingInfoRect, descriptions.circuitBoard + "\n\n[WORTH]\n$" + priceDictionary["Circuit Board"]);
+                        GUI.Label(guiCoordinates.craftingInfoRect, descriptions.electricLight + "\n\n[WORTH]\n$" + priceDictionary["Electric Light"]);
                     }
                     if (guiCoordinates.button9Rect.Contains(Event.current.mousePosition))
                     {
                         GUI.DrawTexture(guiCoordinates.craftingInfoBackgroundRect, textureDictionary.dictionary["Interface Background"]);
-                        GUI.Label(guiCoordinates.craftingInfoRect, descriptions.electricMotor + "\n\n[WORTH]\n$" + priceDictionary["Electric Motor"]);
+                        GUI.Label(guiCoordinates.craftingInfoRect, descriptions.circuitBoard + "\n\n[WORTH]\n$" + priceDictionary["Circuit Board"]);
                     }
                     if (guiCoordinates.button10Rect.Contains(Event.current.mousePosition))
                     {
                         GUI.DrawTexture(guiCoordinates.craftingInfoBackgroundRect, textureDictionary.dictionary["Interface Background"]);
-                        GUI.Label(guiCoordinates.craftingInfoRect, descriptions.storageComputer + "\n\n[WORTH]\n$" + priceDictionary["Storage Computer"]);
+                        GUI.Label(guiCoordinates.craftingInfoRect, descriptions.electricMotor + "\n\n[WORTH]\n$" + priceDictionary["Electric Motor"]);
                     }
                     if (guiCoordinates.button11Rect.Contains(Event.current.mousePosition))
                     {
                         GUI.DrawTexture(guiCoordinates.craftingInfoBackgroundRect, textureDictionary.dictionary["Interface Background"]);
-                        GUI.Label(guiCoordinates.craftingInfoRect, descriptions.turret + "\n\n[WORTH]\n$" + priceDictionary["Turret"]);
+                        GUI.Label(guiCoordinates.craftingInfoRect, descriptions.storageComputer + "\n\n[WORTH]\n$" + priceDictionary["Storage Computer"]);
                     }
                     if (guiCoordinates.button12Rect.Contains(Event.current.mousePosition))
                     {
                         GUI.DrawTexture(guiCoordinates.craftingInfoBackgroundRect, textureDictionary.dictionary["Interface Background"]);
-                        GUI.Label(guiCoordinates.craftingInfoRect, descriptions.missileTurret + "\n\n[WORTH]\n$" + priceDictionary["Missile Turret"]);
+                        GUI.Label(guiCoordinates.craftingInfoRect, descriptions.turret + "\n\n[WORTH]\n$" + priceDictionary["Turret"]);
                     }
                     if (guiCoordinates.button13Rect.Contains(Event.current.mousePosition))
+                    {
+                        GUI.DrawTexture(guiCoordinates.craftingInfoBackgroundRect, textureDictionary.dictionary["Interface Background"]);
+                        GUI.Label(guiCoordinates.craftingInfoRect, descriptions.missileTurret + "\n\n[WORTH]\n$" + priceDictionary["Missile Turret"]);
+                    }
+                    if (guiCoordinates.button14Rect.Contains(Event.current.mousePosition))
                     {
                         GUI.DrawTexture(guiCoordinates.craftingInfoBackgroundRect, textureDictionary.dictionary["Interface Background"]);
                         GUI.Label(guiCoordinates.craftingInfoRect, descriptions.missile + "\n\n[WORTH]\n$" + priceDictionary["Missile"]);
@@ -640,7 +647,18 @@ public class MarketGUI : MonoBehaviour
                             SellItem("Steel Ramp");
                         }
                     }
-                    if (GUI.Button(guiCoordinates.button5Rect, "Quantum Hatchway"))
+                    if (GUI.Button(guiCoordinates.button5Rect, "Door"))
+                    {
+                        if (selling == false)
+                        {
+                            BuyItem("Door");
+                        }
+                        else
+                        {
+                            SellItem("Door");
+                        }
+                    }
+                    if (GUI.Button(guiCoordinates.button6Rect, "Quantum Hatchway"))
                     {
                         if (selling == false)
                         {
@@ -651,7 +669,7 @@ public class MarketGUI : MonoBehaviour
                             SellItem("Quantum Hatchway");
                         }
                     }
-                    if (GUI.Button(guiCoordinates.button6Rect, "Electric Light"))
+                    if (GUI.Button(guiCoordinates.button7Rect, "Electric Light"))
                     {
                         if (selling == false)
                         {
@@ -662,7 +680,7 @@ public class MarketGUI : MonoBehaviour
                             SellItem("Electric Light");
                         }
                     }
-                    if (GUI.Button(guiCoordinates.button7Rect, "Circuit Board"))
+                    if (GUI.Button(guiCoordinates.button9Rect, "Circuit Board"))
                     {
                         if (selling == false)
                         {
@@ -673,7 +691,7 @@ public class MarketGUI : MonoBehaviour
                             SellItem("Circuit Board");
                         }
                     }
-                    if (GUI.Button(guiCoordinates.button9Rect, "Electric Motor"))
+                    if (GUI.Button(guiCoordinates.button10Rect, "Electric Motor"))
                     {
                         if (selling == false)
                         {
@@ -684,7 +702,7 @@ public class MarketGUI : MonoBehaviour
                             SellItem("Electric Motor");
                         }
                     }
-                    if (GUI.Button(guiCoordinates.button10Rect, "Storage Computer"))
+                    if (GUI.Button(guiCoordinates.button11Rect, "Storage Computer"))
                     {
                         if (selling == false)
                         {
@@ -695,7 +713,7 @@ public class MarketGUI : MonoBehaviour
                             SellItem("Storage Computer");
                         }
                     }
-                    if (GUI.Button(guiCoordinates.button11Rect, "Turret"))
+                    if (GUI.Button(guiCoordinates.button12Rect, "Turret"))
                     {
                         if (selling == false)
                         {
@@ -706,7 +724,7 @@ public class MarketGUI : MonoBehaviour
                             SellItem("Turret");
                         }
                     }
-                    if (GUI.Button(guiCoordinates.button12Rect, "Missile Turret"))
+                    if (GUI.Button(guiCoordinates.button13Rect, "Missile Turret"))
                     {
                         if (selling == false)
                         {
@@ -717,7 +735,7 @@ public class MarketGUI : MonoBehaviour
                             SellItem("Missile Turret");
                         }
                     }
-                    if (GUI.Button(guiCoordinates.button13Rect, "Missile"))
+                    if (GUI.Button(guiCoordinates.button14Rect, "Missile"))
                     {
                         if (selling == false)
                         {

@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class AutoCrafter : MonoBehaviour
+public class AutoCrafter : Machine
 {
     public int speed = 1;
     public string ID = "unassigned";
@@ -21,7 +21,6 @@ public class AutoCrafter : MonoBehaviour
     public GameObject powerObject;
     public ConduitItem conduitItem;
     public Material lineMat;
-    private float updateTick;
     private int machineTimer;
     private int warmup;
     private LineRenderer connectionLine;
@@ -43,111 +42,107 @@ public class AutoCrafter : MonoBehaviour
         connectionLine.material = lineMat;
         connectionLine.loop = true;
         connectionLine.enabled = false;
-        builtObjects = GameObject.Find("Built_Objects");
+        builtObjects = GameObject.Find("BuiltObjects");
         conduitItem = GetComponentInChildren<ConduitItem>(true);
     }
 
-    //! Called once per frame by unity engine.
-    public void Update()
+    //! Called by MachineManager update coroutine.
+    public override void UpdateMachine()
     {
-        updateTick += 1 * Time.deltaTime;
-        if (updateTick > 0.5f + (address * 0.001f))
+        if (ID == "unassigned" || stateManager.initMachines == false)
+            return;
+
+        GetComponent<PhysicsHandler>().UpdatePhysics();
+        UpdatePowerReceiver();
+
+        if (warmup < 10)
         {
-            if (stateManager.Busy())
-            {
-                 updateTick = 0;
-                return;
-            }
+            warmup++;
+        }
+        else if (speed > power)
+        {
+            speed = power > 0 ? power : 1;
+        }
+        if (speed > 1)
+        {
+            heat = speed - 1 - cooling;
+        }
+        else
+        {
+            heat = 0;
+        }
+        if (heat < 0)
+        {
+            heat = 0;
+        }
 
-            GetComponent<PhysicsHandler>().UpdatePhysics();
-            UpdatePowerReceiver();
+        GetComponent<InventoryManager>().ID = ID;
+        bool foundType = false;
+        foreach (InventorySlot slot in GetComponent<InventoryManager>().inventory)
+        {
+            if (foundType == false)
+            {
+                if (slot.amountInSlot > 0)
+                {
+                    foundType = true;
+                    type = slot.typeInSlot;
+                }
+            }
+        }
 
-            updateTick = 0;
-            if (warmup < 10)
+        if (inputObject == null)
+        {
+            connectionAttempts += 1;
+            if (creationMethod.Equals("spawned"))
             {
-                warmup++;
-            }
-            else if (speed > power)
-            {
-                speed = power > 0 ? power : 1;
-            }
-            if (speed > 1)
-            {
-                heat = speed - 1 - cooling;
+                if (connectionAttempts >= 128)
+                {
+                    connectionAttempts = 0;
+                    connectionFailed = true;
+                }
             }
             else
             {
-                heat = 0;
-            }
-            if (heat < 0)
-            {
-                heat = 0;
-            }
-
-            GetComponent<InventoryManager>().ID = ID;
-            bool foundType = false;
-            foreach (InventorySlot slot in GetComponent<InventoryManager>().inventory)
-            {
-                if (foundType == false)
+                if (connectionAttempts >= 512)
                 {
-                    if (slot.amountInSlot > 0)
+                    connectionAttempts = 0;
+                    connectionFailed = true;
+                }
+            }
+            if (connectionFailed == false)
+            {
+                GameObject[] allObjects = GameObject.FindGameObjectsWithTag("Machine");
+                foreach (GameObject obj in allObjects)
+                {
+                    if (inputObject != null)
                     {
-                        foundType = true;
-                        type = slot.typeInSlot;
+                        break;
+                    }
+                    if (obj != null)
+                    {
+                        AttemptConnection(obj);
                     }
                 }
             }
+        }
 
-            if (inputObject == null)
+        if (connectionFailed == false && inputObject != null)
+        {
+            DoWork();
+        }
+        else
+        {
+            ShutDown(true);
+        }
+
+        if (inputObject == null)
+        {
+            ShutDown(true);
+            if (connectionFailed == true)
             {
-                connectionAttempts += 1;
                 if (creationMethod.Equals("spawned"))
                 {
-                    if (connectionAttempts >= 30)
-                    {
-                        connectionAttempts = 0;
-                        connectionFailed = true;
-                    }
-                }
-                else
-                {
-                    if (connectionAttempts >= 120)
-                    {
-                        connectionAttempts = 0;
-                        connectionFailed = true;
-                    }
-                }
-                if (connectionFailed == false)
-                {
-                    GameObject[] allObjects = GameObject.FindGameObjectsWithTag("Built");
-                    foreach (GameObject obj in allObjects)
-                    {
-                        if (IsValidObject(obj))
-                        {
-                            ConnectToObject(obj);
-                        }
-                    }
-                }
-            }
-
-            if (connectionFailed == false && inputObject != null)
-            {
-                DoWork();
-            }
-            else
-            {
-                ShutDown(true);
-            }
-
-            if (inputObject == null)
-            {
-                ShutDown(true);
-                if (connectionFailed == true)
-                {
-                    if (creationMethod.Equals("spawned"))
-                    {
-                        creationMethod = "built";
-                    }
+                    creationMethod = "built";
                 }
             }
         }
@@ -162,16 +157,6 @@ public class AutoCrafter : MonoBehaviour
         powerObject = powerReceiver.powerObject;
     }
 
-    //! Returns true if the object exists, is active and is not a standard building block.
-    bool IsValidObject(GameObject obj)
-    {
-        if (obj != null)
-        {
-            return obj.transform.parent != builtObjects.transform && obj.activeInHierarchy;
-        }
-        return false;
-    }
-
     private bool IsStorageContainer(GameObject obj)
     {
         return obj != gameObject
@@ -183,7 +168,7 @@ public class AutoCrafter : MonoBehaviour
     }
 
     //! Connects the auto crafter to a storage inventory.
-    private void ConnectToObject(GameObject obj)
+    private void AttemptConnection(GameObject obj)
     {
         if (inputObject == null && IsStorageContainer(obj))
         {

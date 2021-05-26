@@ -6,6 +6,7 @@ public class RailCart : MonoBehaviour
     public string creationMethod = "built";
     public GameObject target;
     private Vector3 targetPosition;
+    public Vector3 startPosition;
     private StateManager stateManager;
     public int address;
     public string targetID;
@@ -16,7 +17,7 @@ public class RailCart : MonoBehaviour
     //! Called by unity engine on start up to initialize variables.
     public void Start()
     {
-        builtObjects = GameObject.Find("Built_Objects");
+        builtObjects = GameObject.Find("BuiltObjects");
         stateManager = FindObjectOfType<StateManager>();
     }
 

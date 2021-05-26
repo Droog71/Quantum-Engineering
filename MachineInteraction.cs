@@ -21,31 +21,35 @@ public class MachineInteraction
         }
     }
 
-    //! Called when the player is looking at a quantum hatchway.
-    public void InteractWithAirLock()
+    //! Called when the player is looking at a door.
+    public void InteractWithDoor()
     {
-        AirLock airLock = playerController.objectInSight.GetComponent<AirLock>();
+        Door door = playerController.objectInSight.GetComponent<Door>();
+        string doorType = playerController.objectInSight.GetComponent<Door>().type;
+        playerController.doorToEdit = door;
+
         if (cInput.GetKeyDown("Collect Object"))
         {
-            interactionController.CollectObject("Quantum Hatchway");
+            interactionController.CollectObject(doorType);
         }
+
         if (cInput.GetKeyDown("Interact"))
         {
-            AirLock[] airLocks = Object.FindObjectsOfType<AirLock>();
-            foreach (AirLock a in airLocks)
+            if (Input.GetKey(KeyCode.LeftControl))
             {
-                if (Vector3.Distance(playerController.transform.position, a.transform.position) < 40)
+                if (!playerController.GuiOpen())
                 {
-                    a.ToggleOpen();
+                    playerController.doorGUIopen = !playerController.doorGUIopen;
                 }
-            }
-            if (airLock.open == true)
-            {
-                airLock.openObject.GetComponent<AudioSource>().Play();
+                else
+                {
+                    playerController.doorGUIopen = false;
+                }
             }
             else
             {
-                airLock.closedObject.GetComponent<AudioSource>().Play();
+                door.GetComponent<AudioSource>().Play();
+                door.ToggleOpen();
             }
         }
     }
@@ -137,6 +141,8 @@ public class MachineInteraction
         }
         if (cInput.GetKeyDown("Interact"))
         {
+            playerController.networkedConduitRange = powerConduit.range;
+            playerController.networkedDualPower = powerConduit.dualOutput;
             interactionController.ToggleMachineGUI();
         }
     }
@@ -158,6 +164,7 @@ public class MachineInteraction
         }
         if (cInput.GetKeyDown("Interact"))
         {
+            playerController.networkedMachineSpeed = turret.speed;
             interactionController.ToggleMachineGUI();
         }
     }
@@ -181,6 +188,7 @@ public class MachineInteraction
         }
         if (cInput.GetKeyDown("Interact"))
         {
+            playerController.networkedMachineSpeed = turret.speed;
             interactionController.ToggleMachineGUI();
         }
     }
@@ -204,6 +212,7 @@ public class MachineInteraction
         }
         if (cInput.GetKeyDown("Interact"))
         {
+            playerController.networkedMachineSpeed = extractor.speed;
             interactionController.ToggleMachineGUI();
         }
     }
@@ -226,6 +235,7 @@ public class MachineInteraction
         }
         if (cInput.GetKeyDown("Interact"))
         {
+            playerController.networkedMachineSpeed = auger.speed;
             interactionController.ToggleMachineGUI();
         }
     }
@@ -250,6 +260,7 @@ public class MachineInteraction
         {
             if (playerController.machineGUIopen == false)
             {
+                playerController.networkedMachineSpeed = collector.speed;
                 playerController.machineGUIopen = true;
             }
             else
@@ -450,6 +461,7 @@ public class MachineInteraction
         }
         if (cInput.GetKeyDown("Interact"))
         {
+            playerController.networkedConduitRange = conduit.range;
             interactionController.ToggleMachineGUI();
         }
     }
@@ -528,6 +540,7 @@ public class MachineInteraction
         }
         if (cInput.GetKeyDown("Interact"))
         {
+            playerController.networkedConduitRange = dmConduit.range;
             interactionController.ToggleMachineGUI();
         }
     }
@@ -571,6 +584,7 @@ public class MachineInteraction
         {
             if (playerController.machineGUIopen == false)
             {
+                playerController.networkedMachineSpeed = smelter.speed;
                 playerController.machineGUIopen = true;
             }
             else
@@ -630,6 +644,7 @@ public class MachineInteraction
         {
             if (playerController.machineGUIopen == false)
             {
+                playerController.networkedMachineSpeed = alloySmelter.speed;
                 playerController.machineGUIopen = true;
             }
             else
@@ -678,6 +693,7 @@ public class MachineInteraction
         {
             if (playerController.machineGUIopen == false)
             {
+                playerController.networkedMachineSpeed = extruder.speed;
                 playerController.machineGUIopen = true;
             }
             else
@@ -726,6 +742,7 @@ public class MachineInteraction
         {
             if (playerController.machineGUIopen == false)
             {
+                playerController.networkedMachineSpeed = modMachine.speed;
                 playerController.machineGUIopen = true;
             }
             else
@@ -822,6 +839,7 @@ public class MachineInteraction
         {
             if (playerController.machineGUIopen == false)
             {
+                playerController.networkedMachineSpeed = retriever.speed;
                 playerController.machineGUIopen = true;
                 playerController.remoteStorageActive = false;
             }
@@ -917,6 +935,7 @@ public class MachineInteraction
         {
             if (playerController.machineGUIopen == false)
             {
+                playerController.networkedMachineSpeed = heatExchanger.speed;
                 playerController.hxAmount = heatExchanger.amount;
                 playerController.machineGUIopen = true;
             }
@@ -966,6 +985,7 @@ public class MachineInteraction
         {
             if (playerController.machineGUIopen == false)
             {
+                playerController.networkedMachineSpeed = gearCutter.speed;
                 playerController.machineGUIopen = true;
             }
             else
@@ -1014,6 +1034,7 @@ public class MachineInteraction
         {
             if (playerController.machineGUIopen == false)
             {
+                playerController.networkedMachineSpeed = press.speed;
                 playerController.machineGUIopen = true;
             }
             else
@@ -1055,6 +1076,7 @@ public class MachineInteraction
         {
             if (playerController.machineGUIopen == false)
             {
+                playerController.networkedMachineSpeed = autoCrafter.speed;
                 playerController.machineGUIopen = true;
                 playerController.remoteStorageActive = false;
             }

@@ -1,16 +1,16 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-public class StorageComputer : MonoBehaviour
+public class StorageComputer : Machine
 {
     public InventoryManager[] computerContainers;
     private List<InventoryManager> computerContainerList;
+    private int connectionAttempts;
     public string ID = "unassigned";
     public bool powerON;
     public int bootTimer;
     public bool initialized;
     public int address;
-    private float updateTick;
     private StateManager stateManager;
     private List<GameObject> spawnedConnectionList;
     public GameObject connectionObject;
@@ -29,46 +29,54 @@ public class StorageComputer : MonoBehaviour
         conduitItem = GetComponentInChildren<ConduitItem>(true);
     }
 
-    //! Called once per frame by unity engine.
-    public void Update()
+    //! Called by MachineManager update coroutine.
+    public override void UpdateMachine()
     {
-        updateTick += 1 * Time.deltaTime;
-        if (updateTick > 0.5f + (address * 0.001f))
+        if (ID == "unassigned" || stateManager.initMachines == false)
+            return;
+
+        GetComponent<PhysicsHandler>().UpdatePhysics();
+        UpdatePowerReceiver();
+
+        if (powerON == true)
         {
-            if (stateManager.Busy())
+            if (initialized == false)
             {
-                 updateTick = 0;
-                return;
-            }
-
-            GetComponent<PhysicsHandler>().UpdatePhysics();
-            UpdatePowerReceiver();
-
-            updateTick = 0;
-            if (powerON == true)
-            {
-                if (initialized == false)
+                bootTimer++;
+                if (bootTimer >= 5)
                 {
-                    bootTimer++;
-                    if (bootTimer >= 5)
+                    GetContainers();
+                    bool foundContainer = false;
+                    int containerCount = 0;
+                    foreach (InventoryManager manager in computerContainers)
                     {
-                        GetContainers();
-                        initialized = true;
-                        bootTimer = 0;
+                        foundContainer |= computerContainers[containerCount] != null;
+                        containerCount++;
                     }
+                    if (foundContainer == false)
+                    {
+                        Reboot();
+                        connectionAttempts++;
+                        initialized |= connectionAttempts >= 128;
+                    }
+                    else
+                    {
+                        initialized = true;
+                    }
+                    bootTimer = 0;
                 }
             }
-            else
+        }
+        else
+        {
+            initialized = false;
+            bootTimer = 0;
+            GameObject[] spawnedConnections = spawnedConnectionList.ToArray();
+            foreach (GameObject obj in spawnedConnections)
             {
-                initialized = false;
-                bootTimer = 0;
-                GameObject[] spawnedConnections = spawnedConnectionList.ToArray();
-                foreach (GameObject obj in spawnedConnections)
+                if (obj != null)
                 {
-                    if (obj != null)
-                    {
-                        obj.SetActive(false);
-                    }
+                    obj.SetActive(false);
                 }
             }
         }
@@ -92,7 +100,7 @@ public class StorageComputer : MonoBehaviour
             GameObject containerObject = container.gameObject;
             Transform containerTransform = containerObject.transform;
             float distance = Vector3.Distance(transform.position, containerObject.transform.position);
-            if (IsValidContainer(containerObject) && distance < 40)
+            if (IsValidContainer(containerObject) && distance <= 40)
             {
                 computerContainerList.Add(container);
                 GameObject spawnedConnection = Instantiate(connectionObject, containerTransform.position, containerTransform.rotation);

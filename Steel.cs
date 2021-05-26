@@ -1,13 +1,12 @@
 ﻿using UnityEngine;
 
 //! This class is attached to all steel block prefabs.
-public class Steel : MonoBehaviour
+public class Steel : Block
 {
     public string ID = "unassigned";
     private StateManager stateManager;
     public string creationMethod;
     public int address;
-    private float updateTick;
 
     //! Called by unity engine on start up to initialize variables.
     public void Start()
@@ -15,20 +14,12 @@ public class Steel : MonoBehaviour
         stateManager = FindObjectOfType<StateManager>();
     }
 
-    //! Called once per frame by unity engine.
-    public void Update()
+    //! Called by BlockManager update coroutine.
+    public override void UpdateBlock()
     {
-        updateTick += 1 * Time.deltaTime;
-        if (updateTick > 0.5f + (address * 0.001f))
-        {
-            if (stateManager.Busy())
-            {
-                 updateTick = 0;
-                return;
-            }
+        if (ID == "unassigned" || stateManager.Busy())
+            return;
 
-            GetComponent<PhysicsHandler>().UpdatePhysics();
-            updateTick = 0;
-        }
+        GetComponent<PhysicsHandler>().UpdatePhysics();
     }
 }

@@ -53,8 +53,6 @@ public class ActionManager
                 playerController.stoppingBuildCoRoutine = true;
                 meshManager.CombineBlocks();
                 playerController.separatedBlocks = false;
-                playerController.destroyTimer = 0;
-                playerController.buildTimer = 0;
                 playerController.building = false;
                 playerController.destroying = false;
             }
@@ -90,8 +88,6 @@ public class ActionManager
                 playerController.stoppingBuildCoRoutine = true;
                 meshManager.CombineBlocks();
                 playerController.separatedBlocks = false;
-                playerController.destroyTimer = 0;
-                playerController.buildTimer = 0;
                 playerController.building = false;
                 playerController.destroying = false;
             }
@@ -120,6 +116,21 @@ public class ActionManager
     //! Toggles the paint gun.
     public void TogglePaintGun()
     {
+        if (playerController.building == true || playerController.destroying == true)
+        {
+            if (playerController.gameManager.working == false)
+            {
+                playerController.stoppingBuildCoRoutine = true;
+                meshManager.CombineBlocks();
+                playerController.separatedBlocks = false;
+                playerController.building = false;
+                playerController.destroying = false;
+            }
+            else
+            {
+                playerController.requestedBuildingStop = true;
+            }
+        }
         if (playerController.paintGunActive == false)
         {
             playerController.paintGunActive = true;
@@ -135,23 +146,6 @@ public class ActionManager
             playerController.paintGunActive = false;
             playerController.paintColorSelected = false;
         }
-        if (playerController.building == true || playerController.destroying == true)
-        {
-            if (playerController.gameManager.working == false)
-            {
-                playerController.stoppingBuildCoRoutine = true;
-                meshManager.CombineBlocks();
-                playerController.separatedBlocks = false;
-                playerController.destroyTimer = 0;
-                playerController.buildTimer = 0;
-                playerController.building = false;
-                playerController.destroying = false;
-            }
-            else
-            {
-                playerController.requestedBuildingStop = true;
-            }
-        }
     }
 
     //! Toggles the inventory GUI.
@@ -159,23 +153,6 @@ public class ActionManager
     {
         if (!playerController.GuiOpen())
         {
-            if (playerController.building == true || playerController.destroying == true)
-            {
-                if (playerController.gameManager.working == false)
-                {
-                    playerController.stoppingBuildCoRoutine = true;
-                    meshManager.CombineBlocks();
-                    playerController.separatedBlocks = false;
-                    playerController.destroyTimer = 0;
-                    playerController.buildTimer = 0;
-                    playerController.building = false;
-                    playerController.destroying = false;
-                }
-                else
-                {
-                    playerController.requestedBuildingStop = true;
-                }
-            }
             Cursor.visible = true;
             Cursor.lockState = CursorLockMode.None;
             playerController.machineGUIopen = false;
@@ -198,23 +175,6 @@ public class ActionManager
     {
         if (!playerController.GuiOpen())
         {
-            if (playerController.building == true || playerController.destroying == true)
-            {
-                if (playerController.gameManager.working == false)
-                {
-                    playerController.stoppingBuildCoRoutine = true;
-                    meshManager.CombineBlocks();
-                    playerController.separatedBlocks = false;
-                    playerController.destroyTimer = 0;
-                    playerController.buildTimer = 0;
-                    playerController.building = false;
-                    playerController.destroying = false;
-                }
-                else
-                {
-                    playerController.requestedBuildingStop = true;
-                }
-            }
             Cursor.visible = true;
             Cursor.lockState = CursorLockMode.None;
             playerController.machineGUIopen = false;
@@ -238,23 +198,6 @@ public class ActionManager
     {
         if (!playerController.GuiOpen())
         {
-            if (playerController.building == true || playerController.destroying == true)
-            {
-                if (playerController.gameManager.working == false)
-                {
-                    playerController.stoppingBuildCoRoutine = true;
-                    meshManager.CombineBlocks();
-                    playerController.separatedBlocks = false;
-                    playerController.destroyTimer = 0;
-                    playerController.buildTimer = 0;
-                    playerController.building = false;
-                    playerController.destroying = false;
-                }
-                else
-                {
-                    playerController.requestedBuildingStop = true;
-                }
-            }
             Cursor.visible = true;
             Cursor.lockState = CursorLockMode.None;
             playerController.machineGUIopen = false;
@@ -280,23 +223,6 @@ public class ActionManager
     {
         if (!playerController.GuiOpen())
         {
-            if (playerController.building == true || playerController.destroying == true)
-            {
-                if (playerController.gameManager.working == false)
-                {
-                    playerController.stoppingBuildCoRoutine = true;
-                    meshManager.CombineBlocks();
-                    playerController.separatedBlocks = false;
-                    playerController.destroyTimer = 0;
-                    playerController.buildTimer = 0;
-                    playerController.building = false;
-                    playerController.destroying = false;
-                }
-                else
-                {
-                    playerController.requestedBuildingStop = true;
-                }
-            }
             Cursor.visible = true;
             Cursor.lockState = CursorLockMode.None;
             playerController.tabletOpen = true;
@@ -562,8 +488,6 @@ public class ActionManager
         if (playerController.buildIncrementTimer >= 0.1f)
         {
             playerController.buildMultiplier += 1;
-            playerController.destroyTimer = 0;
-            playerController.buildTimer = 0;
             playerController.buildIncrementTimer = 0;
             playerController.PlayButtonSound();
         }
@@ -576,10 +500,21 @@ public class ActionManager
         if (playerController.buildIncrementTimer >= 0.1f)
         {
             playerController.buildMultiplier -= 1;
-            playerController.destroyTimer = 0;
-            playerController.buildTimer = 0;
             playerController.buildIncrementTimer = 0;
             playerController.PlayButtonSound();
+        }
+    }
+
+    //! Toggles building mode.
+    public void ToggleBuilding()
+    {
+        if (playerController.building == true)
+        {
+            StopBuilding();
+        }
+        else
+        {
+            StartBuildMode();
         }
     }
 
@@ -588,39 +523,25 @@ public class ActionManager
     {
         if (!playerController.GuiOpen())
         {
-            bool foundItems = false;
-            foreach (InventorySlot slot in playerController.playerInventory.inventory)
+            if (playerController.paintGunActive == true)
             {
-                if (foundItems == false && slot.amountInSlot > 0)
-                {
-                    foundItems |= slot.typeInSlot.Equals(playerController.buildType);
-                }
+                playerController.paintGun.SetActive(false);
+                playerController.paintGunActive = false;
+                playerController.paintColorSelected = false;
             }
-            if (foundItems == true)
+            if (playerController.scannerActive == true)
             {
-                playerController.building = true;
-                Cursor.visible = false;
-                Cursor.lockState = CursorLockMode.Locked;
-                playerController.inventoryOpen = false;
-                playerController.craftingGUIopen = false;
-                playerController.storageGUIopen = false;
-                if (playerController.paintGunActive == true)
-                {
-                    playerController.paintGun.SetActive(false);
-                    playerController.paintGunActive = false;
-                    playerController.paintColorSelected = false;
-                }
-                if (playerController.scannerActive == true)
-                {
-                    playerController.scanner.SetActive(false);
-                    playerController.scannerActive = false;
-                }
-                if (playerController.laserCannonActive == true)
-                {
-                    playerController.laserCannon.SetActive(false);
-                    playerController.laserCannonActive = false;
-                }
+                playerController.scanner.SetActive(false);
+                playerController.scannerActive = false;
             }
+            if (playerController.laserCannonActive == true)
+            {
+                playerController.laserCannon.SetActive(false);
+                playerController.laserCannonActive = false;
+            }
+            Cursor.visible = false;
+            Cursor.lockState = CursorLockMode.Locked;
+            playerController.building = true;
         }
     }
 
@@ -634,8 +555,6 @@ public class ActionManager
                 playerController.stoppingBuildCoRoutine = true;
                 meshManager.CombineBlocks();
                 playerController.separatedBlocks = false;
-                playerController.destroyTimer = 0;
-                playerController.buildTimer = 0;
                 playerController.building = false;
                 playerController.destroying = false;
             }
@@ -644,32 +563,17 @@ public class ActionManager
                 playerController.requestedBuildingStop = true;
             }
         }
-        if (playerController.paintGunActive == true)
-        {
-            TogglePaintGun();
-        }
+    }
+
+    //! Removes duplicate blocks.
+    public void Undo()
+    {
+        playerController.gameManager.UndoBuiltObjects();
     }
 
     //! Closes machine GUI.
     public void CloseMachineGUI()
     {
-        if (playerController.building == true || playerController.destroying == true)
-        {
-            if (playerController.gameManager.working == false)
-            {
-                playerController.stoppingBuildCoRoutine = true;
-                meshManager.CombineBlocks();
-                playerController.separatedBlocks = false;
-                playerController.destroyTimer = 0;
-                playerController.buildTimer = 0;
-                playerController.building = false;
-                playerController.destroying = false;
-            }
-            else
-            {
-                playerController.requestedBuildingStop = true;
-            }
-        }
         Cursor.visible = true;
         Cursor.lockState = CursorLockMode.None;
         playerController.gameObject.GetComponent<MSCameraController>().enabled = false;
@@ -679,23 +583,6 @@ public class ActionManager
     //! Closes tablet GUI.
     public void CloseTablet()
     {
-        if (playerController.building == true || playerController.destroying == true)
-        {
-            if (playerController.gameManager.working == false)
-            {
-                playerController.stoppingBuildCoRoutine = true;
-                meshManager.CombineBlocks();
-                playerController.separatedBlocks = false;
-                playerController.destroyTimer = 0;
-                playerController.buildTimer = 0;
-                playerController.building = false;
-                playerController.destroying = false;
-            }
-            else
-            {
-                playerController.requestedBuildingStop = true;
-            }
-        }
         Cursor.visible = true;
         Cursor.lockState = CursorLockMode.None;
         playerController.gameObject.GetComponent<MSCameraController>().enabled = false;

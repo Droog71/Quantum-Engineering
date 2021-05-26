@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class MissileTurret : MonoBehaviour
+public class MissileTurret : Machine
 {
     public int speed = 1;
     public int power;
@@ -14,7 +14,6 @@ public class MissileTurret : MonoBehaviour
     public string creationMethod = "built";
     public string inputID;
     public GameObject inputObject;
-    private float updateTick;
     public int address;
     public bool powerON;
     private Quaternion restingRotation;
@@ -40,93 +39,85 @@ public class MissileTurret : MonoBehaviour
         restingRotation = launcher.transform.rotation;
     }
 
-    //! Called once per frame by unity engine.
-    public void Update()
+    //! Called by MachineManager update coroutine.
+    public override void UpdateMachine()
     {
-        updateTick += 1 * Time.deltaTime;
-        if (updateTick > 0.5f + (address * 0.001f))
+        if (ID == "unassigned" || stateManager.initMachines == false)
+            return;
+
+        GetComponent<PhysicsHandler>().UpdatePhysics();
+        UpdatePowerReceiver();
+
+        if (game == null)
         {
-            if (stateManager.Busy())
+            game = GameObject.Find("GameManager").GetComponent<GameManager>();
+        }
+        if (game != null)
+        {
+            if (warmup < 10)
             {
-                updateTick = 0;
-                return;
+                warmup++;
+            }
+            else if (speed > power)
+            {
+                speed = power > 0 ? power : 1;
             }
 
-            GetComponent<PhysicsHandler>().UpdatePhysics();
-            UpdatePowerReceiver();
-
-            updateTick = 0;
-            if (game == null)
+            if (speed > 1)
             {
-                game = GameObject.Find("GameManager").GetComponent<GameManager>();
+                heat = speed - 1 - cooling;
             }
-            if (game != null)
+            else
             {
-                if (warmup < 10)
-                {
-                    warmup++;
-                }
-                else if (speed > power)
-                {
-                    speed = power > 0 ? power : 1;
-                }
+                heat = 0;
+            }
 
-                if (speed > 1)
-                {
-                    heat = speed - 1 - cooling;
-                }
-                else
-                {
-                    heat = 0;
-                }
+            if (heat < 0)
+            {
+                heat = 0;
+            }
 
-                if (heat < 0)
+            if (game.meteorShowerTimer >= 540 && game.meteorShowerTimer < 900 || game.pirateAttackTimer >= 540 && game.pirateAttackTimer < 900 && GameObject.Find("Rocket").GetComponent<Rocket>().day >= 5)
+            {
+                if (foundTarget == false)
                 {
-                    heat = 0;
-                }
-
-                if (game.meteorShowerTimer >= 540 && game.meteorShowerTimer < 900 || game.pirateAttackTimer >= 540 && game.pirateAttackTimer < 900 && GameObject.Find("Rocket").GetComponent<Rocket>().day >= 5)
-                {
-                    if (foundTarget == false)
+                    targets = new GameObject[speed - heat];
+                    int count = 0;
+                    GameObject[] allObjects = GameObject.FindGameObjectsWithTag("Entity");
+                    foreach (GameObject obj in allObjects)
                     {
-                        targets = new GameObject[speed - heat];
-                        int count = 0;
-                        GameObject[] allObjects = GameObject.FindGameObjectsWithTag("Entity");
-                        foreach (GameObject obj in allObjects)
+                        if (obj.activeInHierarchy)
                         {
-                            if (obj.activeInHierarchy)
+                            float distance = Vector3.Distance(transform.position, obj.transform.position);
+                            if (distance < 1000)
                             {
-                                float distance = Vector3.Distance(transform.position, obj.transform.position);
-                                if (distance < 1000)
+                                if (obj.GetComponent<Meteor>() != null)
                                 {
-                                    if (obj.GetComponent<Meteor>() != null)
+                                    if (count < speed - heat && obj.GetComponent<Meteor>().destroying == false && obj.GetComponent<Meteor>().altitude > 200)
                                     {
-                                        if (count < speed - heat && obj.GetComponent<Meteor>().destroying == false && obj.GetComponent<Meteor>().altitude > 200)
-                                        {
-                                            foundTarget = true;
-                                            targets[count] = obj;
-                                            count++;
-                                        }
+                                        foundTarget = true;
+                                        targets[count] = obj;
+                                        count++;
                                     }
-                                    else if (obj.GetComponent<Pirate>() != null)
+                                }
+                                else if (obj.GetComponent<Pirate>() != null)
+                                {
+                                    if (count < speed - heat && obj.GetComponent<Pirate>().destroying == false)
                                     {
-                                        if (count < speed - heat && obj.GetComponent<Pirate>().destroying == false)
-                                        {
-                                            foundTarget = true;
-                                            targets[count] = obj;
-                                            count++;
-                                        }
+                                        foundTarget = true;
+                                        targets[count] = obj;
+                                        count++;
                                     }
                                 }
                             }
                         }
                     }
-                    else
+                }
+                else
+                {
+                    if (powerON == true && firing == false && speed > 0)
                     {
-                        if (powerON == true && firing == false && speed > 0)
-                        {
-                            fireCoroutine = StartCoroutine(Fire());
-                        }
+                        fireCoroutine = StartCoroutine(Fire());
                     }
                 }
             }

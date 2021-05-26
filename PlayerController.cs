@@ -7,9 +7,10 @@ using UnityEngine.SceneManagement;
 public class PlayerController : MonoBehaviour
 {
     private InputManager inputManager;
+    public NetworkController networkController;
     private Coroutine saveCoroutine;
+    private Coroutine networkWorldUpdateCoroutine;
     private Vector3 originalPosition;
-
     public Vector3 destroyStartPosition;
     public Vector3 buildStartPosition;
     public StateManager stateManager;
@@ -23,6 +24,7 @@ public class PlayerController : MonoBehaviour
     public GameObject machineInSight;
     public LaserController laserController;
     public BlockSelector blockSelector;
+    public Door doorToEdit;
 
     public bool cannotCollect;
     public bool building;
@@ -31,12 +33,15 @@ public class PlayerController : MonoBehaviour
     public bool machineGUIopen;
     public bool craftingGUIopen;
     public bool marketGUIopen;
+    public bool buildSettingsGuiOpen;
+    public bool doorGUIopen;
     public bool remoteStorageActive;
     public bool escapeMenuOpen;
     public bool machineHasPower;
     public bool lookingAtCombinedMesh;
     public bool tabletOpen;
     public bool optionsGUIopen;
+    public bool creativeMode;
     public bool timeToDeliverWarningRecieved;
     public bool draggingItem;
     public bool displayingBuildItem;
@@ -61,7 +66,6 @@ public class PlayerController : MonoBehaviour
     public bool destroying;
     public bool requestedChunkLoad;
     public bool blockLimitMessage;
-    public bool requestedEscapeMenu;
     public bool laserCannonActive;
     public bool scannerActive;
     public bool firing;
@@ -76,6 +80,7 @@ public class PlayerController : MonoBehaviour
 
     private bool gotPosition;
     private bool gameStarted;
+    private bool checkedForCreativeMode;
     private bool meteorShowerWarningReceived;
     private bool pirateAttackWarningReceived;
     private bool destructionMessageReceived;
@@ -110,8 +115,6 @@ public class PlayerController : MonoBehaviour
     public float buildItemDisplayTimer;
     public float footStepTimer;
     public float footStepSoundFrquency;
-    public float destroyTimer;
-    public float buildTimer;
     public float buildIncrementTimer;
     public float invalidAugerPlacementTimer;
     public float autoAxisMessageTimer;
@@ -121,14 +124,23 @@ public class PlayerController : MonoBehaviour
     public float paintBlue;
     public float requestedSaveTimer;
     public float blockLimitMessageTimer;
+    public float graphicsQuality = 999;
 
     public int playerMoveSpeed;
     public int machinePower;
     public int machineSpeed;
     public double machineRange;
+    public int networkedConduitRange;
+    public int networkedMachineSpeed;
+    public bool networkedDualPower;
+    public int networkedHubCircuit;
+    public int networkedHubRange;
+    public bool networkedHubStop;
+    public float networkedHubStopTime;
     public int machineHeat;
     public int machineCooling;
     public int buildMultiplier = 1;
+    public int defaultRange = 6;
     public int money;
     public int destructionMessageCount;
     public int storageComputerInventory;
@@ -166,7 +178,8 @@ public class PlayerController : MonoBehaviour
     public GameObject storageContainer;
     public GameObject universalExtractor;
     public GameObject auger;
-    public GameObject airlock;
+    public GameObject quantumHatchway;
+    public GameObject door;
     public GameObject universalConduit;
     public GameObject glass;
     public GameObject brick;
@@ -196,10 +209,13 @@ public class PlayerController : MonoBehaviour
     public GameObject currentStorageComputer;
     public GameObject buildObject;
     public GameObject modMachine;
+    public GameObject modBlock;
+    public GameObject item;
+    public GameObject networkPlayer;
 
     public Material constructionMat;
 
-    private bool addedModMachines;
+    public bool addedModBlocks;
 
     // Called by unity engine on start up to initialize variables.
     public void Start()
@@ -243,15 +259,28 @@ public class PlayerController : MonoBehaviour
         // Audio source for GUI related sounds.
         guiSound = guiObject.GetComponent<AudioSource>();
 
+        // Graphics quality.
+        if (PlayerPrefsX.GetPersistentBool("changedGraphicsQuality") == true)
+        {
+            QualitySettings.SetQualityLevel(PlayerPrefs.GetInt("graphicsQuality"));
+        }
+        graphicsQuality = QualitySettings.GetQualityLevel();
+
         // Vsync.
         QualitySettings.vSyncCount = PlayerPrefs.GetInt("vSyncCount");
+
+        int range = PlayerPrefs.GetInt("defaultRange");
+        defaultRange = range >= 10 ? range : 10;
 
         // Fog and Scanner color for atmospheric worlds.
         if (SceneManager.GetActiveScene().name.Equals("QE_World_Atmo"))
         {
             scannerFlash.GetComponent<Light>().color = Color.white;
             scannerFlash.GetComponent<Light>().intensity = 1;
+        }
 
+        if (!SceneManager.GetActiveScene().name.Equals("QE_World"))
+        {
             float fogDensity = PlayerPrefs.GetFloat("fogDensity");
             RenderSettings.fogDensity = fogDensity > 0 ? fogDensity : 0.00025f;
             RenderSettings.fog = PlayerPrefsX.GetPersistentBool("fogEnabled");
@@ -259,16 +288,22 @@ public class PlayerController : MonoBehaviour
 
         inputManager = new InputManager(this);
         blockSelector = new BlockSelector(this);
+        networkController = new NetworkController(this);
     }
 
     //! Called once per frame by unity engine.
     public void Update()
     {
-        if (ReadyToLoadModMachines() == true)
+        if (addedModBlocks == false)
         {
-            BlockDictionary blockDictionary = GetComponent<BuildController>().blockDictionary;
-            blockDictionary.AddModMachines(blockDictionary.machineDictionary);
-            addedModMachines = true;
+            if (ReadyToLoadModBlocks())
+            {
+                BlockDictionary blockDictionary = GetComponent<BuildController>().blockDictionary;
+                blockDictionary.AddModBlocks(blockDictionary.blockDictionary);
+                blockDictionary.AddModMachines(blockDictionary.machineDictionary);
+                blockDictionary.AddModMeshes(blockDictionary.meshDictionary);
+                addedModBlocks = true;
+            }
         }
 
         // Get a refrence to the camera.
@@ -303,7 +338,7 @@ public class PlayerController : MonoBehaviour
             {
                 gameStarted = true;
 
-                if (FileBasedPrefs.GetBool(stateManager.WorldName + "oldWorld") == false)
+                if (FileBasedPrefs.GetBool(stateManager.worldName + "oldWorld") == false)
                 {
                     OpenTabletOnFirstLoad();
                 }
@@ -315,6 +350,13 @@ public class PlayerController : MonoBehaviour
                 if (ShouldShowTabletIntro())
                 {
                     ShowTabletIntro();
+                }
+
+                if (checkedForCreativeMode == false && stateManager.worldLoaded == true)
+                {
+                    creativeMode |= FileBasedPrefs.GetBool(stateManager.worldName + "creativeMode");
+                    Debug.Log("World [" + stateManager.worldName + "] running in creative mode.");
+                    checkedForCreativeMode = true;
                 }
 
                 // Destruction messages.
@@ -411,11 +453,6 @@ public class PlayerController : MonoBehaviour
                     gameObject.GetComponent<MSCameraController>().enabled = true;
                 }
 
-                if (requestedEscapeMenu == true)
-                {
-                    HandleEscapeMenuRequest();
-                }
-
                 if (requestedSave == true)
                 {
                     HandleSaveRequest();
@@ -430,6 +467,16 @@ public class PlayerController : MonoBehaviour
                 {
                     inputManager.HandleInput();
                     EnforceWorldLimits();
+                }
+
+                if (PlayerPrefsX.GetPersistentBool("multiplayer") == true)
+                {
+                    networkController.NetworkFrame();
+
+                    if (networkController.networkWorldUpdateCoroutineBusy == false)
+                    {
+                        networkWorldUpdateCoroutine = StartCoroutine(networkController.NetWorkWorldUpdate());
+                    }
                 }
             }
         }
@@ -485,9 +532,10 @@ public class PlayerController : MonoBehaviour
     }
 
     //! Returns true when prerequisites are met for loading machines added by mods.
-    private bool ReadyToLoadModMachines()
+    private bool ReadyToLoadModBlocks()
     {
-        return addedModMachines == false
+        return addedModBlocks == false
+        && modBlock != null
         && modMachine != null
         && blockSelector != null
         && BlockDictionaryInitiazlied()
@@ -507,9 +555,9 @@ public class PlayerController : MonoBehaviour
     //! Returns true when all mod textures have finished loading.
     private bool LoadedModTextures()
     {
-        if (GetComponent<TextureDictionary>() != null)
+        if (gameManager.GetComponent<TextureDictionary>() != null)
         {
-            return GetComponent<TextureDictionary>().addedModTextures;
+            return gameManager.GetComponent<TextureDictionary>().addedModTextures;
         }
         return false;
     }
@@ -519,15 +567,21 @@ public class PlayerController : MonoBehaviour
     {
         playerInventory.SaveData();
         GameObject.Find("LanderCargo").GetComponent<InventoryManager>().SaveData();
-        PlayerPrefsX.SetVector3(stateManager.WorldName + "playerPosition", transform.position);
-        PlayerPrefsX.SetQuaternion(stateManager.WorldName + "playerRotation", transform.rotation);
-        FileBasedPrefs.SetInt(stateManager.WorldName + "money", money);
-        FileBasedPrefs.SetBool(stateManager.WorldName + "oldWorld", true);
+        PlayerPrefsX.SetVector3(stateManager.worldName + "playerPosition", transform.position);
+        PlayerPrefsX.SetQuaternion(stateManager.worldName + "playerRotation", transform.rotation);
+        FileBasedPrefs.SetInt(stateManager.worldName + "money", money);
+        FileBasedPrefs.SetBool(stateManager.worldName + "oldWorld", true);
     }
 
     //! Applies global settings.
     public void ApplySettings()
     {
+        if ((int)graphicsQuality != 999)
+        {
+            QualitySettings.SetQualityLevel((int)graphicsQuality, true);
+            PlayerPrefsX.SetPersistentBool("changedGraphicsQuality", true);
+        }
+        PlayerPrefs.SetInt("graphicsQuality", (int)graphicsQuality);
         PlayerPrefsX.SetPersistentBool("mouseInverted", GetComponent<MSCameraController>().CameraSettings.firstPerson.invertYInput);
         PlayerPrefs.SetFloat("xSensitivity", GetComponent<MSCameraController>().CameraSettings.firstPerson.sensibilityX);
         PlayerPrefs.SetFloat("ySensitivity", GetComponent<MSCameraController>().CameraSettings.firstPerson.sensibilityY);
@@ -539,6 +593,8 @@ public class PlayerController : MonoBehaviour
         PlayerPrefsX.SetPersistentBool("fogEnabled", RenderSettings.fog);
         PlayerPrefs.SetFloat("fogDensity", RenderSettings.fogDensity);
         PlayerPrefs.SetInt("chunkSize", gameManager.chunkSize);
+        PlayerPrefs.SetFloat("simulationSpeed", gameManager.simulationSpeed);
+        PlayerPrefs.SetInt("defaultRange", defaultRange);
         PlayerPrefs.SetInt("vSyncCount", QualitySettings.vSyncCount);
         PlayerPrefs.Save();
     }
@@ -576,7 +632,9 @@ public class PlayerController : MonoBehaviour
         || machineGUIopen == true
         || tabletOpen == true
         || marketGUIopen == true
-        || (paintGunActive == true && paintColorSelected == false);
+        || (paintGunActive == true && paintColorSelected == false)
+        || buildSettingsGuiOpen == true
+        || doorGUIopen == true;
     }
 
     //! Returns true at the beginning of the first in-game day when the intro should be displayed on the tablet.
@@ -600,9 +658,9 @@ public class PlayerController : MonoBehaviour
     //! Moves the player to their previous location when a game is loaded.
     private void MovePlayerToSavedLocation()
     {
-        transform.position = PlayerPrefsX.GetVector3(stateManager.WorldName + "playerPosition");
-        transform.rotation = PlayerPrefsX.GetQuaternion(stateManager.WorldName + "playerRotation");
-        money = FileBasedPrefs.GetInt(stateManager.WorldName + "money");
+        transform.position = PlayerPrefsX.GetVector3(stateManager.worldName + "playerPosition");
+        transform.rotation = PlayerPrefsX.GetQuaternion(stateManager.worldName + "playerRotation");
+        money = FileBasedPrefs.GetInt(stateManager.worldName + "money");
         movedPlayer = true;
     }
 
@@ -654,8 +712,6 @@ public class PlayerController : MonoBehaviour
             stoppingBuildCoRoutine = true;
             gameManager.meshManager.CombineBlocks();
             separatedBlocks = false;
-            destroyTimer = 0;
-            buildTimer = 0;
             building = false;
             destroying = false;
             requestedBuildingStop = false;
@@ -669,40 +725,19 @@ public class PlayerController : MonoBehaviour
     //! Handles the sending of chunk load requests for modifying combined meshes.
     private void ModifyCombinedMeshes()
     {
-        destroyTimer += 1 * Time.deltaTime;
-        if (destroyTimer >= 30)
+        float distance = Vector3.Distance(transform.position, destroyStartPosition);
+        if (distance > gameManager.chunkSize * 0.75f)
         {
             if (gameManager.working == false)
             {
-                stoppingBuildCoRoutine = true;
-                gameManager.meshManager.CombineBlocks();
-                destroyTimer = 0;
-                buildTimer = 0;
-                building = false;
-                destroying = false;
-                separatedBlocks = false;
+                gameManager.meshManager.SeparateBlocks(transform.position, "all", true);
+                separatedBlocks = true;
             }
             else
             {
-                requestedBuildingStop = true;
+                requestedChunkLoad = true;
             }
-        }
-        else
-        {
-            float distance = Vector3.Distance(transform.position, destroyStartPosition);
-            if (distance > 15)
-            {
-                if (gameManager.working == false)
-                {
-                    gameManager.meshManager.SeparateBlocks(transform.position, "all", true);
-                    separatedBlocks = true;
-                }
-                else
-                {
-                    requestedChunkLoad = true;
-                }
-                destroyStartPosition = transform.position;
-            }
+            destroyStartPosition = transform.position;
         }
     }
 
@@ -724,34 +759,13 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    //! Handles requests to open the escape menu, stopping appropriate coroutines.
-    private void HandleEscapeMenuRequest()
+    //! Opens the escape menu.
+    public void OpenEscapeMenu()
     {
-        if (building == true || destroying == true)
-        {
-            if (gameManager.working == false)
-            {
-                stoppingBuildCoRoutine = true;
-                gameManager.meshManager.CombineBlocks();
-                separatedBlocks = false;
-                destroyTimer = 0;
-                buildTimer = 0;
-                building = false;
-                destroying = false;
-            }
-            else
-            {
-                requestedBuildingStop = true;
-            }
-        }
-        else if (gameManager.working == false)
-        {
-            Cursor.visible = true;
-            Cursor.lockState = CursorLockMode.None;
-            gameObject.GetComponent<MSCameraController>().enabled = false;
-            escapeMenuOpen = true;
-            requestedEscapeMenu = false;
-        }
+        Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.None;
+        gameObject.GetComponent<MSCameraController>().enabled = false;
+        escapeMenuOpen = true;
     }
 
     //! Enforces world size limitations.
@@ -823,6 +837,61 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    //! Drops a stack of items on the ground.
+    public void DropItem(InventorySlot slot)
+    {
+        Vector3 dropPos = mCam.transform.position + mCam.transform.forward * 10;
+        GameObject droppedItem = Instantiate(item, dropPos, mCam.transform.rotation);
+        droppedItem.GetComponent<Item>().type = slot.typeInSlot;
+        droppedItem.GetComponent<Item>().amount = slot.amountInSlot;
+        slot.typeInSlot = "nothing";
+        slot.amountInSlot = 0;
+        PlayCraftingSound();
+    }
+
+    //! Used to handle walking up stairs.
+    public void OnCollisionStay(Collision collision)
+    {
+        if (collision.gameObject.name == "modBlockHolder(Clone)")
+        {
+            Transform[] transforms = collision.gameObject.GetComponentsInChildren<Transform>(true);
+            foreach (Transform t in transforms)
+            {
+                if (t.GetComponent<ModBlock>() != null)
+                {
+                    string blockName = t.GetComponent<ModBlock>().blockName.ToUpper();
+                    if (blockName.Contains("STAIR"))
+                    {
+                        GetComponent<Rigidbody>().AddForce(Vector3.up * 1000);
+                    }
+                }
+            }
+        }
+        else if (collision.gameObject.GetComponent<ModBlock>() != null)
+        {
+            string blockName = collision.gameObject.GetComponent<ModBlock>().blockName.ToUpper();
+            if (blockName.Contains("STAIR"))
+            {
+                GetComponent<Rigidbody>().AddForce(Vector3.up * 1000);
+            }
+        }
+    }
+
+    //! Used to handle picking up items.
+    public void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.GetComponent<Item>() != null)
+        {
+            Item colItem = collision.gameObject.GetComponent<Item>();
+            playerInventory.AddItem(colItem.type, colItem.amount);
+            if (playerInventory.itemAdded)
+            {
+                Destroy(collision.gameObject);
+                PlayCraftingSound();
+            }
+        }
+    }
+
     //! Handles saving world and exiting to the main menu.
     public static IEnumerator Save()
     {
@@ -838,7 +907,7 @@ public class PlayerController : MonoBehaviour
                     {
                         Debug.Log("Game saved to " + FileBasedPrefs.GetSaveFilePath());
                         Debug.Log("Creating backup...");
-                        string fileName = GameObject.Find("GameManager").GetComponent<StateManager>().WorldName;
+                        string fileName = GameObject.Find("GameManager").GetComponent<StateManager>().worldName;
                         string destinationPath = Path.Combine(Application.persistentDataPath, "SaveData/" + fileName + ".bak");
                         File.Copy(FileBasedPrefs.GetSaveFilePath(), destinationPath, true);
                         Debug.Log("Backup saved to " + destinationPath);

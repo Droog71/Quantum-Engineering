@@ -2,7 +2,7 @@
 using System.Linq;
 using UnityEngine;
 
-public class Retriever : MonoBehaviour
+public class Retriever : Machine
 {
     public float amount;
     public int speed = 1;
@@ -23,7 +23,6 @@ public class Retriever : MonoBehaviour
     public Material lineMat;
     private LineRenderer connectionLine;
     private LineRenderer inputLine;
-    private float updateTick;
     public int address;
     public bool hasHeatExchanger;
     private bool retrievingIce;
@@ -53,92 +52,91 @@ public class Retriever : MonoBehaviour
         connectionLine.material = lineMat;
         connectionLine.loop = true;
         connectionLine.enabled = false;
-        builtObjects = GameObject.Find("Built_Objects");
+        builtObjects = GameObject.Find("BuiltObjects");
     }
 
-    //! Called once per frame by unity engine.
-    public void Update()
+    //! Called by MachineManager update coroutine.
+    public override void UpdateMachine()
     {
-        updateTick += 1 * Time.deltaTime;
-        if (updateTick > 0.5f + (address * 0.001f))
+        if (ID == "unassigned" || stateManager.initMachines == false)
+            return;
+
+        GetComponent<PhysicsHandler>().UpdatePhysics();
+        UpdatePowerReceiver();
+        
+        if (warmup < 10)
         {
-            if (stateManager.Busy())
-            {
-                 updateTick = 0;
-                return;
-            }
-
-            GetComponent<PhysicsHandler>().UpdatePhysics();
-            UpdatePowerReceiver();
-
-            updateTick = 0;
-            if (warmup < 10)
-            {
-                warmup++;
-            }
-            else if (speed > power)
-            {
-                speed = power > 0 ? power : 1;
-            }
-            if (speed > 1 && type.Count > 0 && retrievingIce == false)
-            {
-                heat = speed - 1 - cooling;
-            }
-            else
-            {
-                heat = 0;
-            }
-            if (heat < 0)
-            {
-                heat = 0;
-            }
-            GetComponent<InventoryManager>().ID = ID;
-            if (inputObject == null || outputObject == null)
-            {
-                connectionAttempts += 1;
-                if (creationMethod.Equals("spawned"))
-                {
-                    if (connectionAttempts >= 30)
-                    {
-                        connectionAttempts = 0;
-                        connectionFailed = true;
-                    }
-                }
-                else
-                {
-                    if (connectionAttempts >= 120)
-                    {
-                        connectionAttempts = 0;
-                        connectionFailed = true;
-                    }
-                }
-                if (connectionFailed == false)
-                {
-                    MakeConnections();
-                }
-            }
-            if (powerON == true && connectionFailed == false && speed > 0)
-            {
-                RetrieveItems();
-            }
-            else
-            {
-                conduitItem.active = false;
-                GetComponent<Light>().enabled = false;
-            }
-            if (connectionFailed == true)
-            {
-                if (creationMethod.Equals("spawned"))
-                {
-                    creationMethod = "built";
-                }
-            }
-            if (inputObject != null && outputObject != null)
-            {
-                connectionAttempts = 0;
-            }
-            connectionLine.enabled &= outputObject != null;
+            warmup++;
         }
+        else if (speed > power)
+        {
+            speed = power > 0 ? power : 1;
+        }
+        if (speed > 1 && type.Count > 0 && retrievingIce == false)
+        {
+            heat = speed - 1 - cooling;
+        }
+        else
+        {
+            heat = 0;
+        }
+        if (heat < 0)
+        {
+            heat = 0;
+        }
+        GetComponent<InventoryManager>().ID = ID;
+        if (inputObject == null || outputObject == null)
+        {
+            connectionAttempts += 1;
+            if (creationMethod.Equals("spawned"))
+            {
+                if (connectionAttempts >= 128)
+                {
+                    connectionAttempts = 0;
+                    connectionFailed = true;
+                }
+            }
+            else
+            {
+                if (connectionAttempts >= 512)
+                {
+                    connectionAttempts = 0;
+                    connectionFailed = true;
+                }
+            }
+            if (connectionFailed == false)
+            {
+                if (inputObject == null)
+                {
+                    FindInputObject();
+                }
+                if (outputObject == null)
+                {
+                    FindOutputObject();
+                }
+            }
+        }
+        if (powerON == true && connectionFailed == false && speed > 0)
+        {
+            RetrieveItems();
+        }
+        else
+        {
+            conduitItem.active = false;
+            GetComponent<Light>().enabled = false;
+        }
+        if (connectionFailed == true)
+        {
+            if (creationMethod.Equals("spawned"))
+            {
+                creationMethod = "built";
+            }
+        }
+        if (inputObject != null && outputObject != null)
+        {
+            connectionAttempts = 0;
+        }
+        connectionLine.enabled &= outputObject != null;
     }
 
     //! Used to remove line renderers and conduit item sprites when the machine is destroyed.
@@ -161,16 +159,6 @@ public class Retriever : MonoBehaviour
         power = powerReceiver.power;
         powerON = powerReceiver.powerON;
         powerObject = powerReceiver.powerObject;
-    }
-
-    //! The object exists, is active and is not a standard building block.
-    private bool IsValidObject(GameObject obj)
-    {
-        if (obj != null)
-        {
-            return obj.transform.parent != builtObjects.transform && obj.activeInHierarchy;
-        }
-        return false;
     }
 
     //! The object is a potential output connection.
@@ -196,14 +184,14 @@ public class Retriever : MonoBehaviour
     }
 
     //! Connects the retriever to an inventory manager for input and a conduit for output.
-    private void MakeConnections()
+    private void FindInputObject()
     {
-        GameObject[] allObjects = GameObject.FindGameObjectsWithTag("Built");
+        GameObject[] allObjects = GameObject.FindGameObjectsWithTag("Machine");
         List<GameObject> objList = allObjects.ToList();
         objList.Add(GameObject.Find("LanderCargo"));
         foreach (GameObject obj in objList)
         {
-            if (IsValidObject(obj))
+            if (obj != null)
             {
                 if (inputObject == null && IsStorageContainer(obj))
                 {
@@ -232,6 +220,7 @@ public class Retriever : MonoBehaviour
                             inputLine.SetPosition(1, obj.transform.position);
                             inputLine.enabled = distance < 20;
                             creationMethod = "built";
+                            break;
                         }
                     }
                     else if (creationMethod.Equals("built") && distance < 20)
@@ -247,6 +236,7 @@ public class Retriever : MonoBehaviour
                         inputLine.material = lineMat;
                         inputLine.SetPosition(0, transform.position);
                         inputLine.SetPosition(1, obj.transform.position);
+                        break;
                     }
                 }
                 if (obj.GetComponent<StorageComputer>() != null)
@@ -268,6 +258,7 @@ public class Retriever : MonoBehaviour
                             inputLine.SetPosition(0, transform.position);
                             inputLine.SetPosition(1, obj.transform.position);
                             creationMethod = "built";
+                            break;
                         }
                         else if (creationMethod.Equals("built"))
                         {
@@ -282,9 +273,24 @@ public class Retriever : MonoBehaviour
                             inputLine.material = lineMat;
                             inputLine.SetPosition(0, transform.position);
                             inputLine.SetPosition(1, obj.transform.position);
+                            break;
                         }
                     }
                 }
+            }
+        }
+    }
+
+    //! Connects the retriever to an inventory manager for input and a conduit for output.
+    private void FindOutputObject()
+    {
+        GameObject[] allObjects = GameObject.FindGameObjectsWithTag("Machine");
+        List<GameObject> objList = allObjects.ToList();
+        objList.Add(GameObject.Find("LanderCargo"));
+        foreach (GameObject obj in objList)
+        {
+            if (obj != null)
+            {
                 if (obj.GetComponent<UniversalConduit>() != null)
                 {
                     float distance = Vector3.Distance(transform.position, obj.transform.position);
@@ -298,6 +304,7 @@ public class Retriever : MonoBehaviour
                             connectionLine.SetPosition(1, obj.transform.position);
                             connectionLine.enabled = true;
                             creationMethod = "built";
+                            break;
                         }
                         else if (creationMethod.Equals("built"))
                         {
@@ -306,6 +313,7 @@ public class Retriever : MonoBehaviour
                             connectionLine.SetPosition(0, transform.position);
                             connectionLine.SetPosition(1, obj.transform.position);
                             connectionLine.enabled = true;
+                            break;
                         }
                     }
                 }
