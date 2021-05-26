@@ -53,6 +53,7 @@ public class GameManager : MonoBehaviour
     private bool loadedBlockPhysics;
     private bool loadedHazardsEnabled;
     private bool memoryCoroutineBusy;
+    private bool resetSimSpeed;
     public Rocket rocketScript;
     public Coroutine separateCoroutine;
     public Coroutine meshCombineCoroutine;
@@ -215,16 +216,18 @@ public class GameManager : MonoBehaviour
                 }
                 else if (GetComponent<StateManager>().AddressManagerBusy() == true)
                 {
-                    if (GetComponent<GameManager>().simulationSpeed != 0.1f)
+                    if (GetComponent<GameManager>().simulationSpeed < 0.1f)
                     {
                         userSimSpeed = GetComponent<GameManager>().simulationSpeed;
+                        resetSimSpeed = true;
                     }
                     GetComponent<GameManager>().simulationSpeed = 0.1f;
                 }
-                else
-                {
-                    GetComponent<GameManager>().simulationSpeed = userSimSpeed;
-                }
+            }
+            else if (resetSimSpeed == true)
+            {
+                GetComponent<GameManager>().simulationSpeed = userSimSpeed;
+                resetSimSpeed = false;
             }
 
             // Used to ensure components are removed before combining meshes.
