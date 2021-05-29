@@ -14,9 +14,11 @@ public class NetworkController
     private Coroutine sendNetworkPlayerCoroutine;
     private Coroutine dedicatedServerCoroutine;
     private Coroutine blockUpdateCoroutine;
+    private Coroutine itemUpdateCoroutine;
     private Coroutine storageReceiveCoroutine;
     private Coroutine networkPowerCoroutine;
     private Coroutine networkBlockCoroutine;
+    private Coroutine networkItemCoroutine;
     private Coroutine networkStorageCoroutine;
     private Coroutine networkConduitCoroutine;
     private Coroutine networkMachineCoroutine;
@@ -30,10 +32,12 @@ public class NetworkController
     public bool getNetworkPlayersCoroutineBusy;
     public bool playerMovementCoroutineBusy;
     public bool networkBlockCoroutineBusy;
+    public bool networkItemCoroutineBusy;
     public bool receivedNetworkStorage;
     public bool networkWorldUpdateCoroutineBusy;
     public string playerData;
     public string blockData;
+    public string itemData;
     public string storageData;
     public string serverURL;
 
@@ -86,6 +90,12 @@ public class NetworkController
             networkBlockCoroutineBusy = true;
             networkBlockCoroutine = playerController.StartCoroutine(UpdateNetworkBlocks());
         }
+
+        if (networkItemCoroutineBusy == false)
+        {
+            networkItemCoroutineBusy = true;
+            networkItemCoroutine = playerController.StartCoroutine(UpdateNetworkItems());
+        }
     }
 
     //! Send information about this player once per second.
@@ -93,7 +103,7 @@ public class NetworkController
     {
         sendNetworkPlayerCoroutineBusy = true;
         networkSend.SendPlayerInfo();
-        yield return new WaitForSeconds(1.0f);
+        yield return new WaitForSeconds(1);
         sendNetworkPlayerCoroutineBusy = false;
     }
 
@@ -164,8 +174,11 @@ public class NetworkController
     public IEnumerator DedicatedServerCoroutine()
     {
         dedicatedServerCoroutineBusy = true;
-        yield return new WaitForSeconds(900);
-        playerController.requestedSave = true;
+        yield return new WaitForSeconds(30);
+        if (playerController.stateManager.saving == false)
+        {
+            playerController.requestedSave = true;
+        }
         dedicatedServerCoroutineBusy = false;
     }
 
@@ -287,6 +300,18 @@ public class NetworkController
             yield return null;
         }
         blockUpdateCoroutine = playerController.StartCoroutine(networkReceive.ReceiveNetworkBlocks());
+    }
+
+    //! Instantiates blocks over the network.
+    public IEnumerator UpdateNetworkItems()
+    {
+        itemData = "none";
+        networkReceive.GetItemData();
+        while (itemData == "none")
+        {
+            yield return null;
+        }
+        itemUpdateCoroutine = playerController.StartCoroutine(networkReceive.ReceiveNetworkItems());
     }
 
     //! Updates inventories over the network.

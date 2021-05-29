@@ -12,7 +12,6 @@ public class NetworkSend
     private string serverURL;
     private bool conduitCoroutineBusy;
     private bool machineCoroutineBusy;
-    private bool paintCoroutineBusy;
     private bool hubCoroutineBusy;
     public bool sentNetworkStorage;
     private string playerRed;
@@ -192,19 +191,14 @@ public class NetworkSend
         }
     }
 
-    //! Sends painted block colors to the sever.
-    public IEnumerator SendPaintData(string block, float red, float green, float blue)
+    //! Sends instantiated item info to the server in multiplayer games.
+    public void SendItemData(int destroy, string type, int amount, Vector3 pos)
     {
-        if (paintCoroutineBusy == false)
-        { 
-            yield return new WaitForSeconds(1);
-            using (WebClient client = new WebClient())
-            {
-                Uri uri = new Uri(serverURL+"/paint");
-                client.UploadStringAsync(uri, "POST", "@" + block + ":" + red + "," + green + "," + blue);
-            }
-            paintCoroutineBusy = false;
+        using(WebClient client = new WebClient())
+        {
+            Uri uri = new Uri(PlayerPrefs.GetString("serverURL") + "/items");
+            string position = Mathf.Round(pos.x) + "," + Mathf.Round(pos.y) + "," + Mathf.Round(pos.z);
+            client.UploadStringAsync(uri, "POST", "@" + destroy + ":" + type + ":" + amount + ":" + position);
         }
     }
 }
-

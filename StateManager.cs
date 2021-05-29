@@ -122,7 +122,7 @@ public class StateManager : MonoBehaviour
                 addressManager = new AddressManager(this);
             }
 
-            if (saving == false && worldLoaded == true)
+            if (saving == false && initMachines == true)
             {
                 AssignIDs();
             }

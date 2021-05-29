@@ -102,6 +102,11 @@ public class InventoryManager : Machine
                         slot.typeInSlot = type;
                         slot.amountInSlot += amount;
                         itemAdded = true;
+                        if (PlayerPrefsX.GetPersistentBool("multiplayer") == true && gameObject.tag != "Player")
+                        {
+                            slot.pendingNetworkUpdate = true;
+                            slot.networkWaitTime = 0;
+                        }
                     }
                 }
             }
@@ -113,5 +118,10 @@ public class InventoryManager : Machine
     {
         inventory[slot].typeInSlot = type;
         inventory[slot].amountInSlot += amount;
+        if (PlayerPrefsX.GetPersistentBool("multiplayer") == true && gameObject.tag != "Player")
+        {
+            inventory[slot].pendingNetworkUpdate = true;
+            inventory[slot].networkWaitTime = 0;
+        }
     }
 }

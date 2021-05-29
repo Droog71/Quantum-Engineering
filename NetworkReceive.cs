@@ -15,7 +15,6 @@ public class NetworkReceive
     private string powerData;
     private string machineData;
     private string chatData;
-    private string paintData;
     private bool chatCoroutineBusy;
     private List<string> chatMessageList;
     private string[] localBlockList;
@@ -24,6 +23,8 @@ public class NetworkReceive
     private string[] localStorageList;
     private string[] localPowerList;
     private string[] localMachineList;
+    private string[] localItemList;
+    public int itemDatabaseDelay;
     public bool hubDataCoroutineBusy;
     public bool conduitDataCoroutineBusy;
     public bool machineDataCoroutineBusy;
@@ -247,7 +248,7 @@ public class NetworkReceive
                             float y = Mathf.Round(pos.y);
                             float z = Mathf.Round(pos.z);
                             Vector3 foundPos = new Vector3(x, y, z);
-                            if (foundPos == storagePos)
+                            if (foundPos == storagePos && manager.inventory[slot].pendingNetworkUpdate == false)
                             {
                                 manager.inventory[slot].typeInSlot = type;
                                 manager.inventory[slot].amountInSlot = amount;
@@ -652,6 +653,62 @@ public class NetworkReceive
         powerDataCoroutineBusy = false;
     }
 
+    //! Processes data from item database.
+    public IEnumerator ReceiveNetworkItems()
+    {
+        string[] itemlist = networkController.itemData.Split('[');
+        if (itemlist != localItemList)
+        {
+            localItemList = itemlist;
+            for (int i = 2; i < itemlist.Length; i++)
+            {
+                string itemInfo = itemlist[i];
+                int destroy = int.Parse(itemInfo.Split(',')[0]);
+                string itemType = itemInfo.Split(',')[1].Substring(2).TrimEnd('"');
+                int itemAmount = int.Parse(itemInfo.Split(',')[2]);
+                float xPos = float.Parse(itemInfo.Split(',')[3]);
+                float yPos = float.Parse(itemInfo.Split(',')[4]);
+                float zPos = float.Parse(itemInfo.Split(',')[5].Split(']')[0]);
+                Vector3 itemPos = new Vector3(xPos, yPos, zPos);
+                bool found = false;
+                Item[] allItems = Object.FindObjectsOfType<Item>();
+                Vector3 itemstart = new Vector3(0, 0, 0);
+                foreach (Item item in allItems)
+                {
+                    GameObject obj = item.gameObject;
+                    if (item.gameObject != null)
+                    {
+                        itemstart = item.startPosition;
+                        if (item.startPosition == itemPos)
+                        {
+                            if (destroy == 1 && item.type == itemType && item.amount == itemAmount)
+                            {
+                                Object.Destroy(obj);
+                            }
+                            found = true;
+                            break;
+                        }
+                    }
+                }
+                if (found == false && destroy == 0)
+                {
+                    itemDatabaseDelay++;
+                    if (itemDatabaseDelay >= 10)
+                    {
+                        itemDatabaseDelay = 0;
+                        GameObject newItem = Object.Instantiate(playerController.item, itemPos, new Quaternion());
+                        newItem.GetComponent<Item>().startPosition = itemPos;
+                        newItem.GetComponent<Item>().type = itemType;
+                        newItem.GetComponent<Item>().amount = itemAmount;
+                    }
+                }
+            }
+        }
+        yield return new WaitForSeconds(0.1f);
+        itemDatabaseDelay++;
+        networkController.networkItemCoroutineBusy = false;
+    }
+
     //! Gets chat messages from server.
     private async Task GetChatData()
     {
@@ -679,6 +736,16 @@ public class NetworkReceive
         {    
             System.Uri uri = new System.Uri(serverURL+"/blocks");
             networkController.blockData = await client.DownloadStringTaskAsync(uri);
+        }
+    }
+
+    //! Gets machine data from server.
+    public async Task GetItemData()
+    {
+        using (WebClient client = new WebClient())
+        {    
+            System.Uri uri = new System.Uri(serverURL+"/items");
+            networkController.itemData = await client.DownloadStringTaskAsync(uri);
         }
     }
 
@@ -729,16 +796,6 @@ public class NetworkReceive
         {    
             System.Uri uri = new System.Uri(serverURL+"/machines");
             machineData = await client.DownloadStringTaskAsync(uri);
-        }
-    }
-
-    //! Gets painted block colors from server.
-    private async Task GetPaintData()
-    {
-        using (WebClient client = new WebClient())
-        {    
-            System.Uri uri = new System.Uri(serverURL+"/paint");
-            paintData = await client.DownloadStringTaskAsync(uri);
         }
     }
 }

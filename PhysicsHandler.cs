@@ -1,4 +1,6 @@
 ﻿using UnityEngine;
+using System;
+using System.Net;
 
 public class PhysicsHandler : MonoBehaviour
 {
@@ -388,5 +390,17 @@ public class PhysicsHandler : MonoBehaviour
     {
         Instantiate(explosion, transform.position, transform.rotation);
         Destroy(gameObject);
+        if (PlayerPrefsX.GetPersistentBool("multiplayer") == true)
+        {
+            using(WebClient client = new WebClient())
+            {
+                Uri uri = new Uri(PlayerPrefs.GetString("serverURL") + "/blocks");
+                Vector3 pos = transform.position;
+                Quaternion rot = transform.rotation;
+                string position = Mathf.Round(pos.x) + "," + Mathf.Round(pos.y) + "," + Mathf.Round(pos.z);
+                string rotation = Mathf.Round(rot.x) + "," + Mathf.Round(rot.y) + "," + Mathf.Round(rot.z) + "," + Mathf.Round(rot.w);
+                client.UploadStringAsync(uri, "POST", "@" + 1 + ":" + type + ":" + position + ":" + rotation);
+            }
+        }
     }
 }

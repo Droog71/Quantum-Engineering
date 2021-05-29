@@ -173,6 +173,10 @@ public class MainMenu : MonoBehaviour
                 {
                     ChangeScene();
                 }
+                else
+                {
+                    PreStart();
+                }
             }
             else
             {

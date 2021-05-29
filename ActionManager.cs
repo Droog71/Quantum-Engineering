@@ -116,35 +116,38 @@ public class ActionManager
     //! Toggles the paint gun.
     public void TogglePaintGun()
     {
-        if (playerController.building == true || playerController.destroying == true)
+        if (PlayerPrefsX.GetPersistentBool("multiplayer") == false)
         {
-            if (playerController.gameManager.working == false)
+            if (playerController.building == true || playerController.destroying == true)
             {
-                playerController.stoppingBuildCoRoutine = true;
-                meshManager.CombineBlocks();
-                playerController.separatedBlocks = false;
-                playerController.building = false;
-                playerController.destroying = false;
+                if (playerController.gameManager.working == false)
+                {
+                    playerController.stoppingBuildCoRoutine = true;
+                    meshManager.CombineBlocks();
+                    playerController.separatedBlocks = false;
+                    playerController.building = false;
+                    playerController.destroying = false;
+                }
+                else
+                {
+                    playerController.requestedBuildingStop = true;
+                }
+            }
+            if (playerController.paintGunActive == false)
+            {
+                playerController.paintGunActive = true;
+                playerController.paintGun.SetActive(true);
+                playerController.laserCannon.SetActive(false);
+                playerController.laserCannonActive = false;
+                playerController.scanner.SetActive(false);
+                playerController.scannerActive = false;
             }
             else
             {
-                playerController.requestedBuildingStop = true;
+                playerController.paintGun.SetActive(false);
+                playerController.paintGunActive = false;
+                playerController.paintColorSelected = false;
             }
-        }
-        if (playerController.paintGunActive == false)
-        {
-            playerController.paintGunActive = true;
-            playerController.paintGun.SetActive(true);
-            playerController.laserCannon.SetActive(false);
-            playerController.laserCannonActive = false;
-            playerController.scanner.SetActive(false);
-            playerController.scannerActive = false;
-        }
-        else
-        {
-            playerController.paintGun.SetActive(false);
-            playerController.paintGunActive = false;
-            playerController.paintColorSelected = false;
         }
     }
 
@@ -385,13 +388,26 @@ public class ActionManager
     {
         if (playerController.firing == false)
         {
-            playerController.firing = true;
-            playerController.laserCannon.GetComponent<AudioSource>().Play();
-            playerController.muzzleFlash.SetActive(true);
             if (Physics.Raycast(playerController.mCam.gameObject.transform.position, playerController.mCam.gameObject.transform.forward, out RaycastHit hit, 1000))
             {
-                Object.Instantiate(playerController.weaponHit, hit.point, playerController.gameObject.transform.rotation);
-                playerController.laserController.HitTarget(hit.collider.gameObject, hit);
+                if (hit.collider.gameObject.GetComponent<Deer>() == null)
+                {
+                    playerController.firing = true;
+                    playerController.laserCannon.GetComponent<AudioSource>().Play();
+                    playerController.muzzleFlash.SetActive(true);
+                    playerController.laserController.HitTarget(hit.collider.gameObject, hit);
+                    Object.Instantiate(playerController.weaponHit, hit.point, playerController.gameObject.transform.rotation);
+                }
+                else
+                {
+                    playerController.PlayMissingItemsSound();
+                }
+            }
+            else
+            {
+                playerController.firing = true;
+                playerController.laserCannon.GetComponent<AudioSource>().Play();
+                playerController.muzzleFlash.SetActive(true);
             }
         }
     }

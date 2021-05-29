@@ -7,6 +7,7 @@ public class Item : MonoBehaviour
     public GameObject billboard;
     private StateManager stateManager;
     private GameManager gameManager;
+    public Vector3 startPosition;
 
     //! Called by unity engine on start up to initialize variables.
     public void Start()

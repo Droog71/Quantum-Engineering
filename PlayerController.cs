@@ -842,8 +842,17 @@ public class PlayerController : MonoBehaviour
     {
         Vector3 dropPos = mCam.transform.position + mCam.transform.forward * 10;
         GameObject droppedItem = Instantiate(item, dropPos, mCam.transform.rotation);
+        float x = Mathf.Round(dropPos.x);
+        float y = Mathf.Round(dropPos.y);
+        float z = Mathf.Round(dropPos.z);
+        Vector3 roundedPos = new Vector3(x, y, z);
+        droppedItem.GetComponent<Item>().startPosition = roundedPos;
         droppedItem.GetComponent<Item>().type = slot.typeInSlot;
         droppedItem.GetComponent<Item>().amount = slot.amountInSlot;
+        if (PlayerPrefsX.GetPersistentBool("multiplayer") == true)
+        {
+            networkController.networkSend.SendItemData(0, slot.typeInSlot, slot.amountInSlot, roundedPos);
+        }
         slot.typeInSlot = "nothing";
         slot.amountInSlot = 0;
         PlayCraftingSound();
@@ -887,6 +896,11 @@ public class PlayerController : MonoBehaviour
             if (playerInventory.itemAdded)
             {
                 Destroy(collision.gameObject);
+                if (PlayerPrefsX.GetPersistentBool("multiplayer") == true)
+                {
+                    networkController.networkSend.SendItemData(1, colItem.type, colItem.amount, colItem.startPosition);
+                    networkController.networkReceive.itemDatabaseDelay = 0;
+                }
                 PlayCraftingSound();
             }
         }

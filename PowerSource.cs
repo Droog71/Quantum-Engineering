@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PowerSource : Machine
 {
@@ -193,7 +194,12 @@ public class PowerSource : Machine
     //! Distributes power to power receivers as a solar panel.
     private void DistributeAsSolarPanel()
     {
-        Vector3 sunPosition = new Vector3(7000, 15000, -10000);
+        Vector3 sunPosition = new Vector3(3500, 7000, -5000);
+
+        if (SceneManager.GetActiveScene().buildIndex == 1)
+        {
+            sunPosition = new Vector3(-15000, 4000, -3000);
+        }
 
         if (Physics.Linecast(sunPosition, transform.position, out RaycastHit hit))
         {
