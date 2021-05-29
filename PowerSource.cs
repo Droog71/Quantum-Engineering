@@ -198,7 +198,7 @@ public class PowerSource : Machine
 
         if (SceneManager.GetActiveScene().buildIndex == 1)
         {
-            sunPosition = new Vector3(-15000, 4000, -3000);
+            sunPosition = new Vector3(-15000, 15000, -3000);
         }
 
         if (Physics.Linecast(sunPosition, transform.position, out RaycastHit hit))
