@@ -25,22 +25,7 @@ public class InventoryManager : Machine
             {
                 if (initialized == false)
                 {
-                    inventory = new InventorySlot[16];
-                    int count = 0;
-                    while (count <= 15)
-                    {
-                        inventory[count] = gameObject.AddComponent<InventorySlot>();
-                        string countType = FileBasedPrefs.GetString(stateManager.worldName + "inventory" + ID + "slot" + count + "type");
-                        if (!countType.Equals(""))
-                        {
-                            inventory[count].typeInSlot = FileBasedPrefs.GetString(stateManager.worldName + "inventory" + ID + "slot" + count + "type");
-                            inventory[count].amountInSlot = FileBasedPrefs.GetInt(stateManager.worldName + "inventory" + ID + "slot" + count + "amount");
-                        }
-                        count++;
-                    }
-                    originalID = ID;
-                    initialized = true;
-                    maxStackSize = ID.Equals("Rocket") ? 100000 : 1000;
+                    Initialize();
                 }
                 if (IsStorageContainer())
                 {
@@ -48,6 +33,61 @@ public class InventoryManager : Machine
                 }
             }
         }
+    }
+
+    //! Loads saved inventory data.
+    private void Initialize()
+    {
+        if (GetComponent<PlayerController>() != null && PlayerPrefsX.GetPersistentBool("multiplayer") == true)
+        {
+            LoadDataFromPrefs();
+        }
+        else
+        {
+            LoadDataFromFile();
+        }
+    }
+
+    //! Loads data from .sav file.
+    private void LoadDataFromFile()
+    {
+        inventory = new InventorySlot[16];
+        int count = 0;
+        while (count <= 15)
+        {
+            inventory[count] = gameObject.AddComponent<InventorySlot>();
+            string countType = FileBasedPrefs.GetString(stateManager.worldName + "inventory" + ID + "slot" + count + "type");
+            if (!countType.Equals(""))
+            {
+                inventory[count].typeInSlot = FileBasedPrefs.GetString(stateManager.worldName + "inventory" + ID + "slot" + count + "type");
+                inventory[count].amountInSlot = FileBasedPrefs.GetInt(stateManager.worldName + "inventory" + ID + "slot" + count + "amount");
+            }
+            count++;
+        }
+        originalID = ID;
+        initialized = true;
+        maxStackSize = ID.Equals("Rocket") ? 100000 : 1000;
+    }
+
+    //! Loads data from prefs file.
+    private void LoadDataFromPrefs()
+    {
+        inventory = new InventorySlot[16];
+        int count = 0;
+        while (count <= 15)
+        {
+            inventory[count] = gameObject.AddComponent<InventorySlot>();
+            string countType = PlayerPrefs.GetString(stateManager.worldName + "inventory" + ID + "slot" + count + "type");
+            if (!countType.Equals(""))
+            {
+                inventory[count].typeInSlot = PlayerPrefs.GetString(stateManager.worldName + "inventory" + ID + "slot" + count + "type");
+                inventory[count].amountInSlot = PlayerPrefs.GetInt(stateManager.worldName + "inventory" + ID + "slot" + count + "amount");
+            }
+            count++;
+        }
+        originalID = ID;
+        initialized = true;
+        maxStackSize = ID.Equals("Rocket") ? 100000 : 1000;
     }
 
     //! Returns true if this object is a storage container.
@@ -61,8 +101,21 @@ public class InventoryManager : Machine
         && ID != "Lander";
     }
 
-    //! Saves the inventory's contents to disk.
+    //! Saves inventory data.
     public void SaveData()
+    {
+        if (GetComponent<PlayerController>() != null && PlayerPrefsX.GetPersistentBool("multiplayer") == true)
+        {
+            SaveDataToPrefs();
+        }
+        else
+        {
+            SaveDataToFile();
+        }
+    }
+
+    //! Saves the inventory's contents to .sav file.
+    private void SaveDataToFile()
     {
         if (initialized == true)
         {
@@ -82,6 +135,32 @@ public class InventoryManager : Machine
             {
                 FileBasedPrefs.SetString(stateManager.worldName + "inventory" + ID + "slot" + count + "type", inventory[count].typeInSlot);
                 FileBasedPrefs.SetInt(stateManager.worldName + "inventory" + ID + "slot" + count + "amount", inventory[count].amountInSlot);
+                count++;
+            }
+        }
+    }
+
+    //! Saves the inventory's contents to prefs file.
+    private void SaveDataToPrefs()
+    {
+        if (initialized == true)
+        {
+            if (ID != originalID)
+            {
+                int originalCount = 0;
+                while (originalCount <= 15)
+                {
+                    PlayerPrefs.SetString(stateManager.worldName + "inventory" + originalID + "slot" + originalCount + "type", "nothing");
+                    PlayerPrefs.SetInt(stateManager.worldName + "inventory" + originalID + "slot" + originalCount + "amount", 0);
+                    originalCount++;
+                }
+                originalID = ID;
+            }
+            int count = 0;
+            while (count <= 15)
+            {
+                PlayerPrefs.SetString(stateManager.worldName + "inventory" + ID + "slot" + count + "type", inventory[count].typeInSlot);
+                PlayerPrefs.SetInt(stateManager.worldName + "inventory" + ID + "slot" + count + "amount", inventory[count].amountInSlot);
                 count++;
             }
         }

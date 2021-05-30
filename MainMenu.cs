@@ -55,13 +55,19 @@ public class MainMenu : MonoBehaviour
     //! Called by unity engine on start up to initialize variables.
     public void Start()
     {
+        string[] commandLineOptions = Environment.GetCommandLineArgs();
         stateManager = FindObjectOfType<StateManager>();
         worldList = new List<string>();
         colorSelectTexture = new Texture2D(512, 128);
-        videoPlayer.GetComponent<VP>().PlayVideo("QE_Title.webm",true,0);
         buttonSounds = menuSoundObject.GetComponent<AudioSource>();
         ambient = ambientSoundObject.GetComponent<AudioSource>();
-        ambient.Play();
+
+        if (!commandLineOptions.Contains("-batchmode"))
+        {
+            videoPlayer.GetComponent<VP>().PlayVideo("QE_Title.webm",true,0);
+            ambient.Play();
+        }
+
         if (PlayerPrefsX.GetPersistentBool("changingWorld") == true)
         {
             stateManager.worldName = PlayerPrefs.GetString("worldName");
@@ -71,13 +77,9 @@ public class MainMenu : MonoBehaviour
             worldSelected = true;
             ambient.enabled = false;
         }
-        else
+        else if (commandLineOptions.Contains("-batchmode"))
         {
-            string[] commandLineOptions = Environment.GetCommandLineArgs();
-            if (commandLineOptions.Contains("-batchmode"))
-            {
-                SetupDedicatedServer(commandLineOptions);
-            }
+            SetupDedicatedServer(commandLineOptions);
         }
     }
 

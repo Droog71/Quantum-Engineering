@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 using System.IO;
 using UnityEngine.SceneManagement;
 
@@ -11,6 +12,7 @@ public class PlayerController : MonoBehaviour
     private Coroutine saveCoroutine;
     private Coroutine networkWorldUpdateCoroutine;
     private Vector3 originalPosition;
+    private List<Vector3> networkItemLocations;
     public Vector3 destroyStartPosition;
     public Vector3 buildStartPosition;
     public StateManager stateManager;
@@ -289,6 +291,7 @@ public class PlayerController : MonoBehaviour
         inputManager = new InputManager(this);
         blockSelector = new BlockSelector(this);
         networkController = new NetworkController(this);
+        networkItemLocations = new List<Vector3>();
     }
 
     //! Called once per frame by unity engine.
@@ -846,6 +849,11 @@ public class PlayerController : MonoBehaviour
         float y = Mathf.Round(dropPos.y);
         float z = Mathf.Round(dropPos.z);
         Vector3 roundedPos = new Vector3(x, y, z);
+        while (networkItemLocations.Contains(roundedPos))
+        {
+            roundedPos.y++;
+        }
+        networkItemLocations.Add(roundedPos);
         droppedItem.GetComponent<Item>().startPosition = roundedPos;
         droppedItem.GetComponent<Item>().type = slot.typeInSlot;
         droppedItem.GetComponent<Item>().amount = slot.amountInSlot;
