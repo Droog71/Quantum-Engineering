@@ -6,14 +6,14 @@ public class ChatGUI : MonoBehaviour
     public string messages;
     private string inputMsg = "";
     public GUISkin ChatGUIskin;
-    private bool playersVisible = false;
+    private bool playersVisible;
     private PlayerController playerController;
     private NetworkController networkController;
     private Coroutine chatDataCoroutine;
     private string playersOnline;
     private int playerCount;
     private float chatNetTimer;
-    Vector2 scrollPosition;
+    private Vector2 scrollPosition;
 
     // Use this for initialization
     void Start () 
@@ -63,7 +63,7 @@ public class ChatGUI : MonoBehaviour
         GUILayout.Label(messages);
         GUILayout.EndScrollView();
 
-        if (playerController.building == false)
+        if (playerController.building == false && playerController.machineInSight == null)
         {
             GUI.SetNextControlName ("textfield");
             inputMsg = GUI.TextField (textFieldRect, inputMsg, 300);

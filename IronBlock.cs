@@ -5,7 +5,6 @@ public class IronBlock : Block
 {
     public string ID = "unassigned";
     public string creationMethod;
-    public int address;
     private StateManager stateManager;
 
     //! Called by unity engine on start up to initialize variables.

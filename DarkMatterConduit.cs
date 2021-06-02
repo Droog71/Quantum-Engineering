@@ -16,7 +16,6 @@ public class DarkMatterConduit : Machine
     public Material darkMatterMat;
     public Material lineMat;
     private LineRenderer connectionLine;
-    public int address;
     public int range = 6;
     public int connectionAttempts;
     public bool connectionFailed;

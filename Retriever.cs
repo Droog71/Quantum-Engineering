@@ -23,7 +23,6 @@ public class Retriever : Machine
     public Material lineMat;
     private LineRenderer connectionLine;
     private LineRenderer inputLine;
-    public int address;
     public bool hasHeatExchanger;
     private bool retrievingIce;
     private int warmup;

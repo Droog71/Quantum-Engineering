@@ -21,6 +21,19 @@ public class LaserController
     //! Called when the player's laser cannon shoots something.
     public void HitTarget(GameObject target,RaycastHit hit)
     {
+        ProtectionBlock[] protectionBlocks = Object.FindObjectsOfType<ProtectionBlock>();
+        foreach (ProtectionBlock protectionBlock in protectionBlocks)
+        {
+            Vector3 blockPos = protectionBlock.transform.position;
+            Vector3 hitNoY = new Vector3(hit.point.x, 0, hit.point.z);
+            Vector3 blockPosNoY = new Vector3(blockPos.x, 0, blockPos.z);
+            float distance = Vector3.Distance(hitNoY, blockPosNoY);
+            if (distance <= 160)
+            {
+                return;
+            }
+        }
+
         string objName;
 
         if (target.GetComponent<Meteor>() != null)

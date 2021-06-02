@@ -55,6 +55,7 @@ public class StateManager : MonoBehaviour
     public GameObject railCart;
     public GameObject brick;
     public GameObject modMachine;
+    public GameObject protectionBlock;
     public GameObject modBlock;
     public GameObject builtObjects;
     public string worldName = "World";
@@ -463,6 +464,16 @@ public class StateManager : MonoBehaviour
                             SpawnedObject.GetComponent<PhysicsHandler>().falling = FileBasedPrefs.GetBool(objectName + objectID + "falling");
                             SpawnedObject.GetComponent<PhysicsHandler>().fallingStack = FileBasedPrefs.GetBool(objectName + objectID + "fallingStack");
                         }
+                        if (objectName == worldName + "ProtectionBlock")
+                        {
+                            GameObject SpawnedObject = Instantiate(protectionBlock, objectPosition, objectRotation);
+                            SpawnedObject.GetComponent<ProtectionBlock>().creationMethod = "spawned";
+                            SpawnedObject.GetComponent<ProtectionBlock>().userNames = PlayerPrefsX.GetStringArray(objectName + objectID + "userNames").ToList();
+                            SpawnedObject.GetComponent<ProtectionBlock>().SetPasswords(PlayerPrefsX.GetStringArray(objectName + objectID + "passwords"));
+                            SpawnedObject.GetComponent<PhysicsHandler>().creationMethod = "spawned";
+                            SpawnedObject.GetComponent<PhysicsHandler>().falling = FileBasedPrefs.GetBool(objectName + objectID + "falling");
+                            SpawnedObject.GetComponent<PhysicsHandler>().fallingStack = FileBasedPrefs.GetBool(objectName + objectID + "fallingStack");
+                        }
                     }
                     progress++;
                     loadInterval++;
@@ -541,7 +552,6 @@ public class StateManager : MonoBehaviour
                             GameObject SpawnedObject = Instantiate(modBlock, objectPosition, objectRotation);
                             string blockName = FileBasedPrefs.GetString(objectName + objectID + "blockName");
                             SpawnedObject.GetComponent<ModBlock>().blockName = blockName;
-                            PlayerController playerController = GameObject.Find("Player").GetComponent<PlayerController>();
                             BlockDictionary blockDictionary = playerController.GetComponent<BuildController>().blockDictionary;
                             if (blockDictionary.meshDictionary.ContainsKey(blockName))
                             {

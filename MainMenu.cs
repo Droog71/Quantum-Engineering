@@ -7,6 +7,7 @@ using System.Net;
 using System.Runtime.InteropServices;
 using System.Diagnostics;
 using System.Threading;
+using System.Threading.Tasks;
 using System;
 
 public class MainMenu : MonoBehaviour
@@ -26,6 +27,7 @@ public class MainMenu : MonoBehaviour
     public bool finishedLoading;
     private string worldName = "Enter world name.";
     private string username = "Enter user name.";
+    private string password = "Enter password.";
     private string serverURL = "Enter server IP address.";
     private string[] worlds;
     private StateManager stateManager;
@@ -45,9 +47,12 @@ public class MainMenu : MonoBehaviour
     private bool escapePrompt;
     private bool multiplayerPrompt;
     private bool localPrompt;
+    private bool publicPrompt;
     private bool playerColorPrompt;
     private bool userNamePrompt;
+    private bool passwordPrompt;
     private bool networkAddressPrompt;
+    private string serverList = "none";
     private float playerRed = 1.0f;
     private float playerGreen = 1.0f;
     private float playerBlue = 1.0f;
@@ -104,6 +109,8 @@ public class MainMenu : MonoBehaviour
                 userNamePrompt = false;
                 downloadPrompt = false;
                 userNamePrompt = false;
+                passwordPrompt = false;
+                publicPrompt = false;
             }
             buttonSounds.Play();
         }
@@ -133,18 +140,35 @@ public class MainMenu : MonoBehaviour
         }
     }
 
+    //! Gets server data from master server.
+    private async Task GetServerList()
+    {
+        using (WebClient client = new WebClient())
+        {    
+            Uri uri = new Uri("http://45.77.158.179:48000/servers");
+            serverList = await client.DownloadStringTaskAsync(uri);
+        }
+    }
+
     //! Sets up a dedicated server.
     private void SetupDedicatedServer(string[] commandLineOptions)
     {
         worldName = commandLineOptions.Contains("-local") ? GetLocalAddress() : GetExternalAddress();
+        PlayerPrefs.SetString("ip", worldName);
         FileBasedPrefs.SetWorldName(worldName);
         PlayerPrefsX.SetPersistentBool("multiplayer", true);
+        PlayerPrefsX.SetPersistentBool("hosting", true);
         PlayerPrefs.SetString("serverURL", "http://" + worldName + ":5000");
         PlayerPrefs.SetString("UserName", worldName);
         if (commandLineOptions.Contains("-creative"))
         {
             FileBasedPrefs.SetBool(worldName + "creativeMode", true);
         }
+        if (commandLineOptions.Contains("-announce"))
+        {
+           PlayerPrefsX.SetPersistentBool("announce", true);
+        }
+        UnityEngine.Debug.Log("Announce: " + PlayerPrefsX.GetPersistentBool("announce"));
         StartServer();
         Thread.Sleep(5000);
         worldList = PlayerPrefsX.GetPersistentStringArray("Worlds").ToList();
@@ -216,6 +240,11 @@ public class MainMenu : MonoBehaviour
                 string options = headless == true ? "local headless" : "local";
                 Process.Start(Application.dataPath + "/Linux_Server/qe_server", options);
             }
+            else if (headless == true)
+            {
+                UnityEngine.Debug.Log("Starting online server...");
+                Process.Start(Application.dataPath + "/Linux_Server/qe_server", "headless");
+            }
             else
             {
                 UnityEngine.Debug.Log("Starting online server...");
@@ -230,6 +259,11 @@ public class MainMenu : MonoBehaviour
                 string options = headless == true ? "local headless" : "local";
                 Process.Start(Application.dataPath + "/Windows_Server/qe_server.exe", options);
             }
+            else if (headless == true)
+            {
+                UnityEngine.Debug.Log("Starting online server...");
+                Process.Start(Application.dataPath + "/Windows_Server/qe_server.exe", "headless");
+            }
             else
             {
                 UnityEngine.Debug.Log("Starting online server...");
@@ -243,6 +277,11 @@ public class MainMenu : MonoBehaviour
                 UnityEngine.Debug.Log("Starting LAN server...");
                 string options = headless == true ? "local headless" : "local";
                 Process.Start(Application.dataPath + "/Mac_Server/qe_server", options);
+            }
+            else if (headless == true)
+            {
+                UnityEngine.Debug.Log("Starting online server...");
+                Process.Start(Application.dataPath + "/Mac_Server/qe_server", "headless");
             }
             else
             {
@@ -364,7 +403,7 @@ public class MainMenu : MonoBehaviour
         }
     }
 
-    //! Called when Kepler-1625 or Kepler-452b is selected and the scene needs to be changed.
+    //! Called when Gliese 876 or Kepler-452b is selected and the scene needs to be changed.
     private void ChangeScene()
     {
         FileBasedPrefs.SetBool(worldName + "sceneChangeRequired", true);
@@ -409,6 +448,8 @@ public class MainMenu : MonoBehaviour
         && playerColorPrompt == false
         && localPrompt == false
         && downloadPrompt == false
+        && publicPrompt == false
+        && passwordPrompt == false
         && userNamePrompt == false;
     }
 
@@ -446,6 +487,9 @@ public class MainMenu : MonoBehaviour
         Rect worldListTitleRect = new Rect((ScreenWidth * 0.45f), (ScreenHeight * 0.46f), (ScreenWidth * 0.15f), (ScreenHeight * 0.55f));
 
         Rect promptBackgroundRect = new Rect(((ScreenWidth / 2) - 300), ScreenHeight * 0.14f, 600, ScreenHeight * 0.20f);
+
+        Rect serverListBackgroundRect = new Rect((ScreenWidth * 0.01f), (ScreenHeight * 0.01f), (ScreenWidth * 0.22f), (ScreenHeight * 0.9f));
+        Rect serverListRect = new Rect((ScreenWidth * 0.015f), (ScreenHeight * 0.018f), (ScreenWidth * 0.21f), (ScreenHeight * 0.88f));
 
         Rect deletePromptLabelRect = new Rect((ScreenWidth * 0.435f), (ScreenHeight * 0.18f), (ScreenWidth * 0.20f), (ScreenHeight * 0.05f));
         Rect deletePromptButton1Rect = new Rect((ScreenWidth * 0.39f), (ScreenHeight * 0.22f), (ScreenWidth * 0.10f), (ScreenHeight * 0.05f));
@@ -532,7 +576,10 @@ public class MainMenu : MonoBehaviour
                 }
 
                 GUI.DrawTexture(worldListBackgroundRect, worldListBackground);
+                int f = GUI.skin.label.fontSize;
+                GUI.skin.label.fontSize = 14;
                 GUI.Label(worldListTitleRect, "SAVED WORLDS");
+                GUI.skin.label.fontSize = f;
 
                 worlds = PlayerPrefsX.GetPersistentStringArray("Worlds");
                 if (worlds.Length > 0)
@@ -755,13 +802,17 @@ public class MainMenu : MonoBehaviour
                 if (GUI.Button(deletePromptButton1Rect, "Host"))
                 {
                     hosting = true;
+                    PlayerPrefsX.SetPersistentBool("hosting", true);
                     multiplayerPrompt = false;
                     localPrompt = true;
                 }
                 if (GUI.Button(deletePromptButton2Rect, "Join"))
                 {
+                    GetServerList();
                     multiplayerPrompt = false;
                     networkAddressPrompt = true;
+                    PlayerPrefs.SetString("ip", GetExternalAddress());
+                    PlayerPrefsX.SetPersistentBool("hosting", false);
                 }
             }
 
@@ -780,25 +831,76 @@ public class MainMenu : MonoBehaviour
                     localPrompt = false;
                     userNamePrompt = true;
                     worldName = local == true ? GetLocalAddress() : GetExternalAddress();
+                    PlayerPrefs.SetString("ip", GetLocalAddress());
                     PlayerPrefs.SetString("serverURL", "http://" + worldName + ":5000");
+                    PlayerPrefsX.SetPersistentBool("announce", false);
                     StartServer();
                 }
                 if (GUI.Button(deletePromptButton2Rect, "Online"))
                 {
                     local = false;
                     localPrompt = false;
-                    userNamePrompt = true;
+                    publicPrompt = true;
                     worldName = local == true ? GetLocalAddress() : GetExternalAddress();
+                    PlayerPrefs.SetString("ip", GetExternalAddress());
                     PlayerPrefs.SetString("serverURL", "http://" + worldName + ":5000");
                     StartServer();
                 }
             }
 
-            if (networkAddressPrompt == true)
+            if (publicPrompt == true)
             {
                 GUI.DrawTexture(promptBackgroundRect, guiBackground);
                 int f = GUI.skin.label.fontSize;
                 GUI.skin.label.fontSize = 14;
+                Vector2 size = GetStringSize("Multiplayer.");
+                Rect messagePos = new Rect((Screen.width / 2) - (size.x / 2.2f), ScreenHeight * 0.18f, size.x, size.y);
+                GUI.Label(messagePos, "Multiplayer");
+                GUI.skin.label.fontSize = f;
+                if (GUI.Button(deletePromptButton1Rect, "Public"))
+                {
+                    publicPrompt = false;
+                    userNamePrompt = true;
+                    PlayerPrefsX.SetPersistentBool("announce", true);
+                }
+                if (GUI.Button(deletePromptButton2Rect, "Private"))
+                {
+                    publicPrompt = false;
+                    userNamePrompt = true;
+                    PlayerPrefsX.SetPersistentBool("announce", false);
+                }
+            }
+
+            if (networkAddressPrompt == true)
+            {
+                GUI.DrawTexture(serverListBackgroundRect, worldListBackground);
+                int textAreaFontSize = GUI.skin.textArea.fontSize;
+                GUI.skin.textArea.fontSize = 18;
+                string[] actualList;
+                string displayList = "       Public Servers\n\n";
+                try
+                {
+                    actualList = serverList.Split(':')[1].Split('[');
+                    foreach (string serverEntry in actualList)
+                    {
+                        UnityEngine.Debug.Log(serverEntry);
+                        string serverInfo = serverEntry.Split(']')[0].Replace("\"","").Trim();
+                        if (serverInfo != "")
+                        {
+                            displayList += serverInfo + " players\n\n";
+                        }
+                    }
+                }
+                catch(Exception e)
+                {
+                    UnityEngine.Debug.Log(e.Message);
+                }
+                GUI.TextArea(serverListRect, displayList);
+                GUI.skin.textArea.fontSize = textAreaFontSize;
+
+                int f = GUI.skin.label.fontSize;
+                GUI.skin.label.fontSize = 14;
+                GUI.DrawTexture(promptBackgroundRect, guiBackground);
                 Vector2 size = GetStringSize("Enter server IP address.");
                 Rect messagePos = new Rect((Screen.width / 2) - (size.x / 2.2f), ScreenHeight * 0.18f, size.x, size.y);
                 GUI.Label(messagePos, "Enter server IP address.");
@@ -825,9 +927,33 @@ public class MainMenu : MonoBehaviour
                 username = GUI.TextField(textEntryRect, username, 30);
                 if (GUI.Button(scenePromptButton3Rect, "OK"))
                 {
-                    PlayerPrefs.SetString("UserName", username);
-                    userNamePrompt = false;
-                    playerColorPrompt = true;
+                    if (username != "" && username != "Enter user name.")
+                    {
+                        PlayerPrefs.SetString("UserName", username);
+                        userNamePrompt = false;
+                        passwordPrompt = true;
+                    }
+                }
+            }
+
+            if (passwordPrompt == true)
+            {
+                GUI.DrawTexture(promptBackgroundRect, guiBackground);
+                int f = GUI.skin.label.fontSize;
+                GUI.skin.label.fontSize = 14;
+                Vector2 size = GetStringSize("Enter password.");
+                Rect messagePos = new Rect((Screen.width / 2) - (size.x / 2.2f), ScreenHeight * 0.18f, size.x, size.y);
+                GUI.Label(messagePos, "Enter password.");
+                GUI.skin.label.fontSize = f;
+                password = GUI.TextField(textEntryRect, password, 30);
+                if (GUI.Button(scenePromptButton3Rect, "OK"))
+                {
+                    if (password != "" && password != "Enter password.")
+                    {
+                        PlayerPrefs.SetString("password", password);
+                        passwordPrompt = false;
+                        playerColorPrompt = true;
+                    }
                 }
             }
 

@@ -28,7 +28,6 @@ public class AlloySmelter : Machine
     public bool hasHeatExchanger;
     public bool powerON;
     public bool connectionFailed;
-    public int address;
     public int connectionAttempts;
     private LineRenderer connectionLine;
     private int machineTimer;
@@ -308,7 +307,7 @@ public class AlloySmelter : Machine
                                 fireObject.SetActive(true);
                             }
                             machineTimer += 1;
-                            if (machineTimer > 5 - (address * 0.01f))
+                            if (machineTimer > 5)
                             {
                                 outputObject.GetComponent<UniversalConduit>().amount += speed - heat;
                                 outputAmount -= speed;

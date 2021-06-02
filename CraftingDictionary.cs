@@ -101,6 +101,9 @@ public class CraftingDictionary
     private readonly string[] darkMatterConduitIngredients = 
     { "Steel Plate", "Steel Pipe", "Tin Gear", "Steel Gear", "Bronze Gear", "Aluminum Wire", "Copper Wire", "Dark Matter" };
 
+    private readonly string[] protectionBlockIngredients = 
+    { "Glass Block", "Iron Pipe", "Circuit Board"};
+
     private readonly int[] ironBlockAmounts = { 1 };
     private readonly int[] steelBlockAmounts = { 1 };
     private readonly int[] doorAmounts = { 1, 1 };
@@ -125,6 +128,7 @@ public class CraftingDictionary
     private readonly int[] nuclearReactorAmounts = { 10, 10, 10, 10, 10, 10 };
     private readonly int[] heatExchangerAmounts = { 10, 10 };
     private readonly int[] smelterAmounts = { 5, 10, 10 };
+    private readonly int[] protectionBlockAmounts = { 1, 12, 1};
     private readonly int[] gearCutterAmounts = { 5, 5, 5, 10, 10 };
     private readonly int[] storageComputerAmounts = { 5, 5, 5, 10, 10, 1, 1 };
     private readonly int[] alloySmelterAmounts = { 20, 20, 20, 20, 40, 40 };
@@ -171,7 +175,8 @@ public class CraftingDictionary
             { "Missile", new CraftingRecipe(missileIngredients, missileAmounts, "Missile", 1)  },
             { "Missile Turret", new CraftingRecipe(turretIngredients, missileTurretAmounts, "Missile Turret", 1)  },
             { "Dark Matter Collector", new CraftingRecipe(darkMatterCollectorIngredients, darkMatterCollectorAmounts, "Dark Matter Collector", 1)  },
-            { "Dark Matter Conduit", new CraftingRecipe(darkMatterConduitIngredients, darkMatterConduitAmounts, "Dark Matter Conduit", 1) }
+            { "Dark Matter Conduit", new CraftingRecipe(darkMatterConduitIngredients, darkMatterConduitAmounts, "Dark Matter Conduit", 1) },
+            { "Protection Block", new CraftingRecipe(protectionBlockIngredients, protectionBlockAmounts, "Protection Block", 1) }
         };
 
         AddModRecipes();

@@ -135,7 +135,8 @@ public class TextureDictionary : MonoBehaviour
             { "Rail Cart Hub", Resources.Load("RailCartHub") as Texture2D },
             { "Storage Computer", Resources.Load("StorageComputer") as Texture2D },
             { "Circuit Board", Resources.Load("CircuitBoard") as Texture2D },
-            { "Electric Motor", Resources.Load("Motor") as Texture2D }
+            { "Electric Motor", Resources.Load("Motor") as Texture2D },
+            { "Protection Block", Resources.Load("ShadedSelectionBox") as Texture2D }
         };
 
         modTextureCoroutine = StartCoroutine(AddModTextures(dictionary));

@@ -19,6 +19,13 @@ public class StorageInteraction
         InventoryManager inventory = playerController.objectInSight.GetComponent<InventoryManager>();
         if (cInput.GetKeyDown("Interact"))
         {
+            if (PlayerPrefsX.GetPersistentBool("multiplayer") == true)
+            {
+                if (!interactionController.CanInteract())
+                {
+                    return;
+                }
+            }
             if (playerController.storageGUIopen == false)
             {
                 if (inventory.initialized == true)
@@ -91,6 +98,13 @@ public class StorageInteraction
         playerController.machineHasPower = computer.powerON;
         if (cInput.GetKeyDown("Interact"))
         {
+            if (PlayerPrefsX.GetPersistentBool("multiplayer") == true)
+            {
+                if (!interactionController.CanInteract())
+                {
+                    return;
+                }
+            }
             if (playerController.storageGUIopen == false)
             {
                 if (computer.powerON == true && computer.initialized == true)

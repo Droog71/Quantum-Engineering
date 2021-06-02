@@ -6,7 +6,6 @@ public class Door : Machine
     private StateManager stateManager;
     private GameManager gameManager;
     public string ID = "unassigned";
-    public int address;
     public string type;
     public bool open;
     public AudioClip clip1;

@@ -4,7 +4,6 @@ public class ElectricLight : Machine
 {
     public string ID = "unassigned";
     public string creationMethod = "built";
-    public int address;
     public bool powerON;
     public GameObject powerObject;
     public PowerReceiver powerReceiver;

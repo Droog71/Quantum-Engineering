@@ -130,6 +130,10 @@ public class InteractionController : MonoBehaviour
                     {
                         machineInteraction.InteractWithModMachine();
                     }
+                    else if (obj.GetComponent<ProtectionBlock>() != null)
+                    {
+                        machineInteraction.InteractWithProtectionBlock();
+                    }
                     else if (obj.GetComponent<IronBlock>() != null)
                     {
                         blockInteraction.InteractWithIronBlock();
@@ -205,31 +209,80 @@ public class InteractionController : MonoBehaviour
     //! Destroys an object in the world and adds it's associated inventory item to the player's inventory.
     public void CollectObject(string type)
     {
-        bool spaceAvailable = false;
-        foreach (InventorySlot slot in playerController.playerInventory.inventory)
+        bool canRemove = true;
+
+        if (PlayerPrefsX.GetPersistentBool("multiplayer") == true)
         {
-            if (slot.typeInSlot.Equals("nothing") || slot.typeInSlot.Equals(type) && slot.amountInSlot < 1000)
-            {
-                spaceAvailable = true;
-            }
+            canRemove = CanInteract();
         }
-        if (spaceAvailable == true)
+
+        if (canRemove == true)
         {
-            playerController.playerInventory.AddItem(type, 1);
-            Destroy(playerController.objectInSight);
-            playerController.PlayCraftingSound();
-            if (PlayerPrefsX.GetPersistentBool("multiplayer") == true)
+            bool spaceAvailable = false;
+            foreach (InventorySlot slot in playerController.playerInventory.inventory)
             {
-                Vector3 pos = playerController.objectInSight.transform.position;
-                Quaternion rot = playerController.objectInSight.transform.rotation;
-                UpdateNetwork(1, type, pos, rot);
+                if (slot.typeInSlot.Equals("nothing") || slot.typeInSlot.Equals(type) && slot.amountInSlot < 1000)
+                {
+                    spaceAvailable = true;
+                }
+            }
+            if (spaceAvailable == true)
+            {
+                playerController.playerInventory.AddItem(type, 1);
+                Destroy(playerController.objectInSight);
+                playerController.PlayCraftingSound();
+                if (PlayerPrefsX.GetPersistentBool("multiplayer") == true)
+                {
+                    Vector3 pos = playerController.objectInSight.transform.position;
+                    Quaternion rot = playerController.objectInSight.transform.rotation;
+                    UpdateNetwork(1, type, pos, rot);
+                }
+            }
+            else
+            {
+                playerController.cannotCollect = true;
+                playerController.PlayMissingItemsSound();
             }
         }
         else
         {
-            playerController.cannotCollect = true;
             playerController.PlayMissingItemsSound();
         }
+    }
+
+    //! Returns true if the player is allowed to remove the object.
+    public bool CanInteract()
+    {
+        bool closeToProtectionBlock = false;
+
+        ProtectionBlock[] protectionBlocks = FindObjectsOfType<ProtectionBlock>();
+        foreach (ProtectionBlock protectionBlock in protectionBlocks)
+        {
+            Vector3 playerPos = playerController.gameObject.transform.position;
+            Vector3 blockPos = protectionBlock.transform.position;
+            Vector3 playerPosNoY = new Vector3(playerPos.x, 0, playerPos.z);
+            Vector3 blockPosNoY = new Vector3(blockPos.x, 0, blockPos.z);
+            float distance = Vector3.Distance(playerPosNoY, blockPosNoY);
+            if (distance <= 160)
+            {
+                closeToProtectionBlock = true;
+                if (protectionBlock.IsAuthorizedUser(PlayerPrefs.GetString("password")))
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+        }
+
+        if (closeToProtectionBlock == false)
+        {
+            return true;
+        }
+
+        return false;
     }
 
     //! Opens the machine GUI.

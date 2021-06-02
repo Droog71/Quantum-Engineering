@@ -146,6 +146,7 @@ public class PlayerController : MonoBehaviour
     public int money;
     public int destructionMessageCount;
     public int storageComputerInventory;
+    public string protectionList;
 
     public AudioClip footStep1;
     public AudioClip footStep2;
@@ -214,6 +215,7 @@ public class PlayerController : MonoBehaviour
     public GameObject modBlock;
     public GameObject item;
     public GameObject networkPlayer;
+    public GameObject protectionBlock;
 
     public Material constructionMat;
 
@@ -570,10 +572,18 @@ public class PlayerController : MonoBehaviour
     {
         playerInventory.SaveData();
         GameObject.Find("LanderCargo").GetComponent<InventoryManager>().SaveData();
-        PlayerPrefsX.SetVector3(stateManager.worldName + "playerPosition", transform.position);
-        PlayerPrefsX.SetQuaternion(stateManager.worldName + "playerRotation", transform.rotation);
-        FileBasedPrefs.SetInt(stateManager.worldName + "money", money);
         FileBasedPrefs.SetBool(stateManager.worldName + "oldWorld", true);
+
+        if (PlayerPrefsX.GetPersistentBool("multiplayer") == true)
+        {
+            PlayerPrefsX.SetPersistentVector3(stateManager.worldName + "playerPosition", transform.position);
+            PlayerPrefs.SetInt(stateManager.worldName + "money", money);
+        }
+        else
+        {
+            PlayerPrefsX.SetVector3(stateManager.worldName + "playerPosition", transform.position);
+            FileBasedPrefs.SetInt(stateManager.worldName + "money", money);
+        }
     }
 
     //! Applies global settings.
@@ -661,9 +671,16 @@ public class PlayerController : MonoBehaviour
     //! Moves the player to their previous location when a game is loaded.
     private void MovePlayerToSavedLocation()
     {
-        transform.position = PlayerPrefsX.GetVector3(stateManager.worldName + "playerPosition");
-        transform.rotation = PlayerPrefsX.GetQuaternion(stateManager.worldName + "playerRotation");
-        money = FileBasedPrefs.GetInt(stateManager.worldName + "money");
+        if (PlayerPrefsX.GetPersistentBool("multiplayer") == true)
+        {
+            transform.position = PlayerPrefsX.GetPersistentVector3(stateManager.worldName + "playerPosition");
+            money = PlayerPrefs.GetInt(stateManager.worldName + "money");
+        }
+        else
+        {
+            transform.position = PlayerPrefsX.GetVector3(stateManager.worldName + "playerPosition");
+            money = FileBasedPrefs.GetInt(stateManager.worldName + "money");
+        }
         movedPlayer = true;
     }
 
@@ -845,22 +862,30 @@ public class PlayerController : MonoBehaviour
     {
         Vector3 dropPos = mCam.transform.position + mCam.transform.forward * 10;
         GameObject droppedItem = Instantiate(item, dropPos, mCam.transform.rotation);
+
         float x = Mathf.Round(dropPos.x);
         float y = Mathf.Round(dropPos.y);
         float z = Mathf.Round(dropPos.z);
         Vector3 roundedPos = new Vector3(x, y, z);
-        while (networkItemLocations.Contains(roundedPos))
+
+        if (PlayerPrefsX.GetPersistentBool("multiplayer") == true)
         {
-            roundedPos.y++;
+            while (networkItemLocations.Contains(roundedPos))
+            {
+                roundedPos.y++;
+            }
+            networkItemLocations.Add(roundedPos);
         }
-        networkItemLocations.Add(roundedPos);
+
         droppedItem.GetComponent<Item>().startPosition = roundedPos;
         droppedItem.GetComponent<Item>().type = slot.typeInSlot;
         droppedItem.GetComponent<Item>().amount = slot.amountInSlot;
+
         if (PlayerPrefsX.GetPersistentBool("multiplayer") == true)
         {
             networkController.networkSend.SendItemData(0, slot.typeInSlot, slot.amountInSlot, roundedPos);
         }
+
         slot.typeInSlot = "nothing";
         slot.amountInSlot = 0;
         PlayCraftingSound();

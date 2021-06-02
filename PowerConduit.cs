@@ -15,7 +15,6 @@ public class PowerConduit : Machine
     public string inputID;
     private LineRenderer connectionLine;
     private GameObject connectionLine2;
-    public int address;
     public int powerAmount;
     public bool dualOutput;
     public int range = 6;

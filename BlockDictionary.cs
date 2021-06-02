@@ -218,7 +218,8 @@ public class BlockDictionary
             { "Turret", playerController.turret },
             { "Missile Turret", playerController.missileTurret },
             { "Universal Conduit", playerController.universalConduit },
-            { "Universal Extractor", playerController.universalExtractor }
+            { "Universal Extractor", playerController.universalExtractor },
+            { "Protection Block", playerController.protectionBlock }
         };
 
         typeDictionary = new Dictionary<string, Type>
@@ -254,7 +255,8 @@ public class BlockDictionary
             { "Iron Block", typeof (IronBlock) },
             { "Iron Ramp", typeof (IronBlock) },
             { "Steel Block", typeof (Steel) },
-            { "Steel Ramp", typeof (Steel) }
+            { "Steel Ramp", typeof (Steel) },
+            { "Protection Block", typeof (ProtectionBlock) }
         };
     }
 }

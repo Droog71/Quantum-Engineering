@@ -20,7 +20,6 @@ public class UniversalExtractor : Machine
     public string creationMethod = "built";
     private LineRenderer connectionLine;
     private LineRenderer inputLine;
-    public int address;
     public bool powerON;
     private bool extractingIce;
     private bool hasResource;
@@ -117,7 +116,7 @@ public class UniversalExtractor : Machine
                 GetComponent<Light>().enabled = true;
                 GetComponent<AudioSource>().enabled = true;
                 machineTimer += 1;
-                if (machineTimer > 5 - (address * 0.01f))
+                if (machineTimer > 5)
                 {
                     amount += speed - heat;
                     machineTimer = 0;

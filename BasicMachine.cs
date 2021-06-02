@@ -3,7 +3,6 @@
 public class BasicMachine : Machine
 {
     public float amount;
-    public int address;
     public int speed = 1;
     public int power;
     public int heat;
@@ -221,7 +220,7 @@ public class BasicMachine : Machine
                             conduitItem.active = true;
                             GetComponent<Light>().enabled = true;
                             machineTimer += 1;
-                            if (machineTimer > 5 - (address * 0.01f))
+                            if (machineTimer > 5)
                             {
                                 outputObject.GetComponent<UniversalConduit>().amount += speed - heat;
                                 amount -= speed - heat;

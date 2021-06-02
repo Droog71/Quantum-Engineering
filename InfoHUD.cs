@@ -606,6 +606,16 @@ public class InfoHUD : MonoBehaviour
                     }
                 }
             }
+            else if (obj.GetComponent<ProtectionBlock>() != null)
+            {
+                GUI.Label(guiCoordinates.messageRect, "\nPress F to collect.\nPress E to interact.");
+                if (playerController.machineInSight != null)
+                {
+                    GUI.DrawTexture(guiCoordinates.infoRectBG, textureDictionary.dictionary["Interface Background"]);
+                    string id = machineDisplayID == "unassigned" ? "\nStarting up..." : "\nID: " + machineDisplayID;
+                    GUI.Label(guiCoordinates.infoRect, "Protection Block" + id + "\nUsers: " + playerController.protectionList);
+                }
+            }
             else if (obj.GetComponent<Retriever>() != null)
             {
                 GUI.Label(guiCoordinates.messageRect, "\nPress F to collect.\nPress E to interact.");

@@ -8,7 +8,6 @@ public class ModBlock : Block
     private GameManager gameManager;
     public GameObject glassBreak;
     private bool init;
-    public int address;
     public string ID = "unassigned";
     public string blockName;
 

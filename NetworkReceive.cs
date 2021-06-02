@@ -15,6 +15,7 @@ public class NetworkReceive
     private string powerData;
     private string machineData;
     private string chatData;
+    private string banData;
     private bool chatCoroutineBusy;
     private List<string> chatMessageList;
     private string[] localBlockList;
@@ -38,6 +39,33 @@ public class NetworkReceive
         blockDictionary = playerController.GetComponent<BuildController>().blockDictionary;
         serverURL = networkController.serverURL;
         chatMessageList = new List<string>();
+    }
+
+    //! Check if the player's ip is banned on this server.
+    public IEnumerator CheckForBan()
+    {
+        banData = "none";
+
+        GetBanData();
+        while (banData == "none")
+        {
+            yield return null;
+        }
+
+        string[] banList = banData.Split('[');
+        for (int i=2; i < banList.Length; i++)
+        {
+            string banInfo = banList[i];
+            string ip = banInfo.TrimStart('"').Split('\\')[0];
+            if (ip == PlayerPrefs.GetString("ip"))
+            {
+                playerController.exiting = true;
+                playerController.requestedSave = true;
+                Debug.Log("Your IP address has been banned from " + PlayerPrefs.GetString("serverURL"));
+            }
+            yield return null;
+        }
+        networkController.checkForBanCoroutineBusy = false;
     }
 
     //! Processes data from chat database.
@@ -672,13 +700,11 @@ public class NetworkReceive
                 Vector3 itemPos = new Vector3(xPos, yPos, zPos);
                 bool found = false;
                 Item[] allItems = Object.FindObjectsOfType<Item>();
-                Vector3 itemstart = new Vector3(0, 0, 0);
                 foreach (Item item in allItems)
                 {
                     GameObject obj = item.gameObject;
                     if (item.gameObject != null)
                     {
-                        itemstart = item.startPosition;
                         if (item.startPosition == itemPos)
                         {
                             if (destroy == 1 && item.type == itemType && item.amount == itemAmount)
@@ -796,6 +822,16 @@ public class NetworkReceive
         {    
             System.Uri uri = new System.Uri(serverURL+"/machines");
             machineData = await client.DownloadStringTaskAsync(uri);
+        }
+    }
+
+    //! Gets machine data from server.
+    private async Task GetBanData()
+    {
+        using (WebClient client = new WebClient())
+        {    
+            System.Uri uri = new System.Uri(serverURL+"/bans");
+            banData = await client.DownloadStringTaskAsync(uri);
         }
     }
 }

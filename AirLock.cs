@@ -4,7 +4,6 @@ public class AirLock : Machine
 {
     private StateManager stateManager;
     public string ID = "unassigned";
-    public int address;
     public bool open;
     public GameObject openObject;
     public GameObject closedObject;

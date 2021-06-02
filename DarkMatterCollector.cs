@@ -17,7 +17,6 @@ public class DarkMatterCollector : Machine
     public PowerReceiver powerReceiver;
     private LineRenderer connectionLine;
     private LineRenderer inputLine;
-    public int address;
     public bool powerON;
     private int machineTimer;
     public int connectionAttempts;
@@ -86,7 +85,7 @@ public class DarkMatterCollector : Machine
                 GetComponent<Light>().enabled = true;
                 GetComponent<AudioSource>().enabled = true;
                 machineTimer += 1;
-                if (machineTimer > 5 - (address * 0.01f))
+                if (machineTimer > 5)
                 {
                     darkMatterAmount += speed - heat;
                     machineTimer = 0;

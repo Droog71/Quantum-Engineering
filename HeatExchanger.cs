@@ -14,7 +14,6 @@ public class HeatExchanger : Machine
     public GameObject outputObject;
     public string outputID;
     private LineRenderer connectionLine;
-    public int address;
     private int machineTimer;
     public int connectionAttempts;
     public bool connectionFailed;
@@ -118,7 +117,7 @@ public class HeatExchanger : Machine
         if (outputObject != null)
         {
             machineTimer += 1;
-            if (machineTimer > 5 - (address * 0.01f))
+            if (machineTimer > 5)
             {
                 SetOutputID();
                 DoWork();

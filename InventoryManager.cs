@@ -5,7 +5,6 @@ public class InventoryManager : Machine
     public InventorySlot[] inventory;
     private StateManager stateManager;
     public string ID = "unassigned";
-    public int address;
     private string originalID;
     public bool initialized;
     public int maxStackSize = 1000;

@@ -554,6 +554,18 @@ public class CraftingGUI : MonoBehaviour
                             }
                             GUI.Label(guiCoordinates.craftingInfoRect, descriptions.missile + "\n\n[CRAFTING]\n" + string.Join("\n", crafting));
                         }
+                        if (guiCoordinates.button15Rect.Contains(Event.current.mousePosition))
+                        {
+                            GUI.DrawTexture(guiCoordinates.craftingInfoBackgroundRect, textureDictionary.dictionary["Interface Background"]);
+                            CraftingRecipe recipe = craftingDictionary.dictionary["Protection Block"];
+                            int length = recipe.ingredients.Length;
+                            string[] crafting = new string[length];
+                            for (int i = 0; i < length; i++)
+                            {
+                                crafting[i] = recipe.amounts[i] + "x " + recipe.ingredients[i];
+                            }
+                            GUI.Label(guiCoordinates.craftingInfoRect, descriptions.protectionBlock + "\n\n[CRAFTING]\n" + string.Join("\n", crafting));
+                        }
 
                         GUI.DrawTexture(guiCoordinates.craftingBackgroundRect, textureDictionary.dictionary["Interface Background"]);
                         if (GUI.Button(guiCoordinates.button1Rect, "Iron Block"))
@@ -607,6 +619,10 @@ public class CraftingGUI : MonoBehaviour
                         if (GUI.Button(guiCoordinates.button14Rect, "Missile"))
                         {
                             craftingManager.CraftItemAsPlayer(craftingDictionary.dictionary["Missile"]);
+                        }
+                        if (GUI.Button(guiCoordinates.button15Rect, "Protection Block"))
+                        {
+                            craftingManager.CraftItemAsPlayer(craftingDictionary.dictionary["Protection Block"]);
                         }
                     }
                     if (craftingPage == 2)

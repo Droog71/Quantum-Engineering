@@ -14,7 +14,6 @@ public class MissileTurret : Machine
     public string creationMethod = "built";
     public string inputID;
     public GameObject inputObject;
-    public int address;
     public bool powerON;
     private Quaternion restingRotation;
     public GameObject launcher;

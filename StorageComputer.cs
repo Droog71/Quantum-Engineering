@@ -10,7 +10,6 @@ public class StorageComputer : Machine
     public bool powerON;
     public int bootTimer;
     public bool initialized;
-    public int address;
     private StateManager stateManager;
     private List<GameObject> spawnedConnectionList;
     public GameObject connectionObject;

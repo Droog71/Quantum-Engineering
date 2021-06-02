@@ -10,7 +10,6 @@ public class Turret : Machine
     public int cooling;
     public string ID = "unassigned";
     public string creationMethod = "built";
-    public int address;
     public bool powerON;
     public Material laserMat;
     private Quaternion restingRotation;

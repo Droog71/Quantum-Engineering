@@ -35,6 +35,13 @@ public class MachineInteraction
 
         if (cInput.GetKeyDown("Interact"))
         {
+            if (PlayerPrefsX.GetPersistentBool("multiplayer") == true)
+            {
+                if (!interactionController.CanInteract())
+                {
+                    return;
+                }
+            }
             if (Input.GetKey(KeyCode.LeftControl))
             {
                 if (!playerController.GuiOpen())
@@ -104,6 +111,13 @@ public class MachineInteraction
         }
         if (cInput.GetKeyDown("Interact"))
         {
+            if (PlayerPrefsX.GetPersistentBool("multiplayer") == true)
+            {
+                if (!interactionController.CanInteract())
+                {
+                    return;
+                }
+            }
             interactionController.ToggleMachineGUI();
         }
     }
@@ -141,6 +155,13 @@ public class MachineInteraction
         }
         if (cInput.GetKeyDown("Interact"))
         {
+            if (PlayerPrefsX.GetPersistentBool("multiplayer") == true)
+            {
+                if (!interactionController.CanInteract())
+                {
+                    return;
+                }
+            }
             playerController.networkedConduitRange = powerConduit.range;
             playerController.networkedDualPower = powerConduit.dualOutput;
             interactionController.ToggleMachineGUI();
@@ -164,6 +185,13 @@ public class MachineInteraction
         }
         if (cInput.GetKeyDown("Interact"))
         {
+            if (PlayerPrefsX.GetPersistentBool("multiplayer") == true)
+            {
+                if (!interactionController.CanInteract())
+                {
+                    return;
+                }
+            }
             playerController.networkedMachineSpeed = turret.speed;
             interactionController.ToggleMachineGUI();
         }
@@ -188,6 +216,13 @@ public class MachineInteraction
         }
         if (cInput.GetKeyDown("Interact"))
         {
+            if (PlayerPrefsX.GetPersistentBool("multiplayer") == true)
+            {
+                if (!interactionController.CanInteract())
+                {
+                    return;
+                }
+            }
             playerController.networkedMachineSpeed = turret.speed;
             interactionController.ToggleMachineGUI();
         }
@@ -212,6 +247,13 @@ public class MachineInteraction
         }
         if (cInput.GetKeyDown("Interact"))
         {
+            if (PlayerPrefsX.GetPersistentBool("multiplayer") == true)
+            {
+                if (!interactionController.CanInteract())
+                {
+                    return;
+                }
+            }
             playerController.networkedMachineSpeed = extractor.speed;
             interactionController.ToggleMachineGUI();
         }
@@ -235,6 +277,13 @@ public class MachineInteraction
         }
         if (cInput.GetKeyDown("Interact"))
         {
+            if (PlayerPrefsX.GetPersistentBool("multiplayer") == true)
+            {
+                if (!interactionController.CanInteract())
+                {
+                    return;
+                }
+            }
             playerController.networkedMachineSpeed = auger.speed;
             interactionController.ToggleMachineGUI();
         }
@@ -258,6 +307,13 @@ public class MachineInteraction
         }
         if (cInput.GetKeyDown("Interact"))
         {
+            if (PlayerPrefsX.GetPersistentBool("multiplayer") == true)
+            {
+                if (!interactionController.CanInteract())
+                {
+                    return;
+                }
+            }
             if (playerController.machineGUIopen == false)
             {
                 playerController.networkedMachineSpeed = collector.speed;
@@ -461,6 +517,13 @@ public class MachineInteraction
         }
         if (cInput.GetKeyDown("Interact"))
         {
+            if (PlayerPrefsX.GetPersistentBool("multiplayer") == true)
+            {
+                if (!interactionController.CanInteract())
+                {
+                    return;
+                }
+            }
             playerController.networkedConduitRange = conduit.range;
             interactionController.ToggleMachineGUI();
         }
@@ -540,6 +603,13 @@ public class MachineInteraction
         }
         if (cInput.GetKeyDown("Interact"))
         {
+            if (PlayerPrefsX.GetPersistentBool("multiplayer") == true)
+            {
+                if (!interactionController.CanInteract())
+                {
+                    return;
+                }
+            }
             playerController.networkedConduitRange = dmConduit.range;
             interactionController.ToggleMachineGUI();
         }
@@ -582,6 +652,13 @@ public class MachineInteraction
         }
         if (cInput.GetKeyDown("Interact"))
         {
+            if (PlayerPrefsX.GetPersistentBool("multiplayer") == true)
+            {
+                if (!interactionController.CanInteract())
+                {
+                    return;
+                }
+            }
             if (playerController.machineGUIopen == false)
             {
                 playerController.networkedMachineSpeed = smelter.speed;
@@ -642,6 +719,13 @@ public class MachineInteraction
         }
         if (cInput.GetKeyDown("Interact"))
         {
+            if (PlayerPrefsX.GetPersistentBool("multiplayer") == true)
+            {
+                if (!interactionController.CanInteract())
+                {
+                    return;
+                }
+            }
             if (playerController.machineGUIopen == false)
             {
                 playerController.networkedMachineSpeed = alloySmelter.speed;
@@ -691,6 +775,13 @@ public class MachineInteraction
         }
         if (cInput.GetKeyDown("Interact"))
         {
+            if (PlayerPrefsX.GetPersistentBool("multiplayer") == true)
+            {
+                if (!interactionController.CanInteract())
+                {
+                    return;
+                }
+            }
             if (playerController.machineGUIopen == false)
             {
                 playerController.networkedMachineSpeed = extruder.speed;
@@ -740,6 +831,13 @@ public class MachineInteraction
         }
         if (cInput.GetKeyDown("Interact"))
         {
+            if (PlayerPrefsX.GetPersistentBool("multiplayer") == true)
+            {
+                if (!interactionController.CanInteract())
+                {
+                    return;
+                }
+            }
             if (playerController.machineGUIopen == false)
             {
                 playerController.networkedMachineSpeed = modMachine.speed;
@@ -783,6 +881,13 @@ public class MachineInteraction
         }
         if (cInput.GetKeyDown("Interact"))
         {
+            if (PlayerPrefsX.GetPersistentBool("multiplayer") == true)
+            {
+                if (!interactionController.CanInteract())
+                {
+                    return;
+                }
+            }
             interactionController.ToggleMachineGUI();
         }
     }
@@ -837,6 +942,13 @@ public class MachineInteraction
         }
         if (cInput.GetKeyDown("Interact"))
         {
+            if (PlayerPrefsX.GetPersistentBool("multiplayer") == true)
+            {
+                if (!interactionController.CanInteract())
+                {
+                    return;
+                }
+            }
             if (playerController.machineGUIopen == false)
             {
                 playerController.networkedMachineSpeed = retriever.speed;
@@ -933,6 +1045,13 @@ public class MachineInteraction
         }
         if (cInput.GetKeyDown("Interact"))
         {
+            if (PlayerPrefsX.GetPersistentBool("multiplayer") == true)
+            {
+                if (!interactionController.CanInteract())
+                {
+                    return;
+                }
+            }
             if (playerController.machineGUIopen == false)
             {
                 playerController.networkedMachineSpeed = heatExchanger.speed;
@@ -983,6 +1102,13 @@ public class MachineInteraction
         }
         if (cInput.GetKeyDown("Interact"))
         {
+            if (PlayerPrefsX.GetPersistentBool("multiplayer") == true)
+            {
+                if (!interactionController.CanInteract())
+                {
+                    return;
+                }
+            }
             if (playerController.machineGUIopen == false)
             {
                 playerController.networkedMachineSpeed = gearCutter.speed;
@@ -1032,6 +1158,13 @@ public class MachineInteraction
         }
         if (cInput.GetKeyDown("Interact"))
         {
+            if (PlayerPrefsX.GetPersistentBool("multiplayer") == true)
+            {
+                if (!interactionController.CanInteract())
+                {
+                    return;
+                }
+            }
             if (playerController.machineGUIopen == false)
             {
                 playerController.networkedMachineSpeed = press.speed;
@@ -1074,6 +1207,13 @@ public class MachineInteraction
         }
         if (cInput.GetKeyDown("Interact"))
         {
+            if (PlayerPrefsX.GetPersistentBool("multiplayer") == true)
+            {
+                if (!interactionController.CanInteract())
+                {
+                    return;
+                }
+            }
             if (playerController.machineGUIopen == false)
             {
                 playerController.networkedMachineSpeed = autoCrafter.speed;
@@ -1084,6 +1224,35 @@ public class MachineInteraction
             {
                 playerController.machineGUIopen = false;
             }
+        }
+    }
+
+    //! Called when the player is looking at a protection block.
+    public void InteractWithProtectionBlock()
+    {
+        ProtectionBlock protectionBlock = playerController.objectInSight.GetComponent<ProtectionBlock>();
+        playerController.machineInSight = playerController.objectInSight;
+        playerController.machineID = protectionBlock.ID;
+        playerController.protectionList = "";
+        foreach (string userName in protectionBlock.userNames)
+        {
+            playerController.protectionList += userName + "\n";
+        }
+        if (cInput.GetKeyDown("Collect Object"))
+        {
+            interactionController.CollectObject("Protection Block");
+        }
+        if (cInput.GetKeyDown("Interact"))
+        {
+            if (PlayerPrefsX.GetPersistentBool("multiplayer") == true)
+            {
+                if (!interactionController.CanInteract())
+                {
+                    return;
+                }
+            }
+            protectionBlock.visible = !protectionBlock.visible;
+            playerController.PlayMissingItemsSound();
         }
     }
 }

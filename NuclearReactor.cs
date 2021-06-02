@@ -6,7 +6,6 @@ public class NuclearReactor : Machine
     public int cooling;
     public string ID = "unassigned";
     public string creationMethod = "built";
-    public int address;
     public int turbineCount;
     public bool sufficientCooling;
     private StateManager stateManager;

@@ -8,7 +8,6 @@ public class RailCart : MonoBehaviour
     private Vector3 targetPosition;
     public Vector3 startPosition;
     private StateManager stateManager;
-    public int address;
     public string targetID;
     private bool loadedTarget;
     private float stopTimer;

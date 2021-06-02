@@ -390,7 +390,7 @@ public class ActionManager
         {
             if (Physics.Raycast(playerController.mCam.gameObject.transform.position, playerController.mCam.gameObject.transform.forward, out RaycastHit hit, 1000))
             {
-                if (hit.collider.gameObject.GetComponent<Deer>() == null)
+                if (hit.collider.gameObject.GetComponent<Deer>() == null && hit.collider.gameObject.GetComponent<NetworkPlayer>() == null)
                 {
                     playerController.firing = true;
                     playerController.laserCannon.GetComponent<AudioSource>().Play();

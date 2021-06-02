@@ -25,6 +25,8 @@ public class NetworkController
     private Coroutine networkHubCoroutine;
     private Coroutine getNetworkPlayersCoroutine;
     private Coroutine networkMovementCoroutine;
+    private Coroutine announceCoroutine;
+    private Coroutine checkForBanCoroutine;
     private List<string> playerNames;
     public bool dedicatedServerCoroutineBusy;
     public bool networkStorageCoroutineBusy;
@@ -35,6 +37,8 @@ public class NetworkController
     public bool networkItemCoroutineBusy;
     public bool receivedNetworkStorage;
     public bool networkWorldUpdateCoroutineBusy;
+    public bool announceCoroutineBusy;
+    public bool checkForBanCoroutineBusy;
     public string playerData;
     public string blockData;
     public string itemData;
@@ -95,6 +99,18 @@ public class NetworkController
         {
             networkItemCoroutineBusy = true;
             networkItemCoroutine = playerController.StartCoroutine(UpdateNetworkItems());
+        }
+
+        if (announceCoroutineBusy == false && PlayerPrefsX.GetPersistentBool("hosting") == true && PlayerPrefsX.GetPersistentBool("announce") == true)
+        {
+            announceCoroutineBusy = true;
+            announceCoroutine = playerController.StartCoroutine(networkSend.Announce());
+        }
+
+        if (checkForBanCoroutineBusy == false && PlayerPrefsX.GetPersistentBool("hosting") == false)
+        {
+            checkForBanCoroutineBusy = true;
+            checkForBanCoroutine = playerController.StartCoroutine(networkReceive.CheckForBan());
         }
     }
 
@@ -200,9 +216,15 @@ public class NetworkController
         {
             string playerInfo = playerList[i];
             string playerName = playerInfo.Split(':')[0].Split(',')[0].TrimStart('"').TrimEnd('"');
+            float x = float.Parse(playerInfo.Split(',')[1]);
+            float y = float.Parse(playerInfo.Split(',')[2]);
+            float z = float.Parse(playerInfo.Split(',')[3]);
+            float fx = float.Parse(playerInfo.Split(',')[4]);
+            float fz = float.Parse(playerInfo.Split(',')[5]);
             float red = float.Parse(playerInfo.Split(',')[6]);
             float green = float.Parse(playerInfo.Split(',')[7]);
             float blue = float.Parse(playerInfo.Split(',')[8].Split(']')[0]);
+            Vector3 playerPosition = new Vector3(x, y, z);
             Color playerColor = new Color(red, green, blue);
             if (playerName != PlayerPrefs.GetString("UserName") && playerName != playerController.stateManager.worldName)
             {
@@ -212,7 +234,7 @@ public class NetworkController
                 }
                 if (!networkPlayers.ContainsKey(playerName))
                 {
-                    CreateNetworkPlayer(playerName, playerColor);
+                    CreateNetworkPlayer(playerName, playerPosition, playerColor);
                 }
                 else
                 {
@@ -337,9 +359,9 @@ public class NetworkController
     }
 
     //! Instantiates a gameobject representing another player over the network.
-    private void CreateNetworkPlayer(string playerName, Color playerColor)
+    private void CreateNetworkPlayer(string playerName, Vector3 playerPosition, Color playerColor)
     {
-        GameObject newPlayer = UnityEngine.Object.Instantiate(playerController.networkPlayer);
+        GameObject newPlayer = UnityEngine.Object.Instantiate(playerController.networkPlayer, playerPosition, new Quaternion());
         newPlayer.name = playerName;
         SetPlayerColor(newPlayer, playerColor);
         networkPlayers.Add(playerName, newPlayer);

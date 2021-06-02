@@ -4,6 +4,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.SceneManagement;
 using System.Net;
+using System.Linq;
+using System.Diagnostics;
 
 public class NetworkSend
 {
@@ -39,16 +41,6 @@ public class NetworkSend
         }
     }
 
-    //! Gets external IP address for online games.
-    private string GetExternalAddress()
-    {
-        using (WebClient client = new WebClient())
-        {    
-            Uri uri = new Uri("https://api.ipify.org");
-            return client.DownloadString(uri);
-        }
-    }
-
     //! Sends player name, location and color to the server.
     public void SendPlayerInfo()
     {
@@ -62,7 +54,8 @@ public class NetworkSend
             { "fz", Camera.main.transform.forward.z.ToString() },
             { "r", playerRed },
             { "g", playerGreen },
-            { "b", playerBlue }
+            { "b", playerBlue },
+            { "ip", PlayerPrefs.GetString("ip") }
         };
 
         using(WebClient client = new WebClient()) 
@@ -74,13 +67,13 @@ public class NetworkSend
             }
             catch(Exception e)
             {
-                Debug.Log(e.Message);
+                UnityEngine.Debug.Log(e.Message);
                 SceneManager.LoadScene(0);
             }
             client.UploadStringAsync(uri, "POST", "@" + values["name"] + ":"
             + values["x"] + "," + values["y"] + "," + values["z"]
             + "," + values["fx"] + "," + values["fz"] + ","
-            + values["r"] + "," + values["g"] + "," + values["b"]);
+            + values["r"] + "," + values["g"] + "," + values["b"] + "," + values["ip"]);
         }
     }
 
@@ -90,7 +83,7 @@ public class NetworkSend
         if (conduitCoroutineBusy == false)
         {
             conduitCoroutineBusy = true;
-            yield return new WaitForSeconds(1);
+            yield return new WaitForSeconds(0.5f);
             float x = Mathf.Round(pos.x);
             float y = Mathf.Round(pos.y); 
             float z = Mathf.Round(pos.z); 
@@ -109,7 +102,7 @@ public class NetworkSend
         if (machineCoroutineBusy == false)
         {
             machineCoroutineBusy = true;
-            yield return new WaitForSeconds(1);
+            yield return new WaitForSeconds(0.5f);
             float x = Mathf.Round(pos.x);
             float y = Mathf.Round(pos.y); 
             float z = Mathf.Round(pos.z); 
@@ -128,7 +121,7 @@ public class NetworkSend
         if (hubCoroutineBusy == false)
         {
             hubCoroutineBusy = true;
-            yield return new WaitForSeconds(1);
+            yield return new WaitForSeconds(0.5f);
             float x = Mathf.Round(pos.x);
             float y = Mathf.Round(pos.y); 
             float z = Mathf.Round(pos.z);
@@ -178,7 +171,7 @@ public class NetworkSend
         if (conduitCoroutineBusy == false)
         {
             conduitCoroutineBusy = true;
-            yield return new WaitForSeconds(1);
+            yield return new WaitForSeconds(0.5f);
             float x = Mathf.Round(pos.x);
             float y = Mathf.Round(pos.y); 
             float z = Mathf.Round(pos.z); 
@@ -194,11 +187,36 @@ public class NetworkSend
     //! Sends instantiated item info to the server in multiplayer games.
     public void SendItemData(int destroy, string type, int amount, Vector3 pos)
     {
-        using(WebClient client = new WebClient())
+        using (WebClient client = new WebClient())
         {
             Uri uri = new Uri(PlayerPrefs.GetString("serverURL") + "/items");
             string position = Mathf.Round(pos.x) + "," + Mathf.Round(pos.y) + "," + Mathf.Round(pos.z);
             client.UploadStringAsync(uri, "POST", "@" + destroy + ":" + type + ":" + amount + ":" + position);
         }
+    }
+
+    //! Adds server to master server database.
+    public IEnumerator Announce()
+    {
+        yield return new WaitForSeconds(30);
+        using (WebClient client = new WebClient()) 
+        {
+            Uri uri = new Uri("http://45.77.158.179:48000/servers");
+            string ip = PlayerPrefs.GetString("ip");
+            string creative = FileBasedPrefs.GetBool(ip + "creativeMode").ToString();
+            NetworkPlayer[] allPlayers = UnityEngine.Object.FindObjectsOfType<NetworkPlayer>();
+            int playerCount = allPlayers.Length;
+            string[] commandLineOptions = Environment.GetCommandLineArgs();
+            if (!commandLineOptions.Contains("-batchmode"))
+            {
+                playerCount += 1;
+            }
+            int sceneIndex = SceneManager.GetActiveScene().buildIndex;
+            string[] scenes = { "Kepler-1625", "Gliese 876", "Mods Menu", "Kepler-452b" };
+            string worldName = scenes[sceneIndex];
+            client.UploadStringAsync(uri, "POST", "@" + PlayerPrefs.GetString("ip") + ":" + worldName + "," + creative + "," + playerCount);
+            UnityEngine.Debug.Log("Announce: updating master server >> address: " + PlayerPrefs.GetString("ip") + " scene: " + worldName + " creative: " + creative + " players: " + playerCount);
+        }
+        networkController.announceCoroutineBusy = false;
     }
 }

@@ -149,6 +149,11 @@
     " This machine must be connected to a power source such as a solar panel, nuclear reactor or power conduit" +
     " and has an adjustable output measured in items per cycle.";
 
+    public string protectionBlock = "In multiplayer games, this machine prevents other players from placing or removing objects within a certain boundary." +
+    " If multiple players would like to share a protected area, the machine needs to be placed while all of those players are within the boundary." +
+    " All players within range will be added to the authorized user list for that protection block." +
+    " Each player is limited to 16 protection blocks, regardless of the number of users associated with the block.";
+
     public string chunkSize = "This setting adjusts the size of chunks loaded around the player." +
     " A 'chunk' is an area of blocks separated from their combined mesh to allow editing by the player." +
     " Blocks farther from the player that are not within the loaded chunk are combined into a single object." +

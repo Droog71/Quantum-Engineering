@@ -17,7 +17,6 @@ public class UniversalConduit : Machine
     public ConduitItem conduitItem;
     public Material lineMat;
     public bool inputMachineDisabled;
-    public int address;
     public int range = 6;
     public int connectionAttempts;
     public bool connectionFailed;

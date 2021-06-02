@@ -565,6 +565,22 @@ public class SaveManager
                             FileBasedPrefs.SetBool(worldID + "fallingStack", go.GetComponent<PhysicsHandler>().fallingStack);
                         }
                     }
+                    if (go.GetComponent<ProtectionBlock>() != null)
+                    {
+                        worldID = go.GetComponent<ProtectionBlock>().ID;
+                        List<string> userNames = go.GetComponent<ProtectionBlock>().userNames;
+                        List<string> passwords = go.GetComponent<ProtectionBlock>().GetPasswords();
+                        if (worldID != "unassigned" && worldID != "" && userNames != null && passwords != null)
+                        {
+                            PlayerPrefsX.SetStringArray(worldID + "userNames", userNames.ToArray());
+                            PlayerPrefsX.SetStringArray(worldID + "passwords", passwords.ToArray());
+                            FileBasedPrefs.SetBool(worldID + "falling", go.GetComponent<PhysicsHandler>().falling);
+                            FileBasedPrefs.SetBool(worldID + "fallingStack", go.GetComponent<PhysicsHandler>().fallingStack);
+                            objectName = stateManager.worldName + "ProtectionBlock";
+                            objectID = int.Parse(worldID.Substring(objectName.Length));
+                            machineIdList.Add(objectID);
+                        }
+                    }
 
                     FileBasedPrefs.SetString(stateManager.worldName + "machine" + objectID + "Name", objectName);
                     PlayerPrefsX.SetVector3(stateManager.worldName + "machine" + objectID + "Position", objectPosition);

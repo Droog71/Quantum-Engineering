@@ -12,7 +12,6 @@ public class RailCartHub : Machine
     private StateManager stateManager;
     private LineRenderer connectionLine;
     public Material lineMat;
-    public int address;
     public int range = 6;
     public float stopTime;
     public int connectionAttempts;

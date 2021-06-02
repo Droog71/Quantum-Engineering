@@ -5,7 +5,6 @@ public class AutoCrafter : Machine
     public int speed = 1;
     public string ID = "unassigned";
     public string creationMethod = "built";
-    public int address;
     public int connectionAttempts;
     public int power;
     public int heat;
@@ -290,7 +289,7 @@ public class AutoCrafter : Machine
                     }
 
                     machineTimer += 1;
-                    if (machineTimer > 5 - (address * 0.01f))
+                    if (machineTimer > 5)
                     {
                         CraftItems(false);
                         machineTimer = 0;
@@ -319,7 +318,7 @@ public class AutoCrafter : Machine
                         }
 
                         machineTimer += 1;
-                        if (machineTimer > 5 - (address * 0.01f))
+                        if (machineTimer > 5)
                         {
                             CraftItems(true);
                             machineTimer = 0;

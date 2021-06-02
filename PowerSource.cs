@@ -11,7 +11,6 @@ public class PowerSource : Machine
     public string inputID;
     public string outputID;
     private LineRenderer connectionLine;
-    public int address;
     public int powerAmount;
     public string type;
     public string fuelType;
@@ -250,7 +249,7 @@ public class PowerSource : Machine
             outOfFuel = false;
             fuelConsumptionTimer += 1;
 
-            if (fuelConsumptionTimer > 10 - (address * 0.01f))
+            if (fuelConsumptionTimer > 10)
             {
                 fuelAmount -= 1;
                 fuelConsumptionTimer = 0;

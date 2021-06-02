@@ -42,7 +42,8 @@
             "Dark Matter Conduit",
             "Dark Matter Collector",
             "Turret",
-            "Missile Turret"
+            "Missile Turret",
+            "Protection Block"
         };
     }
 
