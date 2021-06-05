@@ -363,6 +363,7 @@ public class MainMenu : MonoBehaviour
                 Directory.CreateDirectory(savePath);
                 File.WriteAllText(saveFileLocation, www.downloadHandler.text);
                 UnityEngine.Debug.Log("World downloaded.");
+                FileBasedPrefs.SetWorldName(worldName);
                 PreStart();
             }
         }
@@ -374,7 +375,6 @@ public class MainMenu : MonoBehaviour
     {
         if (worldSelected == false && worldName != "Enter world name.")
         {
-            FileBasedPrefs.SetWorldName(worldName);
             worldList = PlayerPrefsX.GetPersistentStringArray("Worlds").ToList();
             if (worldList.Count < 10)
             {
@@ -389,11 +389,13 @@ public class MainMenu : MonoBehaviour
                         }
                         else
                         {
+                            FileBasedPrefs.SetWorldName(worldName);
                             worldSelectPrompt = true;
                         }
                     }
                     else
                     {
+                        FileBasedPrefs.SetWorldName(worldName);
                         worldSelectPrompt = true;
                     }
                 }
@@ -407,11 +409,13 @@ public class MainMenu : MonoBehaviour
                         }
                         else
                         {
+                            FileBasedPrefs.SetWorldName(worldName);
                             PreStart();
                         }
                     }
                     else
                     {
+                        FileBasedPrefs.SetWorldName(worldName);
                         PreStart();
                     }
                 }
@@ -424,6 +428,7 @@ public class MainMenu : MonoBehaviour
                 }
                 else
                 {
+                    FileBasedPrefs.SetWorldName(worldName);
                     PreStart();
                 }
             }
@@ -842,6 +847,7 @@ public class MainMenu : MonoBehaviour
                 GUI.skin.label.fontSize = f;
                 if (GUI.Button(deletePromptButton1Rect, "Host"))
                 {
+                    buttonSounds.Play();
                     hosting = true;
                     PlayerPrefsX.SetPersistentBool("hosting", true);
                     multiplayerPrompt = false;
@@ -849,6 +855,7 @@ public class MainMenu : MonoBehaviour
                 }
                 if (GUI.Button(deletePromptButton2Rect, "Join"))
                 {
+                    buttonSounds.Play();
                     hosting = false;
                     PlayerPrefsX.SetPersistentBool("hosting", false);
                     PlayerPrefs.SetString("ip", GetExternalAddress());
@@ -869,6 +876,7 @@ public class MainMenu : MonoBehaviour
                 GUI.skin.label.fontSize = f;
                 if (GUI.Button(deletePromptButton1Rect, "Local"))
                 {
+                    buttonSounds.Play();
                     local = true;
                     localPrompt = false;
                     userNamePrompt = true;
@@ -880,6 +888,7 @@ public class MainMenu : MonoBehaviour
                 }
                 if (GUI.Button(deletePromptButton2Rect, "Online"))
                 {
+                    buttonSounds.Play();
                     local = false;
                     localPrompt = false;
                     publicPrompt = true;
@@ -901,12 +910,14 @@ public class MainMenu : MonoBehaviour
                 GUI.skin.label.fontSize = f;
                 if (GUI.Button(deletePromptButton1Rect, "Public"))
                 {
+                    buttonSounds.Play();
                     publicPrompt = false;
                     userNamePrompt = true;
                     PlayerPrefsX.SetPersistentBool("announce", true);
                 }
                 if (GUI.Button(deletePromptButton2Rect, "Private"))
                 {
+                    buttonSounds.Play();
                     publicPrompt = false;
                     userNamePrompt = true;
                     PlayerPrefsX.SetPersistentBool("announce", false);
@@ -952,6 +963,7 @@ public class MainMenu : MonoBehaviour
                 serverURL = GUI.TextField(textEntryRect, serverURL, 30);
                 if (GUI.Button(scenePromptButton3Rect, "OK"))
                 {
+                    buttonSounds.Play();
                     worldName = serverURL;
                     PlayerPrefs.SetString("serverURL", "http://" + serverURL + ":5000");
                     networkAddressPrompt = false;
@@ -971,6 +983,7 @@ public class MainMenu : MonoBehaviour
                 username = GUI.TextField(textEntryRect, username, 30);
                 if (GUI.Button(scenePromptButton3Rect, "OK"))
                 {
+                    buttonSounds.Play();
                     if (username != "" && username != "Enter user name.")
                     {
                         PlayerPrefs.SetString("UserName", username);
@@ -992,6 +1005,7 @@ public class MainMenu : MonoBehaviour
                 password = GUI.TextField(textEntryRect, password, 30);
                 if (GUI.Button(scenePromptButton3Rect, "OK"))
                 {
+                    buttonSounds.Play();
                     if (password != "" && password != "Enter password.")
                     {
                         PlayerPrefs.SetString("password", password);
