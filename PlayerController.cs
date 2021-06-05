@@ -359,8 +359,15 @@ public class PlayerController : MonoBehaviour
 
                 if (checkedForCreativeMode == false && stateManager.worldLoaded == true)
                 {
-                    creativeMode |= FileBasedPrefs.GetBool(stateManager.worldName + "creativeMode");
-                    Debug.Log("World [" + stateManager.worldName + "] running in creative mode.");
+                    creativeMode = FileBasedPrefs.GetBool(stateManager.worldName + "creativeMode");
+                    if (creativeMode == true)
+                    {
+                        Debug.Log("World [" + stateManager.worldName + "] running in creative mode.");
+                    }
+                    else
+                    {
+                        Debug.Log("World [" + stateManager.worldName + "] running in standard mode.");
+                    }
                     checkedForCreativeMode = true;
                 }
 
@@ -961,6 +968,8 @@ public class PlayerController : MonoBehaviour
                         if (GameObject.Find("Player").GetComponent<PlayerController>().exiting == true)
                         {
                             Debug.Log("Loading main menu...");
+                            FileBasedPrefs.initialized = false;
+                            FileBasedPrefs._latestData = null;
                             SceneManager.LoadScene(0);
                         }
                         else

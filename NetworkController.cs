@@ -23,6 +23,7 @@ public class NetworkController
     private Coroutine networkConduitCoroutine;
     private Coroutine networkMachineCoroutine;
     private Coroutine networkHubCoroutine;
+    private Coroutine networkHazardCoroutine;
     private Coroutine getNetworkPlayersCoroutine;
     private Coroutine networkMovementCoroutine;
     private Coroutine announceCoroutine;
@@ -49,22 +50,19 @@ public class NetworkController
     public NetworkController(PlayerController playerController)
     {
         this.playerController = playerController;
-        serverURL = PlayerPrefs.GetString("serverURL");
         textureDictionary = playerController.gameManager.GetComponent<TextureDictionary>();
         networkPlayers = new Dictionary<string, GameObject>();
         playerPositions = new Dictionary<string, Vector3>();
         playerNames = new List<string>();
         networkSend = new NetworkSend(this);
         networkReceive = new NetworkReceive(this);
-        if (PlayerPrefsX.GetPersistentBool("multiplayer") == true)
-        {
-            Debug.Log("Connected to " + serverURL);
-        }
     }
 
     //! Network functions called once per frame.
     public void NetworkFrame()
     {
+        serverURL = PlayerPrefs.GetString("serverURL");
+
         string commandLineOptions = Environment.CommandLine;
         if (commandLineOptions.Contains("-batchmode"))
         {
@@ -114,12 +112,12 @@ public class NetworkController
         }
     }
 
-    //! Send information about this player once per second.
+    //! Send information about this player to the server.
     public IEnumerator SendNetworkPlayerInfo()
     {
         sendNetworkPlayerCoroutineBusy = true;
         networkSend.SendPlayerInfo();
-        yield return new WaitForSeconds(1);
+        yield return new WaitForSeconds(0.5f);
         sendNetworkPlayerCoroutineBusy = false;
     }
 
@@ -173,6 +171,15 @@ public class NetworkController
             yield return null;
         }
 
+        if (NetworkAvailable())
+        {
+            networkHazardCoroutine = playerController.StartCoroutine(networkReceive.ReceiveHazardData());
+        }
+        else
+        {
+            yield return null;
+        }
+
         networkWorldUpdateCoroutineBusy = false;
     }
 
@@ -183,6 +190,7 @@ public class NetworkController
         networkReceive.powerDataCoroutineBusy == false &&
         networkReceive.machineDataCoroutineBusy == false &&
         networkReceive.hubDataCoroutineBusy == false &&
+        networkReceive.hazardDataCoroutineBusy == false &&
         networkStorageCoroutineBusy == false;
     }
 

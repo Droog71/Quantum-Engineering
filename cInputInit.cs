@@ -39,6 +39,7 @@ public class cInputInit : MonoBehaviour
         cInput.SetKey("Tablet", "F3", Keys.F3);
         cInput.SetKey("Paint Gun", "P", Keys.P);
         cInput.SetKey("Paint Color", "O", Keys.O);
+        cInput.SetKey("Hotbar", "F9", Keys.F9);
         cInput.SetKey("Crosshair", "T", Keys.T);
     }
 }

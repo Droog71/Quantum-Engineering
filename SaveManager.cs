@@ -568,12 +568,10 @@ public class SaveManager
                     if (go.GetComponent<ProtectionBlock>() != null)
                     {
                         worldID = go.GetComponent<ProtectionBlock>().ID;
-                        List<string> userNames = go.GetComponent<ProtectionBlock>().userNames;
-                        List<string> passwords = go.GetComponent<ProtectionBlock>().GetPasswords();
-                        if (worldID != "unassigned" && worldID != "" && userNames != null && passwords != null)
+                        List<string> userNames = go.GetComponent<ProtectionBlock>().GetUserNames();
+                        if (worldID != "unassigned" && worldID != "" && userNames != null)
                         {
                             PlayerPrefsX.SetStringArray(worldID + "userNames", userNames.ToArray());
-                            PlayerPrefsX.SetStringArray(worldID + "passwords", passwords.ToArray());
                             FileBasedPrefs.SetBool(worldID + "falling", go.GetComponent<PhysicsHandler>().falling);
                             FileBasedPrefs.SetBool(worldID + "fallingStack", go.GetComponent<PhysicsHandler>().fallingStack);
                             objectName = stateManager.worldName + "ProtectionBlock";

@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System.Collections.Generic;
 
 public class MachineInteraction
 {
@@ -1234,25 +1235,29 @@ public class MachineInteraction
         playerController.machineInSight = playerController.objectInSight;
         playerController.machineID = protectionBlock.ID;
         playerController.protectionList = "";
-        foreach (string userName in protectionBlock.userNames)
+        List<string> userNames = protectionBlock.GetUserNames();
+        if (userNames != null)
         {
-            playerController.protectionList += userName + "\n";
-        }
-        if (cInput.GetKeyDown("Collect Object"))
-        {
-            interactionController.CollectObject("Protection Block");
-        }
-        if (cInput.GetKeyDown("Interact"))
-        {
-            if (PlayerPrefsX.GetPersistentBool("multiplayer") == true)
+            foreach (string userName in protectionBlock.GetUserNames())
             {
-                if (!interactionController.CanInteract())
-                {
-                    return;
-                }
+                playerController.protectionList += userName + "\n";
             }
-            protectionBlock.visible = !protectionBlock.visible;
-            playerController.PlayMissingItemsSound();
+            if (cInput.GetKeyDown("Collect Object"))
+            {
+                interactionController.CollectObject("Protection Block");
+            }
+            if (cInput.GetKeyDown("Interact"))
+            {
+                if (PlayerPrefsX.GetPersistentBool("multiplayer") == true)
+                {
+                    if (!interactionController.CanInteract())
+                    {
+                        return;
+                    }
+                }
+                protectionBlock.visible = !protectionBlock.visible;
+                playerController.PlayMissingItemsSound();
+            }
         }
     }
 }

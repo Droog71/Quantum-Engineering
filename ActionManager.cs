@@ -4,11 +4,13 @@ public class ActionManager
 {
     private PlayerController playerController;
     private CombinedMeshManager meshManager;
+    private HotBar hotbar;
 
     //! This class contains all functions called by the input manager.
     public ActionManager(PlayerController playerController)
     {
         this.playerController = playerController;
+        hotbar = playerController.gameObject.GetComponent<HotBar>();
         meshManager = playerController.gameManager.meshManager;
     }
 
@@ -603,6 +605,13 @@ public class ActionManager
         Cursor.lockState = CursorLockMode.None;
         playerController.gameObject.GetComponent<MSCameraController>().enabled = false;
         playerController.tabletOpen = false;
+    }
+
+    //! Toggles the hotbar.
+    public void ToggleHotBar()
+    {
+        hotbar.toggled = !hotbar.toggled;
+        playerController.PlayButtonSound();
     }
 
     //! Closes all GUI windows.

@@ -1,6 +1,9 @@
 ﻿using UnityEngine;
-using System.Collections.Generic;
+using System;
 using System.IO;
+using System.Linq;
+using System.Collections.Generic;
+
 
 //! This class provides the crafting recipe dictionary used by the crafting manager
 public class CraftingDictionary
@@ -213,13 +216,22 @@ public class CraftingDictionary
                 {
                     modDictionary.Add(output, modRecipe);
                     string modName = new DirectoryInfo(path).Name;
-                    Debug.Log("Mod "+"["+modName+"]"+" added a new crafting recipe for [" + output + "]");
+                    string[] commandLineOptions = Environment.GetCommandLineArgs();
+                    if (commandLineOptions.Contains("-devel"))
+                    {
+                        Debug.Log("Mod "+"["+modName+"]"+" added a new crafting recipe for [" + output + "]");
+                    }
+
                 }
                 else
                 {
                     dictionary[output] = modRecipe;
                     string modName = new DirectoryInfo(path).Name;
-                    Debug.Log("Mod "+"["+modName+"]"+" has overridden the crafting recipe for [" + output + "]");
+                    string[] commandLineOptions = Environment.GetCommandLineArgs();
+                    if (commandLineOptions.Contains("-devel"))
+                    {
+                        Debug.Log("Mod " + "[" + modName + "]" + " has overridden the crafting recipe for [" + output + "]");
+                    }
                 }
             }
         }

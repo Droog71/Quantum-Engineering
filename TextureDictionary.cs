@@ -4,6 +4,8 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+
 
 //! This class provides loading of textures by name from Resources or Application.persistentDataPath.
 public class TextureDictionary : MonoBehaviour
@@ -40,7 +42,11 @@ public class TextureDictionary : MonoBehaviour
                         if (!stateManager.modTextureList.Contains(textureName))
                         {
                             stateManager.modTextureList.Add(textureName);
-                            Debug.Log("Mod "+"["+modName+"]"+" loaded texture [" + textureName + ".png]");
+                            string[] commandLineOptions = Environment.GetCommandLineArgs();
+                            if (commandLineOptions.Contains("-devel"))
+                            {
+                                Debug.Log("Mod "+"["+modName+"]"+" loaded texture [" + textureName + ".png]");
+                            }
                         }
                     }
                 }
@@ -77,12 +83,15 @@ public class TextureDictionary : MonoBehaviour
             { "Bronze Ingot", Resources.Load("BronzeIngot") as Texture2D },
             { "Steel Ingot", Resources.Load("SteelIngot") as Texture2D },
             { "Iron Block", Resources.Load("IronBlock") as Texture2D },
+            { "Iron Block_Normal", Resources.Load("IronBlock_Normal") as Texture2D },
             { "Iron Ramp", Resources.Load("IronRamp") as Texture2D },
             { "Steel Block", Resources.Load("SteelBlock") as Texture2D },
+            { "Steel Block_Normal", Resources.Load("SteelBlock_Normal") as Texture2D },
             { "Steel Ramp", Resources.Load("SteelRamp") as Texture2D },
             { "Glass Block", Resources.Load("Glass") as Texture2D },
             { "Glass Block_Icon", Resources.Load("Glass_Icon") as Texture2D },
             { "Brick", Resources.Load("Brick") as Texture2D },
+            { "Brick_Normal", Resources.Load("Brick_Normal") as Texture2D },
             { "Electric Light", Resources.Load("Light") as Texture2D },
             { "Dark Matter Collector", Resources.Load("DarkMatterCollector") as Texture2D },
             { "Dark Matter Conduit", Resources.Load("DarkMatterConduit") as Texture2D },
@@ -90,6 +99,7 @@ public class TextureDictionary : MonoBehaviour
             { "Universal Extractor", Resources.Load("UniversalExtractor") as Texture2D },
             { "Auger", Resources.Load("Auger") as Texture2D },
             { "Door", Resources.Load("Door") as Texture2D },
+            { "Door_Normal", Resources.Load("Door_Normal") as Texture2D },
             { "Quantum Hatchway", Resources.Load("Hatch") as Texture2D },
             { "Storage Container", Resources.Load("StorageContainer") as Texture2D },
             { "Copper Ore", Resources.Load("CopperOre") as Texture2D },
@@ -136,7 +146,7 @@ public class TextureDictionary : MonoBehaviour
             { "Storage Computer", Resources.Load("StorageComputer") as Texture2D },
             { "Circuit Board", Resources.Load("CircuitBoard") as Texture2D },
             { "Electric Motor", Resources.Load("Motor") as Texture2D },
-            { "Protection Block", Resources.Load("ShadedSelectionBox") as Texture2D }
+            { "Protection Block", Resources.Load("ProtectionBlock") as Texture2D }
         };
 
         modTextureCoroutine = StartCoroutine(AddModTextures(dictionary));

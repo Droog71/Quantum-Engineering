@@ -576,7 +576,15 @@ public class PlayerGUI : MonoBehaviour
                     string hazardsEnabledDisplay = gameManager.hazardsEnabled == true ? "ON" : "OFF";
                     if (GUI.Button(guiCoordinates.optionsButton8Rect, "Hazards: " + hazardsEnabledDisplay))
                     {
-                        gameManager.hazardsEnabled = !gameManager.hazardsEnabled;
+                        if (PlayerPrefsX.GetPersistentBool("multiplayer") == false)
+                        {
+                            gameManager.hazardsEnabled = !gameManager.hazardsEnabled;
+                        }
+                        else if (PlayerPrefsX.GetPersistentBool("hosting") == true)
+                        {
+                            gameManager.hazardsEnabled = !gameManager.hazardsEnabled;
+                            playerController.networkController.networkSend.SendHazardData(gameManager.hazardsEnabled);
+                        }
                         playerController.PlayButtonSound();
                     }
 

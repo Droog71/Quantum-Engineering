@@ -1,22 +1,23 @@
 ﻿using UnityEngine;
 using System.Diagnostics;
-using System.Collections.Generic;
+using System;
 using System.Linq;
+using System.Collections.Generic;
 
 public class ProtectionBlock : Machine
 {
-    public List<string> userNames;
-    private List<string> passwords;
-    public string ID;
+    public string ID = "unassigned";
     public bool visible;
     public Material lineMat;
     public GameObject connectionObject;
     public string creationMethod = "built";
+    private List<string> userNames;
     private StateManager stateManager;
     private LineRenderer[] lines;
     private Vector3[] vectors;
     private Vector3 pos;
     private bool init;
+    private int connectionAttempts;
 
     //! Called by unity engine on start up to initialize variables.
     public void Start()
@@ -32,14 +33,41 @@ public class ProtectionBlock : Machine
         {
             PlayerController player = GameObject.Find("Player").GetComponent<PlayerController>();
             float distance = Vector3.Distance(transform.position, player.transform.position);
-            if (distance <= 160)
+            string userName = PlayerPrefs.GetString("UserName");
+            if (distance <= 160 && userName != stateManager.worldName)
             {
-                string userName = PlayerPrefs.GetString("UserName");
-                string password = PlayerPrefs.GetString("password");
-                passwords = new List<string>();
-                AddUser(userName, password);
+                AddUser(userName);
+                init = true;
             }
-            init = true;
+
+            NetworkPlayer[] networkPlayers = FindObjectsOfType<NetworkPlayer>();
+            if (networkPlayers != null)
+            {
+                foreach (NetworkPlayer netWorkPlayer in networkPlayers)
+                {
+                    if (netWorkPlayer != null)
+                    {
+                        float networkPlayerDistance = Vector3.Distance(netWorkPlayer.transform.position, transform.position);
+                        if (networkPlayerDistance <= 160)
+                        {
+                            AddUser(netWorkPlayer.gameObject.name);
+                            string[] commandLineOptions = Environment.GetCommandLineArgs();
+                            if (commandLineOptions.Contains("-batchmode") && ID.Length > stateManager.worldName.Length)
+                            {
+                                string logID = ID.Substring(stateManager.worldName.Length);
+                                UnityEngine.Debug.Log("Adding user " + netWorkPlayer.gameObject.name + " to " + logID);
+                            }
+                            init = true;
+                        }
+                    }
+                }
+            }
+
+            connectionAttempts++;
+            if (connectionAttempts >= 128)
+            {
+                Destroy(gameObject);
+            }
         }
 
         if (vectors == null)
@@ -121,54 +149,49 @@ public class ProtectionBlock : Machine
     }
 
     //! Adds a user to the list of authorized users for this protection block.
-    public void AddUser(string userName, string password)
+    public void AddUser(string userName)
     {
         StackFrame frame = new StackFrame(1);
         if (IsValidCaller(frame))
         {
-            passwords.Add(password);
+            if (userNames == null)
+            {
+                userNames = new List<string>();
+            }
             userNames.Add(userName);
-        }
-        else
-        {
-            Destroy(gameObject);
         }
     }
 
-    //! Initializes the password list.
-    public void SetPasswords(string[] pwArray)
+    //! Adds a user to the list of authorized users for this protection block.
+    public List<string> GetUserNames()
     {
         StackFrame frame = new StackFrame(1);
         if (IsValidCaller(frame))
         {
-            passwords = pwArray.ToList();
+            return userNames;
         }
-        else
+        return null;
+    }
+
+    //! Adds a user to the list of authorized users for this protection block.
+    public void SetUserNames(List<string> names)
+    {
+        StackFrame frame = new StackFrame(1);
+        if (IsValidCaller(frame))
         {
-            Destroy(gameObject);
+            userNames = names;
         }
     }
 
     //! Returns true if the player is an authorized user for this protection block.
-    public bool IsAuthorizedUser(string password)
+    public bool IsAuthorizedUser(string userName)
     {
         StackFrame frame = new StackFrame(1);
         if (IsValidCaller(frame))
         {
-            return passwords.Contains(password);
+            return userNames.Contains(userName);
         }
         return false;
-    }
-
-    //! Gets the list of passwords for this protection block. Used for saving and loading worlds.
-    public List<string> GetPasswords()
-    {
-        StackFrame frame = new StackFrame(1);
-        if (IsValidCaller(frame))
-        {
-            return passwords;
-        }
-        return null;
     }
 
     //! Returns true if the method is called from a valid, authorized class.
@@ -199,6 +222,11 @@ public class ProtectionBlock : Machine
         }
 
         if (methodName == "CanInteract" && className == "InteractionController" && assembly == "Assembly-CSharp")
+        {
+            return true;
+        }
+
+        if (methodName == "InteractWithProtectionBlock" && className == "MachineInteraction" && assembly == "Assembly-CSharp")
         {
             return true;
         }

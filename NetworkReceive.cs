@@ -9,13 +9,13 @@ public class NetworkReceive
     private NetworkController networkController;
     private PlayerController playerController;
     private BlockDictionary blockDictionary;
-    private string serverURL;
     private string hubData;
     private string conduitData;
     private string powerData;
     private string machineData;
     private string chatData;
     private string banData;
+    private string hazardData;
     private bool chatCoroutineBusy;
     private List<string> chatMessageList;
     private string[] localBlockList;
@@ -30,6 +30,7 @@ public class NetworkReceive
     public bool conduitDataCoroutineBusy;
     public bool machineDataCoroutineBusy;
     public bool powerDataCoroutineBusy;
+    public bool hazardDataCoroutineBusy;
 
     //! Network functions for multiplayer games.
     public NetworkReceive(NetworkController networkController)
@@ -37,7 +38,6 @@ public class NetworkReceive
         this.networkController = networkController;
         playerController = networkController.playerController;
         blockDictionary = playerController.GetComponent<BuildController>().blockDictionary;
-        serverURL = networkController.serverURL;
         chatMessageList = new List<string>();
     }
 
@@ -56,16 +56,39 @@ public class NetworkReceive
         for (int i=2; i < banList.Length; i++)
         {
             string banInfo = banList[i];
-            string ip = banInfo.TrimStart('"').Split('\\')[0];
+            string ip = banInfo.TrimStart('"').Split('\\')[0].Split('"')[0];
             if (ip == PlayerPrefs.GetString("ip"))
             {
+                playerController.escapeMenuOpen = true;
                 playerController.exiting = true;
                 playerController.requestedSave = true;
-                Debug.Log("Your IP address has been banned from " + PlayerPrefs.GetString("serverURL"));
+                Debug.Log("Your IP address has been banned from " + networkController.serverURL);
             }
             yield return null;
         }
         networkController.checkForBanCoroutineBusy = false;
+    }
+
+    //! Processes data from chat database.
+    public IEnumerator ReceiveHazardData()
+    {
+        if (hazardDataCoroutineBusy == false)
+        {
+            hazardDataCoroutineBusy = true;
+
+            hazardData = "none";
+
+            GetHazardData();
+            while (hazardData == "none")
+            {
+                yield return null;
+            }
+
+            string hazardsEnabled = hazardData.Split(':')[1].Split('}')[0].TrimStart('"').TrimEnd('"');
+            playerController.gameManager.hazardsEnabled = hazardsEnabled == "True";
+
+            hazardDataCoroutineBusy = false;
+        }
     }
 
     //! Processes data from chat database.
@@ -455,7 +478,7 @@ public class NetworkReceive
                         float y = Mathf.Round(pos.y);
                         float z = Mathf.Round(pos.z);
                         Vector3 foundPos = new Vector3(x, y, z);
-                        if (foundPos == machinePos && machine.speed != speed)
+                        if (foundPos == machinePos)
                         {
                             if (machine.connectionFailed == true)
                             {
@@ -477,7 +500,7 @@ public class NetworkReceive
                         float y = Mathf.Round(pos.y);
                         float z = Mathf.Round(pos.z);
                         Vector3 foundPos = new Vector3(x, y, z);
-                        if (foundPos == machinePos && extractor.speed != speed)
+                        if (foundPos == machinePos)
                         {
                             if (extractor.connectionFailed == true)
                             {
@@ -499,7 +522,7 @@ public class NetworkReceive
                         float y = Mathf.Round(pos.y);
                         float z = Mathf.Round(pos.z);
                         Vector3 foundPos = new Vector3(x, y, z);
-                        if (foundPos == machinePos && collector.speed != speed)
+                        if (foundPos == machinePos)
                         {
                             if (collector.connectionFailed == true)
                             {
@@ -521,7 +544,7 @@ public class NetworkReceive
                         float y = Mathf.Round(pos.y);
                         float z = Mathf.Round(pos.z);
                         Vector3 foundPos = new Vector3(x, y, z);
-                        if (foundPos == machinePos && hx.speed != speed)
+                        if (foundPos == machinePos)
                         {
                             if (hx.connectionFailed == true)
                             {
@@ -543,7 +566,7 @@ public class NetworkReceive
                         float y = Mathf.Round(pos.y);
                         float z = Mathf.Round(pos.z);
                         Vector3 foundPos = new Vector3(x, y, z);
-                        if (foundPos == machinePos && alloySmelter.speed != speed)
+                        if (foundPos == machinePos)
                         {
                             if (alloySmelter.connectionFailed == true)
                             {
@@ -565,7 +588,7 @@ public class NetworkReceive
                         float y = Mathf.Round(pos.y);
                         float z = Mathf.Round(pos.z);
                         Vector3 foundPos = new Vector3(x, y, z);
-                        if (foundPos == machinePos && auger.speed != speed)
+                        if (foundPos == machinePos)
                         {
                             auger.speed = speed;
                         }
@@ -582,7 +605,7 @@ public class NetworkReceive
                         float y = Mathf.Round(pos.y);
                         float z = Mathf.Round(pos.z);
                         Vector3 foundPos = new Vector3(x, y, z);
-                        if (foundPos == machinePos && autoCrafter.speed != speed)
+                        if (foundPos == machinePos)
                         {
                             autoCrafter.speed = speed;
                         }
@@ -599,7 +622,7 @@ public class NetworkReceive
                         float y = Mathf.Round(pos.y);
                         float z = Mathf.Round(pos.z);
                         Vector3 foundPos = new Vector3(x, y, z);
-                        if (foundPos == machinePos && retriever.speed != speed)
+                        if (foundPos == machinePos)
                         {
                             retriever.speed = speed;
                         }
@@ -616,7 +639,7 @@ public class NetworkReceive
                         float y = Mathf.Round(pos.y);
                         float z = Mathf.Round(pos.z);
                         Vector3 foundPos = new Vector3(x, y, z);
-                        if (foundPos == machinePos && turret.speed != speed)
+                        if (foundPos == machinePos)
                         {
                             turret.speed = speed;
                         }
@@ -663,15 +686,15 @@ public class NetworkReceive
                         float y = Mathf.Round(pos.y);
                         float z = Mathf.Round(pos.z);
                         Vector3 foundPos = new Vector3(x, y, z);
-                        if (foundPos == powerPos && powerConduit.range != range)
+                        if (foundPos == powerPos)
                         {
                             if (powerConduit.connectionFailed == true)
                             {
                                 powerConduit.connectionAttempts = 0;
                                 powerConduit.connectionFailed = false;
                             }
-                            powerConduit.dualOutput = dual == true;
                             powerConduit.range = range;
+                            powerConduit.dualOutput = dual == true;
                         }
                     }
                     yield return null;
@@ -735,12 +758,22 @@ public class NetworkReceive
         networkController.networkItemCoroutineBusy = false;
     }
 
+    //! Gets hazards setting from server.
+    private async Task GetHazardData()
+    {
+        using (WebClient client = new WebClient())
+        {    
+            System.Uri uri = new System.Uri(networkController.serverURL+"/hazards");
+            hazardData = await client.DownloadStringTaskAsync(uri);
+        }
+    }
+
     //! Gets chat messages from server.
     private async Task GetChatData()
     {
         using (WebClient client = new WebClient())
         {    
-            System.Uri uri = new System.Uri(serverURL+"/chat");
+            System.Uri uri = new System.Uri(networkController.serverURL+"/chat");
             chatData = await client.DownloadStringTaskAsync(uri);
         }
     }
@@ -750,7 +783,7 @@ public class NetworkReceive
     {
         using (WebClient client = new WebClient())
         {    
-            System.Uri uri = new System.Uri(serverURL+"/storage");
+            System.Uri uri = new System.Uri(networkController.serverURL+"/storage");
             networkController.storageData = await client.DownloadStringTaskAsync(uri);
         }
     }
@@ -760,7 +793,7 @@ public class NetworkReceive
     {
         using (WebClient client = new WebClient())
         {    
-            System.Uri uri = new System.Uri(serverURL+"/blocks");
+            System.Uri uri = new System.Uri(networkController.serverURL+"/blocks");
             networkController.blockData = await client.DownloadStringTaskAsync(uri);
         }
     }
@@ -770,7 +803,7 @@ public class NetworkReceive
     {
         using (WebClient client = new WebClient())
         {    
-            System.Uri uri = new System.Uri(serverURL+"/items");
+            System.Uri uri = new System.Uri(networkController.serverURL+"/items");
             networkController.itemData = await client.DownloadStringTaskAsync(uri);
         }
     }
@@ -780,7 +813,7 @@ public class NetworkReceive
     {
         using (WebClient client = new WebClient())
         {    
-            System.Uri uri = new System.Uri(serverURL+"/players");
+            System.Uri uri = new System.Uri(networkController.serverURL+"/players");
             networkController.playerData = await client.DownloadStringTaskAsync(uri);
         }
     }
@@ -790,7 +823,7 @@ public class NetworkReceive
     {
         using (WebClient client = new WebClient())
         {    
-            System.Uri uri = new System.Uri(serverURL+"/hubs");
+            System.Uri uri = new System.Uri(networkController.serverURL+"/hubs");
             hubData = await client.DownloadStringTaskAsync(uri);
         }
     }
@@ -800,7 +833,7 @@ public class NetworkReceive
     {
         using (WebClient client = new WebClient())
         {    
-            System.Uri uri = new System.Uri(serverURL+"/conduits");
+            System.Uri uri = new System.Uri(networkController.serverURL+"/conduits");
             conduitData = await client.DownloadStringTaskAsync(uri);
         }
     }
@@ -810,7 +843,7 @@ public class NetworkReceive
     {
         using (WebClient client = new WebClient())
         {    
-            System.Uri uri = new System.Uri(serverURL+"/power");
+            System.Uri uri = new System.Uri(networkController.serverURL+"/power");
             powerData = await client.DownloadStringTaskAsync(uri);
         }
     }
@@ -820,7 +853,7 @@ public class NetworkReceive
     {
         using (WebClient client = new WebClient())
         {    
-            System.Uri uri = new System.Uri(serverURL+"/machines");
+            System.Uri uri = new System.Uri(networkController.serverURL+"/machines");
             machineData = await client.DownloadStringTaskAsync(uri);
         }
     }
@@ -830,7 +863,7 @@ public class NetworkReceive
     {
         using (WebClient client = new WebClient())
         {    
-            System.Uri uri = new System.Uri(serverURL+"/bans");
+            System.Uri uri = new System.Uri(networkController.serverURL+"/bans");
             banData = await client.DownloadStringTaskAsync(uri);
         }
     }

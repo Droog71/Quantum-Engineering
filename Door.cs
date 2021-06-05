@@ -30,6 +30,7 @@ public class Door : Machine
         stateManager = FindObjectOfType<StateManager>();
         gameManager = FindObjectOfType<GameManager>();
         textureList = new List<string>();
+        textureList.Add("Door");
         Dictionary<string, Texture2D> textureDictionary = GameObject.Find("GameManager").GetComponent<TextureDictionary>().dictionary;
         Dictionary<string, GameObject> blockDictionary = GameObject.Find("Player").GetComponent<BuildController>().blockDictionary.blockDictionary;
         foreach (KeyValuePair<string, GameObject> kvp in blockDictionary)

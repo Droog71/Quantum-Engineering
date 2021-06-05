@@ -306,6 +306,12 @@ public class InputManager
             actionManager.ToggleTablet();
         }
 
+        // ACTIVATE TABLET GUI ON KEY PRESS
+        if (cInput.GetKeyDown("Hotbar"))
+        {
+            actionManager.ToggleHotBar();
+        }
+
         // OPEN OPTIONS/EXIT MENU WHEN ESCAPE KEY IS PRESSED
         if (Input.GetKeyDown(KeyCode.Escape) && playerController.exiting == false)
         {

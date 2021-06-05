@@ -390,7 +390,10 @@ public class CombinedMeshManager
                 {
                     mat.shaderKeywords = new string[] { "_NORMALMAP" };
                     mat.SetTexture("_BumpMap", textureDictionary.dictionary[blockType + "_Normal"]);
-                    mat.SetFloat("_BumpScale", 2);
+                    if (blockType != "Door" && blockType != "Iron Block" && blockType != "Brick")
+                    {
+                        mat.SetFloat("_BumpScale", 2);
+                    }
                 }
                 obj.GetComponent<Renderer>().material = mat;
             }

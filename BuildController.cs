@@ -452,11 +452,12 @@ public class BuildController : MonoBehaviour
                 {
                     return false;
                 }
-                if (protectionBlock.userNames.Contains(PlayerPrefs.GetString("UserName")))
+                if (protectionBlock.IsAuthorizedUser(PlayerPrefs.GetString("UserName")))
                 {
                     totalProtectionBlocks++;
                 }
             }
+            Debug.Log("total protection blocks: " + totalProtectionBlocks);
             if (totalProtectionBlocks >= 16)
             {
                 return false;
@@ -473,7 +474,7 @@ public class BuildController : MonoBehaviour
             if (distance <= 160)
             {
                 closeToProtectionBlock = true;
-                if (protectionBlock.IsAuthorizedUser(PlayerPrefs.GetString("password")))
+                if (protectionBlock.IsAuthorizedUser(PlayerPrefs.GetString("UserName")))
                 {
                     return true;
                 }

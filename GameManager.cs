@@ -3,6 +3,7 @@ using System.Collections;
 using UnityEngine;
 using System.Diagnostics;
 using System;
+using System.Net;
 
 public class GameManager : MonoBehaviour
 {
@@ -63,6 +64,8 @@ public class GameManager : MonoBehaviour
     private Coroutine undoCoroutine;
     public List<Vector3> meteorShowerLocationList;
 
+
+    //! Stores information about blocks placed for UndoBuiltObjects function.
     public class Block
     {
         public string blockType;
@@ -293,6 +296,12 @@ public class GameManager : MonoBehaviour
                 {
                     Destroy(block.blockObject);
                     player.playerInventory.AddItem(block.blockType, 1);
+                    if (PlayerPrefsX.GetPersistentBool("multiplayer") == true)
+                    {
+                        Vector3 pos = block.blockObject.transform.position;
+                        Quaternion rot = block.blockObject.transform.rotation;
+                        UpdateNetwork(1, block.blockType, pos, rot);
+                    }
                     player.PlayCraftingSound();
                 }
             }
@@ -300,6 +309,18 @@ public class GameManager : MonoBehaviour
         }
         undoBlocks.Clear();
         runningUndo = false;
+    }
+
+    //! Sends instantiated block info to the server in multiplayer games.
+    private void UpdateNetwork(int destroy, string type, Vector3 pos, Quaternion rot)
+    {
+        using(WebClient client = new WebClient())
+        {
+            Uri uri = new Uri(PlayerPrefs.GetString("serverURL") + "/blocks");
+            string position = Mathf.Round(pos.x) + "," + Mathf.Round(pos.y) + "," + Mathf.Round(pos.z);
+            string rotation = Mathf.Round(rot.x) + "," + Mathf.Round(rot.y) + "," + Mathf.Round(rot.z) + "," + Mathf.Round(rot.w);
+            client.UploadStringAsync(uri, "POST", "@" + destroy + ":" + type + ":" + position + ":" + rotation);
+        }
     }
 
     //! Saves the game on exit.

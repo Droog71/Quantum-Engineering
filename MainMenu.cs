@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.Networking;
+using System;
 using System.Linq;
 using System.IO;
 using System.Net;
@@ -8,7 +10,7 @@ using System.Runtime.InteropServices;
 using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
-using System;
+using System.Collections;
 
 public class MainMenu : MonoBehaviour
 {
@@ -34,6 +36,7 @@ public class MainMenu : MonoBehaviour
     private List<string> worldList;
     private AudioSource buttonSounds;
     private AudioSource ambient;
+    private Coroutine worldDownloadCoroutine;
     private int scene;
     private bool local;
     private float waitForVideoTimer;
@@ -52,6 +55,7 @@ public class MainMenu : MonoBehaviour
     private bool userNamePrompt;
     private bool passwordPrompt;
     private bool networkAddressPrompt;
+    private bool downloadingWorld;
     private string serverList = "none";
     private float playerRed = 1.0f;
     private float playerGreen = 1.0f;
@@ -120,11 +124,6 @@ public class MainMenu : MonoBehaviour
     private string GetLocalAddress()
     {
         string[] commandLineOptions = Environment.GetCommandLineArgs();
-        bool devel = commandLineOptions.Contains("-devel");
-        if (Application.isEditor || UnityEngine.Debug.isDebugBuild || devel == true)
-        {
-            return "localhost";
-        }
         string hostName = Dns.GetHostName();
         string address = Dns.GetHostEntry(hostName).AddressList[0].ToString();
         return address;
@@ -160,17 +159,23 @@ public class MainMenu : MonoBehaviour
         PlayerPrefsX.SetPersistentBool("hosting", true);
         PlayerPrefs.SetString("serverURL", "http://" + worldName + ":5000");
         PlayerPrefs.SetString("UserName", worldName);
-        if (commandLineOptions.Contains("-creative"))
-        {
-            FileBasedPrefs.SetBool(worldName + "creativeMode", true);
-        }
-        if (commandLineOptions.Contains("-announce"))
-        {
-           PlayerPrefsX.SetPersistentBool("announce", true);
-        }
+
+        bool creativeMode = commandLineOptions.Contains("-creative");
+        FileBasedPrefs.SetBool(worldName + "creativeMode", creativeMode);
+
+        bool hazardsEnabled = commandLineOptions.Contains("-hazards");
+        PlayerPrefsX.SetPersistentBool("hazardsEnabled", hazardsEnabled);
+
+        bool announce = commandLineOptions.Contains("-announce");
+        PlayerPrefsX.SetPersistentBool("announce", announce);
+
+        UnityEngine.Debug.Log("Creative Mode: " + FileBasedPrefs.GetBool(worldName + "creativeMode"));
+        UnityEngine.Debug.Log("Hazards: " + PlayerPrefsX.GetPersistentBool("hazardsEnabled"));
         UnityEngine.Debug.Log("Announce: " + PlayerPrefsX.GetPersistentBool("announce"));
+
         StartServer();
         Thread.Sleep(5000);
+
         worldList = PlayerPrefsX.GetPersistentStringArray("Worlds").ToList();
         if (worldList.Count < 10)
         {
@@ -225,107 +230,143 @@ public class MainMenu : MonoBehaviour
         string[] commandLineOptions = Environment.GetCommandLineArgs();
         bool headless = commandLineOptions.Contains("-headless");
         bool devel = commandLineOptions.Contains("-devel");
+        bool hazards = commandLineOptions.Contains("-hazards");
 
         if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
         {
-            if (Application.isEditor || UnityEngine.Debug.isDebugBuild || devel == true)
-            {
-                UnityEngine.Debug.Log("Starting development server...");
-                string options = headless == true ? "local devel headless" : "local devel";
-                Process.Start(Application.dataPath + "/Linux_Server/qe_server", options);
-            }
-            else if (local == true)
-            {
-                UnityEngine.Debug.Log("Starting LAN server...");
-                string options = headless == true ? "local headless" : "local";
-                Process.Start(Application.dataPath + "/Linux_Server/qe_server", options);
-            }
-            else if (headless == true)
-            {
-                UnityEngine.Debug.Log("Starting online server...");
-                Process.Start(Application.dataPath + "/Linux_Server/qe_server", "headless");
-            }
-            else
-            {
-                UnityEngine.Debug.Log("Starting online server...");
-                Process.Start(Application.dataPath + "/Linux_Server/qe_server");
-            }
+            StartLinuxServer(headless, devel, hazards);
         }
+
         if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
         {
-            if (local == true)
-            {
-                UnityEngine.Debug.Log("Starting LAN server...");
-                string options = headless == true ? "local headless" : "local";
-                Process.Start(Application.dataPath + "/Windows_Server/qe_server.exe", options);
-            }
-            else if (headless == true)
-            {
-                UnityEngine.Debug.Log("Starting online server...");
-                Process.Start(Application.dataPath + "/Windows_Server/qe_server.exe", "headless");
-            }
-            else
-            {
-                UnityEngine.Debug.Log("Starting online server...");
-                Process.Start(Application.dataPath + "/Windows_Server/qe_server.exe");
-            }
+            StartWindowsServer(headless, devel, hazards);
         }
+
         if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
         {
-            if (local == true)
-            {
-                UnityEngine.Debug.Log("Starting LAN server...");
-                string options = headless == true ? "local headless" : "local";
-                Process.Start(Application.dataPath + "/Mac_Server/qe_server", options);
-            }
-            else if (headless == true)
-            {
-                UnityEngine.Debug.Log("Starting online server...");
-                Process.Start(Application.dataPath + "/Mac_Server/qe_server", "headless");
-            }
-            else
-            {
-                UnityEngine.Debug.Log("Starting online server...");
-                Process.Start(Application.dataPath + "/Mac_Server/qe_server");
-            }
+            StartMacServer(headless, devel, hazards);
         }
     }
 
-    //! Downloads saved world from server.
-    private void DownloadWorld()
+    //! Starts the server python app for Linux OS.
+    private void StartLinuxServer(bool headless, bool devel, bool hazards)
     {
-        string savePath = Path.Combine(Application.persistentDataPath, "SaveData");
-        string[] commandLineOptions = Environment.GetCommandLineArgs();
-        bool devel = commandLineOptions.Contains("-devel");
         if (Application.isEditor || UnityEngine.Debug.isDebugBuild || devel == true)
         {
-            savePath = Path.Combine(Application.persistentDataPath, "Downloads");
+            UnityEngine.Debug.Log("Starting development server...");
+            string options = headless == true ? "local devel headless" : "local devel";
+            if (hazards == true) { options += " hazards"; }
+            Process.Start(Application.dataPath + "/Linux_Server/qe_server", options);
         }
+        else if (local == true)
+        {
+            UnityEngine.Debug.Log("Starting LAN server...");
+            string options = headless == true ? "local headless" : "local";
+            if (hazards == true) { options += " hazards"; }
+            Process.Start(Application.dataPath + "/Linux_Server/qe_server", options);
+        }
+        else if (headless == true)
+        {
+            UnityEngine.Debug.Log("Starting online server...");
+            string options = hazards == true ? "headless hazards" : "headless";
+            Process.Start(Application.dataPath + "/Linux_Server/qe_server", options);
+        }
+        else if (hazards == true)
+        {
+            UnityEngine.Debug.Log("Starting online server...");
+            Process.Start(Application.dataPath + "/Linux_Server/qe_server", "hazards");
+        }
+        else
+        {
+            UnityEngine.Debug.Log("Starting online server...");
+            Process.Start(Application.dataPath + "/Linux_Server/qe_server");
+        }
+    }
 
-        Directory.CreateDirectory(savePath);
-        string saveFileLocation = Path.Combine(savePath + "/" + worldName + ".sav");
-        try
+    //! Starts the server python app for Windows OS.
+    private void StartWindowsServer(bool headless, bool devel, bool hazards)
+    {
+        if (local == true)
         {
-            using (WebClient client = new WebClient()) 
+            UnityEngine.Debug.Log("Starting LAN server...");
+            string options = headless == true ? "local headless" : "local";
+            if (hazards == true) { options += " hazards"; }
+            Process.Start(Application.dataPath + "/Windows_Server/qe_server.exe", options);
+        }
+        else if (headless == true)
+        {
+            UnityEngine.Debug.Log("Starting online server...");
+            string options = hazards == true ? "headless hazards" : "headless";
+            Process.Start(Application.dataPath + "/Windows_Server/qe_server.exe", options);
+        }
+        else if (hazards == true)
+        {
+            UnityEngine.Debug.Log("Starting online server...");
+            Process.Start(Application.dataPath + "/Windows_Server/qe_server.exe", "hazards");
+        }
+        else
+        {
+            UnityEngine.Debug.Log("Starting online server...");
+            Process.Start(Application.dataPath + "/Windows_Server/qe_server.exe");
+        }
+    }
+
+    //! Starts the server python app for Mac OS.
+    private void StartMacServer(bool headless, bool devel, bool hazards)
+    {
+        if (local == true)
+        {
+            UnityEngine.Debug.Log("Starting LAN server...");
+            string options = headless == true ? "local headless" : "local";
+            if (hazards == true) { options += " hazards"; }
+            Process.Start(Application.dataPath + "/Mac_Server/qe_server", options);
+        }
+        else if (headless == true)
+        {
+            UnityEngine.Debug.Log("Starting online server...");
+            string options = hazards == true ? "headless hazards" : "headless";
+            Process.Start(Application.dataPath + "/Mac_Server/qe_server", options);
+        }
+        else if (hazards == true)
+        {
+            UnityEngine.Debug.Log("Starting online server...");
+            Process.Start(Application.dataPath + "/Mac_Server/qe_server", "hazards");
+        }
+        else
+        {
+            UnityEngine.Debug.Log("Starting online server...");
+            Process.Start(Application.dataPath + "/Mac_Server/qe_server");
+        }
+    }
+
+    //! Downloads the .sav file from the server using UnityWebRequest.
+    private IEnumerator DownloadWorld() 
+    {
+        downloadingWorld = true;
+        string url = PlayerPrefs.GetString("serverURL") + "/world";
+        using (UnityWebRequest www = new UnityWebRequest(url))
+        {
+            www.downloadHandler = new DownloadHandlerBuffer();
+            yield return www.SendWebRequest();
+            if (www.isNetworkError || www.isHttpError)
             {
-                string url = PlayerPrefs.GetString("serverURL");
-                client.DownloadFile(url+"/world", saveFileLocation);
+                UnityEngine.Debug.Log(www.error);
+                worldName = "Enter world name.";
+                videoPlayer.GetComponent<VP>().PlayVideo("QE_Title.webm",true,0);
+                downloadingWorld = false;
+                downloadPrompt = true;
             }
-        }
-        catch(Exception e)
-        {
-            UnityEngine.Debug.Log(e.Message);
-            worldName = "Enter world name.";
-            downloadPrompt = true;
-        }
-        finally
-        {
-            if (File.Exists(Path.Combine(savePath + "/" + worldName + ".sav")))
+            else
             {
+                string savePath = Path.Combine(Application.persistentDataPath, "SaveData");
+                string saveFileLocation = Path.Combine(savePath + "/" + worldName + ".sav");
+                Directory.CreateDirectory(savePath);
+                File.WriteAllText(saveFileLocation, www.downloadHandler.text);
                 UnityEngine.Debug.Log("World downloaded.");
                 PreStart();
             }
         }
+        downloadingWorld = false;
     }
 
     //! Confirms world selection and loads the world.
@@ -344,7 +385,7 @@ public class MainMenu : MonoBehaviour
                     {
                         if (hosting == false)
                         {
-                            DownloadWorld();
+                            worldDownloadCoroutine = StartCoroutine(DownloadWorld());
                         }
                         else
                         {
@@ -362,7 +403,7 @@ public class MainMenu : MonoBehaviour
                     {
                         if (hosting == false)
                         {
-                            DownloadWorld();
+                            worldDownloadCoroutine = StartCoroutine(DownloadWorld());
                         }
                         else
                         {
@@ -379,7 +420,7 @@ public class MainMenu : MonoBehaviour
             {
                 if (PlayerPrefsX.GetPersistentBool("multiplayer") == true && hosting == false)
                 {
-                    DownloadWorld();
+                    worldDownloadCoroutine = StartCoroutine(DownloadWorld());
                 }
                 else
                 {
@@ -488,8 +529,8 @@ public class MainMenu : MonoBehaviour
 
         Rect promptBackgroundRect = new Rect(((ScreenWidth / 2) - 300), ScreenHeight * 0.14f, 600, ScreenHeight * 0.20f);
 
-        Rect serverListBackgroundRect = new Rect((ScreenWidth * 0.01f), (ScreenHeight * 0.01f), (ScreenWidth * 0.22f), (ScreenHeight * 0.9f));
-        Rect serverListRect = new Rect((ScreenWidth * 0.015f), (ScreenHeight * 0.018f), (ScreenWidth * 0.21f), (ScreenHeight * 0.88f));
+        Rect serverListBackgroundRect = new Rect((ScreenWidth * 0.01f), (ScreenHeight * 0.01f), (ScreenWidth * 0.23f), (ScreenHeight * 0.9f));
+        Rect serverListRect = new Rect((ScreenWidth * 0.015f), (ScreenHeight * 0.018f), (ScreenWidth * 0.22f), (ScreenHeight * 0.88f));
 
         Rect deletePromptLabelRect = new Rect((ScreenWidth * 0.435f), (ScreenHeight * 0.18f), (ScreenWidth * 0.20f), (ScreenHeight * 0.05f));
         Rect deletePromptButton1Rect = new Rect((ScreenWidth * 0.39f), (ScreenHeight * 0.22f), (ScreenWidth * 0.10f), (ScreenHeight * 0.05f));
@@ -808,11 +849,12 @@ public class MainMenu : MonoBehaviour
                 }
                 if (GUI.Button(deletePromptButton2Rect, "Join"))
                 {
+                    hosting = false;
+                    PlayerPrefsX.SetPersistentBool("hosting", false);
+                    PlayerPrefs.SetString("ip", GetExternalAddress());
                     GetServerList();
                     multiplayerPrompt = false;
                     networkAddressPrompt = true;
-                    PlayerPrefs.SetString("ip", GetExternalAddress());
-                    PlayerPrefsX.SetPersistentBool("hosting", false);
                 }
             }
 
@@ -832,7 +874,7 @@ public class MainMenu : MonoBehaviour
                     userNamePrompt = true;
                     worldName = local == true ? GetLocalAddress() : GetExternalAddress();
                     PlayerPrefs.SetString("ip", GetLocalAddress());
-                    PlayerPrefs.SetString("serverURL", "http://" + worldName + ":5000");
+                    PlayerPrefs.SetString("serverURL", "http://" + worldName + ":5000");                
                     PlayerPrefsX.SetPersistentBool("announce", false);
                     StartServer();
                 }
@@ -880,20 +922,22 @@ public class MainMenu : MonoBehaviour
                 string displayList = "       Public Servers\n\n";
                 try
                 {
-                    actualList = serverList.Split(':')[1].Split('[');
-                    foreach (string serverEntry in actualList)
+                    if (serverList.Split(':').Length > 1)
                     {
-                        UnityEngine.Debug.Log(serverEntry);
-                        string serverInfo = serverEntry.Split(']')[0].Replace("\"","").Trim();
-                        if (serverInfo != "")
+                        actualList = serverList.Split(':')[1].Split('[');
+                        foreach (string serverEntry in actualList)
                         {
-                            displayList += serverInfo + " players\n\n";
+                            string serverInfo = serverEntry.Split(']')[0].Replace("\"","").Trim();
+                            if (serverInfo != "")
+                            {
+                                displayList += serverInfo + " players\n\n";
+                            }
                         }
                     }
                 }
                 catch(Exception e)
                 {
-                    UnityEngine.Debug.Log(e.Message);
+                    UnityEngine.Debug.Log("Error reading server list: " + e.Message);
                 }
                 GUI.TextArea(serverListRect, displayList);
                 GUI.skin.textArea.fontSize = textAreaFontSize;
@@ -1064,6 +1108,25 @@ public class MainMenu : MonoBehaviour
                     buttonSounds.Play();
                     downloadPrompt = false;
                 }
+            }
+
+            if (downloadingWorld == true)
+            {
+                if (videoPlayer.GetComponent<VP>().IsPlaying())
+                {
+                    videoPlayer.GetComponent<VP>().StopVideo();
+                }
+                Texture2D bgTexture = notWideScreen ? titleTextureSD : titleTexture;
+                GUI.DrawTexture(backgroundRect, bgTexture);
+                int f = GUI.skin.label.fontSize;
+                GUI.skin.label.fontSize = 16;
+                GUI.color = new Color(0.2824f, 0.7882f, 0.9569f);
+                string loadingMessage = "Downloading world...";
+                Vector2 size = GetStringSize(loadingMessage);
+                Rect messagePos = new Rect((Screen.width / 2) - (size.x/2), Screen.height * 0.4f, size.x, size.y);
+                GUI.Label(messagePos, loadingMessage);
+                GUI.color = Color.white;
+                GUI.skin.label.fontSize = f;
             }
         }
         else if (finishedLoading == false && LoadingWorld() == true)

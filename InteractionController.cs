@@ -266,7 +266,7 @@ public class InteractionController : MonoBehaviour
             if (distance <= 160)
             {
                 closeToProtectionBlock = true;
-                if (protectionBlock.IsAuthorizedUser(PlayerPrefs.GetString("password")))
+                if (protectionBlock.IsAuthorizedUser(PlayerPrefs.GetString("UserName")))
                 {
                     return true;
                 }

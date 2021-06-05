@@ -78,7 +78,11 @@ public class BlockDictionary
                     if (!stateManager.modRecipeList.Contains(machineName))
                     {
                         stateManager.modRecipeList.Add(machineName);
-                        Debug.Log("Mod "+"["+modName+"]"+" added recipes for [" + machineName + "]");
+                        string[] commandLineOptions = Environment.GetCommandLineArgs();
+                        if (commandLineOptions.Contains("-devel"))
+                        {
+                            Debug.Log("Mod " + "[" + modName + "]" + " added recipes for [" + machineName + "]");
+                        }
                     }
                     return machineRecipes;
                 }
@@ -110,7 +114,11 @@ public class BlockDictionary
                     objList.Add(machineName);
                     playerController.blockSelector.objectNames = objList.ToArray();
                     string modName = new DirectoryInfo(path).Name;
-                    Debug.Log("Mod "+"["+modName+"]"+" created a new machine: [" + machineName + "]");
+                    string[] commandLineOptions = Environment.GetCommandLineArgs();
+                    if (commandLineOptions.Contains("-devel"))
+                    {
+                        Debug.Log("Mod " + "[" + modName + "]" + " created a new machine: [" + machineName + "]");
+                    }
                 }
             }
         }
@@ -140,7 +148,11 @@ public class BlockDictionary
                     playerController.blockSelector.objectNames = objList.ToArray();
                     string modName = new DirectoryInfo(path).Name;
                     playerController.gameManager.modBlockNames.Add(blockName);
-                    Debug.Log("Mod "+"["+modName+"]"+" created a new block: [" + blockName + "]");
+                    string[] commandLineOptions = Environment.GetCommandLineArgs();
+                    if (commandLineOptions.Contains("-devel"))
+                    {
+                        Debug.Log("Mod " + "[" + modName + "]" + " created a new block: [" + blockName + "]");
+                    }
                 }
             }
         }
@@ -168,7 +180,11 @@ public class BlockDictionary
                     Mesh newMesh = importer.ImportFile(filePath);
                     dictionary.Add(meshName, newMesh);
                     string modName = new DirectoryInfo(path).Name;
-                    Debug.Log("Mod "+"["+modName+"]"+" created a new mesh: [" + meshName + "]");
+                    string[] commandLineOptions = Environment.GetCommandLineArgs();
+                    if (commandLineOptions.Contains("-devel"))
+                    {
+                        Debug.Log("Mod " + "[" + modName + "]" + " created a new mesh: [" + meshName + "]");
+                    }
                 }
             }
         }
