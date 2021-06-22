@@ -9,17 +9,28 @@ public class NetworkReceive
     private NetworkController networkController;
     private PlayerController playerController;
     private BlockDictionary blockDictionary;
-    private string serverURL;
+    private string hubData;
     private string conduitData;
     private string powerData;
     private string machineData;
     private string chatData;
-    private string paintData;
+    private string banData;
+    private string hazardData;
     private bool chatCoroutineBusy;
     private List<string> chatMessageList;
+    private string[] localBlockList;
+    private string[] localConduitList;
+    private string[] localHubList;
+    private string[] localStorageList;
+    private string[] localPowerList;
+    private string[] localMachineList;
+    private string[] localItemList;
+    public int itemDatabaseDelay;
+    public bool hubDataCoroutineBusy;
     public bool conduitDataCoroutineBusy;
     public bool machineDataCoroutineBusy;
     public bool powerDataCoroutineBusy;
+    public bool hazardDataCoroutineBusy;
 
     //! Network functions for multiplayer games.
     public NetworkReceive(NetworkController networkController)
@@ -27,8 +38,57 @@ public class NetworkReceive
         this.networkController = networkController;
         playerController = networkController.playerController;
         blockDictionary = playerController.GetComponent<BuildController>().blockDictionary;
-        serverURL = networkController.serverURL;
         chatMessageList = new List<string>();
+    }
+
+    //! Check if the player's ip is banned on this server.
+    public IEnumerator CheckForBan()
+    {
+        banData = "none";
+
+        GetBanData();
+        while (banData == "none")
+        {
+            yield return null;
+        }
+
+        string[] banList = banData.Split('[');
+        for (int i=2; i < banList.Length; i++)
+        {
+            string banInfo = banList[i];
+            string ip = banInfo.TrimStart('"').Split('\\')[0].Split('"')[0];
+            if (ip == PlayerPrefs.GetString("ip"))
+            {
+                playerController.escapeMenuOpen = true;
+                playerController.exiting = true;
+                playerController.requestedSave = true;
+                Debug.Log("Your IP address has been banned from " + networkController.serverURL);
+            }
+            yield return null;
+        }
+        networkController.checkForBanCoroutineBusy = false;
+    }
+
+    //! Processes data from chat database.
+    public IEnumerator ReceiveHazardData()
+    {
+        if (hazardDataCoroutineBusy == false)
+        {
+            hazardDataCoroutineBusy = true;
+
+            hazardData = "none";
+
+            GetHazardData();
+            while (hazardData == "none")
+            {
+                yield return null;
+            }
+
+            string hazardsEnabled = hazardData.Split(':')[1].Split('}')[0].TrimStart('"').TrimEnd('"');
+            playerController.gameManager.hazardsEnabled = hazardsEnabled == "True";
+
+            hazardDataCoroutineBusy = false;
+        }
     }
 
     //! Processes data from chat database.
@@ -74,86 +134,52 @@ public class NetworkReceive
     public IEnumerator ReceiveNetworkBlocks()
     {
         string[] blockList = networkController.blockData.Split('[');
-        for (int i = 2; i < blockList.Length; i++)
+        if (blockList != localBlockList)
         {
-            string blockInfo = blockList[i];
-            int destroy = int.Parse(blockInfo.Split(',')[0]);
-            string blockType = blockInfo.Split(',')[1].Substring(2).TrimEnd('"');
-            float xPos = float.Parse(blockInfo.Split(',')[2]);
-            float yPos = float.Parse(blockInfo.Split(',')[3]);
-            float zPos = float.Parse(blockInfo.Split(',')[4]);
-            float xRot = float.Parse(blockInfo.Split(',')[5]);
-            float yRot = float.Parse(blockInfo.Split(',')[6]);
-            float zRot = float.Parse(blockInfo.Split(',')[7]);
-            float wRot = float.Parse(blockInfo.Split(',')[8].Split(']')[0]);
-            Vector3 blockPos = new Vector3(xPos, yPos, zPos);
-            Quaternion blockRot = new Quaternion(xRot, yRot, zRot, wRot);
-            bool found = false;
-            if (blockDictionary.machineDictionary.ContainsKey(blockType))
+            localBlockList = blockList;
+            for (int i = 2; i < blockList.Length; i++)
             {
-                int blockCheckInterval = 0;
-                System.Type t = blockDictionary.typeDictionary[blockType];
-                GameObject[] allObjects = Object.FindObjectsOfType<GameObject>();
-                foreach (GameObject obj in allObjects)
+                string blockInfo = blockList[i];
+                int destroy = int.Parse(blockInfo.Split(',')[0]);
+                string blockType = blockInfo.Split(',')[1].Substring(2).TrimEnd('"');
+                float xPos = float.Parse(blockInfo.Split(',')[2]);
+                float yPos = float.Parse(blockInfo.Split(',')[3]);
+                float zPos = float.Parse(blockInfo.Split(',')[4]);
+                float xRot = float.Parse(blockInfo.Split(',')[5]);
+                float yRot = float.Parse(blockInfo.Split(',')[6]);
+                float zRot = float.Parse(blockInfo.Split(',')[7]);
+                float wRot = float.Parse(blockInfo.Split(',')[8].Split(']')[0]);
+                Vector3 blockPos = new Vector3(xPos, yPos, zPos);
+                Quaternion blockRot = new Quaternion(xRot, yRot, zRot, wRot);
+                bool found = false;
+                if (blockDictionary.machineDictionary.ContainsKey(blockType))
                 {
-                    if (obj != null)
+                    System.Type t = blockDictionary.typeDictionary[blockType];
+                    GameObject[] allObjects = Object.FindObjectsOfType<GameObject>();
+                    foreach (GameObject obj in allObjects)
                     {
-                        float x = Mathf.Round(obj.transform.position.x);
-                        float y = Mathf.Round(obj.transform.position.y);
-                        float z = Mathf.Round(obj.transform.position.z);
-                        Vector3 foundPos = new Vector3(x, y, z);
-                        if (obj.GetComponent(t) != null && foundPos == blockPos)
+                        if (obj != null)
                         {
-                            if (destroy == 1)
+                            float x = Mathf.Round(obj.transform.position.x);
+                            float y = Mathf.Round(obj.transform.position.y);
+                            float z = Mathf.Round(obj.transform.position.z);
+                            Vector3 foundPos = new Vector3(x, y, z);
+                            if (obj.GetComponent(t) != null && foundPos == blockPos)
                             {
-                                Object.Destroy(obj);
-                            }
-                            found = true;
-                            break;
-                        }
-                    }
-                    blockCheckInterval++;
-                    if (blockCheckInterval >= 10)
-                    {
-                        blockCheckInterval = 0;
-                        yield return null;
-                    }
-                }
-            }
-            else if (blockDictionary.blockDictionary.ContainsKey(blockType))
-            {
-                int blockCheckInterval = 0;
-                Transform[] allBlocks = playerController.gameManager.builtObjects.GetComponentsInChildren<Transform>(true);
-                foreach (Transform block in allBlocks)
-                {
-                    if (block != null)
-                    {
-                        float x = Mathf.Round(block.position.x);
-                        float y = Mathf.Round(block.position.y);
-                        float z = Mathf.Round(block.position.z);
-                        Vector3 foundPos = new Vector3(x, y, z);
-                        if (foundPos == blockPos)
-                        {
-                            if (blockDictionary.typeDictionary.ContainsKey(blockType))
-                            {
-                                System.Type t = blockDictionary.typeDictionary[blockType];
-                                if (block.GetComponent(t) != null)
+                                if (destroy == 1)
                                 {
-                                    if (destroy == 1)
-                                    {
-                                        Object.Destroy(block.gameObject);
-                                    }
-                                    found = true;
-                                    break;
+                                    Object.Destroy(obj);
                                 }
+                                found = true;
+                                break;
                             }
-                            else if (block.GetComponent<ModBlock>() != null)
+                            if (obj.GetComponent<RailCart>() != null)
                             {
-                                if (block.GetComponent<ModBlock>().blockName == blockType)
+                                if (obj.GetComponent<RailCart>().startPosition == blockPos)
                                 {
                                     if (destroy == 1)
                                     {
-                                        Object.Destroy(block.gameObject);
+                                        Object.Destroy(obj);
                                     }
                                     found = true;
                                     break;
@@ -161,76 +187,159 @@ public class NetworkReceive
                             }
                         }
                     }
-                    blockCheckInterval++;
-                    if (blockCheckInterval >= 10)
+                }
+                else if (blockDictionary.blockDictionary.ContainsKey(blockType))
+                {
+                    Transform[] allBlocks = playerController.gameManager.builtObjects.GetComponentsInChildren<Transform>(true);
+                    foreach (Transform block in allBlocks)
                     {
-                        blockCheckInterval = 0;
-                        yield return null;
+                        if (block != null)
+                        {
+                            float x = Mathf.Round(block.position.x);
+                            float y = Mathf.Round(block.position.y);
+                            float z = Mathf.Round(block.position.z);
+                            Vector3 foundPos = new Vector3(x, y, z);
+                            if (foundPos == blockPos)
+                            {
+                                if (block.GetComponent<Block>() != null)
+                                {
+                                    if (block.GetComponent<Block>().blockName == blockType)
+                                    {
+                                        if (destroy == 1)
+                                        {
+                                            BlockHolder blockHolder = block.transform.parent.GetComponent<BlockHolder>();
+                                            if (blockHolder != null)
+                                            {
+                                                Debug.Log("removing block line 213");
+                                                playerController.gameManager.meshManager.RemoveBlock(blockHolder, blockPos, false);
+                                            }
+                                            else
+                                            {
+                                                Debug.Log("removing block line 218");
+                                                Object.Destroy(block.gameObject);
+                                            }
+                                        }
+                                        found = true;
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    if (found == false && destroy == 1)
+                    {
+                        BlockHolder[] blockHolders = Object.FindObjectsOfType<BlockHolder>();
+                        foreach (BlockHolder blockHolder in blockHolders)
+                        {
+                            if (blockHolder.blockData != null)
+                            {
+                                if (blockHolder.blockType == blockType)
+                                {
+                                    if (blockHolder.blockData.Count > 0)
+                                    {
+                                        foreach (BlockHolder.BlockInfo info in blockHolder.blockData)
+                                        {
+                                            if (Vector3.Distance(info.position, blockPos) < 10)
+                                            {
+                                                Debug.Log("removing block line 245");
+                                                playerController.gameManager.meshManager.RemoveBlock(blockHolder, blockPos, false);
+                                                found = true;
+                                                break;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            if (found == true)
+                            {
+                                break;
+                            }
+                        }
+                    }
+                }
+
+                if (found == false && destroy == 0)
+                {
+                    if (blockDictionary.blockDictionary.ContainsKey(blockType))
+                    {
+                        GameObject obj = Object.Instantiate(blockDictionary.blockDictionary[blockType], blockPos, blockRot);
+                        if (obj.GetComponent<Block>() != null)
+                        {
+                            obj.GetComponent<Block>().blockName = blockType;
+                        }
+                        obj.transform.parent = playerController.gameManager.builtObjects.transform;
+                    }
+                    else if (blockDictionary.machineDictionary.ContainsKey(blockType))
+                    {
+                        GameObject newObject = Object.Instantiate(blockDictionary.machineDictionary[blockType], blockPos, blockRot);
+                        if (newObject.GetComponent<RailCart>() != null)
+                        {
+                            newObject.GetComponent<RailCart>().startPosition = blockPos;
+                            RailCartHub[] hubs = Object.FindObjectsOfType<RailCartHub>();
+                            foreach (RailCartHub hub in hubs)
+                            {
+                                if (hub != null)
+                                {
+                                    float distance = Vector3.Distance(newObject.transform.position, hub.gameObject.transform.position);
+                                    if (distance <= 5)
+                                    {
+                                        newObject.GetComponent<RailCart>().target = hub.gameObject;
+                                        break;
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
             }
-
-            if (found == false && destroy == 0)
-            {
-                if (blockDictionary.blockDictionary.ContainsKey(blockType))
-                {
-                    GameObject obj = Object.Instantiate(blockDictionary.blockDictionary[blockType], blockPos, blockRot);
-                    if (obj.GetComponent<ModBlock>() != null)
-                    {
-                        obj.GetComponent<ModBlock>().blockName = blockType;
-                    }
-                    obj.transform.parent = playerController.gameManager.builtObjects.transform;
-                }
-                else if (blockDictionary.machineDictionary.ContainsKey(blockType))
-                {
-                    Object.Instantiate(blockDictionary.machineDictionary[blockType], blockPos, blockRot);
-                }
-            }
-
-            yield return null;
         }
-
-        networkController.blockCoroutineBusy = false;
+        yield return null;
+        networkController.networkBlockCoroutineBusy = false;
     }
 
     //! Processes data from storge database.
     public IEnumerator ReceiveNetworkStorage()
     {
         string[] storageList = networkController.storageData.Split('[');
-        for (int i = 2; i < storageList.Length; i++)
+        if (storageList != localStorageList)
         {
-            string storageInfo = storageList[i];
-            float xPos = float.Parse(storageInfo.Split(',')[0]);
-            float yPos = float.Parse(storageInfo.Split(',')[1]);
-            float zPos = float.Parse(storageInfo.Split(',')[2]);
-            Vector3 storagePos = new Vector3(xPos, yPos, zPos);
-            int slot = int.Parse(storageInfo.Split(',')[3]);
-            string type = storageInfo.Split(',')[4].Substring(2).TrimEnd('"');
-            int amount = int.Parse(storageInfo.Split(',')[5].Split(']')[0]);
-            InventoryManager[] allInventories = Object.FindObjectsOfType<InventoryManager>();
-            foreach (InventoryManager manager in allInventories)
+            localStorageList = storageList;
+            for (int i = 2; i < storageList.Length; i++)
             {
-                if (manager != null)
+                string storageInfo = storageList[i];
+                float xPos = float.Parse(storageInfo.Split(',')[0]);
+                float yPos = float.Parse(storageInfo.Split(',')[1]);
+                float zPos = float.Parse(storageInfo.Split(',')[2]);
+                Vector3 storagePos = new Vector3(xPos, yPos, zPos);
+                int slot = int.Parse(storageInfo.Split(',')[3]);
+                string type = storageInfo.Split(',')[4].Substring(2).TrimEnd('"');
+                int amount = int.Parse(storageInfo.Split(',')[5].Split(']')[0]);
+                InventoryManager[] allInventories = Object.FindObjectsOfType<InventoryManager>();
+                foreach (InventoryManager manager in allInventories)
                 {
-                    if (manager.initialized == true)
+                    if (manager != null)
                     {
-                        Vector3 pos = manager.gameObject.transform.position;
-                        float x = Mathf.Round(pos.x);
-                        float y = Mathf.Round(pos.y);
-                        float z = Mathf.Round(pos.z);
-                        Vector3 foundPos = new Vector3(x, y, z);
-                        if (foundPos== storagePos)
+                        if (manager.initialized == true)
                         {
-                            manager.inventory[slot].typeInSlot = type;
-                            manager.inventory[slot].amountInSlot = amount;
-                            break;
+                            Vector3 pos = manager.gameObject.transform.position;
+                            float x = Mathf.Round(pos.x);
+                            float y = Mathf.Round(pos.y);
+                            float z = Mathf.Round(pos.z);
+                            Vector3 foundPos = new Vector3(x, y, z);
+                            if (foundPos == storagePos && manager.inventory[slot].pendingNetworkUpdate == false)
+                            {
+                                manager.inventory[slot].typeInSlot = type;
+                                manager.inventory[slot].amountInSlot = amount;
+                                break;
+                            }
                         }
                     }
+                    yield return null;
                 }
-                yield return null;
             }
+            networkController.receivedNetworkStorage = true;
         }
-        networkController.receivedNetworkStorage = true;
     }
 
     //! Processes data from conduit database.
@@ -243,63 +352,124 @@ public class NetworkReceive
         {
             yield return null;
         }
-
         string[] conduitList = conduitData.Split('[');
-        for (int i = 2; i < conduitList.Length; i++)
+        if (conduitList != localConduitList)
         {
-            string conduitInfo = conduitList[i];
-            float xPos = float.Parse(conduitInfo.Split(',')[0]);
-            float yPos = float.Parse(conduitInfo.Split(',')[1]);
-            float zPos = float.Parse(conduitInfo.Split(',')[2]);
-            Vector3 conduitPos = new Vector3(xPos, yPos, zPos);
-            int range = int.Parse(conduitInfo.Split(',')[3].Split(']')[0]);
-
-            UniversalConduit[] allConduits = Object.FindObjectsOfType<UniversalConduit>();
-            foreach (UniversalConduit conduit in allConduits)
+            localConduitList = conduitList;
+            for (int i = 2; i < conduitList.Length; i++)
             {
-                if (conduit != null)
-                {
-                    Vector3 pos = conduit.gameObject.transform.position;
-                    float x = Mathf.Round(pos.x);
-                    float y = Mathf.Round(pos.y);
-                    float z = Mathf.Round(pos.z);
-                    Vector3 foundPos = new Vector3(x, y, z);
-                    if (foundPos == conduitPos && conduit.range != range)
-                    {
-                        if (conduit.connectionFailed == true)
-                        {
-                            conduit.connectionAttempts = 0;
-                            conduit.connectionFailed = false;
-                        }
-                        conduit.range = range;
-                    }
-                }
-                yield return null;
-            }
+                string conduitInfo = conduitList[i];
+                float xPos = float.Parse(conduitInfo.Split(',')[0]);
+                float yPos = float.Parse(conduitInfo.Split(',')[1]);
+                float zPos = float.Parse(conduitInfo.Split(',')[2]);
+                Vector3 conduitPos = new Vector3(xPos, yPos, zPos);
+                int range = int.Parse(conduitInfo.Split(',')[3].Split(']')[0]);
 
-            DarkMatterConduit[] allDarkMatterConduits = Object.FindObjectsOfType<DarkMatterConduit>();
-            foreach (DarkMatterConduit conduit in allDarkMatterConduits)
-            {
-                if (conduit != null)
+                UniversalConduit[] allConduits = Object.FindObjectsOfType<UniversalConduit>();
+                foreach (UniversalConduit conduit in allConduits)
                 {
-                    Vector3 pos = conduit.gameObject.transform.position;
-                    float x = Mathf.Round(pos.x);
-                    float y = Mathf.Round(pos.y);
-                    float z = Mathf.Round(pos.z);
-                    Vector3 foundPos = new Vector3(x, y, z);
-                    if (foundPos == conduitPos && conduit.range != range)
+                    if (conduit != null)
                     {
-                        if (conduit.connectionFailed == true)
+                        Vector3 pos = conduit.gameObject.transform.position;
+                        float x = Mathf.Round(pos.x);
+                        float y = Mathf.Round(pos.y);
+                        float z = Mathf.Round(pos.z);
+                        Vector3 foundPos = new Vector3(x, y, z);
+                        if (foundPos == conduitPos && conduit.range != range)
                         {
-                            conduit.connectionAttempts = 0;
-                            conduit.connectionFailed = false;
+                            if (conduit.connectionFailed == true)
+                            {
+                                conduit.connectionAttempts = 0;
+                                conduit.connectionFailed = false;
+                            }
+                            conduit.range = range;
                         }
-                        conduit.range = range;
                     }
+                    yield return null;
                 }
-                yield return null;
+
+                DarkMatterConduit[] allDarkMatterConduits = Object.FindObjectsOfType<DarkMatterConduit>();
+                foreach (DarkMatterConduit conduit in allDarkMatterConduits)
+                {
+                    if (conduit != null)
+                    {
+                        Vector3 pos = conduit.gameObject.transform.position;
+                        float x = Mathf.Round(pos.x);
+                        float y = Mathf.Round(pos.y);
+                        float z = Mathf.Round(pos.z);
+                        Vector3 foundPos = new Vector3(x, y, z);
+                        if (foundPos == conduitPos && conduit.range != range)
+                        {
+                            if (conduit.connectionFailed == true)
+                            {
+                                conduit.connectionAttempts = 0;
+                                conduit.connectionFailed = false;
+                            }
+                            conduit.range = range;
+                        }
+                    }
+                    yield return null;
+                }
             }
         }
+
+        conduitDataCoroutineBusy = false;
+    }
+
+    //! Processes data from railcart hub database.
+    public IEnumerator ReceiveHubData()
+    {
+        hubDataCoroutineBusy = true;
+        hubData = "none";
+        GetHubData();
+        while (hubData == "none")
+        {
+            yield return null;
+        }
+        string[] hubList = hubData.Split('[');
+        if (hubList != localHubList)
+        {
+            localHubList = hubList;
+            for (int i = 2; i < hubList.Length; i++)
+            {
+                string hubInfo = hubList[i];
+                float xPos = float.Parse(hubInfo.Split(',')[0]);
+                float yPos = float.Parse(hubInfo.Split(',')[1]);
+                float zPos = float.Parse(hubInfo.Split(',')[2]);
+                int circuit = int.Parse(hubInfo.Split(',')[3]);
+                int range = int.Parse(hubInfo.Split(',')[4]);
+                int stop = int.Parse(hubInfo.Split(',')[5]);
+                float time = int.Parse(hubInfo.Split(',')[6].Split(']')[0]);
+                Vector3 hubPos = new Vector3(xPos, yPos, zPos);
+
+                RailCartHub[] allHubs = Object.FindObjectsOfType<RailCartHub>();
+                foreach (RailCartHub hub in allHubs)
+                {
+                    if (hub != null)
+                    {
+                        Vector3 pos = hub.gameObject.transform.position;
+                        float x = Mathf.Round(pos.x);
+                        float y = Mathf.Round(pos.y);
+                        float z = Mathf.Round(pos.z);
+                        Vector3 foundPos = new Vector3(x, y, z);
+                        if (foundPos == hubPos)
+                        {
+                            if (hub.connectionFailed == true)
+                            {
+                                hub.connectionAttempts = 0;
+                                hub.connectionFailed = false;
+                            }
+                            hub.circuit = circuit;
+                            hub.range = range;
+                            hub.stop = stop == 1;
+                            hub.stopTime = time;
+                        }
+                    }
+                    yield return null;
+                }
+            }
+        }
+        hubDataCoroutineBusy = false;
     }
 
     //! Processes data from machine database.
@@ -315,191 +485,195 @@ public class NetworkReceive
         }
 
         string[] machineList = machineData.Split('[');
-        for (int i = 2; i < machineList.Length; i++)
+        if (machineList != localMachineList)
         {
-            string machineInfo = machineList[i];
-            float xPos = float.Parse(machineInfo.Split(',')[0]);
-            float yPos = float.Parse(machineInfo.Split(',')[1]);
-            float zPos = float.Parse(machineInfo.Split(',')[2]);
-            Vector3 machinePos = new Vector3(xPos, yPos, zPos);
-            int speed = int.Parse(machineInfo.Split(',')[3].Split(']')[0]);
-            BasicMachine[] allMachines = Object.FindObjectsOfType<BasicMachine>();
-            foreach (BasicMachine machine in allMachines)
+            localMachineList = machineList;
+            for (int i = 2; i < machineList.Length; i++)
             {
-                if (machine != null)
+                string machineInfo = machineList[i];
+                float xPos = float.Parse(machineInfo.Split(',')[0]);
+                float yPos = float.Parse(machineInfo.Split(',')[1]);
+                float zPos = float.Parse(machineInfo.Split(',')[2]);
+                Vector3 machinePos = new Vector3(xPos, yPos, zPos);
+                int speed = int.Parse(machineInfo.Split(',')[3].Split(']')[0]);
+                BasicMachine[] allMachines = Object.FindObjectsOfType<BasicMachine>();
+                foreach (BasicMachine machine in allMachines)
                 {
-                    Vector3 pos = machine.gameObject.transform.position;
-                    float x = Mathf.Round(pos.x);
-                    float y = Mathf.Round(pos.y);
-                    float z = Mathf.Round(pos.z);
-                    Vector3 foundPos = new Vector3(x, y, z);
-                    if (foundPos == machinePos && machine.speed != speed)
+                    if (machine != null)
                     {
-                        if (machine.connectionFailed == true)
+                        Vector3 pos = machine.gameObject.transform.position;
+                        float x = Mathf.Round(pos.x);
+                        float y = Mathf.Round(pos.y);
+                        float z = Mathf.Round(pos.z);
+                        Vector3 foundPos = new Vector3(x, y, z);
+                        if (foundPos == machinePos)
                         {
-                            machine.connectionAttempts = 0;
-                            machine.connectionFailed = false;
+                            if (machine.connectionFailed == true)
+                            {
+                                machine.connectionAttempts = 0;
+                                machine.connectionFailed = false;
+                            }
+                            machine.speed = speed;
                         }
-                        machine.speed = speed;
                     }
+                    yield return null;
                 }
-                yield return null;
-            }
-            UniversalExtractor[] allExtractors = Object.FindObjectsOfType<UniversalExtractor>();
-            foreach (UniversalExtractor extractor in allExtractors)
-            {
-                if (extractor != null)
+                UniversalExtractor[] allExtractors = Object.FindObjectsOfType<UniversalExtractor>();
+                foreach (UniversalExtractor extractor in allExtractors)
                 {
-                    Vector3 pos = extractor.gameObject.transform.position;
-                    float x = Mathf.Round(pos.x);
-                    float y = Mathf.Round(pos.y);
-                    float z = Mathf.Round(pos.z);
-                    Vector3 foundPos = new Vector3(x, y, z);
-                    if (foundPos == machinePos && extractor.speed != speed)
+                    if (extractor != null)
                     {
-                        if (extractor.connectionFailed == true)
+                        Vector3 pos = extractor.gameObject.transform.position;
+                        float x = Mathf.Round(pos.x);
+                        float y = Mathf.Round(pos.y);
+                        float z = Mathf.Round(pos.z);
+                        Vector3 foundPos = new Vector3(x, y, z);
+                        if (foundPos == machinePos)
                         {
-                            extractor.connectionAttempts = 0;
-                            extractor.connectionFailed = false;
+                            if (extractor.connectionFailed == true)
+                            {
+                                extractor.connectionAttempts = 0;
+                                extractor.connectionFailed = false;
+                            }
+                            extractor.speed = speed;
                         }
-                        extractor.speed = speed;
                     }
+                    yield return null;
                 }
-                yield return null;
-            }
-            DarkMatterCollector[] allCollectors = Object.FindObjectsOfType<DarkMatterCollector>();
-            foreach (DarkMatterCollector collector in allCollectors)
-            {
-                if (collector != null)
+                DarkMatterCollector[] allCollectors = Object.FindObjectsOfType<DarkMatterCollector>();
+                foreach (DarkMatterCollector collector in allCollectors)
                 {
-                    Vector3 pos = collector.gameObject.transform.position;
-                    float x = Mathf.Round(pos.x);
-                    float y = Mathf.Round(pos.y);
-                    float z = Mathf.Round(pos.z);
-                    Vector3 foundPos = new Vector3(x, y, z);
-                    if (foundPos == machinePos && collector.speed != speed)
+                    if (collector != null)
                     {
-                        if (collector.connectionFailed == true)
+                        Vector3 pos = collector.gameObject.transform.position;
+                        float x = Mathf.Round(pos.x);
+                        float y = Mathf.Round(pos.y);
+                        float z = Mathf.Round(pos.z);
+                        Vector3 foundPos = new Vector3(x, y, z);
+                        if (foundPos == machinePos)
                         {
-                            collector.connectionAttempts = 0;
-                            collector.connectionFailed = false;
+                            if (collector.connectionFailed == true)
+                            {
+                                collector.connectionAttempts = 0;
+                                collector.connectionFailed = false;
+                            }
+                            collector.speed = speed;
                         }
-                        collector.speed = speed;
                     }
+                    yield return null;
                 }
-                yield return null;
-            }
-            HeatExchanger[] allHX = Object.FindObjectsOfType<HeatExchanger>();
-            foreach (HeatExchanger hx in allHX)
-            {
-                if (hx != null)
+                HeatExchanger[] allHX = Object.FindObjectsOfType<HeatExchanger>();
+                foreach (HeatExchanger hx in allHX)
                 {
-                    Vector3 pos = hx.gameObject.transform.position;
-                    float x = Mathf.Round(pos.x);
-                    float y = Mathf.Round(pos.y);
-                    float z = Mathf.Round(pos.z);
-                    Vector3 foundPos = new Vector3(x, y, z);
-                    if (foundPos == machinePos && hx.speed != speed)
+                    if (hx != null)
                     {
-                        if (hx.connectionFailed == true)
+                        Vector3 pos = hx.gameObject.transform.position;
+                        float x = Mathf.Round(pos.x);
+                        float y = Mathf.Round(pos.y);
+                        float z = Mathf.Round(pos.z);
+                        Vector3 foundPos = new Vector3(x, y, z);
+                        if (foundPos == machinePos)
                         {
-                            hx.connectionAttempts = 0;
-                            hx.connectionFailed = false;
+                            if (hx.connectionFailed == true)
+                            {
+                                hx.connectionAttempts = 0;
+                                hx.connectionFailed = false;
+                            }
+                            hx.speed = speed;
                         }
-                        hx.speed = speed;
                     }
+                    yield return null;
                 }
-                yield return null;
-            }
-            AlloySmelter[] allAlloySmelters = Object.FindObjectsOfType<AlloySmelter>();
-            foreach (AlloySmelter alloySmelter in allAlloySmelters)
-            {
-                if (alloySmelter != null)
+                AlloySmelter[] allAlloySmelters = Object.FindObjectsOfType<AlloySmelter>();
+                foreach (AlloySmelter alloySmelter in allAlloySmelters)
                 {
-                    Vector3 pos = alloySmelter.gameObject.transform.position;
-                    float x = Mathf.Round(pos.x);
-                    float y = Mathf.Round(pos.y);
-                    float z = Mathf.Round(pos.z);
-                    Vector3 foundPos = new Vector3(x, y, z);
-                    if (foundPos == machinePos && alloySmelter.speed != speed)
+                    if (alloySmelter != null)
                     {
-                        if (alloySmelter.connectionFailed == true)
+                        Vector3 pos = alloySmelter.gameObject.transform.position;
+                        float x = Mathf.Round(pos.x);
+                        float y = Mathf.Round(pos.y);
+                        float z = Mathf.Round(pos.z);
+                        Vector3 foundPos = new Vector3(x, y, z);
+                        if (foundPos == machinePos)
                         {
-                            alloySmelter.connectionAttempts = 0;
-                            alloySmelter.connectionFailed = false;
+                            if (alloySmelter.connectionFailed == true)
+                            {
+                                alloySmelter.connectionAttempts = 0;
+                                alloySmelter.connectionFailed = false;
+                            }
+                            alloySmelter.speed = speed;
                         }
-                        alloySmelter.speed = speed;
                     }
+                    yield return null;
                 }
-                yield return null;
-            }
-            Auger[] allAugers = Object.FindObjectsOfType<Auger>();
-            foreach (Auger auger in allAugers)
-            {
-                if (auger != null)
+                Auger[] allAugers = Object.FindObjectsOfType<Auger>();
+                foreach (Auger auger in allAugers)
                 {
-                    Vector3 pos = auger.gameObject.transform.position;
-                    float x = Mathf.Round(pos.x);
-                    float y = Mathf.Round(pos.y);
-                    float z = Mathf.Round(pos.z);
-                    Vector3 foundPos = new Vector3(x, y, z);
-                    if (foundPos == machinePos && auger.speed != speed)
+                    if (auger != null)
                     {
-                        auger.speed = speed;
+                        Vector3 pos = auger.gameObject.transform.position;
+                        float x = Mathf.Round(pos.x);
+                        float y = Mathf.Round(pos.y);
+                        float z = Mathf.Round(pos.z);
+                        Vector3 foundPos = new Vector3(x, y, z);
+                        if (foundPos == machinePos)
+                        {
+                            auger.speed = speed;
+                        }
                     }
+                    yield return null;
                 }
-                yield return null;
-            }
-            AutoCrafter[] allAutoCrafters = Object.FindObjectsOfType<AutoCrafter>();
-            foreach (AutoCrafter autoCrafter in allAutoCrafters)
-            {
-                if (autoCrafter != null)
+                AutoCrafter[] allAutoCrafters = Object.FindObjectsOfType<AutoCrafter>();
+                foreach (AutoCrafter autoCrafter in allAutoCrafters)
                 {
-                    Vector3 pos = autoCrafter.gameObject.transform.position;
-                    float x = Mathf.Round(pos.x);
-                    float y = Mathf.Round(pos.y);
-                    float z = Mathf.Round(pos.z);
-                    Vector3 foundPos = new Vector3(x, y, z);
-                    if (foundPos == machinePos && autoCrafter.speed != speed)
+                    if (autoCrafter != null)
                     {
-                        autoCrafter.speed = speed;
+                        Vector3 pos = autoCrafter.gameObject.transform.position;
+                        float x = Mathf.Round(pos.x);
+                        float y = Mathf.Round(pos.y);
+                        float z = Mathf.Round(pos.z);
+                        Vector3 foundPos = new Vector3(x, y, z);
+                        if (foundPos == machinePos)
+                        {
+                            autoCrafter.speed = speed;
+                        }
                     }
+                    yield return null;
                 }
-                yield return null;
-            }
-            Retriever[] allRetrievers = Object.FindObjectsOfType<Retriever>();
-            foreach (Retriever retriever in allRetrievers)
-            {
-                if (retriever != null)
+                Retriever[] allRetrievers = Object.FindObjectsOfType<Retriever>();
+                foreach (Retriever retriever in allRetrievers)
                 {
-                    Vector3 pos = retriever.gameObject.transform.position;
-                    float x = Mathf.Round(pos.x);
-                    float y = Mathf.Round(pos.y);
-                    float z = Mathf.Round(pos.z);
-                    Vector3 foundPos = new Vector3(x, y, z);
-                    if (foundPos == machinePos && retriever.speed != speed)
+                    if (retriever != null)
                     {
-                        retriever.speed = speed;
+                        Vector3 pos = retriever.gameObject.transform.position;
+                        float x = Mathf.Round(pos.x);
+                        float y = Mathf.Round(pos.y);
+                        float z = Mathf.Round(pos.z);
+                        Vector3 foundPos = new Vector3(x, y, z);
+                        if (foundPos == machinePos)
+                        {
+                            retriever.speed = speed;
+                        }
                     }
+                    yield return null;
                 }
-                yield return null;
-            }
-            Turret[] allTurrets = Object.FindObjectsOfType<Turret>();
-            foreach (Turret turret in allTurrets)
-            {
-                if (turret != null)
+                Turret[] allTurrets = Object.FindObjectsOfType<Turret>();
+                foreach (Turret turret in allTurrets)
                 {
-                    Vector3 pos = turret.gameObject.transform.position;
-                    float x = Mathf.Round(pos.x);
-                    float y = Mathf.Round(pos.y);
-                    float z = Mathf.Round(pos.z);
-                    Vector3 foundPos = new Vector3(x, y, z);
-                    if (foundPos == machinePos && turret.speed != speed)
+                    if (turret != null)
                     {
-                        turret.speed = speed;
+                        Vector3 pos = turret.gameObject.transform.position;
+                        float x = Mathf.Round(pos.x);
+                        float y = Mathf.Round(pos.y);
+                        float z = Mathf.Round(pos.z);
+                        Vector3 foundPos = new Vector3(x, y, z);
+                        if (foundPos == machinePos)
+                        {
+                            turret.speed = speed;
+                        }
                     }
+                    yield return null;
                 }
-                yield return null;
             }
         }
         machineDataCoroutineBusy = false;
@@ -516,42 +690,110 @@ public class NetworkReceive
             yield return null;
         }
 
-        string[] powerlist = powerData.Split('[');
-        for (int i = 2; i < powerlist.Length; i++)
+        string[] powerList = powerData.Split('[');
+        if (powerList != localPowerList)
         {
-            string powerInfo = powerlist[i];
-            float xPos = float.Parse(powerInfo.Split(',')[0]);
-            float yPos = float.Parse(powerInfo.Split(',')[1]);
-            float zPos = float.Parse(powerInfo.Split(',')[2]);
-            Vector3 powerPos = new Vector3(xPos, yPos, zPos);
-            int range = int.Parse(powerInfo.Split(',')[3]);
-            bool dual = bool.Parse(powerInfo.Split(',')[4].Split(']')[0].Substring(2).TrimEnd('"'));
-
-            PowerConduit[] allPowerConduits = Object.FindObjectsOfType<PowerConduit>();
-            foreach (PowerConduit powerConduit in allPowerConduits)
+            localPowerList = powerList;
+            for (int i = 2; i < powerList.Length; i++)
             {
-                if (powerConduit != null)
+                string powerInfo = powerList[i];
+                float xPos = float.Parse(powerInfo.Split(',')[0]);
+                float yPos = float.Parse(powerInfo.Split(',')[1]);
+                float zPos = float.Parse(powerInfo.Split(',')[2]);
+                Vector3 powerPos = new Vector3(xPos, yPos, zPos);
+                int range = int.Parse(powerInfo.Split(',')[3]);
+                bool dual = bool.Parse(powerInfo.Split(',')[4].Split(']')[0].Substring(2).TrimEnd('"'));
+
+                PowerConduit[] allPowerConduits = Object.FindObjectsOfType<PowerConduit>();
+                foreach (PowerConduit powerConduit in allPowerConduits)
                 {
-                    Vector3 pos = powerConduit.gameObject.transform.position;
-                    float x = Mathf.Round(pos.x);
-                    float y = Mathf.Round(pos.y);
-                    float z = Mathf.Round(pos.z);
-                    Vector3 foundPos = new Vector3(x, y, z);
-                    if (foundPos == powerPos && powerConduit.range != range)
+                    if (powerConduit != null)
                     {
-                        if (powerConduit.connectionFailed == true)
+                        Vector3 pos = powerConduit.gameObject.transform.position;
+                        float x = Mathf.Round(pos.x);
+                        float y = Mathf.Round(pos.y);
+                        float z = Mathf.Round(pos.z);
+                        Vector3 foundPos = new Vector3(x, y, z);
+                        if (foundPos == powerPos)
                         {
-                            powerConduit.connectionAttempts = 0;
-                            powerConduit.connectionFailed = false;
+                            if (powerConduit.connectionFailed == true)
+                            {
+                                powerConduit.connectionAttempts = 0;
+                                powerConduit.connectionFailed = false;
+                            }
+                            powerConduit.range = range;
+                            powerConduit.dualOutput = dual == true;
                         }
-                        powerConduit.dualOutput = dual == true;
-                        powerConduit.range = range;
                     }
+                    yield return null;
                 }
-                yield return null;
             }
         }
         powerDataCoroutineBusy = false;
+    }
+
+    //! Processes data from item database.
+    public IEnumerator ReceiveNetworkItems()
+    {
+        string[] itemlist = networkController.itemData.Split('[');
+        if (itemlist != localItemList)
+        {
+            localItemList = itemlist;
+            for (int i = 2; i < itemlist.Length; i++)
+            {
+                string itemInfo = itemlist[i];
+                int destroy = int.Parse(itemInfo.Split(',')[0]);
+                string itemType = itemInfo.Split(',')[1].Substring(2).TrimEnd('"');
+                int itemAmount = int.Parse(itemInfo.Split(',')[2]);
+                float xPos = float.Parse(itemInfo.Split(',')[3]);
+                float yPos = float.Parse(itemInfo.Split(',')[4]);
+                float zPos = float.Parse(itemInfo.Split(',')[5].Split(']')[0]);
+                Vector3 itemPos = new Vector3(xPos, yPos, zPos);
+                bool found = false;
+                Item[] allItems = Object.FindObjectsOfType<Item>();
+                foreach (Item item in allItems)
+                {
+                    GameObject obj = item.gameObject;
+                    if (item.gameObject != null)
+                    {
+                        if (item.startPosition == itemPos)
+                        {
+                            if (destroy == 1 && item.type == itemType && item.amount == itemAmount)
+                            {
+                                Object.Destroy(obj);
+                            }
+                            found = true;
+                            break;
+                        }
+                    }
+                }
+                if (found == false && destroy == 0)
+                {
+                    itemDatabaseDelay++;
+                    if (itemDatabaseDelay >= 10)
+                    {
+                        itemDatabaseDelay = 0;
+                        GameObject newItem = Object.Instantiate(playerController.item, itemPos, new Quaternion());
+                        newItem.GetComponent<Item>().startPosition = itemPos;
+                        newItem.GetComponent<Item>().type = itemType;
+                        newItem.GetComponent<Item>().amount = itemAmount;
+                    }
+                }
+            }
+        }
+        yield return new WaitForSeconds(0.1f);
+        itemDatabaseDelay++;
+        networkController.networkItemCoroutineBusy = false;
+    }
+
+    //! Gets hazards setting from server.
+    private async Task GetHazardData()
+    {
+        using (WebClient client = new WebClient())
+        {    
+            System.Uri uri = new System.Uri(networkController.serverURL+"/hazards");
+            hazardData = await client.DownloadStringTaskAsync(uri);
+        }
     }
 
     //! Gets chat messages from server.
@@ -559,7 +801,7 @@ public class NetworkReceive
     {
         using (WebClient client = new WebClient())
         {    
-            System.Uri uri = new System.Uri(serverURL+"/chat");
+            System.Uri uri = new System.Uri(networkController.serverURL+"/chat");
             chatData = await client.DownloadStringTaskAsync(uri);
         }
     }
@@ -569,7 +811,7 @@ public class NetworkReceive
     {
         using (WebClient client = new WebClient())
         {    
-            System.Uri uri = new System.Uri(serverURL+"/storage");
+            System.Uri uri = new System.Uri(networkController.serverURL+"/storage");
             networkController.storageData = await client.DownloadStringTaskAsync(uri);
         }
     }
@@ -579,8 +821,18 @@ public class NetworkReceive
     {
         using (WebClient client = new WebClient())
         {    
-            System.Uri uri = new System.Uri(serverURL+"/blocks");
+            System.Uri uri = new System.Uri(networkController.serverURL+"/blocks");
             networkController.blockData = await client.DownloadStringTaskAsync(uri);
+        }
+    }
+
+    //! Gets machine data from server.
+    public async Task GetItemData()
+    {
+        using (WebClient client = new WebClient())
+        {    
+            System.Uri uri = new System.Uri(networkController.serverURL+"/items");
+            networkController.itemData = await client.DownloadStringTaskAsync(uri);
         }
     }
 
@@ -589,8 +841,18 @@ public class NetworkReceive
     {
         using (WebClient client = new WebClient())
         {    
-            System.Uri uri = new System.Uri(serverURL+"/players");
+            System.Uri uri = new System.Uri(networkController.serverURL+"/players");
             networkController.playerData = await client.DownloadStringTaskAsync(uri);
+        }
+    }
+
+    //! Gets railcart hub data from server.
+    private async Task GetHubData()
+    {
+        using (WebClient client = new WebClient())
+        {    
+            System.Uri uri = new System.Uri(networkController.serverURL+"/hubs");
+            hubData = await client.DownloadStringTaskAsync(uri);
         }
     }
 
@@ -599,7 +861,7 @@ public class NetworkReceive
     {
         using (WebClient client = new WebClient())
         {    
-            System.Uri uri = new System.Uri(serverURL+"/conduits");
+            System.Uri uri = new System.Uri(networkController.serverURL+"/conduits");
             conduitData = await client.DownloadStringTaskAsync(uri);
         }
     }
@@ -609,7 +871,7 @@ public class NetworkReceive
     {
         using (WebClient client = new WebClient())
         {    
-            System.Uri uri = new System.Uri(serverURL+"/power");
+            System.Uri uri = new System.Uri(networkController.serverURL+"/power");
             powerData = await client.DownloadStringTaskAsync(uri);
         }
     }
@@ -619,18 +881,18 @@ public class NetworkReceive
     {
         using (WebClient client = new WebClient())
         {    
-            System.Uri uri = new System.Uri(serverURL+"/machines");
+            System.Uri uri = new System.Uri(networkController.serverURL+"/machines");
             machineData = await client.DownloadStringTaskAsync(uri);
         }
     }
 
-    //! Gets painted block colors from server.
-    private async Task GetPaintData()
+    //! Gets machine data from server.
+    private async Task GetBanData()
     {
         using (WebClient client = new WebClient())
         {    
-            System.Uri uri = new System.Uri(serverURL+"/paint");
-            paintData = await client.DownloadStringTaskAsync(uri);
+            System.Uri uri = new System.Uri(networkController.serverURL+"/bans");
+            banData = await client.DownloadStringTaskAsync(uri);
         }
     }
 }

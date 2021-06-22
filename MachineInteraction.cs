@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System.Collections.Generic;
 
 public class MachineInteraction
 {
@@ -17,7 +18,7 @@ public class MachineInteraction
     {
         if(cInput.GetKeyDown("Collect Object"))
         {
-            interactionController.CollectObject("Electric Light");
+            interactionController.CollectObject(playerController.objectInSight, "Electric Light");
         }
     }
 
@@ -30,11 +31,18 @@ public class MachineInteraction
 
         if (cInput.GetKeyDown("Collect Object"))
         {
-            interactionController.CollectObject(doorType);
+            interactionController.CollectObject(playerController.objectInSight, doorType);
         }
 
         if (cInput.GetKeyDown("Interact"))
         {
+            if (PlayerPrefsX.GetPersistentBool("multiplayer") == true)
+            {
+                if (!interactionController.CanInteract())
+                {
+                    return;
+                }
+            }
             if (Input.GetKey(KeyCode.LeftControl))
             {
                 if (!playerController.GuiOpen())
@@ -100,10 +108,17 @@ public class MachineInteraction
 
         if (cInput.GetKeyDown("Collect Object"))
         {
-            interactionController.CollectObject(powerSource.type);
+            interactionController.CollectObject(playerController.objectInSight, powerSource.type);
         }
         if (cInput.GetKeyDown("Interact"))
         {
+            if (PlayerPrefsX.GetPersistentBool("multiplayer") == true)
+            {
+                if (!interactionController.CanInteract())
+                {
+                    return;
+                }
+            }
             interactionController.ToggleMachineGUI();
         }
     }
@@ -117,7 +132,19 @@ public class MachineInteraction
         playerController.machineCooling = reactor.cooling;
         if (cInput.GetKeyDown("Collect Object"))
         {
-            interactionController.CollectObject("Nuclear Reactor");
+            interactionController.CollectObject(playerController.objectInSight, "Nuclear Reactor");
+        }
+    }
+
+    //! Called when the player is looking at a nuclear reactor.
+    public void InteractWithLogicBlock()
+    {
+        LogicBlock logicBlock = playerController.objectInSight.GetComponent<LogicBlock>();
+        playerController.machineInSight = playerController.objectInSight;
+        playerController.machineID = logicBlock.ID;
+        if (cInput.GetKeyDown("Collect Object"))
+        {
+            interactionController.CollectObject(playerController.objectInSight, logicBlock.blockType);
         }
     }
 
@@ -137,10 +164,17 @@ public class MachineInteraction
         }
         if (cInput.GetKeyDown("Collect Object"))
         {
-            interactionController.CollectObject("Power Conduit");
+            interactionController.CollectObject(playerController.objectInSight, "Power Conduit");
         }
         if (cInput.GetKeyDown("Interact"))
         {
+            if (PlayerPrefsX.GetPersistentBool("multiplayer") == true)
+            {
+                if (!interactionController.CanInteract())
+                {
+                    return;
+                }
+            }
             playerController.networkedConduitRange = powerConduit.range;
             playerController.networkedDualPower = powerConduit.dualOutput;
             interactionController.ToggleMachineGUI();
@@ -160,10 +194,17 @@ public class MachineInteraction
         playerController.machineCooling = turret.cooling;
         if (cInput.GetKeyDown("Collect Object"))
         {
-            interactionController.CollectObject("Turret");
+            interactionController.CollectObject(playerController.objectInSight, "Turret");
         }
         if (cInput.GetKeyDown("Interact"))
         {
+            if (PlayerPrefsX.GetPersistentBool("multiplayer") == true)
+            {
+                if (!interactionController.CanInteract())
+                {
+                    return;
+                }
+            }
             playerController.networkedMachineSpeed = turret.speed;
             interactionController.ToggleMachineGUI();
         }
@@ -184,10 +225,17 @@ public class MachineInteraction
         playerController.machineAmount = turret.ammoAmount;
         if (cInput.GetKeyDown("Collect Object"))
         {
-            interactionController.CollectObject("Missile Turret");
+            interactionController.CollectObject(playerController.objectInSight, "Missile Turret");
         }
         if (cInput.GetKeyDown("Interact"))
         {
+            if (PlayerPrefsX.GetPersistentBool("multiplayer") == true)
+            {
+                if (!interactionController.CanInteract())
+                {
+                    return;
+                }
+            }
             playerController.networkedMachineSpeed = turret.speed;
             interactionController.ToggleMachineGUI();
         }
@@ -208,10 +256,17 @@ public class MachineInteraction
         playerController.machineType = extractor.type;
         if (cInput.GetKeyDown("Collect Object"))
         {
-            interactionController.CollectObject("Universal Extractor");
+            interactionController.CollectObject(playerController.objectInSight, "Universal Extractor");
         }
         if (cInput.GetKeyDown("Interact"))
         {
+            if (PlayerPrefsX.GetPersistentBool("multiplayer") == true)
+            {
+                if (!interactionController.CanInteract())
+                {
+                    return;
+                }
+            }
             playerController.networkedMachineSpeed = extractor.speed;
             interactionController.ToggleMachineGUI();
         }
@@ -231,10 +286,17 @@ public class MachineInteraction
         playerController.machineCooling = auger.cooling;
         if (cInput.GetKeyDown("Collect Object"))
         {
-            interactionController.CollectObject("Auger");
+            interactionController.CollectObject(playerController.objectInSight, "Auger");
         }
         if (cInput.GetKeyDown("Interact"))
         {
+            if (PlayerPrefsX.GetPersistentBool("multiplayer") == true)
+            {
+                if (!interactionController.CanInteract())
+                {
+                    return;
+                }
+            }
             playerController.networkedMachineSpeed = auger.speed;
             interactionController.ToggleMachineGUI();
         }
@@ -254,10 +316,17 @@ public class MachineInteraction
         playerController.machineCooling = collector.cooling;
         if (cInput.GetKeyDown("Collect Object"))
         {
-            interactionController.CollectObject("Dark Matter Collector");
+            interactionController.CollectObject(playerController.objectInSight, "Dark Matter Collector");
         }
         if (cInput.GetKeyDown("Interact"))
         {
+            if (PlayerPrefsX.GetPersistentBool("multiplayer") == true)
+            {
+                if (!interactionController.CanInteract())
+                {
+                    return;
+                }
+            }
             if (playerController.machineGUIopen == false)
             {
                 playerController.networkedMachineSpeed = collector.speed;
@@ -457,10 +526,17 @@ public class MachineInteraction
         }
         if (cInput.GetKeyDown("Collect Object"))
         {
-            interactionController.CollectObject("Universal Conduit");
+            interactionController.CollectObject(playerController.objectInSight, "Universal Conduit");
         }
         if (cInput.GetKeyDown("Interact"))
         {
+            if (PlayerPrefsX.GetPersistentBool("multiplayer") == true)
+            {
+                if (!interactionController.CanInteract())
+                {
+                    return;
+                }
+            }
             playerController.networkedConduitRange = conduit.range;
             interactionController.ToggleMachineGUI();
         }
@@ -536,10 +612,17 @@ public class MachineInteraction
         }
         if (cInput.GetKeyDown("Collect Object"))
         {
-            interactionController.CollectObject("Dark Matter Conduit");
+            interactionController.CollectObject(playerController.objectInSight, "Dark Matter Conduit");
         }
         if (cInput.GetKeyDown("Interact"))
         {
+            if (PlayerPrefsX.GetPersistentBool("multiplayer") == true)
+            {
+                if (!interactionController.CanInteract())
+                {
+                    return;
+                }
+            }
             playerController.networkedConduitRange = dmConduit.range;
             interactionController.ToggleMachineGUI();
         }
@@ -578,10 +661,17 @@ public class MachineInteraction
         }
         if (cInput.GetKeyDown("Collect Object"))
         {
-            interactionController.CollectObject("Smelter");
+            interactionController.CollectObject(playerController.objectInSight, "Smelter");
         }
         if (cInput.GetKeyDown("Interact"))
         {
+            if (PlayerPrefsX.GetPersistentBool("multiplayer") == true)
+            {
+                if (!interactionController.CanInteract())
+                {
+                    return;
+                }
+            }
             if (playerController.machineGUIopen == false)
             {
                 playerController.networkedMachineSpeed = smelter.speed;
@@ -638,10 +728,17 @@ public class MachineInteraction
         }
         if (cInput.GetKeyDown("Collect Object"))
         {
-            interactionController.CollectObject("Alloy Smelter");
+            interactionController.CollectObject(playerController.objectInSight, "Alloy Smelter");
         }
         if (cInput.GetKeyDown("Interact"))
         {
+            if (PlayerPrefsX.GetPersistentBool("multiplayer") == true)
+            {
+                if (!interactionController.CanInteract())
+                {
+                    return;
+                }
+            }
             if (playerController.machineGUIopen == false)
             {
                 playerController.networkedMachineSpeed = alloySmelter.speed;
@@ -687,10 +784,17 @@ public class MachineInteraction
         }
         if (cInput.GetKeyDown("Collect Object"))
         {
-            interactionController.CollectObject("Extruder");
+            interactionController.CollectObject(playerController.objectInSight, "Extruder");
         }
         if (cInput.GetKeyDown("Interact"))
         {
+            if (PlayerPrefsX.GetPersistentBool("multiplayer") == true)
+            {
+                if (!interactionController.CanInteract())
+                {
+                    return;
+                }
+            }
             if (playerController.machineGUIopen == false)
             {
                 playerController.networkedMachineSpeed = extruder.speed;
@@ -736,10 +840,17 @@ public class MachineInteraction
         }
         if (cInput.GetKeyDown("Collect Object"))
         {
-            interactionController.CollectObject(modMachine.machineName);
+            interactionController.CollectObject(playerController.objectInSight, modMachine.machineName);
         }
         if (cInput.GetKeyDown("Interact"))
         {
+            if (PlayerPrefsX.GetPersistentBool("multiplayer") == true)
+            {
+                if (!interactionController.CanInteract())
+                {
+                    return;
+                }
+            }
             if (playerController.machineGUIopen == false)
             {
                 playerController.networkedMachineSpeed = modMachine.speed;
@@ -779,10 +890,17 @@ public class MachineInteraction
         }
         if (cInput.GetKeyDown("Collect Object"))
         {
-            interactionController.CollectObject("Rail Cart Hub");
+            interactionController.CollectObject(playerController.objectInSight, "Rail Cart Hub");
         }
         if (cInput.GetKeyDown("Interact"))
         {
+            if (PlayerPrefsX.GetPersistentBool("multiplayer") == true)
+            {
+                if (!interactionController.CanInteract())
+                {
+                    return;
+                }
+            }
             interactionController.ToggleMachineGUI();
         }
     }
@@ -833,10 +951,17 @@ public class MachineInteraction
         }
         if (cInput.GetKeyDown("Collect Object"))
         {
-            interactionController.CollectObject("Retriever");
+            interactionController.CollectObject(playerController.objectInSight, "Retriever");
         }
         if (cInput.GetKeyDown("Interact"))
         {
+            if (PlayerPrefsX.GetPersistentBool("multiplayer") == true)
+            {
+                if (!interactionController.CanInteract())
+                {
+                    return;
+                }
+            }
             if (playerController.machineGUIopen == false)
             {
                 playerController.networkedMachineSpeed = retriever.speed;
@@ -929,10 +1054,17 @@ public class MachineInteraction
         }
         if (cInput.GetKeyDown("Collect Object"))
         {
-            interactionController.CollectObject("Heat Exchanger");
+            interactionController.CollectObject(playerController.objectInSight, "Heat Exchanger");
         }
         if (cInput.GetKeyDown("Interact"))
         {
+            if (PlayerPrefsX.GetPersistentBool("multiplayer") == true)
+            {
+                if (!interactionController.CanInteract())
+                {
+                    return;
+                }
+            }
             if (playerController.machineGUIopen == false)
             {
                 playerController.networkedMachineSpeed = heatExchanger.speed;
@@ -979,10 +1111,17 @@ public class MachineInteraction
         }
         if (cInput.GetKeyDown("Collect Object"))
         {
-            interactionController.CollectObject("Gear Cutter");
+            interactionController.CollectObject(playerController.objectInSight, "Gear Cutter");
         }
         if (cInput.GetKeyDown("Interact"))
         {
+            if (PlayerPrefsX.GetPersistentBool("multiplayer") == true)
+            {
+                if (!interactionController.CanInteract())
+                {
+                    return;
+                }
+            }
             if (playerController.machineGUIopen == false)
             {
                 playerController.networkedMachineSpeed = gearCutter.speed;
@@ -1028,10 +1167,17 @@ public class MachineInteraction
         }
         if (cInput.GetKeyDown("Collect Object"))
         {
-            interactionController.CollectObject("Press");
+            interactionController.CollectObject(playerController.objectInSight, "Press");
         }
         if (cInput.GetKeyDown("Interact"))
         {
+            if (PlayerPrefsX.GetPersistentBool("multiplayer") == true)
+            {
+                if (!interactionController.CanInteract())
+                {
+                    return;
+                }
+            }
             if (playerController.machineGUIopen == false)
             {
                 playerController.networkedMachineSpeed = press.speed;
@@ -1070,10 +1216,17 @@ public class MachineInteraction
         }
         if (cInput.GetKeyDown("Collect Object"))
         {
-            interactionController.CollectObject("Auto Crafter");
+            interactionController.CollectObject(playerController.objectInSight, "Auto Crafter");
         }
         if (cInput.GetKeyDown("Interact"))
         {
+            if (PlayerPrefsX.GetPersistentBool("multiplayer") == true)
+            {
+                if (!interactionController.CanInteract())
+                {
+                    return;
+                }
+            }
             if (playerController.machineGUIopen == false)
             {
                 playerController.networkedMachineSpeed = autoCrafter.speed;
@@ -1083,6 +1236,39 @@ public class MachineInteraction
             else
             {
                 playerController.machineGUIopen = false;
+            }
+        }
+    }
+
+    //! Called when the player is looking at a protection block.
+    public void InteractWithProtectionBlock()
+    {
+        ProtectionBlock protectionBlock = playerController.objectInSight.GetComponent<ProtectionBlock>();
+        playerController.machineInSight = playerController.objectInSight;
+        playerController.machineID = protectionBlock.ID;
+        playerController.protectionList = "";
+        List<string> userNames = protectionBlock.GetUserNames();
+        if (userNames != null)
+        {
+            foreach (string userName in protectionBlock.GetUserNames())
+            {
+                playerController.protectionList += userName + "\n";
+            }
+            if (cInput.GetKeyDown("Collect Object"))
+            {
+                interactionController.CollectObject(playerController.objectInSight, "Protection Block");
+            }
+            if (cInput.GetKeyDown("Interact"))
+            {
+                if (PlayerPrefsX.GetPersistentBool("multiplayer") == true)
+                {
+                    if (!interactionController.CanInteract())
+                    {
+                        return;
+                    }
+                }
+                protectionBlock.visible = !protectionBlock.visible;
+                playerController.PlayMissingItemsSound();
             }
         }
     }

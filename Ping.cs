@@ -19,7 +19,7 @@ public class Ping : MonoBehaviour
     //! Called by unity engine on start up to initialize variables.
     public void Start()
     {
-        if (SceneManager.GetActiveScene().name.Equals("QE_World_Atmo"))
+        if (!SceneManager.GetActiveScene().name.Equals("QE_World") && !SceneManager.GetActiveScene().name.Equals("QE_Procedural"))
         {
             attachedLight.GetComponent<Light>().color = Color.white;
         }

@@ -15,7 +15,8 @@ public class InfoHUD : MonoBehaviour
     public void Start()
     {
         playerController = GetComponent<PlayerController>();
-        textureDictionary = GetComponent<TextureDictionary>();
+        GameManager gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
+        textureDictionary = gameManager.GetComponent<TextureDictionary>();
         guiCoordinates = new GuiCoordinates();
     }
 
@@ -26,7 +27,18 @@ public class InfoHUD : MonoBehaviour
         && playerController.objectInSight != playerController.gameObject
         && GetComponent<MainMenu>().finishedLoading == true
         && playerController.objectInSight != null
-        && !playerController.GuiOpen();
+        && !GuiOpen();
+    }
+
+    //! Returns true if any GUI is open with the exception of machine GUIs.
+    public bool GuiOpen()
+    {
+        return cGUI.showingInputGUI == true
+        || playerController.escapeMenuOpen == true
+        || playerController.tabletOpen == true
+        || playerController.marketGUIopen == true
+        || playerController.buildSettingsGuiOpen == true
+        || playerController.doorGUIopen == true;
     }
 
     //! Called by unity engine for rendering and handling GUI events.
@@ -162,77 +174,22 @@ public class InfoHUD : MonoBehaviour
                 GUI.Label(resourceInfoRect, resourceName);
                 GUI.skin.label.fontSize = f;
             }
-            else if (obj.GetComponent<IronBlock>() != null)
+            else if (obj.GetComponent<LogicBlock>() != null)
             {
+                string blockType = obj.GetComponent<LogicBlock>().blockType;
                 int f = GUI.skin.label.fontSize;
                 GUI.skin.label.fontSize = 16;
-                GUIContent content = new GUIContent("Iron Block");
+                GUIContent content = new GUIContent(blockType);
                 GUIStyle style = GUI.skin.box;
                 style.alignment = TextAnchor.MiddleCenter;
                 Vector2 size = style.CalcSize(content);
                 Rect resourceInfoRect = new Rect((Screen.width / 2) - (size.x / 2.1f), (Screen.height - 70) - (size.y / 2), size.x, size.y);
-                GUI.Label(resourceInfoRect, "Iron Block");
-                if (playerController.paintGunActive == false)
-                {
-                    GUI.DrawTexture(guiCoordinates.buildInfoRectBG, textureDictionary.dictionary["Interface Background"]);
-                    GUI.Label(guiCoordinates.buildInfoRect, "Press F to remove blocks.\nPress B to add blocks.\nPress B to stop building.");
-                }
+                GUI.Label(resourceInfoRect, blockType);
                 GUI.skin.label.fontSize = f;
             }
-            else if (obj.GetComponent<Steel>() != null)
+            else if (obj.GetComponent<Block>() != null)
             {
-                int f = GUI.skin.label.fontSize;
-                GUI.skin.label.fontSize = 16;
-                GUIContent content = new GUIContent("Steel Block");
-                GUIStyle style = GUI.skin.box;
-                style.alignment = TextAnchor.MiddleCenter;
-                Vector2 size = style.CalcSize(content);
-                Rect resourceInfoRect = new Rect((Screen.width / 2) - (size.x / 2.1f), (Screen.height - 70) - (size.y / 2), size.x, size.y);
-                GUI.Label(resourceInfoRect, "Steel Block");
-                if (playerController.paintGunActive == false)
-                {
-                    GUI.DrawTexture(guiCoordinates.buildInfoRectBG, textureDictionary.dictionary["Interface Background"]);
-                    GUI.Label(guiCoordinates.buildInfoRect, "Press F to remove blocks.\nPress B to add blocks.\nPress B to stop building.");
-                }
-                GUI.skin.label.fontSize = f;
-            }
-            else if (obj.GetComponent<Glass>() != null)
-            {
-                int f = GUI.skin.label.fontSize;
-                GUI.skin.label.fontSize = 16;
-                GUIContent content = new GUIContent("Glass Block");
-                GUIStyle style = GUI.skin.box;
-                style.alignment = TextAnchor.MiddleCenter;
-                Vector2 size = style.CalcSize(content);
-                Rect resourceInfoRect = new Rect((Screen.width / 2) - (size.x / 2.1f), (Screen.height - 70) - (size.y / 2), size.x, size.y);
-                GUI.Label(resourceInfoRect, "Glass Block");
-                if (playerController.paintGunActive == false)
-                {
-                    GUI.DrawTexture(guiCoordinates.buildInfoRectBG, textureDictionary.dictionary["Interface Background"]);
-                    GUI.Label(guiCoordinates.buildInfoRect, "Press F to remove blocks.\nPress B to add blocks.\nPress B to stop building.");
-                }
-                GUI.skin.label.fontSize = f;
-            }
-            else if (obj.GetComponent<Brick>() != null)
-            {
-                int f = GUI.skin.label.fontSize;
-                GUI.skin.label.fontSize = 16;
-                GUIContent content = new GUIContent("Brick Block");
-                GUIStyle style = GUI.skin.box;
-                style.alignment = TextAnchor.MiddleCenter;
-                Vector2 size = style.CalcSize(content);
-                Rect resourceInfoRect = new Rect((Screen.width / 2) - (size.x / 2.1f), (Screen.height - 70) - (size.y / 2), size.x, size.y);
-                GUI.Label(resourceInfoRect, "Brick Block");
-                if (playerController.paintGunActive == false)
-                {
-                    GUI.DrawTexture(guiCoordinates.buildInfoRectBG, textureDictionary.dictionary["Interface Background"]);
-                    GUI.Label(guiCoordinates.buildInfoRect, "Press F to remove blocks.\nPress B to add blocks.\nPress B to stop building.");
-                }
-                GUI.skin.label.fontSize = f;
-            }
-            else if (obj.GetComponent<ModBlock>() != null)
-            {
-                string blockName = obj.GetComponent<ModBlock>().blockName;
+                string blockName = obj.GetComponent<Block>().blockName;
                 int f = GUI.skin.label.fontSize;
                 GUI.skin.label.fontSize = 16;
                 GUIContent content = new GUIContent(blockName);
@@ -241,11 +198,6 @@ public class InfoHUD : MonoBehaviour
                 Vector2 size = style.CalcSize(content);
                 Rect resourceInfoRect = new Rect((Screen.width / 2) - (size.x / 2.1f), (Screen.height - 70) - (size.y / 2), size.x, size.y);
                 GUI.Label(resourceInfoRect, blockName);
-                if (playerController.paintGunActive == false)
-                {
-                    GUI.DrawTexture(guiCoordinates.buildInfoRectBG, textureDictionary.dictionary["Interface Background"]);
-                    GUI.Label(guiCoordinates.buildInfoRect, "Press F to remove blocks.\nPress B to add blocks.\nPress B to stop building.");
-                }
                 GUI.skin.label.fontSize = f;
             }
             else if (obj.GetComponent<ElectricLight>() != null)
@@ -284,8 +236,8 @@ public class InfoHUD : MonoBehaviour
                     GUI.DrawTexture(guiCoordinates.infoRectBG, textureDictionary.dictionary["Interface Background"]);
                     if (obj.GetComponent<RailCartHub>().connectionFailed == false)
                     {
-                        GUI.Label(guiCoordinates.infoRect, "Rail Cart Hub" + 
-                        "\nID: " + machineDisplayID + 
+                        string id = machineDisplayID == "unassigned" ? "\nStarting up..." : "\nID: " + machineDisplayID;
+                        GUI.Label(guiCoordinates.infoRect, "Rail Cart Hub" + id +
                         "\nCircuit: " + obj.GetComponent<RailCartHub>().circuit + 
                         "\nRange: " + playerController.machineRange / 10 + " meters" + 
                         "\n" + "Input ID: " + machineDisplayInputID + 
@@ -307,8 +259,8 @@ public class InfoHUD : MonoBehaviour
                     GUI.DrawTexture(guiCoordinates.infoRectBG, textureDictionary.dictionary["Interface Background"]);
                     if (obj.GetComponent<DarkMatterConduit>().connectionFailed == false)
                     {
-                        GUI.Label(guiCoordinates.infoRect, "Dark Matter Conduit" + 
-                        "\nID: " + machineDisplayID + 
+                        string id = machineDisplayID == "unassigned" ? "\nStarting up..." : "\nID: " + machineDisplayID;
+                        GUI.Label(guiCoordinates.infoRect, "Dark Matter Conduit" + id +
                         "\nRange: " + playerController.machineRange / 10 + " meters" + 
                         "\nHolding: " + (int)playerController.machineAmount + " Dark Matter" + 
                         "\n" + "Input ID: " + machineDisplayInputID + 
@@ -330,8 +282,8 @@ public class InfoHUD : MonoBehaviour
                     GUI.DrawTexture(guiCoordinates.infoRectBG, textureDictionary.dictionary["Interface Background"]);
                     if (obj.GetComponent<UniversalConduit>().connectionFailed == false)
                     {
-                        GUI.Label(guiCoordinates.infoRect, "Universal Conduit" + 
-                        "\nID: " + machineDisplayID + 
+                        string id = machineDisplayID == "unassigned" ? "\nStarting up..." : "\nID: " + machineDisplayID;
+                        GUI.Label(guiCoordinates.infoRect, "Universal Conduit" + id +
                         "\nRange: " + playerController.machineRange / 10 + " meters" + 
                         "\nHolding: " + (int)playerController.machineAmount + " " + playerController.machineType + 
                         "\n" + "Input ID: " + machineDisplayInputID + 
@@ -353,8 +305,8 @@ public class InfoHUD : MonoBehaviour
                 {
                     if (obj.GetComponent<PowerSource>().connectionFailed == false && obj.GetComponent<PowerSource>().blocked == false)
                     {
-                        GUI.Label(guiCoordinates.infoRect, "Solar Panel" + 
-                        "\nID: " + machineDisplayID + 
+                        string id = machineDisplayID == "unassigned" ? "\nStarting up..." : "\nID: " + machineDisplayID;
+                        GUI.Label(guiCoordinates.infoRect, "Solar Panel" + id +
                         "\nOutput ID: " + machineDisplayOutputID + 
                         "\nPower: " + playerController.machinePower + " MW");
                     }
@@ -371,8 +323,8 @@ public class InfoHUD : MonoBehaviour
                 {
                     if (obj.GetComponent<PowerSource>().connectionFailed == false)
                     {
-                        GUI.Label(guiCoordinates.infoRect, "Generator" + 
-                        "\nID: " + machineDisplayID + 
+                        string id = machineDisplayID == "unassigned" ? "\nStarting up..." : "\nID: " + machineDisplayID;
+                        GUI.Label(guiCoordinates.infoRect, "Generator" + id +
                         "\nOutput ID: " + machineDisplayOutputID + 
                         "\nPower: " + playerController.machinePower + " MW" + 
                         "\nFuel: " + playerController.machineAmount + " " + playerController.machineType);
@@ -386,8 +338,8 @@ public class InfoHUD : MonoBehaviour
                 {
                     if (obj.GetComponent<PowerSource>().connectionFailed == false)
                     {
-                        GUI.Label(guiCoordinates.infoRect, "Reactor Turbine" + 
-                        "\nID: " + machineDisplayID + 
+                        string id = machineDisplayID == "unassigned" ? "\nStarting up..." : "\nID: " + machineDisplayID;
+                        GUI.Label(guiCoordinates.infoRect, "Reactor Turbine" + id +
                         "\nOutput ID: " + machineDisplayOutputID + 
                         "\nPower: " + playerController.machinePower + " MW");
                     }
@@ -403,8 +355,8 @@ public class InfoHUD : MonoBehaviour
                 if (playerController.machineInSight != null)
                 {
                     GUI.DrawTexture(guiCoordinates.infoRectBG, textureDictionary.dictionary["Interface Background"]);
-                    GUI.Label(guiCoordinates.infoRect, "Nuclear Reactor" + 
-                    "\nID: " + machineDisplayID + 
+                    string id = machineDisplayID == "unassigned" ? "\nStarting up..." : "\nID: " + machineDisplayID;
+                    GUI.Label(guiCoordinates.infoRect, "Nuclear Reactor" + id +
                     "\nCooling: " + playerController.machineCooling + " KBTU" + 
                     "\nRequired Cooling: " + obj.GetComponent<NuclearReactor>().turbineCount * 5 + " KBTU");
                 }
@@ -415,8 +367,8 @@ public class InfoHUD : MonoBehaviour
                 GUI.DrawTexture(guiCoordinates.infoRectBG, textureDictionary.dictionary["Interface Background"]);
                 if (obj.GetComponent<PowerConduit>().connectionFailed == false)
                 {
-                    GUI.Label(guiCoordinates.infoRect, "Power Conduit" +
-                    "\nID: " + machineDisplayID + 
+                    string id = machineDisplayID == "unassigned" ? "\nStarting up..." : "\nID: " + machineDisplayID;
+                        GUI.Label(guiCoordinates.infoRect, "Power Conduit" + id +
                     "\nRange: " + playerController.machineRange / 10 + " meters" + 
                     "\nPower: " + playerController.machinePower + " MW" + 
                     "\nOutput 1: " + machineDisplayOutputID + 
@@ -433,8 +385,8 @@ public class InfoHUD : MonoBehaviour
                 GUI.DrawTexture(guiCoordinates.infoRectBG, textureDictionary.dictionary["Interface Background"]);
                 if (obj.GetComponent<UniversalExtractor>().connectionFailed == false)
                 {
-                    GUI.Label(guiCoordinates.infoRect, "Universal Extractor" + 
-                    "\nID: " + machineDisplayID + 
+                    string id = machineDisplayID == "unassigned" ? "\nStarting up..." : "\nID: " + machineDisplayID;
+                    GUI.Label(guiCoordinates.infoRect, "Universal Extractor" + id +
                     "\nEnergized: " + playerController.machineHasPower + 
                     "\nPower: " + playerController.machinePower + " MW" + 
                     "\nOutput: " + playerController.machineSpeed + " IPC" + 
@@ -451,8 +403,8 @@ public class InfoHUD : MonoBehaviour
             {
                 GUI.Label(guiCoordinates.messageRect, "\nPress F to collect.\nPress E to interact.");
                 GUI.DrawTexture(guiCoordinates.infoRectBG, textureDictionary.dictionary["Interface Background"]);
-                GUI.Label(guiCoordinates.infoRect, "Auger" + 
-                "\nID: " + machineDisplayID + 
+                string id = machineDisplayID == "unassigned" ? "\nStarting up..." : "\nID: " + machineDisplayID;
+                GUI.Label(guiCoordinates.infoRect, "Auger" + id +
                 "\nEnergized: " + playerController.machineHasPower + 
                 "\nPower: " + playerController.machinePower + " MW" + 
                 "\nOutput: " + playerController.machineSpeed + " IPC" +
@@ -466,8 +418,8 @@ public class InfoHUD : MonoBehaviour
                 GUI.DrawTexture(guiCoordinates.infoRectBG, textureDictionary.dictionary["Interface Background"]);
                 if (obj.GetComponent<DarkMatterCollector>().connectionFailed == false)
                 {
-                    GUI.Label(guiCoordinates.infoRect, "Dark Matter Collector" + 
-                    "\nID: " + machineDisplayID + 
+                    string id = machineDisplayID == "unassigned" ? "\nStarting up..." : "\nID: " + machineDisplayID;
+                    GUI.Label(guiCoordinates.infoRect, "Dark Matter Collector" + id +
                     "\nEnergized: " + playerController.machineHasPower + 
                     "\nPower: " + playerController.machinePower + " MW" + 
                     "\nOutput: " + playerController.machineSpeed + " IPC" + 
@@ -488,8 +440,8 @@ public class InfoHUD : MonoBehaviour
                     GUI.DrawTexture(guiCoordinates.infoRectBG, textureDictionary.dictionary["Interface Background"]);
                     if (obj.GetComponent<Smelter>().connectionFailed == false)
                     {
-                        GUI.Label(guiCoordinates.infoRect, "Smelter" + 
-                        "\nID: " + machineDisplayID + 
+                        string id = machineDisplayID == "unassigned" ? "\nStarting up..." : "\nID: " + machineDisplayID;
+                        GUI.Label(guiCoordinates.infoRect, "Smelter" + id +
                         "\nEnergized: " + playerController.machineHasPower + 
                         "\nPower: " + playerController.machinePower + " MW" + 
                         "\nOutput: " + playerController.machineSpeed + " IPC" + 
@@ -515,8 +467,8 @@ public class InfoHUD : MonoBehaviour
                     GUI.DrawTexture(guiCoordinates.infoRectBG, textureDictionary.dictionary["Interface Background"]);
                     if (obj.GetComponent<AlloySmelter>().connectionFailed == false)
                     {
-                        GUI.Label(guiCoordinates.infoRect, "Alloy Smelter" + 
-                        "\nID: " + machineDisplayID + 
+                        string id = machineDisplayID == "unassigned" ? "\nStarting up..." : "\nID: " + machineDisplayID;
+                        GUI.Label(guiCoordinates.infoRect, "Alloy Smelter" + id +
                         "\nEnergized: " + playerController.machineHasPower + 
                         "\nPower: " + playerController.machinePower + " MW" + 
                         "\nOutput: " + playerController.machineSpeed + " IPC" + 
@@ -545,8 +497,8 @@ public class InfoHUD : MonoBehaviour
                     GUI.DrawTexture(guiCoordinates.infoRectBG, textureDictionary.dictionary["Interface Background"]);
                     if (obj.GetComponent<Press>().connectionFailed == false)
                     {
-                        GUI.Label(guiCoordinates.infoRect, "Press" + 
-                        "\nID: " + machineDisplayID + 
+                        string id = machineDisplayID == "unassigned" ? "\nStarting up..." : "\nID: " + machineDisplayID;
+                        GUI.Label(guiCoordinates.infoRect, "Press" + id +
                         "\nEnergized: " + playerController.machineHasPower + 
                         "\nPower: " + playerController.machinePower + " MW" + 
                         "\nOutput: " + playerController.machineSpeed + " IPC" + 
@@ -572,8 +524,8 @@ public class InfoHUD : MonoBehaviour
                     GUI.DrawTexture(guiCoordinates.infoRectBG, textureDictionary.dictionary["Interface Background"]);
                     if (obj.GetComponent<Extruder>().connectionFailed == false)
                     {
-                        GUI.Label(guiCoordinates.infoRect, "Extruder" + 
-                        "\nID: " + machineDisplayID + 
+                        string id = machineDisplayID == "unassigned" ? "\nStarting up..." : "\nID: " + machineDisplayID;
+                        GUI.Label(guiCoordinates.infoRect, "Extruder" + id +
                         "\nEnergized: " + playerController.machineHasPower + 
                         "\nPower: " + playerController.machinePower + " MW" + 
                         "\nOutput: " + playerController.machineSpeed + " IPC" + 
@@ -599,8 +551,8 @@ public class InfoHUD : MonoBehaviour
                     GUI.DrawTexture(guiCoordinates.infoRectBG, textureDictionary.dictionary["Interface Background"]);
                     if (obj.GetComponent<ModMachine>().connectionFailed == false)
                     {
-                        GUI.Label(guiCoordinates.infoRect, obj.GetComponent<ModMachine>().machineName +
-                        "\nID: " + machineDisplayID +
+                        string id = machineDisplayID == "unassigned" ? "\nStarting up..." : "\nID: " + machineDisplayID;
+                        GUI.Label(guiCoordinates.infoRect, obj.GetComponent<ModMachine>().machineName + id +
                         "\nEnergized: " + playerController.machineHasPower +
                         "\nPower: " + playerController.machinePower + " MW" +
                         "\nOutput: " + playerController.machineSpeed + " IPC" +
@@ -618,6 +570,16 @@ public class InfoHUD : MonoBehaviour
                     }
                 }
             }
+            else if (obj.GetComponent<ProtectionBlock>() != null)
+            {
+                GUI.Label(guiCoordinates.messageRect, "\nPress F to collect.\nPress E to interact.");
+                if (playerController.machineInSight != null)
+                {
+                    GUI.DrawTexture(guiCoordinates.infoRectBG, textureDictionary.dictionary["Interface Background"]);
+                    string id = machineDisplayID == "unassigned" ? "\nStarting up..." : "\nID: " + machineDisplayID;
+                    GUI.Label(guiCoordinates.infoRect, "Protection Block" + id + "\nUsers: " + playerController.protectionList);
+                }
+            }
             else if (obj.GetComponent<Retriever>() != null)
             {
                 GUI.Label(guiCoordinates.messageRect, "\nPress F to collect.\nPress E to interact.");
@@ -626,8 +588,8 @@ public class InfoHUD : MonoBehaviour
                     GUI.DrawTexture(guiCoordinates.infoRectBG, textureDictionary.dictionary["Interface Background"]);
                     if (obj.GetComponent<Retriever>().connectionFailed == false)
                     {
-                        GUI.Label(guiCoordinates.infoRect, "Retriever" + 
-                        "\nID: " + machineDisplayID + 
+                        string id = machineDisplayID == "unassigned" ? "\nStarting up..." : "\nID: " + machineDisplayID;
+                        GUI.Label(guiCoordinates.infoRect, "Retriever" + id +
                         "\nEnergized: " + playerController.machineHasPower + 
                         "\nPower: " + playerController.machinePower + " MW" +
                         "\nOutput: " + playerController.machineSpeed + " IPC" + 
@@ -651,8 +613,8 @@ public class InfoHUD : MonoBehaviour
                     GUI.DrawTexture(guiCoordinates.infoRectBG, textureDictionary.dictionary["Interface Background"]);
                     if (obj.GetComponent<AutoCrafter>().connectionFailed == false)
                     {
-                        GUI.Label(guiCoordinates.infoRect, "Auto Crafter" + 
-                        "\nID: " + machineDisplayID + 
+                        string id = machineDisplayID == "unassigned" ? "\nStarting up..." : "\nID: " + machineDisplayID;
+                        GUI.Label(guiCoordinates.infoRect, "Auto Crafter" + id +
                         "\nEnergized: " + playerController.machineHasPower + 
                         "\nPower: " + playerController.machinePower + " MW" + 
                         "\nOutput: " + playerController.machineSpeed + " IPC" + 
@@ -676,8 +638,8 @@ public class InfoHUD : MonoBehaviour
                     GUI.DrawTexture(guiCoordinates.infoRectBG, textureDictionary.dictionary["Interface Background"]);
                     if (obj.GetComponent<GearCutter>().connectionFailed == false)
                     {
-                        GUI.Label(guiCoordinates.infoRect, "Gear Cutter" + 
-                        "\nID: " + machineDisplayID + 
+                        string id = machineDisplayID == "unassigned" ? "\nStarting up..." : "\nID: " + machineDisplayID;
+                        GUI.Label(guiCoordinates.infoRect, "Gear Cutter" + id +
                         "\nEnergized: " + playerController.machineHasPower + 
                         "\nPower: " + playerController.machinePower + " MW" + 
                         "\nOutput: " + playerController.machineSpeed + " IPC" + 
@@ -702,8 +664,8 @@ public class InfoHUD : MonoBehaviour
                 {
                     GUI.DrawTexture(guiCoordinates.infoRectBG, textureDictionary.dictionary["Interface Background"]);
                     int rpm = (int)(60 / (1 + (3 - (playerController.machineSpeed * 0.1f))));
-                    GUI.Label(guiCoordinates.infoRect, "Turret" + 
-                    "\nID: " + machineDisplayID + 
+                    string id = machineDisplayID == "unassigned" ? "\nStarting up..." : "\nID: " + machineDisplayID;
+                    GUI.Label(guiCoordinates.infoRect, "Turret" + id +
                     "\nEnergized: " + playerController.machineHasPower + 
                     "\nPower: " + playerController.machinePower + " MW" +
                     "\nOutput: " + rpm + " RPM" + 
@@ -718,8 +680,8 @@ public class InfoHUD : MonoBehaviour
                 {
                     GUI.DrawTexture(guiCoordinates.infoRectBG, textureDictionary.dictionary["Interface Background"]);
                     int rpm = (int)(60 / (1 + (3 - (playerController.machineSpeed * 0.1f))));
-                    GUI.Label(guiCoordinates.infoRect, "Missile Turret" + 
-                    "\nID: " + machineDisplayID + 
+                    string id = machineDisplayID == "unassigned" ? "\nStarting up..." : "\nID: " + machineDisplayID;
+                    GUI.Label(guiCoordinates.infoRect, "Missile Turret" + id +
                     "\nEnergized: " + playerController.machineHasPower + 
                     "\nPower: " + playerController.machinePower + " MW" +
                     "\nOutput: " + rpm + " RPM" + 
@@ -736,8 +698,8 @@ public class InfoHUD : MonoBehaviour
                     GUI.DrawTexture(guiCoordinates.infoRectBG, textureDictionary.dictionary["Interface Background"]);
                     if (obj.GetComponent<HeatExchanger>().connectionFailed == false)
                     {
-                        GUI.Label(guiCoordinates.infoRect, "Heat Exchanger" + 
-                        "\nID: " + machineDisplayID + 
+                    string id = machineDisplayID == "unassigned" ? "\nStarting up..." : "\nID: " + machineDisplayID;
+                    GUI.Label(guiCoordinates.infoRect, "Heat Exchanger" + id +
                         "\nCooling: " + obj.GetComponent<HeatExchanger>().providingCooling + 
                         "\nOutput: " + playerController.machineSpeed + " KBTU" + 
                         "\nHolding: " + (int)playerController.machineAmount + " " + playerController.machineType + 
@@ -753,102 +715,27 @@ public class InfoHUD : MonoBehaviour
             }
             else if (playerController.lookingAtCombinedMesh == true)
             {
-                if (obj.name.Equals("ironHolder(Clone)"))
+                string blockType = "Info";
+
+                if (obj.GetComponent<BlockHolder>() != null)
                 {
-                    int f = GUI.skin.label.fontSize;
-                    GUI.skin.label.fontSize = 16;
-                    GUIContent content = new GUIContent("Iron Structure");
-                    GUIStyle style = GUI.skin.box;
-                    style.alignment = TextAnchor.MiddleCenter;
-                    Vector2 size = style.CalcSize(content);
-                    Rect resourceInfoRect = new Rect((Screen.width / 2) - (size.x / 2.1f), (Screen.height - 70) - (size.y / 2), size.x, size.y);
-                    GUI.Label(resourceInfoRect, "Iron Structure");
-                    if (playerController.paintGunActive == false)
-                    {
-                        GUI.DrawTexture(guiCoordinates.buildInfoRectBG, textureDictionary.dictionary["Interface Background"]);
-                        GUI.Label(guiCoordinates.buildInfoRect, "Press F to remove blocks.\nPress B to add blocks.\nPress B to stop building.");
-                    }
-                    GUI.skin.label.fontSize = f;
+                    blockType = obj.GetComponent<BlockHolder>().blockType;
+
                 }
-                if (obj.name.Equals("glassHolder(Clone)"))
+                else
                 {
-                    int f = GUI.skin.label.fontSize;
-                    GUI.skin.label.fontSize = 16;
-                    GUIContent content = new GUIContent("Glass Structure");
-                    GUIStyle style = GUI.skin.box;
-                    style.alignment = TextAnchor.MiddleCenter;
-                    Vector2 size = style.CalcSize(content);
-                    Rect resourceInfoRect = new Rect((Screen.width / 2) - (size.x / 2.1f), (Screen.height - 70) - (size.y / 2), size.x, size.y);
-                    GUI.Label(resourceInfoRect, "Glass Structure");
-                    if (playerController.paintGunActive == false)
-                    {
-                        GUI.DrawTexture(guiCoordinates.buildInfoRectBG, textureDictionary.dictionary["Interface Background"]);
-                        GUI.Label(guiCoordinates.buildInfoRect, "Press F to remove blocks.\nPress B to add blocks.\nPress B to stop building.");
-                    }
-                    GUI.skin.label.fontSize = f;
+                    blockType = obj.transform.parent.gameObject.GetComponent<BlockHolder>().blockType;
                 }
-                if (obj.name.Equals("steelHolder(Clone)"))
-                {
-                    int f = GUI.skin.label.fontSize;
-                    GUI.skin.label.fontSize = 16;
-                    GUIContent content = new GUIContent("Steel Structure");
-                    GUIStyle style = GUI.skin.box;
-                    style.alignment = TextAnchor.MiddleCenter;
-                    Vector2 size = style.CalcSize(content);
-                    Rect resourceInfoRect = new Rect((Screen.width / 2) - (size.x / 2.1f), (Screen.height - 70) - (size.y / 2), size.x, size.y);
-                    GUI.Label(resourceInfoRect, "Steel Structure");
-                    if (playerController.paintGunActive == false)
-                    {
-                        GUI.DrawTexture(guiCoordinates.buildInfoRectBG, textureDictionary.dictionary["Interface Background"]);
-                        GUI.Label(guiCoordinates.buildInfoRect, "Press F to remove blocks.\nPress B to add blocks.\nPress B to stop building.");
-                    }
-                    GUI.skin.label.fontSize = f;
-                }
-                if (obj.name.Equals("brickHolder(Clone)"))
-                {
-                    int f = GUI.skin.label.fontSize;
-                    GUI.skin.label.fontSize = 16;
-                    GUIContent content = new GUIContent("Brick Structure");
-                    GUIStyle style = GUI.skin.box;
-                    style.alignment = TextAnchor.MiddleCenter;
-                    Vector2 size = style.CalcSize(content);
-                    Rect resourceInfoRect = new Rect((Screen.width / 2) - (size.x / 2.1f), (Screen.height - 70) - (size.y / 2), size.x, size.y);
-                    GUI.Label(resourceInfoRect, "Brick Structure");
-                    if (playerController.paintGunActive == false)
-                    {
-                        GUI.DrawTexture(guiCoordinates.buildInfoRectBG, textureDictionary.dictionary["Interface Background"]);
-                        GUI.Label(guiCoordinates.buildInfoRect, "Press F to remove blocks.\nPress B to add blocks.\nPress B to stop building.");
-                    }
-                    GUI.skin.label.fontSize = f;
-                }
-                if (obj.name.Equals("modBlockHolder(Clone)"))
-                {
-                    string blockType = "Mod";
-                    Transform[] transforms = obj.GetComponentsInChildren<Transform>(true);
-                    foreach (Transform t in transforms)
-                    {
-                        ModBlock modBlock = t.gameObject.GetComponentInChildren<ModBlock>();
-                        if (modBlock != null)
-                        {
-                            blockType = modBlock.blockName;
-                            break;
-                        }
-                    }
-                    int f = GUI.skin.label.fontSize;
-                    GUI.skin.label.fontSize = 16;
-                    GUIContent content = new GUIContent(blockType);
-                    GUIStyle style = GUI.skin.box;
-                    style.alignment = TextAnchor.MiddleCenter;
-                    Vector2 size = style.CalcSize(content);
-                    Rect resourceInfoRect = new Rect((Screen.width / 2) - (size.x / 2.1f), (Screen.height - 70) - (size.y / 2), size.x, size.y);
-                    GUI.Label(resourceInfoRect, blockType);
-                    if (playerController.paintGunActive == false)
-                    {
-                        GUI.DrawTexture(guiCoordinates.buildInfoRectBG, textureDictionary.dictionary["Interface Background"]);
-                        GUI.Label(guiCoordinates.buildInfoRect, "Press F to remove blocks.\nPress B to add blocks.\nPress B to stop building.");
-                    }
-                    GUI.skin.label.fontSize = f;
-                }
+
+                int f = GUI.skin.label.fontSize;
+                GUI.skin.label.fontSize = 16;
+                GUIContent content = new GUIContent(blockType);
+                GUIStyle style = GUI.skin.box;
+                style.alignment = TextAnchor.MiddleCenter;
+                Vector2 size = style.CalcSize(content);
+                Rect resourceInfoRect = new Rect((Screen.width / 2) - (size.x / 2.1f), (Screen.height - 70) - (size.y / 2), size.x, size.y);
+                GUI.Label(resourceInfoRect, blockType);
+                GUI.skin.label.fontSize = f;
             }
         }
     }

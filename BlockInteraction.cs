@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class BlockInteraction
 {
@@ -14,197 +13,68 @@ public class BlockInteraction
     }
 
     //! Called once per frame when the player is looking at an iron block.
-    public void InteractWithIronBlock()
+    public void InteractWithBlock(string blockName)
     {
         playerController.machineGUIopen = false;
         if (cInput.GetKeyDown("Collect Object"))
         {
-            string objectName = "";
-            if (playerController.objectInSight.name.Equals("IronRamp(Clone)"))
-            {
-                objectName = "Iron Ramp";
-
-            }
-            else
-            {
-                objectName = "Iron Block";
-            }
-
-            interactionController.CollectObject(objectName);
-        }
-    }
-
-    //! Called once per frame when the player is looking at a steel block.
-    public void InteractWithSteelBlock()
-    {
-        playerController.machineGUIopen = false;
-        if (cInput.GetKeyDown("Collect Object"))
-        {
-            string objectName = "";
-            if (playerController.objectInSight.name.Equals("SteelRamp(Clone)"))
-            {
-                objectName = "Steel Ramp";
-            }
-            else
-            {
-                objectName = "Steel Block";
-            }
-
-            interactionController.CollectObject(objectName);
-        }
-    }
-
-    //! Called once per frame when the player is looking at a glass block.
-    public void InteractWithGlass()
-    {
-        playerController.machineGUIopen = false;
-        if (cInput.GetKeyDown("Collect Object"))
-        {
-            interactionController.CollectObject("Glass Block");
-        }
-    }
-
-    //! Called once per frame when the player is looking at a brick block.
-    public void InteractWithBricks()
-    {
-        playerController.machineGUIopen = false;
-        if (cInput.GetKeyDown("Collect Object"))
-        {
-            interactionController.CollectObject("Brick");
-        }
-    }
-
-    //! Called once per frame when the player is looking at an iron block.
-    public void InteractWithModBlock(string blockName)
-    {
-        playerController.machineGUIopen = false;
-        if (cInput.GetKeyDown("Collect Object"))
-        {
-            interactionController.CollectObject(blockName);
+            interactionController.CollectObject(playerController.objectInSight, blockName);
         }
     }
 
     //! Called once per frame when the player is looking at a combined mesh object.
-    public void InteractWithCombinedMesh()
+    public void InteractWithCombinedMesh(Vector3 point)
     {
         playerController.machineGUIopen = false;
         playerController.lookingAtCombinedMesh = true;
-        if (cInput.GetKeyDown("Collect Object") && playerController.paintGunActive == false)
+        if (cInput.GetKey("Collect Object"))
         {
-            GameManager manager = GameObject.Find("GameManager").GetComponent<GameManager>();
-            if (manager.working == false)
+            BlockHolder bh = playerController.objectInSight.GetComponent<BlockHolder>();
+            if (bh == null)
             {
-                manager.meshManager.SeparateBlocks(playerController.transform.position, "all", true);
-                playerController.separatedBlocks = true;
+                bh = playerController.objectInSight.transform.parent.GetComponent<BlockHolder>();
             }
-            else
-            {
-                playerController.requestedChunkLoad = true;
-            }
-            if (playerController.building == false)
-            {
-                playerController.destroying = true;
-                playerController.destroyStartPosition = playerController.transform.position;
-            }
-        }
-        if (playerController.paintGunActive == true && playerController.paintColorSelected == true)
-        {
-            if (Input.GetKeyDown(KeyCode.Mouse0))
-            {
-                playerController.paintGun.GetComponent<AudioSource>().Play();
-                if (playerController.objectInSight.name.Equals("glassHolder(Clone)"))
-                {
-                    interactionController.paintingCoroutine = interactionController.StartCoroutine(PaintMesh(playerController.gameManager.glassHolders, "glassHolder"));
-                }
-                if (playerController.objectInSight.name.Equals("brickHolder(Clone)"))
-                {
-                    interactionController.paintingCoroutine = interactionController.StartCoroutine(PaintMesh(playerController.gameManager.brickHolders, "brickHolder"));
-                }
-                if (playerController.objectInSight.name.Equals("ironHolder(Clone)"))
-                {
-                    interactionController.paintingCoroutine = interactionController.StartCoroutine(PaintMesh(playerController.gameManager.ironHolders, "ironHolder"));
-                }
-                if (playerController.objectInSight.name.Equals("steelHolder(Clone)"))
-                {
-                    interactionController.paintingCoroutine = interactionController.StartCoroutine(PaintMesh(playerController.gameManager.steelHolders, "steelHolder"));
-                }
-            }
-        }
-    }
 
-    private IEnumerator PaintMesh(GameObject[] holders, string name)
-    {
-        playerController.machineGUIopen = false;
-        BlockDictionary blockDictionary = new BlockDictionary(playerController);
-        Color color = new Color(playerController.paintRed, playerController.paintGreen, playerController.paintBlue);
-        foreach (GameObject holder in holders)
-        {
-            holder.GetComponent<Renderer>().material.color = color;
-            FileBasedPrefs.SetBool(playerController.stateManager.worldName + name + holder.GetComponent<MeshPainter>().ID + "painted", true);
-            yield return null;
-        }
-        int interval = 0;
-        if (name == "glassHolder")
-        {
-            Glass[] allGlassBlocks = Object.FindObjectsOfType<Glass>();
-            foreach (Glass block in allGlassBlocks)
+            if (bh != null)
             {
-                block.GetComponent<Renderer>().material.color = color;
-                interval++;
-                if (interval >= 500)
+                if (bh.unloaded == true)
                 {
-                    interval = 0;
-                    yield return null;
+                    bh.Load();
                 }
-            }
-        }
-        if (name == "brickHolder")
-        {
-            Transform[] allBuiltObjects = playerController.gameManager.builtObjects.GetComponentsInChildren<Transform>(true);
-            foreach (Transform block in allBuiltObjects)
-            {
-                if (block.GetComponent<Brick>() != null)
+                else if (bh.blockData != null)
                 {
-                    block.GetComponent<Renderer>().material.color = color;
-                    interval++;
-                    if (interval >= 500)
+                    Block blockToRemove = null;
+                    int indexToRemove = 0;
+                    for (int index = 0; index < bh.blockData.Count; index++)
                     {
-                        interval = 0;
-                        yield return null;
+                        BlockHolder.BlockInfo info = bh.blockData[index];
+                        float distance = Vector3.Distance(info.position, point);
+                        if (distance < 5)
+                        {
+                            Block[] blocks = playerController.objectInSight.GetComponentsInChildren<Block>(true);
+                            foreach (Block block in blocks)
+                            {
+                                if (block != null)
+                                {
+                                    Vector3 pos = block.gameObject.transform.position;
+                                    Vector3 roundPos = new Vector3(Mathf.Round(pos.x), Mathf.Round(pos.y), Mathf.Round(pos.z));
+                                    Vector3 roundInfoPos = new Vector3(Mathf.Round(info.position.x), Mathf.Round(info.position.y), Mathf.Round(info.position.z));
+                                    if (roundPos == roundInfoPos)
+                                    {
+                                        blockToRemove = block;
+                                        indexToRemove = index;
+                                        break;
+                                    }
+                                }
+                            }
+                        }
                     }
-                }
-            }
-        }
-        if (name == "ironHolder")
-        {
-            Transform[] allBuiltObjects = playerController.gameManager.builtObjects.GetComponentsInChildren<Transform>(true);
-            foreach (Transform block in allBuiltObjects)
-            {
-                if (block.GetComponent<IronBlock>() != null)
-                {
-                    block.GetComponent<Renderer>().material.color = color;
-                    interval++;
-                    if (interval >= 500)
+                    if (blockToRemove != null)
                     {
-                        interval = 0;
-                        yield return null;
-                    }
-                }
-            }
-        }
-        if (name == "steelHolder")
-        {
-            Transform[] allBuiltObjects = playerController.gameManager.builtObjects.GetComponentsInChildren<Transform>(true);
-            foreach (Transform block in allBuiltObjects)
-            {
-                if (block.GetComponent<Steel>() != null)
-                {
-                    block.GetComponent<Renderer>().material.color = color;
-                    interval++;
-                    if (interval >= 500)
-                    {
-                        interval = 0;
-                        yield return null;
+                        interactionController.CollectObject(blockToRemove.gameObject, bh.blockType);
+                        bh.blockData.RemoveAt(indexToRemove);
+                        playerController.Invoke("CreateMesh", 0.1f);
+                        bh.gameObject.SetActive(true);
                     }
                 }
             }

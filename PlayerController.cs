@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 using System.IO;
 using UnityEngine.SceneManagement;
 
@@ -9,8 +10,9 @@ public class PlayerController : MonoBehaviour
     private InputManager inputManager;
     public NetworkController networkController;
     private Coroutine saveCoroutine;
+    private Coroutine networkWorldUpdateCoroutine;
     private Vector3 originalPosition;
-
+    private List<Vector3> networkItemLocations;
     public Vector3 destroyStartPosition;
     public Vector3 buildStartPosition;
     public StateManager stateManager;
@@ -33,7 +35,7 @@ public class PlayerController : MonoBehaviour
     public bool machineGUIopen;
     public bool craftingGUIopen;
     public bool marketGUIopen;
-    public bool buildAmountGUIopen;
+    public bool buildSettingsGuiOpen;
     public bool doorGUIopen;
     public bool remoteStorageActive;
     public bool escapeMenuOpen;
@@ -56,16 +58,12 @@ public class PlayerController : MonoBehaviour
     public bool meteorShowerWarningActive;
     public bool destructionMessageActive;
     public bool timeToDeliver;
-    public bool paintGunActive;
-    public bool paintColorSelected;
     public bool videoMenuOpen;
     public bool schematicMenuOpen;
     public bool crosshairEnabled = true;
     public bool stoppingBuildCoRoutine;
     public bool separatedBlocks;
-    public bool destroying;
     public bool requestedChunkLoad;
-    public bool blockLimitMessage;
     public bool laserCannonActive;
     public bool scannerActive;
     public bool firing;
@@ -119,11 +117,8 @@ public class PlayerController : MonoBehaviour
     public float invalidAugerPlacementTimer;
     public float autoAxisMessageTimer;
     public float invalidRailCartPlacementTimer;
-    public float paintRed;
-    public float paintGreen;
-    public float paintBlue;
     public float requestedSaveTimer;
-    public float blockLimitMessageTimer;
+    public float graphicsQuality = 999;
 
     public int playerMoveSpeed;
     public int machinePower;
@@ -132,15 +127,18 @@ public class PlayerController : MonoBehaviour
     public int networkedConduitRange;
     public int networkedMachineSpeed;
     public bool networkedDualPower;
+    public int networkedHubCircuit;
     public int networkedHubRange;
     public bool networkedHubStop;
     public float networkedHubStopTime;
     public int machineHeat;
     public int machineCooling;
     public int buildMultiplier = 1;
+    public int defaultRange = 6;
     public int money;
     public int destructionMessageCount;
     public int storageComputerInventory;
+    public string protectionList;
 
     public AudioClip footStep1;
     public AudioClip footStep2;
@@ -158,28 +156,29 @@ public class PlayerController : MonoBehaviour
     public GameObject tablet;
     public GameObject scanner;
     public GameObject laserCannon;
-    public GameObject paintGun;
-    public GameObject paintGunTank;
-    public GameObject adjustedPaintGunTank;
-    public GameObject adjustedPaintGunTank2;
     public GameObject muzzleFlash;
     public GameObject scannerFlash;
     public GameObject weaponHit;
+    public GameObject playerBody;
+    public GameObject builder;
+    public GameObject headlamp;
+    public GameObject guiObject;
+    public GameObject currentStorageComputer;
+    public GameObject buildObject;
+    public GameObject item;
+    public GameObject networkPlayer;
+
+    public GameObject block;
+    public GameObject modMachine;
     public GameObject darkMatterCollector;
     public GameObject darkMatter;
     public GameObject darkMatterConduit;
-    public GameObject ironBlock;
-    public GameObject ironRamp;
-    public GameObject steel;
-    public GameObject steelRamp;
     public GameObject storageContainer;
     public GameObject universalExtractor;
     public GameObject auger;
     public GameObject quantumHatchway;
     public GameObject door;
     public GameObject universalConduit;
-    public GameObject glass;
-    public GameObject brick;
     public GameObject electricLight;
     public GameObject smelter;
     public GameObject turret;
@@ -199,16 +198,16 @@ public class PlayerController : MonoBehaviour
     public GameObject gearCutter;
     public GameObject alloySmelter;
     public GameObject powerConduit;
-    public GameObject playerBody;
-    public GameObject builder;
-    public GameObject headlamp;
-    public GameObject guiObject;
-    public GameObject currentStorageComputer;
-    public GameObject buildObject;
-    public GameObject modMachine;
-    public GameObject modBlock;
-    public GameObject item;
-    public GameObject networkPlayer;
+    public GameObject protectionBlock;
+
+    public GameObject logicBlock;
+    public GameObject logicDelayer;
+    public GameObject logicInverter;
+    public GameObject logicSplitter;
+    public GameObject itemDetector;
+    public GameObject powerDetector;
+    public GameObject playerDetector;
+    public GameObject relay;
 
     public Material constructionMat;
 
@@ -256,15 +255,28 @@ public class PlayerController : MonoBehaviour
         // Audio source for GUI related sounds.
         guiSound = guiObject.GetComponent<AudioSource>();
 
+        // Graphics quality.
+        if (PlayerPrefsX.GetPersistentBool("changedGraphicsQuality") == true)
+        {
+            QualitySettings.SetQualityLevel(PlayerPrefs.GetInt("graphicsQuality"));
+        }
+        graphicsQuality = QualitySettings.GetQualityLevel();
+
         // Vsync.
         QualitySettings.vSyncCount = PlayerPrefs.GetInt("vSyncCount");
+
+        int range = PlayerPrefs.GetInt("defaultRange");
+        defaultRange = range >= 10 ? range : 10;
 
         // Fog and Scanner color for atmospheric worlds.
         if (SceneManager.GetActiveScene().name.Equals("QE_World_Atmo"))
         {
             scannerFlash.GetComponent<Light>().color = Color.white;
             scannerFlash.GetComponent<Light>().intensity = 1;
+        }
 
+        if (!SceneManager.GetActiveScene().name.Equals("QE_World"))
+        {
             float fogDensity = PlayerPrefs.GetFloat("fogDensity");
             RenderSettings.fogDensity = fogDensity > 0 ? fogDensity : 0.00025f;
             RenderSettings.fog = PlayerPrefsX.GetPersistentBool("fogEnabled");
@@ -273,6 +285,7 @@ public class PlayerController : MonoBehaviour
         inputManager = new InputManager(this);
         blockSelector = new BlockSelector(this);
         networkController = new NetworkController(this);
+        networkItemLocations = new List<Vector3>();
     }
 
     //! Called once per frame by unity engine.
@@ -338,13 +351,23 @@ public class PlayerController : MonoBehaviour
 
                 if (checkedForCreativeMode == false && stateManager.worldLoaded == true)
                 {
-                    string worldName = stateManager.worldName.ToUpper();
-                    if (worldName.Contains("CREATIVE"))
+                    creativeMode = FileBasedPrefs.GetBool(stateManager.worldName + "creativeMode");
+                    if (creativeMode == true)
                     {
-                        creativeMode = true;
                         Debug.Log("World [" + stateManager.worldName + "] running in creative mode.");
                     }
+                    else
+                    {
+                        Debug.Log("World [" + stateManager.worldName + "] running in standard mode.");
+                    }
                     checkedForCreativeMode = true;
+                }
+
+                // Fog for procedural world.
+                if (SceneManager.GetActiveScene().name.Equals("QE_Procedural"))
+                {
+                    RenderSettings.fogDensity = 0.008f;
+                    RenderSettings.fog = true;
                 }
 
                 // Destruction messages.
@@ -406,25 +429,15 @@ public class PlayerController : MonoBehaviour
                     timeToDeliverWarningRecieved = false;
                 }
 
-                if (destroying == true)
-                {
-                    ModifyCombinedMeshes();
-                }
-
                 if (requestedBuildingStop == true)
                 {
                     HandleBuildingStopRequest();
                 }
 
                 // The player controller is notified that the game manager finished combining meshes.
-                if (stoppingBuildCoRoutine == true && gameManager.working == false)
+                if (stoppingBuildCoRoutine == true && gameManager.combiningBlocks == false)
                 {
                     stoppingBuildCoRoutine = false;
-                }
-
-                if (requestedChunkLoad == true)
-                {
-                    HandleChunkLoadRequest();
                 }
 
                 // Locking or unlocking the mouse cursor for GUI interaction.
@@ -459,7 +472,12 @@ public class PlayerController : MonoBehaviour
 
                 if (PlayerPrefsX.GetPersistentBool("multiplayer") == true)
                 {
-                    networkController.NetWorkUpdate();
+                    networkController.NetworkFrame();
+
+                    if (networkController.networkWorldUpdateCoroutineBusy == false)
+                    {
+                        networkWorldUpdateCoroutine = StartCoroutine(networkController.NetWorkWorldUpdate());
+                    }
                 }
             }
         }
@@ -518,7 +536,7 @@ public class PlayerController : MonoBehaviour
     private bool ReadyToLoadModBlocks()
     {
         return addedModBlocks == false
-        && modBlock != null
+        && block != null
         && modMachine != null
         && blockSelector != null
         && BlockDictionaryInitiazlied()
@@ -538,9 +556,9 @@ public class PlayerController : MonoBehaviour
     //! Returns true when all mod textures have finished loading.
     private bool LoadedModTextures()
     {
-        if (GetComponent<TextureDictionary>() != null)
+        if (gameManager.GetComponent<TextureDictionary>() != null)
         {
-            return GetComponent<TextureDictionary>().addedModTextures;
+            return gameManager.GetComponent<TextureDictionary>().addedModTextures;
         }
         return false;
     }
@@ -550,26 +568,41 @@ public class PlayerController : MonoBehaviour
     {
         playerInventory.SaveData();
         GameObject.Find("LanderCargo").GetComponent<InventoryManager>().SaveData();
-        PlayerPrefsX.SetVector3(stateManager.worldName + "playerPosition", transform.position);
-        PlayerPrefsX.SetQuaternion(stateManager.worldName + "playerRotation", transform.rotation);
-        FileBasedPrefs.SetInt(stateManager.worldName + "money", money);
         FileBasedPrefs.SetBool(stateManager.worldName + "oldWorld", true);
+
+        if (PlayerPrefsX.GetPersistentBool("multiplayer") == true)
+        {
+            PlayerPrefsX.SetPersistentVector3(stateManager.worldName + "playerPosition", transform.position);
+            PlayerPrefs.SetInt(stateManager.worldName + "money", money);
+        }
+        else
+        {
+            PlayerPrefsX.SetVector3(stateManager.worldName + "playerPosition", transform.position);
+            FileBasedPrefs.SetInt(stateManager.worldName + "money", money);
+        }
     }
 
     //! Applies global settings.
     public void ApplySettings()
     {
+        if ((int)graphicsQuality != 999)
+        {
+            QualitySettings.SetQualityLevel((int)graphicsQuality, true);
+            PlayerPrefsX.SetPersistentBool("changedGraphicsQuality", true);
+        }
+        PlayerPrefs.SetInt("graphicsQuality", (int)graphicsQuality);
         PlayerPrefsX.SetPersistentBool("mouseInverted", GetComponent<MSCameraController>().CameraSettings.firstPerson.invertYInput);
         PlayerPrefs.SetFloat("xSensitivity", GetComponent<MSCameraController>().CameraSettings.firstPerson.sensibilityX);
         PlayerPrefs.SetFloat("ySensitivity", GetComponent<MSCameraController>().CameraSettings.firstPerson.sensibilityY);
         PlayerPrefs.SetFloat("FOV", mCam.fieldOfView);
         PlayerPrefs.SetFloat("drawDistance", mCam.farClipPlane);
         PlayerPrefs.SetFloat("volume", GetComponent<MSCameraController>().cameras[0].volume);
-        PlayerPrefsX.SetPersistentBool("blockPhysics", gameManager.blockPhysics);
         PlayerPrefsX.SetPersistentBool("hazardsEnabled", gameManager.hazardsEnabled);
         PlayerPrefsX.SetPersistentBool("fogEnabled", RenderSettings.fog);
         PlayerPrefs.SetFloat("fogDensity", RenderSettings.fogDensity);
         PlayerPrefs.SetInt("chunkSize", gameManager.chunkSize);
+        PlayerPrefs.SetFloat("simulationSpeed", gameManager.simulationSpeed);
+        PlayerPrefs.SetInt("defaultRange", defaultRange);
         PlayerPrefs.SetInt("vSyncCount", QualitySettings.vSyncCount);
         PlayerPrefs.Save();
     }
@@ -607,8 +640,7 @@ public class PlayerController : MonoBehaviour
         || machineGUIopen == true
         || tabletOpen == true
         || marketGUIopen == true
-        || (paintGunActive == true && paintColorSelected == false)
-        || buildAmountGUIopen == true
+        || buildSettingsGuiOpen == true
         || doorGUIopen == true;
     }
 
@@ -633,9 +665,16 @@ public class PlayerController : MonoBehaviour
     //! Moves the player to their previous location when a game is loaded.
     private void MovePlayerToSavedLocation()
     {
-        transform.position = PlayerPrefsX.GetVector3(stateManager.worldName + "playerPosition");
-        transform.rotation = PlayerPrefsX.GetQuaternion(stateManager.worldName + "playerRotation");
-        money = FileBasedPrefs.GetInt(stateManager.worldName + "money");
+        if (PlayerPrefsX.GetPersistentBool("multiplayer") == true)
+        {
+            transform.position = PlayerPrefsX.GetPersistentVector3(stateManager.worldName + "playerPosition");
+            money = PlayerPrefs.GetInt(stateManager.worldName + "money");
+        }
+        else
+        {
+            transform.position = PlayerPrefsX.GetVector3(stateManager.worldName + "playerPosition");
+            money = FileBasedPrefs.GetInt(stateManager.worldName + "money");
+        }
         movedPlayer = true;
     }
 
@@ -682,55 +721,17 @@ public class PlayerController : MonoBehaviour
     //! Stops the players building mode and sends a request to the game manager to recombine any edited combined meshes.
     private void HandleBuildingStopRequest()
     {
-        if (gameManager.working == false)
+        if (gameManager.combiningBlocks == false)
         {
             stoppingBuildCoRoutine = true;
             gameManager.meshManager.CombineBlocks();
             separatedBlocks = false;
             building = false;
-            destroying = false;
             requestedBuildingStop = false;
         }
         else
         {
             requestedBuildingStop = true;
-        }
-    }
-
-    //! Handles the sending of chunk load requests for modifying combined meshes.
-    private void ModifyCombinedMeshes()
-    {
-        float distance = Vector3.Distance(transform.position, destroyStartPosition);
-        if (distance > gameManager.chunkSize * 0.75f)
-        {
-            if (gameManager.working == false)
-            {
-                gameManager.meshManager.SeparateBlocks(transform.position, "all", true);
-                separatedBlocks = true;
-            }
-            else
-            {
-                requestedChunkLoad = true;
-            }
-            destroyStartPosition = transform.position;
-        }
-    }
-
-    //! Handles requests to load chunks of blocks from combined meshes near the player.
-    private void HandleChunkLoadRequest()
-    {
-        if (gameManager.working == false)
-        {
-            if (destroying == false)
-            {
-                gameManager.meshManager.SeparateBlocks(transform.position, "all", true);
-            }
-            else
-            {
-                gameManager.meshManager.SeparateBlocks(transform.position, "all", false);
-            }
-            separatedBlocks = true;
-            requestedChunkLoad = false;
         }
     }
 
@@ -746,29 +747,38 @@ public class PlayerController : MonoBehaviour
     //! Enforces world size limitations.
     private void EnforceWorldLimits()
     {
-        if (gameObject.transform.position.x > 4500)
+        int limit = 4500;
+        int heightLimit = 500;
+
+        if (SceneManager.GetActiveScene().name == "QE_Procedural")
         {
-            gameObject.transform.position = new Vector3(4500, gameObject.transform.position.y, gameObject.transform.position.z);
+            limit = 500;
+            heightLimit = 100;
         }
-        if (gameObject.transform.position.z > 4500)
+
+        if (gameObject.transform.position.x > limit)
         {
-            gameObject.transform.position = new Vector3(gameObject.transform.position.x, gameObject.transform.position.y, 4500);
+            gameObject.transform.position = new Vector3(limit, gameObject.transform.position.y, gameObject.transform.position.z);
         }
-        if (gameObject.transform.position.x < -4500)
+        if (gameObject.transform.position.z > limit)
         {
-            gameObject.transform.position = new Vector3(-4500, gameObject.transform.position.y, gameObject.transform.position.z);
+            gameObject.transform.position = new Vector3(gameObject.transform.position.x, gameObject.transform.position.y, limit);
         }
-        if (gameObject.transform.position.z < -4500)
+        if (gameObject.transform.position.x < -limit)
         {
-            gameObject.transform.position = new Vector3(gameObject.transform.position.x, gameObject.transform.position.y, -4500);
+            gameObject.transform.position = new Vector3(-limit, gameObject.transform.position.y, gameObject.transform.position.z);
         }
-        if (gameObject.transform.position.y > 500)
+        if (gameObject.transform.position.z < -limit)
         {
-            gameObject.transform.position = new Vector3(gameObject.transform.position.x, 500, gameObject.transform.position.z);
+            gameObject.transform.position = new Vector3(gameObject.transform.position.x, gameObject.transform.position.y, -limit);
         }
-        if (gameObject.transform.position.y < -100)
+        if (gameObject.transform.position.y > heightLimit)
         {
-            gameObject.transform.position = new Vector3(gameObject.transform.position.x, 500, gameObject.transform.position.z);
+            gameObject.transform.position = new Vector3(gameObject.transform.position.x, heightLimit, gameObject.transform.position.z);
+        }
+        if (gameObject.transform.position.y < -150)
+        {
+            gameObject.transform.position = new Vector3(gameObject.transform.position.x, heightLimit, gameObject.transform.position.z);
         }
     }
 
@@ -778,7 +788,7 @@ public class PlayerController : MonoBehaviour
         requestedSaveTimer += 1 * Time.deltaTime;
         if (requestedSaveTimer >= 5)
         {
-            if (gameManager.working == false)
+            if (gameManager.combiningBlocks == false)
             {
                 SavePlayerData();
                 GameObject.Find("GameManager").GetComponent<GameManager>().RequestSaveOperation();
@@ -817,8 +827,30 @@ public class PlayerController : MonoBehaviour
     {
         Vector3 dropPos = mCam.transform.position + mCam.transform.forward * 10;
         GameObject droppedItem = Instantiate(item, dropPos, mCam.transform.rotation);
+
+        float x = Mathf.Round(dropPos.x);
+        float y = Mathf.Round(dropPos.y);
+        float z = Mathf.Round(dropPos.z);
+        Vector3 roundedPos = new Vector3(x, y, z);
+
+        if (PlayerPrefsX.GetPersistentBool("multiplayer") == true)
+        {
+            while (networkItemLocations.Contains(roundedPos))
+            {
+                roundedPos.y++;
+            }
+            networkItemLocations.Add(roundedPos);
+        }
+
+        droppedItem.GetComponent<Item>().startPosition = roundedPos;
         droppedItem.GetComponent<Item>().type = slot.typeInSlot;
         droppedItem.GetComponent<Item>().amount = slot.amountInSlot;
+
+        if (PlayerPrefsX.GetPersistentBool("multiplayer") == true)
+        {
+            networkController.networkSend.SendItemData(0, slot.typeInSlot, slot.amountInSlot, roundedPos);
+        }
+
         slot.typeInSlot = "nothing";
         slot.amountInSlot = 0;
         PlayCraftingSound();
@@ -832,22 +864,22 @@ public class PlayerController : MonoBehaviour
             Transform[] transforms = collision.gameObject.GetComponentsInChildren<Transform>(true);
             foreach (Transform t in transforms)
             {
-                if (t.GetComponent<ModBlock>() != null)
+                if (t.GetComponent<Block>() != null)
                 {
-                    string blockName = t.GetComponent<ModBlock>().blockName.ToUpper();
+                    string blockName = t.GetComponent<Block>().blockName.ToUpper();
                     if (blockName.Contains("STAIR"))
                     {
-                        GetComponent<Rigidbody>().AddForce(Vector3.up * 10000);
+                        GetComponent<Rigidbody>().AddForce(Vector3.up * 1000);
                     }
                 }
             }
         }
-        else if (collision.gameObject.GetComponent<ModBlock>() != null)
+        else if (collision.gameObject.GetComponent<Block>() != null)
         {
-            string blockName = collision.gameObject.GetComponent<ModBlock>().blockName.ToUpper();
+            string blockName = collision.gameObject.GetComponent<Block>().blockName.ToUpper();
             if (blockName.Contains("STAIR"))
             {
-                GetComponent<Rigidbody>().AddForce(Vector3.up * 10000);
+                GetComponent<Rigidbody>().AddForce(Vector3.up * 1000);
             }
         }
     }
@@ -862,7 +894,23 @@ public class PlayerController : MonoBehaviour
             if (playerInventory.itemAdded)
             {
                 Destroy(collision.gameObject);
+                if (PlayerPrefsX.GetPersistentBool("multiplayer") == true)
+                {
+                    networkController.networkSend.SendItemData(1, colItem.type, colItem.amount, colItem.startPosition);
+                    networkController.networkReceive.itemDatabaseDelay = 0;
+                }
                 PlayCraftingSound();
+            }
+        }
+    }
+
+    public void CreateMesh()
+    {
+        if (objectInSight != null)
+        {
+            if (objectInSight.GetComponent<BlockHolder>() != null)
+            {
+                gameManager.meshManager.CreateCombinedMesh(objectInSight);
             }
         }
     }
@@ -874,27 +922,26 @@ public class PlayerController : MonoBehaviour
         while (f < 6000)
         {
             f++;
-            if (GameObject.Find("GameManager").GetComponent<GameManager>().blocksCombined == false)
+            if (GameObject.Find("GameManager").GetComponent<GameManager>().dataSaveRequested == false)
             {
-                if (GameObject.Find("GameManager").GetComponent<GameManager>().dataSaveRequested == false)
+                if (GameObject.Find("GameManager").GetComponent<StateManager>().saving == false)
                 {
-                    if (GameObject.Find("GameManager").GetComponent<StateManager>().saving == false)
+                    Debug.Log("Game saved to " + FileBasedPrefs.GetSaveFilePath());
+                    Debug.Log("Creating backup...");
+                    string worldName = GameObject.Find("GameManager").GetComponent<StateManager>().worldName;
+                    string destinationPath = Path.Combine(Application.persistentDataPath, "SaveData/" + worldName + "/" + worldName + ".bak");
+                    File.Copy(FileBasedPrefs.GetSaveFilePath(), destinationPath, true);
+                    Debug.Log("Backup saved to " + destinationPath);
+                    if (GameObject.Find("Player").GetComponent<PlayerController>().exiting == true)
                     {
-                        Debug.Log("Game saved to " + FileBasedPrefs.GetSaveFilePath());
-                        Debug.Log("Creating backup...");
-                        string fileName = GameObject.Find("GameManager").GetComponent<StateManager>().worldName;
-                        string destinationPath = Path.Combine(Application.persistentDataPath, "SaveData/" + fileName + ".bak");
-                        File.Copy(FileBasedPrefs.GetSaveFilePath(), destinationPath, true);
-                        Debug.Log("Backup saved to " + destinationPath);
-                        if (GameObject.Find("Player").GetComponent<PlayerController>().exiting == true)
-                        {
-                            Debug.Log("Loading main menu...");
-                            SceneManager.LoadScene(0);
-                        }
-                        else
-                        {
-                            break;
-                        }
+                        Debug.Log("Loading main menu...");
+                        FileBasedPrefs.initialized = false;
+                        FileBasedPrefs._latestData = null;
+                        SceneManager.LoadScene(0);
+                    }
+                    else
+                    {
+                        break;
                     }
                 }
             }

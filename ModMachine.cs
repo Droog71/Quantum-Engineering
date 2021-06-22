@@ -8,7 +8,6 @@ public class ModMachine : BasicMachine
 {
     private Material material;
     private PlayerController playerController;
-    private GameManager gameManager;
     private Coroutine modSoundCoroutine;
     public string machineName;
     public bool init;
@@ -19,14 +18,13 @@ public class ModMachine : BasicMachine
         base.Start();
         material = new Material(Shader.Find("Standard"));
         playerController = GameObject.Find("Player").GetComponent<PlayerController>();
-        gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
     }
 
-    //! Called once per frame by unity engine.
-    public new void Update()
+    //! Called by MachineManager update coroutine.
+    public override void UpdateMachine()
     {
-        base.Update();
-        if (!stateManager.Busy() && init == false)
+        base.UpdateMachine();
+        if (stateManager.initMachines == true && init == false)
         {
             BlockDictionary blockDictionary = playerController.GetComponent<BuildController>().blockDictionary;
             if (blockDictionary != null)

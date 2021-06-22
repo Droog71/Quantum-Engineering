@@ -21,7 +21,7 @@ public class cInputInit : MonoBehaviour
         cInput.SetKey("Build Mode", "B", Keys.B);
         cInput.SetKey("Next Item", "Mouse Wheel Up", Keys.X);
         cInput.SetKey("Previous Item", "Mouse Wheel Down", Keys.Z);
-        cInput.SetKey("Build Amount", "Equals", Keys.EqualSign);
+        cInput.SetKey("Build Settings", "Equals", Keys.EqualSign);
         cInput.SetKey("Build Amount +", "RightBracket", Keys.RightBracket);
         cInput.SetKey("Build Amount  -", "LeftBracket", Keys.LeftBracket);
         cInput.SetKey("Place Object", "Mouse1", Keys.Mouse1);
@@ -37,8 +37,7 @@ public class cInputInit : MonoBehaviour
         cInput.SetKey("Scanner", "F1", Keys.F1);
         cInput.SetKey("Laser Cannon", "F2", Keys.F2);
         cInput.SetKey("Tablet", "F3", Keys.F3);
-        cInput.SetKey("Paint Gun", "P", Keys.P);
-        cInput.SetKey("Paint Color", "O", Keys.O);
+        cInput.SetKey("Hotbar", "F9", Keys.F9);
         cInput.SetKey("Crosshair", "T", Keys.T);
     }
 }

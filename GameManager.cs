@@ -1,6 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Collections;
 using UnityEngine;
+using System.Diagnostics;
+using System;
+using System.Net;
 
 public class GameManager : MonoBehaviour
 {
@@ -9,36 +12,25 @@ public class GameManager : MonoBehaviour
     public CombinedMeshManager meshManager;
     public GameObject pirateObject;
     public GameObject meteorObject;
-    public GameObject[] ironHolders;
-    public GameObject[] glassHolders;
-    public GameObject[] steelHolders;
-    public GameObject[] brickHolders;
-    public List<string> modBlockNames;
-    public List<GameObject[]> modBlockHolders;
-    public GameObject ironHolder;
-    public GameObject glassHolder;
-    public GameObject steelHolder;
-    public GameObject brickHolder;
-    public GameObject modBlockHolder;
+    public GameObject machineExplosion;
+    public List<string> blockNames;
+    public List<GameObject[]> blockHolders;
+    public GameObject blockHolder;
     public GameObject lander;
     public GameObject rocketObject;
     public GameObject builtObjects;
+    public GameObject meshObject;
     public Material glassMaterial;
+    public Mesh rampMesh;
     public int chunkSize;
-    public bool blockPhysics;
+    public float simulationSpeed;
     public bool hazardsEnabled = true;
     public float meteorTimer;
     public float pirateTimer;
     public bool dataSaveRequested;
-    public bool blocksCombined;
-    public bool working;
-    public bool replacingMeshFilters;
+    public bool combiningBlocks;
     public bool runningUndo;
-    private float mfDelay;
-    public bool clearBrickDummies;
-    public bool clearGlassDummies;
-    public bool clearIronDummies;
-    public bool clearSteelDummies;
+    private float userSimSpeed;
     public float pirateAttackTimer;
     public float meteorShowerTimer;
     public float pirateFrequency;
@@ -46,29 +38,36 @@ public class GameManager : MonoBehaviour
     public Vector3 meteorShowerLocation;
     public bool loadedMeteorTimer;
     public bool loadedPirateTimer;
-    private bool loadedBlockPhysics;
     private bool loadedHazardsEnabled;
+    private bool memoryCoroutineBusy;
+    private bool meshCountCoroutineBusy;
+    private bool resetSimSpeed;
+    private bool readyToSave;
     public Rocket rocketScript;
     public Coroutine separateCoroutine;
     public Coroutine meshCombineCoroutine;
     public Coroutine blockCombineCoroutine;
     public Coroutine hazardRemovalCoroutine;
+    private Coroutine meshCountCoroutine;
+    private Coroutine memoryCoroutine;
     private Coroutine undoCoroutine;
     public List<Vector3> meteorShowerLocationList;
 
-    public class Block
+
+    //! Stores information about blocks placed for UndoBuiltObjects function.
+    public class UndoBlock
     {
         public string blockType;
         public GameObject blockObject;
 
-        public Block(string blockType, GameObject blockObject)
+        public UndoBlock(string blockType, GameObject blockObject)
         {
             this.blockType = blockType;
             this.blockObject = blockObject;
         }
     }
 
-    public List<Block> undoBlocks;
+    public List<UndoBlock> undoBlocks;
 
     //! Called by unity engine on start up to initialize variables.
     public void Start()
@@ -89,57 +88,34 @@ public class GameManager : MonoBehaviour
         meshManager = new CombinedMeshManager(this);
 
         // Create an object list to hold the player's most recently built objects for the 'undo' function.
-        undoBlocks = new List<Block>();
+        undoBlocks = new List<UndoBlock>();
 
-        // Create mod block name list.
-        modBlockNames = new List<string>();
-        modBlockHolders = new List<GameObject[]>();
+        // Create block lists.
+        blockNames = new List<string>();
+        blockHolders = new List<GameObject[]>();
 
         // Load chunk size setting.
         int cs = PlayerPrefs.GetInt("chunkSize");
         chunkSize = cs > 0 ? cs : 40;
 
-        // Create initial iron block holder for mesh manager.
-        GameObject ironInit = Instantiate(ironHolder, transform.position, transform.rotation);
-        ironInit.transform.parent = builtObjects.transform;
-        ironInit.GetComponent<MeshPainter>().ID = 0;
-        ironInit.SetActive(false);
-        ironHolders = new GameObject[] { ironInit };
-
-        // Create initial iron block holder for mesh manager.
-        GameObject glassInit = Instantiate(glassHolder, transform.position, transform.rotation);
-        glassInit.transform.parent = builtObjects.transform;
-        glassInit.GetComponent<MeshPainter>().ID = 0;
-        glassInit.SetActive(false);
-        glassHolders = new GameObject[] { glassInit };
-
-        // Create initial iron block holder for mesh manager.
-        GameObject steelInit = Instantiate(steelHolder, transform.position, transform.rotation);
-        steelInit.transform.parent = builtObjects.transform;
-        steelInit.GetComponent<MeshPainter>().ID = 0;
-        steelInit.SetActive(false);
-        steelHolders = new GameObject[] { steelInit };
-
-        // Create initial iron block holder for mesh manager.
-        GameObject brickInit = Instantiate(brickHolder, transform.position, transform.rotation);
-        brickInit.transform.parent = builtObjects.transform;
-        brickInit.GetComponent<MeshPainter>().ID = 0;
-        brickInit.SetActive(false);
-        brickHolders = new GameObject[] { brickInit };
+        // Load chunk size setting.
+        float simSpeed = PlayerPrefs.GetFloat("simulationSpeed");
+        simulationSpeed = simSpeed > 0 ? simSpeed : 0.02f;
     }
 
-    public void InitModBlocks()
+    //! Creates initial block holders for mod blocks.
+    public void InitBlocks()
     {
-        // Create initial block holders for mod blocks.
         int index = 0;
-        int count = modBlockNames.Count;
-        foreach (string blockName in modBlockNames)
+        int count = blockNames.Count;
+        foreach (string blockName in blockNames)
         {
-            GameObject modBlockInit = Instantiate(modBlockHolder, transform.position, transform.rotation);
-            meshManager.SetMaterial(modBlockInit, blockName);
-            modBlockInit.transform.parent = builtObjects.transform;
-            modBlockInit.SetActive(false);
-            modBlockHolders.Add(new GameObject[] { modBlockInit });
+            GameObject blockInit = Instantiate(blockHolder, transform.position, transform.rotation);
+            meshManager.SetMaterial(blockInit, blockName);
+            blockInit.GetComponent<BlockHolder>().blockType = blockName;
+            blockInit.transform.parent = builtObjects.transform;
+            blockInit.SetActive(false);
+            blockHolders.Add(new GameObject[] { blockInit });
             index++;
         }
     }
@@ -165,18 +141,6 @@ public class GameManager : MonoBehaviour
             }
             else
             {
-                if (loadedBlockPhysics == false)
-                {
-                    if (PlayerPrefsX.GetPersistentBool("multiplayer") == false)
-                    {
-                        blockPhysics = PlayerPrefsX.GetPersistentBool("blockPhysics");
-                    }
-                    else
-                    {
-                        blockPhysics = false;
-                    }
-                    loadedBlockPhysics = true;
-                }
                 if (loadedHazardsEnabled == false)
                 {
                     hazardsEnabled = PlayerPrefsX.GetPersistentBool("hazardsEnabled");
@@ -194,36 +158,98 @@ public class GameManager : MonoBehaviour
                 }
             }
 
-            // A save game request is pending.
-            if (dataSaveRequested == true)
-            {
-                if (GetComponent<StateManager>().saving == false && GetComponent<StateManager>().assigningIDs == false)
-                {
-                    Debug.Log("Saving world...");
-                    GetComponent<StateManager>().SaveData();
-                    dataSaveRequested = false;
-                }
-            }
-
-            // Used to ensure components are removed before combining meshes.
-            if (replacingMeshFilters == true)
-            {
-                mfDelay += 1 * Time.deltaTime;
-                if (mfDelay > 1)
-                {
-                    meshManager.CombineMeshes();
-                    mfDelay = 0;
-                    replacingMeshFilters = false;
-                }
-            }
-
             if (GetComponent<StateManager>().worldLoaded == true)
             {
                 hazardManager.UpdateHazards();
             }
+
+            if (memoryCoroutineBusy == false)
+            {
+                memoryCoroutine = StartCoroutine(ManageMemory());
+            }
+
+            if (meshCountCoroutineBusy == false)
+            {
+                meshCountCoroutine = StartCoroutine(CheckMeshCount());
+            }
+
+            // A save game request is pending.
+            if (dataSaveRequested == true)
+            {
+                if (combiningBlocks == true)
+                {
+                    return;
+                }
+
+                if (readyToSave == false)
+                {
+                    meshManager.CombineBlocks();
+                    readyToSave = true;
+                }
+                else
+                {
+                    if (GetComponent<StateManager>().saving == false && GetComponent<StateManager>().AddressManagerBusy() == false)
+                    {
+                        UnityEngine.Debug.Log("Saving world...");
+                        GetComponent<StateManager>().SaveData();
+                        dataSaveRequested = false;
+                    }
+                    else if (GetComponent<StateManager>().AddressManagerBusy() == true)
+                    {
+                        if (GetComponent<GameManager>().simulationSpeed < 0.1f)
+                        {
+                            userSimSpeed = GetComponent<GameManager>().simulationSpeed;
+                            resetSimSpeed = true;
+                        }
+                        GetComponent<GameManager>().simulationSpeed = 0.1f;
+                    }
+                    readyToSave = false;
+                }
+            }
+            else if (resetSimSpeed == true)
+            {
+                GetComponent<GameManager>().simulationSpeed = userSimSpeed;
+                resetSimSpeed = false;
+            }
         }
     }
 
+    public IEnumerator CheckMeshCount()
+    {
+        meshCountCoroutineBusy = true;
+        Block[] blocks = FindObjectsOfType<Block>();
+        if (blocks.Length >= 1000 && combiningBlocks == false)
+        {
+            meshManager.CombineBlocks();
+        }
+        yield return new WaitForSeconds(10);
+        meshCountCoroutineBusy = false;
+    }
+
+    public void CreateMesh()
+    {
+        meshManager.CreateCombinedMesh(meshObject);
+    }
+
+    //! Unloads unused assets when the game is using too much memory.
+    public IEnumerator ManageMemory()
+    {
+        memoryCoroutineBusy = true;
+        float availableMemory = SystemInfo.systemMemorySize;
+        Process proc = Process.GetCurrentProcess();
+        proc.Refresh();
+        float usedMemory = Math.Abs((int)(proc.WorkingSet64 / (1024*1024)));
+        proc.Dispose();
+        float percentUsedMemory = usedMemory / availableMemory;
+        if (percentUsedMemory >= 0.5f)
+        {
+            Resources.UnloadUnusedAssets();
+        }
+        yield return new WaitForSeconds(60);
+        memoryCoroutineBusy = false;
+    }
+
+    //! Starts the undo coroutine.
     public void UndoBuiltObjects()
     {
         if (runningUndo == false)
@@ -236,31 +262,52 @@ public class GameManager : MonoBehaviour
     private IEnumerator RemoveRecent()
     {
         runningUndo = true;
-        foreach (Block block in undoBlocks)
+        List<UndoBlock> currentUndoBlocks = undoBlocks;
+        foreach (UndoBlock block in currentUndoBlocks)
         {
-            if (block.blockObject != null)
-            { 
-                if (block.blockObject.activeInHierarchy)
-                {
-                    Destroy(block.blockObject);
-                    player.playerInventory.AddItem(block.blockType, 1);
-                    player.PlayCraftingSound();
+            if (block != null)
+            {
+                if (block.blockObject != null)
+                { 
+                    if (block.blockObject.activeInHierarchy)
+                    {
+                        Destroy(block.blockObject);
+                        player.playerInventory.AddItem(block.blockType, 1);
+                        if (PlayerPrefsX.GetPersistentBool("multiplayer") == true)
+                        {
+                            Vector3 pos = block.blockObject.transform.position;
+                            Quaternion rot = block.blockObject.transform.rotation;
+                            UpdateNetwork(1, block.blockType, pos, rot);
+                        }
+                        player.PlayCraftingSound();
+                    }
                 }
+                yield return null;
             }
-            yield return null;
         }
         undoBlocks.Clear();
         runningUndo = false;
     }
 
+    //! Sends instantiated block info to the server in multiplayer games.
+    private void UpdateNetwork(int destroy, string type, Vector3 pos, Quaternion rot)
+    {
+        using(WebClient client = new WebClient())
+        {
+            Uri uri = new Uri(PlayerPrefs.GetString("serverURL") + "/blocks");
+            string position = Mathf.Round(pos.x) + "," + Mathf.Round(pos.y) + "," + Mathf.Round(pos.z);
+            string rotation = Mathf.Round(rot.x) + "," + Mathf.Round(rot.y) + "," + Mathf.Round(rot.z) + "," + Mathf.Round(rot.w);
+            client.UploadStringAsync(uri, "POST", "@" + destroy + ":" + type + ":" + position + ":" + rotation);
+        }
+    }
+
     //! Saves the game on exit.
     public void RequestSaveOperation()
     {
-        if (working == false && GetComponent<StateManager>().saving == false)
+        if (combiningBlocks == false && GetComponent<StateManager>().saving == false)
         {
-            Debug.Log("Requesting save operation...");
+            UnityEngine.Debug.Log("Requesting save operation...");
             dataSaveRequested = true;
-            blocksCombined = false;
         }
     }
 }

@@ -31,9 +31,9 @@ public class Smelter : BasicMachine
         }
     }
 
-    //! Called once per frame by unity engine.
-    public new void Update()
+    //! Called by MachineManager update coroutine.
+    public override void UpdateMachine()
     {
-        base.Update();
+        base.UpdateMachine();
     }
 }

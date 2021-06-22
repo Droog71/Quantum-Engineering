@@ -8,7 +8,6 @@ public class InteractionController : MonoBehaviour
     private MachineInteraction machineInteraction;
     private StorageInteraction storageInteraction;
     public BlockInteraction blockInteraction;
-    public Coroutine paintingCoroutine;
 
     //! Called by unity engine on start up to initialize variables.
     public void Start()
@@ -31,7 +30,7 @@ public class InteractionController : MonoBehaviour
             {
                 float distance = Vector3.Distance(camPos.position, hit.point);
                 GameObject obj = hit.collider.gameObject;
-                if (GuiFree() && !IsNonInteractive(obj))
+                if (obj != playerController.gameObject && GuiFree() && !IsNonInteractive(obj))
                 {
                     playerController.objectInSight = obj;
                     if (IsStorageContainer(obj) && distance <= 40)
@@ -41,6 +40,10 @@ public class InteractionController : MonoBehaviour
                     else if (obj.GetComponent<StorageComputer>() != null && distance <= 40)
                     {
                         storageInteraction.InteractWithStorageComputer();
+                    }
+                    else if (obj.GetComponent<LogicBlock>() != null && distance <= 40)
+                    {
+                        machineInteraction.InteractWithLogicBlock();
                     }
                     else if (obj.GetComponent<PowerSource>() != null && distance <= 40)
                     {
@@ -130,36 +133,24 @@ public class InteractionController : MonoBehaviour
                     {
                         machineInteraction.InteractWithModMachine();
                     }
-                    else if (obj.GetComponent<IronBlock>() != null)
+                    else if (obj.GetComponent<ProtectionBlock>() != null)
                     {
-                        blockInteraction.InteractWithIronBlock();
+                        machineInteraction.InteractWithProtectionBlock();
                     }
-                    else if (obj.GetComponent<Steel>() != null)
+                    else if (obj.GetComponent<Block>() != null)
                     {
-                        blockInteraction.InteractWithSteelBlock();
+                        blockInteraction.InteractWithBlock(obj.GetComponent<Block>().blockName);
                     }
-                    else if (obj.GetComponent<Glass>() != null)
+                    else if (obj.tag.Equals("CombinedMesh") || obj.transform.parent.tag.Equals("CombinedMesh"))
                     {
-                        blockInteraction.InteractWithGlass();
-                    }
-                    else if (obj.GetComponent<Brick>() != null)
-                    {
-                        blockInteraction.InteractWithBricks();
-                    }
-                    else if (obj.GetComponent<ModBlock>() != null)
-                    {
-                        blockInteraction.InteractWithModBlock(obj.GetComponent<ModBlock>().blockName);
-                    }
-                    else if (obj.tag.Equals("CombinedMesh"))
-                    {
-                        blockInteraction.InteractWithCombinedMesh();
+                        blockInteraction.InteractWithCombinedMesh(hit.point);
                     }
                     else
                     {
                         EndInteraction();
                     }
                 }
-                else if (GuiFree() && distance <= 40 && IsNonInteractive(obj))
+                else if (obj != playerController.gameObject && GuiFree() && distance <= 40 && IsNonInteractive(obj))
                 {
                     playerController.objectInSight = obj;
                 }
@@ -203,33 +194,84 @@ public class InteractionController : MonoBehaviour
     }
 
     //! Destroys an object in the world and adds it's associated inventory item to the player's inventory.
-    public void CollectObject(string type)
+    public void CollectObject(GameObject obj, string type)
     {
-        bool spaceAvailable = false;
-        foreach (InventorySlot slot in playerController.playerInventory.inventory)
+        bool canRemove = true;
+
+        if (PlayerPrefsX.GetPersistentBool("multiplayer") == true)
         {
-            if (slot.typeInSlot.Equals("nothing") || slot.typeInSlot.Equals(type) && slot.amountInSlot < 1000)
-            {
-                spaceAvailable = true;
-            }
+            canRemove = CanInteract();
         }
-        if (spaceAvailable == true)
+
+        if (canRemove == true)
         {
-            playerController.playerInventory.AddItem(type, 1);
-            Destroy(playerController.objectInSight);
-            playerController.PlayCraftingSound();
-            if (PlayerPrefsX.GetPersistentBool("multiplayer") == true)
+            bool spaceAvailable = false;
+
+            foreach (InventorySlot slot in playerController.playerInventory.inventory)
             {
-                Vector3 pos = playerController.objectInSight.transform.position;
-                Quaternion rot = playerController.objectInSight.transform.rotation;
-                UpdateNetwork(1, type, pos, rot);
+                if (slot.typeInSlot.Equals("nothing") || slot.typeInSlot.Equals(type) && slot.amountInSlot < 1000)
+                {
+                    spaceAvailable = true;
+                }
+            }
+
+            if (spaceAvailable == true)
+            {
+                playerController.playerInventory.AddItem(type, 1);
+                Destroy(obj);
+                playerController.PlayCraftingSound();
+                if (PlayerPrefsX.GetPersistentBool("multiplayer") == true)
+                {
+                    Vector3 pos = obj.transform.position;
+                    Quaternion rot = obj.transform.rotation;
+                    UpdateNetwork(1, type, pos, rot);
+                }
+            }
+            else
+            {
+                playerController.cannotCollect = true;
+                playerController.PlayMissingItemsSound();
             }
         }
         else
         {
-            playerController.cannotCollect = true;
             playerController.PlayMissingItemsSound();
         }
+    }
+
+    //! Returns true if the player is allowed to remove the object.
+    public bool CanInteract()
+    {
+        bool closeToProtectionBlock = false;
+
+        ProtectionBlock[] protectionBlocks = FindObjectsOfType<ProtectionBlock>();
+        foreach (ProtectionBlock protectionBlock in protectionBlocks)
+        {
+            Vector3 playerPos = playerController.gameObject.transform.position;
+            Vector3 blockPos = protectionBlock.transform.position;
+            Vector3 playerPosNoY = new Vector3(playerPos.x, 0, playerPos.z);
+            Vector3 blockPosNoY = new Vector3(blockPos.x, 0, blockPos.z);
+            float distance = Vector3.Distance(playerPosNoY, blockPosNoY);
+            if (distance <= 160)
+            {
+                closeToProtectionBlock = true;
+                if (protectionBlock.IsAuthorizedUser(PlayerPrefs.GetString("UserName")))
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+        }
+
+        if (closeToProtectionBlock == false)
+        {
+            return true;
+        }
+
+        return false;
     }
 
     //! Opens the machine GUI.

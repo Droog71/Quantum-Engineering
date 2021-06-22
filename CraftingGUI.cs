@@ -16,8 +16,9 @@ public class CraftingGUI : MonoBehaviour
     public void Start()
     {
         playerController = GetComponent<PlayerController>();
+        GameManager gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
+        textureDictionary = gameManager.GetComponent<TextureDictionary>();
         craftingManager = GetComponent<CraftingManager>();
-        textureDictionary = GetComponent<TextureDictionary>();
         craftingDictionary = new CraftingDictionary();
         guiCoordinates = new GuiCoordinates();
         descriptions = new Descriptions();
@@ -553,8 +554,27 @@ public class CraftingGUI : MonoBehaviour
                             }
                             GUI.Label(guiCoordinates.craftingInfoRect, descriptions.missile + "\n\n[CRAFTING]\n" + string.Join("\n", crafting));
                         }
+                        if (guiCoordinates.button15Rect.Contains(Event.current.mousePosition))
+                        {
+                            GUI.DrawTexture(guiCoordinates.craftingInfoBackgroundRect, textureDictionary.dictionary["Interface Background"]);
+                            CraftingRecipe recipe = craftingDictionary.dictionary["Protection Block"];
+                            int length = recipe.ingredients.Length;
+                            string[] crafting = new string[length];
+                            for (int i = 0; i < length; i++)
+                            {
+                                crafting[i] = recipe.amounts[i] + "x " + recipe.ingredients[i];
+                            }
+                            GUI.Label(guiCoordinates.craftingInfoRect, descriptions.protectionBlock + "\n\n[CRAFTING]\n" + string.Join("\n", crafting));
+                        }
 
                         GUI.DrawTexture(guiCoordinates.craftingBackgroundRect, textureDictionary.dictionary["Interface Background"]);
+                        int f = GUI.skin.label.fontSize;
+                        GUI.skin.label.fontSize = 24;
+                        GUI.color = new Color(0.44f, 0.72f, 0.82f, 1);
+                        GUI.Label(guiCoordinates.craftingTitleRect, "CRAFTING");
+                        GUI.skin.label.fontSize = f;
+                        GUI.color = Color.white;
+
                         if (GUI.Button(guiCoordinates.button1Rect, "Iron Block"))
                         {
                             craftingManager.CraftItemAsPlayer(craftingDictionary.dictionary["Iron Block"]);
@@ -607,8 +627,152 @@ public class CraftingGUI : MonoBehaviour
                         {
                             craftingManager.CraftItemAsPlayer(craftingDictionary.dictionary["Missile"]);
                         }
+                        if (GUI.Button(guiCoordinates.button15Rect, "Protection Block"))
+                        {
+                            craftingManager.CraftItemAsPlayer(craftingDictionary.dictionary["Protection Block"]);
+                        }
                     }
                     if (craftingPage == 2)
+                    {
+                        if (guiCoordinates.button1Rect.Contains(Event.current.mousePosition))
+                        {
+                            GUI.DrawTexture(guiCoordinates.craftingInfoBackgroundRect, textureDictionary.dictionary["Interface Background"]);
+                            CraftingRecipe recipe = craftingDictionary.dictionary["Logic Block"];
+                            int length = recipe.ingredients.Length;
+                            string[] crafting = new string[length];
+                            for (int i = 0; i < length; i++)
+                            {
+                                crafting[i] = recipe.amounts[i] + "x " + recipe.ingredients[i];
+                            }
+                            GUI.Label(guiCoordinates.craftingInfoRect, descriptions.logicBlock + "\n\n[CRAFTING]\n" + string.Join("\n", crafting));
+                        }
+                        if (guiCoordinates.button2Rect.Contains(Event.current.mousePosition))
+                        {
+                            GUI.DrawTexture(guiCoordinates.craftingInfoBackgroundRect, textureDictionary.dictionary["Interface Background"]);
+                            CraftingRecipe recipe = craftingDictionary.dictionary["Logic Splitter"];
+                            int length = recipe.ingredients.Length;
+                            string[] crafting = new string[length];
+                            for (int i = 0; i < length; i++)
+                            {
+                                crafting[i] = recipe.amounts[i] + "x " + recipe.ingredients[i];
+                            }
+                            GUI.Label(guiCoordinates.craftingInfoRect, descriptions.logicSplitter + "\n\n[CRAFTING]\n" + string.Join("\n", crafting));
+                        }
+                        if (guiCoordinates.button3Rect.Contains(Event.current.mousePosition))
+                        {
+                            GUI.DrawTexture(guiCoordinates.craftingInfoBackgroundRect, textureDictionary.dictionary["Interface Background"]);
+                            CraftingRecipe recipe = craftingDictionary.dictionary["Logic Inverter"];
+                            int length = recipe.ingredients.Length;
+                            string[] crafting = new string[length];
+                            for (int i = 0; i < length; i++)
+                            {
+                                crafting[i] = recipe.amounts[i] + "x " + recipe.ingredients[i];
+                            }
+                            GUI.Label(guiCoordinates.craftingInfoRect, descriptions.logicInverter + "\n\n[CRAFTING]\n" + string.Join("\n", crafting));
+                        }
+                        if (guiCoordinates.button4Rect.Contains(Event.current.mousePosition))
+                        {
+                            GUI.DrawTexture(guiCoordinates.craftingInfoBackgroundRect, textureDictionary.dictionary["Interface Background"]);
+                            CraftingRecipe recipe = craftingDictionary.dictionary["Logic Delayer"];
+                            int length = recipe.ingredients.Length;
+                            string[] crafting = new string[length];
+                            for (int i = 0; i < length; i++)
+                            {
+                                crafting[i] = recipe.amounts[i] + "x " + recipe.ingredients[i];
+                            }
+                            GUI.Label(guiCoordinates.craftingInfoRect, descriptions.logicDelayer + "\n\n[CRAFTING]\n" + string.Join("\n", crafting));
+                        }
+                        if (guiCoordinates.button5Rect.Contains(Event.current.mousePosition))
+                        {
+                            GUI.DrawTexture(guiCoordinates.craftingInfoBackgroundRect, textureDictionary.dictionary["Interface Background"]);
+                            CraftingRecipe recipe = craftingDictionary.dictionary["Logic Relay"];
+                            int length = recipe.ingredients.Length;
+                            string[] crafting = new string[length];
+                            for (int i = 0; i < length; i++)
+                            {
+                                crafting[i] = recipe.amounts[i] + "x " + recipe.ingredients[i];
+                            }
+                            GUI.Label(guiCoordinates.craftingInfoRect, descriptions.logicRelay + "\n\n[CRAFTING]\n" + string.Join("\n", crafting));
+                        }
+                        if (guiCoordinates.button6Rect.Contains(Event.current.mousePosition))
+                        {
+                            GUI.DrawTexture(guiCoordinates.craftingInfoBackgroundRect, textureDictionary.dictionary["Interface Background"]);
+                            CraftingRecipe recipe = craftingDictionary.dictionary["Player Detector"];
+                            int length = recipe.ingredients.Length;
+                            string[] crafting = new string[length];
+                            for (int i = 0; i < length; i++)
+                            {
+                                crafting[i] = recipe.amounts[i] + "x " + recipe.ingredients[i];
+                            }
+                            GUI.Label(guiCoordinates.craftingInfoRect, descriptions.playerDetector + "\n\n[CRAFTING]\n" + string.Join("\n", crafting));
+                        }
+                        if (guiCoordinates.button7Rect.Contains(Event.current.mousePosition))
+                        {
+                            GUI.DrawTexture(guiCoordinates.craftingInfoBackgroundRect, textureDictionary.dictionary["Interface Background"]);
+                            CraftingRecipe recipe = craftingDictionary.dictionary["Item Detector"];
+                            int length = recipe.ingredients.Length;
+                            string[] crafting = new string[length];
+                            for (int i = 0; i < length; i++)
+                            {
+                                crafting[i] = recipe.amounts[i] + "x " + recipe.ingredients[i];
+                            }
+                            GUI.Label(guiCoordinates.craftingInfoRect, descriptions.itemDetector + "\n\n[CRAFTING]\n" + string.Join("\n", crafting));
+                        }
+                        if (guiCoordinates.button9Rect.Contains(Event.current.mousePosition))
+                        {
+                            GUI.DrawTexture(guiCoordinates.craftingInfoBackgroundRect, textureDictionary.dictionary["Interface Background"]);
+                            CraftingRecipe recipe = craftingDictionary.dictionary["Power Detector"];
+                            int length = recipe.ingredients.Length;
+                            string[] crafting = new string[length];
+                            for (int i = 0; i < length; i++)
+                            {
+                                crafting[i] = recipe.amounts[i] + "x " + recipe.ingredients[i];
+                            }
+                            GUI.Label(guiCoordinates.craftingInfoRect, descriptions.powerDetector + "\n\n[CRAFTING]\n" + string.Join("\n", crafting));
+                        }
+
+                        GUI.DrawTexture(guiCoordinates.craftingBackgroundRect, textureDictionary.dictionary["Interface Background"]);
+                        int f = GUI.skin.label.fontSize;
+                        GUI.skin.label.fontSize = 24;
+                        GUI.color = new Color(0.44f, 0.72f, 0.82f, 1);
+                        GUI.Label(guiCoordinates.craftingTitleRect, "CRAFTING");
+                        GUI.skin.label.fontSize = f;
+                        GUI.color = Color.white;
+
+                        if (GUI.Button(guiCoordinates.button1Rect, "Logic Block"))
+                        {
+                            craftingManager.CraftItemAsPlayer(craftingDictionary.dictionary["Logic Block"]);
+                        }
+                        if (GUI.Button(guiCoordinates.button2Rect, "Logic Splitter"))
+                        {
+                            craftingManager.CraftItemAsPlayer(craftingDictionary.dictionary["Logic Splitter"]);
+                        }
+                        if (GUI.Button(guiCoordinates.button3Rect, "Logic Inverter"))
+                        {
+                            craftingManager.CraftItemAsPlayer(craftingDictionary.dictionary["Logic Inverter"]);
+                        }
+                        if (GUI.Button(guiCoordinates.button4Rect, "Logic Delayer"))
+                        {
+                            craftingManager.CraftItemAsPlayer(craftingDictionary.dictionary["Logic Delayer"]);
+                        }
+                        if (GUI.Button(guiCoordinates.button5Rect, "Logic Relay"))
+                        {
+                            craftingManager.CraftItemAsPlayer(craftingDictionary.dictionary["Logic Relay"]);
+                        }
+                        if (GUI.Button(guiCoordinates.button6Rect, "Player Detector"))
+                        {
+                            craftingManager.CraftItemAsPlayer(craftingDictionary.dictionary["Player Detector"]);
+                        }
+                        if (GUI.Button(guiCoordinates.button7Rect, "Item Detector"))
+                        {
+                            craftingManager.CraftItemAsPlayer(craftingDictionary.dictionary["Item Detector"]);
+                        }
+                        if (GUI.Button(guiCoordinates.button9Rect, "Power Detector"))
+                        {
+                            craftingManager.CraftItemAsPlayer(craftingDictionary.dictionary["Power Detector"]);
+                        }
+                    }
+                    if (craftingPage == 3)
                     {
                         GUI.DrawTexture(guiCoordinates.craftingBackgroundRect, textureDictionary.dictionary["Interface Background"]);
                         GUI.DrawTexture(guiCoordinates.craftingInfoBackgroundRect, textureDictionary.dictionary["Interface Background"]);
@@ -686,11 +850,11 @@ public class CraftingGUI : MonoBehaviour
                     }
                     if (GUI.Button(guiCoordinates.craftingNextRect, "->"))
                     {
-                        if (craftingPage < 1)
+                        if (craftingPage < 2)
                         {
                             craftingPage += 1;
                         }
-                        else if (craftingPage < 2 && craftingDictionary.modDictionary.Count > 0)
+                        else if (craftingPage < 3 && craftingDictionary.modDictionary.Count > 0)
                         {
                             craftingPage += 1;
                         }

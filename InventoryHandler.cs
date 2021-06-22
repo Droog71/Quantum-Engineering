@@ -1,5 +1,7 @@
 ﻿using UnityEngine;
 using System.Net;
+using System.Collections;
+using System;
 
 public class InventoryHandler
 {
@@ -7,6 +9,10 @@ public class InventoryHandler
     private InventoryManager playerInventory;
     private InventorySlot slotDraggingFrom;
     private GuiCoordinates guiCoordinates;
+    private Coroutine networkContainerCoroutine;
+    private Coroutine networkTransferCoroutine;
+    private bool networkContainerCoroutineBusy;
+    private bool networkTransferCoroutineBusy;
     public string itemToDrag;
     private int amountToDrag;
     private int dragSlotIndex;
@@ -25,6 +31,97 @@ public class InventoryHandler
         return dropSlot.typeInSlot.Equals("nothing")
         || (dropSlot.typeInSlot.Equals(dragSlot.typeInSlot)
         && dropSlot.amountInSlot <= 1000 - dragSlot.amountInSlot);
+    }
+
+    //! Updates the server when items are moved from a storage container to the trash or dropped on the ground.
+    private void NetworkRemoveItem()
+    {
+        bool flag = false;
+        if (playerController.storageInventory != null)
+        {
+            foreach (InventorySlot slot in playerController.storageInventory.inventory)
+            {
+                if (slot == slotDraggingFrom)
+                {
+                    flag = true;
+                    break;
+                }
+            }
+        }
+        if (flag == true)
+        {
+            using (WebClient client = new WebClient())
+            {
+                Vector3 pos = playerController.storageInventory.gameObject.transform.position;
+                float x = Mathf.Round(pos.x);
+                float y = Mathf.Round(pos.y);
+                float z = Mathf.Round(pos.z);
+                Uri uri = new Uri(PlayerPrefs.GetString("serverURL") + "/storage");
+                client.UploadStringAsync(uri, "POST", "@" + x + "," + y + "," + z + ":" + dragSlotIndex + ";" + slotDraggingFrom.typeInSlot + "=" + slotDraggingFrom.amountInSlot);
+            }
+        }
+    }
+
+    //! When an item is moved from one slot to another, within the same container, the contents of both slots are updated on the server.
+    private IEnumerator NetworkContainerCoroutine(int storageInventoryDropSlot, InventorySlot dropSlot, string originType, int originAmount)
+    {
+        networkContainerCoroutineBusy = true;
+        using(WebClient client = new WebClient())
+        {
+            Uri uri = new Uri(PlayerPrefs.GetString("serverURL") + "/storage");
+            Vector3 pos = playerController.storageInventory.gameObject.transform.position;
+            float x = Mathf.Round(pos.x);
+            float y = Mathf.Round(pos.y); 
+            float z = Mathf.Round(pos.z); 
+            client.UploadStringAsync(uri, "POST", "@" + x + "," + y + "," + z + ":"+dragSlotIndex+";"+originType+"="+originAmount);
+            bool flag = false;
+            while (flag == false)
+            {
+                yield return new WaitForSeconds(0.5f);
+                try
+                {
+                    client.UploadStringAsync(uri, "POST", "@" + x + "," + y + "," + z + ":"+storageInventoryDropSlot+";"+dropSlot.typeInSlot+"="+dropSlot.amountInSlot);
+                    flag = true;
+                }
+                catch(Exception e)
+                {
+                    Debug.Log(e.Message + "\nTrying again in 0.5 seconds.");
+                }
+            }
+        }
+        networkContainerCoroutineBusy = false;
+    }
+
+    //! Updates the server when items are transferred to and from containers using ctrl+click.
+    private IEnumerator NetworkTransferItemCoroutine(int addIndex, int removeIndex, InventorySlot addSlot, InventorySlot removeSlot, InventoryManager destination)
+    {
+        networkTransferCoroutineBusy = true;
+        if (destination == playerController.playerInventory)
+        {
+            Vector3 pos = playerController.storageInventory.gameObject.transform.position;
+            float x = Mathf.Round(pos.x);
+            float y = Mathf.Round(pos.y); 
+            float z = Mathf.Round(pos.z); 
+            using (WebClient client = new WebClient())
+            {
+                Uri uri = new Uri(PlayerPrefs.GetString("serverURL") + "/storage");
+                client.UploadStringAsync(uri, "POST", "@" + x + "," + y + "," + z + ":" + removeIndex + ";" + removeSlot.typeInSlot + "=" + removeSlot.amountInSlot);
+            }
+        }
+        else
+        {
+            Vector3 pos = destination.gameObject.transform.position;
+            float x = Mathf.Round(pos.x);
+            float y = Mathf.Round(pos.y); 
+            float z = Mathf.Round(pos.z); 
+            using(WebClient client = new WebClient())
+            {
+                Uri uri = new Uri(PlayerPrefs.GetString("serverURL") + "/storage");
+                client.UploadStringAsync(uri, "POST", "@" + x + "," + y + "," + z + ":"+addIndex+";"+addSlot.typeInSlot+"="+addSlot.amountInSlot);
+            }
+        }
+        yield return new WaitForSeconds(0.25f);
+        networkTransferCoroutineBusy = false;
     }
 
     //! Searches for items in all containers connected to the computer.
@@ -82,32 +179,9 @@ public class InventoryHandler
                         destination.AddItem(dragSlot.typeInSlot, dragSlot.amountInSlot);
                         dragSlot.typeInSlot = "nothing";
                         dragSlot.amountInSlot = 0;
-                        if (PlayerPrefsX.GetPersistentBool("multiplayer") == true)
+                        if (PlayerPrefsX.GetPersistentBool("multiplayer") == true && networkTransferCoroutineBusy == false)
                         {
-                            if (destination == playerController.playerInventory)
-                            {
-                                Vector3 pos = playerController.storageInventory.gameObject.transform.position;
-                                float x = Mathf.Round(pos.x);
-                                float y = Mathf.Round(pos.y); 
-                                float z = Mathf.Round(pos.z); 
-                                using (WebClient client = new WebClient())
-                                {
-                                    System.Uri uri = new System.Uri(PlayerPrefs.GetString("serverURL") + "/storage");
-                                    client.UploadStringAsync(uri, "POST", "@" + x + "," + y + "," + z + ":" + index + ";" + dragSlot.typeInSlot + "=" + dragSlot.amountInSlot);
-                                }
-                            }
-                            else
-                            {
-                                Vector3 pos = destination.gameObject.transform.position;
-                                float x = Mathf.Round(pos.x);
-                                float y = Mathf.Round(pos.y); 
-                                float z = Mathf.Round(pos.z); 
-                                using(WebClient client = new WebClient())
-                                {
-                                    System.Uri uri = new System.Uri(PlayerPrefs.GetString("serverURL") + "/storage");
-                                    client.UploadStringAsync(uri, "POST", "@" + x + "," + y + "," + z + ":"+i+";"+slot.typeInSlot+"="+slot.amountInSlot);
-                                }
-                            }
+                            networkTransferCoroutine = playerController.StartCoroutine(NetworkTransferItemCoroutine(i, index, slot, dragSlot, destination));
                         }
                     }
                 }
@@ -144,6 +218,10 @@ public class InventoryHandler
         if (guiCoordinates.inventoryDropSlotRect.Contains(mousePos))
         {
             playerController.DropItem(slotDraggingFrom);
+            if (PlayerPrefsX.GetPersistentBool("multiplayer") == true)
+            {
+                NetworkRemoveItem();
+            }
             return;
         }
 
@@ -151,6 +229,10 @@ public class InventoryHandler
         {
             slotDraggingFrom.amountInSlot = 0;
             slotDraggingFrom.typeInSlot = "nothing";
+            if (PlayerPrefsX.GetPersistentBool("multiplayer") == true)
+            {
+                NetworkRemoveItem();
+            }
             playerController.PlayCraftingSound();
             return;
         }
@@ -182,14 +264,26 @@ public class InventoryHandler
                 }
                 if (PlayerPrefsX.GetPersistentBool("multiplayer") == true)
                 {
-                    Vector3 pos = playerController.storageInventory.gameObject.transform.position;
-                    float x = Mathf.Round(pos.x);
-                    float y = Mathf.Round(pos.y); 
-                    float z = Mathf.Round(pos.z); 
-                    using(WebClient client = new WebClient())
+                    bool flag = false;
+                    foreach (InventorySlot slot in playerInventory.inventory)
                     {
-                        System.Uri uri = new System.Uri(PlayerPrefs.GetString("serverURL") + "/storage");
-                        client.UploadStringAsync(uri, "POST", "@" + x + "," + y + "," + z + ":"+dragSlotIndex+";"+slotDraggingFrom.typeInSlot+"="+slotDraggingFrom.amountInSlot);
+                        if (slot == slotDraggingFrom)
+                        {
+                            flag = true;
+                            break;
+                        }
+                    }
+                    if (flag == false)
+                    {
+                        Vector3 pos = playerController.storageInventory.gameObject.transform.position;
+                        float x = Mathf.Round(pos.x);
+                        float y = Mathf.Round(pos.y);
+                        float z = Mathf.Round(pos.z);
+                        using(WebClient client = new WebClient())
+                        {
+                            Uri uri = new Uri(PlayerPrefs.GetString("serverURL") + "/storage");
+                            client.UploadStringAsync(uri, "POST", "@" + x + "," + y + "," + z + ":"+dragSlotIndex+";"+slotDraggingFrom.typeInSlot+"="+slotDraggingFrom.amountInSlot);
+                        }
                     }
                 }
             }
@@ -223,16 +317,24 @@ public class InventoryHandler
                         dropSlot.typeInSlot = itemToDrag;
                         dropSlot.amountInSlot = amountToDrag;
                     }
-                    if (PlayerPrefsX.GetPersistentBool("multiplayer") == true && PlayerPrefsX.GetPersistentBool("hosting") == false)
+                    if (PlayerPrefsX.GetPersistentBool("multiplayer") == true)
                     {
-                        using(WebClient client = new WebClient())
+                        slotDraggingFrom.pendingNetworkUpdate = true;
+                        slotDraggingFrom.networkWaitTime = 0;
+                        bool flag = false;
+                        foreach (InventorySlot slot in playerInventory.inventory)
                         {
-                            System.Uri uri = new System.Uri(PlayerPrefs.GetString("serverURL") + "/storage");
-                            Vector3 pos = playerController.storageInventory.gameObject.transform.position;
-                            float x = Mathf.Round(pos.x);
-                            float y = Mathf.Round(pos.y); 
-                            float z = Mathf.Round(pos.z); 
-                            client.UploadStringAsync(uri, "POST", "@" + x + "," + y + "," + z + ":"+storageInventoryDropSlot+";"+dropSlot.typeInSlot+"="+dropSlot.amountInSlot);
+                            if (slot == slotDraggingFrom)
+                            {
+                                flag = true;
+                                break;
+                            }
+                        }
+                        if (flag == false && networkContainerCoroutineBusy == false)
+                        {
+                            string originType = slotDraggingFrom.typeInSlot;
+                            int originAmount = slotDraggingFrom.amountInSlot;
+                            networkContainerCoroutine = playerController.StartCoroutine(NetworkContainerCoroutine(storageInventoryDropSlot, dropSlot, originType, originAmount));
                         }
                     }
                 }

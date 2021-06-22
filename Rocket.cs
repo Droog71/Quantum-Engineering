@@ -11,6 +11,7 @@ public class Rocket : MonoBehaviour
     public float gameTime;
     private float liftOffTimer;
     private PlayerController player;
+    private StateManager stateManager;
     private bool initialized;
     public bool rocketRequested;
 
@@ -18,6 +19,7 @@ public class Rocket : MonoBehaviour
     public void Start()
     {
         player = GameObject.Find("Player").GetComponent<PlayerController>();
+        stateManager = GameObject.Find("GameManager").GetComponent<StateManager>();
     }
 
     //! Called once per frame by unity engine.
@@ -31,7 +33,7 @@ public class Rocket : MonoBehaviour
             }
 
             gameTime += 1 * Time.deltaTime;
-            FileBasedPrefs.SetFloat(GameObject.Find("GameManager").GetComponent<StateManager>().worldName + "gameTime", gameTime);
+            FileBasedPrefs.SetFloat(stateManager.worldName + "gameTime", gameTime);
 
             if (gameTime >= 2400)
             {
@@ -73,16 +75,16 @@ public class Rocket : MonoBehaviour
 
     //! Initializes variables when the world is loaded.
     private void Init()
-    {
-        if (FileBasedPrefs.GetInt(GameObject.Find("GameManager").GetComponent<StateManager>().worldName + "payloadRequired") != 0)
+    {;
+        if (FileBasedPrefs.GetInt(stateManager.worldName + "payloadRequired") != 0)
         {
-            payloadRequired = FileBasedPrefs.GetInt(GameObject.Find("GameManager").GetComponent<StateManager>().worldName + "payloadRequired");
+            payloadRequired = FileBasedPrefs.GetInt(stateManager.worldName + "payloadRequired");
         }
-        if (FileBasedPrefs.GetInt(GameObject.Find("GameManager").GetComponent<StateManager>().worldName + "day") != 0)
+        if (FileBasedPrefs.GetInt(stateManager.worldName + "day") != 0)
         {
-            day = FileBasedPrefs.GetInt(GameObject.Find("GameManager").GetComponent<StateManager>().worldName + "day");
+            day = FileBasedPrefs.GetInt(stateManager.worldName + "day");
         }
-        gameTime = FileBasedPrefs.GetFloat(GameObject.Find("GameManager").GetComponent<StateManager>().worldName + "gameTime");
+        gameTime = FileBasedPrefs.GetFloat(stateManager.worldName + "gameTime");
         initialized = true;
     }
 
@@ -97,16 +99,17 @@ public class Rocket : MonoBehaviour
                 amountInRocket += slot.amountInSlot;
             }
         }
+
         if (amountInRocket >= payloadRequired && ascending == false)
         {
             player.money += 1000;
-            FileBasedPrefs.SetInt(GameObject.Find("GameManager").GetComponent<StateManager>().worldName + "money", player.money);
+            FileBasedPrefs.SetInt(stateManager.worldName + "money", player.money);
             ascending = true;
         }
         else if (liftOffTimer >= 600 && ascending == false)
         {
             player.money -= 500;
-            FileBasedPrefs.SetInt(GameObject.Find("GameManager").GetComponent<StateManager>().worldName + "money", player.money);
+            FileBasedPrefs.SetInt(stateManager.worldName + "money", player.money);
             ascending = true;
         }
     }
@@ -120,8 +123,8 @@ public class Rocket : MonoBehaviour
         {
             payloadRequired = payloadRequired * 2;
         }
-        FileBasedPrefs.SetInt(GameObject.Find("GameManager").GetComponent<StateManager>().worldName + "day", day);
-        FileBasedPrefs.SetInt(GameObject.Find("GameManager").GetComponent<StateManager>().worldName + "payloadRequired", payloadRequired);
+        FileBasedPrefs.SetInt(stateManager.worldName + "day", day);
+        FileBasedPrefs.SetInt(stateManager.worldName + "payloadRequired", payloadRequired);
         player.timeToDeliver = true;
     }
 

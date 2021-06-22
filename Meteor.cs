@@ -37,21 +37,25 @@ public class Meteor : MonoBehaviour
             if (Physics.Raycast(transform.position, -transform.up, out RaycastHit hit, 5))
             {
                 GameObject obj = hit.collider.gameObject;
-                if (obj.tag.Equals("Built"))
+                if (obj.tag.Equals("Built") || obj.tag.Equals("Machine"))
                 {
                     string objName;
-                    if (obj.GetComponent<ModBlock>() != null)
+                    if (obj.GetComponent<Block>() != null)
                     {
-                        objName = obj.GetComponent<ModBlock>().blockName;
+                        objName = obj.GetComponent<Block>().blockName;
                     }
                     else
                     {
                         objName = obj.name.Split('(')[0];
                     }
 
-                    if (obj.GetComponent<PhysicsHandler>() != null)
+                    if (obj.GetComponent<Block>() != null)
                     {
-                        obj.GetComponent<PhysicsHandler>().Explode();
+                        obj.GetComponent<Block>().Explode();
+                    }
+                    else if (obj.GetComponent<Machine>() != null)
+                    {
+                        obj.GetComponent<Machine>().Explode();
                     }
 
                     if (CanSendDestructionMessage())
@@ -66,112 +70,24 @@ public class Meteor : MonoBehaviour
                     }
                     Explode();
                 }
-                else if (obj.tag.Equals("CombinedMesh"))
+                else if (obj.tag.Equals("CombinedMesh") || obj.transform.parent.tag.Equals("CombinedMesh"))
                 {
-                    if (obj.name.Equals("glassHolder(Clone)"))
+                    BlockHolder blockHolder = obj.GetComponent<BlockHolder>();
+
+                    if (blockHolder == null)
                     {
-                        int chanceOfDestruction = Random.Range(1, 101);
-                        {
-                            if (chanceOfDestruction > 25)
-                            {
-                                game.meshManager.SeparateBlocks(transform.position, "glass", false);
-                                if (CanSendDestructionMessage())
-                                {
-                                    if (playerController.destructionMessageActive == false)
-                                    {
-                                        playerController.destructionMessageActive = true;
-                                        playerController.currentTabletMessage = "";
-                                    }
-                                    playerController.currentTabletMessage += "ALERT: Some glass blocks were hit by a meteor!\n";
-                                    playerController.destructionMessageCount += 1;
-                                }
-                            }
-                        }
-                        Explode();
+                        blockHolder = obj.transform.parent.GetComponent<BlockHolder>();
                     }
-                    else if (obj.name.Equals("brickHolder(Clone)"))
+
+                    if (blockHolder != null)
                     {
-                        int chanceOfDestruction = Random.Range(1, 101);
-                        {
-                            if (chanceOfDestruction > 50)
-                            {
-                                game.meshManager.SeparateBlocks(transform.position, "brick", false);
-                                if (CanSendDestructionMessage())
-                                {
-                                    if (playerController.destructionMessageActive == false)
-                                    {
-                                        playerController.destructionMessageActive = true;
-                                        playerController.currentTabletMessage = "";
-                                    }
-                                    playerController.currentTabletMessage += "ALERT: Some bricks were hit by a meteor!\n";
-                                    playerController.destructionMessageCount += 1;
-                                }
-                            }
-                            Explode();
-                        }
-                    }
-                    else if (obj.name.Equals("ironHolder(Clone)"))
-                    {
-                        int chanceOfDestruction = Random.Range(1, 101);
-                        {
-                            if (chanceOfDestruction > 75)
-                            {
-                                game.meshManager.SeparateBlocks(transform.position, "iron", false);
-                                if (CanSendDestructionMessage())
-                                {
-                                    if (playerController.destructionMessageActive == false)
-                                    {
-                                        playerController.destructionMessageActive = true;
-                                        playerController.currentTabletMessage = "";
-                                    }
-                                    playerController.currentTabletMessage += "ALERT: Some iron blocks were hit by a meteor!\n";
-                                    playerController.destructionMessageCount += 1;
-                                }
-                            }
-                            Explode();
-                        }
-                    }
-                    else if (obj.name.Equals("steelHolder(Clone)"))
-                    {
-                        int chanceOfDestruction = Random.Range(1, 101);
-                        {
-                            if (chanceOfDestruction > 99)
-                            {
-                                game.meshManager.SeparateBlocks(transform.position, "steel", false);
-                                if (CanSendDestructionMessage())
-                                {
-                                    if (playerController.destructionMessageActive == false)
-                                    {
-                                        playerController.destructionMessageActive = true;
-                                        playerController.currentTabletMessage = "";
-                                    }
-                                    playerController.currentTabletMessage += "ALERT: Some steel blocks were hit by a meteor!\n";
-                                    playerController.destructionMessageCount += 1;
-                                }
-                            }
-                            Explode();
-                        }
-                    }
-                    else if (obj.name.Equals("modBlockHolder(Clone)"))
-                    {
-                        string type = "all";
                         int toughness = 75;
 
-                        Transform[] transforms = obj.GetComponentsInChildren<Transform>(true);
-                        foreach (Transform t in transforms)
-                        {
-                            if (t.GetComponent<ModBlock>() != null)
-                            {
-                                type = t.GetComponent<ModBlock>().blockName;
-                                break;
-                            }
-                        }
-
-                        if (type.ToUpper().Contains("GLASS"))
+                        if (blockHolder.blockType.ToUpper().Contains("GLASS"))
                         {
                             toughness = 25;
                         }
-                        else if (type.ToUpper().Contains("STEEL"))
+                        else if (blockHolder.blockType.ToUpper().Contains("STEEL"))
                         {
                             toughness = 99;
                         }
@@ -180,16 +96,19 @@ public class Meteor : MonoBehaviour
                         {
                             if (chanceOfDestruction > toughness)
                             {
-                                game.meshManager.SeparateBlocks(hit.point, type, false);
+                                game.meshManager.RemoveBlock(hit.collider.gameObject.GetComponent<BlockHolder>(), hit.point, true);
                                 if (CanSendDestructionMessage())
                                 {
-                                    if (playerController.destructionMessageActive == false)
+                                    if (blockHolder.blockType != "Dirt" && blockHolder.blockType != "Grass")
                                     {
-                                        playerController.destructionMessageActive = true;
-                                        playerController.currentTabletMessage = "";
+                                        if (playerController.destructionMessageActive == false)
+                                        {
+                                            playerController.destructionMessageActive = true;
+                                            playerController.currentTabletMessage = "";
+                                        }
+                                        playerController.currentTabletMessage += "ALERT: " + blockHolder.blockType + " hit by a meteor!\n";
+                                        playerController.destructionMessageCount += 1;
                                     }
-                                    playerController.currentTabletMessage += "ALERT: Some blocks were hit by a meteor!\n";
-                                    playerController.destructionMessageCount += 1;
                                 }
                             }
                             Explode();

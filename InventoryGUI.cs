@@ -22,7 +22,8 @@ public class InventoryGUI : MonoBehaviour
         playerController = GetComponent<PlayerController>();
         playerInventory = GetComponent<InventoryManager>();
         inventoryHandler = new InventoryHandler(playerController, playerInventory);
-        textureDictionary = GetComponent<TextureDictionary>();
+        GameManager gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
+        textureDictionary = gameManager.GetComponent<TextureDictionary>();
         guiCoordinates = new GuiCoordinates();
     }
 

@@ -8,6 +8,7 @@ using System.IO;
 public class BlockDictionary
 {
     private PlayerController playerController;
+    private GameManager gameManager;
     public Dictionary<string, GameObject> machineDictionary;
     public Dictionary<string, GameObject> blockDictionary;
     public Dictionary<string, Mesh> meshDictionary;
@@ -16,6 +17,7 @@ public class BlockDictionary
     public BlockDictionary(PlayerController playerController)
     {
         this.playerController = playerController;
+        gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
         Init();
     }
 
@@ -78,7 +80,11 @@ public class BlockDictionary
                     if (!stateManager.modRecipeList.Contains(machineName))
                     {
                         stateManager.modRecipeList.Add(machineName);
-                        Debug.Log("Mod "+"["+modName+"]"+" added recipes for [" + machineName + "]");
+                        string[] commandLineOptions = Environment.GetCommandLineArgs();
+                        if (commandLineOptions.Contains("-devel"))
+                        {
+                            Debug.Log("Mod " + "[" + modName + "]" + " added recipes for [" + machineName + "]");
+                        }
                     }
                     return machineRecipes;
                 }
@@ -110,7 +116,11 @@ public class BlockDictionary
                     objList.Add(machineName);
                     playerController.blockSelector.objectNames = objList.ToArray();
                     string modName = new DirectoryInfo(path).Name;
-                    Debug.Log("Mod "+"["+modName+"]"+" created a new machine: [" + machineName + "]");
+                    string[] commandLineOptions = Environment.GetCommandLineArgs();
+                    if (commandLineOptions.Contains("-devel"))
+                    {
+                        Debug.Log("Mod " + "[" + modName + "]" + " created a new machine: [" + machineName + "]");
+                    }
                 }
             }
         }
@@ -134,17 +144,21 @@ public class BlockDictionary
                 string blockName = file.Name.Remove(file.Name.Length - 3);
                 if (!dictionary.ContainsKey(blockName))
                 {
-                    dictionary.Add(blockName, playerController.modBlock);
+                    dictionary.Add(blockName, playerController.block);
                     List<string> objList = playerController.blockSelector.objectNames.ToList();
                     objList.Add(blockName);
                     playerController.blockSelector.objectNames = objList.ToArray();
                     string modName = new DirectoryInfo(path).Name;
-                    playerController.gameManager.modBlockNames.Add(blockName);
-                    Debug.Log("Mod "+"["+modName+"]"+" created a new block: [" + blockName + "]");
+                    playerController.gameManager.blockNames.Add(blockName);
+                    string[] commandLineOptions = Environment.GetCommandLineArgs();
+                    if (commandLineOptions.Contains("-devel"))
+                    {
+                        Debug.Log("Mod " + "[" + modName + "]" + " created a new block: [" + blockName + "]");
+                    }
                 }
             }
         }
-        playerController.gameManager.InitModBlocks();
+        playerController.gameManager.InitBlocks();
     }
 
     //! Adds blocks from mods to the game.
@@ -168,27 +182,42 @@ public class BlockDictionary
                     Mesh newMesh = importer.ImportFile(filePath);
                     dictionary.Add(meshName, newMesh);
                     string modName = new DirectoryInfo(path).Name;
-                    Debug.Log("Mod "+"["+modName+"]"+" created a new mesh: [" + meshName + "]");
+                    string[] commandLineOptions = Environment.GetCommandLineArgs();
+                    if (commandLineOptions.Contains("-devel"))
+                    {
+                        Debug.Log("Mod " + "[" + modName + "]" + " created a new mesh: [" + meshName + "]");
+                    }
                 }
             }
         }
-        playerController.gameManager.InitModBlocks();
+        playerController.gameManager.InitBlocks();
     }
 
     //! Initializes variables.
     private void Init()
     {
-        meshDictionary = new Dictionary<string, Mesh>();
+        meshDictionary = new Dictionary<string, Mesh>
+        {
+            { "Iron Ramp", gameManager.rampMesh },
+            { "Steel Ramp", gameManager.rampMesh }
+        };
 
         blockDictionary = new Dictionary<string, GameObject>
         {
-            { "Brick", playerController.brick },
-            { "Glass Block", playerController.glass },
-            { "Iron Block", playerController.ironBlock },
-            { "Iron Ramp", playerController.ironRamp },
-            { "Steel Block", playerController.steel },
-            { "Steel Ramp", playerController.steelRamp }
+            { "Brick", playerController.block },
+            { "Grass", playerController.block },
+            { "Dirt", playerController.block },
+            { "Glass Block", playerController.block },
+            { "Iron Block", playerController.block },
+            { "Iron Ramp", playerController.block },
+            { "Steel Block", playerController.block },
+            { "Steel Ramp", playerController.block }
         };
+
+        foreach (KeyValuePair<string, GameObject> block in blockDictionary)
+        {
+            gameManager.blockNames.Add(block.Key);
+        }
 
         machineDictionary = new Dictionary<string, GameObject>
         {
@@ -218,7 +247,16 @@ public class BlockDictionary
             { "Turret", playerController.turret },
             { "Missile Turret", playerController.missileTurret },
             { "Universal Conduit", playerController.universalConduit },
-            { "Universal Extractor", playerController.universalExtractor }
+            { "Universal Extractor", playerController.universalExtractor },
+            { "Protection Block", playerController.protectionBlock },
+            { "Logic Block", playerController.logicBlock },
+            { "Logic Inverter", playerController.logicInverter },
+            { "Logic Delayer", playerController.logicDelayer },
+            { "Logic Splitter", playerController.logicSplitter },
+            { "Player Detector", playerController.playerDetector },
+            { "Power Detector", playerController.powerDetector },
+            { "Item Detector", playerController.itemDetector },
+            { "Relay", playerController.relay }
         };
 
         typeDictionary = new Dictionary<string, Type>
@@ -249,12 +287,13 @@ public class BlockDictionary
             { "Turret", typeof (Turret) },
             { "Universal Conduit", typeof (UniversalConduit) },
             { "Universal Extractor", typeof (UniversalExtractor) },
-            { "Brick", typeof (Brick) },
-            { "Glass Block", typeof (Glass) },
-            { "Iron Block", typeof (IronBlock) },
-            { "Iron Ramp", typeof (IronBlock) },
-            { "Steel Block", typeof (Steel) },
-            { "Steel Ramp", typeof (Steel) }
+            { "Brick", typeof (Block) },
+            { "Glass Block", typeof (Block) },
+            { "Iron Block", typeof (Block) },
+            { "Iron Ramp", typeof (Block) },
+            { "Steel Block", typeof (Block) },
+            { "Steel Ramp", typeof (Block) },
+            { "Protection Block", typeof (ProtectionBlock) }
         };
     }
 }

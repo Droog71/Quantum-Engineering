@@ -4,6 +4,8 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+
 
 //! This class provides loading of textures by name from Resources or Application.persistentDataPath.
 public class TextureDictionary : MonoBehaviour
@@ -40,13 +42,17 @@ public class TextureDictionary : MonoBehaviour
                         if (!stateManager.modTextureList.Contains(textureName))
                         {
                             stateManager.modTextureList.Add(textureName);
-                            Debug.Log("Mod "+"["+modName+"]"+" loaded texture [" + textureName + ".png]");
+                            string[] commandLineOptions = Environment.GetCommandLineArgs();
+                            if (commandLineOptions.Contains("-devel"))
+                            {
+                                Debug.Log("Mod "+"["+modName+"]"+" loaded texture [" + textureName + ".png]");
+                            }
                         }
                     }
                 }
             }
         }
-        GameObject.Find("Player").GetComponent<TextureDictionary>().addedModTextures = true;
+        GameObject.Find("GameManager").GetComponent<TextureDictionary>().addedModTextures = true;
     }
 
     //! Called by unity engine to initialize variables on startup.
@@ -77,12 +83,23 @@ public class TextureDictionary : MonoBehaviour
             { "Bronze Ingot", Resources.Load("BronzeIngot") as Texture2D },
             { "Steel Ingot", Resources.Load("SteelIngot") as Texture2D },
             { "Iron Block", Resources.Load("IronBlock") as Texture2D },
+            { "Iron Block_Normal", Resources.Load("IronBlockNormal") as Texture2D },
             { "Iron Ramp", Resources.Load("IronRamp") as Texture2D },
+            { "Iron Ramp_Icon", Resources.Load("IronRampIcon") as Texture2D },
+            { "Iron Ramp_Normal", Resources.Load("IronRampNormal") as Texture2D },
             { "Steel Block", Resources.Load("SteelBlock") as Texture2D },
+            { "Steel Block_Normal", Resources.Load("SteelBlockNormal") as Texture2D },
             { "Steel Ramp", Resources.Load("SteelRamp") as Texture2D },
+            { "Steel Ramp_Icon", Resources.Load("SteelRampIcon") as Texture2D },
+            { "Steel Ramp_Normal", Resources.Load("SteelRampNormal") as Texture2D },
             { "Glass Block", Resources.Load("Glass") as Texture2D },
-            { "Glass Block_Icon", Resources.Load("Glass_Icon") as Texture2D },
+            { "Glass Block_Icon", Resources.Load("GlassIcon") as Texture2D },
             { "Brick", Resources.Load("Brick") as Texture2D },
+            { "Grass", Resources.Load("Grass") as Texture2D },
+            { "Dirt", Resources.Load("Dirt") as Texture2D },
+            { "Grass_Normal", Resources.Load("Grass_Normal") as Texture2D },
+            { "Dirt_Normal", Resources.Load("Dirt_Normal") as Texture2D },
+            { "Brick_Normal", Resources.Load("BrickNormal") as Texture2D },
             { "Electric Light", Resources.Load("Light") as Texture2D },
             { "Dark Matter Collector", Resources.Load("DarkMatterCollector") as Texture2D },
             { "Dark Matter Conduit", Resources.Load("DarkMatterConduit") as Texture2D },
@@ -90,6 +107,7 @@ public class TextureDictionary : MonoBehaviour
             { "Universal Extractor", Resources.Load("UniversalExtractor") as Texture2D },
             { "Auger", Resources.Load("Auger") as Texture2D },
             { "Door", Resources.Load("Door") as Texture2D },
+            { "Door_Normal", Resources.Load("DoorNormal") as Texture2D },
             { "Quantum Hatchway", Resources.Load("Hatch") as Texture2D },
             { "Storage Container", Resources.Load("StorageContainer") as Texture2D },
             { "Copper Ore", Resources.Load("CopperOre") as Texture2D },
@@ -135,7 +153,16 @@ public class TextureDictionary : MonoBehaviour
             { "Rail Cart Hub", Resources.Load("RailCartHub") as Texture2D },
             { "Storage Computer", Resources.Load("StorageComputer") as Texture2D },
             { "Circuit Board", Resources.Load("CircuitBoard") as Texture2D },
-            { "Electric Motor", Resources.Load("Motor") as Texture2D }
+            { "Electric Motor", Resources.Load("Motor") as Texture2D },
+            { "Protection Block", Resources.Load("ProtectionBlock") as Texture2D },
+            { "Logic Block", Resources.Load("LogicBlock") as Texture2D },
+            { "Logic Inverter", Resources.Load("Inverter") as Texture2D },
+            { "Logic Delayer", Resources.Load("Delayer") as Texture2D },
+            { "Logic Splitter", Resources.Load("Splitter") as Texture2D },
+            { "Player Detector", Resources.Load("PlayerDetector") as Texture2D },
+            { "Power Detector", Resources.Load("PowerDetector") as Texture2D },
+            { "Item Detector", Resources.Load("ItemDetector") as Texture2D },
+            { "Relay", Resources.Load("Relay") as Texture2D }
         };
 
         modTextureCoroutine = StartCoroutine(AddModTextures(dictionary));

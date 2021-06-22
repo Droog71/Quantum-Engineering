@@ -148,5 +148,38 @@
     " When extracting ice, the extractor will not need a heat exchanger for cooling." +
     " This machine must be connected to a power source such as a solar panel, nuclear reactor or power conduit" +
     " and has an adjustable output measured in items per cycle.";
+
+    public string protectionBlock = "In multiplayer games, this machine prevents other players from placing or removing objects within a certain boundary." +
+    " If multiple players would like to share a protected area, the machine needs to be placed while all of those players are within the boundary." +
+    " All players within range will be added to the authorized user list for that protection block." +
+    " Each player is limited to 16 protection blocks, regardless of the number of users associated with the block.";
+
+    public string chunkSize = "This setting adjusts the size of chunks loaded around the player." +
+    " A 'chunk' is an area of blocks separated from their combined mesh to allow editing by the player." +
+    " Blocks farther from the player that are not within the loaded chunk are combined into a single object." +
+    " A smaller chunk size will increase the game's performance." +
+    " A larger chunk size will allow you to modify structures you have built from a greater distance.";
+
+    public string hazards = "With hazards enabled, your base will be impacted by meteor showers and attacked by hostile spacecraft." +
+    "You will need to shoot down meteors with your laser cannon and build turrets to defend your base.";
+
+    public string simulationSpeed = "This setting affects the frequency of machine operations and block physics updates. " +
+    "Lower simulation speeds increase the game's performance. Higher speeds cause machines to generate items faster.";
+
+    public string logicBlock = "Transmits and receives logic signals.";
+
+    public string logicInverter = "Inverts logic signals.";
+
+    public string logicDelayer = "Transmists and receives logic signals with a slight delay.";
+
+    public string logicSplitter = "Receives logic signal from a single input and transmits that signal to two outputs.";
+
+    public string playerDetector = "Emits a logic signal when a player touches the block.";
+
+    public string itemDetector = "Emits a logic signal when adjacent to a storage container that is not empty.";
+
+    public string powerDetector = "Emits a logic signal when adjacent to a powered machine.";
+
+    public string logicRelay = "Interrupts adjacent machine's power when logic state is high.";
 }
 

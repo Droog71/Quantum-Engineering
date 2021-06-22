@@ -118,7 +118,7 @@ public class Pirate : MonoBehaviour
 
             // Targeting.
             bool targetFound = false;
-            GameObject[] allObjects = GameObject.FindGameObjectsWithTag("Built");
+            GameObject[] allObjects = GameObject.FindGameObjectsWithTag("Machine");
             foreach (GameObject obj in allObjects)
             {
                 if (targetFound == false)
@@ -129,6 +129,7 @@ public class Pirate : MonoBehaviour
                         targetLocation = target.transform.position;
                         targetLocationList.Add(targetLocation);
                         targetFound = true;
+                        break;
                     }
                 }
             }
@@ -187,11 +188,11 @@ public class Pirate : MonoBehaviour
                     {
                         string objName;
                         GameObject obj = hit.collider.gameObject;
-                        if (obj.tag.Equals("Built"))
+                        if (obj.tag.Equals("Built") || obj.tag.Equals("Machine"))
                         {
-                            if (obj.GetComponent<ModBlock>() != null)
+                            if (obj.GetComponent<Block>() != null)
                             {
-                                objName = obj.GetComponent<ModBlock>().blockName;
+                                objName = obj.GetComponent<Block>().blockName;
                             }
                             else
                             {
@@ -202,9 +203,13 @@ public class Pirate : MonoBehaviour
                             if (RandomDamage > 75)
                             {
                                 Instantiate(targetExplosion, hit.point, transform.rotation);
-                                if (objName.ToUpper().Contains("GLASS") && obj.GetComponent<PhysicsHandler>() != null)
+                                if (objName.ToUpper().Contains("GLASS") && obj.GetComponent<Block>() != null)
                                 {
-                                    obj.GetComponent<PhysicsHandler>().Explode();
+                                    obj.GetComponent<Block>().Explode();
+                                }
+                                else if (obj.GetComponent<Machine>() != null)
+                                {
+                                    obj.GetComponent<Machine>().Explode();
                                 }
                                 else
                                 {
@@ -227,124 +232,24 @@ public class Pirate : MonoBehaviour
                                 Instantiate(damageExplosion, hit.point, transform.rotation);
                             }
                         }
-                        else if (obj.tag.Equals("CombinedMesh"))
+                        else if (obj.tag.Equals("CombinedMesh") || obj.transform.parent.tag.Equals("CombinedMesh"))
                         {
-                            if (obj.name.Equals("glassHolder(Clone)"))
+                            BlockHolder blockHolder = obj.GetComponent<BlockHolder>();
+
+                            if (blockHolder == null)
                             {
-                                int chanceOfDestruction = Random.Range(1, 101);
-                                {
-                                    if (chanceOfDestruction > 25)
-                                    {
-                                        Instantiate(targetExplosion, hit.point, transform.rotation);
-                                        game.meshManager.SeparateBlocks(hit.point, "glass",false);
-                                        if (CanSendDestructionMessage())
-                                        {
-                                            if (playerController.destructionMessageActive == false)
-                                            {
-                                                playerController.destructionMessageActive = true;
-                                                playerController.currentTabletMessage = "";
-                                            }
-                                            playerController.currentTabletMessage += "ALERT: Some glass blocks were attacked by hostile spacecraft!\n";
-                                            playerController.destructionMessageCount += 1;
-                                        }
-                                    }
-                                }
+                                blockHolder = obj.transform.parent.GetComponent<BlockHolder>();
                             }
-                            else if (obj.name.Equals("brickHolder(Clone)"))
+
+                            if (blockHolder != null)
                             {
-                                int chanceOfDestruction = Random.Range(1, 101);
-                                {
-                                    if (chanceOfDestruction > 50)
-                                    {
-                                        Instantiate(targetExplosion, hit.point, transform.rotation);
-                                        game.meshManager.SeparateBlocks(hit.point, "brick",false);
-                                        if (CanSendDestructionMessage())
-                                        {
-                                            if (playerController.destructionMessageActive == false)
-                                            {
-                                                playerController.destructionMessageActive = true;
-                                                playerController.currentTabletMessage = "";
-                                            }
-                                            playerController.currentTabletMessage += "ALERT: Some bricks were attacked by hostile spacecraft!\n";
-                                            playerController.destructionMessageCount += 1;
-                                        }
-                                    }
-                                    else
-                                    {
-                                        Instantiate(damageExplosion, hit.point, transform.rotation);
-                                    }
-                                }
-                            }
-                            else if (obj.name.Equals("ironHolder(Clone)"))
-                            {
-                                int chanceOfDestruction = Random.Range(1, 101);
-                                {
-                                    if (chanceOfDestruction > 75)
-                                    {
-                                        Instantiate(targetExplosion, hit.point, transform.rotation);
-                                        game.meshManager.SeparateBlocks(hit.point, "iron", false);
-                                        if (CanSendDestructionMessage())
-                                        {
-                                            if (playerController.destructionMessageActive == false)
-                                            {
-                                                playerController.destructionMessageActive = true;
-                                                playerController.currentTabletMessage = "";
-                                            }
-                                            playerController.currentTabletMessage += "ALERT: Some iron blocks were attacked by hostile spacecraft!\n";
-                                            playerController.destructionMessageCount += 1;
-                                        }
-                                    }
-                                    else
-                                    {
-                                        Instantiate(damageExplosion, hit.point, transform.rotation);
-                                    }
-                                }
-                            }
-                            else if (obj.name.Equals("steelHolder(Clone)"))
-                            {
-                                int chanceOfDestruction = Random.Range(1, 101);
-                                {
-                                    if (chanceOfDestruction > 99)
-                                    {
-                                        Instantiate(targetExplosion, hit.point, transform.rotation);
-                                        game.meshManager.SeparateBlocks(hit.point, "steel", false);
-                                        if (CanSendDestructionMessage())
-                                        {
-                                            if (playerController.destructionMessageActive == false)
-                                            {
-                                                playerController.destructionMessageActive = true;
-                                                playerController.currentTabletMessage = "";
-                                            }
-                                            playerController.currentTabletMessage += "ALERT: Some steel blocks were attacked by hostile spacecraft!\n";
-                                            playerController.destructionMessageCount += 1;
-                                        }
-                                    }
-                                    else
-                                    {
-                                        Instantiate(damageExplosion, hit.point, transform.rotation);
-                                    }
-                                }
-                            }
-                            else if (obj.name.Equals("modBlockHolder(Clone)"))
-                            {
-                                string type = "all";
                                 int toughness = 75;
 
-                                Transform[] transforms = obj.GetComponentsInChildren<Transform>(true);
-                                foreach (Transform t in transforms)
-                                {
-                                    if (t.GetComponent<ModBlock>() != null)
-                                    {
-                                        type = t.GetComponent<ModBlock>().blockName;
-                                        break;
-                                    }
-                                }
-
-                                if (type.ToUpper().Contains("GLASS"))
+                                if (blockHolder.blockType.ToUpper().Contains("GLASS"))
                                 {
                                     toughness = 25;
                                 }
-                                else if (type.ToUpper().Contains("STEEL"))
+                                else if (blockHolder.blockType.ToUpper().Contains("STEEL"))
                                 {
                                     toughness = 99;
                                 }
@@ -354,7 +259,7 @@ public class Pirate : MonoBehaviour
                                     if (chanceOfDestruction > toughness)
                                     {
                                         Instantiate(targetExplosion, hit.point, transform.rotation);
-                                        game.meshManager.SeparateBlocks(hit.point, type, false);
+                                        game.meshManager.RemoveBlock(blockHolder, hit.point, true);
                                         if (CanSendDestructionMessage())
                                         {
                                             if (playerController.destructionMessageActive == false)
@@ -362,7 +267,7 @@ public class Pirate : MonoBehaviour
                                                 playerController.destructionMessageActive = true;
                                                 playerController.currentTabletMessage = "";
                                             }
-                                            playerController.currentTabletMessage += "ALERT: Some blocks were attacked by hostile spacecraft!\n";
+                                            playerController.currentTabletMessage += "ALERT: " + blockHolder.blockType + " attacked by hostile spacecraft!\n";
                                             playerController.destructionMessageCount += 1;
                                         }
                                     }

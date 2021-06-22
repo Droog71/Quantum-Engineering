@@ -1,24 +1,20 @@
 ﻿using UnityEngine;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
-public class UniversalConduit : MonoBehaviour
+public class UniversalConduit : Machine
 {
     public float amount;
     public int speed = 1;
     public int power;
     public string type;
-    public string ID = "unassigned";
     public string inputID;
     public string outputID;
-    public string creationMethod = "built";
     public GameObject inputObject;
     public GameObject outputObject;
     public ConduitItem conduitItem;
     public Material lineMat;
     public bool inputMachineDisabled;
-    public int address;
     public int range = 6;
     public int connectionAttempts;
     public bool connectionFailed;
@@ -27,10 +23,7 @@ public class UniversalConduit : MonoBehaviour
     private StateManager stateManager;
     private GameObject builtObjects;
     private LineRenderer connectionLine;
-    private Coroutine connectionCoroutine;
     private List<GameObject> objList;
-    private bool connectionCoroutineBusy;
-    private float updateTick;
     private bool linkedToRailCart;
     private int findRailCartsInterval;
 
@@ -49,93 +42,89 @@ public class UniversalConduit : MonoBehaviour
         builtObjects = GameObject.Find("BuiltObjects");
     }
 
-    //! Called once per frame by unity engine.
-    public void Update()
+    //! Called by MachineManager update coroutine.
+    public override void UpdateMachine()
     {
-        if (ID == "unassigned")
+        if (ID == "unassigned" || stateManager.initMachines == false)
             return;
 
-        updateTick += 1 * Time.deltaTime;
-        if (updateTick > 0.5f + (address * 0.001f))
+        if (inputObject == null || outputObject == null)
         {
-            if (stateManager.Busy())
+            connectionAttempts += 1;
+            if (creationMethod.Equals("spawned"))
             {
-                updateTick = 0;
-                return;
+                if (connectionAttempts >= 128)
+                {
+                    connectionAttempts = 0;
+                    connectionFailed = true;
+                }
             }
-
-            GetComponent<PhysicsHandler>().UpdatePhysics();
-            updateTick = 0;
-            if (inputObject == null || outputObject == null)
+            else
             {
-                connectionAttempts += 1;
+                if (connectionAttempts >= 512)
+                {
+                    connectionAttempts = 0;
+                    connectionFailed = true;
+                }
+            }
+            if (connectionFailed == false)
+            {
+                GameObject[] allObjects = GameObject.FindGameObjectsWithTag("Machine");
+                objList = allObjects.ToList();
+                objList.Add(GameObject.Find("Rocket"));
+                objList.Add(GameObject.Find("LanderCargo"));
+                foreach (GameObject obj in objList)
+                {
+                    if (inputObject != null && outputObject != null)
+                    {
+                        break;
+                    }
+                    if (obj != null)
+                    {
+                        if (inputObject == null)
+                        {
+                            AttemptInputConnection(obj);
+                        }
+                        if (outputObject == null)
+                        {
+                            AttemptOutputConnection(obj);
+                        }
+                    }
+                }
+            }
+        }
+        if (inputObject != null)
+        {
+            HandleInput();
+        }
+        else
+        {
+            conduitItem.active = false;
+            GetComponent<Light>().enabled = false;
+            GetComponent<AudioSource>().enabled = false;
+        }
+        if (outputObject != null && connectionFailed == false)
+        {
+            HandleOutput();
+        }
+        else
+        {
+            if (connectionFailed == true)
+            {
                 if (creationMethod.Equals("spawned"))
                 {
-                    if (connectionAttempts >= 30)
-                    {
-                        connectionAttempts = 0;
-                        connectionFailed = true;
-                    }
-                }
-                else
-                {
-                    if (connectionAttempts >= 120)
-                    {
-                        connectionAttempts = 0;
-                        connectionFailed = true;
-                    }
-                }
-                if (connectionFailed == false)
-                {
-                    if (connectionCoroutineBusy == false)
-                    {
-                        connectionCoroutine = StartCoroutine(AttemptConnection());
-                    }
+                    creationMethod = "built";
                 }
             }
-            if (inputObject != null)
-            {
-                HandleInput();
-            }
-            else
-            {
-                conduitItem.active = false;
-                GetComponent<Light>().enabled = false;
-                GetComponent<AudioSource>().enabled = false;
-            }
-            if (outputObject != null && connectionFailed == false)
-            {
-                HandleOutput();
-            }
-            else
-            {
-                if (connectionFailed == true)
-                {
-                    if (creationMethod.Equals("spawned"))
-                    {
-                        creationMethod = "built";
-                    }
-                }
-                conduitItem.active = false;
-                GetComponent<Light>().enabled = false;
-                GetComponent<AudioSource>().enabled = false;
-                connectionLine.enabled = false;
-            }
-            if (inputObject != null && outputObject != null)
-            {
-                connectionAttempts = 0;
-            }
+            conduitItem.active = false;
+            GetComponent<Light>().enabled = false;
+            GetComponent<AudioSource>().enabled = false;
+            connectionLine.enabled = false;
         }
-    }
-
-    //! The object exists, is active and is not a standard building block.
-    private bool IsValidObject(GameObject obj)
-    {
-        if (obj != null)
+        if (inputObject != null && outputObject != null)
         {
-            return obj.transform.parent != builtObjects.transform && obj.activeInHierarchy;
+            connectionAttempts = 0;
         }
-        return false;
     }
 
     //! The object is a potential output connection.
@@ -152,24 +141,6 @@ public class UniversalConduit : MonoBehaviour
             return !obj.GetComponent<InventoryManager>().ID.Equals("player") && obj.GetComponent<Retriever>() == null && obj.GetComponent<AutoCrafter>() == null;
         }
         return false;
-    }
-
-    private IEnumerator AttemptConnection()
-    {
-        connectionCoroutineBusy = true;
-        GameObject[] allObjects = GameObject.FindGameObjectsWithTag("Built");
-        objList = allObjects.ToList();
-        objList.Add(GameObject.Find("Rocket"));
-        objList.Add(GameObject.Find("LanderCargo"));
-        foreach (GameObject obj in objList)
-        {
-            if (IsValidObject(obj))
-            {
-                ConnectToObject(obj);
-            }
-            yield return null;
-        }
-        connectionCoroutineBusy = false;
     }
 
     //! Puts items into a storage container or other object with attached inventory manager.
@@ -413,7 +384,7 @@ public class UniversalConduit : MonoBehaviour
     }
 
     //! Makes input and output connections.
-    private void ConnectToObject(GameObject obj)
+    private void AttemptInputConnection(GameObject obj)
     {
         if (obj.GetComponent<Auger>() != null)
         {
@@ -453,6 +424,11 @@ public class UniversalConduit : MonoBehaviour
                 }
             }
         }
+    }
+
+    //! Makes input and output connections.
+    private void AttemptOutputConnection(GameObject obj)
+    {
         if (obj.GetComponent<UniversalConduit>() != null)
         {
             float distance = Vector3.Distance(transform.position, obj.transform.position);

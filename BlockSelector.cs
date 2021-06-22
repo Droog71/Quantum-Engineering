@@ -12,6 +12,8 @@
         { 
             "Glass Block",
             "Brick", 
+            "Grass",
+            "Dirt",
             "Iron Block",
             "Iron Ramp",
             "Steel Block",
@@ -42,7 +44,16 @@
             "Dark Matter Conduit",
             "Dark Matter Collector",
             "Turret",
-            "Missile Turret"
+            "Missile Turret",
+            "Protection Block",
+            "Logic Block",
+            "Logic Inverter",
+            "Logic Delayer",
+            "Logic Splitter",
+            "Player Detector",
+            "Item Detector",
+            "Power Detector",
+            "Relay"
         };
     }
 

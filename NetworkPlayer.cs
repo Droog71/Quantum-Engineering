@@ -8,13 +8,10 @@ public class NetworkPlayer : MonoBehaviour
     public GameObject run;
     private float idleTimer;
 
-    public void Start()
-    {
-    }
-
+    //! Called once per frame by unity engine.
     public void Update()
     {
-        onGround |= Physics.Raycast(transform.position, -transform.up, 12);
+        onGround = Physics.Raycast(transform.position, -transform.up, 12);
 
         if (moving == true && onGround == true)
         {

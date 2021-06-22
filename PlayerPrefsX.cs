@@ -123,9 +123,24 @@ public class PlayerPrefsX
         return SetFloatArray(key, new float[] { vector.x, vector.y, vector.z });
     }
 
+    public static bool SetPersistentVector3(String key, Vector3 vector)
+    {
+        return SetPersistentFloatArray(key, new float[] { vector.x, vector.y, vector.z });
+    }
+
     public static Vector3 GetVector3(String key)
     {
         var floatArray = GetFloatArray(key);
+        if (floatArray.Length < 3)
+        {
+            return Vector3.zero;
+        }
+        return new Vector3(floatArray[0], floatArray[1], floatArray[2]);
+    }
+
+    public static Vector3 GetPersistentVector3(String key)
+    {
+        var floatArray = GetPersistentFloatArray(key);
         if (floatArray.Length < 3)
         {
             return Vector3.zero;
@@ -147,9 +162,24 @@ public class PlayerPrefsX
         return SetFloatArray(key, new float[] { vector.x, vector.y, vector.z, vector.w });
     }
 
+    public static bool SetPersistentQuaternion(String key, Quaternion vector)
+    {
+        return SetPersistentFloatArray(key, new float[] { vector.x, vector.y, vector.z, vector.w });
+    }
+
     public static Quaternion GetQuaternion(String key)
     {
         var floatArray = GetFloatArray(key);
+        if (floatArray.Length < 4)
+        {
+            return Quaternion.identity;
+        }
+        return new Quaternion(floatArray[0], floatArray[1], floatArray[2], floatArray[3]);
+    }
+
+    public static Quaternion GetPersistentQuaternion(String key)
+    {
+        var floatArray = GetPersistentFloatArray(key);
         if (floatArray.Length < 4)
         {
             return Quaternion.identity;
@@ -417,6 +447,11 @@ public class PlayerPrefsX
         return SetValue(key, floatArray, ArrayType.Float, 1, ConvertFromFloat);
     }
 
+    public static bool SetPersistentFloatArray(String key, float[] floatArray)
+    {
+        return SetPersistentValue(key, floatArray, ArrayType.Float, 1, ConvertFromFloat);
+    }
+
     public static bool SetVector2Array(String key, Vector2[] vector2Array)
     {
         return SetValue(key, vector2Array, ArrayType.Vector2, 2, ConvertFromVector2);
@@ -448,6 +483,19 @@ public class PlayerPrefsX
             convert(array, bytes, i);
         }
         return SaveBytes(key, bytes);
+    }
+
+    private static bool SetPersistentValue<T>(String key, T array, ArrayType arrayType, int vectorNumber, Action<T, byte[], int> convert) where T : IList
+    {
+        var bytes = new byte[(4 * array.Count) * vectorNumber + 1];
+        bytes[0] = System.Convert.ToByte(arrayType);    // Identifier
+        Initialize();
+
+        for (var i = 0; i < array.Count; i++)
+        {
+            convert(array, bytes, i);
+        }
+        return SavePersistentBytes(key, bytes);
     }
 
     private static void ConvertFromInt(int[] array, byte[] bytes, int i)
@@ -514,6 +562,13 @@ public class PlayerPrefsX
     {
         var floatList = new List<float>();
         GetValue(key, floatList, ArrayType.Float, 1, ConvertToFloat);
+        return floatList.ToArray();
+    }
+
+    public static float[] GetPersistentFloatArray(String key)
+    {
+        var floatList = new List<float>();
+        GetPersistentValue(key, floatList, ArrayType.Float, 1, ConvertToFloat);
         return floatList.ToArray();
     }
 
@@ -641,6 +696,31 @@ public class PlayerPrefsX
         }
     }
 
+    private static void GetPersistentValue<T>(String key, T list, ArrayType arrayType, int vectorNumber, Action<T, byte[]> convert) where T : IList
+    {
+        if (PlayerPrefs.HasKey(key))
+        {
+            var bytes = System.Convert.FromBase64String(PlayerPrefs.GetString(key));
+            if ((bytes.Length - 1) % (vectorNumber * 4) != 0)
+            {
+                Debug.LogError("Corrupt preference file for " + key);
+                return;
+            }
+            if ((ArrayType)bytes[0] != arrayType)
+            {
+                Debug.LogError(key + " is not a " + arrayType.ToString() + " array");
+                return;
+            }
+            Initialize();
+
+            var end = (bytes.Length - 1) / (vectorNumber * 4);
+            for (var i = 0; i < end; i++)
+            {
+                convert(list, bytes);
+            }
+        }
+    }
+
     private static void ConvertToInt(List<int> list, byte[] bytes)
     {
         list.Add(ConvertBytesToInt32(bytes));
@@ -705,6 +785,19 @@ public class PlayerPrefsX
         try
         {
             FileBasedPrefs.SetString(key, System.Convert.ToBase64String(bytes));
+        }
+        catch
+        {
+            return false;
+        }
+        return true;
+    }
+
+    private static bool SavePersistentBytes(String key, byte[] bytes)
+    {
+        try
+        {
+            PlayerPrefs.SetString(key, System.Convert.ToBase64String(bytes));
         }
         catch
         {

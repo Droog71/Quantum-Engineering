@@ -92,24 +92,6 @@ public class InputManager
         // WEAPON SELECTION
         if (!playerController.GuiOpen())
         {
-            if (cInput.GetKeyDown("Paint Gun"))
-            {
-                actionManager.TogglePaintGun();
-            }
-            if (playerController.paintGunActive == true)
-            {
-                if (Input.GetKeyDown(KeyCode.Mouse1))
-                {
-                    actionManager.TogglePaintGun();
-                }
-            }
-            if (cInput.GetKeyDown("Paint Color"))
-            {
-                if (playerController.paintGunActive == true && playerController.paintColorSelected == true)
-                {
-                    playerController.paintColorSelected = false;
-                }
-            }
             if (cInput.GetKeyDown("Scanner"))
             {
                 actionManager.ToggleScanner();
@@ -197,15 +179,15 @@ public class InputManager
         }
 
         // MANUAL BUILD AMOUNT SELECTION
-        if (cInput.GetKeyDown("Build Amount"))
+        if (cInput.GetKeyDown("Build Settings"))
         {
             if (!playerController.GuiOpen())
             {
-                playerController.buildAmountGUIopen = !playerController.buildAmountGUIopen;
+                playerController.buildSettingsGuiOpen = !playerController.buildSettingsGuiOpen;
             }
             else
             {
-                playerController.buildAmountGUIopen = false;
+                playerController.buildSettingsGuiOpen = false;
             }
         }
 
@@ -306,6 +288,12 @@ public class InputManager
             actionManager.ToggleTablet();
         }
 
+        // ACTIVATE TABLET GUI ON KEY PRESS
+        if (cInput.GetKeyDown("Hotbar"))
+        {
+            actionManager.ToggleHotBar();
+        }
+
         // OPEN OPTIONS/EXIT MENU WHEN ESCAPE KEY IS PRESSED
         if (Input.GetKeyDown(KeyCode.Escape) && playerController.exiting == false)
         {
@@ -325,17 +313,11 @@ public class InputManager
             {
                 actionManager.CloseTablet();
             }
-            else if (playerController.paintGunActive == true)
-            {
-                playerController.paintGun.SetActive(false);
-                playerController.paintGunActive = false;
-                playerController.paintColorSelected = false;
-            }
-            else if (playerController.buildAmountGUIopen == true)
+            else if (playerController.buildSettingsGuiOpen == true)
             {
                 Cursor.visible = false;
                 Cursor.lockState = CursorLockMode.Locked;
-                playerController.buildAmountGUIopen = false;
+                playerController.buildSettingsGuiOpen = false;
                 playerController.PlayButtonSound();
             }
             else if (playerController.doorGUIopen == true)

@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class DarkMatter: MonoBehaviour
 {
@@ -15,7 +16,7 @@ public class DarkMatter: MonoBehaviour
     //! Called once per frame by unity engine
     public void Update()
     {
-        if (!stateManager.Busy())
+        if (!stateManager.Busy() && SceneManager.GetActiveScene().name != "QE_Procedural")
         {
             if (size < 10)
             {

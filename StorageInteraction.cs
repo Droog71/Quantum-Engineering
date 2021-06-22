@@ -19,6 +19,13 @@ public class StorageInteraction
         InventoryManager inventory = playerController.objectInSight.GetComponent<InventoryManager>();
         if (cInput.GetKeyDown("Interact"))
         {
+            if (PlayerPrefsX.GetPersistentBool("multiplayer") == true)
+            {
+                if (!interactionController.CanInteract())
+                {
+                    return;
+                }
+            }
             if (playerController.storageGUIopen == false)
             {
                 if (inventory.initialized == true)
@@ -64,11 +71,11 @@ public class StorageInteraction
                 thisContainer.SaveData();
                 if (playerController.objectInSight.GetComponent<RailCart>() != null)
                 {
-                    interactionController.CollectObject("Rail Cart");
+                    interactionController.CollectObject(playerController.objectInSight, "Rail Cart");
                 }
                 else
                 {
-                    interactionController.CollectObject("Storage Container");
+                    interactionController.CollectObject(playerController.objectInSight, "Storage Container");
                 }
                 Object.Destroy(playerController.objectInSight);
                 playerController.PlayCraftingSound();
@@ -91,6 +98,13 @@ public class StorageInteraction
         playerController.machineHasPower = computer.powerON;
         if (cInput.GetKeyDown("Interact"))
         {
+            if (PlayerPrefsX.GetPersistentBool("multiplayer") == true)
+            {
+                if (!interactionController.CanInteract())
+                {
+                    return;
+                }
+            }
             if (playerController.storageGUIopen == false)
             {
                 if (computer.powerON == true && computer.initialized == true)
@@ -135,7 +149,7 @@ public class StorageInteraction
         }
         if (cInput.GetKeyDown("Collect Object"))
         {
-            interactionController.CollectObject("Storage Computer");
+            interactionController.CollectObject(playerController.objectInSight, "Storage Computer");
         }
     }
 }

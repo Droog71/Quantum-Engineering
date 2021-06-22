@@ -1,14 +1,17 @@
 ﻿using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class ActionManager
 {
     private PlayerController playerController;
     private CombinedMeshManager meshManager;
+    private HotBar hotbar;
 
     //! This class contains all functions called by the input manager.
     public ActionManager(PlayerController playerController)
     {
         this.playerController = playerController;
+        hotbar = playerController.gameObject.GetComponent<HotBar>();
         meshManager = playerController.gameManager.meshManager;
     }
 
@@ -46,15 +49,14 @@ public class ActionManager
     //! Toggles the laser cannon.
     public void ToggleLaserCannon()
     {
-        if (playerController.building == true || playerController.destroying == true)
+        if (playerController.building == true)
         {
-            if (playerController.gameManager.working == false)
+            if (playerController.gameManager.combiningBlocks == false)
             {
                 playerController.stoppingBuildCoRoutine = true;
                 meshManager.CombineBlocks();
                 playerController.separatedBlocks = false;
                 playerController.building = false;
-                playerController.destroying = false;
             }
             else
             {
@@ -63,9 +65,6 @@ public class ActionManager
         }
         if (!playerController.laserCannon.activeSelf)
         {
-            playerController.paintGun.SetActive(false);
-            playerController.paintGunActive = false;
-            playerController.paintColorSelected = false;
             playerController.scanner.SetActive(false);
             playerController.scannerActive = false;
             playerController.laserCannon.SetActive(true);
@@ -81,15 +80,14 @@ public class ActionManager
     //! Toggles the scanner.
     public void ToggleScanner()
     {
-        if (playerController.building == true || playerController.destroying == true)
+        if (playerController.building == true)
         {
-            if (playerController.gameManager.working == false)
+            if (playerController.gameManager.combiningBlocks == false)
             {
                 playerController.stoppingBuildCoRoutine = true;
                 meshManager.CombineBlocks();
                 playerController.separatedBlocks = false;
                 playerController.building = false;
-                playerController.destroying = false;
             }
             else
             {
@@ -98,9 +96,6 @@ public class ActionManager
         }
         if (!playerController.scanner.activeSelf)
         {
-            playerController.paintGun.SetActive(false);
-            playerController.paintGunActive = false;
-            playerController.paintColorSelected = false;
             playerController.laserCannon.SetActive(false);
             playerController.laserCannonActive = false;
             playerController.scanner.SetActive(true);
@@ -110,41 +105,6 @@ public class ActionManager
         {
             playerController.scanner.SetActive(false);
             playerController.scannerActive = false;
-        }
-    }
-
-    //! Toggles the paint gun.
-    public void TogglePaintGun()
-    {
-        if (playerController.building == true || playerController.destroying == true)
-        {
-            if (playerController.gameManager.working == false)
-            {
-                playerController.stoppingBuildCoRoutine = true;
-                meshManager.CombineBlocks();
-                playerController.separatedBlocks = false;
-                playerController.building = false;
-                playerController.destroying = false;
-            }
-            else
-            {
-                playerController.requestedBuildingStop = true;
-            }
-        }
-        if (playerController.paintGunActive == false)
-        {
-            playerController.paintGunActive = true;
-            playerController.paintGun.SetActive(true);
-            playerController.laserCannon.SetActive(false);
-            playerController.laserCannonActive = false;
-            playerController.scanner.SetActive(false);
-            playerController.scannerActive = false;
-        }
-        else
-        {
-            playerController.paintGun.SetActive(false);
-            playerController.paintGunActive = false;
-            playerController.paintColorSelected = false;
         }
     }
 
@@ -238,10 +198,7 @@ public class ActionManager
     //! Returns true when the player is walking on metal.
     private bool OnMetal(RaycastHit hit)
     {
-        return hit.collider.gameObject.GetComponent<IronBlock>() != null
-        || hit.collider.gameObject.GetComponent<Steel>() != null
-        || hit.collider.gameObject.name.Equals("ironHolder(Clone)")
-        || hit.collider.gameObject.name.Equals("steelHolder(Clone)");
+        return false;
     }
 
     //! Returns true when varied footstep sounds should loop back to the first sound.
@@ -290,14 +247,6 @@ public class ActionManager
         else
         {
             playerController.laserCannon.GetComponent<HeldItemSway>().active = false;
-        }
-        if (playerController.paintGunActive == true)
-        {
-            playerController.paintGun.GetComponent<HeldItemSway>().active = true;
-        }
-        else
-        {
-            playerController.paintGun.GetComponent<HeldItemSway>().active = false;
         }
 
         //FOOTSTEP SOUNDS
@@ -360,7 +309,6 @@ public class ActionManager
         playerController.mCam.GetComponent<HeadBob>().active = false;
         playerController.scanner.GetComponent<HeldItemSway>().active = false;
         playerController.laserCannon.GetComponent<HeldItemSway>().active = false;
-        playerController.paintGun.GetComponent<HeldItemSway>().active = false;
     }
 
     //! Resets the held item's position.
@@ -374,10 +322,6 @@ public class ActionManager
         {
             playerController.laserCannon.GetComponent<HeldItemSway>().Reset();
         }
-        if (playerController.paintGunActive == true)
-        {
-            playerController.paintGun.GetComponent<HeldItemSway>().Reset();
-        }
     }
 
     //! Fires the laser cannon.
@@ -385,13 +329,26 @@ public class ActionManager
     {
         if (playerController.firing == false)
         {
-            playerController.firing = true;
-            playerController.laserCannon.GetComponent<AudioSource>().Play();
-            playerController.muzzleFlash.SetActive(true);
             if (Physics.Raycast(playerController.mCam.gameObject.transform.position, playerController.mCam.gameObject.transform.forward, out RaycastHit hit, 1000))
             {
-                Object.Instantiate(playerController.weaponHit, hit.point, playerController.gameObject.transform.rotation);
-                playerController.laserController.HitTarget(hit.collider.gameObject, hit);
+                if (hit.collider.gameObject.GetComponent<Deer>() == null && hit.collider.gameObject.GetComponent<NetworkPlayer>() == null)
+                {
+                    playerController.firing = true;
+                    playerController.laserCannon.GetComponent<AudioSource>().Play();
+                    playerController.muzzleFlash.SetActive(true);
+                    playerController.laserController.HitTarget(hit.collider.gameObject, hit);
+                    Object.Instantiate(playerController.weaponHit, hit.point, playerController.gameObject.transform.rotation);
+                }
+                else
+                {
+                    playerController.PlayMissingItemsSound();
+                }
+            }
+            else
+            {
+                playerController.firing = true;
+                playerController.laserCannon.GetComponent<AudioSource>().Play();
+                playerController.muzzleFlash.SetActive(true);
             }
         }
     }
@@ -412,6 +369,10 @@ public class ActionManager
                 {
                     float x = resource.gameObject.transform.position.x;
                     float y = resource.gameObject.transform.position.y + 15;
+                    if (SceneManager.GetActiveScene().name == "QE_Procedural")
+                    {
+                        y = resource.gameObject.transform.position.y + 65;
+                    }
                     float z = resource.gameObject.transform.position.z;
                     Vector3 pos = new Vector3(x, y, z);
                     Quaternion rot = playerController.gameObject.transform.rotation;
@@ -478,7 +439,6 @@ public class ActionManager
         playerController.mCam.GetComponent<HeadBob>().active = false;
         playerController.scanner.GetComponent<HeldItemSway>().active = false;
         playerController.laserCannon.GetComponent<HeldItemSway>().active = false;
-        playerController.paintGun.GetComponent<HeldItemSway>().active = false;
     }
 
     //! Increases the number of blocks to be built along the build axis.
@@ -523,12 +483,6 @@ public class ActionManager
     {
         if (!playerController.GuiOpen())
         {
-            if (playerController.paintGunActive == true)
-            {
-                playerController.paintGun.SetActive(false);
-                playerController.paintGunActive = false;
-                playerController.paintColorSelected = false;
-            }
             if (playerController.scannerActive == true)
             {
                 playerController.scanner.SetActive(false);
@@ -550,13 +504,12 @@ public class ActionManager
     {
         if (playerController.building == true)
         {
-            if (playerController.gameManager.working == false)
+            if (playerController.gameManager.combiningBlocks == false)
             {
                 playerController.stoppingBuildCoRoutine = true;
                 meshManager.CombineBlocks();
                 playerController.separatedBlocks = false;
                 playerController.building = false;
-                playerController.destroying = false;
             }
             else
             {
@@ -587,6 +540,13 @@ public class ActionManager
         Cursor.lockState = CursorLockMode.None;
         playerController.gameObject.GetComponent<MSCameraController>().enabled = false;
         playerController.tabletOpen = false;
+    }
+
+    //! Toggles the hotbar.
+    public void ToggleHotBar()
+    {
+        hotbar.toggled = !hotbar.toggled;
+        playerController.PlayButtonSound();
     }
 
     //! Closes all GUI windows.

@@ -1,6 +1,9 @@
 ﻿using UnityEngine;
-using System.Collections.Generic;
+using System;
 using System.IO;
+using System.Linq;
+using System.Collections.Generic;
+
 
 //! This class provides the crafting recipe dictionary used by the crafting manager
 public class CraftingDictionary
@@ -101,6 +104,12 @@ public class CraftingDictionary
     private readonly string[] darkMatterConduitIngredients = 
     { "Steel Plate", "Steel Pipe", "Tin Gear", "Steel Gear", "Bronze Gear", "Aluminum Wire", "Copper Wire", "Dark Matter" };
 
+    private readonly string[] protectionBlockIngredients = 
+    { "Glass Block", "Iron Pipe", "Circuit Board"};
+
+    private readonly string[] logicBlockIngredients = 
+    { "Tin Plate", "Circuit Board"};
+
     private readonly int[] ironBlockAmounts = { 1 };
     private readonly int[] steelBlockAmounts = { 1 };
     private readonly int[] doorAmounts = { 1, 1 };
@@ -109,6 +118,7 @@ public class CraftingDictionary
     private readonly int[] augerAmounts = { 10, 10 };
     private readonly int[] storageContainerAmounts = { 6 };
     private readonly int[] extruderAmounts = { 10, 10 };
+    private readonly int[] logicBlockAmounts = { 1, 1 };
     private readonly int[] pressAmounts = { 10, 10, 10 };
     private readonly int[] universalExtractorAmounts = { 10, 10, 10, 10 };
     private readonly int[] universalConduitAmounts = { 5, 5, 5, 5 };
@@ -125,6 +135,7 @@ public class CraftingDictionary
     private readonly int[] nuclearReactorAmounts = { 10, 10, 10, 10, 10, 10 };
     private readonly int[] heatExchangerAmounts = { 10, 10 };
     private readonly int[] smelterAmounts = { 5, 10, 10 };
+    private readonly int[] protectionBlockAmounts = { 1, 12, 1};
     private readonly int[] gearCutterAmounts = { 5, 5, 5, 10, 10 };
     private readonly int[] storageComputerAmounts = { 5, 5, 5, 10, 10, 1, 1 };
     private readonly int[] alloySmelterAmounts = { 20, 20, 20, 20, 40, 40 };
@@ -170,8 +181,17 @@ public class CraftingDictionary
             { "Turret", new CraftingRecipe(turretIngredients, turretAmounts, "Turret", 1)  },
             { "Missile", new CraftingRecipe(missileIngredients, missileAmounts, "Missile", 1)  },
             { "Missile Turret", new CraftingRecipe(turretIngredients, missileTurretAmounts, "Missile Turret", 1)  },
-            { "Dark Matter Collector", new CraftingRecipe(darkMatterCollectorIngredients, darkMatterCollectorAmounts, "Dark Matter Conduit", 1)  },
-            { "Dark Matter Conduit", new CraftingRecipe(darkMatterConduitIngredients, darkMatterConduitAmounts, "Dark Matter Conduit", 1) }
+            { "Dark Matter Collector", new CraftingRecipe(darkMatterCollectorIngredients, darkMatterCollectorAmounts, "Dark Matter Collector", 1)  },
+            { "Dark Matter Conduit", new CraftingRecipe(darkMatterConduitIngredients, darkMatterConduitAmounts, "Dark Matter Conduit", 1) },
+            { "Protection Block", new CraftingRecipe(protectionBlockIngredients, protectionBlockAmounts, "Protection Block", 1) },
+            { "Logic Block", new CraftingRecipe(logicBlockIngredients, logicBlockAmounts, "Logic Block", 1) },
+            { "Logic Inverter", new CraftingRecipe(logicBlockIngredients, logicBlockAmounts, "Logic Inverter", 1) },
+            { "Logic Delayer", new CraftingRecipe(logicBlockIngredients, logicBlockAmounts, "Logic Delayer", 1) },
+            { "Logic Splitter", new CraftingRecipe(logicBlockIngredients, logicBlockAmounts, "Logic Splitter", 1) },
+            { "Logic Relay", new CraftingRecipe(logicBlockIngredients, logicBlockAmounts, "Relay", 1) },
+            { "Player Detector", new CraftingRecipe(logicBlockIngredients, logicBlockAmounts, "Player Detector", 1) },
+            { "Item Detector", new CraftingRecipe(logicBlockIngredients, logicBlockAmounts, "Item Detector", 1) },
+            { "Power Detector", new CraftingRecipe(logicBlockIngredients, logicBlockAmounts, "Power Detector", 1) }
         };
 
         AddModRecipes();
@@ -208,13 +228,22 @@ public class CraftingDictionary
                 {
                     modDictionary.Add(output, modRecipe);
                     string modName = new DirectoryInfo(path).Name;
-                    Debug.Log("Mod "+"["+modName+"]"+" added a new crafting recipe for [" + output + "]");
+                    string[] commandLineOptions = Environment.GetCommandLineArgs();
+                    if (commandLineOptions.Contains("-devel"))
+                    {
+                        Debug.Log("Mod "+"["+modName+"]"+" added a new crafting recipe for [" + output + "]");
+                    }
+
                 }
                 else
                 {
                     dictionary[output] = modRecipe;
                     string modName = new DirectoryInfo(path).Name;
-                    Debug.Log("Mod "+"["+modName+"]"+" has overridden the crafting recipe for [" + output + "]");
+                    string[] commandLineOptions = Environment.GetCommandLineArgs();
+                    if (commandLineOptions.Contains("-devel"))
+                    {
+                        Debug.Log("Mod " + "[" + modName + "]" + " has overridden the crafting recipe for [" + output + "]");
+                    }
                 }
             }
         }

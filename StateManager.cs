@@ -1,6 +1,10 @@
-﻿using System.Collections;
+﻿using UnityEngine;
+using UnityEngine.SceneManagement;
+using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
+using System.IO;
+using System.Linq;
+using System;
 
 //! This class handles unique ID assignment and saving & loading of worlds.
 public class StateManager : MonoBehaviour
@@ -8,18 +12,20 @@ public class StateManager : MonoBehaviour
     public bool saving;
     public bool dataSaved;
     public bool worldLoaded;
-    public int progress;
-    public int[] idList;
+    public bool initMachines;
+    public bool finalMachineAddress;
+    public bool finalBlockAddress;
+    public int machineProgress;
+    public int blockProgress;
+    public int totalMachines;
+    public int currentMachine;
+    public int[] machineIdList;
+    public int[] blockIdList;
     public List<string> modTextureList;
     public List<string> modRecipeList;
     public GameObject darkMatterCollector;
     public GameObject darkMatterConduit;
-    public GameObject ironBlock;
-    public GameObject ironRamp;
-    public GameObject steel;
-    public GameObject steelRamp;
     public GameObject storageContainer;
-    public GameObject glass;
     public GameObject universalExtractor;
     public GameObject universalConduit;
     public GameObject powerConduit;
@@ -44,60 +50,90 @@ public class StateManager : MonoBehaviour
     public GameObject autoCrafter;
     public GameObject railCartHub;
     public GameObject railCart;
-    public GameObject brick;
     public GameObject modMachine;
-    public GameObject modBlock;
+    public GameObject protectionBlock;
+    public GameObject block;
+    public GameObject blockHolder;
     public GameObject builtObjects;
-    public bool assigningIDs;
     public string worldName = "World";
     public string partName = "";
     public SaveManager saveManager;
     public Vector3 partPosition = new Vector3(0.0f, 0.0f, 0.0f);
     public Quaternion partRotation = Quaternion.Euler(new Vector3(0.0f, 0.0f, 0.0f));
+    private GameObject player;
+    private PlayerController playerController;
+    private MainMenu mainMenu;
     private Vector3 emptyVector = new Vector3(0.0f, 0.0f, 0.0f);
     private Vector3 objectPosition;
     private Quaternion objectRotation;
     private AddressManager addressManager;
-    private Coroutine addressingCoroutine;
+    private Coroutine machineIdCoroutine;
+    private Coroutine blockIdCoroutine;
     private Coroutine loadCoroutine;
     private Coroutine saveCoroutine;
-    private float updateTick;
     private string objectName = "";
     private bool loading;
+    private int batchmodeLogInterval;
+    public int totalBlocks;
+    public int currentBlocks;
 
     //! Called by unity engine before the first update.
     public void Start()
     {
         saveManager = new SaveManager(this);
+        player = GameObject.Find("Player");
+        playerController = player.GetComponent<PlayerController>();
+        mainMenu = player.GetComponent<MainMenu>();
     }
 
     //! Update is called once per frame.
     public void Update()
     {
-        GameObject player = GameObject.Find("Player");
-        PlayerController playerController = player.GetComponent<PlayerController>();
-        MainMenu mainMenu = player.GetComponent<MainMenu>();
+        if (mainMenu != null && playerController != null)
+        {
+            if (mainMenu.worldSelected == true && playerController.addedModBlocks == true && loading == false)
+            {
+                loadCoroutine = StartCoroutine(LoadWorld());
+                loading = true;
+            }
 
-        if (mainMenu.worldSelected == true && playerController.addedModBlocks == true && loading == false)
-        {
-            loadCoroutine = StartCoroutine(LoadWorld());
-            loading = true;
-        }
-        if (worldLoaded == true)
-        {
+            string[] commandLineOptions = Environment.GetCommandLineArgs();
+            if (commandLineOptions.Contains("-batchmode"))
+            {
+                if (loading == true && worldLoaded == false)
+                {
+                    batchmodeLogInterval++;
+                    if (batchmodeLogInterval >= 60)
+                    {
+                        string loadingMessage = "Loading... " + blockProgress +
+                        "/" + blockIdList.Length + " chunks " + 
+                        currentBlocks + "/" + totalBlocks + " blocks.";
+                            
+
+                        if (blockProgress > 0 && machineProgress >= blockIdList.Length)
+                        {
+                            loadingMessage = "Loading machines... " + machineProgress + "/" + machineIdList.Length;
+                        }
+
+                        if (blockProgress > 0 && blockProgress >= blockIdList.Length)
+                        {
+                            loadingMessage = "Initializing machines... " + currentMachine + "/" + totalMachines;
+                        }
+
+                        Debug.Log(loadingMessage);
+                        batchmodeLogInterval = 0;
+                    }
+                }
+            }
+
             if (addressManager == null)
             {
                 addressManager = new AddressManager(this);
             }
 
-            updateTick += 1 * Time.deltaTime;
-            if (updateTick > 1)
+            if (saving == false && worldLoaded == true)
             {
-                if (assigningIDs == false && saving == false)
-                {
-                    AssignIDs();
-                }
-                updateTick = 0;
+                AssignIDs();
             }
         }
     }
@@ -105,425 +141,429 @@ public class StateManager : MonoBehaviour
     //! Loads a saved world.
     private IEnumerator LoadWorld()
     {
-        if (worldLoaded == false && PlayerPrefsX.GetIntArray(worldName + "idList").Length > 0)
+        if (worldLoaded == false)
         {
-            int loadInterval = 0;
-            progress = 0;
-            idList = PlayerPrefsX.GetIntArray(worldName + "idList");
-            foreach (int objectID in idList)
+            blockIdList = PlayerPrefsX.GetIntArray(worldName + "blockIdList");
+            machineIdList = PlayerPrefsX.GetIntArray(worldName + "machineIdList");
+
+            if (blockIdList.Length > 0)
             {
-                while (GetComponent<GameManager>().working == true)
+                blockProgress = 0;
+                foreach (int objectID in blockIdList)
                 {
-                    yield return null;
-                }
-                objectPosition = PlayerPrefsX.GetVector3(worldName + objectID + "Position");
-                objectRotation = PlayerPrefsX.GetQuaternion(worldName + objectID + "Rotation");
-                objectName = FileBasedPrefs.GetString(worldName + objectID + "Name");
-                if (objectName != "" && objectPosition != emptyVector)
-                {
-                    if (objectName == worldName + "Door")
+                    objectPosition = PlayerPrefsX.GetVector3(worldName + "block" + objectID + "Position");
+                    objectRotation = PlayerPrefsX.GetQuaternion(worldName + "block" + objectID + "Rotation");
+                    objectName = FileBasedPrefs.GetString(worldName + "block" + objectID + "Name");
+                    string ID = objectName + objectID;
+                    if (objectName == worldName + "BlockHolder")
                     {
-                        GameObject SpawnedObject = Instantiate(door, objectPosition, objectRotation);
-                        SpawnedObject.GetComponent<Door>().audioClip = FileBasedPrefs.GetInt(objectName + objectID + "audioClip");
-                        SpawnedObject.GetComponent<Door>().textureIndex = FileBasedPrefs.GetInt(objectName + objectID + "textureIndex");
-                        SpawnedObject.GetComponent<Door>().material = FileBasedPrefs.GetString(objectName + objectID + "material");
-                        SpawnedObject.GetComponent<Door>().edited = FileBasedPrefs.GetBool(objectName + objectID + "edited");
-                        SpawnedObject.GetComponent<PhysicsHandler>().falling = FileBasedPrefs.GetBool(objectName + objectID + "falling");
-                        SpawnedObject.GetComponent<PhysicsHandler>().fallingStack = FileBasedPrefs.GetBool(objectName + objectID + "fallingStack");
-                        SpawnedObject.GetComponent<PhysicsHandler>().creationMethod = "spawned";
-                    }
-                    if (objectName == worldName + "QuantumHatchway")
-                    {
-                        GameObject SpawnedObject = Instantiate(quantumHatchway, objectPosition, objectRotation);
-                        SpawnedObject.GetComponent<PhysicsHandler>().falling = FileBasedPrefs.GetBool(objectName + objectID + "falling");
-                        SpawnedObject.GetComponent<PhysicsHandler>().fallingStack = FileBasedPrefs.GetBool(objectName + objectID + "fallingStack");
-                        SpawnedObject.GetComponent<PhysicsHandler>().creationMethod = "spawned";
-                    }
-                    if (objectName == worldName + "DarkMatterCollector")
-                    {
-                        GameObject SpawnedObject = Instantiate(darkMatterCollector, objectPosition, objectRotation);
-                        SpawnedObject.GetComponent<DarkMatterCollector>().speed = FileBasedPrefs.GetInt(objectName + objectID + "speed");
-                        SpawnedObject.GetComponent<DarkMatterCollector>().darkMatterAmount = FileBasedPrefs.GetFloat(objectName + objectID + "darkMatterAmount");
-                        SpawnedObject.GetComponent<DarkMatterCollector>().creationMethod = "spawned";
-                        SpawnedObject.GetComponent<PhysicsHandler>().falling = FileBasedPrefs.GetBool(objectName + objectID + "falling");
-                        SpawnedObject.GetComponent<PhysicsHandler>().fallingStack = FileBasedPrefs.GetBool(objectName + objectID + "fallingStack");
-                        SpawnedObject.GetComponent<PhysicsHandler>().creationMethod = "spawned";
-                    }
-                    if (objectName == worldName + "DarkMatterConduit")
-                    {
-                        GameObject SpawnedObject = Instantiate(darkMatterConduit, objectPosition, objectRotation);
-                        SpawnedObject.GetComponent<DarkMatterConduit>().inputID = FileBasedPrefs.GetString(objectName + objectID + "inputID");
-                        SpawnedObject.GetComponent<DarkMatterConduit>().outputID = FileBasedPrefs.GetString(objectName + objectID + "outputID");
-                        SpawnedObject.GetComponent<DarkMatterConduit>().speed = FileBasedPrefs.GetInt(objectName + objectID + "speed");
-                        SpawnedObject.GetComponent<DarkMatterConduit>().range = FileBasedPrefs.GetInt(objectName + objectID + "range");
-                        SpawnedObject.GetComponent<DarkMatterConduit>().darkMatterAmount = FileBasedPrefs.GetFloat(objectName + objectID + "darkMatterAmount");
-                        SpawnedObject.GetComponent<DarkMatterConduit>().creationMethod = "spawned";
-                        SpawnedObject.GetComponent<PhysicsHandler>().falling = FileBasedPrefs.GetBool(objectName + objectID + "falling");
-                        SpawnedObject.GetComponent<PhysicsHandler>().fallingStack = FileBasedPrefs.GetBool(objectName + objectID + "fallingStack");
-                        SpawnedObject.GetComponent<PhysicsHandler>().creationMethod = "spawned";
-                    }
-                    if (objectName == worldName + "RailCartHub")
-                    {
-                        GameObject SpawnedObject = Instantiate(railCartHub, objectPosition, objectRotation);
-                        SpawnedObject.GetComponent<RailCartHub>().inputID = FileBasedPrefs.GetString(objectName + objectID + "inputID");
-                        SpawnedObject.GetComponent<RailCartHub>().outputID = FileBasedPrefs.GetString(objectName + objectID + "outputID");
-                        SpawnedObject.GetComponent<RailCartHub>().range = FileBasedPrefs.GetInt(objectName + objectID + "range");
-                        SpawnedObject.GetComponent<RailCartHub>().stop = FileBasedPrefs.GetBool(objectName + objectID + "stop");
-                        SpawnedObject.GetComponent<RailCartHub>().circuit = FileBasedPrefs.GetInt(objectName + objectID + "circuit");
-                        SpawnedObject.GetComponent<RailCartHub>().stopTime = FileBasedPrefs.GetFloat(objectName + objectID + "stopTime");
-                        SpawnedObject.GetComponent<RailCartHub>().centralHub = FileBasedPrefs.GetBool(objectName + objectID + "centralHub");
-                        SpawnedObject.GetComponent<RailCartHub>().creationMethod = "spawned";
-                        SpawnedObject.GetComponent<PhysicsHandler>().falling = FileBasedPrefs.GetBool(objectName + objectID + "falling");
-                        SpawnedObject.GetComponent<PhysicsHandler>().fallingStack = FileBasedPrefs.GetBool(objectName + objectID + "fallingStack");
-                        SpawnedObject.GetComponent<PhysicsHandler>().creationMethod = "spawned";
-                    }
-                    if (objectName == worldName + "RailCart")
-                    {
-                        GameObject SpawnedObject = Instantiate(railCart, objectPosition, objectRotation);
-                        SpawnedObject.GetComponent<RailCart>().creationMethod = "spawned";
-                        SpawnedObject.GetComponent<RailCart>().targetID = FileBasedPrefs.GetString(objectName + objectID + "targetID");
-                    }
-                    if (objectName == worldName + "UniversalConduit")
-                    {
-                        GameObject SpawnedObject = Instantiate(universalConduit, objectPosition, objectRotation);
-                        SpawnedObject.GetComponent<UniversalConduit>().inputID = FileBasedPrefs.GetString(objectName + objectID + "inputID");
-                        SpawnedObject.GetComponent<UniversalConduit>().outputID = FileBasedPrefs.GetString(objectName + objectID + "outputID");
-                        SpawnedObject.GetComponent<UniversalConduit>().type = FileBasedPrefs.GetString(objectName + objectID + "type");
-                        SpawnedObject.GetComponent<UniversalConduit>().speed = FileBasedPrefs.GetInt(objectName + objectID + "speed");
-                        SpawnedObject.GetComponent<UniversalConduit>().range = FileBasedPrefs.GetInt(objectName + objectID + "range");
-                        SpawnedObject.GetComponent<UniversalConduit>().amount = FileBasedPrefs.GetFloat(objectName + objectID + "amount");
-                        SpawnedObject.GetComponent<UniversalConduit>().creationMethod = "spawned";
-                        SpawnedObject.GetComponent<PhysicsHandler>().falling = FileBasedPrefs.GetBool(objectName + objectID + "falling");
-                        SpawnedObject.GetComponent<PhysicsHandler>().fallingStack = FileBasedPrefs.GetBool(objectName + objectID + "fallingStack");
-                        SpawnedObject.GetComponent<PhysicsHandler>().creationMethod = "spawned";
-                    }
-                    if (objectName == worldName + "Retriever")
-                    {
-                        GameObject SpawnedObject = Instantiate(retriever, objectPosition, objectRotation);
-                        SpawnedObject.GetComponent<Retriever>().inputID = FileBasedPrefs.GetString(objectName + objectID + "inputID");
-                        SpawnedObject.GetComponent<Retriever>().outputID = FileBasedPrefs.GetString(objectName + objectID + "outputID");
-                        SpawnedObject.GetComponent<Retriever>().speed = FileBasedPrefs.GetInt(objectName + objectID + "speed");
-                        SpawnedObject.GetComponent<Retriever>().amount = FileBasedPrefs.GetFloat(objectName + objectID + "amount");
-                        SpawnedObject.GetComponent<Retriever>().creationMethod = "spawned";
-                        SpawnedObject.GetComponent<PhysicsHandler>().falling = FileBasedPrefs.GetBool(objectName + objectID + "falling");
-                        SpawnedObject.GetComponent<PhysicsHandler>().fallingStack = FileBasedPrefs.GetBool(objectName + objectID + "fallingStack");
-                        SpawnedObject.GetComponent<PhysicsHandler>().creationMethod = "spawned";
-                    }
-                    if (objectName == worldName + "AutoCrafter")
-                    {
-                        GameObject SpawnedObject = Instantiate(autoCrafter, objectPosition, objectRotation);
-                        SpawnedObject.GetComponent<AutoCrafter>().inputID = FileBasedPrefs.GetString(objectName + objectID + "inputID");
-                        SpawnedObject.GetComponent<AutoCrafter>().speed = FileBasedPrefs.GetInt(objectName + objectID + "speed");
-                        SpawnedObject.GetComponent<AutoCrafter>().creationMethod = "spawned";
-                        SpawnedObject.GetComponent<PhysicsHandler>().falling = FileBasedPrefs.GetBool(objectName + objectID + "falling");
-                        SpawnedObject.GetComponent<PhysicsHandler>().fallingStack = FileBasedPrefs.GetBool(objectName + objectID + "fallingStack");
-                        SpawnedObject.GetComponent<PhysicsHandler>().creationMethod = "spawned";
-                    }
-                    if (objectName == worldName + "Smelter")
-                    {
-                        GameObject SpawnedObject = Instantiate(smelter, objectPosition, objectRotation);
-                        SpawnedObject.GetComponent<Smelter>().inputID = FileBasedPrefs.GetString(objectName + objectID + "inputID");
-                        SpawnedObject.GetComponent<Smelter>().outputID = FileBasedPrefs.GetString(objectName + objectID + "outputID");
-                        SpawnedObject.GetComponent<Smelter>().inputType = FileBasedPrefs.GetString(objectName + objectID + "inputType");
-                        SpawnedObject.GetComponent<Smelter>().outputType = FileBasedPrefs.GetString(objectName + objectID + "outputType");
-                        SpawnedObject.GetComponent<Smelter>().speed = FileBasedPrefs.GetInt(objectName + objectID + "speed");
-                        SpawnedObject.GetComponent<Smelter>().amount = FileBasedPrefs.GetFloat(objectName + objectID + "amount");
-                        SpawnedObject.GetComponent<Smelter>().creationMethod = "spawned";
-                        SpawnedObject.GetComponent<PhysicsHandler>().falling = FileBasedPrefs.GetBool(objectName + objectID + "falling");
-                        SpawnedObject.GetComponent<PhysicsHandler>().fallingStack = FileBasedPrefs.GetBool(objectName + objectID + "fallingStack");
-                        SpawnedObject.GetComponent<PhysicsHandler>().creationMethod = "spawned";
-                    }
-                    if (objectName == worldName + "HeatExchanger")
-                    {
-                        GameObject SpawnedObject = Instantiate(heatExchanger, objectPosition, objectRotation);
-                        SpawnedObject.GetComponent<HeatExchanger>().inputID = FileBasedPrefs.GetString(objectName + objectID + "inputID");
-                        SpawnedObject.GetComponent<HeatExchanger>().outputID = FileBasedPrefs.GetString(objectName + objectID + "outputID");
-                        SpawnedObject.GetComponent<HeatExchanger>().speed = FileBasedPrefs.GetInt(objectName + objectID + "speed");
-                        SpawnedObject.GetComponent<HeatExchanger>().amount = FileBasedPrefs.GetFloat(objectName + objectID + "amount");
-                        SpawnedObject.GetComponent<HeatExchanger>().inputType = FileBasedPrefs.GetString(objectName + objectID + "inputType");
-                        SpawnedObject.GetComponent<HeatExchanger>().creationMethod = "spawned";
-                        SpawnedObject.GetComponent<PhysicsHandler>().falling = FileBasedPrefs.GetBool(objectName + objectID + "falling");
-                        SpawnedObject.GetComponent<PhysicsHandler>().fallingStack = FileBasedPrefs.GetBool(objectName + objectID + "fallingStack");
-                        SpawnedObject.GetComponent<PhysicsHandler>().creationMethod = "spawned";
-                    }
-                    if (objectName == worldName + "SolarPanel")
-                    {
-                        GameObject SpawnedObject = Instantiate(solarPanel, objectPosition, objectRotation);
-                        SpawnedObject.GetComponent<PowerSource>().outputID = FileBasedPrefs.GetString(objectName + objectID + "outputID");
-                        SpawnedObject.GetComponent<PowerSource>().creationMethod = "spawned";
-                        SpawnedObject.GetComponent<PhysicsHandler>().falling = FileBasedPrefs.GetBool(objectName + objectID + "falling");
-                        SpawnedObject.GetComponent<PhysicsHandler>().fallingStack = FileBasedPrefs.GetBool(objectName + objectID + "fallingStack");
-                        SpawnedObject.GetComponent<PhysicsHandler>().creationMethod = "spawned";
-                    }
-                    if (objectName == worldName + "Generator")
-                    {
-                        GameObject SpawnedObject = Instantiate(generator, objectPosition, objectRotation);
-                        SpawnedObject.GetComponent<PowerSource>().outputID = FileBasedPrefs.GetString(objectName + objectID + "outputID");
-                        SpawnedObject.GetComponent<PowerSource>().creationMethod = "spawned";
-                        SpawnedObject.GetComponent<PowerSource>().fuelType = FileBasedPrefs.GetString(objectName + objectID + "fuelType");
-                        SpawnedObject.GetComponent<PowerSource>().fuelAmount = FileBasedPrefs.GetInt(objectName + objectID + "fuelAmount");
-                        SpawnedObject.GetComponent<PhysicsHandler>().falling = FileBasedPrefs.GetBool(objectName + objectID + "falling");
-                        SpawnedObject.GetComponent<PhysicsHandler>().fallingStack = FileBasedPrefs.GetBool(objectName + objectID + "fallingStack");
-                        SpawnedObject.GetComponent<PhysicsHandler>().creationMethod = "spawned";
-                    }
-                    if (objectName == worldName + "NuclearReactor")
-                    {
-                        GameObject SpawnedObject = Instantiate(nuclearReactor, objectPosition, objectRotation);
-                        SpawnedObject.GetComponent<NuclearReactor>().creationMethod = "spawned";
-                        SpawnedObject.GetComponent<PhysicsHandler>().falling = FileBasedPrefs.GetBool(objectName + objectID + "falling");
-                        SpawnedObject.GetComponent<PhysicsHandler>().fallingStack = FileBasedPrefs.GetBool(objectName + objectID + "fallingStack");
-                        SpawnedObject.GetComponent<PhysicsHandler>().creationMethod = "spawned";
-                    }
-                    if (objectName == worldName + "ReactorTurbine")
-                    {
-                        GameObject SpawnedObject = Instantiate(reactorTurbine, objectPosition, objectRotation);
-                        SpawnedObject.GetComponent<PowerSource>().outputID = FileBasedPrefs.GetString(objectName + objectID + "outputID");
-                        SpawnedObject.GetComponent<PowerSource>().creationMethod = "spawned";
-                        SpawnedObject.GetComponent<PhysicsHandler>().falling = FileBasedPrefs.GetBool(objectName + objectID + "falling");
-                        SpawnedObject.GetComponent<PhysicsHandler>().fallingStack = FileBasedPrefs.GetBool(objectName + objectID + "fallingStack");
-                        SpawnedObject.GetComponent<PhysicsHandler>().creationMethod = "spawned";
-                    }
-                    if (objectName == worldName + "PowerConduit")
-                    {
-                        GameObject SpawnedObject = Instantiate(powerConduit, objectPosition, objectRotation);
-                        SpawnedObject.GetComponent<PowerConduit>().inputID = FileBasedPrefs.GetString(objectName + objectID + "inputID");
-                        SpawnedObject.GetComponent<PowerConduit>().outputID1 = FileBasedPrefs.GetString(objectName + objectID + "outputID1");
-                        SpawnedObject.GetComponent<PowerConduit>().outputID2 = FileBasedPrefs.GetString(objectName + objectID + "outputID2");
-                        SpawnedObject.GetComponent<PowerConduit>().dualOutput = FileBasedPrefs.GetBool(objectName + objectID + "dualOutput");
-                        SpawnedObject.GetComponent<PowerConduit>().range = FileBasedPrefs.GetInt(objectName + objectID + "range");
-                        SpawnedObject.GetComponent<PowerConduit>().powerAmount = FileBasedPrefs.GetInt(objectName + objectID + "powerAmount");
-                        SpawnedObject.GetComponent<PowerConduit>().creationMethod = "spawned";
-                        SpawnedObject.GetComponent<PhysicsHandler>().falling = FileBasedPrefs.GetBool(objectName + objectID + "falling");
-                        SpawnedObject.GetComponent<PhysicsHandler>().fallingStack = FileBasedPrefs.GetBool(objectName + objectID + "fallingStack");
-                        SpawnedObject.GetComponent<PhysicsHandler>().creationMethod = "spawned";
-                    }
-                    if (objectName == worldName + "Auger")
-                    {
-                        GameObject SpawnedObject = Instantiate(auger, objectPosition, objectRotation);
-                        SpawnedObject.GetComponent<Auger>().speed = FileBasedPrefs.GetInt(objectName + objectID + "speed");
-                        SpawnedObject.GetComponent<Auger>().amount = FileBasedPrefs.GetFloat(objectName + objectID + "amount");
-                        SpawnedObject.GetComponent<Auger>().creationMethod = "spawned";
-                        SpawnedObject.GetComponent<PhysicsHandler>().falling = FileBasedPrefs.GetBool(objectName + objectID + "falling");
-                        SpawnedObject.GetComponent<PhysicsHandler>().fallingStack = FileBasedPrefs.GetBool(objectName + objectID + "fallingStack");
-                        SpawnedObject.GetComponent<PhysicsHandler>().creationMethod = "spawned";
-                    }
-                    if (objectName == worldName + "ElectricLight")
-                    {
-                        GameObject SpawnedObject = Instantiate(electricLight, objectPosition, objectRotation);
-                        SpawnedObject.GetComponent<ElectricLight>().creationMethod = "spawned";
-                        SpawnedObject.GetComponent<PhysicsHandler>().falling = FileBasedPrefs.GetBool(objectName + objectID + "falling");
-                        SpawnedObject.GetComponent<PhysicsHandler>().fallingStack = FileBasedPrefs.GetBool(objectName + objectID + "fallingStack");
-                        SpawnedObject.GetComponent<PhysicsHandler>().creationMethod = "spawned";
-                    }
-                    if (objectName == worldName + "Turret")
-                    {
-                        GameObject SpawnedObject = Instantiate(turret, objectPosition, objectRotation);
-                        SpawnedObject.GetComponent<Turret>().speed = FileBasedPrefs.GetInt(objectName + objectID + "speed");
-                        SpawnedObject.GetComponent<Turret>().creationMethod = "spawned";
-                        SpawnedObject.GetComponent<PhysicsHandler>().falling = FileBasedPrefs.GetBool(objectName + objectID + "falling");
-                        SpawnedObject.GetComponent<PhysicsHandler>().fallingStack = FileBasedPrefs.GetBool(objectName + objectID + "fallingStack");
-                        SpawnedObject.GetComponent<PhysicsHandler>().creationMethod = "spawned";
-                    }
-                    if (objectName == worldName + "MissileTurret")
-                    {
-                        GameObject SpawnedObject = Instantiate(missileTurret, objectPosition, objectRotation);
-                        SpawnedObject.GetComponent<MissileTurret>().speed = FileBasedPrefs.GetInt(objectName + objectID + "speed");
-                        SpawnedObject.GetComponent<MissileTurret>().ammoType = FileBasedPrefs.GetString(objectName + objectID + "ammoType");
-                        SpawnedObject.GetComponent<MissileTurret>().ammoAmount = FileBasedPrefs.GetInt(objectName + objectID + "ammoAmount");
-                        SpawnedObject.GetComponent<MissileTurret>().creationMethod = "spawned";
-                        SpawnedObject.GetComponent<PhysicsHandler>().falling = FileBasedPrefs.GetBool(objectName + objectID + "falling");
-                        SpawnedObject.GetComponent<PhysicsHandler>().fallingStack = FileBasedPrefs.GetBool(objectName + objectID + "fallingStack");
-                        SpawnedObject.GetComponent<PhysicsHandler>().creationMethod = "spawned";
-                    }
-                    if (objectName == worldName + "AlloySmelter")
-                    {
-                        GameObject SpawnedObject = Instantiate(alloySmelter, objectPosition, objectRotation);
-                        SpawnedObject.GetComponent<AlloySmelter>().inputID1 = FileBasedPrefs.GetString(objectName + objectID + "inputID1");
-                        SpawnedObject.GetComponent<AlloySmelter>().inputID2 = FileBasedPrefs.GetString(objectName + objectID + "inputID2");
-                        SpawnedObject.GetComponent<AlloySmelter>().inputType1 = FileBasedPrefs.GetString(objectName + objectID + "inputType1");
-                        SpawnedObject.GetComponent<AlloySmelter>().inputType2 = FileBasedPrefs.GetString(objectName + objectID + "inputType2");
-                        SpawnedObject.GetComponent<AlloySmelter>().outputType = FileBasedPrefs.GetString(objectName + objectID + "outputType");
-                        SpawnedObject.GetComponent<AlloySmelter>().outputID = FileBasedPrefs.GetString(objectName + objectID + "outputID");
-                        SpawnedObject.GetComponent<AlloySmelter>().speed = FileBasedPrefs.GetInt(objectName + objectID + "speed");
-                        SpawnedObject.GetComponent<AlloySmelter>().amount = FileBasedPrefs.GetFloat(objectName + objectID + "amount");
-                        SpawnedObject.GetComponent<AlloySmelter>().amount2 = FileBasedPrefs.GetFloat(objectName + objectID + "amount2");
-                        SpawnedObject.GetComponent<AlloySmelter>().outputAmount = FileBasedPrefs.GetFloat(objectName + objectID + "outputAmount");
-                        SpawnedObject.GetComponent<AlloySmelter>().creationMethod = "spawned";
-                        SpawnedObject.GetComponent<PhysicsHandler>().falling = FileBasedPrefs.GetBool(objectName + objectID + "falling");
-                        SpawnedObject.GetComponent<PhysicsHandler>().fallingStack = FileBasedPrefs.GetBool(objectName + objectID + "fallingStack");
-                        SpawnedObject.GetComponent<PhysicsHandler>().creationMethod = "spawned";
-                    }
-                    if (objectName == worldName + "Press")
-                    {
-                        GameObject SpawnedObject = Instantiate(press, objectPosition, objectRotation);
-                        SpawnedObject.GetComponent<Press>().inputID = FileBasedPrefs.GetString(objectName + objectID + "inputID");
-                        SpawnedObject.GetComponent<Press>().outputID = FileBasedPrefs.GetString(objectName + objectID + "outputID");
-                        SpawnedObject.GetComponent<Press>().inputType = FileBasedPrefs.GetString(objectName + objectID + "inputType");
-                        SpawnedObject.GetComponent<Press>().outputType = FileBasedPrefs.GetString(objectName + objectID + "outputType");
-                        SpawnedObject.GetComponent<Press>().speed = FileBasedPrefs.GetInt(objectName + objectID + "speed");
-                        SpawnedObject.GetComponent<Press>().amount = FileBasedPrefs.GetFloat(objectName + objectID + "amount");
-                        SpawnedObject.GetComponent<Press>().creationMethod = "spawned";
-                        SpawnedObject.GetComponent<PhysicsHandler>().falling = FileBasedPrefs.GetBool(objectName + objectID + "falling");
-                        SpawnedObject.GetComponent<PhysicsHandler>().fallingStack = FileBasedPrefs.GetBool(objectName + objectID + "fallingStack");
-                        SpawnedObject.GetComponent<PhysicsHandler>().creationMethod = "spawned";
-                    }
-                    if (objectName == worldName + "Extruder")
-                    {
-                        GameObject SpawnedObject = Instantiate(extruder, objectPosition, objectRotation);
-                        SpawnedObject.GetComponent<Extruder>().inputID = FileBasedPrefs.GetString(objectName + objectID + "inputID");
-                        SpawnedObject.GetComponent<Extruder>().outputID = FileBasedPrefs.GetString(objectName + objectID + "outputID");
-                        SpawnedObject.GetComponent<Extruder>().inputType = FileBasedPrefs.GetString(objectName + objectID + "inputType");
-                        SpawnedObject.GetComponent<Extruder>().outputType = FileBasedPrefs.GetString(objectName + objectID + "outputType");
-                        SpawnedObject.GetComponent<Extruder>().speed = FileBasedPrefs.GetInt(objectName + objectID + "speed");
-                        SpawnedObject.GetComponent<Extruder>().amount = FileBasedPrefs.GetFloat(objectName + objectID + "amount");
-                        SpawnedObject.GetComponent<Extruder>().creationMethod = "spawned";
-                        SpawnedObject.GetComponent<PhysicsHandler>().falling = FileBasedPrefs.GetBool(objectName + objectID + "falling");
-                        SpawnedObject.GetComponent<PhysicsHandler>().fallingStack = FileBasedPrefs.GetBool(objectName + objectID + "fallingStack");
-                        SpawnedObject.GetComponent<PhysicsHandler>().creationMethod = "spawned";
-                    }
-                    if (objectName == worldName + "GearCutter")
-                    {
-                        GameObject SpawnedObject = Instantiate(gearCutter, objectPosition, objectRotation);
-                        SpawnedObject.GetComponent<GearCutter>().inputID = FileBasedPrefs.GetString(objectName + objectID + "inputID");
-                        SpawnedObject.GetComponent<GearCutter>().outputID = FileBasedPrefs.GetString(objectName + objectID + "outputID");
-                        SpawnedObject.GetComponent<GearCutter>().inputType = FileBasedPrefs.GetString(objectName + objectID + "inputType");
-                        SpawnedObject.GetComponent<GearCutter>().outputType = FileBasedPrefs.GetString(objectName + objectID + "outputType");
-                        SpawnedObject.GetComponent<GearCutter>().speed = FileBasedPrefs.GetInt(objectName + objectID + "speed");
-                        SpawnedObject.GetComponent<GearCutter>().amount = FileBasedPrefs.GetFloat(objectName + objectID + "amount");
-                        SpawnedObject.GetComponent<GearCutter>().creationMethod = "spawned";
-                        SpawnedObject.GetComponent<PhysicsHandler>().falling = FileBasedPrefs.GetBool(objectName + objectID + "falling");
-                        SpawnedObject.GetComponent<PhysicsHandler>().fallingStack = FileBasedPrefs.GetBool(objectName + objectID + "fallingStack");
-                        SpawnedObject.GetComponent<PhysicsHandler>().creationMethod = "spawned";
-                    }
-                    if (objectName == worldName + "UniversalExtractor")
-                    {
-                        GameObject SpawnedObject = Instantiate(universalExtractor, objectPosition, objectRotation);
-                        SpawnedObject.GetComponent<UniversalExtractor>().speed = FileBasedPrefs.GetInt(objectName + objectID + "speed");
-                        SpawnedObject.GetComponent<UniversalExtractor>().amount = FileBasedPrefs.GetFloat(objectName + objectID + "amount");
-                        SpawnedObject.GetComponent<UniversalExtractor>().type = FileBasedPrefs.GetString(objectName + objectID + "type");
-                        SpawnedObject.GetComponent<UniversalExtractor>().creationMethod = "spawned";
-                        SpawnedObject.GetComponent<PhysicsHandler>().falling = FileBasedPrefs.GetBool(objectName + objectID + "falling");
-                        SpawnedObject.GetComponent<PhysicsHandler>().fallingStack = FileBasedPrefs.GetBool(objectName + objectID + "fallingStack");
-                        SpawnedObject.GetComponent<PhysicsHandler>().creationMethod = "spawned";
-                    }
-                    if (objectName == worldName + "StorageContainer")
-                    {
-                        GameObject SpawnedObject = Instantiate(storageContainer, objectPosition, objectRotation);
-                        SpawnedObject.GetComponent<PhysicsHandler>().falling = FileBasedPrefs.GetBool(objectName + objectID + "falling");
-                        SpawnedObject.GetComponent<PhysicsHandler>().fallingStack = FileBasedPrefs.GetBool(objectName + objectID + "fallingStack");
-                        SpawnedObject.GetComponent<PhysicsHandler>().creationMethod = "spawned";
-                    }
-                    if (objectName == worldName + "StorageComputer")
-                    {
-                        GameObject SpawnedObject = Instantiate(storageComputer, objectPosition, objectRotation);
-                        SpawnedObject.GetComponent<PhysicsHandler>().falling = FileBasedPrefs.GetBool(objectName + objectID + "falling");
-                        SpawnedObject.GetComponent<PhysicsHandler>().fallingStack = FileBasedPrefs.GetBool(objectName + objectID + "fallingStack");
-                        SpawnedObject.GetComponent<PhysicsHandler>().creationMethod = "spawned";
-                    }
-                    if (objectName == worldName + "IronBlock")
-                    {
-                        GameObject SpawnedObject = Instantiate(ironBlock, objectPosition, objectRotation);
-                        SpawnedObject.GetComponent<IronBlock>().creationMethod = "spawned";
-                        SpawnedObject.GetComponent<PhysicsHandler>().falling = FileBasedPrefs.GetBool(objectName + objectID + "falling");
-                        SpawnedObject.GetComponent<PhysicsHandler>().fallingStack = FileBasedPrefs.GetBool(objectName + objectID + "fallingStack");
-                        SpawnedObject.GetComponent<PhysicsHandler>().creationMethod = "spawned";
-                    }
-                    if (objectName == worldName + "IronRamp")
-                    {
-                        GameObject SpawnedObject = Instantiate(ironRamp, objectPosition, objectRotation);
-                        SpawnedObject.GetComponent<IronBlock>().creationMethod = "spawned";
-                        SpawnedObject.GetComponent<PhysicsHandler>().falling = FileBasedPrefs.GetBool(objectName + objectID + "falling");
-                        SpawnedObject.GetComponent<PhysicsHandler>().fallingStack = FileBasedPrefs.GetBool(objectName + objectID + "fallingStack");
-                        SpawnedObject.GetComponent<PhysicsHandler>().creationMethod = "spawned";
-                    }
-                    if (objectName == worldName + "Steel")
-                    {
-                        GameObject SpawnedObject = Instantiate(steel, objectPosition, objectRotation);
-                        SpawnedObject.GetComponent<Steel>().creationMethod = "spawned";
-                        SpawnedObject.GetComponent<PhysicsHandler>().falling = FileBasedPrefs.GetBool(objectName + objectID + "falling");
-                        SpawnedObject.GetComponent<PhysicsHandler>().fallingStack = FileBasedPrefs.GetBool(objectName + objectID + "fallingStack");
-                        SpawnedObject.GetComponent<PhysicsHandler>().creationMethod = "spawned";
-                    }
-                    if (objectName == worldName + "SteelRamp")
-                    {
-                        GameObject SpawnedObject = Instantiate(steelRamp, objectPosition, objectRotation);
-                        SpawnedObject.GetComponent<Steel>().creationMethod = "spawned";
-                        SpawnedObject.GetComponent<PhysicsHandler>().falling = FileBasedPrefs.GetBool(objectName + objectID + "falling");
-                        SpawnedObject.GetComponent<PhysicsHandler>().fallingStack = FileBasedPrefs.GetBool(objectName + objectID + "fallingStack");
-                        SpawnedObject.GetComponent<PhysicsHandler>().creationMethod = "spawned";
-                    }
-                    if (objectName == worldName + "Brick")
-                    {
-                        GameObject SpawnedObject = Instantiate(brick, objectPosition, objectRotation);
-                        SpawnedObject.GetComponent<Brick>().creationMethod = "spawned";
-                        SpawnedObject.GetComponent<PhysicsHandler>().falling = FileBasedPrefs.GetBool(objectName + objectID + "falling");
-                        SpawnedObject.GetComponent<PhysicsHandler>().fallingStack = FileBasedPrefs.GetBool(objectName + objectID + "fallingStack");
-                        SpawnedObject.GetComponent<PhysicsHandler>().creationMethod = "spawned";
-                    }
-                    if (objectName == worldName + "Glass")
-                    {
-                        GameObject SpawnedObject = Instantiate(glass, objectPosition, objectRotation);
-                        SpawnedObject.GetComponent<Glass>().creationMethod = "spawned";
-                        SpawnedObject.GetComponent<PhysicsHandler>().falling = FileBasedPrefs.GetBool(objectName + objectID + "falling");
-                        SpawnedObject.GetComponent<PhysicsHandler>().fallingStack = FileBasedPrefs.GetBool(objectName + objectID + "fallingStack");
-                        SpawnedObject.GetComponent<PhysicsHandler>().creationMethod = "spawned";
-                    }
-                    if (objectName == worldName + "ModMachine")
-                    {
-                        GameObject SpawnedObject = Instantiate(modMachine, objectPosition, objectRotation);
-                        SpawnedObject.GetComponent<ModMachine>().machineName = FileBasedPrefs.GetString(objectName + objectID + "machineName");
-                        SpawnedObject.GetComponent<ModMachine>().inputID = FileBasedPrefs.GetString(objectName + objectID + "inputID");
-                        SpawnedObject.GetComponent<ModMachine>().outputID = FileBasedPrefs.GetString(objectName + objectID + "outputID");
-                        SpawnedObject.GetComponent<ModMachine>().inputType = FileBasedPrefs.GetString(objectName + objectID + "inputType");
-                        SpawnedObject.GetComponent<ModMachine>().outputType = FileBasedPrefs.GetString(objectName + objectID + "outputType");
-                        SpawnedObject.GetComponent<ModMachine>().speed = FileBasedPrefs.GetInt(objectName + objectID + "speed");
-                        SpawnedObject.GetComponent<ModMachine>().amount = FileBasedPrefs.GetFloat(objectName + objectID + "amount");
-                        SpawnedObject.GetComponent<ModMachine>().creationMethod = "spawned";
-                        SpawnedObject.GetComponent<PhysicsHandler>().creationMethod = "spawned";
-                        SpawnedObject.GetComponent<PhysicsHandler>().falling = FileBasedPrefs.GetBool(objectName + objectID + "falling");
-                        SpawnedObject.GetComponent<PhysicsHandler>().fallingStack = FileBasedPrefs.GetBool(objectName + objectID + "fallingStack");
-                    }
-                    if (objectName == worldName + "ModBlock")
-                    {
-                        GameObject SpawnedObject = Instantiate(modBlock, objectPosition, objectRotation);
-                        string blockName = FileBasedPrefs.GetString(objectName + objectID + "blockName");
-                        SpawnedObject.GetComponent<ModBlock>().blockName = blockName;
-                        PlayerController playerController = GameObject.Find("Player").GetComponent<PlayerController>();
-                        BlockDictionary blockDictionary = playerController.GetComponent<BuildController>().blockDictionary;
-                        if (blockDictionary.meshDictionary.ContainsKey(blockName))
+                        GameObject spawnedObject = Instantiate(blockHolder, objectPosition, objectRotation);
+                        spawnedObject.transform.parent = builtObjects.transform;
+                        spawnedObject.GetComponent<BlockHolder>().blockData = new List<BlockHolder.BlockInfo>();
+                        spawnedObject.GetComponent<BlockHolder>().ID = ID;
+                        string blockType = FileBasedPrefs.GetString(ID + "blockType");
+                        spawnedObject.GetComponent<BlockHolder>().blockType = blockType;
+                        if (blockType == "Grass" || blockType == "Dirt")
                         {
-                            SpawnedObject.GetComponent<MeshFilter>().mesh = blockDictionary.meshDictionary[blockName];
+                            Vector3 worldLoc = PlayerPrefsX.GetVector3(ID + "worldLoc");
+                            GetComponent<TerrainGenerator>().chunkLocations.Add(worldLoc);
                         }
-                        GetComponent<GameManager>().meshManager.SetMaterial(SpawnedObject, blockName);
-                        SpawnedObject.GetComponent<PhysicsHandler>().creationMethod = "spawned";
-                        SpawnedObject.GetComponent<PhysicsHandler>().falling = FileBasedPrefs.GetBool(objectName + objectID + "falling");
-                        SpawnedObject.GetComponent<PhysicsHandler>().fallingStack = FileBasedPrefs.GetBool(objectName + objectID + "fallingStack");
+                        Vector3[] blockPositions = PlayerPrefsX.GetVector3Array(ID + "blockPositions");
+                        if (blockPositions.Length > 0)
+                        {
+                            totalBlocks = blockPositions.Length;
+                            currentBlocks = 0;
+                            int interval = 0;
+                            Quaternion[] blockRotations = PlayerPrefsX.GetQuaternionArray(ID + "blockRotations");
+                            for (int i = 0; i < blockPositions.Length; i++)
+                            {
+                                BlockHolder.BlockInfo blockInfo = new BlockHolder.BlockInfo(blockPositions[i], blockRotations[i]);
+                                spawnedObject.GetComponent<BlockHolder>().blockData.Add(blockInfo);
+                                currentBlocks++;
+                                interval++;
+                                if (interval >= totalBlocks * 0.5f)
+                                {
+                                    interval = 0;
+                                    yield return null;
+                                }
+                            }
+                        }
+                        spawnedObject.GetComponent<BlockHolder>().unloaded = true;
+                        string saveDataPath = Path.Combine(Application.persistentDataPath, "SaveData" + "/" + worldName);
+                        Directory.CreateDirectory(saveDataPath);
+                        string saveFileLocation = Path.Combine(saveDataPath + "/" + ID + ".obj");
+                        ObjImporter importer = new ObjImporter();
+                        Mesh newMesh = importer.ImportFile(saveFileLocation);
+                        spawnedObject.GetComponent<MeshFilter>().mesh = newMesh;
+                        GetComponent<GameManager>().meshManager.SetMaterial(spawnedObject, blockType);
+                        spawnedObject.GetComponent<MeshCollider>().sharedMesh = spawnedObject.GetComponent<MeshFilter>().mesh;
+                        spawnedObject.GetComponent<MeshCollider>().enabled = true;
                     }
+                    blockProgress++;
                 }
-                progress++;
-                loadInterval++;
-                if (loadInterval >= idList.Length * 0.025f)
+            }
+
+            if (machineIdList.Length > 0)
+            {
+                int loadInterval = 0;
+                machineProgress = 0;
+                foreach (int objectID in machineIdList)
                 {
-                    loadInterval = 0;
-                    GetComponent<GameManager>().meshManager.CombineBlocks();
-                    yield return null;
+                    objectPosition = PlayerPrefsX.GetVector3(worldName + "machine" + objectID + "Position");
+                    objectRotation = PlayerPrefsX.GetQuaternion(worldName + "machine" + objectID + "Rotation");
+                    objectName = FileBasedPrefs.GetString(worldName + "machine" + objectID + "Name");
+                    string ID = objectName + objectID;
+                    if (objectName != "" && objectPosition != emptyVector)
+                    {
+                        if (objectName == worldName + "LogicBlock")
+                        {
+                            string blockType = FileBasedPrefs.GetString(ID + "blockType");
+                            BlockDictionary blockDictionary = playerController.GetComponent<BuildController>().blockDictionary;
+                            Debug.Log("LOGIC BLOCK: " + blockType);
+                            GameObject spawnedObject = Instantiate(blockDictionary.machineDictionary[blockType], objectPosition, objectRotation);
+                            spawnedObject.GetComponent<LogicBlock>().logic = PlayerPrefsX.GetBool(ID + "logic");
+                        }
+                        if (objectName == worldName + "Door")
+                        {
+                            GameObject spawnedObject = Instantiate(door, objectPosition, objectRotation);
+                            spawnedObject.GetComponent<Door>().ID = ID;
+                            spawnedObject.GetComponent<Door>().audioClip = FileBasedPrefs.GetInt(ID+ "audioClip");
+                            spawnedObject.GetComponent<Door>().textureIndex = FileBasedPrefs.GetInt(ID+ "textureIndex");
+                            spawnedObject.GetComponent<Door>().material = FileBasedPrefs.GetString(ID+ "material");
+                            spawnedObject.GetComponent<Door>().edited = FileBasedPrefs.GetBool(ID+ "edited");
+                        }
+                        if (objectName == worldName + "QuantumHatchway")
+                        {
+                            GameObject spawnedObject = Instantiate(quantumHatchway, objectPosition, objectRotation);
+                            spawnedObject.GetComponent<Door>().ID = ID;
+                        }
+                        if (objectName == worldName + "DarkMatterCollector")
+                        {
+                            GameObject spawnedObject = Instantiate(darkMatterCollector, objectPosition, objectRotation);
+                            spawnedObject.GetComponent<DarkMatterCollector>().ID = ID;
+                            spawnedObject.GetComponent<DarkMatterCollector>().speed = FileBasedPrefs.GetInt(ID+ "speed");
+                            spawnedObject.GetComponent<DarkMatterCollector>().darkMatterAmount = FileBasedPrefs.GetFloat(ID+ "darkMatterAmount");
+                            spawnedObject.GetComponent<DarkMatterCollector>().creationMethod = "spawned";
+                        }
+                        if (objectName == worldName + "DarkMatterConduit")
+                        {
+                            GameObject spawnedObject = Instantiate(darkMatterConduit, objectPosition, objectRotation);
+                            spawnedObject.GetComponent<DarkMatterConduit>().ID = ID;
+                            spawnedObject.GetComponent<DarkMatterConduit>().inputID = FileBasedPrefs.GetString(ID+ "inputID");
+                            spawnedObject.GetComponent<DarkMatterConduit>().outputID = FileBasedPrefs.GetString(ID+ "outputID");
+                            spawnedObject.GetComponent<DarkMatterConduit>().speed = FileBasedPrefs.GetInt(ID+ "speed");
+                            spawnedObject.GetComponent<DarkMatterConduit>().range = FileBasedPrefs.GetInt(ID+ "range");
+                            spawnedObject.GetComponent<DarkMatterConduit>().darkMatterAmount = FileBasedPrefs.GetFloat(ID+ "darkMatterAmount");
+                            spawnedObject.GetComponent<DarkMatterConduit>().creationMethod = "spawned";
+                        }
+                        if (objectName == worldName + "RailCartHub")
+                        {
+                            GameObject spawnedObject = Instantiate(railCartHub, objectPosition, objectRotation);
+                            spawnedObject.GetComponent<RailCartHub>().ID = ID;
+                            spawnedObject.GetComponent<RailCartHub>().inputID = FileBasedPrefs.GetString(ID+ "inputID");
+                            spawnedObject.GetComponent<RailCartHub>().outputID = FileBasedPrefs.GetString(ID+ "outputID");
+                            spawnedObject.GetComponent<RailCartHub>().range = FileBasedPrefs.GetInt(ID+ "range");
+                            spawnedObject.GetComponent<RailCartHub>().stop = FileBasedPrefs.GetBool(ID+ "stop");
+                            spawnedObject.GetComponent<RailCartHub>().circuit = FileBasedPrefs.GetInt(ID+ "circuit");
+                            spawnedObject.GetComponent<RailCartHub>().stopTime = FileBasedPrefs.GetFloat(ID+ "stopTime");
+                            spawnedObject.GetComponent<RailCartHub>().centralHub = FileBasedPrefs.GetBool(ID+ "centralHub");
+                            spawnedObject.GetComponent<RailCartHub>().creationMethod = "spawned";
+                        }
+                        if (objectName == worldName + "RailCart")
+                        {
+                            GameObject spawnedObject = Instantiate(railCart, objectPosition, objectRotation);
+                            spawnedObject.GetComponent<RailCart>().ID = ID;
+                            spawnedObject.GetComponent<RailCart>().creationMethod = "spawned";
+                            spawnedObject.GetComponent<RailCart>().targetID = FileBasedPrefs.GetString(ID+ "targetID");
+                            spawnedObject.GetComponent<RailCart>().startPosition = PlayerPrefsX.GetVector3(ID+ "startPosition");
+                        }
+                        if (objectName == worldName + "UniversalConduit")
+                        {
+                            GameObject spawnedObject = Instantiate(universalConduit, objectPosition, objectRotation);
+                            spawnedObject.GetComponent<UniversalConduit>().ID = ID;
+                            spawnedObject.GetComponent<UniversalConduit>().inputID = FileBasedPrefs.GetString(ID+ "inputID");
+                            spawnedObject.GetComponent<UniversalConduit>().outputID = FileBasedPrefs.GetString(ID+ "outputID");
+                            spawnedObject.GetComponent<UniversalConduit>().type = FileBasedPrefs.GetString(ID+ "type");
+                            spawnedObject.GetComponent<UniversalConduit>().speed = FileBasedPrefs.GetInt(ID+ "speed");
+                            spawnedObject.GetComponent<UniversalConduit>().range = FileBasedPrefs.GetInt(ID+ "range");
+                            spawnedObject.GetComponent<UniversalConduit>().amount = FileBasedPrefs.GetFloat(ID+ "amount");
+                            spawnedObject.GetComponent<UniversalConduit>().creationMethod = "spawned";
+                        }
+                        if (objectName == worldName + "Retriever")
+                        {
+                            GameObject spawnedObject = Instantiate(retriever, objectPosition, objectRotation);
+                            spawnedObject.GetComponent<Retriever>().ID = ID;
+                            spawnedObject.GetComponent<Retriever>().inputID = FileBasedPrefs.GetString(ID+ "inputID");
+                            spawnedObject.GetComponent<Retriever>().outputID = FileBasedPrefs.GetString(ID+ "outputID");
+                            spawnedObject.GetComponent<Retriever>().speed = FileBasedPrefs.GetInt(ID+ "speed");
+                            spawnedObject.GetComponent<Retriever>().amount = FileBasedPrefs.GetFloat(ID+ "amount");
+                            spawnedObject.GetComponent<Retriever>().creationMethod = "spawned";
+                        }
+                        if (objectName == worldName + "AutoCrafter")
+                        {
+                            GameObject spawnedObject = Instantiate(autoCrafter, objectPosition, objectRotation);
+                            spawnedObject.GetComponent<AutoCrafter>().ID = ID;
+                            spawnedObject.GetComponent<AutoCrafter>().inputID = FileBasedPrefs.GetString(ID+ "inputID");
+                            spawnedObject.GetComponent<AutoCrafter>().speed = FileBasedPrefs.GetInt(ID+ "speed");
+                            spawnedObject.GetComponent<AutoCrafter>().creationMethod = "spawned";
+                        }
+                        if (objectName == worldName + "Smelter")
+                        {
+                            GameObject spawnedObject = Instantiate(smelter, objectPosition, objectRotation);
+                            spawnedObject.GetComponent<Smelter>().ID = ID;
+                            spawnedObject.GetComponent<Smelter>().inputID = FileBasedPrefs.GetString(ID+ "inputID");
+                            spawnedObject.GetComponent<Smelter>().outputID = FileBasedPrefs.GetString(ID+ "outputID");
+                            spawnedObject.GetComponent<Smelter>().inputType = FileBasedPrefs.GetString(ID+ "inputType");
+                            spawnedObject.GetComponent<Smelter>().outputType = FileBasedPrefs.GetString(ID+ "outputType");
+                            spawnedObject.GetComponent<Smelter>().speed = FileBasedPrefs.GetInt(ID+ "speed");
+                            spawnedObject.GetComponent<Smelter>().amount = FileBasedPrefs.GetFloat(ID+ "amount");
+                            spawnedObject.GetComponent<Smelter>().creationMethod = "spawned";
+                        }
+                        if (objectName == worldName + "HeatExchanger")
+                        {
+                            GameObject spawnedObject = Instantiate(heatExchanger, objectPosition, objectRotation);
+                            spawnedObject.GetComponent<HeatExchanger>().ID = ID;
+                            spawnedObject.GetComponent<HeatExchanger>().inputID = FileBasedPrefs.GetString(ID+ "inputID");
+                            spawnedObject.GetComponent<HeatExchanger>().outputID = FileBasedPrefs.GetString(ID+ "outputID");
+                            spawnedObject.GetComponent<HeatExchanger>().speed = FileBasedPrefs.GetInt(ID+ "speed");
+                            spawnedObject.GetComponent<HeatExchanger>().amount = FileBasedPrefs.GetFloat(ID+ "amount");
+                            spawnedObject.GetComponent<HeatExchanger>().inputType = FileBasedPrefs.GetString(ID+ "inputType");
+                            spawnedObject.GetComponent<HeatExchanger>().creationMethod = "spawned";
+                        }
+                        if (objectName == worldName + "SolarPanel")
+                        {
+                            GameObject spawnedObject = Instantiate(solarPanel, objectPosition, objectRotation);
+                            spawnedObject.GetComponent<PowerSource>().ID = ID;
+                            spawnedObject.GetComponent<PowerSource>().outputID = FileBasedPrefs.GetString(ID+ "outputID");
+                            spawnedObject.GetComponent<PowerSource>().creationMethod = "spawned";
+                        }
+                        if (objectName == worldName + "Generator")
+                        {
+                            GameObject spawnedObject = Instantiate(generator, objectPosition, objectRotation);
+                            spawnedObject.GetComponent<PowerSource>().ID = ID;
+                            spawnedObject.GetComponent<PowerSource>().outputID = FileBasedPrefs.GetString(ID+ "outputID");
+                            spawnedObject.GetComponent<PowerSource>().creationMethod = "spawned";
+                            spawnedObject.GetComponent<PowerSource>().fuelType = FileBasedPrefs.GetString(ID+ "fuelType");
+                            spawnedObject.GetComponent<PowerSource>().fuelAmount = FileBasedPrefs.GetInt(ID+ "fuelAmount");
+                        }
+                        if (objectName == worldName + "NuclearReactor")
+                        {
+                            GameObject spawnedObject = Instantiate(nuclearReactor, objectPosition, objectRotation);
+                            spawnedObject.GetComponent<NuclearReactor>().ID = ID;
+                            spawnedObject.GetComponent<NuclearReactor>().creationMethod = "spawned";
+                        }
+                        if (objectName == worldName + "ReactorTurbine")
+                        {
+                            GameObject spawnedObject = Instantiate(reactorTurbine, objectPosition, objectRotation);
+                            spawnedObject.GetComponent<PowerSource>().ID = ID;
+                            spawnedObject.GetComponent<PowerSource>().outputID = FileBasedPrefs.GetString(ID+ "outputID");
+                            spawnedObject.GetComponent<PowerSource>().creationMethod = "spawned";
+                        }
+                        if (objectName == worldName + "PowerConduit")
+                        {
+                            GameObject spawnedObject = Instantiate(powerConduit, objectPosition, objectRotation);
+                            spawnedObject.GetComponent<PowerConduit>().ID = ID;
+                            spawnedObject.GetComponent<PowerConduit>().inputID = FileBasedPrefs.GetString(ID+ "inputID");
+                            spawnedObject.GetComponent<PowerConduit>().outputID1 = FileBasedPrefs.GetString(ID+ "outputID1");
+                            spawnedObject.GetComponent<PowerConduit>().outputID2 = FileBasedPrefs.GetString(ID+ "outputID2");
+                            spawnedObject.GetComponent<PowerConduit>().dualOutput = FileBasedPrefs.GetBool(ID+ "dualOutput");
+                            spawnedObject.GetComponent<PowerConduit>().range = FileBasedPrefs.GetInt(ID+ "range");
+                            spawnedObject.GetComponent<PowerConduit>().powerAmount = FileBasedPrefs.GetInt(ID+ "powerAmount");
+                            spawnedObject.GetComponent<PowerConduit>().creationMethod = "spawned";
+                        }
+                        if (objectName == worldName + "Auger")
+                        {
+                            GameObject spawnedObject = Instantiate(auger, objectPosition, objectRotation);
+                            spawnedObject.GetComponent<Auger>().ID = ID;
+                            spawnedObject.GetComponent<Auger>().speed = FileBasedPrefs.GetInt(ID+ "speed");
+                            spawnedObject.GetComponent<Auger>().amount = FileBasedPrefs.GetFloat(ID+ "amount");
+                            spawnedObject.GetComponent<Auger>().creationMethod = "spawned";
+                        }
+                        if (objectName == worldName + "ElectricLight")
+                        {
+                            GameObject spawnedObject = Instantiate(electricLight, objectPosition, objectRotation);
+                            spawnedObject.GetComponent<ElectricLight>().ID = ID;
+                            spawnedObject.GetComponent<ElectricLight>().creationMethod = "spawned";
+                        }
+                        if (objectName == worldName + "Turret")
+                        {
+                            GameObject spawnedObject = Instantiate(turret, objectPosition, objectRotation);
+                            spawnedObject.GetComponent<Turret>().ID = ID;
+                            spawnedObject.GetComponent<Turret>().speed = FileBasedPrefs.GetInt(ID+ "speed");
+                            spawnedObject.GetComponent<Turret>().creationMethod = "spawned";
+                        }
+                        if (objectName == worldName + "MissileTurret")
+                        {
+                            GameObject spawnedObject = Instantiate(missileTurret, objectPosition, objectRotation);
+                            spawnedObject.GetComponent<MissileTurret>().ID = ID;
+                            spawnedObject.GetComponent<MissileTurret>().speed = FileBasedPrefs.GetInt(ID+ "speed");
+                            spawnedObject.GetComponent<MissileTurret>().ammoType = FileBasedPrefs.GetString(ID+ "ammoType");
+                            spawnedObject.GetComponent<MissileTurret>().ammoAmount = FileBasedPrefs.GetInt(ID+ "ammoAmount");
+                            spawnedObject.GetComponent<MissileTurret>().creationMethod = "spawned";
+                        }
+                        if (objectName == worldName + "AlloySmelter")
+                        {
+                            GameObject spawnedObject = Instantiate(alloySmelter, objectPosition, objectRotation);
+                            spawnedObject.GetComponent<AlloySmelter>().ID = ID;
+                            spawnedObject.GetComponent<AlloySmelter>().inputID1 = FileBasedPrefs.GetString(ID+ "inputID1");
+                            spawnedObject.GetComponent<AlloySmelter>().inputID2 = FileBasedPrefs.GetString(ID+ "inputID2");
+                            spawnedObject.GetComponent<AlloySmelter>().inputType1 = FileBasedPrefs.GetString(ID+ "inputType1");
+                            spawnedObject.GetComponent<AlloySmelter>().inputType2 = FileBasedPrefs.GetString(ID+ "inputType2");
+                            spawnedObject.GetComponent<AlloySmelter>().outputType = FileBasedPrefs.GetString(ID+ "outputType");
+                            spawnedObject.GetComponent<AlloySmelter>().outputID = FileBasedPrefs.GetString(ID+ "outputID");
+                            spawnedObject.GetComponent<AlloySmelter>().speed = FileBasedPrefs.GetInt(ID+ "speed");
+                            spawnedObject.GetComponent<AlloySmelter>().amount = FileBasedPrefs.GetFloat(ID+ "amount");
+                            spawnedObject.GetComponent<AlloySmelter>().amount2 = FileBasedPrefs.GetFloat(ID+ "amount2");
+                            spawnedObject.GetComponent<AlloySmelter>().outputAmount = FileBasedPrefs.GetFloat(ID+ "outputAmount");
+                            spawnedObject.GetComponent<AlloySmelter>().creationMethod = "spawned";
+                        }
+                        if (objectName == worldName + "Press")
+                        {
+                            GameObject spawnedObject = Instantiate(press, objectPosition, objectRotation);
+                            spawnedObject.GetComponent<Press>().ID = ID;
+                            spawnedObject.GetComponent<Press>().inputID = FileBasedPrefs.GetString(ID+ "inputID");
+                            spawnedObject.GetComponent<Press>().outputID = FileBasedPrefs.GetString(ID+ "outputID");
+                            spawnedObject.GetComponent<Press>().inputType = FileBasedPrefs.GetString(ID+ "inputType");
+                            spawnedObject.GetComponent<Press>().outputType = FileBasedPrefs.GetString(ID+ "outputType");
+                            spawnedObject.GetComponent<Press>().speed = FileBasedPrefs.GetInt(ID+ "speed");
+                            spawnedObject.GetComponent<Press>().amount = FileBasedPrefs.GetFloat(ID+ "amount");
+                            spawnedObject.GetComponent<Press>().creationMethod = "spawned";
+                        }
+                        if (objectName == worldName + "Extruder")
+                        {
+                            GameObject spawnedObject = Instantiate(extruder, objectPosition, objectRotation);
+                            spawnedObject.GetComponent<Extruder>().ID = ID;
+                            spawnedObject.GetComponent<Extruder>().inputID = FileBasedPrefs.GetString(ID+ "inputID");
+                            spawnedObject.GetComponent<Extruder>().outputID = FileBasedPrefs.GetString(ID+ "outputID");
+                            spawnedObject.GetComponent<Extruder>().inputType = FileBasedPrefs.GetString(ID+ "inputType");
+                            spawnedObject.GetComponent<Extruder>().outputType = FileBasedPrefs.GetString(ID+ "outputType");
+                            spawnedObject.GetComponent<Extruder>().speed = FileBasedPrefs.GetInt(ID+ "speed");
+                            spawnedObject.GetComponent<Extruder>().amount = FileBasedPrefs.GetFloat(ID+ "amount");
+                            spawnedObject.GetComponent<Extruder>().creationMethod = "spawned";
+                        }
+                        if (objectName == worldName + "GearCutter")
+                        {
+                            GameObject spawnedObject = Instantiate(gearCutter, objectPosition, objectRotation);
+                            spawnedObject.GetComponent<GearCutter>().ID = ID;
+                            spawnedObject.GetComponent<GearCutter>().inputID = FileBasedPrefs.GetString(ID+ "inputID");
+                            spawnedObject.GetComponent<GearCutter>().outputID = FileBasedPrefs.GetString(ID+ "outputID");
+                            spawnedObject.GetComponent<GearCutter>().inputType = FileBasedPrefs.GetString(ID+ "inputType");
+                            spawnedObject.GetComponent<GearCutter>().outputType = FileBasedPrefs.GetString(ID+ "outputType");
+                            spawnedObject.GetComponent<GearCutter>().speed = FileBasedPrefs.GetInt(ID+ "speed");
+                            spawnedObject.GetComponent<GearCutter>().amount = FileBasedPrefs.GetFloat(ID+ "amount");
+                            spawnedObject.GetComponent<GearCutter>().creationMethod = "spawned";
+                        }
+                        if (objectName == worldName + "UniversalExtractor")
+                        {
+                            GameObject spawnedObject = Instantiate(universalExtractor, objectPosition, objectRotation);
+                            spawnedObject.GetComponent<UniversalExtractor>().ID = ID;
+                            spawnedObject.GetComponent<UniversalExtractor>().speed = FileBasedPrefs.GetInt(ID+ "speed");
+                            spawnedObject.GetComponent<UniversalExtractor>().amount = FileBasedPrefs.GetFloat(ID+ "amount");
+                            spawnedObject.GetComponent<UniversalExtractor>().type = FileBasedPrefs.GetString(ID+ "type");
+                            spawnedObject.GetComponent<UniversalExtractor>().creationMethod = "spawned";
+                        }
+                        if (objectName == worldName + "StorageContainer")
+                        {
+                            GameObject spawnedObject = Instantiate(storageContainer, objectPosition, objectRotation);
+                            spawnedObject.GetComponent<InventoryManager>().ID = ID;
+                        }
+                        if (objectName == worldName + "StorageComputer")
+                        {
+                            GameObject spawnedObject = Instantiate(storageComputer, objectPosition, objectRotation);
+                            spawnedObject.GetComponent<StorageComputer>().ID = ID;
+                        }
+                        if (objectName == worldName + "ModMachine")
+                        {
+                            GameObject spawnedObject = Instantiate(modMachine, objectPosition, objectRotation);
+                            spawnedObject.GetComponent<ModMachine>().ID = ID;
+                            spawnedObject.GetComponent<ModMachine>().machineName = FileBasedPrefs.GetString(ID+ "machineName");
+                            spawnedObject.GetComponent<ModMachine>().inputID = FileBasedPrefs.GetString(ID+ "inputID");
+                            spawnedObject.GetComponent<ModMachine>().outputID = FileBasedPrefs.GetString(ID+ "outputID");
+                            spawnedObject.GetComponent<ModMachine>().inputType = FileBasedPrefs.GetString(ID+ "inputType");
+                            spawnedObject.GetComponent<ModMachine>().outputType = FileBasedPrefs.GetString(ID+ "outputType");
+                            spawnedObject.GetComponent<ModMachine>().speed = FileBasedPrefs.GetInt(ID+ "speed");
+                            spawnedObject.GetComponent<ModMachine>().amount = FileBasedPrefs.GetFloat(ID+ "amount");
+                            spawnedObject.GetComponent<ModMachine>().creationMethod = "spawned";
+                        }
+                        if (objectName == worldName + "ProtectionBlock")
+                        {
+                            GameObject spawnedObject = Instantiate(protectionBlock, objectPosition, objectRotation);
+                            spawnedObject.GetComponent<ProtectionBlock>().ID = ID;
+                            spawnedObject.GetComponent<ProtectionBlock>().creationMethod = "spawned";
+                            spawnedObject.GetComponent<ProtectionBlock>().SetUserNames(PlayerPrefsX.GetStringArray(ID+ "userNames").ToList());
+                        }
+                    }
+                    machineProgress++;
+                    loadInterval++;
+                    if (loadInterval >= machineIdList.Length * 0.1f)
+                    {
+                        loadInterval = 0;
+                        yield return null;
+                    }
                 }
             }
         }
-        GetComponent<GameManager>().meshManager.CombineBlocks();
+
+        totalMachines = machineIdList.Length;
+        float simSpeed = GetComponent<GameManager>().simulationSpeed;
+        GetComponent<GameManager>().simulationSpeed = 0.1f;
+        initMachines = true;
+        for (currentMachine = 0; currentMachine < totalMachines; currentMachine++)
+        {
+            yield return new WaitForSeconds(0.06f);
+        }
+        GetComponent<GameManager>().simulationSpeed = simSpeed;
+
         worldLoaded = true;
+        string[] commandLineOptions = Environment.GetCommandLineArgs();
+        if (commandLineOptions.Contains("-batchmode"))
+        {
+            Debug.Log("Server running scene " + SceneManager.GetActiveScene().buildIndex + " @ " + PlayerPrefs.GetString("serverURL"));
+        }
     }
 
     //! Assigns ID to objects in the world.
     private void AssignIDs()
     {
-        addressingCoroutine = StartCoroutine(addressManager.AddressingCoroutine());
+        if (GetComponent<GameManager>().dataSaveRequested == true)
+        {
+            if (finalMachineAddress == false || finalBlockAddress == false)
+            {
+                if (initMachines == true && addressManager.machineIdCoroutineActive == false)
+                {
+                    machineIdCoroutine = StartCoroutine(addressManager.MachineIdCoroutine());
+                }
+                if (worldLoaded == true && addressManager.blockIdCoroutineActive == false)
+                {
+                    blockIdCoroutine = StartCoroutine(addressManager.BlockIdCoroutine());
+                }
+            }
+        }
+        else
+        {
+            finalMachineAddress = false;
+            finalBlockAddress = false;
+            if (initMachines == true && addressManager.machineIdCoroutineActive == false)
+            {
+                machineIdCoroutine = StartCoroutine(addressManager.MachineIdCoroutine());
+            }
+            if (worldLoaded == true && addressManager.blockIdCoroutineActive == false)
+            {
+                blockIdCoroutine = StartCoroutine(addressManager.BlockIdCoroutine());
+            }
+        }
+    }
+
+    //! Returns true if the AddressManager class is actively assigning ids.
+    public bool AddressManagerBusy()
+    {
+        return addressManager.machineIdCoroutineActive || addressManager.blockIdCoroutineActive;
     }
 
     //! Saves the game.
     public void SaveData()
     {
-        if (assigningIDs == false)
+        if (AddressManagerBusy() == false)
             saveCoroutine = StartCoroutine(saveManager.SaveDataCoroutine());
     }
 

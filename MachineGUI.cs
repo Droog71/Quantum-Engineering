@@ -13,7 +13,8 @@ public class MachineGUI : MonoBehaviour
     public void Start()
     {
         playerController = GetComponent<PlayerController>();
-        textureDictionary = GetComponent<TextureDictionary>();
+        GameManager gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
+        textureDictionary = gameManager.GetComponent<TextureDictionary>();
         guiCoordinates = new GuiCoordinates();
     }
 
@@ -174,14 +175,16 @@ public class MachineGUI : MonoBehaviour
                     }
                     if (PlayerPrefsX.GetPersistentBool("multiplayer") == true)
                     {
+                        bool circuitDeSync = hub.circuit != playerController.networkedHubCircuit;
                         bool rangeDeSync = hub.range != playerController.networkedHubRange;
                         bool stopDeSync = hub.stop != playerController.networkedHubStop;
                         bool timeDeSync = (int)hub.stopTime != (int)playerController.networkedHubStopTime;
-                        if (rangeDeSync || stopDeSync || timeDeSync || netFlag)
+                        if (circuitDeSync || rangeDeSync || stopDeSync || timeDeSync || netFlag)
                         {
                             NetworkSend net = playerController.networkController.networkSend;
                             Vector3 location = hub.gameObject.transform.position;
-                            updateNetworkConduitCoroutine = StartCoroutine(net.SendHubData(location,hub.range,hub.stop,hub.stopTime));
+                            updateNetworkConduitCoroutine = StartCoroutine(net.SendHubData(location, hub.circuit, hub.range, hub.stop, hub.stopTime));
+                            playerController.networkedHubCircuit = hub.circuit;
                             playerController.networkedHubRange = hub.range;
                             playerController.networkedHubStop = hub.stop;
                             playerController.networkedHubStopTime = hub.stopTime;
