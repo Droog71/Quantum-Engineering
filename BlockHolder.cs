@@ -12,12 +12,18 @@ public class BlockHolder : MonoBehaviour
     public Vector3 worldLoc;
     public GameObject grass;
     public GameObject dirt;
+    public GameObject grassHolder;
+    public GameObject dirtHolder;
     public List<BlockInfo> blockData;
-    public bool blockHolderCoroutineBusy;
+    public bool chunkLoadCoroutineBusy;
+    public bool chunkUnloadCoroutineBusy;
+    private int yieldTime;
     private GameManager gameManager;
     private StateManager stateManager;
+    private TerrainGenerator terrainGenerator;
     private GameObject player;
-    private Coroutine blockHolderCoroutine;
+    private Coroutine chunkLoadCoroutine;
+    private Coroutine chunkUnloadCoroutine;
 
     //! Holds information about the blocks in this chunk.
     public class BlockInfo
@@ -44,39 +50,36 @@ public class BlockHolder : MonoBehaviour
         {
             gameManager = FindObjectOfType<GameManager>();
         }
+        else if (terrainGenerator == null)
+        {
+            terrainGenerator = gameManager.GetComponent<TerrainGenerator>();
+        }
 
         if (stateManager == null)
         {
             stateManager = FindObjectOfType<StateManager>();
         }
 
-        if (blockHolderCoroutineBusy == false && stateManager.worldLoaded == true && unloaded == true)
+        if (chunkLoadCoroutineBusy == false && unloaded == true)
         {
-            if (SceneManager.GetActiveScene().name == "QE_Procedural")
-            {
-                if (blockType == "Dirt")
-                {
-                    if (gameManager.GetComponent<OreManager>().init == true)
-                    {
-                        blockHolderCoroutine = StartCoroutine(LoadChunk());
-                    }
-                }
-                else
-                {
-                    blockHolderCoroutine = StartCoroutine(LoadChunk());
-                }
-            }
-            else
-            {
-                blockHolderCoroutine = StartCoroutine(LoadChunk());
-            }
+            chunkLoadCoroutine = StartCoroutine(LoadChunk());
         }
     }
 
     //! Loads the chunk.
     private IEnumerator LoadChunk()
     {
-        blockHolderCoroutineBusy = true;
+        chunkLoadCoroutineBusy = true;
+
+        yieldTime = stateManager.worldLoaded == false ? 500 : 50;
+
+        if (SceneManager.GetActiveScene().name == "QE_Procedural" && blockType == "Dirt")
+        {
+            if (gameManager.GetComponent<OreManager>().paused == false)
+            {
+                gameManager.GetComponent<OreManager>().paused = true;
+            }
+        }
 
         if (blockData != null)
         {
@@ -97,7 +100,7 @@ public class BlockHolder : MonoBehaviour
                     gameManager.meshManager.SetMaterial(spawnedObject, blockType);
 
                     spawnInterval++;
-                    if (spawnInterval >= 50)
+                    if (spawnInterval >= yieldTime)
                     {
                         spawnInterval = 0;
                         yield return null;
@@ -117,7 +120,7 @@ public class BlockHolder : MonoBehaviour
                             break;
                         }
                         combineInterval++;
-                        if (combineInterval >= 50)
+                        if (combineInterval >= yieldTime)
                         {
                             combineInterval = 0;
                             yield return null;
@@ -125,31 +128,90 @@ public class BlockHolder : MonoBehaviour
                     }
                 }
 
+                gameManager.meshManager.CreateCombinedMesh(gameObject);
+
                 if (SceneManager.GetActiveScene().name == "QE_Procedural")
                 {
-                    if (blockType == "Grass" || blockType == "Dirt")
+                    if (blockType == "Grass")
                     {
-                        gameManager.GetComponent<TerrainGenerator>().chunkLocations.Add(worldLoc);
+                        if (dirtHolder != null)
+                        {
+                            dirtHolder.GetComponent<BlockHolder>().Load();
+                            if (terrainGenerator != null)
+                            {
+                                if (!terrainGenerator.chunkLocations.Contains(worldLoc))
+                                {
+                                    terrainGenerator.chunkLocations.Add(worldLoc);
+                                    string chunkLocationsKey = stateManager.worldName + "chunkLocations";
+                                    PlayerPrefsX.SetVector3Array(chunkLocationsKey, terrainGenerator.chunkLocations.ToArray());
+                                }
+                            }
+                        }
+                    }
+
+                    if (blockType == "Dirt")
+                    {
+                        if (grassHolder != null)
+                        {
+                            grassHolder.GetComponent<BlockHolder>().Load();
+                            if (terrainGenerator != null)
+                            {
+                                if (!terrainGenerator.chunkLocations.Contains(worldLoc))
+                                {
+                                    terrainGenerator.chunkLocations.Add(worldLoc);
+                                    string chunkLocationsKey = stateManager.worldName + "chunkLocations";
+                                    PlayerPrefsX.SetVector3Array(chunkLocationsKey, terrainGenerator.chunkLocations.ToArray());
+                                }
+                            }
+                        }
                     }
 
                     if (grass != null)
                     {
-                        gameManager.meshManager.CreateCombinedMesh(gameObject);
-                        Vector3 saveVector = new Vector3(Mathf.Round(grass.transform.position.x), Mathf.Round(grass.transform.position.y), Mathf.Round(grass.transform.position.z));
                         Destroy(grass);
                     }
 
                     if (dirt != null)
                     {
-                        gameManager.meshManager.CreateCombinedMesh(gameObject);
-                        Vector3 saveVector = new Vector3(Mathf.Round(dirt.transform.position.x), Mathf.Round(dirt.transform.position.y), Mathf.Round(dirt.transform.position.z));
                         Destroy(dirt);
                     }
                 }
 
                 unloaded = false;
+
+                if (stateManager.worldLoaded == false && chunkUnloadCoroutineBusy == false)
+                {
+                    //chunkUnloadCoroutine = StartCoroutine(UnloadChunk());
+                }
             }
         }
-        blockHolderCoroutineBusy = false;
+        chunkLoadCoroutineBusy = false;
+    }
+
+    //! Unloads the chunk.
+    private IEnumerator UnloadChunk()
+    {
+        chunkUnloadCoroutineBusy = true;
+        yieldTime = stateManager.worldLoaded == false ? 500 : 50;
+        int interval = 0;
+
+        Transform[] blocks = GetComponentsInChildren<Transform>(true);
+        foreach (Transform block in blocks)
+        {
+            if (block.GetComponent<Block>() != null)
+            {
+                Destroy(block.gameObject);
+            }
+
+            interval++;
+            if (interval >= yieldTime)
+            {
+                interval = 0;
+                yield return null;
+            }
+        }
+
+        unloaded = true;
+        chunkUnloadCoroutineBusy = false;
     }
 }

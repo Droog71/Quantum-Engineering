@@ -16,6 +16,7 @@ public class AddressManager
         gameManager = stateManager.GetComponent<GameManager>();
     }
 
+    //! Assigns IDs to machines.
     public IEnumerator MachineIdCoroutine()
     {
         machineIdCoroutineActive = true;
@@ -203,6 +204,7 @@ public class AddressManager
         }
     }
 
+    //! Assigns IDs to BlockHolder objects.
     public IEnumerator BlockIdCoroutine()
     {
         blockIdCoroutineActive = true;

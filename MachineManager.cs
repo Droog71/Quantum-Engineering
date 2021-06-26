@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 //! This class controls machine update functions via coroutine .
@@ -7,15 +8,34 @@ using UnityEngine;
 public class MachineManager : MonoBehaviour
 {
     private bool busy;
+    private bool paused;
     private Coroutine machineUpdateCoroutine;
+    public List<Machine> machines;
 
     //! Called once per frame by unity engine.
     public void Update()
     {
-        if (busy == false && GetComponent<StateManager>().initMachines == true)
+        if (machines == null)
+        {
+            machines = new List<Machine>();
+        }
+
+        if (busy == false && paused == false && GetComponent<StateManager>().initMachines == true)
         {
             machineUpdateCoroutine = StartCoroutine(MachineUpdateCoroutine());
         }
+    }
+
+    public void AddMachine(Machine machine)
+    {
+        paused = true;
+        busy = false;
+        if (machineUpdateCoroutine != null)
+        {
+            StopCoroutine(machineUpdateCoroutine);
+        }
+        machines.Add(machine);
+        paused = false;
     }
 
     //! Calls the UpdateMachine function on each machine in the world, yielding after each call.
@@ -23,7 +43,6 @@ public class MachineManager : MonoBehaviour
     {
         busy = true;
         int interval = 0;
-        Machine[] machines = FindObjectsOfType<Machine>();
         foreach (Machine machine in machines)
         {
             if (machine != null)
@@ -32,7 +51,7 @@ public class MachineManager : MonoBehaviour
                 {
                     if (machine.gameManager == null)
                     {
-                        machine.gameManager = FindObjectOfType<GameManager>();
+                        machine.gameManager = GetComponent<GameManager>();
                     }
                     machine.UpdateMachine();
                 }
@@ -41,7 +60,7 @@ public class MachineManager : MonoBehaviour
                     Debug.Log(e.Message);
                 }
                 interval++;
-                if (interval >= machines.Length * GetComponent<GameManager>().simulationSpeed)
+                if (interval >= machines.Count * GetComponent<GameManager>().simulationSpeed)
                 {
                     yield return null;
                     interval = 0;

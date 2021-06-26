@@ -141,9 +141,20 @@ public class InteractionController : MonoBehaviour
                     {
                         blockInteraction.InteractWithBlock(obj.GetComponent<Block>().blockName);
                     }
-                    else if (obj.tag.Equals("CombinedMesh") || obj.transform.parent.tag.Equals("CombinedMesh"))
+                    else if (obj.tag.Equals("CombinedMesh"))
                     {
                         blockInteraction.InteractWithCombinedMesh(hit.point);
+                    }
+                    else if (obj.transform.parent != null)
+                    {
+                        if (obj.transform.parent.tag.Equals("CombinedMesh"))
+                        {
+                            blockInteraction.InteractWithCombinedMesh(hit.point);
+                        }
+                        else
+                        {
+                            EndInteraction();
+                        }
                     }
                     else
                     {

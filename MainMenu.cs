@@ -1200,10 +1200,7 @@ public class MainMenu : MonoBehaviour
             GUI.skin.label.fontSize = 16;
             GUI.color = new Color(0.2824f, 0.7882f, 0.9569f);
 
-            string loadingMessage = "Loading... " + stateManager.blockProgress +
-            "/" + stateManager.blockIdList.Length + " chunks, " + 
-            stateManager.currentBlocks + "/" + stateManager.totalBlocks + " blocks.";
-                
+            string loadingMessage = "Loading... " + stateManager.blockProgress + "/" + stateManager.blockIdList.Length;
 
             if (stateManager.blockProgress > 0 && stateManager.blockIdList.Length > 0 && stateManager.blockProgress >= stateManager.blockIdList.Length)
             {

@@ -21,6 +21,7 @@ public class PlayerGUI : MonoBehaviour
     private bool schematic5;
     private bool schematic6;
     private bool schematic7;
+    private float rotationAngle;
 
     //! Called by unity engine on start up to initialize variables.
     public void Start()
@@ -865,14 +866,27 @@ public class PlayerGUI : MonoBehaviour
             // CROSSHAIR
             if (ShowCrosshair() == true)
             {
-                GUIContent content = new GUIContent(Resources.Load("Crosshair") as Texture2D);
+                GUIContent content = new GUIContent(textureDictionary.dictionary["Crosshair"]);
                 GUIStyle style = GUI.skin.box;
                 style.alignment = TextAnchor.MiddleCenter;
                 Vector2 size = style.CalcSize(content);
                 size.x = size.x / 3.5f;
                 size.y = size.y / 4;
+
                 Rect crosshairRect = new Rect((Screen.width / 2) - (size.x / 2), (Screen.height / 2) - (size.y / 2), size.x, size.y);
-                GUI.DrawTexture(crosshairRect, textureDictionary.dictionary["Crosshair"]);
+
+                if (playerController.digTime > 0)
+                {
+                    GUI.BeginGroup(new Rect(0, 0, Screen.width, Screen.height));
+                    rotationAngle += 5;
+                    GUIUtility.RotateAroundPivot(rotationAngle, new Vector2(Screen.width / 2, Screen.height / 2));
+                    GUI.DrawTexture(crosshairRect, textureDictionary.dictionary["Crosshair"]);
+                    GUI.EndGroup();
+                }
+                else
+                {
+                    GUI.DrawTexture(crosshairRect, textureDictionary.dictionary["Crosshair"]);
+                }
             }
         }
     }

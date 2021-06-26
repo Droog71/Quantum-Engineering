@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class UniversalExtractor : Machine
 {
@@ -131,12 +132,25 @@ public class UniversalExtractor : Machine
         }
         else
         {
-            connectionAttempts += 1;
-            if (connectionAttempts >= 128)
+            if (SceneManager.GetActiveScene().name == "QE_Procedural")
             {
-                connectionAttempts = 0;
-                connectionFailed = true;
+                connectionAttempts += 1;
+                if (connectionAttempts >= 1024)
+                {
+                    connectionAttempts = 0;
+                    connectionFailed = true;
+                }
             }
+            else
+            {
+                connectionAttempts += 1;
+                if (connectionAttempts >= 128)
+                {
+                    connectionAttempts = 0;
+                    connectionFailed = true;
+                }
+            }
+
             if (connectionFailed == false)
             {
                 UniversalResource[] allResources = FindObjectsOfType<UniversalResource>();

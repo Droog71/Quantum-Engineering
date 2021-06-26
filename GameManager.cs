@@ -10,6 +10,8 @@ public class GameManager : MonoBehaviour
     public bool fileBasedPrefsInitialized;
     private HazardManager hazardManager;
     public CombinedMeshManager meshManager;
+    public Dictionary<string, Material> materialDictionary;
+    public TextureDictionary textureDictionary;
     public GameObject pirateObject;
     public GameObject meteorObject;
     public GameObject machineExplosion;
@@ -19,7 +21,6 @@ public class GameManager : MonoBehaviour
     public GameObject lander;
     public GameObject rocketObject;
     public GameObject builtObjects;
-    public GameObject meshObject;
     public Material glassMaterial;
     public Mesh rampMesh;
     public int chunkSize;
@@ -52,7 +53,6 @@ public class GameManager : MonoBehaviour
     private Coroutine memoryCoroutine;
     private Coroutine undoCoroutine;
     public List<Vector3> meteorShowerLocationList;
-
 
     //! Stores information about blocks placed for UndoBuiltObjects function.
     public class UndoBlock
@@ -87,6 +87,10 @@ public class GameManager : MonoBehaviour
         // Create the combined mesh manager.
         meshManager = new CombinedMeshManager(this);
 
+        // Create the material dictionary.
+        textureDictionary = GetComponent<TextureDictionary>();
+        materialDictionary = new Dictionary<string, Material>();
+
         // Create an object list to hold the player's most recently built objects for the 'undo' function.
         undoBlocks = new List<UndoBlock>();
 
@@ -111,11 +115,28 @@ public class GameManager : MonoBehaviour
         foreach (string blockName in blockNames)
         {
             GameObject blockInit = Instantiate(blockHolder, transform.position, transform.rotation);
-            meshManager.SetMaterial(blockInit, blockName);
             blockInit.GetComponent<BlockHolder>().blockType = blockName;
+
+            if (!materialDictionary.ContainsKey(blockName))
+            {
+                Material mat = new Material(Shader.Find("Standard"));
+                mat.mainTexture = textureDictionary.dictionary[blockName];
+                if (textureDictionary.dictionary.ContainsKey(blockName + "_Normal"))
+                {
+                    mat.shaderKeywords = new string[] { "_NORMALMAP" };
+                    mat.SetTexture("_BumpMap", textureDictionary.dictionary[blockName + "_Normal"]);
+                    mat.SetFloat("_BumpScale", 2);
+                    mat.enableInstancing = true;
+                }
+                materialDictionary.Add(blockName, mat);
+            }
+
+            meshManager.SetMaterial(blockInit, blockName);
+
             blockInit.transform.parent = builtObjects.transform;
             blockInit.SetActive(false);
             blockHolders.Add(new GameObject[] { blockInit });
+
             index++;
         }
     }
@@ -226,11 +247,6 @@ public class GameManager : MonoBehaviour
         meshCountCoroutineBusy = false;
     }
 
-    public void CreateMesh()
-    {
-        meshManager.CreateCombinedMesh(meshObject);
-    }
-
     //! Unloads unused assets when the game is using too much memory.
     public IEnumerator ManageMemory()
     {
@@ -254,7 +270,14 @@ public class GameManager : MonoBehaviour
     {
         if (runningUndo == false)
         {
-            undoCoroutine = StartCoroutine(RemoveRecent());
+            try
+            {
+                undoCoroutine = StartCoroutine(RemoveRecent());
+            }
+            catch(Exception e)
+            {
+                UnityEngine.Debug.Log(e.Message);
+            }
         }
     }
 

@@ -722,9 +722,12 @@ public class InfoHUD : MonoBehaviour
                     blockType = obj.GetComponent<BlockHolder>().blockType;
 
                 }
-                else
+                else if (obj.transform.parent != null)
                 {
-                    blockType = obj.transform.parent.gameObject.GetComponent<BlockHolder>().blockType;
+                    if (obj.transform.parent.GetComponent<BlockHolder>() != null)
+                    {
+                        blockType = obj.transform.parent.GetComponent<BlockHolder>().blockType;
+                    }
                 }
 
                 int f = GUI.skin.label.fontSize;
@@ -735,6 +738,18 @@ public class InfoHUD : MonoBehaviour
                 Vector2 size = style.CalcSize(content);
                 Rect resourceInfoRect = new Rect((Screen.width / 2) - (size.x / 2.1f), (Screen.height - 70) - (size.y / 2), size.x, size.y);
                 GUI.Label(resourceInfoRect, blockType);
+                GUI.skin.label.fontSize = f;
+            }
+            else if (obj.tag == "Procedural")
+            {
+                int f = GUI.skin.label.fontSize;
+                GUI.skin.label.fontSize = 16;
+                GUIContent content = new GUIContent("Foliage");
+                GUIStyle style = GUI.skin.box;
+                style.alignment = TextAnchor.MiddleCenter;
+                Vector2 size = style.CalcSize(content);
+                Rect resourceInfoRect = new Rect((Screen.width / 2) - (size.x / 2.1f), (Screen.height - 70) - (size.y / 2), size.x, size.y);
+                GUI.Label(resourceInfoRect, "Foliage");
                 GUI.skin.label.fontSize = f;
             }
         }

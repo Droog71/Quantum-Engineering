@@ -119,6 +119,7 @@ public class PlayerController : MonoBehaviour
     public float invalidRailCartPlacementTimer;
     public float requestedSaveTimer;
     public float graphicsQuality = 999;
+    public float digTime;
 
     public int playerMoveSpeed;
     public int machinePower;
@@ -900,17 +901,6 @@ public class PlayerController : MonoBehaviour
                     networkController.networkReceive.itemDatabaseDelay = 0;
                 }
                 PlayCraftingSound();
-            }
-        }
-    }
-
-    public void CreateMesh()
-    {
-        if (objectInSight != null)
-        {
-            if (objectInSight.GetComponent<BlockHolder>() != null)
-            {
-                gameManager.meshManager.CreateCombinedMesh(objectInSight);
             }
         }
     }

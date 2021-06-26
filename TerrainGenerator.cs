@@ -25,6 +25,9 @@ public class TerrainGenerator : MonoBehaviour
     public void Start()
     {
         player = GameObject.Find("Player");
+        worldLocations = new List<Vector3>();
+        chunkLocations = new List<Vector3>();
+        treeLocations = new List<Vector3>();
         stateManager = GetComponent<StateManager>();
         gameManager = GetComponent<GameManager>();
     }
@@ -34,11 +37,14 @@ public class TerrainGenerator : MonoBehaviour
     {
         if (stateManager.worldLoaded == true)
         {
-            worldLocations = PlayerPrefsX.GetVector3Array(stateManager.worldName + "worldLocations").ToList();
-            chunkLocations = PlayerPrefsX.GetVector3Array(stateManager.worldName + "chunkLocations").ToList();
-            treeLocations = PlayerPrefsX.GetVector3Array(stateManager.worldName + "treeLocations").ToList();
+            if (worldLocations.Count < 1)
+            {
+                worldLocations = PlayerPrefsX.GetVector3Array(stateManager.worldName + "worldLocations").ToList();
+                chunkLocations = PlayerPrefsX.GetVector3Array(stateManager.worldName + "chunkLocations").ToList();
+                treeLocations = PlayerPrefsX.GetVector3Array(stateManager.worldName + "treeLocations").ToList();
+            }
 
-            if (worldLocations == null || worldLocations.Count < 1)
+            if (worldLocations.Count < 1)
             {
                 for (int i = -1000; i < 1000; i += 50)
                 {
@@ -78,9 +84,11 @@ public class TerrainGenerator : MonoBehaviour
                         }
                     }
                 }
+
                 PlayerPrefsX.SetVector3Array(stateManager.worldName + "worldLocations", worldLocations.ToArray());
                 PlayerPrefsX.SetVector3Array(stateManager.worldName + "treeLocations", treeLocations.ToArray());
             }
+
             terrainGenCoroutine = StartCoroutine(GenerateTerrain());
         }
     }
@@ -89,6 +97,7 @@ public class TerrainGenerator : MonoBehaviour
     private IEnumerator GenerateTerrain()
     {
         bool chunkRequired = false;
+
         foreach(Vector3 worldLoc in worldLocations)
         {
             float distance = Vector3.Distance(player.transform.position, worldLoc);
@@ -99,7 +108,7 @@ public class TerrainGenerator : MonoBehaviour
                     if (!chunkLocations.Contains(worldLoc))
                     {
                         chunkRequired = true;
-                        GetComponent<OreManager>().init = false;
+                        GetComponent<OreManager>().paused = false;
                         GenerateChunk(worldLoc);
                     }
                 }
@@ -114,20 +123,16 @@ public class TerrainGenerator : MonoBehaviour
         }
 
         initialized |= chunkRequired == false;
-        PlayerPrefsX.SetVector3Array(stateManager.worldName + "chunkLocations", chunkLocations.ToArray());
     }
 
     //! Creates a blockHolder object which is vector array representing a "chunk" of blocks that will be combined into a single object.
     private void GenerateChunk(Vector3 worldLoc)
     {
-        GameObject spawnedObject = Instantiate(blockHolder, gameManager.transform.position, gameManager.transform.rotation);
-        GameObject grassObject = Instantiate(grass, new Vector3(worldLoc.x - 2.3f, worldLoc.y, worldLoc.z - 2.7f), new Quaternion());
-        grassObject.transform.parent = spawnedObject.transform;
-        spawnedObject.GetComponent<BlockHolder>().grass = grassObject;
-        spawnedObject.GetComponent<BlockHolder>().worldLoc = worldLoc;
-        spawnedObject.transform.parent = gameManager.builtObjects.transform;
+        GameObject grassChunk = Instantiate(blockHolder, gameManager.transform.position, gameManager.transform.rotation);
+        grassChunk.GetComponent<BlockHolder>().worldLoc = worldLoc;
+        grassChunk.transform.parent = gameManager.builtObjects.transform;
         List<BlockHolder.BlockInfo> blockData = new List<BlockHolder.BlockInfo>();
-        spawnedObject.GetComponent<BlockHolder>().blockData = blockData;
+        grassChunk.GetComponent<BlockHolder>().blockData = blockData;
         for (int i = (int)worldLoc.x - 25; i < worldLoc.x + 25; i += 5)
         {
             for (int j = (int)worldLoc.z - 25; j < worldLoc.z + 25; j += 5)
@@ -135,33 +140,41 @@ public class TerrainGenerator : MonoBehaviour
                 blockData.Add(new BlockHolder.BlockInfo(new Vector3(i, worldLoc.y, j), new Quaternion()));
             }
         }
-        spawnedObject.GetComponent<BlockHolder>().blockType = "Grass";
-        spawnedObject.GetComponent<BlockHolder>().unloaded = true;
-        GetComponent<GameManager>().meshManager.SetMaterial(spawnedObject, "Grass");
-        spawnedObject.GetComponent<MeshCollider>().enabled = true;
+        grassChunk.GetComponent<BlockHolder>().blockType = "Grass";
+        grassChunk.GetComponent<BlockHolder>().unloaded = true;
+        GetComponent<GameManager>().meshManager.SetMaterial(grassChunk, "Grass");
+        grassChunk.GetComponent<MeshCollider>().enabled = true;
 
-        spawnedObject = Instantiate(blockHolder, gameManager.transform.position, gameManager.transform.rotation);
-        GameObject dirtObject = Instantiate(dirt, new Vector3(worldLoc.x - 2.3f, worldLoc.y - 5, worldLoc.z - 2.7f), new Quaternion());
-        dirtObject.transform.parent = spawnedObject.transform;
-        spawnedObject.GetComponent<BlockHolder>().dirt = dirtObject;
-        spawnedObject.GetComponent<BlockHolder>().worldLoc = worldLoc;
-        spawnedObject.transform.parent = gameManager.builtObjects.transform;
+        GameObject grassObject = Instantiate(grass, new Vector3(worldLoc.x - 2.3f, worldLoc.y, worldLoc.z - 2.7f), new Quaternion());
+        grassObject.transform.parent = grassChunk.transform;
+        grassChunk.GetComponent<BlockHolder>().grass = grassObject;
+
+        GameObject dirtChunk = Instantiate(blockHolder, gameManager.transform.position, gameManager.transform.rotation);
+        dirtChunk.GetComponent<BlockHolder>().worldLoc = worldLoc;
+        dirtChunk.transform.parent = gameManager.builtObjects.transform;
         blockData = new List<BlockHolder.BlockInfo>();
-        spawnedObject.GetComponent<BlockHolder>().blockData = blockData;
+        dirtChunk.GetComponent<BlockHolder>().blockData = blockData;
         for (int i = (int)worldLoc.x - 25; i < worldLoc.x + 25; i += 5)
         {
             for (int j = (int)worldLoc.z - 25; j < worldLoc.z + 25; j += 5)
             {
-                for (int k = (int)worldLoc.y - 5; k >= worldLoc.y - 60; k -= 5)
+                for (int k = (int)worldLoc.y - 5; k > worldLoc.y - 55; k -= 5)
                 {
                     blockData.Add(new BlockHolder.BlockInfo(new Vector3(i, k, j), new Quaternion()));
                 }
             }
         }
-        spawnedObject.GetComponent<BlockHolder>().blockType = "Dirt";
-        spawnedObject.GetComponent<BlockHolder>().unloaded = true;
-        GetComponent<GameManager>().meshManager.SetMaterial(spawnedObject, "Dirt");
-        spawnedObject.GetComponent<MeshCollider>().enabled = true;
+        dirtChunk.GetComponent<BlockHolder>().blockType = "Dirt";
+        dirtChunk.GetComponent<BlockHolder>().unloaded = true;
+        GetComponent<GameManager>().meshManager.SetMaterial(dirtChunk, "Dirt");
+        dirtChunk.GetComponent<MeshCollider>().enabled = true;
+
+        GameObject dirtObject = Instantiate(dirt, new Vector3(worldLoc.x - 2.3f, worldLoc.y - 5, worldLoc.z - 2.7f), new Quaternion());
+        dirtObject.transform.parent = dirtChunk.transform;
+        dirtChunk.GetComponent<BlockHolder>().dirt = dirtObject;
+
+        grassChunk.GetComponent<BlockHolder>().dirtHolder = dirtChunk;
+        dirtChunk.GetComponent<BlockHolder>().grassHolder = grassChunk;
 
         if (treeLocations.Contains(worldLoc))
         {

@@ -8,6 +8,9 @@ public class CombinedMeshManager
     private GameManager gameManager;
     private StateManager stateManager;
     private GameObject player;
+    private Coroutine modifyMeshCoroutine;
+
+    private bool modifyMeshCoroutineBusy;
 
     //! The Combined Mesh Manager handles all combined meshes for building blocks.
     //! All standard building blocks are stored in combined meshes after being placed.
@@ -24,8 +27,7 @@ public class CombinedMeshManager
     //! Sets up the material of an object.
     public void SetMaterial(GameObject obj, string blockType)
     {
-        TextureDictionary textureDictionary = gameManager.GetComponent<TextureDictionary>();
-        if (textureDictionary.dictionary.ContainsKey(blockType))
+        if (gameManager.materialDictionary.ContainsKey(blockType))
         {
             if (blockType.ToUpper().Contains("GLASS"))
             {
@@ -33,66 +35,78 @@ public class CombinedMeshManager
             }
             else
             {
-                Material mat = new Material(Shader.Find("Standard"));
-                mat.mainTexture = textureDictionary.dictionary[blockType];
-                if (textureDictionary.dictionary.ContainsKey(blockType + "_Normal"))
-                {
-                    mat.shaderKeywords = new string[] { "_NORMALMAP" };
-                    mat.SetTexture("_BumpMap", textureDictionary.dictionary[blockType + "_Normal"]);
-                    mat.SetFloat("_BumpScale", 2);
-                    mat.enableInstancing = true;
-                }
-                obj.GetComponent<Renderer>().material = mat;
+                obj.GetComponent<Renderer>().material = gameManager.materialDictionary[blockType];
             }
         }
     }
 
-    //! Separates combined meshes into blocks
+    //! Removes a block from a combined mesh.
     public void RemoveBlock(BlockHolder bh, Vector3 point, bool explosion)
     {
-        if (bh.unloaded == true)
+        if (modifyMeshCoroutineBusy == false)
         {
-            bh.Load();
-        }
-        else if (bh.blockData != null)
-        {
-            Block blockToRemove = null;
-            int indexToRemove = 0;
-            foreach (BlockHolder.BlockInfo info in bh.blockData)
+            if (bh.unloaded == true)
             {
-                float distance = Vector3.Distance(info.position, point);
-                if (distance < 5)
+                bh.Load();
+            }
+            else if (bh.blockData != null)
+            {
+                Block blockToRemove = null;
+                int indexToRemove = 0;
+                foreach (BlockHolder.BlockInfo info in bh.blockData)
                 {
-                    Block[] blocks = bh.gameObject.GetComponentsInChildren<Block>(true);
-                    foreach (Block block in blocks)
+                    float distance = Vector3.Distance(info.position, point);
+                    if (distance < 5)
                     {
-                        Vector3 pos = block.gameObject.transform.position;
-                        Vector3 roundPos = new Vector3(Mathf.Round(pos.x), Mathf.Round(pos.y), Mathf.Round(pos.z));
-                        Vector3 roundInfoPos = new Vector3(Mathf.Round(info.position.x), Mathf.Round(info.position.y), Mathf.Round(info.position.z));
-                        if (roundPos == roundInfoPos)
+                        Block[] blocks = bh.gameObject.GetComponentsInChildren<Block>(true);
+                        foreach (Block block in blocks)
                         {
-                            indexToRemove = bh.blockData.IndexOf(info);
-                            blockToRemove = block;
+                            Vector3 pos = block.gameObject.transform.position;
+                            Vector3 roundPos = new Vector3(Mathf.Round(pos.x), Mathf.Round(pos.y), Mathf.Round(pos.z));
+                            Vector3 roundInfoPos = new Vector3(Mathf.Round(info.position.x), Mathf.Round(info.position.y), Mathf.Round(info.position.z));
+                            if (roundPos == roundInfoPos)
+                            {
+                                indexToRemove = bh.blockData.IndexOf(info);
+                                blockToRemove = block;
+                            }
                         }
                     }
                 }
-            }
-            if (blockToRemove != null)
-            {
-                if (explosion == true)
+                if (blockToRemove != null)
                 {
-                    blockToRemove.GetComponent<Block>().Explode();
+                    if (explosion == true)
+                    {
+                        blockToRemove.GetComponent<Block>().Explode();
+                    }
+                    else
+                    {
+                        Object.Destroy(blockToRemove.gameObject);
+                    }
+                    bh.blockData.RemoveAt(indexToRemove);
+                    modifyMeshCoroutine = gameManager.StartCoroutine(ModifyMesh(bh.gameObject));
+                    bh.gameObject.SetActive(true);
                 }
-                else
-                {
-                    Object.Destroy(blockToRemove.gameObject);
-                }
-                bh.blockData.RemoveAt(indexToRemove);
-                gameManager.meshObject = bh.gameObject;
-                gameManager.Invoke("CreateMesh", 0.1f);
-                bh.gameObject.SetActive(true);
             }
         }
+    }
+
+    //! Modifies a combined mesh with a slight delay to allow the BlockHolder class to load data.
+    public IEnumerator ModifyMesh(GameObject obj)
+    {
+        modifyMeshCoroutineBusy = true;
+        yield return new WaitForSeconds(0.1f);
+        if (obj != null)
+        {
+            BlockHolder bh = obj.GetComponent<BlockHolder>();
+            if (bh != null)
+            {
+                if (bh.chunkLoadCoroutineBusy == false && bh.unloaded == false)
+                {
+                    CreateCombinedMesh(obj);
+                }
+            }
+        }
+        modifyMeshCoroutineBusy = false;
     }
 
     //! Starts the coroutine to combine all blocks into combined meshes.

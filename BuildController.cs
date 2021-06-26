@@ -373,6 +373,7 @@ public class BuildController : MonoBehaviour
                                     }
                                 }
                                 gameManager.undoBlocks.Add(new GameManager.UndoBlock(type, obj));
+                                gameManager.GetComponent<MachineManager>().AddMachine(obj.GetComponent<Machine>());
                                 slot.amountInSlot -= 1;
                                 playerController.builderSound.clip = singleBuildClip;
                                 playerController.builderSound.Play();

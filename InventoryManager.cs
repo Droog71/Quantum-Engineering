@@ -1,8 +1,9 @@
 ﻿using UnityEngine;
 
-public class InventoryManager : Machine
+public class InventoryManager : MonoBehaviour
 {
     public InventorySlot[] inventory;
+    public string ID = "unassigned";
     private StateManager stateManager;
     private string originalID;
     public bool initialized;
@@ -15,7 +16,7 @@ public class InventoryManager : Machine
     }
 
     //! Called by MachineManager update coroutine.
-    public override void UpdateMachine()
+    public void Update()
     {
         if (!stateManager.Busy())
         {

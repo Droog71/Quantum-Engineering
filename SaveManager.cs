@@ -588,14 +588,6 @@ public class SaveManager
                             blockRotations[i] = blockHolder.blockData[i].rotation;
                         }
 
-                        string saveDataPath = Path.Combine(Application.persistentDataPath, "SaveData" + "/" + stateManager.worldName);
-                        Directory.CreateDirectory(saveDataPath);
-                        string saveFileLocation = Path.Combine(saveDataPath + "/" + worldID + ".obj");
-                        if (blockHolder.gameObject.GetComponent<MeshFilter>() != null)
-                        {
-                            ObjExporter.MeshToFile(blockHolder.gameObject.GetComponent<MeshFilter>(), saveFileLocation);
-                        }
-
                         FileBasedPrefs.SetString(worldID + "blockType", blockType);
                         PlayerPrefsX.SetVector3Array(worldID + "blockPositions", blockPositions);
                         PlayerPrefsX.SetQuaternionArray(worldID + "blockRotations", blockRotations);

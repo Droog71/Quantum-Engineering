@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class ModBlock : MonoBehaviour
+public class ModBlock : Block
 {
     private Material material;
     private StateManager stateManager;
@@ -8,8 +8,6 @@ public class ModBlock : MonoBehaviour
     private GameManager gameManager;
     public GameObject glassBreak;
     private bool init;
-    private float updateTick;
-    public int address;
     public string ID = "unassigned";
     public string blockName;
 
@@ -39,19 +37,14 @@ public class ModBlock : MonoBehaviour
             }
             init = true;
         }
+    }
 
-        if (ID != "unassigned")
+    //! Called by BlockManager update coroutine.
+    public override void UpdateBlock()
+    {
+        if (ID == "unassigned" || stateManager.Busy())
         {
-            updateTick += 1 * Time.deltaTime;
-            if (updateTick > 0.5f + (address * 0.001f))
-            {
-                if (stateManager.Busy())
-                {
-                    updateTick = 0;
-                    return;
-                }
-                GetComponent<PhysicsHandler>().UpdatePhysics();
-            }
+            GetComponent<PhysicsHandler>().UpdatePhysics();
         }
     }
 }

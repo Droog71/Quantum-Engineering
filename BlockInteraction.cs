@@ -1,9 +1,12 @@
 ﻿using UnityEngine;
+using System.Collections;
 
 public class BlockInteraction
 {
     private PlayerController playerController;
     private InteractionController interactionController;
+    private Coroutine modifyMeshCoroutine;
+    private bool modifyMeshCoroutineBusy;
 
     //! This class handles the player's interactions with standard building blocks.
     public BlockInteraction(PlayerController playerController, InteractionController interactionController)
@@ -16,9 +19,18 @@ public class BlockInteraction
     public void InteractWithBlock(string blockName)
     {
         playerController.machineGUIopen = false;
-        if (cInput.GetKeyDown("Collect Object"))
+        if (cInput.GetKey("Collect Object"))
         {
-            interactionController.CollectObject(playerController.objectInSight, blockName);
+            playerController.digTime += 1 * Time.deltaTime;
+            if (playerController.digTime > 0.15f)
+            {
+                interactionController.CollectObject(playerController.objectInSight, blockName);
+                playerController.digTime = 0;
+            }
+        }
+        else
+        {
+            playerController.digTime = 0;
         }
     }
 
@@ -29,55 +41,92 @@ public class BlockInteraction
         playerController.lookingAtCombinedMesh = true;
         if (cInput.GetKey("Collect Object"))
         {
-            BlockHolder bh = playerController.objectInSight.GetComponent<BlockHolder>();
-            if (bh == null)
+            if (modifyMeshCoroutineBusy == false)
             {
-                bh = playerController.objectInSight.transform.parent.GetComponent<BlockHolder>();
-            }
-
-            if (bh != null)
-            {
-                if (bh.unloaded == true)
+                BlockHolder bh = playerController.objectInSight.GetComponent<BlockHolder>();
+                if (bh == null)
                 {
-                    bh.Load();
+                    bh = playerController.objectInSight.transform.parent.GetComponent<BlockHolder>();
                 }
-                else if (bh.blockData != null)
+
+                if (bh != null)
                 {
-                    Block blockToRemove = null;
-                    int indexToRemove = 0;
-                    for (int index = 0; index < bh.blockData.Count; index++)
+                    if (bh.unloaded == true)
                     {
-                        BlockHolder.BlockInfo info = bh.blockData[index];
-                        float distance = Vector3.Distance(info.position, point);
-                        if (distance < 5)
-                        {
-                            Block[] blocks = playerController.objectInSight.GetComponentsInChildren<Block>(true);
-                            foreach (Block block in blocks)
-                            {
-                                if (block != null)
-                                {
-                                    Vector3 pos = block.gameObject.transform.position;
-                                    Vector3 roundPos = new Vector3(Mathf.Round(pos.x), Mathf.Round(pos.y), Mathf.Round(pos.z));
-                                    Vector3 roundInfoPos = new Vector3(Mathf.Round(info.position.x), Mathf.Round(info.position.y), Mathf.Round(info.position.z));
-                                    if (roundPos == roundInfoPos)
-                                    {
-                                        blockToRemove = block;
-                                        indexToRemove = index;
-                                        break;
-                                    }
-                                }
-                            }
-                        }
+                        bh.Load();
                     }
-                    if (blockToRemove != null)
+                    else if (bh.blockData != null)
                     {
-                        interactionController.CollectObject(blockToRemove.gameObject, bh.blockType);
-                        bh.blockData.RemoveAt(indexToRemove);
-                        playerController.Invoke("CreateMesh", 0.1f);
-                        bh.gameObject.SetActive(true);
+                        playerController.digTime += 1 * Time.deltaTime;
+                        if (playerController.digTime > 0.15f)
+                        {
+                            Dig(bh, point);
+                            playerController.digTime = 0;
+                        }
                     }
                 }
             }
         }
+        else
+        {
+            playerController.digTime = 0;
+        }
+    }
+
+    //! Removes a block.
+    private void Dig(BlockHolder bh, Vector3 point)
+    {
+        Block blockToRemove = null;
+        int indexToRemove = 0;
+        for (int index = 0; index < bh.blockData.Count; index++)
+        {
+            BlockHolder.BlockInfo info = bh.blockData[index];
+            float distance = Vector3.Distance(info.position, point);
+            if (distance < 5)
+            {
+                Block[] blocks = playerController.objectInSight.GetComponentsInChildren<Block>(true);
+                foreach (Block block in blocks)
+                {
+                    if (block != null)
+                    {
+                        Vector3 pos = block.gameObject.transform.position;
+                        Vector3 roundPos = new Vector3(Mathf.Round(pos.x), Mathf.Round(pos.y), Mathf.Round(pos.z));
+                        Vector3 roundInfoPos = new Vector3(Mathf.Round(info.position.x), Mathf.Round(info.position.y), Mathf.Round(info.position.z));
+                        if (roundPos == roundInfoPos)
+                        {
+                            blockToRemove = block;
+                            indexToRemove = index;
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+        if (blockToRemove != null)
+        {
+            interactionController.CollectObject(blockToRemove.gameObject, bh.blockType);
+            bh.blockData.RemoveAt(indexToRemove);
+            modifyMeshCoroutine = playerController.StartCoroutine(ModifyMesh(bh.gameObject));
+            bh.gameObject.SetActive(true);
+        }
+    }
+
+    //! Modifies a combined mesh with a slight delay to allow the BlockHolder class to load data.
+    private IEnumerator ModifyMesh(GameObject obj)
+    {
+        modifyMeshCoroutineBusy = true;
+        yield return new WaitForSeconds(0.1f);
+        if (obj != null)
+        {
+            BlockHolder bh = obj.GetComponent<BlockHolder>();
+            if (bh != null)
+            {
+                if (bh.chunkLoadCoroutineBusy == false && bh.chunkUnloadCoroutineBusy == false && bh.unloaded == false)
+                {
+                    playerController.gameManager.meshManager.CreateCombinedMesh(obj);
+                }
+            }
+        }
+        modifyMeshCoroutineBusy = false;
     }
 }

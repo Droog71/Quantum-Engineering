@@ -16,9 +16,18 @@ public class MachineInteraction
     //! Called when the player is looking at an electric light.
     public void InteractWithElectricLight()
     {
-        if(cInput.GetKeyDown("Collect Object"))
+        if(cInput.GetKey("Collect Object"))
         {
-            interactionController.CollectObject(playerController.objectInSight, "Electric Light");
+            playerController.digTime += 1 * Time.deltaTime;
+            if (playerController.digTime > 0.15f)
+            {
+                interactionController.CollectObject(playerController.objectInSight, "Electric Light");
+                playerController.digTime = 0;
+            }
+        }
+        else
+        {
+            playerController.digTime = 0;
         }
     }
 
@@ -29,9 +38,18 @@ public class MachineInteraction
         string doorType = playerController.objectInSight.GetComponent<Door>().type;
         playerController.doorToEdit = door;
 
-        if (cInput.GetKeyDown("Collect Object"))
+        if(cInput.GetKey("Collect Object"))
         {
-            interactionController.CollectObject(playerController.objectInSight, doorType);
+            playerController.digTime += 1 * Time.deltaTime;
+            if (playerController.digTime > 0.15f)
+            {
+                interactionController.CollectObject(playerController.objectInSight, doorType);
+                playerController.digTime = 0;
+            }
+        }
+        else
+        {
+            playerController.digTime = 0;
         }
 
         if (cInput.GetKeyDown("Interact"))
@@ -106,10 +124,20 @@ public class MachineInteraction
             }
         }
 
-        if (cInput.GetKeyDown("Collect Object"))
+        if(cInput.GetKey("Collect Object"))
         {
-            interactionController.CollectObject(playerController.objectInSight, powerSource.type);
+            playerController.digTime += 1 * Time.deltaTime;
+            if (playerController.digTime > 0.15f)
+            {
+                interactionController.CollectObject(playerController.objectInSight, powerSource.type);
+                playerController.digTime = 0;
+            }
         }
+        else
+        {
+            playerController.digTime = 0;
+        }
+
         if (cInput.GetKeyDown("Interact"))
         {
             if (PlayerPrefsX.GetPersistentBool("multiplayer") == true)
@@ -130,9 +158,19 @@ public class MachineInteraction
         playerController.machineInSight = playerController.objectInSight;
         playerController.machineID = reactor.ID;
         playerController.machineCooling = reactor.cooling;
-        if (cInput.GetKeyDown("Collect Object"))
+
+        if(cInput.GetKey("Collect Object"))
         {
-            interactionController.CollectObject(playerController.objectInSight, "Nuclear Reactor");
+            playerController.digTime += 1 * Time.deltaTime;
+            if (playerController.digTime > 0.15f)
+            {
+                interactionController.CollectObject(playerController.objectInSight, "Nuclear Reactor");
+                playerController.digTime = 0;
+            }
+        }
+        else
+        {
+            playerController.digTime = 0;
         }
     }
 
@@ -142,9 +180,19 @@ public class MachineInteraction
         LogicBlock logicBlock = playerController.objectInSight.GetComponent<LogicBlock>();
         playerController.machineInSight = playerController.objectInSight;
         playerController.machineID = logicBlock.ID;
-        if (cInput.GetKeyDown("Collect Object"))
+
+        if(cInput.GetKey("Collect Object"))
         {
-            interactionController.CollectObject(playerController.objectInSight, logicBlock.blockType);
+            playerController.digTime += 1 * Time.deltaTime;
+            if (playerController.digTime > 0.15f)
+            {
+                interactionController.CollectObject(playerController.objectInSight, logicBlock.blockType);
+                playerController.digTime = 0;
+            }
+        }
+        else
+        {
+            playerController.digTime = 0;
         }
     }
 
@@ -162,10 +210,21 @@ public class MachineInteraction
         {
             playerController.machineRange = 10;
         }
-        if (cInput.GetKeyDown("Collect Object"))
+
+        if(cInput.GetKey("Collect Object"))
         {
-            interactionController.CollectObject(playerController.objectInSight, "Power Conduit");
+            playerController.digTime += 1 * Time.deltaTime;
+            if (playerController.digTime > 0.15f)
+            {
+                interactionController.CollectObject(playerController.objectInSight, "Power Conduit");
+                playerController.digTime = 0;
+            }
         }
+        else
+        {
+            playerController.digTime = 0;
+        }
+
         if (cInput.GetKeyDown("Interact"))
         {
             if (PlayerPrefsX.GetPersistentBool("multiplayer") == true)
@@ -192,10 +251,21 @@ public class MachineInteraction
         playerController.machinePower = turret.power;
         playerController.machineHeat = turret.heat;
         playerController.machineCooling = turret.cooling;
-        if (cInput.GetKeyDown("Collect Object"))
+
+        if(cInput.GetKey("Collect Object"))
         {
-            interactionController.CollectObject(playerController.objectInSight, "Turret");
+            playerController.digTime += 1 * Time.deltaTime;
+            if (playerController.digTime > 0.15f)
+            {
+                interactionController.CollectObject(playerController.objectInSight, "Turret");
+                playerController.digTime = 0;
+            }
         }
+        else
+        {
+            playerController.digTime = 0;
+        }
+
         if (cInput.GetKeyDown("Interact"))
         {
             if (PlayerPrefsX.GetPersistentBool("multiplayer") == true)
@@ -223,10 +293,21 @@ public class MachineInteraction
         playerController.machineCooling = turret.cooling;
         playerController.machineType = turret.ammoType;
         playerController.machineAmount = turret.ammoAmount;
-        if (cInput.GetKeyDown("Collect Object"))
+
+        if(cInput.GetKey("Collect Object"))
         {
-            interactionController.CollectObject(playerController.objectInSight, "Missile Turret");
+            playerController.digTime += 1 * Time.deltaTime;
+            if (playerController.digTime > 0.15f)
+            {
+                interactionController.CollectObject(playerController.objectInSight, "Missile Turret");
+                playerController.digTime = 0;
+            }
         }
+        else
+        {
+            playerController.digTime = 0;
+        }
+
         if (cInput.GetKeyDown("Interact"))
         {
             if (PlayerPrefsX.GetPersistentBool("multiplayer") == true)
@@ -254,10 +335,21 @@ public class MachineInteraction
         playerController.machineHeat = extractor.heat;
         playerController.machineCooling = extractor.cooling;
         playerController.machineType = extractor.type;
-        if (cInput.GetKeyDown("Collect Object"))
+
+        if(cInput.GetKey("Collect Object"))
         {
-            interactionController.CollectObject(playerController.objectInSight, "Universal Extractor");
+            playerController.digTime += 1 * Time.deltaTime;
+            if (playerController.digTime > 0.15f)
+            {
+                interactionController.CollectObject(playerController.objectInSight, "Universal Extractor");
+                playerController.digTime = 0;
+            }
         }
+        else
+        {
+            playerController.digTime = 0;
+        }
+
         if (cInput.GetKeyDown("Interact"))
         {
             if (PlayerPrefsX.GetPersistentBool("multiplayer") == true)
@@ -284,10 +376,21 @@ public class MachineInteraction
         playerController.machineSpeed = auger.speed;
         playerController.machineHeat = auger.heat;
         playerController.machineCooling = auger.cooling;
-        if (cInput.GetKeyDown("Collect Object"))
+
+        if(cInput.GetKey("Collect Object"))
         {
-            interactionController.CollectObject(playerController.objectInSight, "Auger");
+            playerController.digTime += 1 * Time.deltaTime;
+            if (playerController.digTime > 0.15f)
+            {
+                interactionController.CollectObject(playerController.objectInSight, "Auger");
+                playerController.digTime = 0;
+            }
         }
+        else
+        {
+            playerController.digTime = 0;
+        }
+
         if (cInput.GetKeyDown("Interact"))
         {
             if (PlayerPrefsX.GetPersistentBool("multiplayer") == true)
@@ -314,10 +417,21 @@ public class MachineInteraction
         playerController.machineSpeed = collector.speed;
         playerController.machineHeat = collector.heat;
         playerController.machineCooling = collector.cooling;
-        if (cInput.GetKeyDown("Collect Object"))
+
+        if(cInput.GetKey("Collect Object"))
         {
-            interactionController.CollectObject(playerController.objectInSight, "Dark Matter Collector");
+            playerController.digTime += 1 * Time.deltaTime;
+            if (playerController.digTime > 0.15f)
+            {
+                interactionController.CollectObject(playerController.objectInSight, "Dark Matter Collector");
+                playerController.digTime = 0;
+            }
         }
+        else
+        {
+            playerController.digTime = 0;
+        }
+
         if (cInput.GetKeyDown("Interact"))
         {
             if (PlayerPrefsX.GetPersistentBool("multiplayer") == true)
@@ -524,10 +638,21 @@ public class MachineInteraction
                 playerController.machineOutputAmount = storageTotal;
             }
         }
-        if (cInput.GetKeyDown("Collect Object"))
+
+        if(cInput.GetKey("Collect Object"))
         {
-            interactionController.CollectObject(playerController.objectInSight, "Universal Conduit");
+            playerController.digTime += 1 * Time.deltaTime;
+            if (playerController.digTime > 0.15f)
+            {
+                interactionController.CollectObject(playerController.objectInSight, "Universal Conduit");
+                playerController.digTime = 0;
+            }
         }
+        else
+        {
+            playerController.digTime = 0;
+        }
+
         if (cInput.GetKeyDown("Interact"))
         {
             if (PlayerPrefsX.GetPersistentBool("multiplayer") == true)
@@ -610,10 +735,21 @@ public class MachineInteraction
                 playerController.machineOutputAmount = storageTotal;
             }
         }
-        if (cInput.GetKeyDown("Collect Object"))
+
+        if(cInput.GetKey("Collect Object"))
         {
-            interactionController.CollectObject(playerController.objectInSight, "Dark Matter Conduit");
+            playerController.digTime += 1 * Time.deltaTime;
+            if (playerController.digTime > 0.15f)
+            {
+                interactionController.CollectObject(playerController.objectInSight, "Dark Matter Conduit");
+                playerController.digTime = 0;
+            }
         }
+        else
+        {
+            playerController.digTime = 0;
+        }
+
         if (cInput.GetKeyDown("Interact"))
         {
             if (PlayerPrefsX.GetPersistentBool("multiplayer") == true)
@@ -659,10 +795,21 @@ public class MachineInteraction
                 playerController.machineOutputType = smelter.outputObject.GetComponent<UniversalConduit>().type;
             }
         }
-        if (cInput.GetKeyDown("Collect Object"))
+
+        if(cInput.GetKey("Collect Object"))
         {
-            interactionController.CollectObject(playerController.objectInSight, "Smelter");
+            playerController.digTime += 1 * Time.deltaTime;
+            if (playerController.digTime > 0.15f)
+            {
+                interactionController.CollectObject(playerController.objectInSight, "Smelter");
+                playerController.digTime = 0;
+            }
         }
+        else
+        {
+            playerController.digTime = 0;
+        }
+
         if (cInput.GetKeyDown("Interact"))
         {
             if (PlayerPrefsX.GetPersistentBool("multiplayer") == true)
@@ -726,10 +873,21 @@ public class MachineInteraction
                 playerController.machineOutputType = alloySmelter.outputObject.GetComponent<UniversalConduit>().type;
             }
         }
-        if (cInput.GetKeyDown("Collect Object"))
+
+        if(cInput.GetKey("Collect Object"))
         {
-            interactionController.CollectObject(playerController.objectInSight, "Alloy Smelter");
+            playerController.digTime += 1 * Time.deltaTime;
+            if (playerController.digTime > 0.15f)
+            {
+                interactionController.CollectObject(playerController.objectInSight, "Alloy Smelter");
+                playerController.digTime = 0;
+            }
         }
+        else
+        {
+            playerController.digTime = 0;
+        }
+
         if (cInput.GetKeyDown("Interact"))
         {
             if (PlayerPrefsX.GetPersistentBool("multiplayer") == true)
@@ -782,10 +940,21 @@ public class MachineInteraction
                 playerController.machineOutputType = extruder.outputObject.GetComponent<UniversalConduit>().type;
             }
         }
-        if (cInput.GetKeyDown("Collect Object"))
+
+        if(cInput.GetKey("Collect Object"))
         {
-            interactionController.CollectObject(playerController.objectInSight, "Extruder");
+            playerController.digTime += 1 * Time.deltaTime;
+            if (playerController.digTime > 0.15f)
+            {
+                interactionController.CollectObject(playerController.objectInSight, "Extruder");
+                playerController.digTime = 0;
+            }
         }
+        else
+        {
+            playerController.digTime = 0;
+        }
+
         if (cInput.GetKeyDown("Interact"))
         {
             if (PlayerPrefsX.GetPersistentBool("multiplayer") == true)
@@ -838,10 +1007,21 @@ public class MachineInteraction
                 playerController.machineOutputType = modMachine.outputObject.GetComponent<UniversalConduit>().type;
             }
         }
-        if (cInput.GetKeyDown("Collect Object"))
+
+        if(cInput.GetKey("Collect Object"))
         {
-            interactionController.CollectObject(playerController.objectInSight, modMachine.machineName);
+            playerController.digTime += 1 * Time.deltaTime;
+            if (playerController.digTime > 0.15f)
+            {
+                interactionController.CollectObject(playerController.objectInSight, modMachine.machineName);
+                playerController.digTime = 0;
+            }
         }
+        else
+        {
+            playerController.digTime = 0;
+        }
+
         if (cInput.GetKeyDown("Interact"))
         {
             if (PlayerPrefsX.GetPersistentBool("multiplayer") == true)
@@ -888,10 +1068,21 @@ public class MachineInteraction
                 playerController.machineOutputID = railCartHub.outputObject.GetComponent<RailCartHub>().ID;
             }
         }
-        if (cInput.GetKeyDown("Collect Object"))
+
+        if(cInput.GetKey("Collect Object"))
         {
-            interactionController.CollectObject(playerController.objectInSight, "Rail Cart Hub");
+            playerController.digTime += 1 * Time.deltaTime;
+            if (playerController.digTime > 0.15f)
+            {
+                interactionController.CollectObject(playerController.objectInSight, "Rail Cart Hub");
+                playerController.digTime = 0;
+            }
         }
+        else
+        {
+            playerController.digTime = 0;
+        }
+
         if (cInput.GetKeyDown("Interact"))
         {
             if (PlayerPrefsX.GetPersistentBool("multiplayer") == true)
@@ -949,10 +1140,21 @@ public class MachineInteraction
                 playerController.machineOutputType = retriever.outputObject.GetComponent<UniversalConduit>().type;
             }
         }
-        if (cInput.GetKeyDown("Collect Object"))
+
+        if(cInput.GetKey("Collect Object"))
         {
-            interactionController.CollectObject(playerController.objectInSight, "Retriever");
+            playerController.digTime += 1 * Time.deltaTime;
+            if (playerController.digTime > 0.15f)
+            {
+                interactionController.CollectObject(playerController.objectInSight, "Retriever");
+                playerController.digTime = 0;
+            }
         }
+        else
+        {
+            playerController.digTime = 0;
+        }
+
         if (cInput.GetKeyDown("Interact"))
         {
             if (PlayerPrefsX.GetPersistentBool("multiplayer") == true)
@@ -1052,10 +1254,21 @@ public class MachineInteraction
                 playerController.machineOutputID = heatExchanger.outputObject.GetComponent<ModMachine>().ID;
             }
         }
-        if (cInput.GetKeyDown("Collect Object"))
+
+        if(cInput.GetKey("Collect Object"))
         {
-            interactionController.CollectObject(playerController.objectInSight, "Heat Exchanger");
+            playerController.digTime += 1 * Time.deltaTime;
+            if (playerController.digTime > 0.15f)
+            {
+                interactionController.CollectObject(playerController.objectInSight, "Heat Exchanger");
+                playerController.digTime = 0;
+            }
         }
+        else
+        {
+            playerController.digTime = 0;
+        }
+
         if (cInput.GetKeyDown("Interact"))
         {
             if (PlayerPrefsX.GetPersistentBool("multiplayer") == true)
@@ -1109,10 +1322,21 @@ public class MachineInteraction
                 playerController.machineOutputType = gearCutter.outputObject.GetComponent<UniversalConduit>().type;
             }
         }
-        if (cInput.GetKeyDown("Collect Object"))
+
+        if(cInput.GetKey("Collect Object"))
         {
-            interactionController.CollectObject(playerController.objectInSight, "Gear Cutter");
+            playerController.digTime += 1 * Time.deltaTime;
+            if (playerController.digTime > 0.15f)
+            {
+                interactionController.CollectObject(playerController.objectInSight, "Gear Cutter");
+                playerController.digTime = 0;
+            }
         }
+        else
+        {
+            playerController.digTime = 0;
+        }
+
         if (cInput.GetKeyDown("Interact"))
         {
             if (PlayerPrefsX.GetPersistentBool("multiplayer") == true)
@@ -1165,10 +1389,21 @@ public class MachineInteraction
                 playerController.machineOutputType = press.outputObject.GetComponent<UniversalConduit>().type;
             }
         }
-        if (cInput.GetKeyDown("Collect Object"))
+
+        if(cInput.GetKey("Collect Object"))
         {
-            interactionController.CollectObject(playerController.objectInSight, "Press");
+            playerController.digTime += 1 * Time.deltaTime;
+            if (playerController.digTime > 0.15f)
+            {
+                interactionController.CollectObject(playerController.objectInSight, "Press");
+                playerController.digTime = 0;
+            }
         }
+        else
+        {
+            playerController.digTime = 0;
+        }
+
         if (cInput.GetKeyDown("Interact"))
         {
             if (PlayerPrefsX.GetPersistentBool("multiplayer") == true)
@@ -1214,10 +1449,21 @@ public class MachineInteraction
                 playerController.machineInputID = autoCrafter.inputObject.GetComponent<StorageComputer>().ID;
             }
         }
-        if (cInput.GetKeyDown("Collect Object"))
+
+        if(cInput.GetKey("Collect Object"))
         {
-            interactionController.CollectObject(playerController.objectInSight, "Auto Crafter");
+            playerController.digTime += 1 * Time.deltaTime;
+            if (playerController.digTime > 0.15f)
+            {
+                interactionController.CollectObject(playerController.objectInSight, "Auto Crafter");
+                playerController.digTime = 0;
+            }
         }
+        else
+        {
+            playerController.digTime = 0;
+        }
+
         if (cInput.GetKeyDown("Interact"))
         {
             if (PlayerPrefsX.GetPersistentBool("multiplayer") == true)
@@ -1254,10 +1500,21 @@ public class MachineInteraction
             {
                 playerController.protectionList += userName + "\n";
             }
-            if (cInput.GetKeyDown("Collect Object"))
+
+            if(cInput.GetKey("Collect Object"))
             {
-                interactionController.CollectObject(playerController.objectInSight, "Protection Block");
+                playerController.digTime += 1 * Time.deltaTime;
+                if (playerController.digTime > 0.15f)
+                {
+                    interactionController.CollectObject(playerController.objectInSight, "Protection Block");
+                    playerController.digTime = 0;
+                }
             }
+            else
+            {
+                playerController.digTime = 0;
+            }
+
             if (cInput.GetKeyDown("Interact"))
             {
                 if (PlayerPrefsX.GetPersistentBool("multiplayer") == true)

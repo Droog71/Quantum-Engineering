@@ -17,7 +17,7 @@ public class StorageInteraction
     {
         playerController.machineGUIopen = false;
         InventoryManager inventory = playerController.objectInSight.GetComponent<InventoryManager>();
-        if (cInput.GetKeyDown("Interact"))
+        if (cInput.GetKey("Interact"))
         {
             if (PlayerPrefsX.GetPersistentBool("multiplayer") == true)
             {
@@ -50,41 +50,53 @@ public class StorageInteraction
                 playerController.storageGUIopen = false;
             }
         }
-        if (cInput.GetKeyDown("Collect Object") && inventory.ID != "Rocket" && inventory.ID != "Lander")
+        if (cInput.GetKey("Collect Object") && inventory.ID != "Rocket" && inventory.ID != "Lander")
         {
-            bool spaceAvailable = false;
-            foreach (InventorySlot slot in playerController.playerInventory.inventory)
+            playerController.digTime += 1 * Time.deltaTime;
+            if (playerController.digTime > 0.15f)
             {
-                if (slot.typeInSlot.Equals("nothing") || slot.typeInSlot.Equals("Storage Container") && slot.amountInSlot < 1000)
+                bool spaceAvailable = false;
+
+                foreach (InventorySlot slot in playerController.playerInventory.inventory)
                 {
-                    spaceAvailable = true;
+                    if (slot.typeInSlot.Equals("nothing") || slot.typeInSlot.Equals("Storage Container") && slot.amountInSlot < 1000)
+                    {
+                        spaceAvailable = true;
+                    }
                 }
-            }
-            if (spaceAvailable == true)
-            {
-                InventoryManager thisContainer = inventory;
-                foreach (InventorySlot slot in thisContainer.inventory)
+
+                if (spaceAvailable == true)
                 {
-                    slot.typeInSlot = "nothing";
-                    slot.amountInSlot = 0;
-                }
-                thisContainer.SaveData();
-                if (playerController.objectInSight.GetComponent<RailCart>() != null)
-                {
-                    interactionController.CollectObject(playerController.objectInSight, "Rail Cart");
+                    InventoryManager thisContainer = inventory;
+                    foreach (InventorySlot slot in thisContainer.inventory)
+                    {
+                        slot.typeInSlot = "nothing";
+                        slot.amountInSlot = 0;
+                    }
+                    thisContainer.SaveData();
+                    if (playerController.objectInSight.GetComponent<RailCart>() != null)
+                    {
+                        interactionController.CollectObject(playerController.objectInSight, "Rail Cart");
+                    }
+                    else
+                    {
+                        interactionController.CollectObject(playerController.objectInSight, "Storage Container");
+                    }
+                    Object.Destroy(playerController.objectInSight);
+                    playerController.PlayCraftingSound();
                 }
                 else
                 {
-                    interactionController.CollectObject(playerController.objectInSight, "Storage Container");
+                    playerController.cannotCollect = true;
+                    playerController.PlayCraftingSound();
                 }
-                Object.Destroy(playerController.objectInSight);
-                playerController.PlayCraftingSound();
+
+                playerController.digTime = 0;
             }
-            else
-            {
-                playerController.cannotCollect = true;
-                playerController.PlayCraftingSound();
-            }
+        }
+        else
+        {
+            playerController.digTime = 0;
         }
     }
 
@@ -147,9 +159,19 @@ public class StorageInteraction
                 playerController.storageGUIopen = false;
             }
         }
-        if (cInput.GetKeyDown("Collect Object"))
+
+        if(cInput.GetKey("Collect Object"))
         {
-            interactionController.CollectObject(playerController.objectInSight, "Storage Computer");
+            playerController.digTime += 1 * Time.deltaTime;
+            if (playerController.digTime > 0.15f)
+            {
+                interactionController.CollectObject(playerController.objectInSight, "Storage Computer");
+                playerController.digTime = 0;
+            }
+        }
+        else
+        {
+            playerController.digTime = 0;
         }
     }
 }

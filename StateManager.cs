@@ -71,6 +71,7 @@ public class StateManager : MonoBehaviour
     private Coroutine blockIdCoroutine;
     private Coroutine loadCoroutine;
     private Coroutine saveCoroutine;
+    private MachineManager machineManager;
     private string objectName = "";
     private bool loading;
     private int batchmodeLogInterval;
@@ -84,6 +85,7 @@ public class StateManager : MonoBehaviour
         player = GameObject.Find("Player");
         playerController = player.GetComponent<PlayerController>();
         mainMenu = player.GetComponent<MainMenu>();
+        machineManager = GetComponent<MachineManager>();
     }
 
     //! Update is called once per frame.
@@ -108,7 +110,6 @@ public class StateManager : MonoBehaviour
                         string loadingMessage = "Loading... " + blockProgress +
                         "/" + blockIdList.Length + " chunks " + 
                         currentBlocks + "/" + totalBlocks + " blocks.";
-                            
 
                         if (blockProgress > 0 && machineProgress >= blockIdList.Length)
                         {
@@ -158,11 +159,12 @@ public class StateManager : MonoBehaviour
                     if (objectName == worldName + "BlockHolder")
                     {
                         GameObject spawnedObject = Instantiate(blockHolder, objectPosition, objectRotation);
+                        BlockHolder bh = spawnedObject.GetComponent<BlockHolder>();
                         spawnedObject.transform.parent = builtObjects.transform;
-                        spawnedObject.GetComponent<BlockHolder>().blockData = new List<BlockHolder.BlockInfo>();
-                        spawnedObject.GetComponent<BlockHolder>().ID = ID;
+                        bh.blockData = new List<BlockHolder.BlockInfo>();
+                        bh.ID = ID;
                         string blockType = FileBasedPrefs.GetString(ID + "blockType");
-                        spawnedObject.GetComponent<BlockHolder>().blockType = blockType;
+                        bh.blockType = blockType;
                         if (blockType == "Grass" || blockType == "Dirt")
                         {
                             Vector3 worldLoc = PlayerPrefsX.GetVector3(ID + "worldLoc");
@@ -173,31 +175,24 @@ public class StateManager : MonoBehaviour
                         {
                             totalBlocks = blockPositions.Length;
                             currentBlocks = 0;
-                            int interval = 0;
                             Quaternion[] blockRotations = PlayerPrefsX.GetQuaternionArray(ID + "blockRotations");
                             for (int i = 0; i < blockPositions.Length; i++)
                             {
                                 BlockHolder.BlockInfo blockInfo = new BlockHolder.BlockInfo(blockPositions[i], blockRotations[i]);
-                                spawnedObject.GetComponent<BlockHolder>().blockData.Add(blockInfo);
+                                bh.blockData.Add(blockInfo);
                                 currentBlocks++;
-                                interval++;
-                                if (interval >= totalBlocks * 0.5f)
-                                {
-                                    interval = 0;
-                                    yield return null;
-                                }
                             }
                         }
-                        spawnedObject.GetComponent<BlockHolder>().unloaded = true;
+                        bh.unloaded = true;
                         string saveDataPath = Path.Combine(Application.persistentDataPath, "SaveData" + "/" + worldName);
                         Directory.CreateDirectory(saveDataPath);
                         string saveFileLocation = Path.Combine(saveDataPath + "/" + ID + ".obj");
-                        ObjImporter importer = new ObjImporter();
-                        Mesh newMesh = importer.ImportFile(saveFileLocation);
-                        spawnedObject.GetComponent<MeshFilter>().mesh = newMesh;
                         GetComponent<GameManager>().meshManager.SetMaterial(spawnedObject, blockType);
-                        spawnedObject.GetComponent<MeshCollider>().sharedMesh = spawnedObject.GetComponent<MeshFilter>().mesh;
-                        spawnedObject.GetComponent<MeshCollider>().enabled = true;
+                        bh.Load();
+                        while (bh.chunkLoadCoroutineBusy == true || bh.chunkUnloadCoroutineBusy == true)
+                        {
+                            yield return null;
+                        }
                     }
                     blockProgress++;
                 }
@@ -222,6 +217,7 @@ public class StateManager : MonoBehaviour
                             Debug.Log("LOGIC BLOCK: " + blockType);
                             GameObject spawnedObject = Instantiate(blockDictionary.machineDictionary[blockType], objectPosition, objectRotation);
                             spawnedObject.GetComponent<LogicBlock>().logic = PlayerPrefsX.GetBool(ID + "logic");
+                            machineManager.machines.Add(spawnedObject.GetComponent<LogicBlock>());
                         }
                         if (objectName == worldName + "Door")
                         {
@@ -231,11 +227,13 @@ public class StateManager : MonoBehaviour
                             spawnedObject.GetComponent<Door>().textureIndex = FileBasedPrefs.GetInt(ID+ "textureIndex");
                             spawnedObject.GetComponent<Door>().material = FileBasedPrefs.GetString(ID+ "material");
                             spawnedObject.GetComponent<Door>().edited = FileBasedPrefs.GetBool(ID+ "edited");
+                            machineManager.machines.Add(spawnedObject.GetComponent<Door>());
                         }
                         if (objectName == worldName + "QuantumHatchway")
                         {
                             GameObject spawnedObject = Instantiate(quantumHatchway, objectPosition, objectRotation);
                             spawnedObject.GetComponent<Door>().ID = ID;
+                            machineManager.machines.Add(spawnedObject.GetComponent<Door>());
                         }
                         if (objectName == worldName + "DarkMatterCollector")
                         {
@@ -244,6 +242,7 @@ public class StateManager : MonoBehaviour
                             spawnedObject.GetComponent<DarkMatterCollector>().speed = FileBasedPrefs.GetInt(ID+ "speed");
                             spawnedObject.GetComponent<DarkMatterCollector>().darkMatterAmount = FileBasedPrefs.GetFloat(ID+ "darkMatterAmount");
                             spawnedObject.GetComponent<DarkMatterCollector>().creationMethod = "spawned";
+                            machineManager.machines.Add(spawnedObject.GetComponent<DarkMatterCollector>());
                         }
                         if (objectName == worldName + "DarkMatterConduit")
                         {
@@ -255,6 +254,7 @@ public class StateManager : MonoBehaviour
                             spawnedObject.GetComponent<DarkMatterConduit>().range = FileBasedPrefs.GetInt(ID+ "range");
                             spawnedObject.GetComponent<DarkMatterConduit>().darkMatterAmount = FileBasedPrefs.GetFloat(ID+ "darkMatterAmount");
                             spawnedObject.GetComponent<DarkMatterConduit>().creationMethod = "spawned";
+                            machineManager.machines.Add(spawnedObject.GetComponent<DarkMatterConduit>());
                         }
                         if (objectName == worldName + "RailCartHub")
                         {
@@ -268,6 +268,7 @@ public class StateManager : MonoBehaviour
                             spawnedObject.GetComponent<RailCartHub>().stopTime = FileBasedPrefs.GetFloat(ID+ "stopTime");
                             spawnedObject.GetComponent<RailCartHub>().centralHub = FileBasedPrefs.GetBool(ID+ "centralHub");
                             spawnedObject.GetComponent<RailCartHub>().creationMethod = "spawned";
+                            machineManager.machines.Add(spawnedObject.GetComponent<RailCartHub>());
                         }
                         if (objectName == worldName + "RailCart")
                         {
@@ -288,6 +289,7 @@ public class StateManager : MonoBehaviour
                             spawnedObject.GetComponent<UniversalConduit>().range = FileBasedPrefs.GetInt(ID+ "range");
                             spawnedObject.GetComponent<UniversalConduit>().amount = FileBasedPrefs.GetFloat(ID+ "amount");
                             spawnedObject.GetComponent<UniversalConduit>().creationMethod = "spawned";
+                            machineManager.machines.Add(spawnedObject.GetComponent<UniversalConduit>());
                         }
                         if (objectName == worldName + "Retriever")
                         {
@@ -298,6 +300,7 @@ public class StateManager : MonoBehaviour
                             spawnedObject.GetComponent<Retriever>().speed = FileBasedPrefs.GetInt(ID+ "speed");
                             spawnedObject.GetComponent<Retriever>().amount = FileBasedPrefs.GetFloat(ID+ "amount");
                             spawnedObject.GetComponent<Retriever>().creationMethod = "spawned";
+                            machineManager.machines.Add(spawnedObject.GetComponent<Retriever>());
                         }
                         if (objectName == worldName + "AutoCrafter")
                         {
@@ -306,6 +309,7 @@ public class StateManager : MonoBehaviour
                             spawnedObject.GetComponent<AutoCrafter>().inputID = FileBasedPrefs.GetString(ID+ "inputID");
                             spawnedObject.GetComponent<AutoCrafter>().speed = FileBasedPrefs.GetInt(ID+ "speed");
                             spawnedObject.GetComponent<AutoCrafter>().creationMethod = "spawned";
+                            machineManager.machines.Add(spawnedObject.GetComponent<AutoCrafter>());
                         }
                         if (objectName == worldName + "Smelter")
                         {
@@ -318,6 +322,7 @@ public class StateManager : MonoBehaviour
                             spawnedObject.GetComponent<Smelter>().speed = FileBasedPrefs.GetInt(ID+ "speed");
                             spawnedObject.GetComponent<Smelter>().amount = FileBasedPrefs.GetFloat(ID+ "amount");
                             spawnedObject.GetComponent<Smelter>().creationMethod = "spawned";
+                            machineManager.machines.Add(spawnedObject.GetComponent<Smelter>());
                         }
                         if (objectName == worldName + "HeatExchanger")
                         {
@@ -329,6 +334,7 @@ public class StateManager : MonoBehaviour
                             spawnedObject.GetComponent<HeatExchanger>().amount = FileBasedPrefs.GetFloat(ID+ "amount");
                             spawnedObject.GetComponent<HeatExchanger>().inputType = FileBasedPrefs.GetString(ID+ "inputType");
                             spawnedObject.GetComponent<HeatExchanger>().creationMethod = "spawned";
+                            machineManager.machines.Add(spawnedObject.GetComponent<HeatExchanger>());
                         }
                         if (objectName == worldName + "SolarPanel")
                         {
@@ -336,6 +342,7 @@ public class StateManager : MonoBehaviour
                             spawnedObject.GetComponent<PowerSource>().ID = ID;
                             spawnedObject.GetComponent<PowerSource>().outputID = FileBasedPrefs.GetString(ID+ "outputID");
                             spawnedObject.GetComponent<PowerSource>().creationMethod = "spawned";
+                            machineManager.machines.Add(spawnedObject.GetComponent<PowerSource>());
                         }
                         if (objectName == worldName + "Generator")
                         {
@@ -345,12 +352,14 @@ public class StateManager : MonoBehaviour
                             spawnedObject.GetComponent<PowerSource>().creationMethod = "spawned";
                             spawnedObject.GetComponent<PowerSource>().fuelType = FileBasedPrefs.GetString(ID+ "fuelType");
                             spawnedObject.GetComponent<PowerSource>().fuelAmount = FileBasedPrefs.GetInt(ID+ "fuelAmount");
+                            machineManager.machines.Add(spawnedObject.GetComponent<PowerSource>());
                         }
                         if (objectName == worldName + "NuclearReactor")
                         {
                             GameObject spawnedObject = Instantiate(nuclearReactor, objectPosition, objectRotation);
                             spawnedObject.GetComponent<NuclearReactor>().ID = ID;
                             spawnedObject.GetComponent<NuclearReactor>().creationMethod = "spawned";
+                            machineManager.machines.Add(spawnedObject.GetComponent<NuclearReactor>());
                         }
                         if (objectName == worldName + "ReactorTurbine")
                         {
@@ -358,6 +367,7 @@ public class StateManager : MonoBehaviour
                             spawnedObject.GetComponent<PowerSource>().ID = ID;
                             spawnedObject.GetComponent<PowerSource>().outputID = FileBasedPrefs.GetString(ID+ "outputID");
                             spawnedObject.GetComponent<PowerSource>().creationMethod = "spawned";
+                            machineManager.machines.Add(spawnedObject.GetComponent<PowerSource>());
                         }
                         if (objectName == worldName + "PowerConduit")
                         {
@@ -370,6 +380,7 @@ public class StateManager : MonoBehaviour
                             spawnedObject.GetComponent<PowerConduit>().range = FileBasedPrefs.GetInt(ID+ "range");
                             spawnedObject.GetComponent<PowerConduit>().powerAmount = FileBasedPrefs.GetInt(ID+ "powerAmount");
                             spawnedObject.GetComponent<PowerConduit>().creationMethod = "spawned";
+                            machineManager.machines.Add(spawnedObject.GetComponent<PowerConduit>());
                         }
                         if (objectName == worldName + "Auger")
                         {
@@ -378,12 +389,14 @@ public class StateManager : MonoBehaviour
                             spawnedObject.GetComponent<Auger>().speed = FileBasedPrefs.GetInt(ID+ "speed");
                             spawnedObject.GetComponent<Auger>().amount = FileBasedPrefs.GetFloat(ID+ "amount");
                             spawnedObject.GetComponent<Auger>().creationMethod = "spawned";
+                            machineManager.machines.Add(spawnedObject.GetComponent<Auger>());
                         }
                         if (objectName == worldName + "ElectricLight")
                         {
                             GameObject spawnedObject = Instantiate(electricLight, objectPosition, objectRotation);
                             spawnedObject.GetComponent<ElectricLight>().ID = ID;
                             spawnedObject.GetComponent<ElectricLight>().creationMethod = "spawned";
+                            machineManager.machines.Add(spawnedObject.GetComponent<ElectricLight>());
                         }
                         if (objectName == worldName + "Turret")
                         {
@@ -391,6 +404,7 @@ public class StateManager : MonoBehaviour
                             spawnedObject.GetComponent<Turret>().ID = ID;
                             spawnedObject.GetComponent<Turret>().speed = FileBasedPrefs.GetInt(ID+ "speed");
                             spawnedObject.GetComponent<Turret>().creationMethod = "spawned";
+                            machineManager.machines.Add(spawnedObject.GetComponent<Turret>());
                         }
                         if (objectName == worldName + "MissileTurret")
                         {
@@ -400,6 +414,7 @@ public class StateManager : MonoBehaviour
                             spawnedObject.GetComponent<MissileTurret>().ammoType = FileBasedPrefs.GetString(ID+ "ammoType");
                             spawnedObject.GetComponent<MissileTurret>().ammoAmount = FileBasedPrefs.GetInt(ID+ "ammoAmount");
                             spawnedObject.GetComponent<MissileTurret>().creationMethod = "spawned";
+                            machineManager.machines.Add(spawnedObject.GetComponent<MissileTurret>());
                         }
                         if (objectName == worldName + "AlloySmelter")
                         {
@@ -416,6 +431,7 @@ public class StateManager : MonoBehaviour
                             spawnedObject.GetComponent<AlloySmelter>().amount2 = FileBasedPrefs.GetFloat(ID+ "amount2");
                             spawnedObject.GetComponent<AlloySmelter>().outputAmount = FileBasedPrefs.GetFloat(ID+ "outputAmount");
                             spawnedObject.GetComponent<AlloySmelter>().creationMethod = "spawned";
+                            machineManager.machines.Add(spawnedObject.GetComponent<AlloySmelter>());
                         }
                         if (objectName == worldName + "Press")
                         {
@@ -428,6 +444,7 @@ public class StateManager : MonoBehaviour
                             spawnedObject.GetComponent<Press>().speed = FileBasedPrefs.GetInt(ID+ "speed");
                             spawnedObject.GetComponent<Press>().amount = FileBasedPrefs.GetFloat(ID+ "amount");
                             spawnedObject.GetComponent<Press>().creationMethod = "spawned";
+                            machineManager.machines.Add(spawnedObject.GetComponent<Press>());
                         }
                         if (objectName == worldName + "Extruder")
                         {
@@ -440,6 +457,7 @@ public class StateManager : MonoBehaviour
                             spawnedObject.GetComponent<Extruder>().speed = FileBasedPrefs.GetInt(ID+ "speed");
                             spawnedObject.GetComponent<Extruder>().amount = FileBasedPrefs.GetFloat(ID+ "amount");
                             spawnedObject.GetComponent<Extruder>().creationMethod = "spawned";
+                            machineManager.machines.Add(spawnedObject.GetComponent<Extruder>());
                         }
                         if (objectName == worldName + "GearCutter")
                         {
@@ -452,6 +470,7 @@ public class StateManager : MonoBehaviour
                             spawnedObject.GetComponent<GearCutter>().speed = FileBasedPrefs.GetInt(ID+ "speed");
                             spawnedObject.GetComponent<GearCutter>().amount = FileBasedPrefs.GetFloat(ID+ "amount");
                             spawnedObject.GetComponent<GearCutter>().creationMethod = "spawned";
+                            machineManager.machines.Add(spawnedObject.GetComponent<GearCutter>());
                         }
                         if (objectName == worldName + "UniversalExtractor")
                         {
@@ -461,6 +480,7 @@ public class StateManager : MonoBehaviour
                             spawnedObject.GetComponent<UniversalExtractor>().amount = FileBasedPrefs.GetFloat(ID+ "amount");
                             spawnedObject.GetComponent<UniversalExtractor>().type = FileBasedPrefs.GetString(ID+ "type");
                             spawnedObject.GetComponent<UniversalExtractor>().creationMethod = "spawned";
+                            machineManager.machines.Add(spawnedObject.GetComponent<UniversalExtractor>());
                         }
                         if (objectName == worldName + "StorageContainer")
                         {
@@ -471,6 +491,7 @@ public class StateManager : MonoBehaviour
                         {
                             GameObject spawnedObject = Instantiate(storageComputer, objectPosition, objectRotation);
                             spawnedObject.GetComponent<StorageComputer>().ID = ID;
+                            machineManager.machines.Add(spawnedObject.GetComponent<StorageComputer>());
                         }
                         if (objectName == worldName + "ModMachine")
                         {
@@ -484,6 +505,7 @@ public class StateManager : MonoBehaviour
                             spawnedObject.GetComponent<ModMachine>().speed = FileBasedPrefs.GetInt(ID+ "speed");
                             spawnedObject.GetComponent<ModMachine>().amount = FileBasedPrefs.GetFloat(ID+ "amount");
                             spawnedObject.GetComponent<ModMachine>().creationMethod = "spawned";
+                            machineManager.machines.Add(spawnedObject.GetComponent<ModMachine>());
                         }
                         if (objectName == worldName + "ProtectionBlock")
                         {
@@ -491,6 +513,7 @@ public class StateManager : MonoBehaviour
                             spawnedObject.GetComponent<ProtectionBlock>().ID = ID;
                             spawnedObject.GetComponent<ProtectionBlock>().creationMethod = "spawned";
                             spawnedObject.GetComponent<ProtectionBlock>().SetUserNames(PlayerPrefsX.GetStringArray(ID+ "userNames").ToList());
+                            machineManager.machines.Add(spawnedObject.GetComponent<ProtectionBlock>());
                         }
                     }
                     machineProgress++;
