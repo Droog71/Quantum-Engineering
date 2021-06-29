@@ -129,6 +129,22 @@ public class BuildController : MonoBehaviour
     {
         Vector3 hitPoint = buildHit.point;
         Vector3 blockPos = buildHit.collider.transform.position;
+
+        BlockHolder bh = buildHit.collider.gameObject.GetComponent<BlockHolder>();
+        if (bh != null)
+        {
+            for (int index = 0; index < bh.blockData.Count; index++)
+            {
+                BlockHolder.BlockInfo info = bh.blockData[index];
+                float distance = Vector3.Distance(info.position, buildHit.point);
+                if (distance < 5)
+                {
+                    blockPos = info.position;
+                    break;
+                }
+            }
+        }
+
         float xDif = hitPoint.x - blockPos.x;
         float yDif = hitPoint.y - blockPos.y;
         float zDif = hitPoint.z - blockPos.z;

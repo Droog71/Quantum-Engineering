@@ -20,6 +20,7 @@ public class TerrainGenerator : MonoBehaviour
     public GameObject grass;
     public bool initialized;
     private int interval;
+    private bool loadedFoliage;
 
     //! Called by unity engine on start to initialize variables.
     public void Start()
@@ -87,6 +88,23 @@ public class TerrainGenerator : MonoBehaviour
 
                 PlayerPrefsX.SetVector3Array(stateManager.worldName + "worldLocations", worldLocations.ToArray());
                 PlayerPrefsX.SetVector3Array(stateManager.worldName + "treeLocations", treeLocations.ToArray());
+            }
+            else if (loadedFoliage == false)
+            {
+                foreach (Vector3 worldLoc in worldLocations)
+                {
+                    if (treeLocations.Contains(worldLoc))
+                    {
+                        GameObject treeObj = Instantiate(tree, new Vector3(worldLoc.x - 2.3f, worldLoc.y + 3, worldLoc.z - 2.7f), new Quaternion());
+                        treeObj.transform.parent = foliage.transform;
+                    }
+                    else
+                    {
+                        GameObject grassObj = Instantiate(billboardGrass, new Vector3(worldLoc.x - 2.3f, worldLoc.y + 3, worldLoc.z - 2.7f), new Quaternion());
+                        grassObj.transform.parent = foliage.transform;
+                    }
+                }
+                loadedFoliage = true;
             }
 
             terrainGenCoroutine = StartCoroutine(GenerateTerrain());

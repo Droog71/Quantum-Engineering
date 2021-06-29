@@ -13,6 +13,8 @@ public class OreManager : MonoBehaviour
     public GameObject coal;
     public GameObject ice;
     public GameObject darkMatter;
+    private TerrainGenerator terrainGenerator;
+    private StateManager stateManager;
     private GameObject[] ores;
     private Coroutine updateCoroutine;
     private bool coroutineBusy;
@@ -24,6 +26,16 @@ public class OreManager : MonoBehaviour
     //! Called once per frame by unity engine.
     public void Update()
     {
+        if (terrainGenerator == null)
+        {
+            terrainGenerator = GetComponent<TerrainGenerator>();
+        }
+
+        if (stateManager == null)
+        {
+            stateManager = GetComponent<StateManager>();
+        }
+
         if (orePositions == null)
         {
             orePositions = new List<Vector3>();
@@ -48,7 +60,7 @@ public class OreManager : MonoBehaviour
             };
         }
 
-        if (!coroutineBusy && paused == false)
+        if (!coroutineBusy)
         {
             updateCoroutine = StartCoroutine(ManageOre());
         }
@@ -59,12 +71,12 @@ public class OreManager : MonoBehaviour
     {
         coroutineBusy = true;
 
-        if (FileBasedPrefs.GetBool(GetComponent<StateManager>().worldName + "oldWorld") == true && loaded == false)
+        if (FileBasedPrefs.GetBool(stateManager.worldName + "oldWorld") == true && loaded == false)
         {
-            if (GetComponent<StateManager>().worldLoaded == true)
+            if (stateManager.worldLoaded == true)
             {
-                Vector3[] posArray = PlayerPrefsX.GetVector3Array(GetComponent<StateManager>().worldName + "orePositions");
-                int[] typeArray = PlayerPrefsX.GetIntArray(GetComponent<StateManager>().worldName + "oreTypes");
+                Vector3[] posArray = PlayerPrefsX.GetVector3Array(stateManager.worldName + "orePositions");
+                int[] typeArray = PlayerPrefsX.GetIntArray(stateManager.worldName + "oreTypes");
 
                 orePositions = posArray.ToList();
                 oreTypes = typeArray.ToList();
@@ -81,7 +93,7 @@ public class OreManager : MonoBehaviour
             }
         }
 
-        if (GetComponent<StateManager>().worldLoaded == true && GetComponent<TerrainGenerator>().initialized == true)
+        if (paused == false && stateManager.worldLoaded == true && terrainGenerator.initialized == true)
         {
             BlockHolder[] blockHolders = GetComponent<GameManager>().builtObjects.GetComponentsInChildren<BlockHolder>(true);
             foreach (BlockHolder blockHolder in blockHolders)
@@ -164,8 +176,8 @@ public class OreManager : MonoBehaviour
                     }
                 }
             }
-            PlayerPrefsX.SetVector3Array(GetComponent<StateManager>().worldName + "orePositions", orePositions.ToArray());
-            PlayerPrefsX.SetIntArray(GetComponent<StateManager>().worldName + "oreTypes", oreTypes.ToArray());
+            PlayerPrefsX.SetVector3Array(stateManager.worldName + "orePositions", orePositions.ToArray());
+            PlayerPrefsX.SetIntArray(stateManager.worldName + "oreTypes", oreTypes.ToArray());
         }          
         paused = true;
         coroutineBusy = false;
