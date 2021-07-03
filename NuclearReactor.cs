@@ -6,12 +6,6 @@ public class NuclearReactor : Machine
     public int cooling;
     public int turbineCount;
     public bool sufficientCooling;
-    private StateManager stateManager;
-
-    public void Start()
-    {
-        stateManager = FindObjectOfType<StateManager>();
-    }
 
     //! Called by MachineManager update coroutine.
     public override void UpdateMachine()

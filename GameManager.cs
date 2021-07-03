@@ -4,6 +4,7 @@ using UnityEngine;
 using System.Diagnostics;
 using System;
 using System.Net;
+using MEC;
 
 public class GameManager : MonoBehaviour
 {
@@ -45,13 +46,6 @@ public class GameManager : MonoBehaviour
     private bool resetSimSpeed;
     private bool readyToSave;
     public Rocket rocketScript;
-    public Coroutine separateCoroutine;
-    public Coroutine meshCombineCoroutine;
-    public Coroutine blockCombineCoroutine;
-    public Coroutine hazardRemovalCoroutine;
-    private Coroutine meshCountCoroutine;
-    private Coroutine memoryCoroutine;
-    private Coroutine undoCoroutine;
     public List<Vector3> meteorShowerLocationList;
 
     //! Stores information about blocks placed for UndoBuiltObjects function.
@@ -186,12 +180,12 @@ public class GameManager : MonoBehaviour
 
             if (memoryCoroutineBusy == false)
             {
-                memoryCoroutine = StartCoroutine(ManageMemory());
+                Timing.RunCoroutine(ManageMemory());
             }
 
             if (meshCountCoroutineBusy == false)
             {
-                meshCountCoroutine = StartCoroutine(CheckMeshCount());
+                Timing.RunCoroutine(CheckMeshCount());
             }
 
             // A save game request is pending.
@@ -235,20 +229,20 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public IEnumerator CheckMeshCount()
+    public IEnumerator<float> CheckMeshCount()
     {
         meshCountCoroutineBusy = true;
-        Block[] blocks = FindObjectsOfType<Block>();
+        Block[] blocks = builtObjects.GetComponentsInChildren<Block>(false);
         if (blocks.Length >= 1000 && combiningBlocks == false)
         {
             meshManager.CombineBlocks();
         }
-        yield return new WaitForSeconds(10);
+        yield return Timing.WaitForSeconds(10);
         meshCountCoroutineBusy = false;
     }
 
     //! Unloads unused assets when the game is using too much memory.
-    public IEnumerator ManageMemory()
+    public IEnumerator<float> ManageMemory()
     {
         memoryCoroutineBusy = true;
         float availableMemory = SystemInfo.systemMemorySize;
@@ -261,7 +255,7 @@ public class GameManager : MonoBehaviour
         {
             Resources.UnloadUnusedAssets();
         }
-        yield return new WaitForSeconds(60);
+        yield return Timing.WaitForSeconds(60);
         memoryCoroutineBusy = false;
     }
 
@@ -270,42 +264,35 @@ public class GameManager : MonoBehaviour
     {
         if (runningUndo == false)
         {
-            try
-            {
-                undoCoroutine = StartCoroutine(RemoveRecent());
-            }
-            catch(Exception e)
-            {
-                UnityEngine.Debug.Log(e.Message);
-            }
+            Timing.RunCoroutine(RemoveRecent());
         }
     }
 
     //! Removes recently placed blocks.
-    private IEnumerator RemoveRecent()
+    private IEnumerator<float> RemoveRecent()
     {
         runningUndo = true;
         List<UndoBlock> currentUndoBlocks = undoBlocks;
-        foreach (UndoBlock block in currentUndoBlocks)
+        for (int i =0; i < currentUndoBlocks.Count; i++)
         {
-            if (block != null)
+            if (currentUndoBlocks[i] != null)
             {
-                if (block.blockObject != null)
+                if (currentUndoBlocks[i].blockObject != null)
                 { 
-                    if (block.blockObject.activeInHierarchy)
+                    if (currentUndoBlocks[i].blockObject.activeInHierarchy)
                     {
-                        Destroy(block.blockObject);
-                        player.playerInventory.AddItem(block.blockType, 1);
+                        Destroy(currentUndoBlocks[i].blockObject);
+                        player.playerInventory.AddItem(currentUndoBlocks[i].blockType, 1);
                         if (PlayerPrefsX.GetPersistentBool("multiplayer") == true)
                         {
-                            Vector3 pos = block.blockObject.transform.position;
-                            Quaternion rot = block.blockObject.transform.rotation;
-                            UpdateNetwork(1, block.blockType, pos, rot);
+                            Vector3 pos = currentUndoBlocks[i].blockObject.transform.position;
+                            Quaternion rot = currentUndoBlocks[i].blockObject.transform.rotation;
+                            UpdateNetwork(1, currentUndoBlocks[i].blockType, pos, rot);
                         }
                         player.PlayCraftingSound();
                     }
                 }
-                yield return null;
+                yield return Timing.WaitForOneFrame;
             }
         }
         undoBlocks.Clear();

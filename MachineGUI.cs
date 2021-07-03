@@ -1,12 +1,12 @@
 ﻿using UnityEngine;
+using System.Collections.Generic;
+using MEC;
 
 public class MachineGUI : MonoBehaviour
 {
     private PlayerController playerController;
     private GuiCoordinates guiCoordinates;
     private TextureDictionary textureDictionary;
-    private Coroutine updateNetworkConduitCoroutine;
-    private Coroutine updateNetworkMachineCoroutine;
     private bool hubStopWindowOpen;
 
     //! Called by unity engine on start up to initialize variables.
@@ -90,7 +90,7 @@ public class MachineGUI : MonoBehaviour
                         {
                             NetworkSend net = playerController.networkController.networkSend;
                             Vector3 location = powerConduit.gameObject.transform.position;
-                            updateNetworkConduitCoroutine = StartCoroutine(net.SendPowerData(location,powerConduit.range,powerConduit.dualOutput));
+                            Timing.RunCoroutine(net.SendPowerData(location,powerConduit.range,powerConduit.dualOutput));
                             playerController.networkedConduitRange = powerConduit.range;
                             playerController.networkedDualPower = powerConduit.dualOutput;
                         }
@@ -183,7 +183,7 @@ public class MachineGUI : MonoBehaviour
                         {
                             NetworkSend net = playerController.networkController.networkSend;
                             Vector3 location = hub.gameObject.transform.position;
-                            updateNetworkConduitCoroutine = StartCoroutine(net.SendHubData(location, hub.circuit, hub.range, hub.stop, hub.stopTime));
+                            Timing.RunCoroutine(net.SendHubData(location, hub.circuit, hub.range, hub.stop, hub.stopTime));
                             playerController.networkedHubCircuit = hub.circuit;
                             playerController.networkedHubRange = hub.range;
                             playerController.networkedHubStop = hub.stop;
@@ -242,7 +242,7 @@ public class MachineGUI : MonoBehaviour
                         {
                             NetworkSend net = playerController.networkController.networkSend;
                             Vector3 location = retriever.gameObject.transform.position;
-                            updateNetworkConduitCoroutine = StartCoroutine(net.SendConduitData(location,retriever.speed));
+                            Timing.RunCoroutine(net.SendConduitData(location,retriever.speed));
                             playerController.networkedConduitRange = retriever.speed;
                         }
                     }
@@ -298,7 +298,7 @@ public class MachineGUI : MonoBehaviour
                         {
                             NetworkSend net = playerController.networkController.networkSend;
                             Vector3 location = autoCrafter.gameObject.transform.position;
-                            updateNetworkConduitCoroutine = StartCoroutine(net.SendConduitData(location,autoCrafter.speed));
+                            Timing.RunCoroutine(net.SendConduitData(location,autoCrafter.speed));
                             playerController.networkedConduitRange = autoCrafter.speed;
                         }
                     }
@@ -331,7 +331,7 @@ public class MachineGUI : MonoBehaviour
                         {
                             NetworkSend net = playerController.networkController.networkSend;
                             Vector3 location = conduit.gameObject.transform.position;
-                            updateNetworkConduitCoroutine = StartCoroutine(net.SendConduitData(location,conduit.range));
+                            Timing.RunCoroutine(net.SendConduitData(location,conduit.range));
                             playerController.networkedConduitRange = conduit.range;
                         }
                     }
@@ -364,7 +364,7 @@ public class MachineGUI : MonoBehaviour
                         {
                             NetworkSend net = playerController.networkController.networkSend;
                             Vector3 location = conduit.gameObject.transform.position;
-                            updateNetworkConduitCoroutine = StartCoroutine(net.SendConduitData(location,conduit.range));
+                            Timing.RunCoroutine(net.SendConduitData(location,conduit.range));
                             playerController.networkedConduitRange = conduit.range;
                         }
                     }
@@ -401,7 +401,7 @@ public class MachineGUI : MonoBehaviour
                                 {
                                     NetworkSend net = playerController.networkController.networkSend;
                                     Vector3 location = hx.gameObject.transform.position;
-                                    updateNetworkMachineCoroutine = StartCoroutine(net.SendMachineData(location,hx.speed));
+                                    Timing.RunCoroutine(net.SendMachineData(location,hx.speed));
                                     playerController.networkedMachineSpeed = hx.speed;
                                 }
                             }
@@ -456,7 +456,7 @@ public class MachineGUI : MonoBehaviour
                         {
                             NetworkSend net = playerController.networkController.networkSend;
                             Vector3 location = auger.gameObject.transform.position;
-                            updateNetworkMachineCoroutine = StartCoroutine(net.SendMachineData(location,auger.speed));
+                            Timing.RunCoroutine(net.SendMachineData(location,auger.speed));
                             playerController.networkedMachineSpeed = auger.speed;
                         }
                     }
@@ -497,7 +497,7 @@ public class MachineGUI : MonoBehaviour
                         {
                             NetworkSend net = playerController.networkController.networkSend;
                             Vector3 location = extractor.gameObject.transform.position;
-                            updateNetworkMachineCoroutine = StartCoroutine(net.SendMachineData(location,extractor.speed));
+                            Timing.RunCoroutine(net.SendMachineData(location,extractor.speed));
                             playerController.networkedMachineSpeed = extractor.speed;
                         }
                     }
@@ -536,7 +536,7 @@ public class MachineGUI : MonoBehaviour
                         {
                             NetworkSend net = playerController.networkController.networkSend;
                             Vector3 location = collector.gameObject.transform.position;
-                            updateNetworkMachineCoroutine = StartCoroutine(net.SendMachineData(location,collector.speed));
+                            Timing.RunCoroutine(net.SendMachineData(location,collector.speed));
                             playerController.networkedMachineSpeed = collector.speed;
                         }
                     }
@@ -577,7 +577,7 @@ public class MachineGUI : MonoBehaviour
                         {
                             NetworkSend net = playerController.networkController.networkSend;
                             Vector3 location = smelter.gameObject.transform.position;
-                            updateNetworkMachineCoroutine = StartCoroutine(net.SendMachineData(location,smelter.speed));
+                            Timing.RunCoroutine(net.SendMachineData(location,smelter.speed));
                             playerController.networkedMachineSpeed = smelter.speed;
                         }
                     }
@@ -617,7 +617,7 @@ public class MachineGUI : MonoBehaviour
                         {
                             NetworkSend net = playerController.networkController.networkSend;
                             Vector3 location = alloySmelter.gameObject.transform.position;
-                            updateNetworkMachineCoroutine = StartCoroutine(net.SendMachineData(location,alloySmelter.speed));
+                            Timing.RunCoroutine(net.SendMachineData(location,alloySmelter.speed));
                             playerController.networkedMachineSpeed = alloySmelter.speed;
                         }
                     }
@@ -657,7 +657,7 @@ public class MachineGUI : MonoBehaviour
                         {
                             NetworkSend net = playerController.networkController.networkSend;
                             Vector3 location = press.gameObject.transform.position;
-                            updateNetworkMachineCoroutine = StartCoroutine(net.SendMachineData(location,press.speed));
+                            Timing.RunCoroutine(net.SendMachineData(location,press.speed));
                             playerController.networkedMachineSpeed = press.speed;
                         }
                     }
@@ -697,7 +697,7 @@ public class MachineGUI : MonoBehaviour
                         {
                             NetworkSend net = playerController.networkController.networkSend;
                             Vector3 location = extruder.gameObject.transform.position;
-                            updateNetworkMachineCoroutine = StartCoroutine(net.SendMachineData(location,extruder.speed));
+                            Timing.RunCoroutine(net.SendMachineData(location,extruder.speed));
                             playerController.networkedMachineSpeed = extruder.speed;
                         }
                     }
@@ -737,7 +737,7 @@ public class MachineGUI : MonoBehaviour
                         {
                             NetworkSend net = playerController.networkController.networkSend;
                             Vector3 location = modMachine.gameObject.transform.position;
-                            updateNetworkMachineCoroutine = StartCoroutine(net.SendMachineData(location,modMachine.speed));
+                            Timing.RunCoroutine(net.SendMachineData(location,modMachine.speed));
                             playerController.networkedMachineSpeed = modMachine.speed;
                         }
                     }
@@ -769,7 +769,7 @@ public class MachineGUI : MonoBehaviour
                         {
                             NetworkSend net = playerController.networkController.networkSend;
                             Vector3 location = turret.gameObject.transform.position;
-                            updateNetworkMachineCoroutine = StartCoroutine(net.SendMachineData(location,turret.speed));
+                            Timing.RunCoroutine(net.SendMachineData(location,turret.speed));
                             playerController.networkedMachineSpeed = turret.speed;
                         }
                     }
@@ -801,7 +801,7 @@ public class MachineGUI : MonoBehaviour
                         {
                             NetworkSend net = playerController.networkController.networkSend;
                             Vector3 location = turret.gameObject.transform.position;
-                            updateNetworkMachineCoroutine = StartCoroutine(net.SendMachineData(location,turret.speed));
+                            Timing.RunCoroutine(net.SendMachineData(location,turret.speed));
                             playerController.networkedMachineSpeed = turret.speed;
                         }
                     }
@@ -841,7 +841,7 @@ public class MachineGUI : MonoBehaviour
                         {
                             NetworkSend net = playerController.networkController.networkSend;
                             Vector3 location = gearCutter.gameObject.transform.position;
-                            updateNetworkMachineCoroutine = StartCoroutine(net.SendMachineData(location,gearCutter.speed));
+                            Timing.RunCoroutine(net.SendMachineData(location,gearCutter.speed));
                             playerController.networkedMachineSpeed = gearCutter.speed;
                         }
                     }

@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System;
 using System.Linq;
-using System.Collections;
+using MEC;
 using System.Collections.Generic;
 
 public class OreManager : MonoBehaviour
@@ -16,7 +16,6 @@ public class OreManager : MonoBehaviour
     private TerrainGenerator terrainGenerator;
     private StateManager stateManager;
     private GameObject[] ores;
-    private Coroutine updateCoroutine;
     private bool coroutineBusy;
     private List<Vector3> orePositions;
     private List<int> oreTypes;
@@ -62,12 +61,12 @@ public class OreManager : MonoBehaviour
 
         if (!coroutineBusy)
         {
-            updateCoroutine = StartCoroutine(ManageOre());
+            Timing.RunCoroutine(ManageOre());
         }
     }
 
     //! Spawns ore in procedural worlds.
-    private IEnumerator ManageOre()
+    private IEnumerator<float> ManageOre()
     {
         coroutineBusy = true;
 
@@ -124,7 +123,7 @@ public class OreManager : MonoBehaviour
                                 if (interval >= 250)
                                 {
                                     interval = 0;
-                                    yield return null;
+                                    yield return Timing.WaitForOneFrame;
                                 }
                             }
 
@@ -168,7 +167,7 @@ public class OreManager : MonoBehaviour
                                     if (interval >= 250)
                                     {
                                         interval = 0;
-                                        yield return null;
+                                        yield return Timing.WaitForOneFrame;
                                     }
                                 }
                             }

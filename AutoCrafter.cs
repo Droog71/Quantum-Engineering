@@ -22,8 +22,6 @@ public class AutoCrafter : Machine
     private LineRenderer connectionLine;
     private CraftingManager craftingManager;
     private CraftingDictionary craftingDictionary;
-    private GameObject builtObjects;
-    private StateManager stateManager;
 
     //! Called by unity engine on start up to initialize variables.
     public void Start()
@@ -32,13 +30,11 @@ public class AutoCrafter : Machine
         powerReceiver = gameObject.AddComponent<PowerReceiver>();
         connectionLine = gameObject.AddComponent<LineRenderer>();
         craftingDictionary = new CraftingDictionary();
-        stateManager = FindObjectOfType<StateManager>();
         connectionLine.startWidth = 0.2f;
         connectionLine.endWidth = 0.2f;
         connectionLine.material = lineMat;
         connectionLine.loop = true;
         connectionLine.enabled = false;
-        builtObjects = GameObject.Find("BuiltObjects");
         conduitItem = GetComponentInChildren<ConduitItem>(true);
     }
 

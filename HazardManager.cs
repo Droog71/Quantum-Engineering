@@ -1,5 +1,6 @@
-﻿using System.Collections;
+﻿using System.Collections.Generic;
 using UnityEngine;
+using MEC;
 
 public class HazardManager
 {
@@ -186,12 +187,12 @@ public class HazardManager
         }
         if (hazardsRemoved == false)
         {
-            gameManager.hazardRemovalCoroutine = gameManager.StartCoroutine(HazardRemovalCoroutine());
+            Timing.RunCoroutine(HazardRemovalCoroutine());
         }
     }
 
     //! Removes all hazards from the world.
-    private IEnumerator HazardRemovalCoroutine()
+    private IEnumerator<float> HazardRemovalCoroutine()
     {
         Meteor[] allMeteors = Object.FindObjectsOfType<Meteor>();
         foreach (Meteor meteor in allMeteors)
@@ -200,7 +201,7 @@ public class HazardManager
             {
                 meteor.Explode();
             }
-            yield return new WaitForSeconds(0.1f);
+            yield return Timing.WaitForSeconds(0.1f);
         }
         Pirate[] allPirates = Object.FindObjectsOfType<Pirate>();
         foreach (Pirate pirate in allPirates)
@@ -209,7 +210,7 @@ public class HazardManager
             {
                 pirate.Explode();
             }
-            yield return new WaitForSeconds(0.1f);
+            yield return Timing.WaitForSeconds(0.1f);
         }
         hazardsRemoved = true;
     }

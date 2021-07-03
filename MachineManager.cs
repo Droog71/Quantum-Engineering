@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Collections;
+using MEC;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -9,7 +9,6 @@ public class MachineManager : MonoBehaviour
 {
     private bool busy;
     private bool paused;
-    private Coroutine machineUpdateCoroutine;
     public List<Machine> machines;
 
     //! Called once per frame by unity engine.
@@ -22,7 +21,7 @@ public class MachineManager : MonoBehaviour
 
         if (busy == false && paused == false && GetComponent<StateManager>().initMachines == true)
         {
-            machineUpdateCoroutine = StartCoroutine(MachineUpdateCoroutine());
+            Timing.RunCoroutine(MachineUpdateCoroutine(), "MachineUpdateCoroutine");
         }
     }
 
@@ -30,16 +29,13 @@ public class MachineManager : MonoBehaviour
     {
         paused = true;
         busy = false;
-        if (machineUpdateCoroutine != null)
-        {
-            StopCoroutine(machineUpdateCoroutine);
-        }
+        Timing.KillCoroutines("MachineUpdateCoroutine");
         machines.Add(machine);
         paused = false;
     }
 
     //! Calls the UpdateMachine function on each machine in the world, yielding after each call.
-    private IEnumerator MachineUpdateCoroutine()
+    private IEnumerator<float> MachineUpdateCoroutine()
     {
         busy = true;
         int interval = 0;
@@ -53,6 +49,12 @@ public class MachineManager : MonoBehaviour
                     {
                         machine.gameManager = GetComponent<GameManager>();
                     }
+
+                    if (machine.stateManager == null)
+                    {
+                        machine.stateManager = GetComponent<StateManager>();
+                    }
+
                     machine.UpdateMachine();
                 }
                 catch (Exception e)
@@ -62,7 +64,7 @@ public class MachineManager : MonoBehaviour
                 interval++;
                 if (interval >= machines.Count * GetComponent<GameManager>().simulationSpeed)
                 {
-                    yield return null;
+                    yield return Timing.WaitForOneFrame;
                     interval = 0;
                 }
             }

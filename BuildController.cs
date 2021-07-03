@@ -1,6 +1,7 @@
-﻿using System.Collections;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using System.Net;
+using MEC;
 
 public class BuildController : MonoBehaviour
 {
@@ -13,8 +14,6 @@ public class BuildController : MonoBehaviour
     public AudioClip singleBuildClip;
     public AudioClip multiBuildClip;
     public bool autoAxis;
-    private Coroutine buildBlockCoroutine;
-    private Coroutine updateNetworkCoroutine;
 
     //! Called by unity engine on start up to initialize variables
     public void Start()
@@ -351,7 +350,7 @@ public class BuildController : MonoBehaviour
                                     {
                                         NetworkSend net = playerController.networkController.networkSend;
                                         Vector3 location = obj.transform.position;
-                                        updateNetworkCoroutine = StartCoroutine(net.SendConduitData(location,playerController.defaultRange));
+                                        Timing.RunCoroutine(net.SendConduitData(location,playerController.defaultRange));
                                     }
                                 }
                                 if (obj.GetComponent<PowerConduit>() != null)
@@ -363,7 +362,7 @@ public class BuildController : MonoBehaviour
                                         Vector3 location = obj.transform.position;
                                         int range = playerController.defaultRange;
                                         bool dualOutput = obj.GetComponent<PowerConduit>().dualOutput;
-                                        updateNetworkCoroutine = StartCoroutine(net.SendPowerData(location,range,dualOutput));
+                                        Timing.RunCoroutine(net.SendPowerData(location,range,dualOutput));
                                     }
                                 }
                                 if (obj.GetComponent<DarkMatterConduit>() != null)
@@ -373,7 +372,7 @@ public class BuildController : MonoBehaviour
                                     {
                                         NetworkSend net = playerController.networkController.networkSend;
                                         Vector3 location = obj.transform.position;
-                                        updateNetworkCoroutine = StartCoroutine(net.SendConduitData(location,playerController.defaultRange));
+                                        Timing.RunCoroutine(net.SendConduitData(location,playerController.defaultRange));
                                     }
                                 }
                                 if (obj.GetComponent<RailCartHub>() != null)
@@ -385,7 +384,7 @@ public class BuildController : MonoBehaviour
                                         RailCartHub hub = obj.GetComponent<RailCartHub>();
                                         Vector3 location = obj.transform.position;
                                         int range = playerController.defaultRange;
-                                        updateNetworkCoroutine = StartCoroutine(net.SendHubData(location, hub.circuit, hub.range, hub.stop, hub.stopTime));
+                                        Timing.RunCoroutine(net.SendHubData(location, hub.circuit, hub.range, hub.stop, hub.stopTime));
                                     }
                                 }
                                 gameManager.undoBlocks.Add(new GameManager.UndoBlock(type, obj));
@@ -492,11 +491,11 @@ public class BuildController : MonoBehaviour
     private void BuildBlock(string type)
     {
         gameManager.undoBlocks.Clear();
-        buildBlockCoroutine = StartCoroutine(BuildBlockCoroutine(type));
+        Timing.RunCoroutine(BuildBlockCoroutine(type));
     }
 
     //! Places standard building blocks in the world.
-    private IEnumerator BuildBlockCoroutine(string type)
+    private IEnumerator<float> BuildBlockCoroutine(string type)
     {
         bool canBuild = true;
 
@@ -563,7 +562,7 @@ public class BuildController : MonoBehaviour
                                 {
                                     UpdateNetwork(0, type, obj.transform.position, obj.transform.rotation);
                                 }
-                                yield return null;
+                                yield return Timing.WaitForOneFrame;
                             }
                         }
                         if (slot.amountInSlot == 0)

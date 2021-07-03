@@ -20,8 +20,6 @@ public class UniversalConduit : Machine
     public bool connectionFailed;
     public GameObject storageComputerConduitItemObject;
     public ConduitItem storageComputerConduitItem;
-    private StateManager stateManager;
-    private GameObject builtObjects;
     private LineRenderer connectionLine;
     private List<GameObject> objList;
     private bool linkedToRailCart;
@@ -32,14 +30,12 @@ public class UniversalConduit : Machine
     {
         connectionLine = gameObject.AddComponent<LineRenderer>();
         conduitItem = GetComponentInChildren<ConduitItem>(true);
-        stateManager = FindObjectOfType<StateManager>();
         objList = new List<GameObject>();
         connectionLine.startWidth = 0.2f;
         connectionLine.endWidth = 0.2f;
         connectionLine.material = lineMat;
         connectionLine.loop = true;
         connectionLine.enabled = false;
-        builtObjects = GameObject.Find("BuiltObjects");
     }
 
     //! Called by MachineManager update coroutine.

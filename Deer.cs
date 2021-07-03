@@ -1,12 +1,12 @@
 ﻿using UnityEngine;
-using System.Collections;
+using System.Collections.Generic;
+using MEC;
 
 public class Deer : MonoBehaviour
 {
     private GameObject player;
     private StateManager stateManager;
     public AnimationClip[] clips;
-    private Coroutine coroutine;
     private float direction = 0.1f;
     private int thinkTimer;
     private bool coroutineBusy;
@@ -27,12 +27,12 @@ public class Deer : MonoBehaviour
     {
         if (coroutineBusy == false && stateManager.worldLoaded == true && !stateManager.Busy())
         {
-            coroutine = StartCoroutine(Think());
+            Timing.RunCoroutine(Think());
         }
     }
 
     //! Controls movement, animation and player detection.
-    public IEnumerator Think()
+    public IEnumerator<float> Think()
     {
         coroutineBusy = true;
 
@@ -59,12 +59,12 @@ public class Deer : MonoBehaviour
             GetComponent<Animation>().Play("Run");
             thinkTimer = 0;
             running = true;
-            yield return new WaitForSeconds(10);
+            yield return Timing.WaitForSeconds(10);
             startled = false;
         }
         else
         {
-            yield return new WaitForSeconds(0.25f);
+            yield return Timing.WaitForSeconds(0.25f);
             thinkTimer++;
             if (thinkTimer > Random.Range(20, 60))
             {

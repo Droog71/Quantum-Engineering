@@ -4,12 +4,10 @@ public class ElectricLight : Machine
 {
     public GameObject powerObject;
     public PowerReceiver powerReceiver;
-    private StateManager stateManager;
 
     //! Called by unity engine on start up to initialize variables.
     public void Start()
     {
-        stateManager = FindObjectOfType<StateManager>();
         powerReceiver = gameObject.AddComponent<PowerReceiver>();
     }
 

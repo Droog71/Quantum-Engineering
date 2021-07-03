@@ -1,10 +1,10 @@
 ﻿using UnityEngine;
 using UnityEngine.SceneManagement;
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System;
+using MEC;
 
 //! This class handles unique ID assignment and saving & loading of worlds.
 public class StateManager : MonoBehaviour
@@ -67,10 +67,6 @@ public class StateManager : MonoBehaviour
     private Vector3 objectPosition;
     private Quaternion objectRotation;
     private AddressManager addressManager;
-    private Coroutine machineIdCoroutine;
-    private Coroutine blockIdCoroutine;
-    private Coroutine loadCoroutine;
-    private Coroutine saveCoroutine;
     private MachineManager machineManager;
     private string objectName = "";
     private bool loading;
@@ -95,7 +91,7 @@ public class StateManager : MonoBehaviour
         {
             if (mainMenu.worldSelected == true && playerController.addedModBlocks == true && loading == false)
             {
-                loadCoroutine = StartCoroutine(LoadWorld());
+                Timing.RunCoroutine(LoadWorld());
                 loading = true;
             }
 
@@ -107,9 +103,7 @@ public class StateManager : MonoBehaviour
                     batchmodeLogInterval++;
                     if (batchmodeLogInterval >= 60)
                     {
-                        string loadingMessage = "Loading... " + blockProgress +
-                        "/" + blockIdList.Length + " chunks " + 
-                        currentBlocks + "/" + totalBlocks + " blocks.";
+                        string loadingMessage = "Loading... " + blockProgress + "/" + blockIdList.Length;
 
                         if (blockProgress > 0 && machineProgress >= blockIdList.Length)
                         {
@@ -140,7 +134,7 @@ public class StateManager : MonoBehaviour
     }
 
     //! Loads a saved world.
-    private IEnumerator LoadWorld()
+    private IEnumerator<float> LoadWorld()
     {
         if (worldLoaded == false)
         {
@@ -191,7 +185,7 @@ public class StateManager : MonoBehaviour
                         bh.Load();
                         while (bh.chunkLoadCoroutineBusy == true || bh.chunkUnloadCoroutineBusy == true)
                         {
-                            yield return null;
+                            yield return Timing.WaitForOneFrame;
                         }
                     }
                     blockProgress++;
@@ -521,7 +515,7 @@ public class StateManager : MonoBehaviour
                     if (loadInterval >= machineIdList.Length * 0.1f)
                     {
                         loadInterval = 0;
-                        yield return null;
+                        yield return Timing.WaitForOneFrame;
                     }
                 }
             }
@@ -533,7 +527,7 @@ public class StateManager : MonoBehaviour
         initMachines = true;
         for (currentMachine = 0; currentMachine < totalMachines; currentMachine++)
         {
-            yield return new WaitForSeconds(0.06f);
+            yield return Timing.WaitForSeconds(0.06f);
         }
         GetComponent<GameManager>().simulationSpeed = simSpeed;
 
@@ -554,11 +548,11 @@ public class StateManager : MonoBehaviour
             {
                 if (initMachines == true && addressManager.machineIdCoroutineActive == false)
                 {
-                    machineIdCoroutine = StartCoroutine(addressManager.MachineIdCoroutine());
+                    Timing.RunCoroutine(addressManager.MachineIdCoroutine());
                 }
                 if (worldLoaded == true && addressManager.blockIdCoroutineActive == false)
                 {
-                    blockIdCoroutine = StartCoroutine(addressManager.BlockIdCoroutine());
+                    Timing.RunCoroutine(addressManager.BlockIdCoroutine());
                 }
             }
         }
@@ -568,11 +562,11 @@ public class StateManager : MonoBehaviour
             finalBlockAddress = false;
             if (initMachines == true && addressManager.machineIdCoroutineActive == false)
             {
-                machineIdCoroutine = StartCoroutine(addressManager.MachineIdCoroutine());
+                Timing.RunCoroutine(addressManager.MachineIdCoroutine());
             }
             if (worldLoaded == true && addressManager.blockIdCoroutineActive == false)
             {
-                blockIdCoroutine = StartCoroutine(addressManager.BlockIdCoroutine());
+                Timing.RunCoroutine(addressManager.BlockIdCoroutine());
             }
         }
     }
@@ -587,7 +581,7 @@ public class StateManager : MonoBehaviour
     public void SaveData()
     {
         if (AddressManagerBusy() == false)
-            saveCoroutine = StartCoroutine(saveManager.SaveDataCoroutine());
+            Timing.RunCoroutine(saveManager.SaveDataCoroutine());
     }
 
     //! Returns true if the object in question is a storage container.

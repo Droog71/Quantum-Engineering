@@ -732,12 +732,6 @@ public class PlayerGUI : MonoBehaviour
                 }
             }
 
-            if (playerController.stoppingBuildCoRoutine == true || playerController.requestedBuildingStop == true)
-            {
-                GUI.DrawTexture(guiCoordinates.buildingMessageBackgroundRect, textureDictionary.dictionary["Interface Background"]);
-                GUI.Label(guiCoordinates.buildingMessageRect, "Stopping Build System...");
-            }
-
             // BUILDING INSTRUCTIONS
             if (playerController.building == true && !playerController.GuiOpen())
             {
@@ -772,8 +766,8 @@ public class PlayerGUI : MonoBehaviour
                 {
                     GUI.DrawTexture(guiCoordinates.buildInfoRectBG, textureDictionary.dictionary["Interface Background"]);
                     int f = GUI.skin.label.fontSize;
-                    GUI.skin.label.fontSize = 16;
-                    GUI.Label(guiCoordinates.buildInfoRect, "Right click to place block.\nPress F to collect.\nPress R or Ctrl+R to rotate.\nPress B to stop building.");
+                    GUI.skin.label.fontSize = 14;
+                    GUI.Label(guiCoordinates.buildInfoRect, "Right click to place block.\nPress F to collect.\nPress R or Ctrl+R to rotate.\nPress V to change axi.\nPress Y to toggle auto axis selection.\nPress B to stop building.");
                     GUI.skin.label.fontSize = f;
                 }
             }

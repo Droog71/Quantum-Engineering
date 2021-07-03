@@ -19,8 +19,6 @@ public class DarkMatterCollector : Machine
     public int connectionAttempts;
     public bool connectionFailed;
     public bool foundDarkMatter;
-    private GameObject builtObjects;
-    private StateManager stateManager;
 
     //! Called by unity engine on start up to initialize variables.
     private void Start()
@@ -33,8 +31,6 @@ public class DarkMatterCollector : Machine
         connectionLine.material = lineMat;
         connectionLine.loop = true;
         connectionLine.enabled = false;
-        builtObjects = GameObject.Find("BuiltObjects");
-        stateManager = FindObjectOfType<StateManager>();
     }
 
     //! Called by MachineManager update coroutine.
@@ -131,16 +127,6 @@ public class DarkMatterCollector : Machine
         }
     }
 
-    //! The object exists, is active and is not a standard building block.
-    bool IsValidObject(GameObject obj)
-    {
-        if (obj != null)
-        {
-            return obj.transform.parent != builtObjects.transform && obj.activeInHierarchy;
-        }
-        return false;
-    }
-
     //! Finds a dark matter source node to harvest.
     private void FindDarkMatter()
     {
@@ -148,28 +134,25 @@ public class DarkMatterCollector : Machine
         foreach (DarkMatter d in allDarkMatter)
         {
             GameObject obj = d.gameObject;
-            if (IsValidObject(obj))
+            float distance = Vector3.Distance(transform.position, obj.transform.position);
+            if (distance < 20)
             {
-                float distance = Vector3.Distance(transform.position, obj.transform.position);
-                if (distance < 20)
+                if (obj.GetComponent<DarkMatter>().collector == null)
                 {
-                    if (obj.GetComponent<DarkMatter>().collector == null)
+                    obj.GetComponent<DarkMatter>().collector = gameObject;
+                }
+                if (obj.GetComponent<DarkMatter>().collector == gameObject)
+                {
+                    if (inputLine == null && obj.GetComponent<LineRenderer>() == null)
                     {
-                        obj.GetComponent<DarkMatter>().collector = gameObject;
+                        inputLine = obj.AddComponent<LineRenderer>();
+                        inputLine.startWidth = 0.2f;
+                        inputLine.endWidth = 0.2f;
+                        inputLine.material = lineMat;
+                        inputLine.SetPosition(0, transform.position);
+                        inputLine.SetPosition(1, obj.transform.position);
                     }
-                    if (obj.GetComponent<DarkMatter>().collector == gameObject)
-                    {
-                        if (inputLine == null && obj.GetComponent<LineRenderer>() == null)
-                        {
-                            inputLine = obj.AddComponent<LineRenderer>();
-                            inputLine.startWidth = 0.2f;
-                            inputLine.endWidth = 0.2f;
-                            inputLine.material = lineMat;
-                            inputLine.SetPosition(0, transform.position);
-                            inputLine.SetPosition(1, obj.transform.position);
-                        }
-                        foundDarkMatter = true;
-                    }
+                    foundDarkMatter = true;
                 }
             }
         }

@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.Networking;
 using System;
-using System.Collections;
+using MEC;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -11,11 +11,10 @@ using System.Linq;
 public class TextureDictionary : MonoBehaviour
 {
     public Dictionary<string, Texture2D> dictionary;
-    private Coroutine modTextureCoroutine;
     public bool addedModTextures;
 
     //! Loads textures from files for mods.
-    public static IEnumerator AddModTextures(Dictionary<string, Texture2D> dictionary)
+    public static IEnumerator<float> AddModTextures(Dictionary<string, Texture2D> dictionary)
     {
         StateManager stateManager = GameObject.Find("GameManager").GetComponent<StateManager>();
         string modPath = Path.Combine(Application.persistentDataPath, "Mods");
@@ -32,7 +31,11 @@ public class TextureDictionary : MonoBehaviour
                 UriBuilder texUriBuildier = new UriBuilder(filePath) { Scheme = "file" };
                 using (UnityWebRequest uwr = UnityWebRequestTexture.GetTexture(texUriBuildier.ToString()))
                 {
-                    yield return uwr.SendWebRequest();
+                    UnityWebRequestAsyncOperation ao = uwr.SendWebRequest();
+                    while (!ao.isDone)
+                    {
+                        yield return Timing.WaitForOneFrame;
+                    }
                     if (!uwr.isNetworkError && !uwr.isHttpError)
                     {
                         Texture2D texture = DownloadHandlerTexture.GetContent(uwr);
@@ -165,6 +168,6 @@ public class TextureDictionary : MonoBehaviour
             { "Relay", Resources.Load("Relay") as Texture2D }
         };
 
-        modTextureCoroutine = StartCoroutine(AddModTextures(dictionary));
+        Timing.RunCoroutine(AddModTextures(dictionary));
     }
 }

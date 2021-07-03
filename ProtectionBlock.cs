@@ -10,7 +10,6 @@ public class ProtectionBlock : Machine
     public Material lineMat;
     public GameObject connectionObject;
     private List<string> userNames;
-    private StateManager stateManager;
     private LineRenderer[] lines;
     private Vector3[] vectors;
     private Vector3 pos;
@@ -20,7 +19,6 @@ public class ProtectionBlock : Machine
     //! Called by unity engine on start up to initialize variables.
     public void Start()
     {
-        stateManager = GameObject.Find("GameManager").GetComponent<StateManager>();
         visible = true;
     }
 

@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
-using System.Collections;
+using System.Collections.Generic;
+using MEC;
 
 //! This object is used in arrays by the inventory manager to hold item names and amounts.
 public class InventorySlot : MonoBehaviour
@@ -8,7 +9,6 @@ public class InventorySlot : MonoBehaviour
     public string typeInSlot = "nothing";
     public int networkWaitTime;
     public bool pendingNetworkUpdate;
-    private Coroutine networkCoroutine;
     private bool networkCoroutineBusy;
 
     //! Returns true if this inventory slot requires network updates in multiplayer games.
@@ -24,19 +24,19 @@ public class InventorySlot : MonoBehaviour
     public void Update()
     {
         if (ShouldDoNetworkUpdate())
-        {
-            networkCoroutine = StartCoroutine(WaitForServer());
+        { 
+            Timing.RunCoroutine(WaitForServer());
         }
     }
 
     //! Delays overwriting of values by the server while the database is being updated.
-    private IEnumerator WaitForServer()
+    private IEnumerator<float> WaitForServer()
     {
         networkCoroutineBusy = true;
         if (networkWaitTime < 30)
         {
             networkWaitTime++;
-            yield return new WaitForSeconds(1);
+            yield return Timing.WaitForSeconds(1);
         }
         else
         {

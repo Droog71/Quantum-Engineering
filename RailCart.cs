@@ -11,12 +11,10 @@ public class RailCart : MonoBehaviour
     public string targetID;
     private bool loadedTarget;
     private float stopTimer;
-    private GameObject builtObjects;
 
     //! Called by unity engine on start up to initialize variables.
     public void Start()
     {
-        builtObjects = GameObject.Find("BuiltObjects");
         stateManager = FindObjectOfType<StateManager>();
     }
 

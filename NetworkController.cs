@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System;
+using MEC;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -11,23 +12,6 @@ public class NetworkController
     private Dictionary<string, GameObject> networkPlayers;
     private Dictionary<string, Vector3> playerPositions;
     private TextureDictionary textureDictionary;
-    private Coroutine sendNetworkPlayerCoroutine;
-    private Coroutine dedicatedServerCoroutine;
-    private Coroutine blockUpdateCoroutine;
-    private Coroutine itemUpdateCoroutine;
-    private Coroutine storageReceiveCoroutine;
-    private Coroutine networkPowerCoroutine;
-    private Coroutine networkBlockCoroutine;
-    private Coroutine networkItemCoroutine;
-    private Coroutine networkStorageCoroutine;
-    private Coroutine networkConduitCoroutine;
-    private Coroutine networkMachineCoroutine;
-    private Coroutine networkHubCoroutine;
-    private Coroutine networkHazardCoroutine;
-    private Coroutine getNetworkPlayersCoroutine;
-    private Coroutine networkMovementCoroutine;
-    private Coroutine announceCoroutine;
-    private Coroutine checkForBanCoroutine;
     private List<string> playerNames;
     public bool dedicatedServerCoroutineBusy;
     public bool networkStorageCoroutineBusy;
@@ -68,116 +52,116 @@ public class NetworkController
         {
             if (dedicatedServerCoroutineBusy == false)
             {
-                dedicatedServerCoroutine = playerController.StartCoroutine(DedicatedServerCoroutine());
+                Timing.RunCoroutine(DedicatedServerCoroutine());
             }
         }
 
         if (sendNetworkPlayerCoroutineBusy == false)
         {
-            sendNetworkPlayerCoroutine = playerController.StartCoroutine(SendNetworkPlayerInfo());
+            Timing.RunCoroutine(SendNetworkPlayerInfo());
         }
 
         if (getNetworkPlayersCoroutineBusy == false)
         {
-            getNetworkPlayersCoroutine = playerController.StartCoroutine(GetNetworkPlayers());
+            Timing.RunCoroutine(GetNetworkPlayers());
         }
 
         if (playerMovementCoroutineBusy == false)
         {
-            networkMovementCoroutine = playerController.StartCoroutine(MoveNetworkPlayers());
+            Timing.RunCoroutine(MoveNetworkPlayers());
         }
 
         if (networkBlockCoroutineBusy == false)
         {
             networkBlockCoroutineBusy = true;
-            networkBlockCoroutine = playerController.StartCoroutine(UpdateNetworkBlocks());
+            Timing.RunCoroutine(UpdateNetworkBlocks());
         }
 
         if (networkItemCoroutineBusy == false)
         {
             networkItemCoroutineBusy = true;
-            networkItemCoroutine = playerController.StartCoroutine(UpdateNetworkItems());
+            Timing.RunCoroutine(UpdateNetworkItems());
         }
 
         if (announceCoroutineBusy == false && PlayerPrefsX.GetPersistentBool("hosting") == true && PlayerPrefsX.GetPersistentBool("announce") == true)
         {
             announceCoroutineBusy = true;
-            announceCoroutine = playerController.StartCoroutine(networkSend.Announce());
+            Timing.RunCoroutine(networkSend.Announce());
         }
 
         if (checkForBanCoroutineBusy == false && PlayerPrefsX.GetPersistentBool("hosting") == false)
         {
             checkForBanCoroutineBusy = true;
-            checkForBanCoroutine = playerController.StartCoroutine(networkReceive.CheckForBan());
+            Timing.RunCoroutine(networkReceive.CheckForBan());
         }
     }
 
     //! Send information about this player to the server.
-    public IEnumerator SendNetworkPlayerInfo()
+    public IEnumerator<float> SendNetworkPlayerInfo()
     {
         sendNetworkPlayerCoroutineBusy = true;
         networkSend.SendPlayerInfo();
-        yield return new WaitForSeconds(0.5f);
+        yield return Timing.WaitForSeconds(0.5f);
         sendNetworkPlayerCoroutineBusy = false;
     }
 
     //! Updates the world over the network.
-    public IEnumerator NetWorkWorldUpdate()
+    public IEnumerator<float> NetWorkWorldUpdate()
     {
         networkWorldUpdateCoroutineBusy = true;
 
         if (NetworkAvailable())
         {
-            networkConduitCoroutine = playerController.StartCoroutine(networkReceive.ReceiveConduitData());
+            Timing.RunCoroutine(networkReceive.ReceiveConduitData());
         }
         else
         {
-            yield return null;
+            yield return Timing.WaitForOneFrame;
         }
 
         if (NetworkAvailable())
         {
-            networkPowerCoroutine = playerController.StartCoroutine(networkReceive.ReceivePowerData());
+            Timing.RunCoroutine(networkReceive.ReceivePowerData());
         }
         else
         {
-            yield return null;
+            yield return Timing.WaitForOneFrame;
         }
 
         if (NetworkAvailable())
         {
-            networkStorageCoroutine = playerController.StartCoroutine(UpdateNetworkStorage());
+            Timing.RunCoroutine(UpdateNetworkStorage());
         }
         else
         {
-            yield return null;
+            yield return Timing.WaitForOneFrame;
         }
 
         if (NetworkAvailable())
         {
-            networkHubCoroutine = playerController.StartCoroutine(networkReceive.ReceiveHubData());
+            Timing.RunCoroutine(networkReceive.ReceiveHubData());
         }
         else
         {
-            yield return null;
+            yield return Timing.WaitForOneFrame;
         }
 
         if (NetworkAvailable())
         {
-            networkMachineCoroutine = playerController.StartCoroutine(networkReceive.ReceiveMachineData());
+            Timing.RunCoroutine(networkReceive.ReceiveMachineData());
         }
         else
         {
-            yield return null;
+            yield return Timing.WaitForOneFrame;
         }
 
         if (NetworkAvailable())
         {
-            networkHazardCoroutine = playerController.StartCoroutine(networkReceive.ReceiveHazardData());
+            Timing.RunCoroutine(networkReceive.ReceiveHazardData());
         }
         else
         {
-            yield return null;
+            yield return Timing.WaitForOneFrame;
         }
 
         networkWorldUpdateCoroutineBusy = false;
@@ -195,10 +179,10 @@ public class NetworkController
     }
 
     //! Saves the world for dedicated servers.
-    public IEnumerator DedicatedServerCoroutine()
+    public IEnumerator<float> DedicatedServerCoroutine()
     {
         dedicatedServerCoroutineBusy = true;
-        yield return new WaitForSeconds(30);
+        yield return Timing.WaitForSeconds(30);
         if (playerController.stateManager.saving == false)
         {
             playerController.requestedSave = true;
@@ -207,7 +191,7 @@ public class NetworkController
     }
 
     //! Gets information about other players from the server.
-    public IEnumerator GetNetworkPlayers()
+    public IEnumerator<float> GetNetworkPlayers()
     {
         getNetworkPlayersCoroutineBusy = true;
 
@@ -215,7 +199,7 @@ public class NetworkController
         networkReceive.GetPlayerData();
         while (playerData == "none")
         {
-            yield return null;
+            yield return Timing.WaitForOneFrame;
         }
 
         playerNames.Clear();
@@ -249,7 +233,7 @@ public class NetworkController
                     UpdateNetWorkPlayer(playerInfo, playerColor);
                 }
             }
-            yield return null;
+            yield return Timing.WaitForOneFrame;
         }
 
         Dictionary<string, GameObject> allPlayers = new Dictionary<string, GameObject>(networkPlayers);
@@ -260,7 +244,7 @@ public class NetworkController
                 networkPlayers.Remove(entry.Key);
                 UnityEngine.Object.Destroy(entry.Value);
             }
-            yield return null;
+            yield return Timing.WaitForOneFrame;
         }
 
         getNetworkPlayersCoroutineBusy = false;
@@ -296,7 +280,7 @@ public class NetworkController
     }
 
     //! Moves network player game objects based on database values.
-    public IEnumerator MoveNetworkPlayers()
+    public IEnumerator<float> MoveNetworkPlayers()
     {
         playerMovementCoroutineBusy = true;
         Dictionary<string, GameObject> allPlayers = new Dictionary<string, GameObject>(networkPlayers);
@@ -315,37 +299,37 @@ public class NetworkController
                     player.Value.GetComponent<NetworkPlayer>().moving = false;
                 }
             }
-            yield return null;
+            yield return Timing.WaitForOneFrame;
         }
         playerMovementCoroutineBusy = false;
     }
 
     //! Instantiates blocks over the network.
-    public IEnumerator UpdateNetworkBlocks()
+    public IEnumerator<float> UpdateNetworkBlocks()
     {
         blockData = "none";
         networkReceive.GetBlockData();
         while (blockData == "none")
         {
-            yield return null;
+            yield return Timing.WaitForOneFrame;
         }
-        blockUpdateCoroutine = playerController.StartCoroutine(networkReceive.ReceiveNetworkBlocks());
+        Timing.RunCoroutine(networkReceive.ReceiveNetworkBlocks());
     }
 
     //! Instantiates blocks over the network.
-    public IEnumerator UpdateNetworkItems()
+    public IEnumerator<float> UpdateNetworkItems()
     {
         itemData = "none";
         networkReceive.GetItemData();
         while (itemData == "none")
         {
-            yield return null;
+            yield return Timing.WaitForOneFrame;
         }
-        itemUpdateCoroutine = playerController.StartCoroutine(networkReceive.ReceiveNetworkItems());
+        Timing.RunCoroutine(networkReceive.ReceiveNetworkItems());
     }
 
     //! Updates inventories over the network.
-    public IEnumerator UpdateNetworkStorage()
+    public IEnumerator<float> UpdateNetworkStorage()
     {
         networkStorageCoroutineBusy = true;
 
@@ -353,14 +337,14 @@ public class NetworkController
         networkReceive.GetStorageData();
         while (storageData == "none")
         {
-            yield return null;
+            yield return Timing.WaitForOneFrame;
         }
 
         receivedNetworkStorage = false;
-        storageReceiveCoroutine = playerController.StartCoroutine(networkReceive.ReceiveNetworkStorage());
+        Timing.RunCoroutine(networkReceive.ReceiveNetworkStorage());
         while (receivedNetworkStorage == false)
         {
-            yield return null;
+            yield return Timing.WaitForOneFrame;
         }
 
         networkStorageCoroutineBusy = false;

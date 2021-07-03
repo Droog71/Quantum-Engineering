@@ -10,6 +10,7 @@ public class Machine : MonoBehaviour
     public bool powerON;
     public string creationMethod = "built";
     public GameManager gameManager;
+    public StateManager stateManager;
     private string objectName;
 
     //! Called by MachineManager update coroutine.

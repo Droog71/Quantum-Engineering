@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
+using MEC;
 
 public class ChatGUI : MonoBehaviour 
 {
@@ -9,7 +10,6 @@ public class ChatGUI : MonoBehaviour
     private bool playersVisible;
     private PlayerController playerController;
     private NetworkController networkController;
-    private Coroutine chatDataCoroutine;
     private string playersOnline;
     private int playerCount;
     private float chatNetTimer;
@@ -34,7 +34,7 @@ public class ChatGUI : MonoBehaviour
             chatNetTimer += 1 * Time.deltaTime;
             if (chatNetTimer >= Random.Range(0.75f, 1.0f))
             {
-                chatDataCoroutine = StartCoroutine(networkController.networkReceive.ReceiveChatData());
+                Timing.RunCoroutine(networkController.networkReceive.ReceiveChatData());
                 chatNetTimer = 0;
             }
         }

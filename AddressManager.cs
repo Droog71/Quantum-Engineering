@@ -1,11 +1,12 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
+using MEC;
 
 public class AddressManager
 {
     private StateManager stateManager;
     private GameManager gameManager;
-    private int totalObjects;
     public bool machineIdCoroutineActive;
     public bool blockIdCoroutineActive;
 
@@ -17,7 +18,7 @@ public class AddressManager
     }
 
     //! Assigns IDs to machines.
-    public IEnumerator MachineIdCoroutine()
+    public IEnumerator<float> MachineIdCoroutine()
     {
         machineIdCoroutineActive = true;
         int idCount = 0;
@@ -191,7 +192,7 @@ public class AddressManager
                     addressingInterval++;
                     if (addressingInterval >= machines.Length * (gameManager.simulationSpeed / 4))
                     {
-                        yield return null;
+                        yield return Timing.WaitForOneFrame;
                         addressingInterval = 0;
                     }
                 }
@@ -205,11 +206,10 @@ public class AddressManager
     }
 
     //! Assigns IDs to BlockHolder objects.
-    public IEnumerator BlockIdCoroutine()
+    public IEnumerator<float> BlockIdCoroutine()
     {
         blockIdCoroutineActive = true;
         int idCount = 0;
-        int addressingInterval = 0;
         string objectName  = "";
         BlockHolder[] blockHolders = stateManager.builtObjects.GetComponentsInChildren<BlockHolder>(true);
         foreach (BlockHolder blockHolder in blockHolders)
@@ -217,12 +217,7 @@ public class AddressManager
             objectName = stateManager.worldName + "BlockHolder";
             blockHolder.ID = objectName  + idCount;
             idCount++;
-            addressingInterval++;
-            if (addressingInterval >= blockHolders.Length * (gameManager.simulationSpeed / 4))
-            {
-                yield return null;
-                addressingInterval = 0;
-            }
+            yield return Timing.WaitForSeconds(0.1f);
         }
         blockIdCoroutineActive = false;
         if (gameManager.dataSaveRequested == true)

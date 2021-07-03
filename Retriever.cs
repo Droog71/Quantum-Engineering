@@ -33,7 +33,6 @@ public class Retriever : Machine
     private InventoryManager storageComputerInventoryManager;
     public PowerReceiver powerReceiver;
     private GameObject builtObjects;
-    private StateManager stateManager;
     private int findRailCartsInterval;
 
     //! Called by unity engine on start up to initialize variables.
@@ -42,7 +41,6 @@ public class Retriever : Machine
         powerReceiver = gameObject.AddComponent<PowerReceiver>();
         connectionLine = gameObject.AddComponent<LineRenderer>();
         conduitItem = GetComponentInChildren<ConduitItem>(true);
-        stateManager = FindObjectOfType<StateManager>();
         connectionLine.startWidth = 0.2f;
         connectionLine.endWidth = 0.2f;
         connectionLine.material = lineMat;

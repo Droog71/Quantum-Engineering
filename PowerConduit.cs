@@ -21,12 +21,10 @@ public class PowerConduit : Machine
     public bool connectionFailed;
     private GameObject builtObjects;
     public PowerReceiver powerReceiver;
-    private StateManager stateManager;
 
     //! Called by unity engine on start up to initialize variables.
     public void Start()
     {
-        stateManager = FindObjectOfType<StateManager>();
         connectionLine = gameObject.AddComponent<LineRenderer>();
         powerReceiver = gameObject.AddComponent<PowerReceiver>();
         connectionLine.startWidth = 0.2f;

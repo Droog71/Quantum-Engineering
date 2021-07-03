@@ -14,7 +14,6 @@ public class Auger : Machine
     public PowerReceiver powerReceiver;
     public Material lineMat;
     private LineRenderer connectionLine;
-    private StateManager stateManager;
     private int machineTimer;
     private int warmup;
 
@@ -24,7 +23,6 @@ public class Auger : Machine
         powerReceiver = gameObject.AddComponent<PowerReceiver>();
         connectionLine = gameObject.AddComponent<LineRenderer>();
         conduitItem = GetComponentInChildren<ConduitItem>(true);
-        stateManager = FindObjectOfType<StateManager>();
         connectionLine.startWidth = 0.2f;
         connectionLine.endWidth = 0.2f;
         connectionLine.material = lineMat;

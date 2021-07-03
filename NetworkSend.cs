@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.SceneManagement;
 using System;
+using MEC;
 using System.Net;
 using System.IO;
 using System.Linq;
@@ -80,12 +81,12 @@ public class NetworkSend
     }
 
     //! Sends conduit range to the server when changed by the player.
-    public IEnumerator SendConduitData(Vector3 pos, int range)
+    public IEnumerator<float> SendConduitData(Vector3 pos, int range)
     {
         if (conduitCoroutineBusy == false)
         {
             conduitCoroutineBusy = true;
-            yield return new WaitForSeconds(0.5f);
+            yield return Timing.WaitForSeconds(0.5f);
             float x = Mathf.Round(pos.x);
             float y = Mathf.Round(pos.y); 
             float z = Mathf.Round(pos.z); 
@@ -99,12 +100,12 @@ public class NetworkSend
     }
 
     //! Sends machine speed to the server when changed by the player.
-    public IEnumerator SendMachineData(Vector3 pos, int speed)
+    public IEnumerator<float> SendMachineData(Vector3 pos, int speed)
     {
         if (machineCoroutineBusy == false)
         {
             machineCoroutineBusy = true;
-            yield return new WaitForSeconds(0.5f);
+            yield return Timing.WaitForSeconds(0.5f);
             float x = Mathf.Round(pos.x);
             float y = Mathf.Round(pos.y); 
             float z = Mathf.Round(pos.z); 
@@ -118,12 +119,12 @@ public class NetworkSend
     }
 
     //! Sends rail cart hub data to the server when changed by the player.
-    public IEnumerator SendHubData(Vector3 pos, int circuit, int range, bool stop, float stopTime)
+    public IEnumerator<float> SendHubData(Vector3 pos, int circuit, int range, bool stop, float stopTime)
     {
         if (hubCoroutineBusy == false)
         {
             hubCoroutineBusy = true;
-            yield return new WaitForSeconds(0.5f);
+            yield return Timing.WaitForSeconds(0.5f);
             float x = Mathf.Round(pos.x);
             float y = Mathf.Round(pos.y); 
             float z = Mathf.Round(pos.z);
@@ -138,7 +139,7 @@ public class NetworkSend
     }
 
     //! Sends inventory data to the server.
-    public IEnumerator SendNetworkStorage()
+    public IEnumerator<float> SendNetworkStorage()
     {
         InventoryManager[] allInventories = UnityEngine.Object.FindObjectsOfType<InventoryManager>();
         foreach (InventoryManager manager in allInventories)
@@ -159,7 +160,7 @@ public class NetworkSend
                             float z = Mathf.Round(pos.z); 
                             client.UploadStringAsync(uri, "POST", "@" + x + "," + y + "," + z + ":"+i+";"+inventory[i].typeInSlot+"="+inventory[i].amountInSlot);
                         }
-                        yield return null;
+                        yield return Timing.WaitForOneFrame;
                     }
                 }
             }
@@ -168,12 +169,12 @@ public class NetworkSend
     }
 
     //! Sends power conduit data to the server.
-    public IEnumerator SendPowerData(Vector3 pos, int range, bool dual)
+    public IEnumerator<float> SendPowerData(Vector3 pos, int range, bool dual)
     {
         if (conduitCoroutineBusy == false)
         {
             conduitCoroutineBusy = true;
-            yield return new WaitForSeconds(0.5f);
+            yield return Timing.WaitForSeconds(0.5f);
             float x = Mathf.Round(pos.x);
             float y = Mathf.Round(pos.y); 
             float z = Mathf.Round(pos.z); 
@@ -208,7 +209,7 @@ public class NetworkSend
     }
 
     //! Adds server to master server database.
-    public IEnumerator Announce()
+    public IEnumerator<float> Announce()
     {
         if (modNames == null)
         {
@@ -265,7 +266,7 @@ public class NetworkSend
             }
         }
 
-        yield return new WaitForSeconds(30);
+        yield return Timing.WaitForSeconds(30);
 
         using (WebClient client = new WebClient()) 
         {

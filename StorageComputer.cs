@@ -8,7 +8,6 @@ public class StorageComputer : Machine
     private int connectionAttempts;
     public int bootTimer;
     public bool initialized;
-    private StateManager stateManager;
     private List<GameObject> spawnedConnectionList;
     public GameObject connectionObject;
     public Material lineMat;
@@ -19,7 +18,6 @@ public class StorageComputer : Machine
     //! Called by unity engine on start up to initialize variables.
     public void Start()
     {
-        stateManager = FindObjectOfType<StateManager>();
         powerReceiver = gameObject.AddComponent<PowerReceiver>();
         computerContainerList = new List<InventoryManager>();
         spawnedConnectionList = new List<GameObject>();

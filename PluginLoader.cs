@@ -3,7 +3,8 @@ using UnityEngine.Networking;
 using System;
 using System.IO;
 using System.Reflection;
-using System.Collections;
+using System.Collections.Generic;
+using MEC;
 
 public class PluginLoader :MonoBehaviour
 {
@@ -33,11 +34,11 @@ public class PluginLoader :MonoBehaviour
     //! Starts the assembly loading coroutine.
     private void LoadPlugin(string pluginName, string url)
     {
-        StartCoroutine(LoadAssembly(pluginName, url));
+        Timing.RunCoroutine(LoadAssembly(pluginName, url));
     }
 
     //! Uses GetAssembly to load classes from the dll and add them to a dictionary.
-    private IEnumerator LoadAssembly(string pluginName, string url)
+    private IEnumerator<float> LoadAssembly(string pluginName, string url)
     {
         if(url == null)
         {
@@ -46,7 +47,11 @@ public class PluginLoader :MonoBehaviour
         UriBuilder uriBuildier = new UriBuilder(url) { Scheme = "file" };
         using (UnityWebRequest uwr = UnityWebRequest.Get(uriBuildier.ToString()))
         {
-            yield return uwr.SendWebRequest();
+            UnityWebRequestAsyncOperation ao = uwr.SendWebRequest();
+            while (!ao.isDone)
+            {
+                yield return Timing.WaitForOneFrame;
+            }
             if (!uwr.isNetworkError && !uwr.isHttpError)
             {
                 assembly = GetAssembly(uwr);

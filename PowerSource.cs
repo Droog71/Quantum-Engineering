@@ -21,8 +21,6 @@ public class PowerSource : Machine
     private int fuelConsumptionTimer;
     public Texture2D generatorOffTexture;
     public Texture2D generatorOnTexture;
-    private GameObject builtObjects;
-    private StateManager stateManager;
 
     //! Called by unity engine on start up to initialize variables.
     public void Start()
@@ -33,8 +31,6 @@ public class PowerSource : Machine
         connectionLine.material = lineMat;
         connectionLine.loop = true;
         connectionLine.enabled = false;
-        builtObjects = GameObject.Find("BuiltObjects");
-        stateManager = FindObjectOfType<StateManager>();
     }
 
     //! Called by MachineManager update coroutine.

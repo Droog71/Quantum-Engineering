@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
-using System.Collections;
 using System.Collections.Generic;
+using MEC;
 using System.Net;
 using System.Threading.Tasks;
 
@@ -42,14 +42,14 @@ public class NetworkReceive
     }
 
     //! Check if the player's ip is banned on this server.
-    public IEnumerator CheckForBan()
+    public IEnumerator<float> CheckForBan()
     {
         banData = "none";
 
         GetBanData();
         while (banData == "none")
         {
-            yield return null;
+            yield return Timing.WaitForOneFrame;
         }
 
         string[] banList = banData.Split('[');
@@ -64,13 +64,13 @@ public class NetworkReceive
                 playerController.requestedSave = true;
                 Debug.Log("Your IP address has been banned from " + networkController.serverURL);
             }
-            yield return null;
+            yield return Timing.WaitForOneFrame;
         }
         networkController.checkForBanCoroutineBusy = false;
     }
 
     //! Processes data from chat database.
-    public IEnumerator ReceiveHazardData()
+    public IEnumerator<float> ReceiveHazardData()
     {
         if (hazardDataCoroutineBusy == false)
         {
@@ -81,7 +81,7 @@ public class NetworkReceive
             GetHazardData();
             while (hazardData == "none")
             {
-                yield return null;
+                yield return Timing.WaitForOneFrame;
             }
 
             string hazardsEnabled = hazardData.Split(':')[1].Split('}')[0].TrimStart('"').TrimEnd('"');
@@ -92,7 +92,7 @@ public class NetworkReceive
     }
 
     //! Processes data from chat database.
-    public IEnumerator ReceiveChatData()
+    public IEnumerator<float> ReceiveChatData()
     {
         if (chatCoroutineBusy == false)
         {
@@ -103,7 +103,7 @@ public class NetworkReceive
             GetChatData();
             while (chatData == "none")
             {
-                yield return null;
+                yield return Timing.WaitForOneFrame;
             }
 
             string[] chatMessages = chatData.Split('[');
@@ -123,7 +123,7 @@ public class NetworkReceive
                     chatMessageList.Add(messageToSend);
                     playerController.GetComponent<ChatGUI>().messages += messageToSend;
                 }
-                yield return null;
+                yield return Timing.WaitForOneFrame;
             }
 
             chatCoroutineBusy = false;
@@ -131,7 +131,7 @@ public class NetworkReceive
     }
 
     //! Processes data from block database.
-    public IEnumerator ReceiveNetworkBlocks()
+    public IEnumerator<float> ReceiveNetworkBlocks()
     {
         string[] blockList = networkController.blockData.Split('[');
         if (blockList != localBlockList)
@@ -294,12 +294,12 @@ public class NetworkReceive
                 }
             }
         }
-        yield return null;
+        yield return Timing.WaitForOneFrame;
         networkController.networkBlockCoroutineBusy = false;
     }
 
     //! Processes data from storge database.
-    public IEnumerator ReceiveNetworkStorage()
+    public IEnumerator<float> ReceiveNetworkStorage()
     {
         string[] storageList = networkController.storageData.Split('[');
         if (storageList != localStorageList)
@@ -335,7 +335,7 @@ public class NetworkReceive
                             }
                         }
                     }
-                    yield return null;
+                    yield return Timing.WaitForOneFrame;
                 }
             }
             networkController.receivedNetworkStorage = true;
@@ -343,14 +343,14 @@ public class NetworkReceive
     }
 
     //! Processes data from conduit database.
-    public IEnumerator ReceiveConduitData()
+    public IEnumerator<float> ReceiveConduitData()
     {
         conduitDataCoroutineBusy = true;
         conduitData = "none";
         GetConduitData();
         while (conduitData == "none")
         {
-            yield return null;
+            yield return Timing.WaitForOneFrame;
         }
         string[] conduitList = conduitData.Split('[');
         if (conduitList != localConduitList)
@@ -385,7 +385,7 @@ public class NetworkReceive
                             conduit.range = range;
                         }
                     }
-                    yield return null;
+                    yield return Timing.WaitForOneFrame;
                 }
 
                 DarkMatterConduit[] allDarkMatterConduits = Object.FindObjectsOfType<DarkMatterConduit>();
@@ -408,7 +408,7 @@ public class NetworkReceive
                             conduit.range = range;
                         }
                     }
-                    yield return null;
+                    yield return Timing.WaitForOneFrame;
                 }
             }
         }
@@ -417,14 +417,14 @@ public class NetworkReceive
     }
 
     //! Processes data from railcart hub database.
-    public IEnumerator ReceiveHubData()
+    public IEnumerator<float> ReceiveHubData()
     {
         hubDataCoroutineBusy = true;
         hubData = "none";
         GetHubData();
         while (hubData == "none")
         {
-            yield return null;
+            yield return Timing.WaitForOneFrame;
         }
         string[] hubList = hubData.Split('[');
         if (hubList != localHubList)
@@ -465,7 +465,7 @@ public class NetworkReceive
                             hub.stopTime = time;
                         }
                     }
-                    yield return null;
+                    yield return Timing.WaitForOneFrame;
                 }
             }
         }
@@ -473,7 +473,7 @@ public class NetworkReceive
     }
 
     //! Processes data from machine database.
-    public IEnumerator ReceiveMachineData()
+    public IEnumerator<float> ReceiveMachineData()
     {
         machineDataCoroutineBusy = true;
 
@@ -481,7 +481,7 @@ public class NetworkReceive
         GetMachineData();
         while (machineData == "none")
         {
-            yield return null;
+            yield return Timing.WaitForOneFrame;
         }
 
         string[] machineList = machineData.Split('[');
@@ -516,7 +516,7 @@ public class NetworkReceive
                             machine.speed = speed;
                         }
                     }
-                    yield return null;
+                    yield return Timing.WaitForOneFrame;
                 }
                 UniversalExtractor[] allExtractors = Object.FindObjectsOfType<UniversalExtractor>();
                 foreach (UniversalExtractor extractor in allExtractors)
@@ -538,7 +538,7 @@ public class NetworkReceive
                             extractor.speed = speed;
                         }
                     }
-                    yield return null;
+                    yield return Timing.WaitForOneFrame;
                 }
                 DarkMatterCollector[] allCollectors = Object.FindObjectsOfType<DarkMatterCollector>();
                 foreach (DarkMatterCollector collector in allCollectors)
@@ -560,7 +560,7 @@ public class NetworkReceive
                             collector.speed = speed;
                         }
                     }
-                    yield return null;
+                    yield return Timing.WaitForOneFrame;
                 }
                 HeatExchanger[] allHX = Object.FindObjectsOfType<HeatExchanger>();
                 foreach (HeatExchanger hx in allHX)
@@ -582,7 +582,7 @@ public class NetworkReceive
                             hx.speed = speed;
                         }
                     }
-                    yield return null;
+                    yield return Timing.WaitForOneFrame;
                 }
                 AlloySmelter[] allAlloySmelters = Object.FindObjectsOfType<AlloySmelter>();
                 foreach (AlloySmelter alloySmelter in allAlloySmelters)
@@ -604,7 +604,7 @@ public class NetworkReceive
                             alloySmelter.speed = speed;
                         }
                     }
-                    yield return null;
+                    yield return Timing.WaitForOneFrame;
                 }
                 Auger[] allAugers = Object.FindObjectsOfType<Auger>();
                 foreach (Auger auger in allAugers)
@@ -621,7 +621,7 @@ public class NetworkReceive
                             auger.speed = speed;
                         }
                     }
-                    yield return null;
+                    yield return Timing.WaitForOneFrame;
                 }
                 AutoCrafter[] allAutoCrafters = Object.FindObjectsOfType<AutoCrafter>();
                 foreach (AutoCrafter autoCrafter in allAutoCrafters)
@@ -638,7 +638,7 @@ public class NetworkReceive
                             autoCrafter.speed = speed;
                         }
                     }
-                    yield return null;
+                    yield return Timing.WaitForOneFrame;
                 }
                 Retriever[] allRetrievers = Object.FindObjectsOfType<Retriever>();
                 foreach (Retriever retriever in allRetrievers)
@@ -655,7 +655,7 @@ public class NetworkReceive
                             retriever.speed = speed;
                         }
                     }
-                    yield return null;
+                    yield return Timing.WaitForOneFrame;
                 }
                 Turret[] allTurrets = Object.FindObjectsOfType<Turret>();
                 foreach (Turret turret in allTurrets)
@@ -672,7 +672,7 @@ public class NetworkReceive
                             turret.speed = speed;
                         }
                     }
-                    yield return null;
+                    yield return Timing.WaitForOneFrame;
                 }
             }
         }
@@ -680,14 +680,14 @@ public class NetworkReceive
     }
 
     //! Processes data from power conduit database.
-    public IEnumerator ReceivePowerData()
+    public IEnumerator<float> ReceivePowerData()
     {
         powerDataCoroutineBusy = true;
         powerData = "none";
         GetPowerData();
         while (powerData == "none")
         {
-            yield return null;
+            yield return Timing.WaitForOneFrame;
         }
 
         string[] powerList = powerData.Split('[');
@@ -725,7 +725,7 @@ public class NetworkReceive
                             powerConduit.dualOutput = dual == true;
                         }
                     }
-                    yield return null;
+                    yield return Timing.WaitForOneFrame;
                 }
             }
         }
@@ -733,7 +733,7 @@ public class NetworkReceive
     }
 
     //! Processes data from item database.
-    public IEnumerator ReceiveNetworkItems()
+    public IEnumerator<float> ReceiveNetworkItems()
     {
         string[] itemlist = networkController.itemData.Split('[');
         if (itemlist != localItemList)
@@ -781,7 +781,7 @@ public class NetworkReceive
                 }
             }
         }
-        yield return new WaitForSeconds(0.1f);
+        yield return Timing.WaitForSeconds(0.1f);
         itemDatabaseDelay++;
         networkController.networkItemCoroutineBusy = false;
     }

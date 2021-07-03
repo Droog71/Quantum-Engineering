@@ -23,7 +23,6 @@ public class BasicMachine : Machine
     public BasicMachineRecipe[] recipes;
     private LineRenderer connectionLine;
     private GameObject builtObjects;
-    public StateManager stateManager;
     public bool hasCustomSound;
     private int machineTimer;
     private int warmup;
@@ -31,7 +30,6 @@ public class BasicMachine : Machine
     //! Called by unity engine on start up to initialize variables.
     public void Start()
     {
-        stateManager = FindObjectOfType<StateManager>();
         powerReceiver = gameObject.AddComponent<PowerReceiver>();
         connectionLine = gameObject.AddComponent<LineRenderer>();
         conduitItem = GetComponentInChildren<ConduitItem>(true);

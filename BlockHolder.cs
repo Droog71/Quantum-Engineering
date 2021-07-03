@@ -1,8 +1,8 @@
 ﻿using UnityEngine;
 using UnityEngine.SceneManagement;
 using System.Linq;
-using System.Collections;
 using System.Collections.Generic;
+using MEC;
 
 public class BlockHolder : MonoBehaviour
 {
@@ -22,8 +22,6 @@ public class BlockHolder : MonoBehaviour
     private StateManager stateManager;
     private TerrainGenerator terrainGenerator;
     private GameObject player;
-    private Coroutine chunkLoadCoroutine;
-    private Coroutine chunkUnloadCoroutine;
 
     //! Holds information about the blocks in this chunk.
     public class BlockInfo
@@ -62,12 +60,12 @@ public class BlockHolder : MonoBehaviour
 
         if (chunkLoadCoroutineBusy == false && unloaded == true)
         {
-            chunkLoadCoroutine = StartCoroutine(LoadChunk());
+            Timing.RunCoroutine(LoadChunk());
         }
     }
 
     //! Loads the chunk.
-    private IEnumerator LoadChunk()
+    private IEnumerator<float> LoadChunk()
     {
         chunkLoadCoroutineBusy = true;
 
@@ -103,7 +101,7 @@ public class BlockHolder : MonoBehaviour
                     if (spawnInterval >= yieldTime)
                     {
                         spawnInterval = 0;
-                        yield return null;
+                        yield return Timing.WaitForOneFrame;
                     }
                 }
 
@@ -123,7 +121,7 @@ public class BlockHolder : MonoBehaviour
                         if (combineInterval >= yieldTime)
                         {
                             combineInterval = 0;
-                            yield return null;
+                            yield return Timing.WaitForOneFrame;
                         }
                     }
                 }
@@ -143,7 +141,6 @@ public class BlockHolder : MonoBehaviour
                                 {
                                     terrainGenerator.chunkLocations.Add(worldLoc);
                                     string chunkLocationsKey = stateManager.worldName + "chunkLocations";
-                                    PlayerPrefsX.SetVector3Array(chunkLocationsKey, terrainGenerator.chunkLocations.ToArray());
                                 }
                             }
                         }
@@ -160,7 +157,6 @@ public class BlockHolder : MonoBehaviour
                                 {
                                     terrainGenerator.chunkLocations.Add(worldLoc);
                                     string chunkLocationsKey = stateManager.worldName + "chunkLocations";
-                                    PlayerPrefsX.SetVector3Array(chunkLocationsKey, terrainGenerator.chunkLocations.ToArray());
                                 }
                             }
                         }
@@ -181,7 +177,7 @@ public class BlockHolder : MonoBehaviour
 
                 if (stateManager.worldLoaded == false && chunkUnloadCoroutineBusy == false)
                 {
-                    //chunkUnloadCoroutine = StartCoroutine(UnloadChunk());
+                    Timing.RunCoroutine(UnloadChunk());
                 }
             }
         }
@@ -189,12 +185,12 @@ public class BlockHolder : MonoBehaviour
     }
 
     //! Unloads the chunk.
-    private IEnumerator UnloadChunk()
+    private IEnumerator<float> UnloadChunk()
     {
         chunkUnloadCoroutineBusy = true;
         yieldTime = stateManager.worldLoaded == false ? 500 : 50;
         int interval = 0;
-
+ 
         Transform[] blocks = GetComponentsInChildren<Transform>(true);
         foreach (Transform block in blocks)
         {
@@ -202,15 +198,15 @@ public class BlockHolder : MonoBehaviour
             {
                 Destroy(block.gameObject);
             }
-
+ 
             interval++;
             if (interval >= yieldTime)
             {
                 interval = 0;
-                yield return null;
+                yield return Timing.WaitForOneFrame;
             }
         }
-
+ 
         unloaded = true;
         chunkUnloadCoroutineBusy = false;
     }

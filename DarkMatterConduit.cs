@@ -19,8 +19,6 @@ public class DarkMatterConduit : Machine
     public bool connectionFailed;
     public GameObject storageComputerConduitItemObject;
     public ConduitItem storageComputerConduitItem;
-    private GameObject builtObjects;
-    private StateManager stateManager;
     private bool linkedToRailCart;
     private int findRailCartsInterval;
 
@@ -34,8 +32,6 @@ public class DarkMatterConduit : Machine
         connectionLine.material = lineMat;
         connectionLine.loop = true;
         connectionLine.enabled = false;
-        builtObjects = GameObject.Find("BuiltObjects");
-        stateManager = FindObjectOfType<StateManager>();
     }
 
     //! Called by MachineManager update coroutine.

@@ -1,14 +1,14 @@
 ﻿using UnityEngine;
 using UnityEngine.Networking;
 using System;
-using System.Collections;
+using System.Collections.Generic;
+using MEC;
 using System.IO;
 
 public class ModMachine : BasicMachine
 {
     private Material material;
     private PlayerController playerController;
-    private Coroutine modSoundCoroutine;
     public string machineName;
     public bool init;
 
@@ -35,7 +35,7 @@ public class ModMachine : BasicMachine
                 }
             }
             gameManager.meshManager.SetMaterial(gameObject, machineName);
-            modSoundCoroutine = StartCoroutine(GetAudioFile(this, GetComponent<AudioSource>(), machineName));
+            Timing.RunCoroutine(GetAudioFile(this, GetComponent<AudioSource>(), machineName));
             init = true;
         }
 
@@ -46,7 +46,7 @@ public class ModMachine : BasicMachine
     }
 
     //! Loads sound files.
-    public static IEnumerator GetAudioFile(ModMachine machine, AudioSource source, string machineName)
+    public static IEnumerator<float> GetAudioFile(ModMachine machine, AudioSource source, string machineName)
     {
         string modPath = Path.Combine(Application.persistentDataPath, "Mods");
         Directory.CreateDirectory(modPath);
@@ -63,7 +63,11 @@ public class ModMachine : BasicMachine
                 string url = soundUriBuildier.ToString();
                 using (UnityWebRequest uwr = UnityWebRequestMultimedia.GetAudioClip(url, AudioType.WAV))
                 {
-                    yield return uwr.SendWebRequest();
+                    UnityWebRequestAsyncOperation ao = uwr.SendWebRequest();
+                    while (!ao.isDone)
+                    {
+                        yield return Timing.WaitForOneFrame;
+                    }
                     if (!uwr.isNetworkError && !uwr.isHttpError)
                     {
                         AudioClip audioClip = DownloadHandlerAudioClip.GetContent(uwr);

@@ -29,21 +29,17 @@ public class AlloySmelter : Machine
     private LineRenderer connectionLine;
     private int machineTimer;
     private int warmup;
-    private GameObject builtObjects;
-    private StateManager stateManager;
 
     //! Called by unity engine on start up to initialize variables.
     public void Start()
     {
         powerReceiver = gameObject.AddComponent<PowerReceiver>();
         connectionLine = gameObject.AddComponent<LineRenderer>();
-        stateManager = FindObjectOfType<StateManager>();
         connectionLine.startWidth = 0.2f;
         connectionLine.endWidth = 0.2f;
         connectionLine.material = lineMat;
         connectionLine.loop = true;
         connectionLine.enabled = false;
-        builtObjects = GameObject.Find("BuiltObjects");
         conduitItem = GetComponentInChildren<ConduitItem>(true);
     }
 

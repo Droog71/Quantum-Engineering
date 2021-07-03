@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
-using System.Collections;
+using MEC;
+using System.Collections.Generic;
 
 public class Turret : Machine
 {
@@ -16,10 +17,8 @@ public class Turret : Machine
     private GameObject[] targets;
     private bool foundTarget;
     private bool hasTarget;
-    private Coroutine fireCoroutine;
     private bool firing;
     private int warmup;
-    private StateManager stateManager;
     private LineRenderer laser;
     public PowerReceiver powerReceiver;
 
@@ -28,7 +27,6 @@ public class Turret : Machine
     {
         powerReceiver = gameObject.AddComponent<PowerReceiver>();
         laser = gameObject.AddComponent<LineRenderer>();
-        stateManager = FindObjectOfType<StateManager>();
         laser.startWidth = 0.2f;
         laser.endWidth = 0.2f;
         laser.material = laserMat;
@@ -116,7 +114,7 @@ public class Turret : Machine
                 {
                     if (powerON == true && firing == false && speed > 0)
                     {
-                        fireCoroutine = StartCoroutine(Fire());
+                        Timing.RunCoroutine(Fire());
                     }
                 }
             }
@@ -124,7 +122,7 @@ public class Turret : Machine
     }
 
     //! Fires at all targets on the target list.
-    private IEnumerator Fire()
+    private IEnumerator<float> Fire()
     {
         firing = true;
         hasTarget = false;
@@ -150,13 +148,13 @@ public class Turret : Machine
                             {
                                 barrel.transform.rotation = Quaternion.Euler(-45, barrel.transform.rotation.y, barrel.transform.rotation.z);
                             }
-                            yield return new WaitForSeconds(0.45f);
+                            yield return Timing.WaitForSeconds(0.45f);
                             GetComponent<AudioSource>().Play();
                             laser.enabled = true;
                             GetComponent<Light>().enabled = true;
                             laser.SetPosition(0, muzzle.transform.position);
                             laser.SetPosition(1, target.transform.position);
-                            yield return new WaitForSeconds(0.10f);
+                            yield return Timing.WaitForSeconds(0.10f);
                             if (Physics.Linecast(transform.position, target.transform.position, out RaycastHit hit))
                             {
                                 if (hit.collider.gameObject == target)
@@ -166,14 +164,14 @@ public class Turret : Machine
                             }
                             laser.enabled = false;
                             GetComponent<Light>().enabled = false;
-                            yield return new WaitForSeconds(0.45f);
+                            yield return Timing.WaitForSeconds(0.45f);
                             barrel.transform.rotation = restingRotation;
                             float outputPenalty = 3 - (speed * 0.1f);
                             if (outputPenalty < 0)
                             {
                                 outputPenalty = 0;
                             }
-                            yield return new WaitForSeconds(outputPenalty);
+                            yield return Timing.WaitForSeconds(outputPenalty);
                         }
                     }
                 }
@@ -195,13 +193,13 @@ public class Turret : Machine
                             {
                                 barrel.transform.rotation = Quaternion.Euler(-45, barrel.transform.rotation.y, barrel.transform.rotation.z);
                             }
-                            yield return new WaitForSeconds(0.45f);
+                            yield return Timing.WaitForSeconds(0.45f);
                             GetComponent<AudioSource>().Play();
                             laser.enabled = true;
                             GetComponent<Light>().enabled = true;
                             laser.SetPosition(0, muzzle.transform.position);
                             laser.SetPosition(1, target.transform.position);
-                            yield return new WaitForSeconds(0.10f);
+                            yield return Timing.WaitForSeconds(0.10f);
                             if (Physics.Linecast(transform.position, target.transform.position, out RaycastHit hit))
                             {
                                 if (hit.collider.gameObject == target)
@@ -211,14 +209,14 @@ public class Turret : Machine
                             }
                             laser.enabled = false;
                             GetComponent<Light>().enabled = false;
-                            yield return new WaitForSeconds(0.45f);
+                            yield return Timing.WaitForSeconds(0.45f);
                             barrel.transform.rotation = restingRotation;
                             float outputPenalty = 3 - (speed * 0.1f);
                             if (outputPenalty < 0)
                             {
                                 outputPenalty = 0;
                             }
-                            yield return new WaitForSeconds(outputPenalty);
+                            yield return Timing.WaitForSeconds(outputPenalty);
                         }
                     }
                 }

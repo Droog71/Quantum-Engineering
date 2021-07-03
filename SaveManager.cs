@@ -1,7 +1,8 @@
 ﻿using UnityEngine;
-using System.IO;
+using UnityEngine.SceneManagement;
 using System.Collections;
 using System.Collections.Generic;
+using MEC;
 
 public class SaveManager
 {
@@ -16,7 +17,7 @@ public class SaveManager
     }
 
     //! Saves the world.
-    public IEnumerator SaveDataCoroutine()
+    public IEnumerator<float> SaveDataCoroutine()
     {
         stateManager.dataSaved = false;
         stateManager.saving = true;
@@ -551,7 +552,7 @@ public class SaveManager
                     saveInterval++;
                     if (saveInterval >= totalObjects * 0.1f)
                     {
-                        yield return null;
+                        yield return Timing.WaitForOneFrame;
                         saveInterval = 0;
                     }
                 }
@@ -601,7 +602,7 @@ public class SaveManager
             saveInterval++;
             if (saveInterval >= totalObjects * 0.1f)
             {
-                yield return null;
+                yield return Timing.WaitForOneFrame;
                 saveInterval = 0;
             }
         }
@@ -614,6 +615,15 @@ public class SaveManager
         if (blockIdList.Count > 0)
         {
             PlayerPrefsX.SetIntArray(stateManager.worldName + "blockIdList", blockIdList.ToArray());
+        }
+
+        if (SceneManager.GetActiveScene().name == "QE_Procedural")
+        {
+            TerrainGenerator tg = stateManager.GetComponent<TerrainGenerator>();
+            PlayerPrefsX.SetVector3Array(stateManager.worldName + "worldLocations", tg.worldLocations.ToArray());
+            PlayerPrefsX.SetVector3Array(stateManager.worldName + "chunkLocations", tg.chunkLocations.ToArray());
+            PlayerPrefsX.SetVector3Array(stateManager.worldName + "treeLocations", tg.treeLocations.ToArray());
+            PlayerPrefsX.SetVector3Array(stateManager.worldName + "grassLocations", tg.grassLocations.ToArray());
         }
 
         FileBasedPrefs.ManuallySave();

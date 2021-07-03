@@ -15,8 +15,6 @@ public class HeatExchanger : Machine
     private int machineTimer;
     public int connectionAttempts;
     public bool connectionFailed;
-    private GameObject builtObjects;
-    private StateManager stateManager;
 
     //! Called by unity engine on start up to initialize variables.
     public void Start()
@@ -27,8 +25,6 @@ public class HeatExchanger : Machine
         connectionLine.material = lineMat;
         connectionLine.loop = true;
         connectionLine.enabled = false;
-        builtObjects = GameObject.Find("BuiltObjects");
-        stateManager = FindObjectOfType<StateManager>();
     }
 
     //! Called by MachineManager update coroutine.

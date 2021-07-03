@@ -1,9 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
+using MEC;
 
 public class Door : Machine
 {
-    private StateManager stateManager;
     public string type;
     public bool open;
     public AudioClip clip1;
@@ -20,6 +20,7 @@ public class Door : Machine
     public int audioClip;
     public bool edited;
     private bool init;
+    private bool coroutineBusy;
 
     //! Called by unity engine on start up to initialize variables.
     public void Start()
@@ -59,9 +60,9 @@ public class Door : Machine
         }
     }
 
-    //! Toggle the open or closed state of the hatchway.
-    public void ToggleOpen()
+    private IEnumerator<float> ToggleDoor()
     {
+        coroutineBusy = true;
         if (open == false)
         {
             openObject.SetActive(true);
@@ -79,6 +80,7 @@ public class Door : Machine
                         d.ToggleOpen();
                     }
                 }
+                yield return Timing.WaitForOneFrame;
             }
         }
         else
@@ -98,7 +100,18 @@ public class Door : Machine
                         d.ToggleOpen();
                     }
                 }
+                yield return Timing.WaitForOneFrame;
             }
+        }
+        coroutineBusy = false;
+    }
+
+    //! Toggle the open or closed state of the hatchway.
+    public void ToggleOpen()
+    {
+        if (coroutineBusy == false)
+        {
+            Timing.RunCoroutine(ToggleDoor());
         }
     }
 }

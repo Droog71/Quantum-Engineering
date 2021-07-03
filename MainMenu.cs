@@ -1,8 +1,9 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using System.IO.Compression;
+using UnityEngine.Networking;
 using System;
+using MEC;
 using System.Linq;
 using System.IO;
 using System.Net;
@@ -10,7 +11,6 @@ using System.Runtime.InteropServices;
 using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Collections;
 
 public class MainMenu : MonoBehaviour
 {
@@ -36,7 +36,6 @@ public class MainMenu : MonoBehaviour
     private List<string> worldList;
     private AudioSource buttonSounds;
     private AudioSource ambient;
-    private Coroutine worldDownloadCoroutine;
     private int scene;
     private bool local;
     private float waitForVideoTimer;
@@ -341,49 +340,37 @@ public class MainMenu : MonoBehaviour
     }
 
     //! Downloads the .sav file from the server using UnityWebRequest.
-    private IEnumerator DownloadWorld() 
+    private IEnumerator<float> DownloadWorld() 
     {
         downloadingWorld = true;
-
-        yield return new WaitForSeconds(1);
-
-        string savePath = Path.Combine(Application.persistentDataPath, "SaveData");
-
-        if (Application.isEditor)
+        string url = PlayerPrefs.GetString("serverURL") + "/world";
+        using (UnityWebRequest www = new UnityWebRequest(url))
         {
-            savePath = Path.Combine(Application.persistentDataPath, "Downloads");
-        }
-
-        Directory.CreateDirectory(savePath);
-
-        string saveFileLocation = Path.Combine(savePath + "/" + worldName + ".zip");
-
-        try
-        {
-            using (WebClient client = new WebClient()) 
+            www.downloadHandler = new DownloadHandlerBuffer();
+            UnityWebRequestAsyncOperation ao = www.SendWebRequest();
+            while (!ao.isDone)
             {
-                string url = PlayerPrefs.GetString("serverURL");
-                client.DownloadFile(url+"/world", saveFileLocation);
-                if (Directory.Exists(savePath + "/" + worldName))
-                {
-                    Directory.Delete(savePath + "/" + worldName, true);
-                }
-                ZipFile.ExtractToDirectory(saveFileLocation, savePath);
-                File.Delete(saveFileLocation);
+                yield return Timing.WaitForOneFrame;
+            }
+            if (www.isNetworkError || www.isHttpError)
+            {
+                UnityEngine.Debug.Log(www.error);
+                worldName = "Enter world name.";
+                videoPlayer.GetComponent<VP>().PlayVideo("QE_Title.webm",true,0);
+                downloadingWorld = false;
+                downloadPrompt = true;
+            }
+            else
+            {
+                string savePath = Path.Combine(Application.persistentDataPath, "SaveData");
+                string saveFileLocation = Path.Combine(savePath + "/" + worldName + ".sav");
+                Directory.CreateDirectory(savePath);
+                File.WriteAllText(saveFileLocation, www.downloadHandler.text);
                 UnityEngine.Debug.Log("World downloaded.");
                 FileBasedPrefs.SetWorldName(worldName);
                 PreStart();
             }
         }
-        catch(Exception e)
-        {
-            UnityEngine.Debug.Log(e.Message);
-            worldName = "Enter world name.";
-            videoPlayer.GetComponent<VP>().PlayVideo("QE_Title.webm",true,0);
-            downloadingWorld = false;
-            downloadPrompt = true;
-        }
-
         downloadingWorld = false;
     }
 
@@ -402,7 +389,7 @@ public class MainMenu : MonoBehaviour
                     {
                         if (hosting == false)
                         {
-                            worldDownloadCoroutine = StartCoroutine(DownloadWorld());
+                            Timing.RunCoroutine(DownloadWorld());
                         }
                         else
                         {
@@ -422,7 +409,7 @@ public class MainMenu : MonoBehaviour
                     {
                         if (hosting == false)
                         {
-                            worldDownloadCoroutine = StartCoroutine(DownloadWorld());
+                            Timing.RunCoroutine(DownloadWorld());
                         }
                         else
                         {
@@ -441,7 +428,7 @@ public class MainMenu : MonoBehaviour
             {
                 if (PlayerPrefsX.GetPersistentBool("multiplayer") == true && hosting == false)
                 {
-                    worldDownloadCoroutine = StartCoroutine(DownloadWorld());
+                    Timing.RunCoroutine(DownloadWorld());
                 }
                 else
                 {
@@ -1213,12 +1200,13 @@ public class MainMenu : MonoBehaviour
             }
             
             if (stateManager.worldLoaded == true && LoadingComplete() == true)
-            { 
-                if (stateManager.gameObject.GetComponent<TerrainGenerator>() != null)
+            {
+                TerrainGenerator tg = stateManager.gameObject.GetComponent<TerrainGenerator>();
+                if (tg != null)
                 {
-                    if (stateManager.gameObject.GetComponent<TerrainGenerator>().initialized == false)
+                    if (tg.initialized == false)
                     {
-                        loadingMessage = "Generating terrain... ";
+                        loadingMessage = "Generating terrain.. " + tg.generated + "/" + tg.total;
                     }
                 }
             }

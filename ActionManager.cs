@@ -49,20 +49,8 @@ public class ActionManager
     //! Toggles the laser cannon.
     public void ToggleLaserCannon()
     {
-        if (playerController.building == true)
-        {
-            if (playerController.gameManager.combiningBlocks == false)
-            {
-                playerController.stoppingBuildCoRoutine = true;
-                meshManager.CombineBlocks();
-                playerController.separatedBlocks = false;
-                playerController.building = false;
-            }
-            else
-            {
-                playerController.requestedBuildingStop = true;
-            }
-        }
+        playerController.building = false;
+
         if (!playerController.laserCannon.activeSelf)
         {
             playerController.scanner.SetActive(false);
@@ -80,20 +68,9 @@ public class ActionManager
     //! Toggles the scanner.
     public void ToggleScanner()
     {
-        if (playerController.building == true)
-        {
-            if (playerController.gameManager.combiningBlocks == false)
-            {
-                playerController.stoppingBuildCoRoutine = true;
-                meshManager.CombineBlocks();
-                playerController.separatedBlocks = false;
-                playerController.building = false;
-            }
-            else
-            {
-                playerController.requestedBuildingStop = true;
-            }
-        }
+
+        playerController.building = false;
+
         if (!playerController.scanner.activeSelf)
         {
             playerController.laserCannon.SetActive(false);
@@ -502,20 +479,7 @@ public class ActionManager
     //! Stops building mode.
     public void StopBuilding()
     {
-        if (playerController.building == true)
-        {
-            if (playerController.gameManager.combiningBlocks == false)
-            {
-                playerController.stoppingBuildCoRoutine = true;
-                meshManager.CombineBlocks();
-                playerController.separatedBlocks = false;
-                playerController.building = false;
-            }
-            else
-            {
-                playerController.requestedBuildingStop = true;
-            }
-        }
+        playerController.building = false;
     }
 
     //! Removes duplicate blocks.

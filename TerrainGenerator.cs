@@ -2,14 +2,15 @@
 using System.Linq;
 using System.Collections.Generic;
 using System.Collections;
+using MEC;
 
 public class TerrainGenerator : MonoBehaviour
 {
     private GameObject player;
-    private List<Vector3> worldLocations;
+    public List<Vector3> worldLocations;
     public List<Vector3> chunkLocations;
-    private List<Vector3> treeLocations;
-    private Coroutine terrainGenCoroutine;
+    public List<Vector3> treeLocations;
+    public List<Vector3> grassLocations;
     private StateManager stateManager;
     private GameManager gameManager;
     public GameObject blockHolder;
@@ -19,8 +20,11 @@ public class TerrainGenerator : MonoBehaviour
     public GameObject dirt;
     public GameObject grass;
     public bool initialized;
+    public int generated;
+    public int total;
     private int interval;
-    private bool loadedFoliage;
+    private bool loading;
+    private bool createdWorld;
 
     //! Called by unity engine on start to initialize variables.
     public void Start()
@@ -43,10 +47,38 @@ public class TerrainGenerator : MonoBehaviour
                 worldLocations = PlayerPrefsX.GetVector3Array(stateManager.worldName + "worldLocations").ToList();
                 chunkLocations = PlayerPrefsX.GetVector3Array(stateManager.worldName + "chunkLocations").ToList();
                 treeLocations = PlayerPrefsX.GetVector3Array(stateManager.worldName + "treeLocations").ToList();
+                grassLocations = PlayerPrefsX.GetVector3Array(stateManager.worldName + "grassLocations").ToList();
+            }
+
+            if (loading == false)
+            {
+                loading = true;
+                Timing.RunCoroutine(Initialize());
+            }
+
+            if (worldLocations.Count > 0 && createdWorld == true)
+            {
+                Timing.RunCoroutine(GenerateTerrain());
+            }
+        }
+    }
+
+    private IEnumerator<float> Initialize()
+    {
+        if (stateManager.worldLoaded == true)
+        {
+            if (worldLocations.Count < 1)
+            {
+                worldLocations = PlayerPrefsX.GetVector3Array(stateManager.worldName + "worldLocations").ToList();
+                chunkLocations = PlayerPrefsX.GetVector3Array(stateManager.worldName + "chunkLocations").ToList();
+                treeLocations = PlayerPrefsX.GetVector3Array(stateManager.worldName + "treeLocations").ToList();
+                grassLocations = PlayerPrefsX.GetVector3Array(stateManager.worldName + "grassLocations").ToList();
             }
 
             if (worldLocations.Count < 1)
             {
+                total = 1600;
+                int loadInterval = 0;
                 for (int i = -1000; i < 1000; i += 50)
                 {
                     for (int j = -1000; j < 1000; j += 50)
@@ -83,60 +115,102 @@ public class TerrainGenerator : MonoBehaviour
                         {
                             treeLocations.Add(new Vector3(Mathf.Round(i), Mathf.Round(-72) + randHeight, Mathf.Round(j)));
                         }
+                        else if (atLander == false)
+                        {
+                            grassLocations.Add(new Vector3(Mathf.Round(i), Mathf.Round(-72) + randHeight, Mathf.Round(j)));
+                        }
+                        generated++;
+                        loadInterval++;
+                        if (loadInterval >= 10)
+                        {
+                            loadInterval = 0;
+                            yield return Timing.WaitForOneFrame;
+                        }
                     }
                 }
-
-                PlayerPrefsX.SetVector3Array(stateManager.worldName + "worldLocations", worldLocations.ToArray());
-                PlayerPrefsX.SetVector3Array(stateManager.worldName + "treeLocations", treeLocations.ToArray());
+                createdWorld = true;
             }
-            else if (loadedFoliage == false)
+            else if (createdWorld == false)
             {
+                int loadInterval = 0;
+                total = worldLocations.Count;
                 foreach (Vector3 worldLoc in worldLocations)
                 {
                     if (treeLocations.Contains(worldLoc))
                     {
                         GameObject treeObj = Instantiate(tree, new Vector3(worldLoc.x - 2.3f, worldLoc.y + 3, worldLoc.z - 2.7f), new Quaternion());
                         treeObj.transform.parent = foliage.transform;
+                        treeObj.GetComponent<ProceduralFoliage>().location = worldLoc;
                     }
-                    else
+                    else if (treeLocations.Contains(worldLoc))
                     {
                         GameObject grassObj = Instantiate(billboardGrass, new Vector3(worldLoc.x - 2.3f, worldLoc.y + 3, worldLoc.z - 2.7f), new Quaternion());
                         grassObj.transform.parent = foliage.transform;
+                        grassObj.GetComponent<ProceduralFoliage>().location = worldLoc;
+                    }
+                    generated++;
+                    loadInterval++;
+                    if (loadInterval >= 10)
+                    {
+                        loadInterval = 0;
+                        yield return Timing.WaitForOneFrame;
                     }
                 }
-                loadedFoliage = true;
+                createdWorld = true;
             }
-
-            terrainGenCoroutine = StartCoroutine(GenerateTerrain());
         }
     }
 
     //! Generates chunks of dirt and grass near the player in procedural worlds.
-    private IEnumerator GenerateTerrain()
+    private IEnumerator<float> GenerateTerrain()
     {
         bool chunkRequired = false;
 
         foreach(Vector3 worldLoc in worldLocations)
         {
-            float distance = Vector3.Distance(player.transform.position, worldLoc);
-            if (distance <= 256)
+            if (stateManager.saving == false)
             {
-                if (!Physics.Raycast(new Vector3(worldLoc.x, worldLoc.y + 5, worldLoc.z), Vector3.down, out RaycastHit hit, 10))
+                bool playerInRange = false;
+
+                float distance = Vector3.Distance(player.transform.position, worldLoc);
+                if (distance <= 256)
                 {
-                    if (!chunkLocations.Contains(worldLoc))
+                    playerInRange = true;
+                }
+
+                if (playerInRange  == false && PlayerPrefsX.GetPersistentBool("multipayer") == true)
+                {
+                    NetworkPlayer[] networkPlayers = FindObjectsOfType<NetworkPlayer>();
+                    foreach (NetworkPlayer netWorkPlayer in networkPlayers)
                     {
-                        chunkRequired = true;
-                        GetComponent<OreManager>().paused = false;
-                        GenerateChunk(worldLoc);
+                        float networkPlayerDistance = Vector3.Distance(netWorkPlayer.transform.position, transform.position);
+                        if (networkPlayerDistance <= 256)
+                        {
+                            playerInRange = true;
+                            break;
+                        }
                     }
                 }
-            }
 
-            interval++;
-            if (interval >= 10)
-            {
-                interval = 0;
-                yield return null;
+                if (playerInRange == true)
+                {
+                    if (!Physics.Raycast(new Vector3(worldLoc.x, worldLoc.y + 5, worldLoc.z), Vector3.down, out RaycastHit hit, 10))
+                    {
+                        if (!chunkLocations.Contains(worldLoc))
+                        {
+                            chunkRequired = true;
+                            GetComponent<OreManager>().paused = false;
+                            GenerateChunk(worldLoc);
+                        }
+                    }
+                }
+
+                interval++;
+                if (interval >= 10)
+                {
+                    interval = 0;
+                    yield return Timing.WaitForOneFrame;
+                }
             }
         }
 
@@ -198,11 +272,13 @@ public class TerrainGenerator : MonoBehaviour
         {
             GameObject treeObj = Instantiate(tree, new Vector3(worldLoc.x - 2.3f, worldLoc.y + 3, worldLoc.z - 2.7f), new Quaternion());
             treeObj.transform.parent = foliage.transform;
+            treeObj.GetComponent<ProceduralFoliage>().location = worldLoc;
         }
-        else
+        else if (grassLocations.Contains(worldLoc))
         {
             GameObject grassObj = Instantiate(billboardGrass, new Vector3(worldLoc.x - 2.3f, worldLoc.y + 3, worldLoc.z - 2.7f), new Quaternion());
             grassObj.transform.parent = foliage.transform;
+            grassObj.GetComponent<ProceduralFoliage>().location = worldLoc;
         }
     }
 }

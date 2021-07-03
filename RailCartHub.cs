@@ -7,7 +7,6 @@ public class RailCartHub : Machine
     public string outputID;
     public GameObject inputObject;
     public GameObject outputObject;
-    private StateManager stateManager;
     private LineRenderer connectionLine;
     public Material lineMat;
     public int range = 6;
@@ -22,7 +21,6 @@ public class RailCartHub : Machine
     public void Start()
     {
         connectionLine = gameObject.AddComponent<LineRenderer>();
-        stateManager = FindObjectOfType<StateManager>();
         connectionLine.startWidth = 0.2f;
         connectionLine.endWidth = 0.2f;
         connectionLine.material = lineMat;

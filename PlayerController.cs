@@ -1,5 +1,5 @@
 ﻿using UnityEngine;
-using System.Collections;
+using MEC;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine.SceneManagement;
@@ -9,8 +9,6 @@ public class PlayerController : MonoBehaviour
 {
     private InputManager inputManager;
     public NetworkController networkController;
-    private Coroutine saveCoroutine;
-    private Coroutine networkWorldUpdateCoroutine;
     private Vector3 originalPosition;
     private List<Vector3> networkItemLocations;
     public Vector3 destroyStartPosition;
@@ -53,7 +51,6 @@ public class PlayerController : MonoBehaviour
     public bool autoAxisMessage;
     public bool invalidRailCartPlacement;
     public bool helpMenuOpen;
-    public bool requestedBuildingStop;
     public bool pirateAttackWarningActive;
     public bool meteorShowerWarningActive;
     public bool destructionMessageActive;
@@ -61,9 +58,6 @@ public class PlayerController : MonoBehaviour
     public bool videoMenuOpen;
     public bool schematicMenuOpen;
     public bool crosshairEnabled = true;
-    public bool stoppingBuildCoRoutine;
-    public bool separatedBlocks;
-    public bool requestedChunkLoad;
     public bool laserCannonActive;
     public bool scannerActive;
     public bool firing;
@@ -430,17 +424,6 @@ public class PlayerController : MonoBehaviour
                     timeToDeliverWarningRecieved = false;
                 }
 
-                if (requestedBuildingStop == true)
-                {
-                    HandleBuildingStopRequest();
-                }
-
-                // The player controller is notified that the game manager finished combining meshes.
-                if (stoppingBuildCoRoutine == true && gameManager.combiningBlocks == false)
-                {
-                    stoppingBuildCoRoutine = false;
-                }
-
                 // Locking or unlocking the mouse cursor for GUI interaction.
                 if (GuiOpen())
                 {
@@ -477,7 +460,7 @@ public class PlayerController : MonoBehaviour
 
                     if (networkController.networkWorldUpdateCoroutineBusy == false)
                     {
-                        networkWorldUpdateCoroutine = StartCoroutine(networkController.NetWorkWorldUpdate());
+                        Timing.RunCoroutine(networkController.NetWorkWorldUpdate());
                     }
                 }
             }
@@ -719,23 +702,6 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    //! Stops the players building mode and sends a request to the game manager to recombine any edited combined meshes.
-    private void HandleBuildingStopRequest()
-    {
-        if (gameManager.combiningBlocks == false)
-        {
-            stoppingBuildCoRoutine = true;
-            gameManager.meshManager.CombineBlocks();
-            separatedBlocks = false;
-            building = false;
-            requestedBuildingStop = false;
-        }
-        else
-        {
-            requestedBuildingStop = true;
-        }
-    }
-
     //! Opens the escape menu.
     public void OpenEscapeMenu()
     {
@@ -793,7 +759,7 @@ public class PlayerController : MonoBehaviour
             {
                 SavePlayerData();
                 GameObject.Find("GameManager").GetComponent<GameManager>().RequestSaveOperation();
-                saveCoroutine = StartCoroutine(Save());
+                Timing.RunCoroutine(Save());
                 requestedSaveTimer = 0;
                 requestedSave = false;
             }
@@ -906,7 +872,7 @@ public class PlayerController : MonoBehaviour
     }
 
     //! Handles saving world and exiting to the main menu.
-    public static IEnumerator Save()
+    public static IEnumerator<float> Save()
     {
         float f = 0;
         while (f < 6000)
@@ -935,7 +901,7 @@ public class PlayerController : MonoBehaviour
                     }
                 }
             }
-            yield return new WaitForSeconds(0.1f);
+            yield return Timing.WaitForSeconds(0.1f);
         }
     }
 }

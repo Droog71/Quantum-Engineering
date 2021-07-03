@@ -1,11 +1,11 @@
 ﻿using UnityEngine;
-using System.Collections;
+using System.Collections.Generic;
+using MEC;
 
 public class BlockInteraction
 {
     private PlayerController playerController;
     private InteractionController interactionController;
-    private Coroutine modifyMeshCoroutine;
     private bool modifyMeshCoroutineBusy;
 
     //! This class handles the player's interactions with standard building blocks.
@@ -106,16 +106,16 @@ public class BlockInteraction
         {
             interactionController.CollectObject(blockToRemove.gameObject, bh.blockType);
             bh.blockData.RemoveAt(indexToRemove);
-            modifyMeshCoroutine = playerController.StartCoroutine(ModifyMesh(bh.gameObject));
+            Timing.RunCoroutine(ModifyMesh(bh.gameObject));
             bh.gameObject.SetActive(true);
         }
     }
 
     //! Modifies a combined mesh with a slight delay to allow the BlockHolder class to load data.
-    private IEnumerator ModifyMesh(GameObject obj)
+    private IEnumerator<float> ModifyMesh(GameObject obj)
     {
         modifyMeshCoroutineBusy = true;
-        yield return new WaitForSeconds(0.1f);
+        yield return Timing.WaitForSeconds(0.1f);
         if (obj != null)
         {
             BlockHolder bh = obj.GetComponent<BlockHolder>();

@@ -1,7 +1,8 @@
 ﻿using UnityEngine;
 using System.Net;
-using System.Collections;
+using System.Collections.Generic;
 using System;
+using MEC;
 
 public class InventoryHandler
 {
@@ -9,8 +10,6 @@ public class InventoryHandler
     private InventoryManager playerInventory;
     private InventorySlot slotDraggingFrom;
     private GuiCoordinates guiCoordinates;
-    private Coroutine networkContainerCoroutine;
-    private Coroutine networkTransferCoroutine;
     private bool networkContainerCoroutineBusy;
     private bool networkTransferCoroutineBusy;
     public string itemToDrag;
@@ -63,7 +62,7 @@ public class InventoryHandler
     }
 
     //! When an item is moved from one slot to another, within the same container, the contents of both slots are updated on the server.
-    private IEnumerator NetworkContainerCoroutine(int storageInventoryDropSlot, InventorySlot dropSlot, string originType, int originAmount)
+    private IEnumerator<float> NetworkContainerCoroutine(int storageInventoryDropSlot, InventorySlot dropSlot, string originType, int originAmount)
     {
         networkContainerCoroutineBusy = true;
         using(WebClient client = new WebClient())
@@ -77,7 +76,7 @@ public class InventoryHandler
             bool flag = false;
             while (flag == false)
             {
-                yield return new WaitForSeconds(0.5f);
+                yield return Timing.WaitForSeconds(0.5f);
                 try
                 {
                     client.UploadStringAsync(uri, "POST", "@" + x + "," + y + "," + z + ":"+storageInventoryDropSlot+";"+dropSlot.typeInSlot+"="+dropSlot.amountInSlot);
@@ -93,7 +92,7 @@ public class InventoryHandler
     }
 
     //! Updates the server when items are transferred to and from containers using ctrl+click.
-    private IEnumerator NetworkTransferItemCoroutine(int addIndex, int removeIndex, InventorySlot addSlot, InventorySlot removeSlot, InventoryManager destination)
+    private IEnumerator<float> NetworkTransferItemCoroutine(int addIndex, int removeIndex, InventorySlot addSlot, InventorySlot removeSlot, InventoryManager destination)
     {
         networkTransferCoroutineBusy = true;
         if (destination == playerController.playerInventory)
@@ -120,7 +119,7 @@ public class InventoryHandler
                 client.UploadStringAsync(uri, "POST", "@" + x + "," + y + "," + z + ":"+addIndex+";"+addSlot.typeInSlot+"="+addSlot.amountInSlot);
             }
         }
-        yield return new WaitForSeconds(0.25f);
+        yield return Timing.WaitForSeconds(0.25f);
         networkTransferCoroutineBusy = false;
     }
 
@@ -181,7 +180,7 @@ public class InventoryHandler
                         dragSlot.amountInSlot = 0;
                         if (PlayerPrefsX.GetPersistentBool("multiplayer") == true && networkTransferCoroutineBusy == false)
                         {
-                            networkTransferCoroutine = playerController.StartCoroutine(NetworkTransferItemCoroutine(i, index, slot, dragSlot, destination));
+                            Timing.RunCoroutine(NetworkTransferItemCoroutine(i, index, slot, dragSlot, destination));
                         }
                     }
                 }
@@ -334,7 +333,7 @@ public class InventoryHandler
                         {
                             string originType = slotDraggingFrom.typeInSlot;
                             int originAmount = slotDraggingFrom.amountInSlot;
-                            networkContainerCoroutine = playerController.StartCoroutine(NetworkContainerCoroutine(storageInventoryDropSlot, dropSlot, originType, originAmount));
+                            Timing.RunCoroutine(NetworkContainerCoroutine(storageInventoryDropSlot, dropSlot, originType, originAmount));
                         }
                     }
                 }

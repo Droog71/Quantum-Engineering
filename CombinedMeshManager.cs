@@ -2,13 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using MEC;
 
 public class CombinedMeshManager
 {
     private GameManager gameManager;
     private StateManager stateManager;
     private GameObject player;
-    private Coroutine modifyMeshCoroutine;
 
     private bool modifyMeshCoroutineBusy;
 
@@ -83,7 +83,7 @@ public class CombinedMeshManager
                         Object.Destroy(blockToRemove.gameObject);
                     }
                     bh.blockData.RemoveAt(indexToRemove);
-                    modifyMeshCoroutine = gameManager.StartCoroutine(ModifyMesh(bh.gameObject));
+                    Timing.RunCoroutine(ModifyMesh(bh.gameObject));
                     bh.gameObject.SetActive(true);
                 }
             }
@@ -91,10 +91,10 @@ public class CombinedMeshManager
     }
 
     //! Modifies a combined mesh with a slight delay to allow the BlockHolder class to load data.
-    public IEnumerator ModifyMesh(GameObject obj)
+    public IEnumerator<float> ModifyMesh(GameObject obj)
     {
         modifyMeshCoroutineBusy = true;
-        yield return new WaitForSeconds(0.1f);
+        yield return Timing.WaitForSeconds(0.1f);
         if (obj != null)
         {
             BlockHolder bh = obj.GetComponent<BlockHolder>();
@@ -112,15 +112,15 @@ public class CombinedMeshManager
     //! Starts the coroutine to combine all blocks into combined meshes.
     public void CombineBlocks()
     {
-        gameManager.blockCombineCoroutine = gameManager.StartCoroutine(BlockCombineCoroutine());
+        Timing.RunCoroutine(BlockCombineCoroutine());
     }
 
     //! Creates combined meshes from placed building blocks.
-    public IEnumerator BlockCombineCoroutine()
+    public IEnumerator<float> BlockCombineCoroutine()
     {
         while (gameManager.combiningBlocks == true || stateManager.saving == true)
         {
-            yield return null;
+            yield return Timing.WaitForOneFrame;
         }
 
         gameManager.combiningBlocks = true;
@@ -132,7 +132,7 @@ public class CombinedMeshManager
 
         foreach (string blockType in gameManager.blockNames)
         {
-            List<Block> allBlocks = Object.FindObjectsOfType<Block>().ToList();
+            Block[] allBlocks = gameManager.builtObjects.GetComponentsInChildren<Block>(false);
             foreach (Block block in allBlocks)
             {
                 if (block != null)
@@ -140,31 +140,31 @@ public class CombinedMeshManager
                     if (block.blockName == blockType)
                     {
                         GameObject[] currentBlockType = gameManager.blockHolders[blockIndex];
-                        float distance = Vector3.Distance(block.gameObject.transform.position, player.transform.position);
-                        if (distance > gameManager.chunkSize || gameManager.dataSaveRequested == true)
+                        block.transform.parent = currentBlockType[blockHolderCount].transform;
+                        BlockHolder bh = currentBlockType[blockHolderCount].GetComponent<BlockHolder>();
+
+                        if (bh.blockData == null)
                         {
-                            block.transform.parent = currentBlockType[blockHolderCount].transform;
-                            BlockHolder bh = currentBlockType[blockHolderCount].GetComponent<BlockHolder>();
-                            if (bh.blockData == null)
+                            bh.blockData = new List<BlockHolder.BlockInfo>();
+                        }
+
+                        Vector3 pos = block.gameObject.transform.position;
+                        Quaternion rot = block.gameObject.transform.rotation;
+
+                        bool blockExists = false;
+                        foreach (BlockHolder.BlockInfo blockInfo in bh.blockData)
+                        {
+                            if (blockInfo.position == pos && blockInfo.rotation == rot)
                             {
-                                bh.blockData = new List<BlockHolder.BlockInfo>();
+                                blockExists = true;
+                                break;
                             }
-                            Vector3 pos = block.gameObject.transform.position;
-                            Quaternion rot = block.gameObject.transform.rotation;
-                            bool blockExists = false;
-                            foreach (BlockHolder.BlockInfo blockInfo in bh.blockData)
-                            {
-                                if (blockInfo.position == pos && blockInfo.rotation == rot)
-                                {
-                                    blockExists = true;
-                                    break;
-                                }
-                            }
-                            if (blockExists == false)
-                            {
-                                bh.blockData.Add(new BlockHolder.BlockInfo(block.gameObject.transform.position, block.gameObject.transform.rotation));
-                                blockCount++;
-                            }
+                        }
+
+                        if (blockExists == false)
+                        {
+                            bh.blockData.Add(new BlockHolder.BlockInfo(block.gameObject.transform.position, block.gameObject.transform.rotation));
+                            blockCount++;
                         }
 
                         Transform[] blocks = currentBlockType[blockHolderCount].GetComponentsInChildren<Transform>(true);
@@ -191,7 +191,7 @@ public class CombinedMeshManager
                     if (combineInterval >= 250)
                     {
                         combineInterval = 0;
-                        yield return null;
+                        yield return Timing.WaitForOneFrame;
                     }
                 }
             }
@@ -213,26 +213,24 @@ public class CombinedMeshManager
     //! Starts the combined mesh coroutine.
     public void CombineMeshes()
     {
-        gameManager.meshCombineCoroutine = gameManager.StartCoroutine(CombineMeshCoroutine());
+        Timing.RunCoroutine(CombineMeshCoroutine());
     }
 
     //! Creates combined meshes from blocks placed in the world.
-    private IEnumerator CombineMeshCoroutine()
+    private IEnumerator<float> CombineMeshCoroutine()
     {
         int blockIndex = 0;
         foreach (string blockName in gameManager.blockNames)
         {
-            int combineInterval = 0;
             foreach (GameObject holder in gameManager.blockHolders[blockIndex])
             {
-                CreateCombinedMesh(holder);
-                if (stateManager.worldLoaded == true)
+                Block[] blocks = holder.GetComponentsInChildren<Block>(false);
+                if (blocks.Length > 0)
                 {
-                    combineInterval++;
-                    if (combineInterval >= 10)
+                    CreateCombinedMesh(holder);
+                    if (stateManager.worldLoaded == true)
                     {
-                        combineInterval = 0;
-                        yield return null;
+                        yield return Timing.WaitForOneFrame;
                     }
                 }
             }

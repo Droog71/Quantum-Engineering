@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
+using MEC;
 
 public class ConduitItem : MonoBehaviour
 {
@@ -12,17 +13,46 @@ public class ConduitItem : MonoBehaviour
     public GameObject billboard;
     public GameObject billboard2;
     public bool active;
+    private bool init;
+    private bool addedToManager;
 
     //! Called by unity engine on start up to initialize variables.
     public void Start()
     {
-        stateManager = FindObjectOfType<StateManager>();
-        gameManager = FindObjectOfType<GameManager>();
         startPosition = transform.position;
+        Timing.RunCoroutine(Init());
+    }
+
+    private IEnumerator<float> Init()
+    {
+        while (init == false)
+        {
+            if (stateManager == null)
+            {
+                stateManager = FindObjectOfType<StateManager>();
+            }
+
+            if (gameManager != null)
+            {
+                if (gameManager.GetComponent<ItemManager>() != null)
+                {
+                    gameManager.GetComponent<ItemManager>().AddItem(this);
+                    addedToManager = true;
+                }
+            }
+            else
+            {
+                gameManager = FindObjectOfType<GameManager>();
+            }
+
+            init |= addedToManager == true && stateManager != null;
+
+            yield return Timing.WaitForOneFrame;
+        }
     }
 
     //! Called once per frame by unity engine.
-    public void Update()
+    public void UpdateItem()
     {
         if (!stateManager.Busy())
         {

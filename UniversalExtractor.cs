@@ -23,7 +23,6 @@ public class UniversalExtractor : Machine
     private bool hasResource;
     public int connectionAttempts;
     public bool connectionFailed;
-    private StateManager stateManager;
     private GameObject builtObjects;
     public PowerReceiver powerReceiver;
 
@@ -33,12 +32,10 @@ public class UniversalExtractor : Machine
         powerReceiver = gameObject.AddComponent<PowerReceiver>();
         connectionLine = gameObject.AddComponent<LineRenderer>();
         conduitItem = GetComponentInChildren<ConduitItem>(true);
-        stateManager = FindObjectOfType<StateManager>();
         connectionLine.startWidth = 0.2f;
         connectionLine.endWidth = 0.2f;
         connectionLine.material = lineMat;
         connectionLine.loop = true;
-        builtObjects = GameObject.Find("BuiltObjects");
     }
 
     //! Used to remove the connection line renderer when the block is destroyed.
@@ -53,7 +50,7 @@ public class UniversalExtractor : Machine
     //! The object exists, is active and is a resource node.
     private bool IsValidResource(GameObject obj)
     {
-        return obj != null && obj.transform.parent != builtObjects.transform && obj.activeInHierarchy && obj.GetComponent<UniversalResource>() != null;
+        return obj.GetComponent<UniversalResource>() != null;
     }
 
     //! Gets power values from power receiver.
@@ -157,37 +154,34 @@ public class UniversalExtractor : Machine
                 foreach (UniversalResource r in allResources)
                 {
                     GameObject obj = r.gameObject;
-                    if (IsValidResource(obj))
+                    float distance = Vector3.Distance(transform.position, obj.transform.position);
+                    if (distance < 20)
                     {
-                        float distance = Vector3.Distance(transform.position, obj.transform.position);
-                        if (distance < 20)
+                        if (obj.GetComponent<UniversalResource>().extractor == null)
                         {
-                            if (obj.GetComponent<UniversalResource>().extractor == null)
+                            obj.GetComponent<UniversalResource>().extractor = gameObject;
+                        }
+                        if (obj.GetComponent<UniversalResource>().extractor == gameObject)
+                        {
+                            if (obj.GetComponent<UniversalResource>().type.Equals("Ice"))
                             {
-                                obj.GetComponent<UniversalResource>().extractor = gameObject;
+                                extractingIce = true;
                             }
-                            if (obj.GetComponent<UniversalResource>().extractor == gameObject)
+                            else
                             {
-                                if (obj.GetComponent<UniversalResource>().type.Equals("Ice"))
-                                {
-                                    extractingIce = true;
-                                }
-                                else
-                                {
-                                    extractingIce = false;
-                                }
-                                if (inputLine == null && obj.GetComponent<LineRenderer>() == null)
-                                {
-                                    inputLine = obj.AddComponent<LineRenderer>();
-                                    inputLine.startWidth = 0.2f;
-                                    inputLine.endWidth = 0.2f;
-                                    inputLine.material = lineMat;
-                                    inputLine.SetPosition(0, transform.position);
-                                    inputLine.SetPosition(1, obj.transform.position);
-                                }
-                                inputObject = obj;
-                                hasResource = true;
+                                extractingIce = false;
                             }
+                            if (inputLine == null && obj.GetComponent<LineRenderer>() == null)
+                            {
+                                inputLine = obj.AddComponent<LineRenderer>();
+                                inputLine.startWidth = 0.2f;
+                                inputLine.endWidth = 0.2f;
+                                inputLine.material = lineMat;
+                                inputLine.SetPosition(0, transform.position);
+                                inputLine.SetPosition(1, obj.transform.position);
+                            }
+                            inputObject = obj;
+                            hasResource = true;
                         }
                     }
                 }
