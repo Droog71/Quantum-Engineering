@@ -135,13 +135,13 @@ public class BlockHolder : MonoBehaviour
                         if (dirtHolder != null)
                         {
                             dirtHolder.GetComponent<BlockHolder>().Load();
-                            if (terrainGenerator != null)
+                        }
+
+                        if (terrainGenerator != null)
+                        {
+                            if (!terrainGenerator.chunkLocations.Contains(worldLoc))
                             {
-                                if (!terrainGenerator.chunkLocations.Contains(worldLoc))
-                                {
-                                    terrainGenerator.chunkLocations.Add(worldLoc);
-                                    string chunkLocationsKey = stateManager.worldName + "chunkLocations";
-                                }
+                                terrainGenerator.chunkLocations.Add(worldLoc);
                             }
                         }
                     }
@@ -151,13 +151,13 @@ public class BlockHolder : MonoBehaviour
                         if (grassHolder != null)
                         {
                             grassHolder.GetComponent<BlockHolder>().Load();
-                            if (terrainGenerator != null)
+                        }
+
+                        if (terrainGenerator != null)
+                        {
+                            if (!terrainGenerator.chunkLocations.Contains(worldLoc))
                             {
-                                if (!terrainGenerator.chunkLocations.Contains(worldLoc))
-                                {
-                                    terrainGenerator.chunkLocations.Add(worldLoc);
-                                    string chunkLocationsKey = stateManager.worldName + "chunkLocations";
-                                }
+                                terrainGenerator.chunkLocations.Add(worldLoc);
                             }
                         }
                     }

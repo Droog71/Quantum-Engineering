@@ -884,8 +884,8 @@ public class PlayerController : MonoBehaviour
                 {
                     Debug.Log("Game saved to " + FileBasedPrefs.GetSaveFilePath());
                     Debug.Log("Creating backup...");
-                    string worldName = GameObject.Find("GameManager").GetComponent<StateManager>().worldName;
-                    string destinationPath = Path.Combine(Application.persistentDataPath, "SaveData/" + worldName + "/" + worldName + ".bak");
+                    string fileName = GameObject.Find("GameManager").GetComponent<StateManager>().worldName;
+                    string destinationPath = Path.Combine(Application.persistentDataPath, "SaveData/" + fileName + ".bak");
                     File.Copy(FileBasedPrefs.GetSaveFilePath(), destinationPath, true);
                     Debug.Log("Backup saved to " + destinationPath);
                     if (GameObject.Find("Player").GetComponent<PlayerController>().exiting == true)

@@ -219,10 +219,12 @@ public class AddressManager
             idCount++;
             yield return Timing.WaitForSeconds(0.1f);
         }
-        blockIdCoroutineActive = false;
+
         if (gameManager.dataSaveRequested == true)
         {
             stateManager.finalBlockAddress = true;
         }
+
+        blockIdCoroutineActive = false;
     }
 }

@@ -9,6 +9,7 @@ public class ProceduralFoliage : MonoBehaviour
     public Vector3 location;
     public string type;
     private TerrainGenerator terrainGenerator;
+    private StateManager stateManager;
 
     // Update is called once per frame
     void Update()
@@ -16,6 +17,11 @@ public class ProceduralFoliage : MonoBehaviour
         if (terrainGenerator == null)
         {
             terrainGenerator = FindObjectOfType<TerrainGenerator>();
+        }
+
+        if (stateManager == null)
+        {
+            stateManager = FindObjectOfType<StateManager>();
         }
 
         if (groundCheckPositions == null)
@@ -30,7 +36,7 @@ public class ProceduralFoliage : MonoBehaviour
             };
         }
 
-        if (coroutineBusy == false)
+        if (coroutineBusy == false && !stateManager.Busy())
         {
             Timing.RunCoroutine(CheckGround());
         }
@@ -40,9 +46,9 @@ public class ProceduralFoliage : MonoBehaviour
     {
         coroutineBusy = true;
         yield return Timing.WaitForSeconds(3);
-        foreach (Vector3 pos in groundCheckPositions)
+        for (int i = 0; i < groundCheckPositions.Length; i++)
         {
-            if (!Physics.Raycast(pos, Vector3.down, 5))
+            if (!Physics.Raycast(groundCheckPositions[i], Vector3.down, 5) && !stateManager.Busy())
             {
                 if (type == "Tree")
                 {
@@ -52,7 +58,11 @@ public class ProceduralFoliage : MonoBehaviour
                 {
                     terrainGenerator.grassLocations.Remove(location);
                 }
-                Destroy(gameObject);
+
+                if (gameObject != null)
+                {
+                    Destroy(gameObject);
+                }
             }
         }
         coroutineBusy = false;

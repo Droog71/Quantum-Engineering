@@ -1,7 +1,6 @@
 ﻿using UnityEngine;
 using System.Linq;
 using System.Collections.Generic;
-using System.Collections;
 using MEC;
 
 public class TerrainGenerator : MonoBehaviour
@@ -42,14 +41,6 @@ public class TerrainGenerator : MonoBehaviour
     {
         if (stateManager.worldLoaded == true)
         {
-            if (worldLocations.Count < 1)
-            {
-                worldLocations = PlayerPrefsX.GetVector3Array(stateManager.worldName + "worldLocations").ToList();
-                chunkLocations = PlayerPrefsX.GetVector3Array(stateManager.worldName + "chunkLocations").ToList();
-                treeLocations = PlayerPrefsX.GetVector3Array(stateManager.worldName + "treeLocations").ToList();
-                grassLocations = PlayerPrefsX.GetVector3Array(stateManager.worldName + "grassLocations").ToList();
-            }
-
             if (loading == false)
             {
                 loading = true;
@@ -168,7 +159,7 @@ public class TerrainGenerator : MonoBehaviour
 
         foreach(Vector3 worldLoc in worldLocations)
         {
-            if (stateManager.saving == false)
+            if (!stateManager.Busy() && player != null)
             {
                 bool playerInRange = false;
 

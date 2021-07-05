@@ -163,6 +163,7 @@ public class StateManager : MonoBehaviour
                         {
                             Vector3 worldLoc = PlayerPrefsX.GetVector3(ID + "worldLoc");
                             GetComponent<TerrainGenerator>().chunkLocations.Add(worldLoc);
+                            bh.worldLoc = worldLoc;
                         }
                         Vector3[] blockPositions = PlayerPrefsX.GetVector3Array(ID + "blockPositions");
                         if (blockPositions.Length > 0)
@@ -208,7 +209,6 @@ public class StateManager : MonoBehaviour
                         {
                             string blockType = FileBasedPrefs.GetString(ID + "blockType");
                             BlockDictionary blockDictionary = playerController.GetComponent<BuildController>().blockDictionary;
-                            Debug.Log("LOGIC BLOCK: " + blockType);
                             GameObject spawnedObject = Instantiate(blockDictionary.machineDictionary[blockType], objectPosition, objectRotation);
                             spawnedObject.GetComponent<LogicBlock>().logic = PlayerPrefsX.GetBool(ID + "logic");
                             machineManager.machines.Add(spawnedObject.GetComponent<LogicBlock>());

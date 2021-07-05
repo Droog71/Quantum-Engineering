@@ -113,16 +113,19 @@ public class GameManager : MonoBehaviour
 
             if (!materialDictionary.ContainsKey(blockName))
             {
-                Material mat = new Material(Shader.Find("Standard"));
-                mat.mainTexture = textureDictionary.dictionary[blockName];
-                if (textureDictionary.dictionary.ContainsKey(blockName + "_Normal"))
+                if (textureDictionary.dictionary.ContainsKey(blockName))
                 {
-                    mat.shaderKeywords = new string[] { "_NORMALMAP" };
-                    mat.SetTexture("_BumpMap", textureDictionary.dictionary[blockName + "_Normal"]);
-                    mat.SetFloat("_BumpScale", 2);
-                    mat.enableInstancing = true;
+                    Material mat = new Material(Shader.Find("Standard"));
+                    mat.mainTexture = textureDictionary.dictionary[blockName];
+                    if (textureDictionary.dictionary.ContainsKey(blockName + "_Normal"))
+                    {
+                        mat.shaderKeywords = new string[] { "_NORMALMAP" };
+                        mat.SetTexture("_BumpMap", textureDictionary.dictionary[blockName + "_Normal"]);
+                        mat.SetFloat("_BumpScale", 2);
+                        mat.enableInstancing = true;
+                    }
+                    materialDictionary.Add(blockName, mat);
                 }
-                materialDictionary.Add(blockName, mat);
             }
 
             meshManager.SetMaterial(blockInit, blockName);

@@ -720,7 +720,6 @@ public class InfoHUD : MonoBehaviour
                 if (obj.GetComponent<BlockHolder>() != null)
                 {
                     blockType = obj.GetComponent<BlockHolder>().blockType;
-
                 }
                 else if (obj.transform.parent != null)
                 {
