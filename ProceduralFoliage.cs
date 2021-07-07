@@ -38,7 +38,7 @@ public class ProceduralFoliage : MonoBehaviour
 
         if (coroutineBusy == false && !stateManager.Busy())
         {
-            Timing.RunCoroutine(CheckGround());
+            Timing.RunCoroutine(CheckGround().CancelWith(gameObject));
         }
     }
 

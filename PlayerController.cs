@@ -894,6 +894,7 @@ public class PlayerController : MonoBehaviour
                         FileBasedPrefs.initialized = false;
                         FileBasedPrefs._latestData = null;
                         SceneManager.LoadScene(0);
+                        break;
                     }
                     else
                     {

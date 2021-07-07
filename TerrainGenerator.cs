@@ -133,7 +133,7 @@ public class TerrainGenerator : MonoBehaviour
                         treeObj.transform.parent = foliage.transform;
                         treeObj.GetComponent<ProceduralFoliage>().location = worldLoc;
                     }
-                    else if (treeLocations.Contains(worldLoc))
+                    else if (grassLocations.Contains(worldLoc))
                     {
                         GameObject grassObj = Instantiate(billboardGrass, new Vector3(worldLoc.x - 2.3f, worldLoc.y + 3, worldLoc.z - 2.7f), new Quaternion());
                         grassObj.transform.parent = foliage.transform;

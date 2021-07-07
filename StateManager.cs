@@ -1,7 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.SceneManagement;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System;
 using MEC;
@@ -179,9 +178,6 @@ public class StateManager : MonoBehaviour
                             }
                         }
                         bh.unloaded = true;
-                        string saveDataPath = Path.Combine(Application.persistentDataPath, "SaveData" + "/" + worldName);
-                        Directory.CreateDirectory(saveDataPath);
-                        string saveFileLocation = Path.Combine(saveDataPath + "/" + ID + ".obj");
                         GetComponent<GameManager>().meshManager.SetMaterial(spawnedObject, blockType);
                         bh.Load();
                         while (bh.chunkLoadCoroutineBusy == true || bh.chunkUnloadCoroutineBusy == true)
