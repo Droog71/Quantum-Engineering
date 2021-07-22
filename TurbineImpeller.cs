@@ -6,16 +6,14 @@ public class TurbineImpeller : MonoBehaviour
     public GameObject turbine;
     private StateManager stateManager;
 
-    //! Called by unity engine on start up to initialize variables.
-    void Start()
-    {
-        stateManager = turbine.GetComponent<PowerSource>().stateManager;
-    }
-
     //! Update is called once per frame.
     void Update()
     {
-        if (!stateManager.Busy())
+        if (stateManager == null)
+        {
+            stateManager = turbine.GetComponent<PowerSource>().stateManager;
+        }
+        else if (!stateManager.Busy())
         {
             if (turbine.GetComponent<AudioSource>().isPlaying == true)
             {

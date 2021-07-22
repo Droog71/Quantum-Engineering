@@ -205,7 +205,7 @@ public class InteractionController : MonoBehaviour
     }
 
     //! Destroys an object in the world and adds it's associated inventory item to the player's inventory.
-    public void CollectObject(GameObject obj, string type)
+    public bool CollectObject(GameObject obj, string type)
     {
         bool canRemove = true;
 
@@ -237,6 +237,7 @@ public class InteractionController : MonoBehaviour
                     Quaternion rot = obj.transform.rotation;
                     UpdateNetwork(1, type, pos, rot);
                 }
+                return true;
             }
             else
             {
@@ -248,6 +249,7 @@ public class InteractionController : MonoBehaviour
         {
             playerController.PlayMissingItemsSound();
         }
+        return false;
     }
 
     //! Returns true if the player is allowed to remove the object.

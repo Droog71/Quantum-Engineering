@@ -104,10 +104,12 @@ public class BlockInteraction
         }
         if (blockToRemove != null)
         {
-            interactionController.CollectObject(blockToRemove.gameObject, bh.blockType);
-            bh.blockData.RemoveAt(indexToRemove);
-            Timing.RunCoroutine(ModifyMesh(bh.gameObject));
-            bh.gameObject.SetActive(true);
+            if (interactionController.CollectObject(blockToRemove.gameObject, bh.blockType))
+            {
+                bh.blockData.RemoveAt(indexToRemove);
+                Timing.RunCoroutine(ModifyMesh(bh.gameObject));
+                bh.gameObject.SetActive(true);
+            }
         }
     }
 
