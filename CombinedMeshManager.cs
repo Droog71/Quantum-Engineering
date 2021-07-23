@@ -219,10 +219,9 @@ public class CombinedMeshManager
     //! Creates combined meshes from blocks placed in the world.
     private IEnumerator<float> CombineMeshCoroutine()
     {
-        int blockIndex = 0;
-        foreach (string blockName in gameManager.blockNames)
+        for (int i = 0; i < gameManager.blockHolders.Count; i++)
         {
-            foreach (GameObject holder in gameManager.blockHolders[blockIndex])
+            foreach (GameObject holder in gameManager.blockHolders[i])
             {
                 Block[] blocks = holder.GetComponentsInChildren<Block>(false);
                 if (blocks.Length > 0)
@@ -234,7 +233,6 @@ public class CombinedMeshManager
                     }
                 }
             }
-            blockIndex++;
         }
 
         gameManager.combiningBlocks = false;
