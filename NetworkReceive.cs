@@ -149,7 +149,9 @@ public class NetworkReceive
                 float xRot = float.Parse(blockInfo.Split(',')[6].Split(':')[1].Replace("'",""));
                 float yRot = float.Parse(blockInfo.Split(',')[7].Split(':')[1].Replace("'",""));
                 string blockType = blockInfo.Split(',')[8].Split(':')[1].Split('}')[0].Replace("'", "");
+
                 Debug.Log(wRot + "," + zRot + "," + xPos + "," + yPos + "," + destroy + "," + zPos + "," + xRot + "," + yRot + "," + blockType);
+
                 Vector3 blockPos = new Vector3(xPos, yPos, zPos);
                 Quaternion blockRot = new Quaternion(xRot, yRot, zRot, wRot);
                 bool found = false;
@@ -211,12 +213,10 @@ public class NetworkReceive
                                             BlockHolder blockHolder = block.transform.parent.GetComponent<BlockHolder>();
                                             if (blockHolder != null)
                                             {
-                                                Debug.Log("removing block line 213");
                                                 playerController.gameManager.meshManager.RemoveBlock(blockHolder, blockPos, false);
                                             }
                                             else
                                             {
-                                                Debug.Log("removing block line 218");
                                                 Object.Destroy(block.gameObject);
                                             }
                                         }
@@ -243,7 +243,6 @@ public class NetworkReceive
                                         {
                                             if (Vector3.Distance(info.position, blockPos) < 10)
                                             {
-                                                Debug.Log("removing block line 245");
                                                 playerController.gameManager.meshManager.RemoveBlock(blockHolder, blockPos, false);
                                                 found = true;
                                                 break;

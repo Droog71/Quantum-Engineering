@@ -203,19 +203,23 @@ public class NetworkController
         }
 
         playerNames.Clear();
-        string[] playerList = playerData.Split('[');
+        string[] playerList = playerData.Split('{');
         for (int i=2; i < playerList.Length; i++)
         {
             string playerInfo = playerList[i];
-            string playerName = playerInfo.Split(':')[0].Split(',')[0].TrimStart('"').TrimEnd('"');
-            float x = float.Parse(playerInfo.Split(',')[1]);
-            float y = float.Parse(playerInfo.Split(',')[2]);
-            float z = float.Parse(playerInfo.Split(',')[3]);
-            float fx = float.Parse(playerInfo.Split(',')[4]);
-            float fz = float.Parse(playerInfo.Split(',')[5]);
-            float red = float.Parse(playerInfo.Split(',')[6]);
-            float green = float.Parse(playerInfo.Split(',')[7]);
-            float blue = float.Parse(playerInfo.Split(',')[8].Split(']')[0]);
+
+            float fx = float.Parse(playerInfo.Split(',')[0].Split(':')[1].Replace("'",""));
+            float red = float.Parse(playerInfo.Split(',')[1].Split(':')[1].Replace("'",""));
+            string playerName = playerInfo.Split(',')[2].Split(':')[1].Replace("'", "");
+            float green = float.Parse(playerInfo.Split(',')[3].Split(':')[1].Replace("'",""));
+            float y = float.Parse(playerInfo.Split(',')[4].Split(':')[1].Replace("'",""));
+            float x = float.Parse(playerInfo.Split(',')[5].Split(':')[1].Replace("'",""));
+            float fz = float.Parse(playerInfo.Split(',')[6].Split(':')[1].Replace("'",""));
+            float z = float.Parse(playerInfo.Split(',')[7].Split(':')[1].Replace("'",""));
+            float blue = float.Parse(playerInfo.Split(',')[8].Split(':')[1].Split('}')[0].Replace("'",""));
+
+            //Debug.Log(playerName + "," + x + "," + y + "," + z + "," + fx + "," + fz + "," + red + "," + green + "," + blue);
+
             Vector3 playerPosition = new Vector3(x, y, z);
             Color playerColor = new Color(red, green, blue);
             if (playerName != PlayerPrefs.GetString("UserName") && playerName != playerController.stateManager.worldName)
@@ -253,12 +257,13 @@ public class NetworkController
     //! Sends player positions to server.
     private void UpdateNetWorkPlayer(string playerInfo, Color playerColor)
     {
-        string playerName = playerInfo.Split(':')[0].Split(',')[0].TrimStart('"').TrimEnd('"');
-        float x = float.Parse(playerInfo.Split(',')[1]);
-        float y = float.Parse(playerInfo.Split(',')[2]);
-        float z = float.Parse(playerInfo.Split(',')[3]);
-        float fx = float.Parse(playerInfo.Split(',')[4]);
-        float fz = float.Parse(playerInfo.Split(',')[5]);
+        float fx = float.Parse(playerInfo.Split(',')[0].Split(':')[1].Replace("'",""));
+        string playerName = playerInfo.Split(',')[2].Split(':')[1].Replace("'", "");
+        float y = float.Parse(playerInfo.Split(',')[4].Split(':')[1].Replace("'",""));
+        float x = float.Parse(playerInfo.Split(',')[5].Split(':')[1].Replace("'",""));
+        float fz = float.Parse(playerInfo.Split(',')[6].Split(':')[1].Replace("'",""));
+        float z = float.Parse(playerInfo.Split(',')[7].Split(':')[1].Replace("'",""));
+
         if (!playerPositions.ContainsKey(playerName))
         {
             playerPositions.Add(playerName, new Vector3(x, y, z));
