@@ -33,6 +33,7 @@ public class InteractionController : MonoBehaviour
                 if (obj != playerController.gameObject && GuiFree() && !IsNonInteractive(obj))
                 {
                     playerController.objectInSight = obj;
+
                     if (IsStorageContainer(obj) && distance <= 40)
                     {
                         storageInteraction.InteractWithStorageContainer();
@@ -191,7 +192,8 @@ public class InteractionController : MonoBehaviour
     {
         return obj.GetComponent<DarkMatter>() != null
         || obj.GetComponent<UniversalResource>() != null
-        || obj.GetComponent<NetworkPlayer>() != null;
+        || obj.GetComponent<NetworkPlayer>() != null
+        || obj.name.Equals("Bedrock");
     }
 
     //! Returns true if the object in question is a storage container.

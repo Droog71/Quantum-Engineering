@@ -130,7 +130,19 @@ public class InfoHUD : MonoBehaviour
                 machineDisplayOutputID2 = "unassigned";
             }
 
-            if (obj.GetComponent<InventoryManager>() != null && obj.GetComponent<AutoCrafter>() == null && obj.GetComponent<Retriever>() == null && obj != gameObject)
+            if (obj.name.Equals("Bedrock"))
+            {
+                int f = GUI.skin.label.fontSize;
+                GUI.skin.label.fontSize = 16;
+                GUIContent content = new GUIContent("Bedrock");
+                GUIStyle style = GUI.skin.box;
+                style.alignment = TextAnchor.MiddleCenter;
+                Vector2 size = style.CalcSize(content);
+                Rect resourceInfoRect = new Rect((Screen.width / 2) - (size.x / 2.1f), (Screen.height - 70) - (size.y / 2), size.x, size.y);
+                GUI.Label(resourceInfoRect, "Bedrock");
+                GUI.skin.label.fontSize = f;
+            }
+            else if (obj.GetComponent<InventoryManager>() != null && obj.GetComponent<AutoCrafter>() == null && obj.GetComponent<Retriever>() == null && obj != gameObject)
             {
                 if (obj.GetComponent<RailCart>() != null)
                 {

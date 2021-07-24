@@ -157,18 +157,23 @@ public class Rocket : MonoBehaviour
         {
             EnableRenderers();
         }
-        if (Physics.Raycast(transform.position, -transform.up, out RaycastHit hit, 0.5f) || transform.position.y <= -66)
+
+        if (landed == false)
         {
-            landed = true;
-            GetComponent<AudioSource>().enabled = false;
-            exhaust.SetActive(false);
-        }
-        else
-        {
+            GetComponent<Rigidbody>().useGravity = true;
             GetComponent<AudioSource>().enabled = true;
             exhaust.SetActive(true);
-            transform.position -= transform.up * 25 * Time.deltaTime;
+            GetComponent<Rigidbody>().AddForce(-transform.up * 5000);
         }
+    }
+
+    //! Used to handle rocket landing.
+    public void OnCollisionEnter(Collision collision)
+    {
+        GetComponent<Rigidbody>().useGravity = false;
+        GetComponent<AudioSource>().enabled = false;
+        exhaust.SetActive(false);
+        landed = true;
     }
 
     //! Empty the rocket's inventory.
