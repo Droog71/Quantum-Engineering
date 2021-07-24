@@ -133,22 +133,23 @@ public class NetworkReceive
     //! Processes data from block database.
     public IEnumerator<float> ReceiveNetworkBlocks()
     {
-        string[] blockList = networkController.blockData.Split('[');
+        string[] blockList = networkController.blockData.Split('{');
         if (blockList != localBlockList)
         {
             localBlockList = blockList;
             for (int i = 2; i < blockList.Length; i++)
             {
                 string blockInfo = blockList[i];
-                int destroy = int.Parse(blockInfo.Split(',')[0]);
-                string blockType = blockInfo.Split(',')[1].Substring(2).TrimEnd('"');
-                float xPos = float.Parse(blockInfo.Split(',')[2]);
-                float yPos = float.Parse(blockInfo.Split(',')[3]);
-                float zPos = float.Parse(blockInfo.Split(',')[4]);
-                float xRot = float.Parse(blockInfo.Split(',')[5]);
-                float yRot = float.Parse(blockInfo.Split(',')[6]);
-                float zRot = float.Parse(blockInfo.Split(',')[7]);
-                float wRot = float.Parse(blockInfo.Split(',')[8].Split(']')[0]);
+                float wRot = float.Parse(blockInfo.Split(',')[0].Split(':')[1].Replace("'",""));
+                float zRot = float.Parse(blockInfo.Split(',')[1].Split(':')[1].Replace("'",""));
+                float xPos = float.Parse(blockInfo.Split(',')[2].Split(':')[1].Replace("'",""));
+                float yPos = float.Parse(blockInfo.Split(',')[3].Split(':')[1].Replace("'",""));
+                int destroy = int.Parse(blockInfo.Split(',')[4].Split(':')[1].Replace("'",""));
+                float zPos = float.Parse(blockInfo.Split(',')[5].Split(':')[1].Replace("'",""));
+                float xRot = float.Parse(blockInfo.Split(',')[6].Split(':')[1].Replace("'",""));
+                float yRot = float.Parse(blockInfo.Split(',')[7].Split(':')[1].Replace("'",""));
+                string blockType = blockInfo.Split(',')[8].Split(':')[1].Split('}')[0].Replace("'", "");
+                Debug.Log(wRot + "," + zRot + "," + xPos + "," + yPos + "," + destroy + "," + zPos + "," + xRot + "," + yRot + "," + blockType);
                 Vector3 blockPos = new Vector3(xPos, yPos, zPos);
                 Quaternion blockRot = new Quaternion(xRot, yRot, zRot, wRot);
                 bool found = false;
@@ -273,6 +274,7 @@ public class NetworkReceive
                     else if (blockDictionary.machineDictionary.ContainsKey(blockType))
                     {
                         GameObject newObject = Object.Instantiate(blockDictionary.machineDictionary[blockType], blockPos, blockRot);
+                        playerController.gameManager.GetComponent<MachineManager>().AddMachine(newObject.GetComponent<Machine>());
                         if (newObject.GetComponent<RailCart>() != null)
                         {
                             newObject.GetComponent<RailCart>().startPosition = blockPos;
