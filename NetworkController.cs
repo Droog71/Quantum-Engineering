@@ -207,7 +207,6 @@ public class NetworkController
         for (int i=2; i < playerList.Length; i++)
         {
             string playerInfo = playerList[i];
-
             string playerName = playerInfo.Split(',')[0].Split(':')[1].Replace("'", "").TrimStart();
             float x = float.Parse(playerInfo.Split(',')[1].Split(':')[1].Replace("'", ""));
             float y = float.Parse(playerInfo.Split(',')[2].Split(':')[1].Replace("'",""));
@@ -256,7 +255,7 @@ public class NetworkController
     //! Sends player positions to server.
     private void UpdateNetWorkPlayer(string playerInfo, Color playerColor)
     {
-        string playerName = playerInfo.Split(',')[0].Split(':')[1].Replace("'", "");
+        string playerName = playerInfo.Split(',')[0].Split(':')[1].Replace("'", "").TrimStart();
         float x = float.Parse(playerInfo.Split(',')[1].Split(':')[1].Replace("'", ""));
         float y = float.Parse(playerInfo.Split(',')[2].Split(':')[1].Replace("'",""));
         float z = float.Parse(playerInfo.Split(',')[3].Split(':')[1].Replace("'",""));
