@@ -122,7 +122,12 @@ public class MainMenu : MonoBehaviour
     //! Gets the local address for LAN games.
     private string GetLocalAddress()
     {
-        string[] commandLineOptions = Environment.GetCommandLineArgs();
+        string commandLineOptions = Environment.CommandLine;
+        bool devel = commandLineOptions.Contains("-devel");
+        if (devel == true || Application.isEditor || UnityEngine.Debug.isDebugBuild)
+        {
+            return "localhost";
+        }
         string hostName = Dns.GetHostName();
         string address = Dns.GetHostEntry(hostName).AddressList[0].ToString();
         return address;

@@ -140,17 +140,15 @@ public class NetworkReceive
             for (int i = 2; i < blockList.Length; i++)
             {
                 string blockInfo = blockList[i];
-                float wRot = float.Parse(blockInfo.Split(',')[0].Split(':')[1].Replace("'",""));
-                float zRot = float.Parse(blockInfo.Split(',')[1].Split(':')[1].Replace("'",""));
+                int destroy = int.Parse(blockInfo.Split(',')[0].Split(':')[1].Replace("'",""));
+                string blockType = blockInfo.Split(',')[1].Split(':')[1].Replace("'", "").TrimStart();
                 float xPos = float.Parse(blockInfo.Split(',')[2].Split(':')[1].Replace("'",""));
                 float yPos = float.Parse(blockInfo.Split(',')[3].Split(':')[1].Replace("'",""));
-                int destroy = int.Parse(blockInfo.Split(',')[4].Split(':')[1].Replace("'",""));
-                float zPos = float.Parse(blockInfo.Split(',')[5].Split(':')[1].Replace("'",""));
-                float xRot = float.Parse(blockInfo.Split(',')[6].Split(':')[1].Replace("'",""));
-                float yRot = float.Parse(blockInfo.Split(',')[7].Split(':')[1].Replace("'",""));
-                string blockType = blockInfo.Split(',')[8].Split(':')[1].Split('}')[0].Replace("'", "");
-
-                Debug.Log(wRot + "," + zRot + "," + xPos + "," + yPos + "," + destroy + "," + zPos + "," + xRot + "," + yRot + "," + blockType);
+                float zPos = float.Parse(blockInfo.Split(',')[4].Split(':')[1].Replace("'",""));
+                float xRot = float.Parse(blockInfo.Split(',')[5].Split(':')[1].Replace("'",""));
+                float yRot = float.Parse(blockInfo.Split(',')[6].Split(':')[1].Replace("'",""));
+                float zRot = float.Parse(blockInfo.Split(',')[7].Split(':')[1].Replace("'",""));
+                float wRot = float.Parse(blockInfo.Split(',')[8].Split(':')[1].Split('}')[0].Split('"')[1].Split('\'')[0]);
 
                 Vector3 blockPos = new Vector3(xPos, yPos, zPos);
                 Quaternion blockRot = new Quaternion(xRot, yRot, zRot, wRot);
