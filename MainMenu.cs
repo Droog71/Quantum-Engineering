@@ -367,7 +367,13 @@ public class MainMenu : MonoBehaviour
             }
             else
             {
+                string commandLineOptions = Environment.CommandLine;
+                bool devel = commandLineOptions.Contains("-devel");
                 string savePath = Path.Combine(Application.persistentDataPath, "SaveData");
+                if (devel == true || Application.isEditor || UnityEngine.Debug.isDebugBuild)
+                {
+                    savePath = Path.Combine(Application.persistentDataPath, "Downloads");
+                }
                 string saveFileLocation = Path.Combine(savePath + "/" + worldName + ".sav");
                 Directory.CreateDirectory(savePath);
                 File.WriteAllText(saveFileLocation, www.downloadHandler.text);

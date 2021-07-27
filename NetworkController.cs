@@ -274,11 +274,14 @@ public class NetworkController
         if (networkPlayers.ContainsKey(playerName))
         {
             GameObject player = networkPlayers[playerName];
-            player.transform.forward = new Vector3(fx,0,fz);
-            Renderer renderer = player.GetComponentInChildren<Renderer>();
-            if (renderer.material.color != playerColor)
+            if (player != null)
             {
-                SetPlayerColor(player, playerColor);
+                player.transform.forward = new Vector3(fx, 0, fz);
+                Renderer renderer = player.GetComponentInChildren<Renderer>();
+                if (renderer.material.color != playerColor)
+                {
+                    SetPlayerColor(player, playerColor);
+                }
             }
         }
     }

@@ -293,7 +293,15 @@ public class BlockDictionary
             { "Iron Ramp", typeof (Block) },
             { "Steel Block", typeof (Block) },
             { "Steel Ramp", typeof (Block) },
-            { "Protection Block", typeof (ProtectionBlock) }
+            { "Protection Block", typeof (ProtectionBlock) },
+            { "Logic Block", typeof (LogicBlock) },
+            { "Logic Inverter", typeof (LogicInverter) },
+            { "Logic Delayer", typeof (LogicDelayer) },
+            { "Logic Splitter", typeof (LogicSplitter) },
+            { "Player Detector", typeof (PlayerDetector) },
+            { "Power Detector", typeof (PowerDetector) },
+            { "Item Detector", typeof (ItemDetector) },
+            { "Relay", typeof (Relay) }
         };
     }
 }
