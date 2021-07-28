@@ -3,6 +3,7 @@ using MEC;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine.SceneManagement;
+using System;
 
 //! This is the core class for the player which handles most of the player's interactions with the game.
 public class PlayerController : MonoBehaviour
@@ -884,8 +885,11 @@ public class PlayerController : MonoBehaviour
                 {
                     Debug.Log("Game saved to " + FileBasedPrefs.GetSaveFilePath());
                     Debug.Log("Creating backup...");
-                    string fileName = GameObject.Find("GameManager").GetComponent<StateManager>().worldName;
-                    string destinationPath = Path.Combine(Application.persistentDataPath, "SaveData/" + fileName + ".bak");
+                    string worldName = GameObject.Find("GameManager").GetComponent<StateManager>().worldName;
+                    string backupPath = Path.Combine(Application.persistentDataPath, "SaveData/" + worldName);
+                    Directory.CreateDirectory(backupPath);
+                    string backupFile = DateTime.Now.ToString().Replace('/', '_') + ".bak";
+                    string destinationPath = Path.Combine(backupPath, backupFile);
                     File.Copy(FileBasedPrefs.GetSaveFilePath(), destinationPath, true);
                     Debug.Log("Backup saved to " + destinationPath);
                     if (GameObject.Find("Player").GetComponent<PlayerController>().exiting == true)

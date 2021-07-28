@@ -849,16 +849,14 @@ public class MainMenu : MonoBehaviour
                 if (GUI.Button(deletePromptButton1Rect, "Yes"))
                 {
                     buttonSounds.Play();
-                    string savePath = Path.Combine(Application.persistentDataPath, "SaveData");
-                    Directory.CreateDirectory(savePath);
+                    string saveDataPath = Path.Combine(Application.persistentDataPath, "SaveData");
+                    Directory.CreateDirectory(saveDataPath);
                     string savFile = "SaveData/" + worldName + ".sav";
-                    string bakFile = "SaveData/" + worldName + ".bak";
                     string savPath = Path.Combine(Application.persistentDataPath, savFile);
-                    string bakPath = Path.Combine(Application.persistentDataPath, bakFile);
-                    string saveDataPath = Path.Combine(Application.persistentDataPath, "SaveData" + "/" + worldName);
-                    Directory.Delete(saveDataPath, true);
+                    string backupPath = Path.Combine(Application.persistentDataPath, "SaveData" + "/" + worldName);
+                    Directory.CreateDirectory(backupPath);
                     File.Delete(savPath);
-                    File.Delete(bakPath);
+                    Directory.Delete(backupPath, true);
                     worldList = worlds.ToList();
                     foreach (string w in worlds)
                     {
