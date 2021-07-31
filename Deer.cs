@@ -27,7 +27,7 @@ public class Deer : MonoBehaviour
     {
         if (coroutineBusy == false && stateManager.worldLoaded == true && !stateManager.Busy())
         {
-            Timing.RunCoroutine(Think());
+            Timing.RunCoroutine(Think().CancelWith(gameObject));
         }
     }
 
