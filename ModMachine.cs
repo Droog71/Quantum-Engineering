@@ -34,6 +34,24 @@ public class ModMachine : BasicMachine
                     GetComponent<MeshFilter>().mesh = blockDictionary.meshDictionary[machineName];
                 }
             }
+
+            if (!gameManager.materialDictionary.ContainsKey(machineName))
+            {
+                if (gameManager.textureDictionary.dictionary.ContainsKey(machineName))
+                {
+                    Material mat = new Material(Shader.Find("Standard"));
+                    mat.mainTexture = gameManager.textureDictionary.dictionary[machineName];
+                    if (gameManager.textureDictionary.dictionary.ContainsKey(machineName + "_Normal"))
+                    {
+                        mat.shaderKeywords = new string[] { "_NORMALMAP" };
+                        mat.SetTexture("_BumpMap", gameManager.textureDictionary.dictionary[machineName + "_Normal"]);
+                        mat.SetFloat("_BumpScale", 2);
+                        mat.enableInstancing = true;
+                    }
+                    gameManager.materialDictionary.Add(machineName, mat);
+                }
+            }
+
             gameManager.meshManager.SetMaterial(gameObject, machineName);
             Timing.RunCoroutine(GetAudioFile(this, GetComponent<AudioSource>(), machineName));
             init = true;
