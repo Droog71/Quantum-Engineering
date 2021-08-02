@@ -185,14 +185,12 @@ public class CombinedMeshManager
                         }
                     }
                 }
-                if (stateManager.worldLoaded == true)
+
+                combineInterval++;
+                if (combineInterval >= 250)
                 {
-                    combineInterval++;
-                    if (combineInterval >= 250)
-                    {
-                        combineInterval = 0;
-                        yield return Timing.WaitForOneFrame;
-                    }
+                    combineInterval = 0;
+                    yield return Timing.WaitForOneFrame;
                 }
             }
             blockHolderCount = 0;
@@ -223,14 +221,18 @@ public class CombinedMeshManager
         {
             foreach (GameObject holder in gameManager.blockHolders[i])
             {
+                BlockHolder blockHolder = holder.GetComponent<BlockHolder>();
                 Block[] blocks = holder.GetComponentsInChildren<Block>(false);
+
                 if (blocks.Length > 0)
                 {
-                    CreateCombinedMesh(holder);
-                    if (stateManager.worldLoaded == true)
+                    while (blockHolder.unloaded == true)
                     {
+                        blockHolder.Load();
                         yield return Timing.WaitForOneFrame;
                     }
+
+                    CreateCombinedMesh(holder);
                 }
             }
         }
