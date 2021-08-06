@@ -72,7 +72,7 @@ public class MachineInteraction
                     playerController.doorGUIopen = false;
                 }
             }
-            else
+            else if (door.coroutineBusy == false)
             {
                 door.GetComponent<AudioSource>().Play();
                 door.ToggleOpen();

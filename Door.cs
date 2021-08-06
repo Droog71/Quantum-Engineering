@@ -13,20 +13,24 @@ public class Door : Machine
     public GameObject openObject;
     public GameObject closedObject;
     public GameObject effects;
+    private List<Door> adjacentDoorBlockList;
+    private Door[] adjacentDoorBlockArray;
     private List<string> textureList;
     public string[] textures;
     public int textureIndex;
     public string material;
     public int audioClip;
     public bool edited;
+    public bool coroutineBusy;
     private bool init;
-    private bool coroutineBusy;
+
 
     //! Called by unity engine on start up to initialize variables.
     public void Start()
     {
         audioClips = new AudioClip[] { clip1, clip2, clip3 };
         stateManager = FindObjectOfType<StateManager>();
+        adjacentDoorBlockList = new List<Door>();
         textureList = new List<string>();
         textureList.Add("Door");
         Dictionary<string, Texture2D> textureDictionary = GameObject.Find("GameManager").GetComponent<TextureDictionary>().dictionary;
@@ -60,6 +64,7 @@ public class Door : Machine
         }
     }
 
+    //! Opens or closes the door.
     private IEnumerator<float> ToggleDoor()
     {
         coroutineBusy = true;
@@ -69,18 +74,41 @@ public class Door : Machine
             closedObject.SetActive(false);
             GetComponent<Collider>().isTrigger = true;
             open = true;
-            Door[] doors = Object.FindObjectsOfType<Door>();
-            foreach (Door d in doors)
+
+            if (adjacentDoorBlockList.Count < 1)
             {
-                if (d.type == type)
+                adjacentDoorBlockArray = FindObjectsOfType<Door>();
+                foreach (Door d in adjacentDoorBlockArray)
                 {
-                    float distance = Vector3.Distance(transform.position, d.transform.position);
-                    if (distance <= 5 && d.open != open)
+                    if (d.type == type)
                     {
-                        d.ToggleOpen();
+                        float distance = Vector3.Distance(transform.position, d.transform.position);
+                        if (distance <= 5 && d != this)
+                        {
+                            adjacentDoorBlockList.Add(d);
+                            if (d.open != open)
+                            {
+                                d.ToggleOpen();
+                            }
+                        }
+                    }
+                    yield return Timing.WaitForOneFrame;
+                }
+            }
+            else
+            {
+                adjacentDoorBlockArray = adjacentDoorBlockList.ToArray();
+                while (!Toggled())
+                {
+                    foreach (Door d in adjacentDoorBlockArray)
+                    {
+                        if (d.open != open)
+                        {
+                            d.ToggleOpen();
+                        }
+                        yield return Timing.WaitForOneFrame;
                     }
                 }
-                yield return Timing.WaitForOneFrame;
             }
         }
         else
@@ -89,21 +117,59 @@ public class Door : Machine
             closedObject.SetActive(true);
             GetComponent<Collider>().isTrigger = false;
             open = false;
-            Door[] doors = Object.FindObjectsOfType<Door>();
-            foreach (Door d in doors)
+
+            if (adjacentDoorBlockList.Count < 1)
             {
-                if (d.type == type)
+                adjacentDoorBlockArray = FindObjectsOfType<Door>();
+                foreach (Door d in adjacentDoorBlockArray)
                 {
-                    float distance = Vector3.Distance(transform.position, d.transform.position);
-                    if (distance <= 5 && d.open != open)
+                    if (d.type == type)
                     {
-                        d.ToggleOpen();
+                        float distance = Vector3.Distance(transform.position, d.transform.position);
+                        if (distance <= 5 && d != this)
+                        {
+                            adjacentDoorBlockList.Add(d);
+                            if (d.open != open)
+                            {
+                                d.ToggleOpen();
+                            }
+                        }
+                    }
+                    yield return Timing.WaitForOneFrame;
+                }
+            }
+            else
+            {
+                adjacentDoorBlockArray = adjacentDoorBlockList.ToArray();
+                while (!Toggled())
+                {
+                    foreach (Door d in adjacentDoorBlockArray)
+                    {
+                        if (d.open != open)
+                        {
+                            d.ToggleOpen();
+                        }
+                        yield return Timing.WaitForOneFrame;
                     }
                 }
-                yield return Timing.WaitForOneFrame;
             }
         }
+
         coroutineBusy = false;
+    }
+
+    //! Returns true if all adjacent door blocks open variable match this one.
+    private bool Toggled()
+    {
+        foreach (Door d in adjacentDoorBlockArray)
+        {
+            if (d != this && d.open != open)
+            {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     //! Toggle the open or closed state of the hatchway.
