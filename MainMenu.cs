@@ -21,6 +21,10 @@ public class MainMenu : MonoBehaviour
     public Texture2D guiBackground;
     public Texture2D worldListBackground;
     public Texture2D playerModel;
+    public Texture2D scene1;
+    public Texture2D scene2;
+    public Texture2D scene3;
+    public Texture2D scene4;
     private Texture2D colorSelectTexture;
     public GameObject videoPlayer;
     public GameObject menuSoundObject;
@@ -577,6 +581,11 @@ public class MainMenu : MonoBehaviour
         Rect scenePromptButton2Rect = new Rect((ScreenWidth * 0.38f), (ScreenHeight * 0.22f), (ScreenWidth * 0.10f), (ScreenHeight * 0.05f));
         Rect scenePromptButton3Rect = new Rect((ScreenWidth * 0.50f), (ScreenHeight * 0.22f), (ScreenWidth * 0.10f), (ScreenHeight * 0.05f));
         Rect scenePromptButton4Rect = new Rect((ScreenWidth * 0.62f), (ScreenHeight * 0.22f), (ScreenWidth * 0.10f), (ScreenHeight * 0.05f));
+
+        Rect sceneDescriptionBackgroundRect = new Rect((ScreenWidth * 0.04f), (ScreenHeight * 0.6f), (ScreenWidth * 0.30f), (ScreenHeight * 0.35f));
+        Rect scenePreviewRect = new Rect((ScreenWidth * 0.64f), (ScreenHeight * 0.6f), (ScreenWidth * 0.30f), (ScreenHeight * 0.35f));
+        Rect sceneDescriptionRect = new Rect((ScreenWidth * 0.08f), (ScreenHeight * 0.64f), (ScreenWidth * 0.22f), (ScreenHeight * 0.31f));
+
         Rect creativeButtonRect = new Rect((ScreenWidth / 2) - (ScreenWidth * 0.025f), (ScreenHeight * 0.30f), (ScreenWidth * 0.014f), (ScreenHeight * 0.0225f));
         Rect creativeLabelrect = new Rect((ScreenWidth / 2), (ScreenHeight * 0.299f), (ScreenWidth * 0.12f), (ScreenHeight * 0.05f));
 
@@ -800,11 +809,13 @@ public class MainMenu : MonoBehaviour
                 Rect messagePos = new Rect((Screen.width / 2) - (size.x / 2.2f), ScreenHeight * 0.18f, size.x, size.y);
                 GUI.Label(messagePos, "Choose location.");
                 GUI.skin.label.fontSize = f;
+
                 if (GUI.Button(scenePromptButton1Rect, "Kepler-1625"))
                 {
                     buttonSounds.Play();
                     StartGame();
                 }
+
                 if (GUI.Button(scenePromptButton2Rect, "Kepler-452b"))
                 {
                     buttonSounds.Play();
@@ -812,6 +823,7 @@ public class MainMenu : MonoBehaviour
                     FileBasedPrefs.SetInt(worldName + "scene", scene);
                     ChangeScene();
                 }
+
                 if (GUI.Button(scenePromptButton3Rect, "Gliese 876"))
                 {
                     buttonSounds.Play();
@@ -819,6 +831,7 @@ public class MainMenu : MonoBehaviour
                     FileBasedPrefs.SetInt(worldName + "scene", scene);
                     ChangeScene();
                 }
+
                 if (GUI.Button(scenePromptButton4Rect, "Procedural"))
                 {
                     buttonSounds.Play();
@@ -826,6 +839,38 @@ public class MainMenu : MonoBehaviour
                     FileBasedPrefs.SetInt(worldName + "scene", scene);
                     ChangeScene();
                 }
+
+                GUI.skin.label.fontSize = 14;
+
+                if (scenePromptButton1Rect.Contains(Event.current.mousePosition))
+                {
+                    GUI.DrawTexture(sceneDescriptionBackgroundRect, guiBackground);
+                    GUI.DrawTexture(scenePreviewRect, scene1);
+                    GUI.Label(sceneDescriptionRect, "A moon similar to Earth's moon, devoid of flora and fauna with no atmosphere.");
+                }
+
+                if (scenePromptButton2Rect.Contains(Event.current.mousePosition))
+                {
+                    GUI.DrawTexture(sceneDescriptionBackgroundRect, guiBackground);
+                    GUI.DrawTexture(scenePreviewRect, scene2);
+                    GUI.Label(sceneDescriptionRect, "A planetary location similar to Earth in an area with a temperate climate.");
+                }
+
+                if (scenePromptButton3Rect.Contains(Event.current.mousePosition))
+                {
+                    GUI.DrawTexture(sceneDescriptionBackgroundRect, guiBackground);
+                    GUI.DrawTexture(scenePreviewRect, scene3);
+                    GUI.Label(sceneDescriptionRect, "An atmospheric, alien planet with unusual flora and a colorful landscape.");
+                }
+
+                if (scenePromptButton4Rect.Contains(Event.current.mousePosition))
+                {
+                    GUI.DrawTexture(sceneDescriptionBackgroundRect, guiBackground);
+                    GUI.DrawTexture(scenePreviewRect, scene4);
+                    GUI.Label(sceneDescriptionRect, "A jungle environment with voxel terrain. Ores and other resources spawn underground and can only be reached by digging.");
+                }
+
+                GUI.skin.label.fontSize = f;
 
                 GUI.Label(creativeLabelrect, "Creative Mode");
                 bool creativeMode = FileBasedPrefs.GetBool(worldName + "creativeMode");

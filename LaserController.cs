@@ -18,6 +18,17 @@ public class LaserController
         return playerController.timeToDeliver == false && playerController.meteorShowerWarningActive == false && playerController.pirateAttackWarningActive == false;
     }
 
+    //! Returns true if the game object is parented to a combined mesh object.
+    private bool CombinedMeshParent(GameObject target)
+    {
+        if (target.transform.parent != null)
+        {
+            return target.transform.parent.tag.Equals("CombinedMesh");
+        }
+
+        return false;
+    }
+
     //! Called when the player's laser cannon shoots something.
     public void HitTarget(GameObject target,RaycastHit hit)
     {
@@ -78,7 +89,7 @@ public class LaserController
             }
         }
 
-        if (target.tag.Equals("CombinedMesh") || target.transform.parent.tag.Equals("CombinedMesh"))
+        if (target.tag.Equals("CombinedMesh") || CombinedMeshParent(target))
         {
             BlockHolder blockHolder = target.GetComponent<BlockHolder>();
 

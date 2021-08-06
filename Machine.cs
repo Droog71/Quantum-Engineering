@@ -23,7 +23,7 @@ public class Machine : MonoBehaviour
     //! Destroyes the object and spawns explosion effects.
     public void Explode()
     {
-        Instantiate(gameManager.machineExplosion, transform.position, transform.rotation);
+        Instantiate(gameManager.machineExplosion, transform.position + (Vector3.up * 10), transform.rotation);
         if (PlayerPrefsX.GetPersistentBool("multiplayer") == true)
         {
             if (GetComponent<Block>() != null)
