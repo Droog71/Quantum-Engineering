@@ -18,14 +18,14 @@ public class PlayerDetector : LogicBlock
         foreach (NetworkPlayer netWorkPlayer in networkPlayers)
         {
             float networkPlayerDistance = Vector3.Distance(netWorkPlayer.transform.position, transform.position);
-            if (networkPlayerDistance < 10)
+            if (networkPlayerDistance < 20)
             {
                 detected = true;
                 break;
             }
         }
 
-        if (Vector3.Distance(transform.position, player.transform.position) < 10)
+        if (Vector3.Distance(transform.position, player.transform.position) < 20)
         {
             detected = true;
         }
