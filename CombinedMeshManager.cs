@@ -128,18 +128,19 @@ public class CombinedMeshManager
         int combineInterval = 0;
         int blockHolderCount = 0;
         int blockCount = 0;
-        int blockIndex = 0;
 
-        foreach (string blockType in gameManager.blockNames)
+        for (int typeIndex = 0; typeIndex < gameManager.blockHolders.Count; typeIndex++)
         {
+            string blockType = gameManager.blockHolders[typeIndex][0].GetComponent<BlockHolder>().blockType;
             Block[] allBlocks = gameManager.builtObjects.GetComponentsInChildren<Block>(false);
+
             foreach (Block block in allBlocks)
             {
                 if (block != null)
                 {
                     if (block.blockName == blockType)
                     {
-                        GameObject[] currentBlockType = gameManager.blockHolders[blockIndex];
+                        GameObject[] currentBlockType = gameManager.blockHolders[typeIndex];
                         block.transform.parent = currentBlockType[blockHolderCount].transform;
                         BlockHolder bh = currentBlockType[blockHolderCount].GetComponent<BlockHolder>();
 
@@ -179,7 +180,7 @@ public class CombinedMeshManager
                                 blockHolder.GetComponent<BlockHolder>().blockType = blockType;
                                 blockHolder.SetActive(false);
                                 blockList.Add(blockHolder);
-                                gameManager.blockHolders[blockIndex] = blockList.ToArray();
+                                gameManager.blockHolders[typeIndex] = blockList.ToArray();
                             }
                             blockHolderCount++;
                         }
@@ -194,7 +195,6 @@ public class CombinedMeshManager
                 }
             }
             blockHolderCount = 0;
-            blockIndex++;
         }
         combineInterval = 0;
 

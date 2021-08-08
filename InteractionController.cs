@@ -209,7 +209,7 @@ public class InteractionController : MonoBehaviour
     //! Destroys an object in the world and adds it's associated inventory item to the player's inventory.
     public bool CollectObject(GameObject obj, string type)
     {
-        bool canRemove = true;
+        bool canRemove = !playerController.gameManager.combiningBlocks;
 
         if (PlayerPrefsX.GetPersistentBool("multiplayer") == true)
         {

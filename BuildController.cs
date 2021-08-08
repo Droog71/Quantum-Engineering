@@ -7,8 +7,9 @@ public class BuildController : MonoBehaviour
 {
     private PlayerController playerController;
     private GameManager gameManager;
-    public BlockDictionary blockDictionary;
     private LineRenderer dirLine;
+    private bool buildBlockCoroutineBusy;
+    public BlockDictionary blockDictionary;
     public Material lineMat;
     public GameObject builtObjects;
     public AudioClip singleBuildClip;
@@ -490,14 +491,18 @@ public class BuildController : MonoBehaviour
     //! Starts the building coroutine.
     private void BuildBlock(string type)
     {
-        gameManager.undoBlocks.Clear();
-        Timing.RunCoroutine(BuildBlockCoroutine(type));
+        if (buildBlockCoroutineBusy == false)
+        {
+            buildBlockCoroutineBusy = true;
+            gameManager.undoBlocks.Clear();
+            Timing.RunCoroutine(BuildBlockCoroutine(type));
+        }
     }
 
     //! Places standard building blocks in the world.
     private IEnumerator<float> BuildBlockCoroutine(string type)
     {
-        bool canBuild = true;
+        bool canBuild = !gameManager.combiningBlocks;
 
         if (PlayerPrefsX.GetPersistentBool("multiplayer") == true)
         {
@@ -581,5 +586,7 @@ public class BuildController : MonoBehaviour
         {
             playerController.PlayMissingItemsSound();
         }
+
+        buildBlockCoroutineBusy = false;
     }
 }
