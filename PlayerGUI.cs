@@ -767,7 +767,7 @@ public class PlayerGUI : MonoBehaviour
                     GUI.DrawTexture(guiCoordinates.buildInfoRectBG, textureDictionary.dictionary["Interface Background"]);
                     int f = GUI.skin.label.fontSize;
                     GUI.skin.label.fontSize = 14;
-                    GUI.Label(guiCoordinates.buildInfoRect, "Right click to place block.\nPress F to collect.\nPress R or Ctrl+R to rotate.\nPress V to change axi.\nPress Y to toggle auto axis selection.\nPress B to stop building.");
+                    GUI.Label(guiCoordinates.buildInfoRect, "Right click to place block.\nPress F to collect.\nPress R or Ctrl+R to rotate.\nPress V to change axis.\nPress Y to toggle auto axis selection.\nPress B to stop building.");
                     GUI.skin.label.fontSize = f;
                 }
             }

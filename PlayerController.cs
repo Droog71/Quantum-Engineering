@@ -827,19 +827,12 @@ public class PlayerController : MonoBehaviour
     //! Used to handle walking up stairs.
     public void OnCollisionStay(Collision collision)
     {
-        if (collision.gameObject.name == "modBlockHolder(Clone)")
+        if (collision.gameObject.GetComponent<BlockHolder>() != null)
         {
-            Transform[] transforms = collision.gameObject.GetComponentsInChildren<Transform>(true);
-            foreach (Transform t in transforms)
+            string blockName = collision.gameObject.GetComponent<BlockHolder>().blockType.ToUpper();
+            if (blockName.Contains("STAIR"))
             {
-                if (t.GetComponent<Block>() != null)
-                {
-                    string blockName = t.GetComponent<Block>().blockName.ToUpper();
-                    if (blockName.Contains("STAIR"))
-                    {
-                        GetComponent<Rigidbody>().AddForce(Vector3.up * 1000);
-                    }
-                }
+                GetComponent<Rigidbody>().AddForce(Vector3.up * 10000);
             }
         }
         else if (collision.gameObject.GetComponent<Block>() != null)
@@ -847,7 +840,7 @@ public class PlayerController : MonoBehaviour
             string blockName = collision.gameObject.GetComponent<Block>().blockName.ToUpper();
             if (blockName.Contains("STAIR"))
             {
-                GetComponent<Rigidbody>().AddForce(Vector3.up * 1000);
+                GetComponent<Rigidbody>().AddForce(Vector3.up * 10000);
             }
         }
     }
