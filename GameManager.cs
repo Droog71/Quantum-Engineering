@@ -24,7 +24,6 @@ public class GameManager : MonoBehaviour
     public GameObject builtObjects;
     public Material glassMaterial;
     public Mesh rampMesh;
-    public int chunkSize;
     public float simulationSpeed;
     public bool hazardsEnabled = true;
     public float meteorTimer;
@@ -91,10 +90,6 @@ public class GameManager : MonoBehaviour
         // Create block lists.
         blockNames = new List<string>();
         blockHolders = new List<GameObject[]>();
-
-        // Load chunk size setting.
-        int cs = PlayerPrefs.GetInt("chunkSize");
-        chunkSize = cs > 0 ? cs : 40;
 
         // Load chunk size setting.
         float simSpeed = PlayerPrefs.GetFloat("simulationSpeed");

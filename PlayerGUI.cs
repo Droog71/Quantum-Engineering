@@ -531,32 +531,22 @@ public class PlayerGUI : MonoBehaviour
 
                     GUI.Label(guiCoordinates.sliderLabel1Rect, "Audio Volume");
 
-                    GUI.Label(guiCoordinates.sliderLabel2Rect, "Chunk Size " + "(" + gameManager.chunkSize + ")");
-
                     int simSpeed = (int)(gameManager.simulationSpeed * 5000);
-                    GUI.Label(guiCoordinates.sliderLabel3Rect, "Simulation Speed " + "(" + simSpeed + "%)");
+                    GUI.Label(guiCoordinates.sliderLabel2Rect, "Simulation Speed " + "(" + simSpeed + "%)");
 
                     AudioListener.volume = GUI.HorizontalSlider(guiCoordinates.optionsButton4Rect, AudioListener.volume, 0, 5);
                     GetComponent<MSCameraController>().cameras[0].volume = AudioListener.volume;
 
-                    gameManager.chunkSize = (int)GUI.HorizontalSlider(guiCoordinates.optionsButton5Rect, gameManager.chunkSize, 20, 100);
+                    gameManager.simulationSpeed = GUI.HorizontalSlider(guiCoordinates.optionsButton5Rect, gameManager.simulationSpeed, 0.0051f, 0.1f);
 
                     if (guiCoordinates.optionsButton5Rect.Contains(mousePos))
-                    {
-                        GUI.DrawTexture(guiCoordinates.craftingInfoBackgroundRect, textureDictionary.dictionary["Interface Background"]);
-                        GUI.Label(guiCoordinates.craftingInfoRect, descriptions.chunkSize);
-                    }
-
-                    gameManager.simulationSpeed = GUI.HorizontalSlider(guiCoordinates.optionsButton6Rect, gameManager.simulationSpeed, 0.0051f, 0.1f);
-
-                    if (guiCoordinates.optionsButton6Rect.Contains(mousePos))
                     {
                         GUI.DrawTexture(guiCoordinates.craftingInfoBackgroundRect, textureDictionary.dictionary["Interface Background"]);
                         GUI.Label(guiCoordinates.craftingInfoRect, descriptions.simulationSpeed);
                     }
 
                     string hazardsEnabledDisplay = gameManager.hazardsEnabled == true ? "ON" : "OFF";
-                    if (GUI.Button(guiCoordinates.optionsButton7Rect, "Hazards: " + hazardsEnabledDisplay))
+                    if (GUI.Button(guiCoordinates.optionsButton6Rect, "Hazards: " + hazardsEnabledDisplay))
                     {
                         if (PlayerPrefsX.GetPersistentBool("multiplayer") == false)
                         {
@@ -570,7 +560,7 @@ public class PlayerGUI : MonoBehaviour
                         playerController.PlayButtonSound();
                     }
 
-                    if (guiCoordinates.optionsButton7Rect.Contains(mousePos))
+                    if (guiCoordinates.optionsButton6Rect.Contains(mousePos))
                     {
                         GUI.DrawTexture(guiCoordinates.craftingInfoBackgroundRect, textureDictionary.dictionary["Interface Background"]);
                         GUI.Label(guiCoordinates.craftingInfoRect, descriptions.hazards);

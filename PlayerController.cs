@@ -585,7 +585,6 @@ public class PlayerController : MonoBehaviour
         PlayerPrefsX.SetPersistentBool("hazardsEnabled", gameManager.hazardsEnabled);
         PlayerPrefsX.SetPersistentBool("fogEnabled", RenderSettings.fog);
         PlayerPrefs.SetFloat("fogDensity", RenderSettings.fogDensity);
-        PlayerPrefs.SetInt("chunkSize", gameManager.chunkSize);
         PlayerPrefs.SetFloat("simulationSpeed", gameManager.simulationSpeed);
         PlayerPrefs.SetInt("defaultRange", defaultRange);
         PlayerPrefs.SetInt("vSyncCount", QualitySettings.vSyncCount);
@@ -773,7 +772,7 @@ public class PlayerController : MonoBehaviour
         if (remoteStorageActive == false)
         {
             float distance = Vector3.Distance(transform.position, storageInventory.gameObject.transform.position);
-            if (distance > 40)
+            if (distance > 45)
             {
                 storageGUIopen = false;
                 inventoryOpen = false;
@@ -782,7 +781,7 @@ public class PlayerController : MonoBehaviour
         else
         {
             float distance = Vector3.Distance(transform.position, currentStorageComputer.transform.position);
-            if (distance > 40)
+            if (distance > 45)
             {
                 storageGUIopen = false;
                 inventoryOpen = false;

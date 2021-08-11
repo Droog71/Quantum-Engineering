@@ -24,9 +24,8 @@ public class InteractionController : MonoBehaviour
         if (!playerController.stateManager.Busy())
         {
             // Raycast and associated data for interacting with machines and other objects.
-            float range = playerController.gameManager.chunkSize * 0.75f;
             Transform camPos = Camera.main.gameObject.transform;
-            if (Physics.Raycast(camPos.position, camPos.forward, out RaycastHit hit, range))
+            if (Physics.Raycast(camPos.position, camPos.forward, out RaycastHit hit, 45))
             {
                 float distance = Vector3.Distance(camPos.position, hit.point);
                 GameObject obj = hit.collider.gameObject;

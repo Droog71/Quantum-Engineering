@@ -154,17 +154,11 @@
     " All players within range will be added to the authorized user list for that protection block." +
     " Each player is limited to 16 protection blocks, regardless of the number of users associated with the block.";
 
-    public string chunkSize = "This setting adjusts the size of chunks loaded around the player." +
-    " A 'chunk' is an area of blocks separated from their combined mesh to allow editing by the player." +
-    " Blocks farther from the player that are not within the loaded chunk are combined into a single object." +
-    " A smaller chunk size will increase the game's performance." +
-    " A larger chunk size will allow you to modify structures you have built from a greater distance.";
-
     public string hazards = "With hazards enabled, your base will be impacted by meteor showers and attacked by hostile spacecraft." +
     "You will need to shoot down meteors with your laser cannon and build turrets to defend your base.";
 
-    public string simulationSpeed = "This setting affects the frequency of machine operations and block physics updates. " +
-    "Lower simulation speeds increase the game's performance. Higher speeds cause machines to generate items faster.";
+    public string simulationSpeed = "This setting affects the frequency of machine operations." +
+    " Lower simulation speeds increase the game's performance. Higher speeds cause machines to generate items faster.";
 
     public string logicBlock = "Transmits and receives logic signals.";
 

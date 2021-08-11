@@ -38,11 +38,11 @@ public class BuildController : MonoBehaviour
                 }
                 else
                 {
-                    if (Physics.Raycast(Camera.main.gameObject.transform.position, Camera.main.gameObject.transform.forward, out RaycastHit hit, gameManager.chunkSize))
+                    if (Physics.Raycast(Camera.main.gameObject.transform.position, Camera.main.gameObject.transform.forward, out RaycastHit hit, 60))
                     {
                         float distance = Vector3.Distance(transform.position, playerController.buildObject.transform.position);
                         Material buildObjectMaterial = playerController.buildObject.GetComponent<MeshRenderer>().material;
-                        buildObjectMaterial.color = distance > gameManager.chunkSize * 0.75f ? Color.red : Color.white;
+                        buildObjectMaterial.color = distance > 45 ? Color.red : Color.white;
                         if (hit.collider.gameObject.tag == "Built" || hit.collider.gameObject.tag == "Machine")
                         {
                             if (autoAxis == true)
@@ -79,7 +79,7 @@ public class BuildController : MonoBehaviour
                             SetupFreePlacement(hit);
                         }
                     }
-                    if (Physics.Raycast(Camera.main.gameObject.transform.position, Camera.main.gameObject.transform.forward, out RaycastHit buildHit, gameManager.chunkSize * 0.75f))
+                    if (Physics.Raycast(Camera.main.gameObject.transform.position, Camera.main.gameObject.transform.forward, out RaycastHit buildHit, 45))
                     {
                         playerController.buildObject.GetComponent<MeshRenderer>().material.color = Color.white;
                         if (cInput.GetKeyDown("Place Object"))
