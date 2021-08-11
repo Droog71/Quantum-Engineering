@@ -218,7 +218,14 @@ public class InfoHUD : MonoBehaviour
             }
             else if (obj.GetComponent<Door>() != null)
             {
-                GUI.Label(guiCoordinates.messageRect, obj.GetComponent<Door>().type + "\nPress E to operate." + "\nPress Ctrl+E to edit." + "\nPress F to Collect.");
+                if (obj.GetComponent<Door>().type != "Quantum Hatchway")
+                {
+                    GUI.Label(guiCoordinates.messageRect, obj.GetComponent<Door>().type + "\nPress E to operate." + "\nPress Ctrl+E to edit." + "\nPress F to Collect.");
+                }
+                else
+                {
+                    GUI.Label(guiCoordinates.messageRect, obj.GetComponent<Door>().type + "\nPress E to operate." + "\nPress F to Collect.");
+                }
             }
             else if (obj.GetComponent<StorageComputer>() != null)
             {

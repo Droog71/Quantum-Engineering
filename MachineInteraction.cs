@@ -61,7 +61,7 @@ public class MachineInteraction
                     return;
                 }
             }
-            if (Input.GetKey(KeyCode.LeftControl))
+            if (Input.GetKey(KeyCode.LeftControl) && door.type != "Quantum Hatchway")
             {
                 if (!playerController.GuiOpen())
                 {
