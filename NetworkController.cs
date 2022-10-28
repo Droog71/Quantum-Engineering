@@ -181,6 +181,7 @@ public class NetworkController
     {
         return networkReceive.conduitDataCoroutineBusy == false &&
         networkReceive.powerDataCoroutineBusy == false &&
+        networkReceive.genDataCoroutineBusy == false &&
         networkReceive.machineDataCoroutineBusy == false &&
         networkReceive.hubDataCoroutineBusy == false &&
         networkReceive.hazardDataCoroutineBusy == false &&
