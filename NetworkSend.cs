@@ -13,6 +13,7 @@ public class NetworkSend
 {
     private NetworkController networkController;
     private PlayerController playerController;
+    private bool genCoroutineBusy;
     private bool conduitCoroutineBusy;
     private bool machineCoroutineBusy;
     private bool hubCoroutineBusy;
@@ -184,6 +185,25 @@ public class NetworkSend
                 client.UploadStringAsync(uri, "POST", "@" + x + "," + y + "," + z + ":" + range + "," + dual);
             }
             conduitCoroutineBusy = false;
+        }
+    }
+
+    //! Sends power source range to the server when changed by the player.
+    public IEnumerator<float> SendGenData(Vector3 pos, int range)
+    {
+        if (genCoroutineBusy == false)
+        {
+            genCoroutineBusy = true;
+            yield return Timing.WaitForSeconds(0.5f);
+            float x = Mathf.Round(pos.x);
+            float y = Mathf.Round(pos.y); 
+            float z = Mathf.Round(pos.z); 
+            using (WebClient client = new WebClient())
+            {
+                Uri uri = new Uri(networkController.serverURL+"/gen");
+                client.UploadStringAsync(uri, "POST", "@" + x + "," + y + "," + z + ":" + range);
+            }
+            genCoroutineBusy = false;
         }
     }
 

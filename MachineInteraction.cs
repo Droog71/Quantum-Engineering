@@ -194,6 +194,21 @@ public class MachineInteraction
         {
             playerController.digTime = 0;
         }
+
+        if (cInput.GetKeyDown("Interact"))
+        {
+            if (PlayerPrefsX.GetPersistentBool("multiplayer") == true)
+            {
+                if (!interactionController.CanInteract())
+                {
+                    return;
+                }
+            }
+            if (logicBlock is LogicSwitch)
+            {
+                logicBlock.logic = !logicBlock.logic;
+            }
+        }
     }
 
     //! Called when the player is looking at a power conduit.

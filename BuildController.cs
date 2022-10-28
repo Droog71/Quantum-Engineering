@@ -354,6 +354,16 @@ public class BuildController : MonoBehaviour
                                         Timing.RunCoroutine(net.SendConduitData(location,playerController.defaultRange));
                                     }
                                 }
+                                if (obj.GetComponent<PowerSource>() != null)
+                                {
+                                    obj.GetComponent<PowerSource>().range = playerController.defaultRange;
+                                    if (PlayerPrefsX.GetPersistentBool("multiplayer") == true)
+                                    {
+                                        NetworkSend net = playerController.networkController.networkSend;
+                                        Vector3 location = obj.transform.position;
+                                        Timing.RunCoroutine(net.SendGenData(location,playerController.defaultRange));
+                                    }
+                                }
                                 if (obj.GetComponent<PowerConduit>() != null)
                                 {
                                     obj.GetComponent<PowerConduit>().range = playerController.defaultRange;

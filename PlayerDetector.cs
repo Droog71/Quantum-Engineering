@@ -47,7 +47,7 @@ public class PlayerDetector : LogicBlock
             foreach (LogicBlock lb in logicBlocks)
             {
                 float distance = Vector3.Distance(transform.position,lb.transform.position);
-                if (distance <= 6 && lb != this && lb.input == null && lb.output != this && lb.blockType != "Player Detector")
+                if (distance <= 6 && IsValidOutput(lb))
                 {
                     output = lb;
                     output.input = this;

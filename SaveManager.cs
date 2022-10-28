@@ -313,9 +313,11 @@ public class SaveManager
                             string outputID = go.GetComponent<PowerSource>().outputID;
                             string fuelType = go.GetComponent<PowerSource>().fuelType;
                             int fuelAmount = go.GetComponent<PowerSource>().fuelAmount;
+                            int range = go.GetComponent<PowerSource>().range;
                             FileBasedPrefs.SetString(worldID + "outputID", outputID);
                             FileBasedPrefs.SetString(worldID + "fuelType", fuelType);
                             FileBasedPrefs.SetInt(worldID + "fuelAmount", fuelAmount);
+                            FileBasedPrefs.SetInt(worldID + "range", range);
                         }
                     }
                     if (go.GetComponent<NuclearReactor>() != null)
@@ -622,8 +624,6 @@ public class SaveManager
             TerrainGenerator tg = stateManager.GetComponent<TerrainGenerator>();
             PlayerPrefsX.SetVector3Array(stateManager.worldName + "worldLocations", tg.worldLocations.ToArray());
             PlayerPrefsX.SetVector3Array(stateManager.worldName + "chunkLocations", tg.chunkLocations.ToArray());
-            PlayerPrefsX.SetVector3Array(stateManager.worldName + "treeLocations", tg.treeLocations.ToArray());
-            PlayerPrefsX.SetVector3Array(stateManager.worldName + "grassLocations", tg.grassLocations.ToArray());
         }
 
         FileBasedPrefs.ManuallySave();

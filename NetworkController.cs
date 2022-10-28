@@ -130,6 +130,15 @@ public class NetworkController
 
         if (NetworkAvailable())
         {
+            Timing.RunCoroutine(networkReceive.ReceiveGenData());
+        }
+        else
+        {
+            yield return Timing.WaitForOneFrame;
+        }
+
+        if (NetworkAvailable())
+        {
             Timing.RunCoroutine(UpdateNetworkStorage());
         }
         else

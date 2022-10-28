@@ -62,8 +62,6 @@ public class TerrainGenerator : MonoBehaviour
             {
                 worldLocations = PlayerPrefsX.GetVector3Array(stateManager.worldName + "worldLocations").ToList();
                 chunkLocations = PlayerPrefsX.GetVector3Array(stateManager.worldName + "chunkLocations").ToList();
-                treeLocations = PlayerPrefsX.GetVector3Array(stateManager.worldName + "treeLocations").ToList();
-                grassLocations = PlayerPrefsX.GetVector3Array(stateManager.worldName + "grassLocations").ToList();
             }
 
             if (worldLocations.Count < 1)
@@ -100,16 +98,6 @@ public class TerrainGenerator : MonoBehaviour
                             randHeight = 0;
                         }
                         worldLocations.Add(new Vector3(Mathf.Round(i), Mathf.Round(-72) + randHeight, Mathf.Round(j)));
-                        int randomTree = Random.Range(0, 100);
-                        bool atLander = i == 0 && j == 0;
-                        if (randomTree >= 50 && atLander == false)
-                        {
-                            treeLocations.Add(new Vector3(Mathf.Round(i), Mathf.Round(-72) + randHeight, Mathf.Round(j)));
-                        }
-                        else if (atLander == false)
-                        {
-                            grassLocations.Add(new Vector3(Mathf.Round(i), Mathf.Round(-72) + randHeight, Mathf.Round(j)));
-                        }
                         generated++;
                         loadInterval++;
                         if (loadInterval >= 10)
@@ -127,18 +115,15 @@ public class TerrainGenerator : MonoBehaviour
                 total = worldLocations.Count;
                 foreach (Vector3 worldLoc in worldLocations)
                 {
-                    if (treeLocations.Contains(worldLoc))
+                    if (!((int)worldLoc.x == 0 && (int)worldLoc.z == 0))
                     {
                         GameObject treeObj = Instantiate(tree, new Vector3(worldLoc.x - 2.3f, worldLoc.y + 3, worldLoc.z - 2.7f), new Quaternion());
                         treeObj.transform.parent = foliage.transform;
                         treeObj.GetComponent<ProceduralFoliage>().location = worldLoc;
                     }
-                    else if (grassLocations.Contains(worldLoc))
-                    {
-                        GameObject grassObj = Instantiate(billboardGrass, new Vector3(worldLoc.x - 2.3f, worldLoc.y + 3, worldLoc.z - 2.7f), new Quaternion());
-                        grassObj.transform.parent = foliage.transform;
-                        grassObj.GetComponent<ProceduralFoliage>().location = worldLoc;
-                    }
+                    GameObject grassObj = Instantiate(billboardGrass, new Vector3(worldLoc.x - 2.3f, worldLoc.y + 3, worldLoc.z - 2.7f), new Quaternion());
+                    grassObj.transform.parent = foliage.transform;
+                    grassObj.GetComponent<ProceduralFoliage>().location = worldLoc;
                     generated++;
                     loadInterval++;
                     if (loadInterval >= 10)
@@ -259,17 +244,15 @@ public class TerrainGenerator : MonoBehaviour
         grassChunk.GetComponent<BlockHolder>().dirtHolder = dirtChunk;
         dirtChunk.GetComponent<BlockHolder>().grassHolder = grassChunk;
 
-        if (treeLocations.Contains(worldLoc))
+        if (!((int)worldLoc.x == 0 && (int)worldLoc.z == 0))
         {
             GameObject treeObj = Instantiate(tree, new Vector3(worldLoc.x - 2.3f, worldLoc.y + 3, worldLoc.z - 2.7f), new Quaternion());
             treeObj.transform.parent = foliage.transform;
             treeObj.GetComponent<ProceduralFoliage>().location = worldLoc;
         }
-        else if (grassLocations.Contains(worldLoc))
-        {
-            GameObject grassObj = Instantiate(billboardGrass, new Vector3(worldLoc.x - 2.3f, worldLoc.y + 3, worldLoc.z - 2.7f), new Quaternion());
-            grassObj.transform.parent = foliage.transform;
-            grassObj.GetComponent<ProceduralFoliage>().location = worldLoc;
-        }
+
+        GameObject grassObj = Instantiate(billboardGrass, new Vector3(worldLoc.x - 2.3f, worldLoc.y + 3, worldLoc.z - 2.7f), new Quaternion());
+        grassObj.transform.parent = foliage.transform;
+        grassObj.GetComponent<ProceduralFoliage>().location = worldLoc;
     }
 }

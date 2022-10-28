@@ -12,6 +12,7 @@ public class NetworkReceive
     private string hubData;
     private string conduitData;
     private string powerData;
+    private string genData;
     private string machineData;
     private string chatData;
     private string banData;
@@ -23,6 +24,7 @@ public class NetworkReceive
     private string[] localHubList;
     private string[] localStorageList;
     private string[] localPowerList;
+    private string[] localGenList;
     private string[] localMachineList;
     private string[] localItemList;
     public int itemDatabaseDelay;
@@ -30,6 +32,7 @@ public class NetworkReceive
     public bool conduitDataCoroutineBusy;
     public bool machineDataCoroutineBusy;
     public bool powerDataCoroutineBusy;
+    public bool genDataCoroutineBusy;
     public bool hazardDataCoroutineBusy;
 
     //! Network functions for multiplayer games.
@@ -413,6 +416,57 @@ public class NetworkReceive
         }
 
         conduitDataCoroutineBusy = false;
+    }
+
+        //! Processes data from conduit database.
+    public IEnumerator<float> ReceiveGenData()
+    {
+        genDataCoroutineBusy = true;
+        genData = "none";
+        GetGenData();
+        while (genData == "none")
+        {
+            yield return Timing.WaitForOneFrame;
+        }
+        string[] genList = genData.Split('[');
+        if (genList != localGenList)
+        {
+            localGenList = genList;
+            for (int i = 2; i < genList.Length; i++)
+            {
+                string genInfo = genList[i];
+                float xPos = float.Parse(genInfo.Split(',')[0]);
+                float yPos = float.Parse(genInfo.Split(',')[1]);
+                float zPos = float.Parse(genInfo.Split(',')[2]);
+                Vector3 genPos = new Vector3(xPos, yPos, zPos);
+                int range = int.Parse(genInfo.Split(',')[3].Split(']')[0]);
+
+                PowerSource[] allGen = Object.FindObjectsOfType<PowerSource>();
+                foreach (PowerSource gen in allGen)
+                {
+                    if (gen != null)
+                    {
+                        Vector3 pos = gen.gameObject.transform.position;
+                        float x = Mathf.Round(pos.x);
+                        float y = Mathf.Round(pos.y);
+                        float z = Mathf.Round(pos.z);
+                        Vector3 foundPos = new Vector3(x, y, z);
+                        if (foundPos == genPos && gen.range != range)
+                        {
+                            if (gen.connectionFailed == true)
+                            {
+                                gen.connectionAttempts = 0;
+                                gen.connectionFailed = false;
+                            }
+                            gen.range = range;
+                        }
+                    }
+                    yield return Timing.WaitForOneFrame;
+                }
+            }
+        }
+
+        genDataCoroutineBusy = false;
     }
 
     //! Processes data from railcart hub database.
@@ -872,6 +926,16 @@ public class NetworkReceive
         {    
             System.Uri uri = new System.Uri(networkController.serverURL+"/power");
             powerData = await client.DownloadStringTaskAsync(uri);
+        }
+    }
+
+    //! Gets power source data from server.
+    private async Task GetGenData()
+    {
+        using (WebClient client = new WebClient())
+        {    
+            System.Uri uri = new System.Uri(networkController.serverURL+"/gen");
+            genData = await client.DownloadStringTaskAsync(uri);
         }
     }
 

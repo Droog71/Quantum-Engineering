@@ -47,6 +47,7 @@
             "Missile Turret",
             "Protection Block",
             "Logic Block",
+            "Logic Switch",
             "Logic Inverter",
             "Logic Delayer",
             "Logic Splitter",

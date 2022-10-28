@@ -123,6 +123,7 @@ public class PlayerController : MonoBehaviour
     public int networkedConduitRange;
     public int networkedMachineSpeed;
     public bool networkedDualPower;
+    public int networkedGenRange;
     public int networkedHubCircuit;
     public int networkedHubRange;
     public bool networkedHubStop;
@@ -197,6 +198,7 @@ public class PlayerController : MonoBehaviour
     public GameObject protectionBlock;
 
     public GameObject logicBlock;
+    public GameObject logicSwitch;
     public GameObject logicDelayer;
     public GameObject logicInverter;
     public GameObject logicSplitter;

@@ -149,6 +149,10 @@ public class GameManager : MonoBehaviour
                     lander.GetComponent<InventoryManager>().AddItem("Universal Extractor", 2);
                     lander.GetComponent<InventoryManager>().AddItem("Dark Matter Conduit", 1);
                     lander.GetComponent<InventoryManager>().AddItem("Dark Matter Collector", 1);
+                    lander.GetComponent<InventoryManager>().AddItem("Iron Block", 1000);
+                    lander.GetComponent<InventoryManager>().AddItem("Iron Block", 1000);
+                    lander.GetComponent<InventoryManager>().AddItem("Iron Block", 1000);
+                    lander.GetComponent<InventoryManager>().AddItem("Iron Block", 1000);
                     FileBasedPrefs.SetBool(GetComponent<StateManager>().worldName + "Initialized", true);
                 }
             }

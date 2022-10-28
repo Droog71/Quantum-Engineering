@@ -419,6 +419,7 @@ public class MachineGUI : MonoBehaviour
 
                 if (obj.GetComponent<PowerSource>() != null)
                 {
+                    bool netFlag = false;
                     GUI.DrawTexture(guiCoordinates.speedControlBGRect, textureDictionary.dictionary["Interface Background"]);
                     PowerSource powerSource = obj.GetComponent<PowerSource>();
                     if (powerSource.connectionFailed == true)
@@ -426,6 +427,7 @@ public class MachineGUI : MonoBehaviour
                         GUI.Label(guiCoordinates.outputLabelRect, "Offline");
                         if (GUI.Button(guiCoordinates.outputControlButton2Rect, "Reboot"))
                         {
+                            netFlag = true;
                             powerSource.connectionAttempts = 0;
                             powerSource.connectionFailed = false;
                             playerController.PlayButtonSound();
@@ -433,7 +435,18 @@ public class MachineGUI : MonoBehaviour
                     }
                     else
                     {
-                        GUI.Label(guiCoordinates.outputLabelRect, "Online");
+                        GUI.Label(guiCoordinates.outputLabelRect, "Range");
+                        powerSource.range = (int)GUI.HorizontalSlider(guiCoordinates.outputControlButton2Rect, powerSource.range, 6, 120);
+                    }
+                    if (PlayerPrefsX.GetPersistentBool("multiplayer") == true)
+                    {
+                        if (powerSource.range != playerController.networkedGenRange || netFlag == true)
+                        {
+                            NetworkSend net = playerController.networkController.networkSend;
+                            Vector3 location = powerSource.gameObject.transform.position;
+                            Timing.RunCoroutine(net.SendGenData(location,powerSource.range));
+                            playerController.networkedGenRange = powerSource.range;
+                        }
                     }
                 }
 

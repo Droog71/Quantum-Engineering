@@ -159,6 +159,7 @@ public class TextureDictionary : MonoBehaviour
             { "Electric Motor", Resources.Load("Motor") as Texture2D },
             { "Protection Block", Resources.Load("ProtectionBlock") as Texture2D },
             { "Logic Block", Resources.Load("LogicBlock") as Texture2D },
+            { "Logic Switch", Resources.Load("LogicSwitch") as Texture2D },
             { "Logic Inverter", Resources.Load("Inverter") as Texture2D },
             { "Logic Delayer", Resources.Load("Delayer") as Texture2D },
             { "Logic Splitter", Resources.Load("Splitter") as Texture2D },

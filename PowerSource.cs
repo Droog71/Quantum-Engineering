@@ -9,6 +9,7 @@ public class PowerSource : Machine
     public string inputID;
     public string outputID;
     private LineRenderer connectionLine;
+    public int range = 6;
     public int powerAmount;
     public string type;
     public string fuelType;
@@ -104,7 +105,7 @@ public class PowerSource : Machine
     private void AttemptConnection(GameObject obj)
     {
         float distance = Vector3.Distance(transform.position, obj.transform.position);
-        if (distance <= 40)
+        if (distance <= range)
         {
             if (obj.GetComponent<PowerReceiver>() != null && outputObject == null)
             {

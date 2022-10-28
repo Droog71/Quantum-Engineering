@@ -160,6 +160,8 @@
     public string simulationSpeed = "This setting affects the frequency of machine operations." +
     " Lower simulation speeds increase the game's performance. Higher speeds cause machines to generate items faster.";
 
+    public string logicSwitch = "Enables and disables logic circuits. Press the interact key to toggle.";
+
     public string logicBlock = "Transmits and receives logic signals.";
 
     public string logicInverter = "Inverts logic signals.";

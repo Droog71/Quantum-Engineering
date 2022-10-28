@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.SceneManagement;
-
+ 
 public class PlayerGUI : MonoBehaviour
 {
     private PlayerController playerController;
@@ -22,7 +22,7 @@ public class PlayerGUI : MonoBehaviour
     private bool schematic6;
     private bool schematic7;
     private float rotationAngle;
-
+ 
     //! Called by unity engine on start up to initialize variables.
     public void Start()
     {
@@ -34,7 +34,7 @@ public class PlayerGUI : MonoBehaviour
         descriptions = new Descriptions();
         guiCoordinates = new GuiCoordinates();
     }
-
+ 
     //! Returns true if the escape menu should be displayed.
     private bool MenuAvailable()
     {
@@ -46,13 +46,13 @@ public class PlayerGUI : MonoBehaviour
         && gameManager.dataSaveRequested == false
         && stateManager.saving == false;
     }
-
+ 
     //! Returns true if the block is a building block, used with combined meshes.
     private bool IsStandardBlock(string type)
     {
         return playerController.GetComponent<BuildController>().blockDictionary.blockDictionary.ContainsKey(type);
     }
-
+ 
     //! Returns true if the saving world message should be displayed.
     private bool SavingMessageRequired()
     {
@@ -61,7 +61,7 @@ public class PlayerGUI : MonoBehaviour
         || gameManager.dataSaveRequested == true
         || stateManager.saving == true;
     }
-
+ 
     //! Returns true if a tablet notification should be displayed.
     private bool TabletNotificationRequired()
     {
@@ -70,7 +70,7 @@ public class PlayerGUI : MonoBehaviour
         || playerController.pirateAttackWarningActive == true
         || playerController.destructionMessageActive == true;
     }
-
+ 
     //! Stops displaying schematics when the menu is closed.
     private void ClearSchematic()
     {
@@ -82,7 +82,7 @@ public class PlayerGUI : MonoBehaviour
         schematic6 = false;
         schematic7 = false;
     }
-
+ 
     //! Returns true if any schematic is being displayed.
     private bool SchematicActive()
     {
@@ -94,14 +94,14 @@ public class PlayerGUI : MonoBehaviour
         || schematic6 == true
         || schematic7 == true;
     }
-
+ 
     //! Returns true if the crosshair should be displayed.
     private bool ShowCrosshair()
     {
         return playerController.crosshairEnabled &&
         !playerController.GuiOpen();
     }
-
+ 
     //! Gets the size of in pixels of text so it can be positioned on the screen accordingly.
     private Vector2 GetStringSize(string str)
     {
@@ -110,13 +110,13 @@ public class PlayerGUI : MonoBehaviour
         style.alignment = TextAnchor.MiddleCenter;
         return style.CalcSize(content);
     }
-
+ 
     //! Called by unity engine for rendering and handling GUI events.
     public void OnGUI()
     {
         // STYLE
         GUI.skin = thisGUIskin;
-
+ 
         // ASPECT RATIO
         float ScreenHeight = Screen.height;
         float ScreenWidth = Screen.width;
@@ -128,14 +128,14 @@ public class PlayerGUI : MonoBehaviour
         {
             GUI.skin.label.fontSize = 10;
         }
-
+ 
         if (playerController.stateManager.worldLoaded == true && GetComponent<MainMenu>().finishedLoading == true)
         {
             // BUILD ITEM HUD AT TOP RIGHT OF SCREEN
             if (playerController.displayingBuildItem == true)
             {
                 GUI.Label(guiCoordinates.topRightInfoRect, "\n\nBuild item set to " + playerController.buildType);
-
+ 
                 if (textureDictionary.dictionary.ContainsKey(playerController.previousBuildType + "_Icon"))
                 {
                     GUI.DrawTexture(guiCoordinates.previousBuildItemTextureRect, textureDictionary.dictionary[playerController.previousBuildType + "_Icon"]);
@@ -144,7 +144,7 @@ public class PlayerGUI : MonoBehaviour
                 {
                     GUI.DrawTexture(guiCoordinates.previousBuildItemTextureRect, textureDictionary.dictionary[playerController.previousBuildType]);
                 }
-
+ 
                 if (textureDictionary.dictionary.ContainsKey(playerController.buildType + "_Icon"))
                 {
                     GUI.DrawTexture(guiCoordinates.buildItemTextureRect, textureDictionary.dictionary[playerController.buildType + "_Icon"]);
@@ -153,7 +153,7 @@ public class PlayerGUI : MonoBehaviour
                 {
                     GUI.DrawTexture(guiCoordinates.buildItemTextureRect, textureDictionary.dictionary[playerController.buildType]);
                 }
-
+ 
                 if (textureDictionary.dictionary.ContainsKey(playerController.buildType + "_Icon"))
                 {
                     GUI.DrawTexture(guiCoordinates.currentBuildItemTextureRect, textureDictionary.dictionary[playerController.buildType + "_Icon"]);
@@ -162,9 +162,9 @@ public class PlayerGUI : MonoBehaviour
                 {
                     GUI.DrawTexture(guiCoordinates.currentBuildItemTextureRect, textureDictionary.dictionary[playerController.buildType]);
                 }
-
+ 
                 GUI.DrawTexture(guiCoordinates.buildItemTextureRect, textureDictionary.dictionary["Selection Box"]);
-
+ 
                 if (textureDictionary.dictionary.ContainsKey(playerController.nextBuildType + "_Icon"))
                 {
                     GUI.DrawTexture(guiCoordinates.nextBuildItemTextureRect, textureDictionary.dictionary[playerController.nextBuildType + "_Icon"]);
@@ -173,7 +173,7 @@ public class PlayerGUI : MonoBehaviour
                 {
                     GUI.DrawTexture(guiCoordinates.nextBuildItemTextureRect, textureDictionary.dictionary[playerController.nextBuildType]);
                 }
-
+ 
                 int buildItemCount = 0;
                 foreach (InventorySlot slot in playerInventory.inventory)
                 {
@@ -184,13 +184,13 @@ public class PlayerGUI : MonoBehaviour
                 }
                 GUI.Label(guiCoordinates.buildItemCountRect, "" + buildItemCount);
             }
-
+ 
             // METEOR SHOWER WARNINGS
             if (TabletNotificationRequired())
             {
                 GUI.Label(guiCoordinates.topLeftInfoRect, "Urgent message received! Check your tablet for more information.");
             }
-
+ 
             // TABLET
             if (playerController.tabletOpen == true)
             {
@@ -224,7 +224,7 @@ public class PlayerGUI : MonoBehaviour
                     playerController.PlayButtonSound();
                 }
             }
-
+ 
             // OPTIONS/EXIT MENU
             if (playerController.escapeMenuOpen == true)
             {
@@ -283,7 +283,7 @@ public class PlayerGUI : MonoBehaviour
                     }
                 }
             }
-
+ 
             // HELP MENU
             if (playerController.helpMenuOpen == true)
             {
@@ -383,18 +383,29 @@ public class PlayerGUI : MonoBehaviour
                             playerController.PlayButtonSound();
                         }
                     }
-
+ 
                     if (playerController.mCam.GetComponent<UnityEngine.Video.VideoPlayer>().isPlaying == false)
                     {
                         Cursor.visible = true;
                         Cursor.lockState = CursorLockMode.None;
                         videoPlayer.GetComponent<VP>().StopVideo();
                     }
-                    if (playerController.mCam.GetComponent<UnityEngine.Video.VideoPlayer>().isPlaying == true && Input.anyKey)
+                    else
                     {
-                        Cursor.visible = true;
-                        Cursor.lockState = CursorLockMode.None;
-                        videoPlayer.GetComponent<VP>().StopVideo();
+                        if (GUI.Button(guiCoordinates.playButtonRect, ">"))
+                        {
+                            playerController.mCam.GetComponent<UnityEngine.Video.VideoPlayer>().playbackSpeed = 1;
+                        }
+                        if (GUI.Button(guiCoordinates.ffButtonRect, ">>"))
+                        {
+                            playerController.mCam.GetComponent<UnityEngine.Video.VideoPlayer>().playbackSpeed = 100;
+                        }
+                        if (GUI.Button(guiCoordinates.stopButtonRect, "STOP"))
+                        {
+                            Cursor.visible = true;
+                            Cursor.lockState = CursorLockMode.None;
+                            videoPlayer.GetComponent<VP>().StopVideo();
+                        }
                     }
                 }
                 if (playerController.schematicMenuOpen == true)
@@ -433,7 +444,7 @@ public class PlayerGUI : MonoBehaviour
                                 schematic4 = true;
                             }
                             playerController.PlayButtonSound();
-
+ 
                         }
                         if (GUI.Button(guiCoordinates.helpButton5Rect, "Steel"))
                         {
@@ -442,7 +453,7 @@ public class PlayerGUI : MonoBehaviour
                                 schematic5 = true;
                             }
                             playerController.PlayButtonSound();
-
+ 
                         }
                         if (GUI.Button(guiCoordinates.helpButton6Rect, "Bronze"))
                         {
@@ -451,7 +462,7 @@ public class PlayerGUI : MonoBehaviour
                                 schematic6 = true;
                             }
                             playerController.PlayButtonSound();
-
+ 
                         }
                         if (GUI.Button(guiCoordinates.helpButton7Rect, "Heat Exchangers"))
                         {
@@ -509,7 +520,7 @@ public class PlayerGUI : MonoBehaviour
                     ClearSchematic();
                 }
             }
-
+ 
             // OPTIONS MENU
             if (playerController.optionsGUIopen == true)
             {
@@ -522,29 +533,29 @@ public class PlayerGUI : MonoBehaviour
                         graphicsMenuOpen = true;
                         playerController.PlayButtonSound();
                     }
-
+ 
                     if (GUI.Button(guiCoordinates.optionsButton2Rect, "Controls"))
                     {
                         controlsMenuOpen = true;
                         playerController.PlayButtonSound();
                     }
-
+ 
                     GUI.Label(guiCoordinates.sliderLabel1Rect, "Audio Volume");
-
+ 
                     int simSpeed = (int)(gameManager.simulationSpeed * 5000);
                     GUI.Label(guiCoordinates.sliderLabel2Rect, "Simulation Speed " + "(" + simSpeed + "%)");
-
+ 
                     AudioListener.volume = GUI.HorizontalSlider(guiCoordinates.optionsButton4Rect, AudioListener.volume, 0, 5);
                     GetComponent<MSCameraController>().cameras[0].volume = AudioListener.volume;
-
+ 
                     gameManager.simulationSpeed = GUI.HorizontalSlider(guiCoordinates.optionsButton5Rect, gameManager.simulationSpeed, 0.0051f, 0.1f);
-
+ 
                     if (guiCoordinates.optionsButton5Rect.Contains(mousePos))
                     {
                         GUI.DrawTexture(guiCoordinates.craftingInfoBackgroundRect, textureDictionary.dictionary["Interface Background"]);
                         GUI.Label(guiCoordinates.craftingInfoRect, descriptions.simulationSpeed);
                     }
-
+ 
                     string hazardsEnabledDisplay = gameManager.hazardsEnabled == true ? "ON" : "OFF";
                     if (GUI.Button(guiCoordinates.optionsButton6Rect, "Hazards: " + hazardsEnabledDisplay))
                     {
@@ -559,13 +570,13 @@ public class PlayerGUI : MonoBehaviour
                         }
                         playerController.PlayButtonSound();
                     }
-
+ 
                     if (guiCoordinates.optionsButton6Rect.Contains(mousePos))
                     {
                         GUI.DrawTexture(guiCoordinates.craftingInfoBackgroundRect, textureDictionary.dictionary["Interface Background"]);
                         GUI.Label(guiCoordinates.craftingInfoRect, descriptions.hazards);
                     }
-
+ 
                     if (GUI.Button(guiCoordinates.optionsButton8Rect, "BACK"))
                     {
                         playerController.ApplySettings();
@@ -573,7 +584,7 @@ public class PlayerGUI : MonoBehaviour
                         playerController.PlayButtonSound();
                     }
                 }
-
+ 
                 if (controlsMenuOpen == true && cGUI.showingInputGUI == false)
                 {    
                     GUI.DrawTexture(guiCoordinates.optionsSubMenuBackgroundRect, textureDictionary.dictionary["Menu Background"]);
@@ -582,7 +593,7 @@ public class PlayerGUI : MonoBehaviour
                         cGUI.ToggleGUI();
                         playerController.PlayButtonSound();
                     }
-
+ 
                     MSACC_SettingsCameraFirstPerson csInverted = GetComponent<MSCameraController>().CameraSettings.firstPerson;
                     string invertYInput = csInverted.invertYInput == true ? "ON" : "OFF";
                     if (GUI.Button(guiCoordinates.optionsButton2Rect, "Invert Y Axis: " + invertYInput))
@@ -590,14 +601,14 @@ public class PlayerGUI : MonoBehaviour
                         csInverted.invertYInput = !csInverted.invertYInput;
                         playerController.PlayButtonSound();
                     }
-
+ 
                     GUI.Label(guiCoordinates.sliderLabel1Rect, "X sensitivity");
                     GUI.Label(guiCoordinates.sliderLabel2Rect, "Y sensitivity");
-
+ 
                     MSACC_SettingsCameraFirstPerson csSensitivity = GetComponent<MSCameraController>().CameraSettings.firstPerson;
                     csSensitivity.sensibilityX = GUI.HorizontalSlider(guiCoordinates.optionsButton4Rect, csSensitivity.sensibilityX, 0, 10);
                     csSensitivity.sensibilityY = GUI.HorizontalSlider(guiCoordinates.optionsButton5Rect, csSensitivity.sensibilityY, 0, 10);
-
+ 
                     if (GUI.Button(guiCoordinates.optionsButton8Rect, "BACK"))
                     {
                         controlsMenuOpen = false;
@@ -605,7 +616,7 @@ public class PlayerGUI : MonoBehaviour
                         playerController.PlayButtonSound();
                     }
                 }
-
+ 
                 if (graphicsMenuOpen == true)
                 {
                     GUI.DrawTexture(guiCoordinates.optionsSubMenuBackgroundRect, textureDictionary.dictionary["Menu Background"]);
@@ -622,24 +633,24 @@ public class PlayerGUI : MonoBehaviour
                         }
                         playerController.PlayButtonSound();
                     }
-
+ 
                     GUI.Label(guiCoordinates.sliderLabel0Rect, "Fog Density");
                     GUI.Label(guiCoordinates.sliderLabel1Rect, "FOV");
                     GUI.Label(guiCoordinates.sliderLabel2Rect, "Draw Distance");
                     GUI.Label(guiCoordinates.sliderLabel3Rect, "Graphics Quality " + "(" + QualitySettings.names[(int)playerController.graphicsQuality] + ")");
-
+ 
                     RenderSettings.fogDensity = GUI.HorizontalSlider(guiCoordinates.optionsButton3Rect, RenderSettings.fogDensity, 0.00025f, 0.025f);
                     playerController.mCam.fieldOfView = GUI.HorizontalSlider(guiCoordinates.optionsButton4Rect, playerController.mCam.fieldOfView, 60, 80);
                     playerController.mCam.farClipPlane = GUI.HorizontalSlider(guiCoordinates.optionsButton5Rect, playerController.mCam.farClipPlane, 1000, 10000);
                     playerController.graphicsQuality = GUI.HorizontalSlider(guiCoordinates.optionsButton6Rect, playerController.graphicsQuality, 0, QualitySettings.names.Length - 1);
-
+ 
                     string vsyncDisplay = QualitySettings.vSyncCount == 1 ? "ON" : "OFF";
                     if (GUI.Button(guiCoordinates.optionsButton7Rect, "Vsync: " + vsyncDisplay))
                     {
                         QualitySettings.vSyncCount = QualitySettings.vSyncCount == 0 ? 1 : 0;
                         playerController.PlayButtonSound();
                     }
-
+ 
                     if (GUI.Button(guiCoordinates.optionsButton8Rect, "BACK"))
                     {
                         graphicsMenuOpen = false;
@@ -653,7 +664,7 @@ public class PlayerGUI : MonoBehaviour
                 controlsMenuOpen = false;
             }
             //END OPTIONS MENU
-
+ 
             if (playerController.cannotCollect == true)
             {
                 if (playerController.cannotCollectTimer < 3)
@@ -668,7 +679,7 @@ public class PlayerGUI : MonoBehaviour
                     playerController.cannotCollectTimer = 0;
                 }
             }
-
+ 
             if (playerController.invalidAugerPlacement == true)
             {
                 if (playerController.invalidAugerPlacementTimer < 3)
@@ -683,7 +694,7 @@ public class PlayerGUI : MonoBehaviour
                     playerController.invalidAugerPlacementTimer = 0;
                 }
             }
-
+ 
             if (playerController.autoAxisMessage == true)
             {
                 if (playerController.autoAxisMessageTimer < 3)
@@ -706,7 +717,7 @@ public class PlayerGUI : MonoBehaviour
                     playerController.autoAxisMessageTimer = 0;
                 }
             }
-
+ 
             if (playerController.invalidRailCartPlacement == true)
             {
                 if (playerController.invalidRailCartPlacementTimer < 3)
@@ -721,7 +732,7 @@ public class PlayerGUI : MonoBehaviour
                     playerController.invalidRailCartPlacementTimer = 0;
                 }
             }
-
+ 
             // BUILDING INSTRUCTIONS
             if (playerController.building == true && !playerController.GuiOpen())
             {
@@ -733,7 +744,7 @@ public class PlayerGUI : MonoBehaviour
                 {
                     GUI.DrawTexture(guiCoordinates.currentBuildItemTextureRect, textureDictionary.dictionary[playerController.buildType]);
                 }
-
+ 
                 int buildItemCount = 0;
                 foreach (InventorySlot slot in playerInventory.inventory)
                 {
@@ -742,7 +753,7 @@ public class PlayerGUI : MonoBehaviour
                         buildItemCount += slot.amountInSlot;
                     }
                 }
-
+ 
                 if (IsStandardBlock(playerController.buildType))
                 {
                     GUI.Label(guiCoordinates.buildItemCountRect, "" + buildItemCount + "\nx" + playerController.buildMultiplier);
@@ -751,7 +762,7 @@ public class PlayerGUI : MonoBehaviour
                 {
                     GUI.Label(guiCoordinates.buildItemCountRect, "" + buildItemCount);
                 }
-
+ 
                 if (playerController.machineInSight == null)
                 {
                     GUI.DrawTexture(guiCoordinates.buildInfoRectBG, textureDictionary.dictionary["Interface Background"]);
@@ -761,7 +772,7 @@ public class PlayerGUI : MonoBehaviour
                     GUI.skin.label.fontSize = f;
                 }
             }
-
+ 
             // BUILD SETTINGS
             if (playerController.buildSettingsGuiOpen)
             {
@@ -772,9 +783,9 @@ public class PlayerGUI : MonoBehaviour
                 Rect messagePos = new Rect((Screen.width / 2) - (size.x / 2.2f), ScreenHeight * 0.14f, size.x, size.y);
                 GUI.Label(messagePos, "Build Settings");
                 GUI.skin.label.fontSize = f;
-
+ 
                 GUI.Label(guiCoordinates.optionsButton3Rect, "Build Multiplier");
-
+ 
                 string amountString = GUI.TextField(guiCoordinates.buildAmountTextFieldRect, playerController.buildMultiplier.ToString(), 3);
                 try
                 {
@@ -784,14 +795,14 @@ public class PlayerGUI : MonoBehaviour
                 {
                     // NOOP
                 }
-
+ 
                 int i = playerController.buildMultiplier;
                 i = i > 100 ? 100 : i;
                 playerController.buildMultiplier = i;
-
+ 
                 GUI.Label(guiCoordinates.sliderLabel3Rect, "Machine Range " + "(" + (double)playerController.defaultRange / 10 + " meters"  + ")");
                 playerController.defaultRange = (int)GUI.HorizontalSlider(guiCoordinates.optionsButton6Rect, playerController.defaultRange, 10, 120);
-
+ 
                 if (GUI.Button(guiCoordinates.optionsButton7Rect, "OK"))
                 {
                     Cursor.visible = false;
@@ -800,7 +811,7 @@ public class PlayerGUI : MonoBehaviour
                     playerController.PlayButtonSound();
                 }
             }
-
+ 
             // DOOR SETTINGS
             if (playerController.doorGUIopen)
             {
@@ -809,35 +820,35 @@ public class PlayerGUI : MonoBehaviour
                 GUI.skin.label.fontSize = 12;
                 GUI.Label(guiCoordinates.doorTitleRect, "Door Settings");
                 GUI.skin.label.fontSize = f;
-
+ 
                 if (GUI.Button(guiCoordinates.doorTextureRect,"Material"))
                 {
                     Door door = playerController.doorToEdit;
-
+ 
                     if (door.textureIndex < door.textures.Length - 1)
                         door.textureIndex++;
                     else
                         door.textureIndex = 0;
-
+ 
                     door.material = door.textures[door.textureIndex];
                     gameManager.meshManager.SetMaterial(door.closedObject, door.material);
                     door.edited = true;
                     playerController.PlayButtonSound();
                 }
-
+ 
                 if (GUI.Button(guiCoordinates.doorSoundRect,"Sound"))
                 {
                     Door door = playerController.doorToEdit;
-
+ 
                     if (door.audioClip < door.audioClips.Length - 1)
                         door.audioClip++;
                     else
                         door.audioClip = 0;
-
+ 
                     door.GetComponent<AudioSource>().clip = door.audioClips[door.audioClip];
                     door.GetComponent<AudioSource>().Play();
                 }
-
+ 
                 if (GUI.Button(guiCoordinates.doorCloseRect, "OK"))
                 {
                     Cursor.visible = false;
@@ -846,7 +857,7 @@ public class PlayerGUI : MonoBehaviour
                     playerController.PlayButtonSound();
                 }
             }
-
+ 
             // CROSSHAIR
             if (ShowCrosshair() == true)
             {
@@ -856,9 +867,9 @@ public class PlayerGUI : MonoBehaviour
                 Vector2 size = style.CalcSize(content);
                 size.x = size.x / 3.5f;
                 size.y = size.y / 4;
-
+ 
                 Rect crosshairRect = new Rect((Screen.width / 2) - (size.x / 2), (Screen.height / 2) - (size.y / 2), size.x, size.y);
-
+ 
                 if (playerController.digTime > 0)
                 {
                     GUI.BeginGroup(new Rect(0, 0, Screen.width, Screen.height));

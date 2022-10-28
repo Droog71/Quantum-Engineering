@@ -185,6 +185,7 @@ public class CraftingDictionary
             { "Dark Matter Conduit", new CraftingRecipe(darkMatterConduitIngredients, darkMatterConduitAmounts, "Dark Matter Conduit", 1) },
             { "Protection Block", new CraftingRecipe(protectionBlockIngredients, protectionBlockAmounts, "Protection Block", 1) },
             { "Logic Block", new CraftingRecipe(logicBlockIngredients, logicBlockAmounts, "Logic Block", 1) },
+            { "Logic Switch", new CraftingRecipe(logicBlockIngredients, logicBlockAmounts, "Logic Switch", 1) },
             { "Logic Inverter", new CraftingRecipe(logicBlockIngredients, logicBlockAmounts, "Logic Inverter", 1) },
             { "Logic Delayer", new CraftingRecipe(logicBlockIngredients, logicBlockAmounts, "Logic Delayer", 1) },
             { "Logic Splitter", new CraftingRecipe(logicBlockIngredients, logicBlockAmounts, "Logic Splitter", 1) },

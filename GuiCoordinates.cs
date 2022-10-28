@@ -264,6 +264,11 @@ public class GuiCoordinates
     public Rect marketMoneyRect;
     public Rect marketMessageButtonRect;
 
+    //VIDEO PLAYER
+    public Rect playButtonRect;
+    public Rect ffButtonRect;
+    public Rect stopButtonRect;
+
     public GuiCoordinates()
     {
         //ASPECT RATIO
@@ -474,6 +479,11 @@ public class GuiCoordinates
         craftingBackgroundRect = new Rect(0, (ScreenHeight * 0.05f), (ScreenWidth * 0.60f), (ScreenHeight * 0.68f));
         craftingInfoBackgroundRect = new Rect((ScreenWidth * 0.04f), (ScreenHeight * 0.65f), (ScreenWidth * 0.50f), (Screen.height * 0.35f));
         craftingInfoRect = new Rect((ScreenWidth * 0.08f), (ScreenHeight * 0.69f), (ScreenWidth * 0.42f), (Screen.height * 0.31f));
+
+        //VIDEO PLAYER
+        playButtonRect = new Rect(ScreenWidth - (ScreenWidth * 0.45f), (ScreenHeight * 0.0f), (ScreenWidth * 0.14f), (ScreenHeight * 0.05f));
+        ffButtonRect = new Rect(ScreenWidth - (ScreenWidth * 0.30f), (ScreenHeight * 0.0f), (ScreenWidth * 0.14f), (ScreenHeight * 0.05f));
+        stopButtonRect = new Rect(ScreenWidth - (ScreenWidth * 0.15f), (ScreenHeight * 0.0f), (ScreenWidth * 0.14f), (ScreenHeight * 0.05f));
 
         //CRAFTING GUI BUTTONS
         button1Rect = new Rect((ScreenWidth * 0.08f), (ScreenHeight * 0.15f), (ScreenWidth * 0.14f), (ScreenHeight * 0.05f));

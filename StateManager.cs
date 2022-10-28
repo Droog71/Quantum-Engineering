@@ -332,6 +332,7 @@ public class StateManager : MonoBehaviour
                             spawnedObject.GetComponent<PowerSource>().ID = ID;
                             spawnedObject.GetComponent<PowerSource>().outputID = FileBasedPrefs.GetString(ID+ "outputID");
                             spawnedObject.GetComponent<PowerSource>().creationMethod = "spawned";
+                            spawnedObject.GetComponent<PowerSource>().range = FileBasedPrefs.GetInt(ID+ "range");
                             machineManager.machines.Add(spawnedObject.GetComponent<PowerSource>());
                         }
                         if (objectName == worldName + "Generator")
@@ -342,6 +343,7 @@ public class StateManager : MonoBehaviour
                             spawnedObject.GetComponent<PowerSource>().creationMethod = "spawned";
                             spawnedObject.GetComponent<PowerSource>().fuelType = FileBasedPrefs.GetString(ID+ "fuelType");
                             spawnedObject.GetComponent<PowerSource>().fuelAmount = FileBasedPrefs.GetInt(ID+ "fuelAmount");
+                            spawnedObject.GetComponent<PowerSource>().range = FileBasedPrefs.GetInt(ID+ "range");
                             machineManager.machines.Add(spawnedObject.GetComponent<PowerSource>());
                         }
                         if (objectName == worldName + "NuclearReactor")
@@ -357,6 +359,7 @@ public class StateManager : MonoBehaviour
                             spawnedObject.GetComponent<PowerSource>().ID = ID;
                             spawnedObject.GetComponent<PowerSource>().outputID = FileBasedPrefs.GetString(ID+ "outputID");
                             spawnedObject.GetComponent<PowerSource>().creationMethod = "spawned";
+                            spawnedObject.GetComponent<PowerSource>().range = FileBasedPrefs.GetInt(ID+ "range");
                             machineManager.machines.Add(spawnedObject.GetComponent<PowerSource>());
                         }
                         if (objectName == worldName + "PowerConduit")
