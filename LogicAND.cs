@@ -1,39 +1,10 @@
 ﻿using UnityEngine;
 
-public class ItemDetector : LogicBlock
+public class LogicAND : LogicGATE
 {
-    private InventoryManager inventoryManager;
-
     //! Called by MachineManager update coroutine.
     public override void UpdateMachine()
     {
-        if (inventoryManager == null)
-        {
-            InventoryManager[] inventoryManagers = FindObjectsOfType<InventoryManager>();
-            foreach (InventoryManager i in inventoryManagers)
-            {
-                float distance = Vector3.Distance(transform.position, i.transform.position);
-                if (distance <= 6 && IsStorageContainer(i.gameObject))
-                {
-                    inventoryManager = i;
-                }
-            }
-        }
-        else
-        {
-            bool empty = true;
-            foreach (InventorySlot slot in inventoryManager.inventory)
-            {
-                if (slot.amountInSlot > 0)
-                {
-                    empty = false;
-                    break;
-                }
-            }
-
-            logic = !empty;
-        }
-
         if (output == null)
         {
             connectionAttempts += 1;
@@ -64,20 +35,17 @@ public class ItemDetector : LogicBlock
                     }
                 }
             }
-        }
-        else
-        {
-            outputID = output.ID;
-            if (!(output is LogicGATE))
+            else
             {
-                output.logic = logic;
+                GetComponent<Renderer>().material.color = Color.red;
             }
         }
-
-        if (connectionFailed == false)
+        else if (input != null && input2 != null)
         {
+            outputID = output.ID;
+            output.logic = input.logic && input2.logic;
             GetComponent<Renderer>().material.color = Color.white;
-            if (logic == true)
+            if (output.logic == true)
             {
                 GetComponent<Renderer>().material.mainTexture = onTexture;
             }
@@ -85,10 +53,6 @@ public class ItemDetector : LogicBlock
             {
                 GetComponent<Renderer>().material.mainTexture = offTexture;
             }
-        }
-        else
-        {
-            GetComponent<Renderer>().material.color = Color.red;
         }
     }
 
@@ -153,14 +117,13 @@ public class ItemDetector : LogicBlock
         return false;
     }
 
-    //! Returns true if the object in question is a storage container.
-    private bool IsStorageContainer(GameObject obj)
+    //! Used to notify other blocks.
+    public new void OnDestroy()
     {
-        if (obj.GetComponent<InventoryManager>() != null)
+        if (output != null)
         {
-            return !obj.GetComponent<InventoryManager>().ID.Equals("player") && obj.GetComponent<Retriever>() == null && obj.GetComponent<AutoCrafter>() == null;
+            output.logic = false;
         }
-        return false;
     }
 }
 

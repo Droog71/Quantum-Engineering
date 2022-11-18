@@ -266,7 +266,7 @@ public class GuiCoordinates
 
     //VIDEO PLAYER
     public Rect playButtonRect;
-    public Rect ffButtonRect;
+    public Rect pauseButtonRect;
     public Rect stopButtonRect;
 
     public GuiCoordinates()
@@ -482,7 +482,7 @@ public class GuiCoordinates
 
         //VIDEO PLAYER
         playButtonRect = new Rect(ScreenWidth - (ScreenWidth * 0.45f), (ScreenHeight * 0.0f), (ScreenWidth * 0.14f), (ScreenHeight * 0.05f));
-        ffButtonRect = new Rect(ScreenWidth - (ScreenWidth * 0.30f), (ScreenHeight * 0.0f), (ScreenWidth * 0.14f), (ScreenHeight * 0.05f));
+        pauseButtonRect = new Rect(ScreenWidth - (ScreenWidth * 0.30f), (ScreenHeight * 0.0f), (ScreenWidth * 0.14f), (ScreenHeight * 0.05f));
         stopButtonRect = new Rect(ScreenWidth - (ScreenWidth * 0.15f), (ScreenHeight * 0.0f), (ScreenWidth * 0.14f), (ScreenHeight * 0.05f));
 
         //CRAFTING GUI BUTTONS

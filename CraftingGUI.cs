@@ -661,6 +661,42 @@ public class CraftingGUI : MonoBehaviour
                         if (guiCoordinates.button3Rect.Contains(Event.current.mousePosition))
                         {
                             GUI.DrawTexture(guiCoordinates.craftingInfoBackgroundRect, textureDictionary.dictionary["Interface Background"]);
+                            CraftingRecipe recipe = craftingDictionary.dictionary["Logic AND"];
+                            int length = recipe.ingredients.Length;
+                            string[] crafting = new string[length];
+                            for (int i = 0; i < length; i++)
+                            {
+                                crafting[i] = recipe.amounts[i] + "x " + recipe.ingredients[i];
+                            }
+                            GUI.Label(guiCoordinates.craftingInfoRect, descriptions.logicAND + "\n\n[CRAFTING]\n" + string.Join("\n", crafting));
+                        }
+                        if (guiCoordinates.button4Rect.Contains(Event.current.mousePosition))
+                        {
+                            GUI.DrawTexture(guiCoordinates.craftingInfoBackgroundRect, textureDictionary.dictionary["Interface Background"]);
+                            CraftingRecipe recipe = craftingDictionary.dictionary["Logic OR"];
+                            int length = recipe.ingredients.Length;
+                            string[] crafting = new string[length];
+                            for (int i = 0; i < length; i++)
+                            {
+                                crafting[i] = recipe.amounts[i] + "x " + recipe.ingredients[i];
+                            }
+                            GUI.Label(guiCoordinates.craftingInfoRect, descriptions.logicOR + "\n\n[CRAFTING]\n" + string.Join("\n", crafting));
+                        }
+                        if (guiCoordinates.button5Rect.Contains(Event.current.mousePosition))
+                        {
+                            GUI.DrawTexture(guiCoordinates.craftingInfoBackgroundRect, textureDictionary.dictionary["Interface Background"]);
+                            CraftingRecipe recipe = craftingDictionary.dictionary["Logic XOR"];
+                            int length = recipe.ingredients.Length;
+                            string[] crafting = new string[length];
+                            for (int i = 0; i < length; i++)
+                            {
+                                crafting[i] = recipe.amounts[i] + "x " + recipe.ingredients[i];
+                            }
+                            GUI.Label(guiCoordinates.craftingInfoRect, descriptions.logicXOR + "\n\n[CRAFTING]\n" + string.Join("\n", crafting));
+                        }
+                        if (guiCoordinates.button6Rect.Contains(Event.current.mousePosition))
+                        {
+                            GUI.DrawTexture(guiCoordinates.craftingInfoBackgroundRect, textureDictionary.dictionary["Interface Background"]);
                             CraftingRecipe recipe = craftingDictionary.dictionary["Logic Splitter"];
                             int length = recipe.ingredients.Length;
                             string[] crafting = new string[length];
@@ -670,7 +706,7 @@ public class CraftingGUI : MonoBehaviour
                             }
                             GUI.Label(guiCoordinates.craftingInfoRect, descriptions.logicSplitter + "\n\n[CRAFTING]\n" + string.Join("\n", crafting));
                         }
-                        if (guiCoordinates.button4Rect.Contains(Event.current.mousePosition))
+                        if (guiCoordinates.button7Rect.Contains(Event.current.mousePosition))
                         {
                             GUI.DrawTexture(guiCoordinates.craftingInfoBackgroundRect, textureDictionary.dictionary["Interface Background"]);
                             CraftingRecipe recipe = craftingDictionary.dictionary["Logic Inverter"];
@@ -682,7 +718,7 @@ public class CraftingGUI : MonoBehaviour
                             }
                             GUI.Label(guiCoordinates.craftingInfoRect, descriptions.logicInverter + "\n\n[CRAFTING]\n" + string.Join("\n", crafting));
                         }
-                        if (guiCoordinates.button5Rect.Contains(Event.current.mousePosition))
+                        if (guiCoordinates.button9Rect.Contains(Event.current.mousePosition))
                         {
                             GUI.DrawTexture(guiCoordinates.craftingInfoBackgroundRect, textureDictionary.dictionary["Interface Background"]);
                             CraftingRecipe recipe = craftingDictionary.dictionary["Logic Delayer"];
@@ -694,7 +730,7 @@ public class CraftingGUI : MonoBehaviour
                             }
                             GUI.Label(guiCoordinates.craftingInfoRect, descriptions.logicDelayer + "\n\n[CRAFTING]\n" + string.Join("\n", crafting));
                         }
-                        if (guiCoordinates.button6Rect.Contains(Event.current.mousePosition))
+                        if (guiCoordinates.button10Rect.Contains(Event.current.mousePosition))
                         {
                             GUI.DrawTexture(guiCoordinates.craftingInfoBackgroundRect, textureDictionary.dictionary["Interface Background"]);
                             CraftingRecipe recipe = craftingDictionary.dictionary["Logic Relay"];
@@ -706,7 +742,7 @@ public class CraftingGUI : MonoBehaviour
                             }
                             GUI.Label(guiCoordinates.craftingInfoRect, descriptions.logicRelay + "\n\n[CRAFTING]\n" + string.Join("\n", crafting));
                         }
-                        if (guiCoordinates.button7Rect.Contains(Event.current.mousePosition))
+                        if (guiCoordinates.button11Rect.Contains(Event.current.mousePosition))
                         {
                             GUI.DrawTexture(guiCoordinates.craftingInfoBackgroundRect, textureDictionary.dictionary["Interface Background"]);
                             CraftingRecipe recipe = craftingDictionary.dictionary["Player Detector"];
@@ -718,7 +754,7 @@ public class CraftingGUI : MonoBehaviour
                             }
                             GUI.Label(guiCoordinates.craftingInfoRect, descriptions.playerDetector + "\n\n[CRAFTING]\n" + string.Join("\n", crafting));
                         }
-                        if (guiCoordinates.button9Rect.Contains(Event.current.mousePosition))
+                        if (guiCoordinates.button12Rect.Contains(Event.current.mousePosition))
                         {
                             GUI.DrawTexture(guiCoordinates.craftingInfoBackgroundRect, textureDictionary.dictionary["Interface Background"]);
                             CraftingRecipe recipe = craftingDictionary.dictionary["Item Detector"];
@@ -730,7 +766,7 @@ public class CraftingGUI : MonoBehaviour
                             }
                             GUI.Label(guiCoordinates.craftingInfoRect, descriptions.itemDetector + "\n\n[CRAFTING]\n" + string.Join("\n", crafting));
                         }
-                        if (guiCoordinates.button10Rect.Contains(Event.current.mousePosition))
+                        if (guiCoordinates.button13Rect.Contains(Event.current.mousePosition))
                         {
                             GUI.DrawTexture(guiCoordinates.craftingInfoBackgroundRect, textureDictionary.dictionary["Interface Background"]);
                             CraftingRecipe recipe = craftingDictionary.dictionary["Power Detector"];
@@ -759,31 +795,43 @@ public class CraftingGUI : MonoBehaviour
                         {
                             craftingManager.CraftItemAsPlayer(craftingDictionary.dictionary["Logic Switch"]);
                         }
-                        if (GUI.Button(guiCoordinates.button3Rect, "Logic Splitter"))
+                        if (GUI.Button(guiCoordinates.button3Rect, "Logic AND Gate"))
+                        {
+                            craftingManager.CraftItemAsPlayer(craftingDictionary.dictionary["Logic AND"]);
+                        }
+                        if (GUI.Button(guiCoordinates.button4Rect, "Logic OR Gate"))
+                        {
+                            craftingManager.CraftItemAsPlayer(craftingDictionary.dictionary["Logic OR"]);
+                        }
+                        if (GUI.Button(guiCoordinates.button5Rect, "Logic XOR Gate"))
+                        {
+                            craftingManager.CraftItemAsPlayer(craftingDictionary.dictionary["Logic XOR"]);
+                        }
+                        if (GUI.Button(guiCoordinates.button6Rect, "Logic Splitter"))
                         {
                             craftingManager.CraftItemAsPlayer(craftingDictionary.dictionary["Logic Splitter"]);
                         }
-                        if (GUI.Button(guiCoordinates.button4Rect, "Logic Inverter"))
+                        if (GUI.Button(guiCoordinates.button7Rect, "Logic Inverter"))
                         {
                             craftingManager.CraftItemAsPlayer(craftingDictionary.dictionary["Logic Inverter"]);
                         }
-                        if (GUI.Button(guiCoordinates.button5Rect, "Logic Delayer"))
+                        if (GUI.Button(guiCoordinates.button9Rect, "Logic Delayer"))
                         {
                             craftingManager.CraftItemAsPlayer(craftingDictionary.dictionary["Logic Delayer"]);
                         }
-                        if (GUI.Button(guiCoordinates.button6Rect, "Logic Relay"))
+                        if (GUI.Button(guiCoordinates.button10Rect, "Logic Relay"))
                         {
                             craftingManager.CraftItemAsPlayer(craftingDictionary.dictionary["Logic Relay"]);
                         }
-                        if (GUI.Button(guiCoordinates.button7Rect, "Player Detector"))
+                        if (GUI.Button(guiCoordinates.button11Rect, "Player Detector"))
                         {
                             craftingManager.CraftItemAsPlayer(craftingDictionary.dictionary["Player Detector"]);
                         }
-                        if (GUI.Button(guiCoordinates.button9Rect, "Item Detector"))
+                        if (GUI.Button(guiCoordinates.button12Rect, "Item Detector"))
                         {
                             craftingManager.CraftItemAsPlayer(craftingDictionary.dictionary["Item Detector"]);
                         }
-                        if (GUI.Button(guiCoordinates.button10Rect, "Power Detector"))
+                        if (GUI.Button(guiCoordinates.button13Rect, "Power Detector"))
                         {
                             craftingManager.CraftItemAsPlayer(craftingDictionary.dictionary["Power Detector"]);
                         }

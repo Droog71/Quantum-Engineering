@@ -162,6 +162,12 @@
 
     public string logicSwitch = "Enables and disables logic circuits. Press the interact key to toggle.";
 
+    public string logicAND = "Logic AND gate.";
+
+    public string logicOR = "Logic OR gate.";
+
+    public string logicXOR = "Logic XOR gate.";
+
     public string logicBlock = "Transmits and receives logic signals.";
 
     public string logicInverter = "Inverts logic signals.";

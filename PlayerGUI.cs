@@ -308,11 +308,13 @@ public class PlayerGUI : MonoBehaviour
                 }
                 if (playerController.videoMenuOpen == true)
                 {
-                    if (playerController.mCam.GetComponent<UnityEngine.Video.VideoPlayer>().isPlaying == false)
+                    bool playing = playerController.mCam.GetComponent<UnityEngine.Video.VideoPlayer>().isPlaying;
+                    bool paused = playerController.mCam.GetComponent<UnityEngine.Video.VideoPlayer>().isPaused;
+                    if (playing == false && paused == false)
                     {
                         GUI.DrawTexture(guiCoordinates.videoMenuBackgroundRect, textureDictionary.dictionary["Menu Background"]);
                     }
-                    if (playerController.mCam.GetComponent<UnityEngine.Video.VideoPlayer>().isPlaying == false)
+                    if (playing == false && paused == false)
                     {
                         if (GUI.Button(guiCoordinates.helpButton1Rect, "Intro"))
                         {
@@ -384,7 +386,10 @@ public class PlayerGUI : MonoBehaviour
                         }
                     }
  
-                    if (playerController.mCam.GetComponent<UnityEngine.Video.VideoPlayer>().isPlaying == false)
+                    playing = playerController.mCam.GetComponent<UnityEngine.Video.VideoPlayer>().isPlaying;
+                    paused = playerController.mCam.GetComponent<UnityEngine.Video.VideoPlayer>().isPaused;
+
+                    if (playing == false && paused == false)
                     {
                         Cursor.visible = true;
                         Cursor.lockState = CursorLockMode.None;
@@ -394,13 +399,16 @@ public class PlayerGUI : MonoBehaviour
                     {
                         if (GUI.Button(guiCoordinates.playButtonRect, ">"))
                         {
-                            playerController.mCam.GetComponent<UnityEngine.Video.VideoPlayer>().playbackSpeed = 1;
+                            if (playerController.mCam.GetComponent<UnityEngine.Video.VideoPlayer>().isPaused)
+                            {
+                                playerController.mCam.GetComponent<UnityEngine.Video.VideoPlayer>().Play();
+                            }                    
                         }
-                        if (GUI.Button(guiCoordinates.ffButtonRect, ">>"))
+                        if (GUI.Button(guiCoordinates.pauseButtonRect, "||"))
                         {
-                            playerController.mCam.GetComponent<UnityEngine.Video.VideoPlayer>().playbackSpeed = 100;
+                            playerController.mCam.GetComponent<UnityEngine.Video.VideoPlayer>().Pause();
                         }
-                        if (GUI.Button(guiCoordinates.stopButtonRect, "STOP"))
+                        if (GUI.Button(guiCoordinates.stopButtonRect, "EXIT"))
                         {
                             Cursor.visible = true;
                             Cursor.lockState = CursorLockMode.None;

@@ -49,13 +49,19 @@ public class SaveManager
                     {
                         objectName = stateManager.worldName + "LogicBlock";
                         worldID = go.GetComponent<LogicBlock>().ID;
-                        string blockType = go.GetComponent<LogicBlock>().blockType;
-                        bool logic = go.GetComponent<LogicBlock>().logic;
                         if (worldID != "unassigned" && worldID != "")
                         {
                             objectID = int.Parse(worldID.Substring(objectName.Length));
                             machineIdList.Add(objectID);
+                            bool logic = go.GetComponent<LogicBlock>().logic;
+                            string blockType = go.GetComponent<LogicBlock>().blockType;
+                            string outputID = go.GetComponent<LogicBlock>().outputID;
+                            if (go.GetComponent<LogicBlock>() is LogicSplitter splitter)
+                            {
+                                FileBasedPrefs.SetString(worldID + "output2ID", splitter.output2ID);
+                            }
                             FileBasedPrefs.SetString(worldID + "blockType", blockType);
+                            FileBasedPrefs.SetString(worldID + "outputID", outputID);
                             PlayerPrefsX.SetBool(worldID + "logic", logic);
                         }
                     }

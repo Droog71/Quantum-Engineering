@@ -174,12 +174,13 @@ public class MachineInteraction
         }
     }
 
-    //! Called when the player is looking at a nuclear reactor.
+    //! Called when the player is looking at a logic block.
     public void InteractWithLogicBlock()
     {
         LogicBlock logicBlock = playerController.objectInSight.GetComponent<LogicBlock>();
         playerController.machineInSight = playerController.objectInSight;
         playerController.machineID = logicBlock.ID;
+        playerController.machineOutputID = logicBlock.outputID;
 
         if(cInput.GetKey("Collect Object"))
         {

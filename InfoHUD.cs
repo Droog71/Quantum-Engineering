@@ -186,19 +186,6 @@ public class InfoHUD : MonoBehaviour
                 GUI.Label(resourceInfoRect, resourceName);
                 GUI.skin.label.fontSize = f;
             }
-            else if (obj.GetComponent<LogicBlock>() != null)
-            {
-                string blockType = obj.GetComponent<LogicBlock>().blockType;
-                int f = GUI.skin.label.fontSize;
-                GUI.skin.label.fontSize = 16;
-                GUIContent content = new GUIContent(blockType);
-                GUIStyle style = GUI.skin.box;
-                style.alignment = TextAnchor.MiddleCenter;
-                Vector2 size = style.CalcSize(content);
-                Rect resourceInfoRect = new Rect((Screen.width / 2) - (size.x / 2.1f), (Screen.height - 70) - (size.y / 2), size.x, size.y);
-                GUI.Label(resourceInfoRect, blockType);
-                GUI.skin.label.fontSize = f;
-            }
             else if (obj.GetComponent<Block>() != null)
             {
                 string blockName = obj.GetComponent<Block>().blockName;
@@ -211,6 +198,27 @@ public class InfoHUD : MonoBehaviour
                 Rect resourceInfoRect = new Rect((Screen.width / 2) - (size.x / 2.1f), (Screen.height - 70) - (size.y / 2), size.x, size.y);
                 GUI.Label(resourceInfoRect, blockName);
                 GUI.skin.label.fontSize = f;
+            }
+            else if (obj.GetComponent<LogicBlock>() != null)
+            {
+                GUI.Label(guiCoordinates.messageRect, "\n" + obj.GetComponent<LogicBlock>().blockType + "\nPress F to collect.");
+                if (obj.GetComponent<LogicBlock>().connectionFailed == false)
+                {
+                    if (playerController.machineInSight != null)
+                    {
+                        GUI.DrawTexture(guiCoordinates.infoRectBG, textureDictionary.dictionary["Interface Background"]);
+                        string id = machineDisplayID == "unassigned" ? "\nStarting up..." : "\nID: " + machineDisplayID;
+                        GUI.Label(guiCoordinates.infoRect, obj.GetComponent<LogicBlock>().blockType + id +
+                        "\n" + "Output ID: " + machineDisplayOutputID);
+                    }
+                }
+                else
+                {
+                    GUI.DrawTexture(guiCoordinates.infoRectBG, textureDictionary.dictionary["Interface Background"]);
+                    string id = machineDisplayID == "unassigned" ? "\nStarting up..." : "\nID: " + machineDisplayID;
+                    GUI.Label(guiCoordinates.infoRect, obj.GetComponent<LogicBlock>().blockType + id +
+                    "\n\nCONNECTION FAILED.\nPLEASE REPLACE.");
+                }
             }
             else if (obj.GetComponent<ElectricLight>() != null)
             {

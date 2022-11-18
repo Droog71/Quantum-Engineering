@@ -199,6 +199,9 @@ public class PlayerController : MonoBehaviour
 
     public GameObject logicBlock;
     public GameObject logicSwitch;
+    public GameObject logicAND;
+    public GameObject logicOR;
+    public GameObject logicXOR;
     public GameObject logicDelayer;
     public GameObject logicInverter;
     public GameObject logicSplitter;
@@ -882,7 +885,10 @@ public class PlayerController : MonoBehaviour
                     string worldName = GameObject.Find("GameManager").GetComponent<StateManager>().worldName;
                     string backupPath = Path.Combine(Application.persistentDataPath, "SaveData/" + worldName);
                     Directory.CreateDirectory(backupPath);
-                    string backupFile = DateTime.Now.ToString().Replace('/', '_') + ".bak";
+                    string dateTime = DateTime.Now.ToString();
+                    char[] dateTimeChars = dateTime.ToCharArray();
+                    dateTimeChars = Array.FindAll(dateTimeChars, c => char.IsLetterOrDigit(c));
+                    string backupFile = new string(dateTimeChars) + ".bak";
                     string destinationPath = Path.Combine(backupPath, backupFile);
                     File.Copy(FileBasedPrefs.GetSaveFilePath(), destinationPath, true);
                     Debug.Log("Backup saved to " + destinationPath);

@@ -206,7 +206,13 @@ public class StateManager : MonoBehaviour
                             string blockType = FileBasedPrefs.GetString(ID + "blockType");
                             BlockDictionary blockDictionary = playerController.GetComponent<BuildController>().blockDictionary;
                             GameObject spawnedObject = Instantiate(blockDictionary.machineDictionary[blockType], objectPosition, objectRotation);
+                            if (spawnedObject.GetComponent<LogicBlock>() is LogicSplitter splitter)
+                            {
+                                splitter.output2ID = FileBasedPrefs.GetString(ID+ "output2ID");
+                            }
+                            spawnedObject.GetComponent<LogicBlock>().outputID = FileBasedPrefs.GetString(ID+ "outputID");
                             spawnedObject.GetComponent<LogicBlock>().logic = PlayerPrefsX.GetBool(ID + "logic");
+                            spawnedObject.GetComponent<LogicBlock>().creationMethod = "spawned";
                             machineManager.machines.Add(spawnedObject.GetComponent<LogicBlock>());
                         }
                         if (objectName == worldName + "Door")
